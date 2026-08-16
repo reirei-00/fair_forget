@@ -1,6 +1,6 @@
-# StereoSet translation comparison
+#Stage 1: translation comparison
 
-The notebook selects 40 representative StereoSet development items, translates each complete item
+We select 200 representative StereoSet development items, translates each complete item
 with DeepL, Gemini, and Lapa, calculates reference-free scores, and exports one comparison CSV.
 
 ## Local
@@ -15,8 +15,8 @@ cp .env.example .env
 jupyter lab
 ```
 
-Add the keys to `.env`, open `stereoset_translation_comparison_40.ipynb`, and run it.
-The notebook saves each API result and skips completed translations when rerun (to do not overspend because we rely on paid APIs, of you need different behaviour, please edit).
+Add the keys to `.env`, open `notebooks/stereoset_translation_comparison_200.ipynb`, and run it.
+The notebook saves each API result and reuses completed translations on reruns.
 
 ## Colab
 
