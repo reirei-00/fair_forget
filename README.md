@@ -15,11 +15,9 @@ cp .env.example .env
 jupyter lab
 ```
 
-Add the keys to `.env`, open `stereoset_translation_comparison_40.ipynb`, and run its cells in order.
-The notebook saves each API result and skips completed translations when rerun.
-
-Gemini uses the stable `gemini-3.5-flash-lite` model through Google's OpenAI-compatible endpoint.
+Add the keys to `.env`, open `stereoset_translation_comparison_40.ipynb`, and run it.
+The notebook saves each API result and skips completed translations when rerun (to do not overspend because we rely on paid APIs, of you need different behaviour, please edit).
 
 ## Colab
 
-Upload the notebook, add the same values through Colab Secrets, and run the cells in order.
+Upload the notebook, add the same values through Colab Secrets, and run.

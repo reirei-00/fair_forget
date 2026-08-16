@@ -1,0 +1,8 @@
+.env
+.venv/
+.cache/
+.ipynb_checkpoints/
+outputs/
+*.zip
+__pycache__/
+.DS_Store
