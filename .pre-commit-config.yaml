@@ -1,0 +1,11 @@
+default_language_version:
+  python: python3.10
+
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.2
+    hooks:
+      - id: ruff-check
+        additional_dependencies: ["ruff==0.16.2"]
+      - id: ruff-format
+        additional_dependencies: ["ruff==0.16.2"]
