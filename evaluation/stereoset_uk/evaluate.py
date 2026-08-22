@@ -94,6 +94,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-model-len", type=int, default=512)
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.85)
     parser.add_argument("--tensor-parallel-size", type=int, default=1)
+    parser.add_argument("--cpu-offload-gb", type=float, default=0)
     parser.add_argument("--bootstrap-samples", type=int, default=2000)
     parser.add_argument("--seed", type=int, default=20260822)
     return parser.parse_args()
@@ -467,6 +468,8 @@ def score_pending_items(
         max_model_len=args.max_model_len,
         gpu_memory_utilization=args.gpu_memory_utilization,
         tensor_parallel_size=args.tensor_parallel_size,
+        cpu_offload_gb=args.cpu_offload_gb,
+        limit_mm_per_prompt={"image": 0, "audio": 0},
         seed=args.seed,
         disable_log_stats=True,
     )
@@ -521,6 +524,8 @@ def run(args: argparse.Namespace) -> None:
         raise ValueError("--limit-items must be positive")
     if args.batch_items <= 0:
         raise ValueError("--batch-items must be positive")
+    if args.cpu_offload_gb < 0:
+        raise ValueError("--cpu-offload-gb cannot be negative")
 
     dataset_path = resolve_dataset_path(args.input)
     dataset_sha256 = validate_dataset(dataset_path)
