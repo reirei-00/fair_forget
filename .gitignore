@@ -3,6 +3,8 @@
 .cache/
 .ipynb_checkpoints/
 outputs/
+runs/
+slurm-*.out
 *.zip
 __pycache__/
 .DS_Store
