@@ -1,0 +1,80 @@
+﻿term,domain,include,comment
+gentlemen,gender,yes,
+grandfather,gender,yes,
+herself,gender,yes,
+himself,gender,yes,
+male,gender,yes,
+mommy,gender,yes,
+mother,gender,yes,
+schoolboy,gender,yes,
+schoolgirl,gender,yes,
+sister,gender,yes,
+assistant,profession,yes,
+bartender,profession,yes,
+butcher,profession,yes,
+chemist,profession,yes,
+chess player,profession,yes,
+civil servant,profession,yes,
+commander,profession,yes,"те саме, що з армією"
+delivery man,profession,yes,
+engineer,profession,yes,
+entrepreneur,profession,yes,
+football player,profession,yes,"US football != футболіст, review sentences carefully"
+guitarist,profession,yes,
+historian,profession,yes,
+manager,profession,yes,
+mathematician,profession,yes,
+mover,profession,no,"US-specific occupation framing, dropped"
+musician,profession,yes,"was excluded accidentally, restored"
+nurse,profession,yes,"няня чи медсестра, різні речі"
+performing artist,profession,no,?
+physicist,profession,yes,
+plumber,profession,yes,
+policeman,profession,yes,
+politician,profession,yes,
+prisoner,profession,no,"not a profession, dropped"
+producer,profession,yes,
+prosecutor,profession,yes,
+psychologist,profession,yes,
+researcher,profession,yes,
+software developer,profession,yes,
+tailor,profession,no,"dated occupation in Ukraine, dropped"
+Afghanistan,race,no,
+African,race,no,
+Arab,race,no,
+Bangladesh,race,no,
+Bengali,race,no,
+Britain,race,no,
+Cameroon,race,no,
+Cape Verde,race,no,
+Columbian,race,no,typo (Colombian)
+Crimean,race,no,
+Ecuador,race,no,
+Eriteria,race,no,typo (Eritrea)
+Eritrean,race,no,
+Ethiopia,race,no,
+Ethiopian,race,no,
+Ghanaian,race,no,
+Hispanic,race,no,
+Iranian,race,no,
+Iraq,race,no,
+Italy,race,no,
+Japanese,race,no,
+Jordan,race,no,
+Lebanon,race,no,
+Morocco,race,no,
+Norway,race,no,
+Norweigan,race,no,typo (Norwegian)
+Persian people,race,no,
+Russian,race,no,
+Saudi Arabian,race,no,
+Sierra Leon,race,no,typo (Sierra Leone)
+Somalia,race,no,
+Spain,race,no,
+Syria,race,no,
+Ukrainian,race,no,
+Vietnam,race,no,
+Yemen,race,no,
+Bible,religion,no,не релігія (текст)
+Brahmin,religion,no,не релігія (каста)
+Muslim,religion,no,
