@@ -25,7 +25,7 @@ historian,profession,yes,
 manager,profession,yes,
 mathematician,profession,yes,
 mover,profession,no,"US-specific occupation framing, dropped"
-musician,profession,yes,"was excluded accidentally, restored"
+musician,profession,yes,
 nurse,profession,yes,"няня чи медсестра, різні речі"
 performing artist,profession,no,?
 physicist,profession,yes,
@@ -38,7 +38,7 @@ prosecutor,profession,yes,
 psychologist,profession,yes,
 researcher,profession,yes,
 software developer,profession,yes,
-tailor,profession,no,"dated occupation in Ukraine, dropped"
+tailor,profession,no,"outdated occupation in Ukraine, dropped"
 Afghanistan,race,no,
 African,race,no,
 Arab,race,no,

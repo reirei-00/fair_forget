@@ -79,7 +79,7 @@ class StereoSetFilteringNotebookTests(unittest.TestCase):
             "flag_sentence_length_gap",
             "flag_filler_frequency_gap",
             "flag_us_specific",
-            "flag_topic_inconsistency",
+            "flag_spelling_issue",
         ]
         for flag in expected_flags:
             self.assertIn(flag, self.code)
@@ -93,12 +93,20 @@ class StereoSetFilteringNotebookTests(unittest.TestCase):
         self.assertIn("NLP.pipe(", self.code)
         self.assertNotIn("import nltk", self.code)
 
-    def test_review_roundtrip_is_strict(self):
+    def test_review_export_is_present(self):
         self.assertIn("def build_review_frame", self.code)
-        self.assertIn("def load_reviewed", self.code)
-        self.assertIn('validate="one_to_one"', self.code)
-        self.assertIn('{"keep", "drop"}', self.code)
-        self.assertIn("stereoset_filter_review_completed.csv", self.code)
+        self.assertIn('review_frame["decision"] = "keep"', self.code)
+
+    def test_spelling_fixes_are_curated(self):
+        self.assertIn("spelling_overrides.csv", self.code)
+        self.assertIn("SPELLING_OVERRIDES", self.code)
+        self.assertIn("(check manually)", self.code)
+        header = (
+            (PROJECT_DIR / "notebooks" / "stereoset_filtering" / "spelling_overrides.csv")
+            .read_text(encoding="utf-8-sig")
+            .splitlines()[0]
+        )
+        self.assertEqual(header, "word,replacement,comment")
 
     def test_output_structure_is_separate_and_complete(self):
         self.assertIn('PROJECT_DIR / "outputs" / "stereoset_filtering"', self.code)
@@ -107,11 +115,7 @@ class StereoSetFilteringNotebookTests(unittest.TestCase):
             "population_flags.csv",
             "flag_summary.csv",
             "stereoset_filter_review.csv",
-            "stereoset_filter_review_completed.csv",
-            "stereoset_ua_candidates.csv",
-            "stereoset_filter_summary.csv",
             "filtering_overview.png",
-            "cluster_counts.png",
             "pos_coverage.png",
         ]
         for filename in expected:
