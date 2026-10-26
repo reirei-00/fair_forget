@@ -28,6 +28,15 @@ def _state(value):
     return state
 
 
+def state_storage_ids(value):
+    """Identify nonempty storage by device and address; empty buffers cannot alias data."""
+    return {
+        (tensor.device, tensor.untyped_storage().data_ptr())
+        for tensor in _state(value).values()
+        if tensor.numel()
+    }
+
+
 def state_sha256(value):
     """Hash names, shapes, dtypes and exact bytes, including scalar/BF16 buffers."""
     records = []
@@ -137,15 +146,8 @@ def verify_starting_checkpoint(model, reference_model, before_checkpoint, *, che
         raise ValueError("Provide an actual checkpoint loader")
     directory, expected_files = _directory(before_checkpoint)
     loaded = _state(checkpoint_loader(directory))
-    loaded_storage = {
-        tensor.untyped_storage().data_ptr() for tensor in loaded.values() if tensor.numel()
-    }
-    actual_storage = {
-        tensor.untyped_storage().data_ptr()
-        for actual in (model, reference_model)
-        for tensor in _state(actual).values()
-        if tensor.numel()
-    }
+    loaded_storage = state_storage_ids(loaded)
+    actual_storage = state_storage_ids(model) | state_storage_ids(reference_model)
     if loaded_storage & actual_storage:
         raise ValueError("Checkpoint loader must load independent weights from verified bytes")
     loaded_digest = state_sha256(loaded)

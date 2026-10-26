@@ -10,6 +10,7 @@ from .base_checkpoint import (
     load_hf_checkpoint,
     load_state_checkpoint,
     state_sha256,
+    state_storage_ids,
     verify_starting_checkpoint,
 )
 
@@ -21,6 +22,7 @@ __all__ = [
     "negate_lora_update",
     "save_state",
     "state_sha256",
+    "state_storage_ids",
     "verify_starting_checkpoint",
 ]
 

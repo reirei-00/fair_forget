@@ -11,6 +11,7 @@ from .checkpoints import (
     clone_state,
     negate_full_update,
     negate_lora_update,
+    state_storage_ids,
     verify_starting_checkpoint,
 )
 from .config import require_config
@@ -137,16 +138,8 @@ def run_training(
     names = config["trainable_parameters"]
     if len(set(names)) != len(names) or not set(names) <= set(parameters):
         raise ValueError("Trainable parameter names must match the actual model")
-    model_storage = {
-        tensor.untyped_storage().data_ptr()
-        for tensor in model.state_dict().values()
-        if tensor.numel()
-    }
-    reference_storage = {
-        tensor.untyped_storage().data_ptr()
-        for tensor in reference_model.state_dict().values()
-        if tensor.numel()
-    }
+    model_storage = state_storage_ids(model)
+    reference_storage = state_storage_ids(reference_model)
     if model is reference_model or model_storage & reference_storage:
         raise ValueError("Reference weights must be independent frozen base tensors")
     initial_state, reference_state = model.state_dict(), reference_model.state_dict()

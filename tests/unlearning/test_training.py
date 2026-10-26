@@ -251,6 +251,27 @@ def test_rmu_all_valid_exposure_counts_the_actual_representation_mask(tmp_path):
     )
 
 
+def test_training_accepts_independent_models_with_persistent_empty_buffers(tmp_path, monkeypatch):
+    original_model = TinyModel
+
+    class EmptyBufferModel(original_model):
+        def __init__(self):
+            super().__init__()
+            self.register_buffer("empty_cache", torch.empty(0, 4))
+
+    monkeypatch.setitem(train.__globals__, "TinyModel", EmptyBufferModel)
+    model, reference, original, receipt = train(tmp_path, "wga_kl")
+    assert model.empty_cache.untyped_storage().data_ptr() == 0
+    assert reference.empty_cache.untyped_storage().data_ptr() == 0
+    assert torch.equal(model.empty_cache, original["empty_cache"])
+    assert torch.equal(reference.empty_cache, original["empty_cache"])
+    exported = load_state_checkpoint(tmp_path / "run/checkpoint")
+    assert torch.equal(exported["empty_cache"], original["empty_cache"])
+    assert receipt["training"]["starting_checkpoint_verification"]["state_sha256"] == state_sha256(
+        original
+    )
+
+
 def test_template_configs_do_not_invent_pending_settings():
     paths = list((Path(__file__).resolve().parents[2] / "configs/unlearning").glob("*.json"))
     assert len(paths) == 5
