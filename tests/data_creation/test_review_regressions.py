@@ -152,6 +152,206 @@ def test_renderer_rejects_unsupported_profile_labels_instead_of_omitting_them(ch
         target(row)
 
 
+@pytest.mark.parametrize(
+    "target_group,axis",
+    [
+        ("idp", "age"),
+        ("idp", "gender"),
+        ("veteran", "service_period"),
+        ("idp", "displacement_origin"),
+        ("idp", "origin_region"),
+        ("idp", "disability"),
+        ("idp", "pets"),
+        ("idp", "registration"),
+        ("veteran", "service_state"),
+        ("veteran", "discharge_recency"),
+        ("veteran", "service_duration"),
+        ("veteran", "service_role"),
+        ("veteran", "rank"),
+        ("veteran", "recruitment_route"),
+        ("veteran", "prior_occupation"),
+        ("idp", "region"),
+        ("idp", "community_type"),
+        ("idp", "displacement_wave"),
+        ("idp", "housing_type"),
+        ("idp", "caregiving"),
+        ("idp", "help_seeking"),
+        ("idp", "dual_status"),
+        ("idp", "language"),
+        ("idp", "ethnicity"),
+    ],
+)
+def test_every_profile_axis_rejects_unknown_values_with_a_clear_error(target_group, axis):
+    row = {
+        "target_group": target_group,
+        "intrinsic_attributes": {},
+        "additional_tags": {axis: "unsupported"},
+    }
+    with pytest.raises(ValueError, match=f"Unsupported {axis} value"):
+        target(row)
+
+
+@pytest.mark.parametrize(
+    "axis,value",
+    [("disability", False), ("dual_status", True), ("ethnicity", []), ("occupation", 0)],
+)
+def test_profile_attributes_cannot_be_silently_dropped_or_interpreted_as_booleans(axis, value):
+    row = {
+        "target_group": "idp",
+        "intrinsic_attributes": {},
+        "additional_tags": {axis: value},
+    }
+    with pytest.raises(ValueError, match=f"Unsupported {axis} value"):
+        target(row)
+
+
+@pytest.mark.parametrize(
+    "target_group,attributes",
+    [
+        ("idp", {"service_period": "ato_oos"}),
+        ("veteran", {"displacement_origin": "occupied_territories"}),
+        ("veteran", {"origin_region": "east"}),
+        ("idp", {"service_period": "full_scale", "dual_status": "veteran_and_idp"}),
+        (
+            "veteran",
+            {"displacement_origin": "occupied_territories", "dual_status": "veteran_and_idp"},
+        ),
+    ],
+)
+def test_actor_specific_attributes_must_be_realized_even_for_dual_status(target_group, attributes):
+    row = {
+        "target_group": target_group,
+        "intrinsic_attributes": attributes,
+        "additional_tags": {},
+    }
+    with pytest.raises(ValueError, match="cannot realize .* for target group"):
+        target(row)
+
+
+@pytest.mark.parametrize(
+    "target_group,attributes,expected",
+    [
+        (
+            "veteran",
+            {"service_period": "ato_oos"},
+            "veterans who served during ATO/OOS (2014–2021)",
+        ),
+        (
+            "veteran",
+            {"service_period": "full_scale"},
+            "veterans who served during the full-scale war",
+        ),
+        (
+            "veteran",
+            {"service_period": "both"},
+            "veterans who served both before and during the full-scale invasion",
+        ),
+        (
+            "idp",
+            {"displacement_origin": "occupied_territories"},
+            "internally displaced people from occupied territories",
+        ),
+        (
+            "idp",
+            {"origin_region": "east"},
+            "internally displaced people from eastern regions",
+        ),
+        (
+            "idp",
+            {"displacement_origin": "occupied_territories", "origin_region": "east"},
+            "internally displaced people from eastern occupied territories",
+        ),
+        (
+            "idp",
+            {"disability": "war_caused"},
+            "internally displaced people with war-related disabilities",
+        ),
+        (
+            "idp",
+            {"disability": "war_caused_nonvisible"},
+            "internally displaced people with invisible war-related disabilities",
+        ),
+        (
+            "idp",
+            {"disability": "unspecified_cause"},
+            "internally displaced people with disabilities",
+        ),
+        ("idp", {"pets": "with_pets"}, "internally displaced people with pets"),
+        (
+            "idp",
+            {"registration": "unregistered"},
+            "internally displaced people who lack formal IDP registration",
+        ),
+        (
+            "idp",
+            {"dual_status": "veteran_and_idp"},
+            "internally displaced people who are veterans",
+        ),
+        (
+            "veteran",
+            {"dual_status": "veteran_and_idp"},
+            "veterans who are internally displaced",
+        ),
+        ("idp", {"language": "russian"}, "Russian-speaking internally displaced people"),
+        ("idp", {"language": "ukrainian"}, "Ukrainian-speaking internally displaced people"),
+        ("idp", {"ethnicity": "roma"}, "Roma internally displaced people"),
+    ],
+)
+def test_stricter_validation_preserves_supported_profile_wording(
+    target_group, attributes, expected
+):
+    row = {
+        "target_group": target_group,
+        "intrinsic_attributes": {},
+        "additional_tags": attributes,
+    }
+    assert target(row) == expected
+
+
+@pytest.mark.parametrize(
+    "occupation,reference,expected",
+    [
+        ("nurse", "current", "who work as nurses"),
+        ("nurse", "previous", "who previously worked as nurses"),
+        ("nurse", "sought", "who are seeking work as nurses"),
+        ("family_healthcare", "current", "who work in healthcare and care services"),
+    ],
+)
+def test_occupation_dictionary_and_reference_preserve_explicit_wording(
+    occupation, reference, expected
+):
+    row = {
+        "target_group": "idp",
+        "intrinsic_attributes": {},
+        "additional_tags": {"occupation": occupation, "pets": "with_pets"},
+        "occupation_reference": reference,
+    }
+    dictionary = {
+        "occupations": [
+            {"code": "family_healthcare", "jobs": [{"code": "nurse", "label_en": "nurse"}]}
+        ]
+    }
+    assert target(row, dictionary) == f"internally displaced people {expected} and have pets"
+    row["additional_tags"]["occupation"] = "unknown_job"
+    with pytest.raises(ValueError, match="Unsupported occupation.*provided attribute dictionary"):
+        target(row, dictionary)
+    row["additional_tags"]["occupation"] = occupation
+    row["occupation_reference"] = "unsupported"
+    with pytest.raises(ValueError, match="Unsupported occupation_reference"):
+        target(row, dictionary)
+
+
+def test_dictionary_family_requires_existing_renderer_wording():
+    row = {
+        "target_group": "idp",
+        "intrinsic_attributes": {},
+        "additional_tags": {"occupation": "unsupported_family"},
+    }
+    dictionary = {"occupations": [{"code": "unsupported_family", "jobs": []}]}
+    with pytest.raises(ValueError, match="Unsupported occupation family"):
+        target(row, dictionary)
+
+
 def human_review(row):
     return review_record(
         row,
