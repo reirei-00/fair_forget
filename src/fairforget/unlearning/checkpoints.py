@@ -6,6 +6,24 @@ from pathlib import Path
 
 import torch
 
+from .base_checkpoint import (
+    load_hf_checkpoint,
+    load_state_checkpoint,
+    state_sha256,
+    verify_starting_checkpoint,
+)
+
+__all__ = [
+    "clone_state",
+    "load_hf_checkpoint",
+    "load_state_checkpoint",
+    "negate_full_update",
+    "negate_lora_update",
+    "save_state",
+    "state_sha256",
+    "verify_starting_checkpoint",
+]
+
 
 def clone_state(model):
     return {name: tensor.detach().cpu().clone() for name, tensor in model.state_dict().items()}
@@ -37,8 +55,13 @@ def _validate_states(base, acquired, scale):
 
 def negate_full_update(base, acquired, *, scale):
     _validate_states(base, acquired, scale)
+    if scale == 0:
+        return {name: tensor.clone() for name, tensor in base.items()}
     return {
-        name: base[name] - scale * (acquired[name] - base[name])
+        name: _representable(
+            base[name].double() - scale * (acquired[name].double() - base[name].double()),
+            base[name].dtype,
+        )
         if base[name].is_floating_point()
         else base[name].clone()
         for name in base
@@ -57,9 +80,19 @@ def negate_lora_update(base, acquired, *, scale):
     b_names = [name for name in acquired if "lora_B" in name]
     if not b_names or any(torch.count_nonzero(base[name]).item() for name in b_names):
         raise ValueError("LoRA task vectors require verified zero initial B matrices")
+    if scale == 0:
+        return {name: tensor.clone() for name, tensor in base.items()}
     result = {name: tensor.clone() for name, tensor in acquired.items()}
     for name in b_names:
-        result[name] = -scale * acquired[name]
+        result[name] = _representable(-scale * acquired[name].double(), acquired[name].dtype)
+    return result
+
+
+def _representable(value, dtype):
+    """Reject overflow both in the intermediate arithmetic and its stored dtype."""
+    result = value.to(dtype=dtype)
+    if not torch.isfinite(value).all() or not torch.isfinite(result).all():
+        raise ValueError("Task-vector result is nonfinite or not representable in its stored dtype")
     return result
 
 

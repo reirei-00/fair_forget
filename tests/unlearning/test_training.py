@@ -11,7 +11,13 @@ import pytest
 import torch
 from lm_eval.fair_uk.contracts import canonical_sha256, validate_exposure, validate_intervention
 
-from fairforget.unlearning.checkpoints import negate_full_update, negate_lora_update, save_state
+from fairforget.unlearning.checkpoints import (
+    load_state_checkpoint,
+    negate_full_update,
+    negate_lora_update,
+    save_state,
+    state_sha256,
+)
 from fairforget.unlearning.config import require_config
 from fairforget.unlearning.controller import SwapController
 from fairforget.unlearning.data import Example, encode_completion, validate_partitions
@@ -159,6 +165,7 @@ def train(tmp_path, method, *, configure=None):
         output=tmp_path / "run",
         optimizer_factory=lambda params, cfg: torch.optim.SGD(params, lr=cfg["learning_rate"]),
         checkpoint_writer=save_state,
+        checkpoint_loader=load_state_checkpoint,
         development_evaluator=lambda *_: {"split": "method_development", "gap": 0.5},
     )
     return model, reference, original, receipt
@@ -175,6 +182,12 @@ def test_methods_train_real_tiny_models_and_emit_actual_stream_tokens(tmp_path, 
     )
     assert all(parameter.grad is None for parameter in reference.parameters())
     validate_intervention(receipt)
+    assert receipt["training"]["starting_checkpoint_verification"]["state_sha256"] == state_sha256(
+        original
+    )
+    assert receipt["training"]["starting_checkpoint_verification"][
+        "checkpoint_reference_sha256"
+    ] == canonical_sha256(receipt["before"])
     exposure = json.loads((tmp_path / "run/exposure.json").read_text())
     validate_exposure(exposure, intervention=receipt)
     assert (
@@ -212,7 +225,9 @@ def test_methods_train_real_tiny_models_and_emit_actual_stream_tokens(tmp_path, 
     if method == "task_vector":
         acquired = torch.load(tmp_path / "run/acquisition/state.pt", weights_only=True)
         for name, parameter in model.state_dict().items():
-            assert torch.equal(parameter, original[name] - 0.5 * (acquired[name] - original[name]))
+            torch.testing.assert_close(
+                parameter, original[name] - 0.5 * (acquired[name] - original[name])
+            )
 
 
 def test_rmu_all_valid_exposure_counts_the_actual_representation_mask(tmp_path):
@@ -335,6 +350,7 @@ def test_preflight_rejects_invalid_inputs_without_training_or_outputs(tmp_path, 
             output=tmp_path / "absent",
             optimizer_factory=lambda *_: pytest.fail("Preflight must not construct the optimizer"),
             checkpoint_writer=lambda *_: pytest.fail("Preflight must not write checkpoints"),
+            checkpoint_loader=load_state_checkpoint,
         )
     assert not (tmp_path / "absent").exists()
     assert all(
@@ -381,6 +397,7 @@ def test_source_release_membership_hash_and_family_binding_fail_before_optimizer
                 output=tmp_path / "absent",
                 optimizer_factory=lambda *_: pytest.fail("Must reject before optimization"),
                 checkpoint_writer=lambda *_: pytest.fail("Must reject before export"),
+                checkpoint_loader=load_state_checkpoint,
             )
     assert not (tmp_path / "absent").exists()
 
@@ -422,12 +439,13 @@ def test_applied_exposure_survives_a_development_callback_failure(tmp_path):
             evaluation=[e],
             schedule=[{"forget": ["s"], "correction": ["c"], "preservation": ["p"]}] * 2,
             config=config,
-            before_checkpoint={"uri": "base", "revision": "c" * 40},
+            before_checkpoint=save_state(model, tmp_path / "base"),
             data_release_sha256=canonical_sha256(release_fixture()),
             release=release_fixture(),
             output=tmp_path / "partial",
             optimizer_factory=lambda params, cfg: torch.optim.SGD(params, lr=cfg["learning_rate"]),
             checkpoint_writer=save_state,
+            checkpoint_loader=load_state_checkpoint,
             development_evaluator=broken_controller,
         )
     exposure = json.loads((tmp_path / "partial/exposure.json").read_text())
