@@ -7,6 +7,46 @@ ordinary English.  Historical outputs are preserved in the run directory; this m
 is used for subsequent wording revisions.
 """
 
+AGE_WORDS = {"young_adult": "young", "middle_aged": "middle-aged", "older": "older"}
+GENDER_WORDS = {"women": "women", "men": "men"}
+SUPPORTED_ATTRIBUTES = {
+    "age",
+    "gender",
+    "service_period",
+    "displacement_origin",
+    "origin_region",
+    "disability",
+    "pets",
+    "registration",
+    "occupation",
+    "service_state",
+    "discharge_recency",
+    "service_duration",
+    "service_role",
+    "rank",
+    "recruitment_route",
+    "prior_occupation",
+    "region",
+    "community_type",
+    "displacement_wave",
+    "housing_type",
+    "caregiving",
+    "help_seeking",
+    "dual_status",
+    "language",
+    "ethnicity",
+}
+
+
+def _validate_profile(row, attributes):
+    if row.get("target_group") not in ("idp", "veteran"):
+        raise ValueError("Unsupported target group for profile rendering")
+    if set(attributes) - SUPPORTED_ATTRIBUTES:
+        raise ValueError("Profile includes attributes this renderer cannot realize")
+    for axis, vocabulary in (("age", AGE_WORDS), ("gender", GENDER_WORDS)):
+        if attributes.get(axis) not in (None, "", *vocabulary):
+            raise ValueError(f"Unsupported {axis} value for profile rendering")
+
 
 def plural(job):
     return (
@@ -63,9 +103,8 @@ def _occupation_clause(occupation, reference, dictionary):
 def target(row, dictionary=None):
     """Render a profile as natural English while preserving every selected attribute."""
     attrs = {**row["intrinsic_attributes"], **row["additional_tags"]}
-    age = {"young_adult": "young", "middle_aged": "middle-aged", "older": "older"}.get(
-        attrs.get("age"), ""
-    )
+    _validate_profile(row, attrs)
+    age = AGE_WORDS.get(attrs.get("age"), "")
     modifiers = []
     clauses = []
 
@@ -82,7 +121,7 @@ def target(row, dictionary=None):
         elif period == "both":
             clauses.append("who served both before and during the full-scale invasion")
     else:
-        person = {"women": "women", "men": "men"}.get(attrs.get("gender"), "people")
+        person = GENDER_WORDS.get(attrs.get("gender"), "people")
         base = " ".join(x for x in (age, "internally displaced", person) if x)
         origin = attrs.get("displacement_origin")
         region = attrs.get("origin_region")
