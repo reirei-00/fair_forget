@@ -7,7 +7,12 @@ from pathlib import Path
 
 import torch
 
-from .checkpoints import clone_state, negate_full_update, negate_lora_update
+from .checkpoints import (
+    clone_state,
+    negate_full_update,
+    negate_lora_update,
+    verify_starting_checkpoint,
+)
 from .config import require_config
 from .controller import SwapController
 from .data import in_stream, tensors, validate_partitions
@@ -38,6 +43,7 @@ def run_training(
     release_root=None,
     optimizer_factory,
     checkpoint_writer,
+    checkpoint_loader,
     development_evaluator=None,
 ):
     """Train supplied models on a declared schedule and emit actual exposure + a receipt.
@@ -47,6 +53,9 @@ def run_training(
     ``development_evaluator(model, development)`` supplies registered controller
     evidence; it never receives evaluation examples. The checkpoint writer must
     export an evaluator-loadable artifact for production; tests inject a state writer.
+    ``checkpoint_loader(directory)`` must load the actual architecture/state from
+    the verified local checkpoint directory. Pinned Hub references use only the
+    existing cache. Their loaded weights must match both starting models exactly.
     """
     from lm_eval.fair_uk.contracts import (
         canonical_sha256,
@@ -128,9 +137,15 @@ def run_training(
     names = config["trainable_parameters"]
     if len(set(names)) != len(names) or not set(names) <= set(parameters):
         raise ValueError("Trainable parameter names must match the actual model")
-    model_storage = {tensor.untyped_storage().data_ptr() for tensor in model.state_dict().values()}
+    model_storage = {
+        tensor.untyped_storage().data_ptr()
+        for tensor in model.state_dict().values()
+        if tensor.numel()
+    }
     reference_storage = {
-        tensor.untyped_storage().data_ptr() for tensor in reference_model.state_dict().values()
+        tensor.untyped_storage().data_ptr()
+        for tensor in reference_model.state_dict().values()
+        if tensor.numel()
     }
     if model is reference_model or model_storage & reference_storage:
         raise ValueError("Reference weights must be independent frozen base tensors")
@@ -149,6 +164,9 @@ def run_training(
     output = Path(output)
     if output.exists() and any(output.iterdir()):
         raise ValueError("Training requires a fresh output directory")
+    starting_checkpoint = verify_starting_checkpoint(
+        model, reference_model, before_checkpoint, checkpoint_loader=checkpoint_loader
+    )
     # Validate the public boundary before mutating weights or writing artifacts.
     initial_receipt = {
         "kind": "intervention",
@@ -162,6 +180,7 @@ def run_training(
             "seed": config["seed"],
             "purpose": config["purpose"],
             "language": config["language"],
+            "starting_checkpoint_verification": starting_checkpoint,
             "streams": [
                 {
                     "name": stream,
@@ -309,6 +328,10 @@ def run_training(
         model.load_state_dict(transform(base, acquired, scale=config["negation_scale"]))
     else:
         acquisition = None
+    if any(not torch.isfinite(tensor).all() for tensor in model.state_dict().values()):
+        raise ValueError(
+            "Final checkpoint contains nonfinite state; no receipt or final export written"
+        )
     after_checkpoint = checkpoint_writer(model, output / "checkpoint")
     exposure = {
         "kind": "exposure",
