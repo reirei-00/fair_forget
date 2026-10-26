@@ -35,7 +35,8 @@ for arguments. The stages are:
 3. `translate` and `neutral`: source-bound generation with exact raw request and
    response caching. Preview is the default. Execution requires `--execute` and
    an explicitly supplied provider factory.
-4. `review` and `release`: bind supplied linguistic decisions to exact text and
+4. `review-template`, `review` and `release`: freeze the full text/profile/source
+   context for review, verify the completed decisions against that same context and
    build aligned, family-allocated releases. Machine review is recorded as
    pending human qualification. `severity` and `harm-mechanisms` are separate
    typed JEV annotation commands, also previewing by default.
@@ -48,6 +49,25 @@ Provider factories are named `module:callable` and receive `config=...`. Trainin
 factories additionally receive `output=...`. They are imported only when execution
 is requested. No provider, model, intervention setting or mixture ratio is silently
 selected. Configuration files with pending values remain templates.
+
+Create a review template with `fairforget review-template --input rows.jsonl
+--output decisions.jsonl`, inspect its frozen context and fill the reviewer,
+decision and criteria fields, then run `fairforget review --input rows.jsonl
+--decisions decisions.jsonl --output reviews.jsonl`. Existing files are preserved.
+Metadata changes invalidate the old review; text-only legacy decisions cannot be
+rebound automatically. Authoring appends a versioned target-slot contract to the
+preserved prompt and records both hashes. Literal responses or profile values the
+renderer cannot realize fail before expansion. Neutral collection similarly
+requires the exact source digest retained by generation.
+
+Training factories must provide a `checkpoint_loader` that loads actual tensors
+from the runner's verified directory. `load_state_checkpoint` supports the tiny
+software fixtures; `load_hf_checkpoint` loads a self-contained causal HF snapshot
+offline. Remote base revisions must already be cached. PEFT or other architectures
+need an explicit compatible loader or self-contained starting snapshot. The runner
+compares model and reference with the loaded state before optimization, and records
+the reference digest, file hashes and exact tensor-state fingerprint. A caller's
+declared model identity alone cannot qualify an intervention receipt.
 
 ## Offline verification
 

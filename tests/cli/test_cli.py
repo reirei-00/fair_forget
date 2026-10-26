@@ -63,7 +63,7 @@ def test_author_preview_never_imports_provider_factory(tmp_path):
 
 def test_author_executes_injected_provider_and_resumes_without_calls(tmp_path, monkeypatch):
     args = author_inputs(tmp_path)
-    provider = FixtureProvider(["A synthetic stereotype."])
+    provider = FixtureProvider(["{target} always refuse work."])
     module = ModuleType("fixture_provider_plugin")
     module.make = lambda config: provider
     monkeypatch.setitem(sys.modules, module.__name__, module)
@@ -80,6 +80,77 @@ def test_generation_execution_requires_an_explicit_provider(tmp_path):
     with pytest.raises(SystemExit, match="1"):
         main([*author_inputs(tmp_path), "--execute"])
     assert not (tmp_path / "output/responses.jsonl").exists()
+
+
+def review_inputs(tmp_path):
+    row = {
+        "id": "fixture",
+        "language": "en",
+        "target_group": "idp",
+        "additional_tags": {},
+        "stereotype": "IDPs always refuse work.",
+        "counter_stereotype": "IDPs make their own work decisions.",
+        "unrelated": "IDPs listen to the radio.",
+    }
+    rows, decisions = tmp_path / "rows.jsonl", tmp_path / "decisions.jsonl"
+    write_rows(rows, [row])
+    main(["review-template", "--input", str(rows), "--output", str(decisions)])
+    decision = read_rows(decisions)[0]
+    decision.update(reviewer="fixture-rater", decision="accepted")
+    decision["criteria"] = dict.fromkeys(decision["criteria"], "pass")
+    write_rows(decisions, [decision])
+    return rows, decisions
+
+
+def test_cli_review_verifies_the_frozen_context_without_rebinding(tmp_path):
+    rows, decisions = review_inputs(tmp_path)
+    output = tmp_path / "bound.jsonl"
+    main(["review", "--input", str(rows), "--decisions", str(decisions), "--output", str(output)])
+    assert read_rows(output)[0]["decision"] == "accepted"
+    changed = read_rows(rows)[0]
+    changed["target_group"] = "veteran"
+    write_rows(rows, [changed])
+    with pytest.raises(SystemExit):
+        main(
+            [
+                "review",
+                "--input",
+                str(rows),
+                "--decisions",
+                str(decisions),
+                "--output",
+                str(tmp_path / "stale.jsonl"),
+            ]
+        )
+    assert not (tmp_path / "stale.jsonl").exists()
+
+
+def test_review_template_never_overwrites_an_edited_decision(tmp_path):
+    rows, decisions = review_inputs(tmp_path)
+    previous = decisions.read_bytes()
+    with pytest.raises(SystemExit):
+        main(["review-template", "--input", str(rows), "--output", str(decisions)])
+    assert decisions.read_bytes() == previous
+
+
+def test_cli_review_rejects_legacy_decisions_without_a_context_binding(tmp_path):
+    rows, decisions = review_inputs(tmp_path)
+    decision = read_rows(decisions)[0]
+    for key in ("schema_version", "review_context", "review_context_sha256"):
+        decision.pop(key)
+    write_rows(decisions, [decision])
+    with pytest.raises(SystemExit):
+        main(
+            [
+                "review",
+                "--input",
+                str(rows),
+                "--decisions",
+                str(decisions),
+                "--output",
+                str(tmp_path / "unbound.jsonl"),
+            ]
+        )
 
 
 def test_translation_example_builds_a_qualified_release(tmp_path):
@@ -113,6 +184,21 @@ def test_unlearning_preview_does_not_load_factory_and_execute_runs_real_step(tmp
     assert exposure["events"] and all(
         event["valid_loss_tokens"] > 0 for event in exposure["events"]
     )
+    from lm_eval.fair_uk.lineage import bind_training_evidence
+
+    report = {
+        "kind": "paired_native_checkpoint_evaluation",
+        "provenance": {
+            state: {
+                "run": {"model_identity": {"local_files_sha256": receipt[state]["files_sha256"]}}
+            }
+            for state in ("before", "after")
+        },
+    }
+    release = json.loads((tmp_path / "run-release/manifest.json").read_text())
+    bound = bind_training_evidence(report, receipt, exposure, release)
+    assert bound["actual_exposure_events"] == len(exposure["events"])
+    assert bound["training_language"] == "en"
 
 
 @pytest.mark.parametrize("name", ["warbias_generation", "warbias_translation_review", "unlearning"])

@@ -72,7 +72,12 @@ def _parser():
     neutral.add_argument("--en", type=Path)
     neutral.add_argument("--uk", type=Path)
     _generation_options(neutral)
-    review = commands.add_parser("review", help="Bind supplied linguistic decisions to exact text")
+    template = commands.add_parser(
+        "review-template", help="Freeze the exact context for linguistic review"
+    )
+    for key in ("input", "output"):
+        template.add_argument(f"--{key}", type=Path, required=True)
+    review = commands.add_parser("review", help="Verify frozen-context linguistic decisions")
     for key in ("input", "decisions", "output"):
         review.add_argument(f"--{key}", type=Path, required=True)
     release = commands.add_parser("release", help="Build an aligned reviewed data release")
@@ -207,21 +212,26 @@ def dispatch(args):
             "languages": sorted(rows),
             "records": None if result is None else sum(map(len, result.values())),
         }
-    if args.command == "review":
+    if args.command in ("review-template", "review"):
         from fairforget.io import unique_index
-        from fairforget.warbias.review import review_record
+        from fairforget.warbias.review import bind_decision, decision_template
 
+        if args.output.exists():
+            raise ValueError("Review output must be a new file; existing decisions are preserved")
         rows = unique_index(read_rows(args.input))
+        if args.command == "review-template":
+            records = [decision_template(row) for row in rows.values()]
+            write_rows(args.output, records)
+            return {
+                "review_records": len(records),
+                "template": True,
+                "automatic_linguistic_acceptance": False,
+            }
         decisions = read_rows(args.decisions)
         indexed = unique_index(decisions)
         if set(indexed) != set(rows):
             raise ValueError("Review decisions must cover exactly the supplied items")
-        records = [
-            review_record(
-                rows[item], **{key: value for key, value in decision.items() if key != "id"}
-            )
-            for item, decision in indexed.items()
-        ]
+        records = [bind_decision(rows[item], decision) for item, decision in indexed.items()]
         write_rows(args.output, records)
         return {"review_records": len(records), "automatic_linguistic_acceptance": False}
     if args.command == "release":

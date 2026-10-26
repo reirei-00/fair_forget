@@ -197,7 +197,7 @@ def unlearning_example_bundle(*, config, output):
     from lm_eval.fair_uk.contracts import canonical_sha256, validate_data_release
 
     from fairforget.io import file_digest, write_json
-    from fairforget.unlearning.checkpoints import save_state
+    from fairforget.unlearning.checkpoints import load_state_checkpoint, save_state
     from fairforget.unlearning.data import Example
 
     class TinyModel(torch.nn.Module):
@@ -289,6 +289,7 @@ def unlearning_example_bundle(*, config, output):
             parameters, lr=settings["learning_rate"]
         ),
         "checkpoint_writer": save_state,
+        "checkpoint_loader": load_state_checkpoint,
     }
 
 
