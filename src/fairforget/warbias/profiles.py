@@ -9,33 +9,128 @@ is used for subsequent wording revisions.
 
 AGE_WORDS = {"young_adult": "young", "middle_aged": "middle-aged", "older": "older"}
 GENDER_WORDS = {"women": "women", "men": "men"}
-SUPPORTED_ATTRIBUTES = {
-    "age",
-    "gender",
-    "service_period",
-    "displacement_origin",
-    "origin_region",
-    "disability",
-    "pets",
-    "registration",
-    "occupation",
-    "service_state",
-    "discharge_recency",
-    "service_duration",
-    "service_role",
-    "rank",
-    "recruitment_route",
-    "prior_occupation",
-    "region",
-    "community_type",
-    "displacement_wave",
-    "housing_type",
-    "caregiving",
-    "help_seeking",
-    "dual_status",
-    "language",
-    "ethnicity",
+SERVICE_PERIOD_CLAUSES = {
+    "ato_oos": "who served during ATO/OOS (2014–2021)",
+    "full_scale": "who served during the full-scale war",
+    "both": "who served both before and during the full-scale invasion",
 }
+ORIGIN_WORDS = {"occupied_territories": "occupied territories"}
+ORIGIN_REGION_WORDS = {"east": "eastern regions"}
+DISABILITY_MODIFIERS = {
+    "war_caused": "with war-related disabilities",
+    "war_caused_nonvisible": "with invisible war-related disabilities",
+    "unspecified_cause": "with disabilities",
+}
+PETS_MODIFIERS = {"with_pets": "with pets"}
+REGISTRATION_CLAUSES = {"unregistered": "who lack formal IDP registration"}
+DUAL_STATUS_CLAUSES = {
+    "veteran_and_idp": {
+        "veteran": "who are internally displaced",
+        "idp": "who are veterans",
+    }
+}
+LANGUAGE_PREFIXES = {"russian": "Russian-speaking ", "ukrainian": "Ukrainian-speaking "}
+ETHNICITY_PREFIXES = {"roma": "Roma "}
+SUFFIX_CLAUSES = {
+    "service_state": {
+        "discharged": "who have left military service",
+        "currently_serving": "who are currently serving",
+        "returned_to_service": "who have returned to military service",
+    },
+    "discharge_recency": {
+        "recently_discharged": "who recently left military service",
+        "longer_civilian_life": "who have been living as civilians for some time",
+    },
+    "service_duration": {
+        "short_service": "who served for a relatively short time",
+        "long_service": "who have a long history of military service",
+    },
+    "service_role": {
+        "combat": "who served in combat roles",
+        "noncombat": "who served in noncombat roles",
+    },
+    "rank": {
+        "officer": "who served as officers",
+        "sergeant": "who served as sergeants",
+        "enlisted": "who served in the enlisted ranks",
+    },
+    "recruitment_route": {
+        "volunteer": "who volunteered for military service",
+        "contract": "who entered military service on a contract",
+        "mobilized": "who entered military service through mobilization",
+    },
+    "prior_occupation": {
+        "schoolteacher": "who previously worked as schoolteachers",
+        "electrician": "who previously worked as electricians",
+    },
+    "region": {
+        "eastern_region": "who live in an eastern region",
+        "western_region": "who live in a western region",
+    },
+    "community_type": {
+        "urban": "who live in an urban community",
+        "rural": "who live in a rural community",
+    },
+    "displacement_wave": {
+        "before_full_scale": "who were displaced before the full-scale invasion",
+        "during_full_scale": "who were displaced during the full-scale invasion",
+    },
+    "housing_type": {
+        "rented_home": "who live in rented housing",
+        "collective_accommodation": "who live in collective accommodation",
+    },
+    "caregiving": {
+        "parent": "who have children",
+        "unpaid_carer": "who provide unpaid care for a relative",
+    },
+    "help_seeking": {"psychological_support": "who seek psychological support"},
+}
+ATTRIBUTE_WORDS = {
+    "age": AGE_WORDS,
+    "gender": GENDER_WORDS,
+    "service_period": SERVICE_PERIOD_CLAUSES,
+    "displacement_origin": ORIGIN_WORDS,
+    "origin_region": ORIGIN_REGION_WORDS,
+    "disability": DISABILITY_MODIFIERS,
+    "pets": PETS_MODIFIERS,
+    "registration": REGISTRATION_CLAUSES,
+    "dual_status": DUAL_STATUS_CLAUSES,
+    "language": LANGUAGE_PREFIXES,
+    "ethnicity": ETHNICITY_PREFIXES,
+    **SUFFIX_CLAUSES,
+}
+SUPPORTED_ATTRIBUTES = {*ATTRIBUTE_WORDS, "occupation"}
+ATTRIBUTE_TARGET_GROUPS = {
+    "service_period": "veteran",
+    "displacement_origin": "idp",
+    "origin_region": "idp",
+}
+OCCUPATION_SECTORS = {
+    "family_education": "education",
+    "family_healthcare": "healthcare and care services",
+    "family_it": "information technology",
+    "family_engineering": "engineering and technical occupations",
+    "family_administration": "administration",
+    "family_finance_legal": "finance and legal services",
+    "family_retail": "retail and customer service",
+    "family_hospitality": "hospitality and food services",
+    "family_trades": "construction and the skilled trades",
+    "family_manufacturing": "manufacturing and repair services",
+    "family_transport": "transport and logistics",
+    "family_agriculture": "agriculture and forestry",
+    "family_media": "media and the arts",
+    "family_property_services": "cleaning and property services",
+}
+OCCUPATION_CLAUSES = {
+    "current": "who work ",
+    "previous": "who previously worked ",
+    "sought": "who are seeking work ",
+}
+
+
+def _require_option(axis, value, vocabulary):
+    if not isinstance(value, str) or value not in vocabulary:
+        raise ValueError(f"Unsupported {axis} value {value!r} for profile rendering")
 
 
 def _validate_profile(row, attributes):
@@ -43,9 +138,19 @@ def _validate_profile(row, attributes):
         raise ValueError("Unsupported target group for profile rendering")
     if set(attributes) - SUPPORTED_ATTRIBUTES:
         raise ValueError("Profile includes attributes this renderer cannot realize")
-    for axis, vocabulary in (("age", AGE_WORDS), ("gender", GENDER_WORDS)):
-        if attributes.get(axis) not in (None, "", *vocabulary):
-            raise ValueError(f"Unsupported {axis} value for profile rendering")
+    for axis, vocabulary in ATTRIBUTE_WORDS.items():
+        value = attributes.get(axis)
+        if value is None or value == "":
+            continue
+        _require_option(axis, value, vocabulary)
+        target_group = ATTRIBUTE_TARGET_GROUPS.get(axis)
+        if target_group and row["target_group"] != target_group:
+            raise ValueError(
+                f"Profile renderer cannot realize {axis} for target group {row['target_group']!r}"
+            )
+    occupation = attributes.get("occupation")
+    if occupation is not None and occupation != "" and not isinstance(occupation, str):
+        raise ValueError(f"Unsupported occupation value {occupation!r} for profile rendering")
 
 
 def plural(job):
@@ -71,33 +176,19 @@ def _join_clauses(base, clauses):
 
 
 def _occupation_clause(occupation, reference, dictionary):
-    families = {x["code"] for x in dictionary["occupations"]}
-    jobs = {j["code"]: j["label_en"] for x in dictionary["occupations"] for j in x["jobs"]}
-    sectors = {
-        "family_education": "education",
-        "family_healthcare": "healthcare and care services",
-        "family_it": "information technology",
-        "family_engineering": "engineering and technical occupations",
-        "family_administration": "administration",
-        "family_finance_legal": "finance and legal services",
-        "family_retail": "retail and customer service",
-        "family_hospitality": "hospitality and food services",
-        "family_trades": "construction and the skilled trades",
-        "family_manufacturing": "manufacturing and repair services",
-        "family_transport": "transport and logistics",
-        "family_agriculture": "agriculture and forestry",
-        "family_media": "media and the arts",
-        "family_property_services": "cleaning and property services",
-    }
+    _require_option("occupation_reference", reference, OCCUPATION_CLAUSES)
+    families = {x["code"] for x in dictionary.get("occupations", [])}
+    jobs = {j["code"]: j["label_en"] for x in dictionary.get("occupations", []) for j in x["jobs"]}
+    if not isinstance(occupation, str) or occupation not in families | jobs.keys():
+        raise ValueError(
+            f"Unsupported occupation value {occupation!r} in the provided attribute dictionary"
+        )
     if occupation in families:
-        noun = "in " + sectors[occupation]
+        _require_option("occupation family", occupation, OCCUPATION_SECTORS)
+        noun = "in " + OCCUPATION_SECTORS[occupation]
     else:
         noun = "as " + plural(jobs[occupation])
-    if reference == "previous":
-        return "who previously worked " + noun
-    if reference == "sought":
-        return "who are seeking work " + noun
-    return "who work " + noun
+    return OCCUPATION_CLAUSES[reference] + noun
 
 
 def target(row, dictionary=None):
@@ -114,12 +205,8 @@ def target(row, dictionary=None):
         gender = {"women": "women", "men": "male"}.get(attrs.get("gender"), "")
         base = " ".join(x for x in (age, gender, "veterans") if x)
         period = attrs.get("service_period")
-        if period == "ato_oos":
-            clauses.append("who served during ATO/OOS (2014–2021)")
-        elif period == "full_scale":
-            clauses.append("who served during the full-scale war")
-        elif period == "both":
-            clauses.append("who served both before and during the full-scale invasion")
+        if period:
+            clauses.append(SERVICE_PERIOD_CLAUSES[period])
     else:
         person = GENDER_WORDS.get(attrs.get("gender"), "people")
         base = " ".join(x for x in (age, "internally displaced", person) if x)
@@ -127,23 +214,19 @@ def target(row, dictionary=None):
         region = attrs.get("origin_region")
         if origin == "occupied_territories" and region == "east":
             base += " from eastern occupied territories"
-        elif origin == "occupied_territories":
-            base += " from occupied territories"
-        elif region == "east":
-            base += " from eastern regions"
+        elif origin:
+            base += " from " + ORIGIN_WORDS[origin]
+        elif region:
+            base += " from " + ORIGIN_REGION_WORDS[region]
 
     disability = attrs.get("disability")
-    if disability == "war_caused":
-        modifiers.append("with war-related disabilities")
-    elif disability == "war_caused_nonvisible":
-        modifiers.append("with invisible war-related disabilities")
-    elif disability == "unspecified_cause":
-        modifiers.append("with disabilities")
+    if disability:
+        modifiers.append(DISABILITY_MODIFIERS[disability])
 
-    if attrs.get("pets") == "with_pets" and not attrs.get("occupation"):
-        modifiers.append("with pets")
-    if attrs.get("registration") == "unregistered":
-        clauses.append("who lack formal IDP registration")
+    if attrs.get("pets") and not attrs.get("occupation"):
+        modifiers.append(PETS_MODIFIERS[attrs["pets"]])
+    if attrs.get("registration"):
+        clauses.append(REGISTRATION_CLAUSES[attrs["registration"]])
 
     occupation = attrs.get("occupation")
     if occupation:
@@ -153,86 +236,26 @@ def target(row, dictionary=None):
             _occupation_clause(
                 occupation,
                 row.get("occupation_reference", "current"),
-                dictionary or {"occupations": []},
+                dictionary,
             )
         )
         if attrs.get("pets") == "with_pets":
             clauses.append("who have pets")
 
-    suffixes = {
-        "service_state": {
-            "discharged": "who have left military service",
-            "currently_serving": "who are currently serving",
-            "returned_to_service": "who have returned to military service",
-        },
-        "discharge_recency": {
-            "recently_discharged": "who recently left military service",
-            "longer_civilian_life": "who have been living as civilians for some time",
-        },
-        "service_duration": {
-            "short_service": "who served for a relatively short time",
-            "long_service": "who have a long history of military service",
-        },
-        "service_role": {
-            "combat": "who served in combat roles",
-            "noncombat": "who served in noncombat roles",
-        },
-        "rank": {
-            "officer": "who served as officers",
-            "sergeant": "who served as sergeants",
-            "enlisted": "who served in the enlisted ranks",
-        },
-        "recruitment_route": {
-            "volunteer": "who volunteered for military service",
-            "contract": "who entered military service on a contract",
-            "mobilized": "who entered military service through mobilization",
-        },
-        "prior_occupation": {
-            "schoolteacher": "who previously worked as schoolteachers",
-            "electrician": "who previously worked as electricians",
-        },
-        "region": {
-            "eastern_region": "who live in an eastern region",
-            "western_region": "who live in a western region",
-        },
-        "community_type": {
-            "urban": "who live in an urban community",
-            "rural": "who live in a rural community",
-        },
-        "displacement_wave": {
-            "before_full_scale": "who were displaced before the full-scale invasion",
-            "during_full_scale": "who were displaced during the full-scale invasion",
-        },
-        "housing_type": {
-            "rented_home": "who live in rented housing",
-            "collective_accommodation": "who live in collective accommodation",
-        },
-        "caregiving": {
-            "parent": "who have children",
-            "unpaid_carer": "who provide unpaid care for a relative",
-        },
-        "help_seeking": {"psychological_support": "who seek psychological support"},
-    }
-    for axis, options in suffixes.items():
+    for axis, options in SUFFIX_CLAUSES.items():
         if attrs.get(axis):
             clauses.append(options[attrs[axis]])
 
     if attrs.get("dual_status"):
-        clauses.append(
-            "who are internally displaced"
-            if row["target_group"] == "veteran"
-            else "who are veterans"
-        )
+        clauses.append(DUAL_STATUS_CLAUSES[attrs["dual_status"]][row["target_group"]])
 
     if modifiers:
         base += " " + " and ".join(modifiers)
     base = _join_clauses(base, clauses)
     if attrs.get("language"):
-        base = {"russian": "Russian-speaking ", "ukrainian": "Ukrainian-speaking "}[
-            attrs["language"]
-        ] + base
-    if attrs.get("ethnicity") == "roma":
-        base = "Roma " + base
+        base = LANGUAGE_PREFIXES[attrs["language"]] + base
+    if attrs.get("ethnicity"):
+        base = ETHNICITY_PREFIXES[attrs["ethnicity"]] + base
     return base
 
 
