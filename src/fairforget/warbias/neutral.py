@@ -14,7 +14,7 @@ derived evaluation inputs, not edits to their source triplets.
 import re
 from pathlib import Path
 
-from fairforget.io import read_rows, write_rows
+from fairforget.io import digest, read_rows, unique_index, write_rows
 from fairforget.warbias.schema import FIELDS, LANGUAGES
 
 VERSION = "warbias_neutral_variants_v1"  # record schema version
@@ -163,7 +163,6 @@ def choose(original, candidates, language):
 
 def generate(rows_by_language, config, output, *, provider=None, execute=False):
     """Generate neutral variants through an injected, raw-evidence-caching provider."""
-    from fairforget.io import digest
     from fairforget.warbias.provider import response_text, run_requests
 
     requests = []
@@ -199,6 +198,7 @@ def generate(rows_by_language, config, output, *, provider=None, execute=False):
                 "field": field,
                 "candidates": [clean_output(response_text(call))],
                 "raw_call_sha256": digest(call),
+                "source_sha256": call["request"]["source_sha256"],
             }
         )
     for language, records in grouped.items():
@@ -208,12 +208,30 @@ def generate(rows_by_language, config, output, *, provider=None, execute=False):
 
 def collect(released, raw, language):
     """Choose and validate one variant per sentence; a row is valid if all three are."""
-    by_id = {r["id"]: r for r in released}
+    if language not in LANGUAGES:
+        raise ValueError("Unsupported neutral language")
+    by_id = unique_index(released)
     grouped = {}
     for item in raw:
-        grouped.setdefault(item["id"], {})[item["field"]] = item["candidates"]
+        identifier, field = item.get("id"), item.get("field")
+        if identifier not in by_id or field not in FIELDS or item.get("language") != language:
+            raise ValueError("Neutral generation language, ID or field differs from the release")
+        if item.get("source_sha256") != digest(by_id[identifier][field]):
+            raise ValueError(
+                f"{language}:{identifier}:{field}: neutral generation has stale source text"
+            )
+        if field in grouped.setdefault(identifier, {}):
+            raise ValueError("Duplicate neutral generation ID/field")
+        candidates = item.get("candidates")
+        if not isinstance(candidates, list) or any(
+            value is not None and not isinstance(value, str) for value in candidates
+        ):
+            raise ValueError("Neutral candidates must be a list of strings or null")
+        grouped[identifier][field] = candidates
     if set(grouped) != set(by_id):
         raise ValueError(f"{language}: generations do not cover the release exactly")
+    if any(set(fields) != set(FIELDS) for fields in grouped.values()):
+        raise ValueError("Neutral generations must cover all three source fields")
     records = []
     for item, fields in sorted(grouped.items()):
         row, neutral, problems = by_id[item], {}, {}
@@ -230,6 +248,7 @@ def collect(released, raw, language):
                 "status": "valid" if valid else "invalid",
                 "problems": problems,
                 "version": VERSION,
+                "source_sha256": {field: digest(row[field]) for field in FIELDS},
             }
         )
     return records

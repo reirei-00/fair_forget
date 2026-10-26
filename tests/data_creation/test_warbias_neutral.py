@@ -1,5 +1,6 @@
 """Neutral-variant validation rules."""
 
+from fairforget.io import digest
 from fairforget.warbias.neutral import (
     check_sentence,
     choose,
@@ -65,6 +66,8 @@ def test_collect_marks_rows_valid_only_when_all_three_sentences_are():
             "candidates": ["IDPs sing."],
         },
     ]
+    for record in raw:
+        record["source_sha256"] = digest(released[0][record["field"]])
     record = collect(released, raw, "en")[0]
     assert record["status"] == "invalid" and record["neutral"] is None
     assert record["problems"]["unrelated"] == ["status_term_remains", "unchanged"]

@@ -118,7 +118,7 @@ def test_sequential_authoring_requires_review_and_exact_parent_lineage(tmp_path)
         CONFIG,
         prompt,
         tmp_path / "s",
-        provider=Provider(["A stereotype."]),
+        provider=Provider(["{target} always refuse work."]),
         execute=True,
     )
     with pytest.raises(ValueError, match="linguistic reviews"):
@@ -133,13 +133,13 @@ def test_sequential_authoring_requires_review_and_exact_parent_lineage(tmp_path)
         prompt,
         tmp_path / "c",
         previous={"S": s},
-        provider=Provider(["A counter."]),
+        provider=Provider(["{target} make their own work decisions."]),
         execute=True,
     )
     c[0]["review"] = stage_review(
         c[0]["text"], reviewer="fixture reviewer", reviewer_kind="model", accepted=True
     )
-    s[0]["text"] = "Changed and reviewed stereotype."
+    s[0]["text"] = "{target} always reject employment."
     s[0]["review"] = stage_review(
         s[0]["text"], reviewer="fixture reviewer", reviewer_kind="model", accepted=True
     )
