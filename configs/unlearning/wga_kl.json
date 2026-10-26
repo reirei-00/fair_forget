@@ -1,0 +1,24 @@
+{
+  "status": "pending_reviewed_inputs_and_development_selection",
+  "intervention_id": null,
+  "language": null,
+  "seed": null,
+  "steps": null,
+  "learning_rate": null,
+  "max_grad_norm": null,
+  "trainable_parameters": null,
+  "pad_token_id": null,
+  "data_release": null,
+  "schedule": null,
+  "method": "wga_kl",
+  "alpha": null,
+  "preservation_weight": null,
+  "kl_direction": "reference_to_current",
+  "stream_roles": {
+    "forget": "confidence-weighted stereotype suppression",
+    "preservation": "frozen-base token KL"
+  },
+  "purpose": "production",
+  "dropout_policy": null,
+  "tokenizer_identity": null
+}

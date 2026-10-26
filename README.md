@@ -33,3 +33,11 @@ uses the vLLM 0.18 token-input API; it makes no scientific setting selections.
 The pre-existing StereoSet filtering notebooks and reviewed files under
 `notebooks/stereoset_filtering/` remain unchanged. They are outside the new
 paper-code export.
+
+The `fairforget.unlearning` API implements separate WGA+KL, NPO+retention, RMU,
+BiasUnlearn-style and task-vector objectives. Its injected runner requires
+reviewed source/release bindings, explicit completion masks, held-out family
+separation, a same-base frozen reference and actual optimizer exposure records.
+Production needs qualified data, a tokenizer identity and an evaluator-loadable
+checkpoint writer. Configuration templates retain required/null scientific
+choices. Run `python -m pytest tests/unlearning -q` for tiny CPU checks.

@@ -1,0 +1,23 @@
+{
+  "status": "pending_reviewed_inputs_and_development_selection",
+  "intervention_id": null,
+  "language": null,
+  "seed": null,
+  "steps": null,
+  "learning_rate": null,
+  "max_grad_norm": null,
+  "trainable_parameters": null,
+  "pad_token_id": null,
+  "data_release": null,
+  "schedule": null,
+  "method": "task_vector",
+  "negation_scale": null,
+  "parameterization": "lora",
+  "acquisition_preservation": false,
+  "stream_roles": {
+    "forget": "completion-only positive-vector CE acquisition"
+  },
+  "purpose": "production",
+  "dropout_policy": null,
+  "tokenizer_identity": null
+}
