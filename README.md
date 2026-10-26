@@ -1,28 +1,75 @@
 # FairForget paper pipeline
 
-FairForget owns source-bound WarBias construction, translation and linguistic
-review. Fair-UK owns evaluation, scoring and the public artifact contracts.
-The maintained code is in `src/fairforget/`; the original working checkout and
-executed historical notebooks remain preserved outside this clean paper tree.
+Reusable code for source-bound WarBias construction, English–Ukrainian
+translation and explicit unlearning experiments. The maintained implementation
+lives in `src/fairforget/`; notebooks are thin, offline examples. Fair-UK owns the
+public data-release/intervention/exposure contracts and evaluation. This package
+uses those interfaces instead of duplicating their validators or metrics.
 
-Install the paired Fair-UK checkout first, then `pip install -e .[dev,judging]`.
-The upstream harness alone does not provide the public Fair-UK contracts.
+## Install
 
-The reusable stages are `warbias.source.prepare_cases`,
-`warbias.profiles.build_profile_matrix`, `warbias.authoring.author_stage`,
-`warbias.authoring.render_profiles`, `translation.warbias.translate`,
-`warbias.review.review_record` and `warbias.release.build_release`.
-They preserve frozen IDs, source/prompt/request hashes, reviewed parent text,
-exact translation alignment and semantic-family splits. Provider execution is
-explicit; offline previews do not call a model. Model review never implies
-human validation. Study settings remain explicit and pending in configuration.
+Use Python 3.10+ and a dedicated environment. Install the paired Fair-UK checkout
+first, then this repository:
 
-Original prompt files are preserved byte for byte with `prompts/manifest.json`.
-Case annotation and neutral rewriting also belong here. Generated data, model
-weights and run outputs stay outside Git. The old copied evaluators are retired
-in favour of maintained Fair-UK protocols.
+```sh
+python -m pip install -e /path/to/paired-fair-uk
+python -m pip install -e '.[dev,judging,unlearning]'
+fairforget doctor
+```
 
-Run `python -m pytest tests/data_creation -q` for offline software checks.
+The paired evaluator currently uses distribution name `lm_eval` and namespace
+`lm_eval.fair_uk`. An upstream harness installation without the public contracts
+and JEV provider API is insufficient; `doctor` checks the required interfaces.
+The install path above is a placeholder supplied by the operator, never a saved
+machine-specific dependency. Add `.[notebooks]` only to open notebooks.
+
+## Workflow
+
+Run `fairforget --help` for explicit stage inputs and `fairforget <stage> --help`
+for arguments. The stages are:
+
+1. `sources` and `profiles`: bind selected claims to immutable source evidence
+   and resolve the explicit profile allocation.
+2. `author`: sequential S/C/U authoring with reviewed parent text; `render`
+   expands reviewed templates without counting rendering as new model calls.
+3. `translate` and `neutral`: source-bound generation with exact raw request and
+   response caching. Preview is the default. Execution requires `--execute` and
+   an explicitly supplied provider factory.
+4. `review` and `release`: bind supplied linguistic decisions to exact text and
+   build aligned, family-allocated releases. Machine review is recorded as
+   pending human qualification. `severity` and `harm-mechanisms` are separate
+   typed JEV annotation commands, also previewing by default.
+5. `unlearning-validate` verifies hashed token exports and partition separation.
+   `unlearn` previews its explicit configuration; execution additionally requires
+   `--execute` and a factory binding the actual local model, frozen reference,
+   optimizer, schedule and checkpoint writer.
+
+Provider factories are named `module:callable` and receive `config=...`. Training
+factories additionally receive `output=...`. They are imported only when execution
+is requested. No provider, model, intervention setting or mixture ratio is silently
+selected. Configuration files with pending values remain templates.
+
+## Offline verification
+
+```sh
+python -m pytest tests/data_creation tests/unlearning tests/cli -q
+python -m ruff check src tests/data_creation tests/unlearning tests/cli
+fairforget example generation --output outputs/check-generation
+fairforget example translation --output outputs/check-translation
+fairforget example unlearning --output outputs/check-unlearning
+```
+
+Run examples from the repository root, or pass `--prompt-root` for another prompt
+asset directory. They use synthetic local providers/data and a tiny CPU model;
+the unlearning example performs one actual optimizer step. These are software
+checks, not measured study baselines, human calibration or study interventions.
+Use fresh output directories. The executable notebooks in `notebooks/paper/`
+call the same functions and write only to temporary directories.
+
+Original WarBias prompt files are retained byte for byte in `prompts/` with their
+hash manifest. Published source names and immutable pins remain provenance.
+No anonymous dataset mirror or publication is implied by this local code package.
+Keep secrets, generated data, checkpoints and result evidence outside source.
 
 For explicitly executed local generation/translation, install the optional
 `generation` extra and select the provider factory
@@ -31,13 +78,4 @@ explicit engine, sampling and raw/native-chat template settings. This adapter
 uses the vLLM 0.18 token-input API; it makes no scientific setting selections.
 
 The pre-existing StereoSet filtering notebooks and reviewed files under
-`notebooks/stereoset_filtering/` remain unchanged. They are outside the new
-paper-code export.
-
-The `fairforget.unlearning` API implements separate WGA+KL, NPO+retention, RMU,
-BiasUnlearn-style and task-vector objectives. Its injected runner requires
-reviewed source/release bindings, explicit completion masks, held-out family
-separation, a same-base frozen reference and actual optimizer exposure records.
-Production needs qualified data, a tokenizer identity and an evaluator-loadable
-checkpoint writer. Configuration templates retain required/null scientific
-choices. Run `python -m pytest tests/unlearning -q` for tiny CPU checks.
+`notebooks/stereoset_filtering/` remain unchanged and outside the paper-code export.

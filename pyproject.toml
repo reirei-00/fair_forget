@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "fairforget-paper"
 version = "0.1.0"
-description = "Source-bound WarBias construction and translation"
+description = "Source-bound WarBias construction, translation and explicit unlearning"
 requires-python = ">=3.10"
 readme = "README.md"
 dependencies = ["lm_eval>=0.4.14.dev0"]
@@ -16,6 +16,9 @@ judging = ["httpx>=0.28,<1"]
 unlearning = ["torch>=2.2"]
 notebooks = ["jupyterlab>=4"]
 dev = ["pytest>=9", "ruff==0.16.2"]
+
+[project.scripts]
+fairforget = "fairforget.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
