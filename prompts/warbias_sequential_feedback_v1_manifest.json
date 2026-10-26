@@ -1,0 +1,30 @@
+{
+  "bundle_id": "warbias-sequential-feedback-v1-20260908",
+  "purpose": "Three-stage prompts revised using the 48-item human development pilot",
+  "preferred_model_code": "lapa12b",
+  "strategy": "sequential",
+  "human_validated": false,
+  "stages": [
+    {
+      "stage": "stereotype",
+      "file": "archive/warbias_validation_sequential_stereotype_feedback_v1_20260908.txt",
+      "sha256": "efba573e0be7e1b7a033b933754d56d4367cc89b9f9fe989c4d49e0a9c2ff8b3",
+      "output_field": "stereotype_uk",
+      "previous_prompt": "archive/warbias_validation_sequential_stereotype_before_feedback_20260908.txt"
+    },
+    {
+      "stage": "counter",
+      "file": "archive/warbias_validation_sequential_counter_feedback_v1_20260908.txt",
+      "sha256": "8f60731746f0b260beb52114e72af03e702cb9d5c9a0de0ecdf03138b94eb932",
+      "output_field": "counter_stereotype_uk",
+      "previous_prompt": "archive/warbias_validation_sequential_counter_before_feedback_20260908.txt"
+    },
+    {
+      "stage": "unrelated",
+      "file": "archive/warbias_validation_sequential_unrelated_feedback_v1_20260908.txt",
+      "sha256": "e3f54604e35d816a8cdec52a0ae7d5edfa1b13569c9564d76cb6b41d61e5bf94",
+      "output_field": "unrelated_uk",
+      "previous_prompt": "archive/warbias_validation_sequential_unrelated_before_feedback_20260908.txt"
+    }
+  ]
+}

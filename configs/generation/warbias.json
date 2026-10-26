@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "provider": null,
+  "model": null,
+  "revision": null,
+  "settings": {},
+  "prompt": "prompts/warbias_english_authoring_v1.txt",
+  "stage_order": ["S", "C", "U"],
+  "require_review_between_stages": true,
+  "note": "Select and pin the actual provider/model explicitly. No inference is authorized by loading this configuration."
+}

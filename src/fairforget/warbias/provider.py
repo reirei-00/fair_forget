@@ -1,0 +1,90 @@
+"""Injectable generation with durable, request-bound raw response evidence."""
+
+from copy import deepcopy
+from pathlib import Path
+from typing import Protocol
+
+from fairforget.io import canonical_json, digest, file_digest, read_rows, unique_index, write_json
+
+
+class GenerationProvider(Protocol):
+    def generate(self, request: dict) -> dict:
+        """Return the raw provider envelope, including its exact output text."""
+        ...
+
+
+def prompt_record(path):
+    path = Path(path)
+    return {"sha256": file_digest(path), "text": path.read_text(encoding="utf-8")}
+
+
+def request_record(item_id, stage, state, config, prompt):
+    if not config.get("model") or not config.get("provider"):
+        raise ValueError("Declare the generation provider and model explicitly")
+    return {
+        "id": item_id,
+        "stage": stage,
+        "provider": config["provider"],
+        "model": config["model"],
+        "revision": config.get("revision"),
+        "settings": dict(config.get("settings", {})),
+        "prompt_sha256": prompt["sha256"],
+        "messages": [
+            {"role": "system", "content": prompt["text"]},
+            {"role": "user", "content": canonical_json(state)},
+        ],
+        "state_sha256": digest(state),
+    }
+
+
+def run_requests(requests, output, *, provider=None, execute=False):
+    """Preview or resume exact requests; only explicit execution invokes a provider."""
+    requests = list(requests)
+    if not requests:
+        raise ValueError("Generation selection is empty")
+    if any(not request.get("provider") or not request.get("model") for request in requests):
+        raise ValueError("Declare the generation provider and model explicitly")
+    indexed = unique_index(requests)
+    output = Path(output)
+    raw = output / "responses.jsonl"
+    saved = unique_index(read_rows(raw)) if raw.exists() else {}
+    if set(saved) - set(indexed):
+        raise ValueError("Saved generation IDs are absent from the current selection")
+    for item, record in saved.items():
+        expected = indexed[item]
+        if record.get("request_sha256") != digest(expected) or record.get("request") != expected:
+            raise ValueError(f"{item}: saved generation request differs")
+        if record.get("response_sha256") != digest(record.get("response")):
+            raise ValueError(f"{item}: saved raw provider response differs")
+    write_json(
+        output / "plan.json", {"schema_version": 1, "requests": requests, "execute": execute}
+    )
+    if not execute:
+        return None
+    pending = [request for request in requests if request["id"] not in saved]
+    if pending and provider is None:
+        raise ValueError("Execution requires an explicitly supplied generation provider")
+    with raw.open("a", encoding="utf-8") as stream:
+        for request in pending:
+            response = provider.generate(deepcopy(request))
+            if not isinstance(response, dict):
+                raise ValueError("Generation provider must return a raw JSON object")
+            record = {
+                "id": request["id"],
+                "request": request,
+                "request_sha256": digest(request),
+                "response": response,
+                "response_sha256": digest(response),
+            }
+            stream.write(canonical_json(record) + "\n")
+            stream.flush()
+            saved[request["id"]] = record
+    return [saved[request["id"]] for request in requests]
+
+
+def response_text(record):
+    """Decode the adapter's explicit text field without rewriting generated text."""
+    text = record["response"].get("text")
+    if not isinstance(text, str):
+        raise ValueError("Provider adapter must retain exact output in response.text")
+    return text

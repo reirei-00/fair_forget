@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "provider": null,
+  "model": null,
+  "revision": null,
+  "settings": {},
+  "source_language": "en",
+  "target_language": "uk",
+  "prompt": "prompts/warbias_en_uk_translation_v4.txt",
+  "note": "Exact historical prompt bytes are preserved. Select the actual translation checkpoint/revision; schema checks do not establish linguistic fidelity."
+}
