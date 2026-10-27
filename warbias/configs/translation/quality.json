@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "model_id": "Unbabel/wmt20-comet-qe-da",
+  "revision": "2e7ffc84fb67d99cf92506611766463bb9230cfb",
+  "prediction_options": {
+    "batch_size": 8,
+    "gpus": 0,
+    "accelerator": "cpu",
+    "num_workers": 1
+  }
+}

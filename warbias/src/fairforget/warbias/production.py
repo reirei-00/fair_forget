@@ -1,17 +1,59 @@
 """Full generation is gated by an explicit evidence-bound human selection."""
 
+import re
 from copy import deepcopy
 from pathlib import Path
 
 from fairforget.io import digest, unique_index, write_json, write_rows
 from fairforget.warbias.generation import (
+    STRATEGIES,
     freeze_file,
     generate_triplets,
     input_id,
     validate_cases,
     validate_source_language,
+    verify_strategy,
 )
 from fairforget.warbias.pilot import verify_pilot_plan
+
+
+def resolve_final_strategy(selected, final_strategy=None):
+    """Allow revised prompt bytes while preserving the selected strategy and settings."""
+    pilot_strategy = selected["strategy_config"]
+    strategy = deepcopy(pilot_strategy if final_strategy is None else final_strategy)
+    verify_strategy(selected["strategy"], strategy)
+    if {key: value for key, value in strategy.items() if key != "prompts"} != {
+        key: value for key, value in pilot_strategy.items() if key != "prompts"
+    }:
+        raise ValueError("Final prompts cannot change the selected response fields or settings")
+    return strategy
+
+
+def _prompt_hashes(strategy):
+    return {stage: prompt["sha256"] for stage, prompt in strategy["prompts"].items()}
+
+
+def _verify_prompt_revision(revision):
+    if not isinstance(revision, dict) or set(revision) != {
+        "strategy",
+        "pilot_prompt_sha256",
+        "final_prompt_sha256",
+    }:
+        raise ValueError("Full-generation prompt revision is incomplete")
+    name = revision["strategy"]
+    stages = STRATEGIES.get(name) if isinstance(name, str) else None
+    for name in ("pilot_prompt_sha256", "final_prompt_sha256"):
+        hashes = revision[name]
+        if (
+            stages is None
+            or not isinstance(hashes, dict)
+            or set(hashes) != set(stages)
+            or any(
+                not isinstance(value, str) or not re.fullmatch(r"[a-f0-9]{64}", value)
+                for value in hashes.values()
+            )
+        ):
+            raise ValueError("Full-generation prompt revision hashes differ")
 
 
 def verify_production_result(rows, manifest):
@@ -28,6 +70,9 @@ def verify_production_result(rows, manifest):
     unique_index(rows)
     language = manifest.get("source_language")
     validate_source_language(language)
+    revision = manifest.get("prompt_revision")
+    if revision is not None:
+        _verify_prompt_revision(revision)
     if (
         manifest.get("rows_sha256") != digest(rows)
         or manifest.get("row_count") != len(rows)
@@ -48,17 +93,43 @@ def verify_production_result(rows, manifest):
             or not manifest.get("selection_sha256")
             or generation.get("production_plan_sha256") != manifest["production_plan_sha256"]
             or generation.get("selection_sha256") != manifest["selection_sha256"]
+            or generation.get("prompt_revision") != revision
+            or revision is not None
+            and (
+                generation.get("strategy") != revision["strategy"]
+                or generation.get("prompt_sha256") != revision["final_prompt_sha256"]
+            )
         ):
             raise ValueError("Full-generation row language or selection lineage differs")
     return manifest
 
 
-def generate_full(cases, pilot_plan, selection_receipt, output, *, provider=None, execute=False):
-    """Run only the selected model/strategy, without changing its frozen prompts."""
+def generate_full(
+    cases,
+    pilot_plan,
+    selection_receipt,
+    output,
+    *,
+    final_strategy=None,
+    provider=None,
+    execute=False,
+):
+    """Run the selected condition, with an optional explicit final prompt revision."""
     from fairforget.warbias.selection import verify_selection
 
     verify_pilot_plan(pilot_plan)
     selected = verify_selection(selection_receipt, pilot_plan)
+    strategy = resolve_final_strategy(selected, final_strategy)
+    revision = (
+        {
+            "strategy": selected["strategy"],
+            "pilot_prompt_sha256": _prompt_hashes(selected["strategy_config"]),
+            "final_prompt_sha256": _prompt_hashes(strategy),
+        }
+        if final_strategy is not None
+        else None
+    )
+    revision_binding = {"prompt_revision": revision} if revision is not None else {}
     cases = deepcopy(list(cases))
     validate_cases(cases)
     plan = {
@@ -71,6 +142,7 @@ def generate_full(cases, pilot_plan, selection_receipt, output, *, provider=None
         "cases_sha256": digest(cases),
         "case_ids": [case["case_id"] for case in cases],
         "unit_ids": [input_id(case) for case in cases],
+        **({"final_strategy": strategy, **revision_binding} if revision is not None else {}),
     }
     plan["plan_sha256"] = digest(plan)
     output = Path(output)
@@ -79,7 +151,7 @@ def generate_full(cases, pilot_plan, selection_receipt, output, *, provider=None
         cases,
         selected["candidate"],
         selected["strategy"],
-        selected["strategy_config"],
+        strategy,
         selected["source_language"],
         output / "generation",
         condition_id=selected["condition_id"],
@@ -88,6 +160,7 @@ def generate_full(cases, pilot_plan, selection_receipt, output, *, provider=None
             "pilot_plan_sha256": pilot_plan["plan_sha256"],
             "selection_sha256": plan["selection_sha256"],
             "production_plan_sha256": plan["plan_sha256"],
+            **revision_binding,
         },
         provider=provider,
         execute=execute,
@@ -109,6 +182,7 @@ def generate_full(cases, pilot_plan, selection_receipt, output, *, provider=None
         "row_count": len(rows),
         "rows_sha256": digest(rows),
         "human_validated": False,
+        **revision_binding,
     }
     manifest["manifest_sha256"] = digest(manifest)
     write_json(output / "production-result.json", manifest)
