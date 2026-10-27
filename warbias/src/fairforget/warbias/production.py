@@ -4,7 +4,13 @@ from copy import deepcopy
 from pathlib import Path
 
 from fairforget.io import digest, unique_index, write_json, write_rows
-from fairforget.warbias.generation import freeze_file, generate_triplets, input_id, validate_cases
+from fairforget.warbias.generation import (
+    freeze_file,
+    generate_triplets,
+    input_id,
+    validate_cases,
+    validate_source_language,
+)
 from fairforget.warbias.pilot import verify_pilot_plan
 
 
@@ -21,10 +27,9 @@ def verify_production_result(rows, manifest):
     validate_cases(rows)
     unique_index(rows)
     language = manifest.get("source_language")
+    validate_source_language(language)
     if (
-        not isinstance(language, str)
-        or not language.strip()
-        or manifest.get("rows_sha256") != digest(rows)
+        manifest.get("rows_sha256") != digest(rows)
         or manifest.get("row_count") != len(rows)
         or manifest.get("case_count") != len({row["case_id"] for row in rows})
         or manifest.get("unit_count") != len(rows)

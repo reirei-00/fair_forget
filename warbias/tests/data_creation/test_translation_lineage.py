@@ -4,51 +4,28 @@ import json
 from copy import deepcopy
 
 import pytest
-from test_construction import CONFIG, ROOT, Provider, english, translation_text
+from test_construction import CONFIG, ROOT, Provider, translation_text, ukrainian
 
-from fairforget.io import read_rows
+from fairforget.io import digest, read_rows
 from fairforget.translation.warbias import (
     align_languages,
     ingest_translations,
     parse_translation,
     translate,
 )
+from fairforget.warbias.provider import prompt_record, request_record, run_requests
 from fairforget.warbias.review import accepted, decision_template, review_record
-from fairforget.warbias.schema import CRITERIA
-
-
-def test_translation_requires_explicit_distinct_language_roles(tmp_path):
-    for patch in ({"source_language": None}, {"target_language": None}, {"target_language": "en"}):
-        with pytest.raises(ValueError, match="distinct"):
-            translate(
-                [english()], {**CONFIG, **patch}, ROOT / "prompts/current/translation.txt", tmp_path
-            )
-    with pytest.raises(ValueError, match="source language"):
-        translate(
-            [english()],
-            {**CONFIG, "source_language": "uk", "target_language": "en"},
-            ROOT / "prompts/current/translation.txt",
-            tmp_path,
-        )
+from fairforget.warbias.schema import CRITERIA, FIELDS, review_context, text_digest, text_payload
 
 
 def test_ukrainian_source_can_be_translated_into_english(tmp_path):
-    source = {**english(), **json.loads(translation_text()), "language": "uk"}
+    source = ukrainian()
     target = translate(
         [source],
-        {**CONFIG, "source_language": "uk", "target_language": "en"},
+        CONFIG,
         ROOT / "prompts/current/translation.txt",
         tmp_path,
-        provider=Provider(
-            [
-                json.dumps(
-                    {
-                        field: english()[field]
-                        for field in ("stereotype", "counter_stereotype", "unrelated")
-                    }
-                )
-            ]
-        ),
+        provider=Provider([translation_text()]),
         execute=True,
     )[0]
     assert target["language"] == "en"
@@ -68,7 +45,7 @@ def test_ukrainian_source_can_be_translated_into_english(tmp_path):
 
 
 def test_alignment_and_raw_ingest_reject_source_metadata_drift(tmp_path):
-    source = {**english(), "source": {"revision": "original"}}
+    source = {**ukrainian(), "source": {"revision": "original"}}
     target = translate(
         [source],
         CONFIG,
@@ -91,10 +68,10 @@ def test_alignment_and_raw_ingest_reject_source_metadata_drift(tmp_path):
 
 def test_translation_preview_cannot_replace_a_different_frozen_plan(tmp_path):
     prompt = ROOT / "prompts/current/translation.txt"
-    assert translate([english()], CONFIG, prompt, tmp_path) is None
+    assert translate([ukrainian()], CONFIG, prompt, tmp_path) is None
     saved = (tmp_path / "translation-plan.json").read_bytes()
     with pytest.raises(ValueError, match="different generation plan"):
-        translate([english()], {**CONFIG, "model": "different-model"}, prompt, tmp_path)
+        translate([ukrainian()], {**CONFIG, "model": "different-model"}, prompt, tmp_path)
     assert (tmp_path / "translation-plan.json").read_bytes() == saved
     assert not (tmp_path / "responses.jsonl").exists()
 
@@ -104,3 +81,77 @@ def test_duplicate_translation_fields_are_rejected():
         parse_translation(
             '{"stereotype":"A.","stereotype":"B.","counter_stereotype":"C.","unrelated":"D."}'
         )
+
+
+@pytest.mark.parametrize(
+    "patch",
+    [
+        {"source_language": None},
+        {"target_language": None},
+        {"target_language": "uk"},
+        {"source_language": "en", "target_language": "uk"},
+        {"target_language": "fr"},
+    ],
+)
+def test_translation_accepts_only_ukrainian_to_english(patch, tmp_path):
+    provider = Provider([])
+    with pytest.raises(ValueError, match="source_language uk and target_language en"):
+        translate(
+            [ukrainian()],
+            {**CONFIG, **patch},
+            ROOT / "prompts/current/translation.txt",
+            tmp_path,
+            provider=provider,
+            execute=True,
+        )
+    assert provider.calls == []
+    assert not list(tmp_path.iterdir())
+
+
+def test_translation_rejects_non_ukrainian_source_rows(tmp_path):
+    source = {**ukrainian(), **json.loads(translation_text()), "language": "en"}
+    provider = Provider([])
+    with pytest.raises(ValueError, match="original Ukrainian triplets"):
+        translate(
+            [source],
+            CONFIG,
+            ROOT / "prompts/current/translation.txt",
+            tmp_path,
+            provider=provider,
+            execute=True,
+        )
+    assert provider.calls == []
+
+
+def test_reverse_translation_evidence_cannot_pass_ingest_or_alignment(tmp_path):
+    source = {**ukrainian(), **json.loads(translation_text()), "language": "en"}
+    target = {
+        **ukrainian(),
+        "translation_source_language": "en",
+        "translation_source_sha256": text_digest(source),
+        "translation_source_context_sha256": digest(review_context(source)),
+    }
+    with pytest.raises(ValueError, match="stale or missing source binding"):
+        align_languages([source], [target])
+    request = request_record(
+        source["id"],
+        "translation",
+        {
+            "row_id": source["id"],
+            "source_language": "en",
+            "target_language": "uk",
+            "source_sha256": text_digest(source),
+            "source_row_sha256": digest(source),
+            "source": text_payload(source),
+        },
+        CONFIG,
+        prompt_record(ROOT / "prompts/current/translation.txt"),
+    )
+    calls = run_requests(
+        [request],
+        tmp_path,
+        provider=Provider([json.dumps({field: target[field] for field in FIELDS})]),
+        execute=True,
+    )
+    with pytest.raises(ValueError, match="source_language uk and target_language en"):
+        ingest_translations([source], calls)

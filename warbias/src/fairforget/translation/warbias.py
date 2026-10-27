@@ -1,4 +1,4 @@
-"""Source-bound translation after generation, with explicit language roles."""
+"""Translate saved Ukrainian triplets into English with exact source bindings."""
 
 import json
 from pathlib import Path
@@ -17,20 +17,9 @@ from fairforget.warbias.schema import (
 
 def language_pair(config):
     source, target = config.get("source_language"), config.get("target_language")
-    if (
-        not isinstance(source, str)
-        or not source.strip()
-        or not isinstance(target, str)
-        or not target.strip()
-        or source == target
-    ):
-        raise ValueError("Declare distinct source_language and target_language explicitly")
+    if (source, target) != ("uk", "en"):
+        raise ValueError("WarBias translation requires source_language uk and target_language en")
     return source, target
-
-
-def speaker_prefix_matches(text, prefix):
-    apostrophes = str.maketrans({"’": "'", "ʼ": "'"})
-    return text.translate(apostrophes).startswith(prefix.translate(apostrophes))
 
 
 def parse_translation(text):
@@ -67,8 +56,13 @@ def validate_production_source(rows, manifest, config):
 def _source_rows(rows, config):
     source, target = language_pair(config)
     unique_index(rows)
-    if not rows or any(row.get("language") != source or structural_issues(row) for row in rows):
-        raise ValueError("Translate structurally complete triplets in the declared source language")
+    if not rows or any(
+        row.get("language") != source
+        or row.get("translation_source_language")
+        or structural_issues(row)
+        for row in rows
+    ):
+        raise ValueError("Translate structurally complete original Ukrainian triplets")
     return source, target
 
 
@@ -96,9 +90,6 @@ def translate(
                     "additional_tags": row.get("additional_tags", {}),
                 },
             ),
-            "exact_speaker_prefix": row.get("exact_speaker_prefix"),
-            "frozen_fields": row.get("frozen_fields", []),
-            "prior_translation": row.get("prior_translation", {}),
         }
         requests.append(request_record(row["id"], "translation", state, config, prompt))
     freeze_file(
@@ -127,6 +118,7 @@ def ingest_translations(source_rows, calls):
         call = indexed[item]
         request = call["request"]
         state = json.loads(request["messages"][-1]["content"])
+        language_pair(state)
         if call["request_sha256"] != digest(request) or call["response_sha256"] != digest(
             call["response"]
         ):
@@ -135,26 +127,13 @@ def ingest_translations(source_rows, calls):
             state.get("row_id") != item
             or request.get("stage") != "translation"
             or state.get("source_language") != row.get("language")
+            or row.get("translation_source_language")
             or state.get("source_sha256") != text_digest(row)
             or state.get("source_row_sha256") != digest(row)
             or state.get("source") != text_payload(row)
         ):
             raise ValueError("Translation is bound to stale or different source text")
-        language_pair(state)
         translated = parse_translation(response_text(call))
-        issues = []
-        for field in state.get("frozen_fields", []):
-            if field not in FIELDS or translated[field] != state.get("prior_translation", {}).get(
-                field
-            ):
-                issues.append("frozen_field_changed:" + field)
-        prefix = state.get("exact_speaker_prefix")
-        if prefix:
-            issues.extend(
-                "speaker_prefix_mismatch:" + field
-                for field in FIELDS[:2]
-                if not speaker_prefix_matches(translated[field], prefix)
-            )
         result = {
             **row,
             **translated,
@@ -167,7 +146,6 @@ def ingest_translations(source_rows, calls):
             "raw_call_sha256": digest(call),
             "translation_model": request["model"],
             "translation_revision": request.get("revision"),
-            "contract_issues": issues,
             "human_validated": False,
             "review_status": "pending",
         }
@@ -177,18 +155,19 @@ def ingest_translations(source_rows, calls):
 
 
 def align_languages(source_rows, translated_rows):
-    """Align either language order; provenance establishes translation direction."""
+    """Keep input order while checking Ukrainian source and English translation."""
     left, right = unique_index(source_rows), unique_index(translated_rows)
     if set(left) != set(right):
         raise ValueError("Language release IDs differ")
     for item in left:
         a, b = left[item], right[item]
-        if not a.get("language") or not b.get("language") or a["language"] == b["language"]:
-            raise ValueError("Expected distinct language labels")
-        if a.get("translation_source_language") == b["language"]:
+        if a.get("language") == "en":
             a, b = b, a
+        if a.get("language") != "uk" or b.get("language") != "en":
+            raise ValueError("Alignment requires Ukrainian source and English translation")
         if (
-            b.get("translation_source_language") != a["language"]
+            a.get("translation_source_language")
+            or b.get("translation_source_language") != "uk"
             or b.get("translation_source_sha256") != text_digest(a)
             or b.get("translation_source_context_sha256") != digest(review_context(a))
         ):
