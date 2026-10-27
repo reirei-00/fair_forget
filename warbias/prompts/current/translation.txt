@@ -1,8 +1,7 @@
-Translate the supplied source triplet from source_language into target_language.
+Translate the supplied Ukrainian triplet into English.
 Preserve the exact association, its direction, speaker, actor profile and degree
 of generalization in each sentence. The counter-stereotype must counter the same
 association; the unrelated sentence must remain independent of that association.
 Do not add evidence, interpretations, demographic attributes or stronger claims.
-Use natural complete sentences in the target language. Honor frozen_fields and
-the exact_speaker_prefix when supplied. Return only one JSON object containing
+Use natural complete sentences in English. Return only one JSON object containing
 exactly three string fields: stereotype, counter_stereotype, unrelated.

@@ -108,28 +108,6 @@ def accepted(row, review, *, require_human=False):
     )
 
 
-def stage_review(text, *, reviewer, reviewer_kind, accepted):
-    if not reviewer or reviewer_kind not in ("human", "model"):
-        raise ValueError("Declare who reviewed the authoring stage")
-    return {
-        "text_sha256": digest(text),
-        "reviewer": reviewer,
-        "reviewer_kind": reviewer_kind,
-        "accepted": bool(accepted),
-    }
-
-
-def require_stage_review(stage):
-    review = stage.get("review", {})
-    if not (
-        review.get("accepted") is True
-        and review.get("text_sha256") == digest(stage["text"])
-        and review.get("reviewer")
-        and review.get("reviewer_kind") in ("human", "model")
-    ):
-        raise ValueError("Earlier authoring stages need current explicit linguistic reviews")
-
-
 def write_sheet(path, fields, rows):
     """Create or extend a review sheet without rewriting existing human edits."""
     path = Path(path)

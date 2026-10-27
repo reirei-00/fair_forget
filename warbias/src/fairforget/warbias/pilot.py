@@ -14,12 +14,14 @@ from fairforget.warbias.generation import (
     input_id,
     validate_candidate,
     validate_cases,
+    validate_source_language,
     verify_strategy,
 )
 
 
 def freeze_pilot(cases, candidates, strategies, *, source_language):
     """Freeze supplied cases without sampling or choosing a preferred model."""
+    validate_source_language(source_language)
     cases, candidates = deepcopy(list(cases)), deepcopy(list(candidates))
     validate_cases(cases)
     for candidate in candidates:
@@ -29,8 +31,6 @@ def freeze_pilot(cases, candidates, strategies, *, source_language):
     unique_index(candidates, "candidate_id")
     if len({(row["provider"], row["model"]) for row in candidates}) < 2:
         raise ValueError("The model-selection pilot needs at least two distinct model candidates")
-    if not isinstance(source_language, str) or not source_language.strip():
-        raise ValueError("Declare the pilot source language explicitly")
     conditions = [
         {
             "condition_id": f"condition_{index + 1:02}",
@@ -72,8 +72,7 @@ def verify_pilot_plan(plan):
         or plan.get("cases_sha256") != digest(plan["cases"])
     ):
         raise ValueError("Frozen pilot cases differ")
-    if not isinstance(plan.get("source_language"), str) or not plan["source_language"].strip():
-        raise ValueError("Declare the pilot source language explicitly")
+    validate_source_language(plan.get("source_language"))
     candidates = unique_index(plan["candidates"], "candidate_id")
     for candidate in candidates.values():
         validate_candidate(candidate)
