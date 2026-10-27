@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "source_language": "uk",
+  "candidates": [
+    {
+      "candidate_id": "lapa12b",
+      "provider": null,
+      "model": "LapaLLM-Gemma-3-12B-instruct",
+      "revision": null,
+      "settings": {}
+    },
+    {
+      "candidate_id": "mamay27b",
+      "provider": null,
+      "model": "MamayLM-Gemma-3-27B-IT-v2.0",
+      "revision": null,
+      "settings": {}
+    }
+  ],
+  "strategies": {
+    "zero_shot": {
+      "prompts": {
+        "triplet": "prompts/warbias_validation_zero_shot.txt"
+      },
+      "response_fields": {
+        "stereotype": "stereotype_uk",
+        "counter_stereotype": "counter_stereotype_uk",
+        "unrelated": "unrelated_uk"
+      }
+    },
+    "sequential": {
+      "prompts": {
+        "S": "prompts/warbias_validation_sequential_stereotype.txt",
+        "C": "prompts/warbias_validation_sequential_counter.txt",
+        "U": "prompts/warbias_validation_sequential_unrelated.txt"
+      },
+      "response_fields": {
+        "stereotype": "stereotype_uk",
+        "counter_stereotype": "counter_stereotype_uk",
+        "unrelated": "unrelated_uk"
+      }
+    }
+  }
+}

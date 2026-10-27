@@ -1,4 +1,8 @@
-# Translation comparison
+# FairForget
+
+Research workflows for benchmark adaptation, translation and unlearning.
+
+## Translation comparison
 
 The notebooks load a benchmark sample, translate complete items with DeepL, Gemini, and Lapa,
 validate the translations, calculate COMET, MetricX, and LaBSE scores, and export review files.
@@ -26,3 +30,12 @@ after each batch and reused when the notebook is run again.
 
 Upload a clean notebook, add the same three keys through Colab Secrets, and run its cells from top
 to bottom.
+
+## WarBias subproject
+
+The WarBias pipelines live in [`warbias/`](warbias/): the Ukrainian generation
+pilot, blinded human model/strategy selection, full generation, English
+translation, review and unlearning. Both aligned language versions are retained.
+See the [WarBias guide](warbias/README.md) for its separate installation, tests
+and paper-source export. Existing benchmark notebooks, evaluation scripts and
+their root dependencies remain independent of this subproject.

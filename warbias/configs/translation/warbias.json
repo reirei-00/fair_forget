@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "provider": null,
+  "model": null,
+  "revision": null,
+  "settings": {},
+  "source_language": "uk",
+  "target_language": "en",
+  "prompt": "prompts/current/translation.txt"
+}
