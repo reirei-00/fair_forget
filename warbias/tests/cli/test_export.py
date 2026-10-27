@@ -3,6 +3,7 @@
 import importlib.util
 import json
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -37,8 +38,74 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
     ):
         assert not (exported / relative).exists()
     assert "file://" not in (exported / "pyproject.toml").read_text()
+    assert 'name = "fairforget-warbias"' in (exported / "pyproject.toml").read_text()
+    assert json.loads((exported / exporter.MANIFEST).read_text())["subproject"] == "warbias"
     with pytest.raises(ValueError, match="must not exist"):
         exporter.export(ROOT, exported)
+
+
+def test_broader_repository_exports_only_its_warbias_child_without_changes(exported, tmp_path):
+    repository = tmp_path / "fairforget"
+    shutil.copytree(exported, repository / "warbias")
+    sibling_files = {
+        "README.md": b"Broader project documentation.\n",
+        "requirements.txt": b"legacy-project-dependency\n",
+        "notebooks/stereoset_filtering/reviewed.csv": b"term,decision\nfixture,keep\n",
+        "notebooks/executed/stereoset.ipynb": b"Unrelated saved notebook outputs.\n",
+        "evaluation/stereoset_uk/evaluate.py": b"# Existing project evaluator.\n",
+        "configs/project-private.json": b'{"secret":"sibling-only-fixture"}\n',
+    }
+    for relative, content in sibling_files.items():
+        path = repository / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(content)
+    before = {
+        str(path.relative_to(repository)): path.read_bytes()
+        for path in repository.rglob("*")
+        if path.is_file()
+    }
+    result = exporter.export(repository, tmp_path / "isolated")
+    after = {
+        str(path.relative_to(repository)): path.read_bytes()
+        for path in repository.rglob("*")
+        if path.is_file()
+    }
+    assert before == after
+    assert (result / exporter.MANIFEST).read_bytes() == (exported / exporter.MANIFEST).read_bytes()
+    for relative, content in sibling_files.items():
+        assert not (result / relative).exists() or (result / relative).read_bytes() != content
+    assert not (result / "warbias").exists()
+    assert exporter.verify(result) > 50
+
+
+def test_standalone_export_can_be_exported_again(exported, tmp_path):
+    copied = exporter.export(exported, tmp_path / "copy")
+    assert (copied / exporter.MANIFEST).read_bytes() == (exported / exporter.MANIFEST).read_bytes()
+
+
+@pytest.mark.parametrize("linked_child", [False, True])
+def test_source_boundary_rejects_symlinked_root_or_warbias_child(exported, tmp_path, linked_child):
+    source = tmp_path / "source"
+    if linked_child:
+        source.mkdir()
+        (source / "warbias").symlink_to(exported, target_is_directory=True)
+    else:
+        source.symlink_to(exported, target_is_directory=True)
+    with pytest.raises(ValueError, match="symlink"):
+        exporter.export(source, tmp_path / "rejected")
+    assert not (tmp_path / "rejected").exists()
+
+
+def test_manifest_preserves_legacy_verification_and_rejects_other_subprojects(exported):
+    path = exported / exporter.MANIFEST
+    manifest = json.loads(path.read_text())
+    del manifest["subproject"]
+    path.write_text(json.dumps(manifest))
+    assert exporter.verify(exported) > 50
+    manifest["subproject"] = "another-project"
+    path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="Unsupported"):
+        exporter.verify(exported)
 
 
 @pytest.mark.parametrize("damage", ["changed", "missing", "hidden"])

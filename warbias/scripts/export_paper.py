@@ -1,4 +1,4 @@
-"""Build or verify a portable FairForget producer source export without run history."""
+"""Export the WarBias subproject without copying the broader FairForget repository."""
 
 import argparse
 import hashlib
@@ -49,8 +49,10 @@ PRIVATE_CONFIG_KEYS = {
     "credential_reference",
     "credentials_file",
 }
-INSTALL = """# Install the producer export
+INSTALL = """# Install the WarBias subproject export
 
+This is the standalone `fairforget-warbias` package from FairForget's `warbias/`
+directory. Other FairForget subprojects remain in their original repository.
 Copy this entire directory into a new repository without adding old Git history.
 Use Python 3.10+ and a dedicated environment. Install the paired Fair-UK evaluator
 first, then install this source directory:
@@ -166,6 +168,30 @@ def _inventory(directory):
     return result
 
 
+def source_root(source):
+    """Accept the project repository, its exact WarBias child, or a standalone copy.
+
+    Select the child before inspecting export trees so sibling notebooks, data
+    and dependencies never become part of the source package.
+    """
+    source = Path(source).absolute()
+    if source.is_symlink():
+        raise ValueError("WarBias source cannot be a symlink")
+    child = source / "warbias"
+    if child.is_symlink():
+        raise ValueError("The WarBias subproject cannot be a symlink")
+    if child.exists():
+        source = child
+    if (
+        not (source / "pyproject.toml").is_file()
+        or not (source / "src/fairforget/warbias/provider.py").is_file()
+    ):
+        raise ValueError(
+            "Select the FairForget repository, its warbias directory or a standalone WarBias export"
+        )
+    return source.resolve()
+
+
 def verify(directory, *, check_imports=False):
     """Check every exported byte and optional editable-package import origin."""
     directory = Path(directory).resolve()
@@ -173,6 +199,7 @@ def verify(directory, *, check_imports=False):
     if (
         manifest.get("schema_version") != 1
         or manifest.get("kind") != "producer_source_export"
+        or manifest.get("subproject", "warbias") != "warbias"
         or not isinstance(manifest.get("files"), dict)
     ):
         raise ValueError("Unsupported producer source manifest")
@@ -195,8 +222,8 @@ def verify(directory, *, check_imports=False):
 
 
 def export(source, output):
-    """Copy maintained allowlisted source, never modifying existing exports."""
-    source, output = Path(source).resolve(), Path(output).absolute()
+    """Copy only allowlisted WarBias source; preserve sibling projects and exports."""
+    source, output = source_root(source), Path(output).absolute()
     if output.exists() or output.is_symlink():
         raise ValueError("Export destination must not exist")
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -216,6 +243,7 @@ def export(source, output):
         manifest = {
             "schema_version": 1,
             "kind": "producer_source_export",
+            "subproject": "warbias",
             "files": _inventory(staging),
         }
         (staging / MANIFEST).write_text(
@@ -233,7 +261,12 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     build = commands.add_parser("build", help="Create a fresh portable source directory")
-    build.add_argument("--source", type=Path, default=Path(__file__).resolve().parents[1])
+    build.add_argument(
+        "--source",
+        type=Path,
+        default=Path(__file__).resolve().parents[1],
+        help="FairForget repository, warbias subproject, or standalone WarBias source directory",
+    )
     build.add_argument("--output", type=Path, required=True)
     check = commands.add_parser("verify", help="Verify an exported source directory")
     check.add_argument("--directory", type=Path, required=True)

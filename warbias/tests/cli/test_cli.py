@@ -1,6 +1,7 @@
 """CLI workflows execute the maintained functions and preserve preview boundaries."""
 
 import json
+import shutil
 import sys
 from pathlib import Path
 from types import ModuleType
@@ -201,11 +202,7 @@ def test_unlearning_preview_does_not_load_factory_and_execute_runs_real_step(tmp
     assert bound["training_language"] == "en"
 
 
-@pytest.mark.parametrize("name", ["warbias_generation", "warbias_translation_review", "unlearning"])
-def test_thin_notebooks_run_top_to_bottom_offline(name, monkeypatch):
-    if name == "unlearning":
-        pytest.importorskip("torch")
-    monkeypatch.chdir(ROOT)
+def run_notebook(name):
     notebook = json.loads((ROOT / "notebooks/paper" / (name + ".ipynb")).read_text())
     namespace = {"__name__": "__main__"}
     for cell in notebook["cells"]:
@@ -213,3 +210,30 @@ def test_thin_notebooks_run_top_to_bottom_offline(name, monkeypatch):
             assert cell["outputs"] == [] and cell["execution_count"] is None
             exec(compile("".join(cell["source"]), name + ".ipynb", "exec"), namespace)
     assert namespace["result"]["qualification"] == "synthetic_software_check"
+    return namespace
+
+
+@pytest.mark.parametrize("name", ["warbias_generation", "warbias_translation_review", "unlearning"])
+def test_thin_notebooks_run_top_to_bottom_offline(name, monkeypatch):
+    if name == "unlearning":
+        pytest.importorskip("torch")
+    monkeypatch.chdir(ROOT)
+    run_notebook(name)
+
+
+@pytest.mark.parametrize("name", ["warbias_generation", "warbias_translation_review"])
+def test_notebooks_from_broader_repository_use_warbias_prompts(name, tmp_path, monkeypatch):
+    repository = tmp_path / "fairforget"
+    prompts = repository / "warbias/prompts"
+    shutil.copytree(ROOT / "prompts", prompts)
+    sibling = repository / "prompts/manifest.json"
+    sibling.parent.mkdir()
+    sibling.write_text('{"subproject":"another-benchmark"}\n')
+    before = sibling.read_bytes()
+    monkeypatch.chdir(repository)
+
+    namespace = run_notebook(name)
+
+    assert namespace["prompt_root"] == prompts
+    assert namespace["result"]["network_requests"] == 0
+    assert sibling.read_bytes() == before
