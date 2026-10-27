@@ -10,7 +10,7 @@ From `warbias/`, install the paired Fair-UK package, then this package:
 
 ```sh
 python -m pip install -e /path/to/paired-fair-uk
-python -m pip install -e '.[dev,judging]'
+python -m pip install -e '.[dev]'
 ```
 
 The distribution is `fairforget-warbias`; the Python namespace is `fairforget`.
