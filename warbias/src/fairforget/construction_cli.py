@@ -59,7 +59,20 @@ def add_commands(commands):
         "generate", help="Generate the full matrix using only the selected condition"
     )
     _paths(full, "cases", "plan", "selection")
+    full.add_argument(
+        "--final-prompts", type=Path, help="Generation config with final prompt bytes"
+    )
+    full.add_argument("--prompt-root", type=Path, default=Path("."))
     add_execution_options(full)
+
+
+def _strategy_paths(config, prompt_root):
+    strategies = deepcopy(config["strategies"])
+    for strategy in strategies.values():
+        strategy["prompts"] = {
+            stage: prompt_root / path for stage, path in strategy["prompts"].items()
+        }
+    return strategies
 
 
 def _new_output(path):
@@ -73,15 +86,10 @@ def dispatch(args):
     if args.command == "pilot-plan":
         _new_output(args.output)
         config = load_json(args.config)
-        strategies = deepcopy(config["strategies"])
-        for strategy in strategies.values():
-            strategy["prompts"] = {
-                stage: args.prompt_root / path for stage, path in strategy["prompts"].items()
-            }
         plan = pilot.freeze_pilot(
             read_rows(args.cases),
             config["candidates"],
-            strategies,
+            _strategy_paths(config, args.prompt_root),
             source_language=config["source_language"],
         )
         write_json(args.output, plan)
@@ -134,10 +142,22 @@ def dispatch(args):
         write_json(args.output, receipt)
         return {"selection_recorded": True, "automatic_ranking": False}
     if args.command == "generate":
-        from fairforget.warbias.generation import validate_cases
+        from fairforget.warbias.generation import (
+            freeze_strategies,
+            validate_cases,
+            validate_source_language,
+        )
 
         plan, receipt = load_json(args.plan), load_json(args.selection)
         chosen = selection.verify_selection(receipt, plan)
+        final_strategy = None
+        if args.final_prompts is not None:
+            config = load_json(args.final_prompts)
+            validate_source_language(config.get("source_language"))
+            strategies = freeze_strategies(_strategy_paths(config, args.prompt_root))
+            final_strategy = production.resolve_final_strategy(
+                chosen, strategies[chosen["strategy"]]
+            )
         cases = read_rows(args.cases)
         validate_cases(cases)
         rows = production.generate_full(
@@ -145,6 +165,7 @@ def dispatch(args):
             plan,
             receipt,
             args.output,
+            final_strategy=final_strategy,
             provider=provider_from_args(args, chosen["candidate"]),
             execute=args.execute,
         )

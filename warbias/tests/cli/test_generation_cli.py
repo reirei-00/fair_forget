@@ -2,6 +2,7 @@
 
 import json
 import sys
+from copy import deepcopy
 from pathlib import Path
 from types import ModuleType
 
@@ -43,6 +44,63 @@ class Provider:
             }
         fields = FIELDS if request["stage"] == "triplet" else (STAGE_FIELD[request["stage"]],)
         return {"text": json.dumps({field + "_uk": UK[field] for field in fields})}
+
+
+def test_full_generation_uses_explicit_final_prompts_and_validates_before_provider_load(
+    tmp_path, monkeypatch
+):
+    fixture = tmp_path / "fixture"
+    run_generation_example(fixture, prompt_root=ROOT / "prompts")
+    plan_path = fixture / "pilot/pilot-plan.json"
+    selection_path = fixture / "private/selection.json"
+    plan = json.loads(plan_path.read_text())
+    strategies = deepcopy(plan["strategies"])
+    final_text = {}
+    for name, strategy in strategies.items():
+        for stage, prompt in strategy["prompts"].items():
+            path = tmp_path / f"final-{name}-{stage}.txt"
+            path.write_text(prompt["text"] + " Final feedback revision.")
+            final_text[stage] = path.read_text()
+            strategy["prompts"][stage] = path.name
+    config = {"source_language": "uk", "strategies": strategies}
+    config_path = tmp_path / "final-prompts.json"
+    write_json(config_path, config)
+    write_rows(tmp_path / "cases.jsonl", plan["cases"])
+    args = [
+        "generate",
+        "--cases",
+        str(tmp_path / "cases.jsonl"),
+        "--plan",
+        str(plan_path),
+        "--selection",
+        str(selection_path),
+        "--final-prompts",
+        str(config_path),
+        "--prompt-root",
+        str(tmp_path),
+        "--output",
+        str(tmp_path / "full"),
+    ]
+    assert main([*args, "--provider-factory", "missing:never_import"])["execute"] is False
+    loaded, provider = [], Provider()
+    module = ModuleType("final_prompts_fixture")
+    module.make = lambda config: loaded.append(config) or provider
+    monkeypatch.setitem(sys.modules, module.__name__, module)
+    main([*args, "--execute", "--provider-factory", "final_prompts_fixture:make"])
+    selected = json.loads(selection_path.read_text())["selected"]
+    assert loaded == [selected["candidate"]]
+    assert all(
+        call["messages"][0]["content"] == final_text[call["stage"]] for call in provider.calls
+    )
+    for change in ("response_fields", "source_language"):
+        invalid = deepcopy(config)
+        if change == "response_fields":
+            invalid["strategies"][selected["strategy"]]["response_fields"]["stereotype"] = "other"
+        else:
+            invalid["source_language"] = "en"
+        write_json(config_path, invalid)
+        with pytest.raises(SystemExit):
+            main([*args, "--execute", "--provider-factory", "missing:must_not_import"])
 
 
 def test_lifecycle_commands_execute_with_local_fixture_and_preserve_decisions(

@@ -27,6 +27,8 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
     assert exporter.verify(exported) > 50
     assert (exported / "src/fairforget/warbias/provider.py").is_file()
     assert (exported / "notebooks/paper/unlearning.ipynb").is_file()
+    assert (exported / "protocol/pilot_snapshots.json").is_file()
+    assert (exported / "notebooks/paper/warbias_translation_quality.ipynb").is_file()
     for relative in (
         ".env",
         ".git",

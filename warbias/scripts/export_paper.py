@@ -25,6 +25,7 @@ TREES = {
     "src": {".py"},
     "prompts": {".txt", ".md", ".json", ".yaml", ".yml"},
     "configs": {".json"},
+    "protocol": {".json"},
     "notebooks/paper": {".ipynb"},
     "tests/data_creation": {".py", ".json"},
     "tests/unlearning": {".py", ".json"},

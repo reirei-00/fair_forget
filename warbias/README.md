@@ -18,6 +18,7 @@ fairforget doctor
 
 The package is `fairforget-warbias`; its Python namespace and command are
 `fairforget`. Add the `generation` extra for vLLM or `notebooks` for Jupyter.
+Add `quality` for COMET translation checks.
 
 ## Run
 
