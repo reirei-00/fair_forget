@@ -1,0 +1,287 @@
+"""CLI workflows execute the maintained functions and preserve preview boundaries."""
+
+import json
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+from types import ModuleType
+
+import pytest
+from test_generation_cli import Provider
+
+from fairforget.cli import main
+from fairforget.examples import unlearning_example_config
+from fairforget.io import digest, read_rows, write_json, write_rows
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def pilot_inputs(tmp_path):
+    config = json.loads((ROOT / "configs/generation/warbias.json").read_text())
+    for candidate in config["candidates"]:
+        candidate["provider"] = "fixture"
+    write_rows(tmp_path / "cases.jsonl", [{"case_id": "case", "claim": "Synthetic claim"}])
+    write_json(tmp_path / "config.json", config)
+    plan = tmp_path / "pilot-plan.json"
+    main(
+        [
+            "pilot-plan",
+            "--cases",
+            str(tmp_path / "cases.jsonl"),
+            "--config",
+            str(tmp_path / "config.json"),
+            "--prompt-root",
+            str(ROOT),
+            "--output",
+            str(plan),
+        ]
+    )
+    return ["pilot", "--plan", str(plan), "--output", str(tmp_path / "output")]
+
+
+def test_doctor_requires_only_public_contracts(monkeypatch):
+    from lm_eval.fair_uk import contracts
+
+    module = ModuleType("lm_eval.fair_uk")
+    module.contracts = contracts
+    monkeypatch.setitem(sys.modules, module.__name__, module)
+    assert main(["doctor"])["network_requests"] == 0
+
+
+@pytest.mark.parametrize("command,exit_code", [("doctor", 0), ("unknown-command", 2)])
+def test_installed_console_entrypoint_exit_status(command, exit_code, tmp_path):
+    launcher = (
+        "from importlib.metadata import distribution; "
+        "entries = distribution('fairforget-warbias').entry_points; "
+        "entry = next(item for item in entries if item.group == 'console_scripts' "
+        "and item.name == 'fairforget'); "
+        "raise SystemExit(entry.load()())"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", launcher, command],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == exit_code, result.stderr
+    if command == "doctor":
+        assert json.loads(result.stdout)["network_requests"] == 0
+
+
+def test_pilot_preview_never_imports_provider_factory(tmp_path):
+    args = pilot_inputs(tmp_path)
+    result = main([*args, "--provider-factory", "missing_module:no_provider"])
+    assert result["execute"] is False and result["records"] is None
+    assert not list((tmp_path / "output").rglob("responses.jsonl"))
+
+
+def test_pilot_executes_injected_provider_and_resumes_without_calls(tmp_path, monkeypatch):
+    args = pilot_inputs(tmp_path)
+    provider = Provider()
+    module = ModuleType("fixture_provider_plugin")
+    module.make = lambda config: provider
+    monkeypatch.setitem(sys.modules, module.__name__, module)
+    result = main([*args, "--execute", "--provider-factory", "fixture_provider_plugin:make"])
+    assert result["records"] == 4 and len(provider.calls) == 8
+    cached = {
+        path.relative_to(tmp_path): path.read_bytes()
+        for path in (tmp_path / "output").rglob("responses.jsonl")
+    }
+    main([*args, "--execute", "--provider-factory", "fixture_provider_plugin:make"])
+    assert len(provider.calls) == 8
+    assert {relative: (tmp_path / relative).read_bytes() for relative in cached} == cached
+    assert all(
+        row["review_status"] == "pending" for row in read_rows(tmp_path / "output/triplets.jsonl")
+    )
+
+
+def test_generation_execution_requires_an_explicit_provider(tmp_path):
+    with pytest.raises(SystemExit, match="1"):
+        main([*pilot_inputs(tmp_path), "--execute"])
+    assert not list((tmp_path / "output").rglob("responses.jsonl"))
+
+
+def review_inputs(tmp_path):
+    row = {
+        "id": "fixture",
+        "language": "uk",
+        "target_group": "idp",
+        "additional_tags": {},
+        "stereotype": "ВПО завжди відмовляються працювати.",
+        "counter_stereotype": "ВПО самі вирішують, де працювати.",
+        "unrelated": "ВПО слухають радіо.",
+    }
+    rows, decisions = tmp_path / "rows.jsonl", tmp_path / "decisions.jsonl"
+    write_rows(rows, [row])
+    main(["review-template", "--input", str(rows), "--output", str(decisions)])
+    decision = read_rows(decisions)[0]
+    decision.update(reviewer="fixture-rater", decision="accepted")
+    decision["criteria"] = dict.fromkeys(decision["criteria"], "pass")
+    write_rows(decisions, [decision])
+    return rows, decisions
+
+
+def test_cli_review_verifies_the_frozen_context_without_rebinding(tmp_path):
+    rows, decisions = review_inputs(tmp_path)
+    output = tmp_path / "bound.jsonl"
+    main(["review", "--input", str(rows), "--decisions", str(decisions), "--output", str(output)])
+    assert read_rows(output)[0]["decision"] == "accepted"
+    changed = read_rows(rows)[0]
+    changed["target_group"] = "veteran"
+    write_rows(rows, [changed])
+    with pytest.raises(SystemExit):
+        main(
+            [
+                "review",
+                "--input",
+                str(rows),
+                "--decisions",
+                str(decisions),
+                "--output",
+                str(tmp_path / "stale.jsonl"),
+            ]
+        )
+    assert not (tmp_path / "stale.jsonl").exists()
+
+
+def test_review_template_never_overwrites_an_edited_decision(tmp_path):
+    rows, decisions = review_inputs(tmp_path)
+    previous = decisions.read_bytes()
+    with pytest.raises(SystemExit):
+        main(["review-template", "--input", str(rows), "--output", str(decisions)])
+    assert decisions.read_bytes() == previous
+
+
+def test_cli_review_rejects_legacy_decisions_without_a_context_binding(tmp_path):
+    rows, decisions = review_inputs(tmp_path)
+    decision = read_rows(decisions)[0]
+    for key in ("schema_version", "review_context", "review_context_sha256"):
+        decision.pop(key)
+    write_rows(decisions, [decision])
+    with pytest.raises(SystemExit):
+        main(
+            [
+                "review",
+                "--input",
+                str(rows),
+                "--decisions",
+                str(decisions),
+                "--output",
+                str(tmp_path / "unbound.jsonl"),
+            ]
+        )
+
+
+def test_translation_example_builds_a_qualified_release(tmp_path):
+    result = main(
+        [
+            "example",
+            "translation",
+            "--output",
+            str(tmp_path / "translation"),
+            "--prompt-root",
+            str(ROOT / "prompts"),
+        ]
+    )
+    assert result["network_requests"] == 0
+    assert result["release_qualification"]["human_validated"] is False
+    assert (tmp_path / "translation/release/manifest.json").is_file()
+
+
+def test_unlearning_preview_does_not_load_factory_and_execute_runs_real_step(tmp_path):
+    pytest.importorskip("torch")
+    config = tmp_path / "config.json"
+    write_json(config, unlearning_example_config())
+    args = ["unlearn", "--config", str(config), "--output", str(tmp_path / "run")]
+    result = main([*args, "--bundle-factory", "missing_module:never_load"])
+    assert result["optimizer_steps"] == 0 and not (tmp_path / "run").exists()
+    receipt = main(
+        [*args, "--bundle-factory", "fairforget.examples:unlearning_example_bundle", "--execute"]
+    )
+    assert receipt["training"]["optimizer_steps"] == 1
+    exposure = json.loads((tmp_path / "run/exposure.json").read_text())
+    assert exposure["events"] and all(
+        event["valid_loss_tokens"] > 0 for event in exposure["events"]
+    )
+    from lm_eval.fair_uk.lineage import bind_training_evidence
+
+    report = {
+        "kind": "paired_native_checkpoint_evaluation",
+        "provenance": {
+            state: {
+                "run": {"model_identity": {"local_files_sha256": receipt[state]["files_sha256"]}}
+            }
+            for state in ("before", "after")
+        },
+    }
+    release = json.loads((tmp_path / "run-release/manifest.json").read_text())
+    bound = bind_training_evidence(report, receipt, exposure, release)
+    assert bound["actual_exposure_events"] == len(exposure["events"])
+    assert bound["training_language"] == "en"
+
+
+def run_notebook(name):
+    notebook = json.loads((ROOT / "notebooks/paper" / (name + ".ipynb")).read_text())
+    namespace = {"__name__": "__main__"}
+    for cell in notebook["cells"]:
+        if cell["cell_type"] == "code":
+            assert cell["outputs"] == [] and cell["execution_count"] is None
+            exec(compile("".join(cell["source"]), name + ".ipynb", "exec"), namespace)
+    assert namespace["result"]["qualification"] == "synthetic_software_check"
+    return namespace
+
+
+@pytest.mark.parametrize("name", ["warbias_generation", "warbias_translation_review", "unlearning"])
+def test_thin_notebooks_run_top_to_bottom_offline(name, monkeypatch):
+    if name == "unlearning":
+        pytest.importorskip("torch")
+    monkeypatch.chdir(ROOT)
+    run_notebook(name)
+
+
+@pytest.mark.parametrize("name", ["warbias_generation", "warbias_translation_review"])
+def test_notebooks_from_broader_repository_use_warbias_prompts(name, tmp_path, monkeypatch):
+    repository = tmp_path / "fairforget"
+    prompts = repository / "warbias/prompts"
+    shutil.copytree(ROOT / "prompts", prompts)
+    sibling = repository / "prompts/manifest.json"
+    sibling.parent.mkdir()
+    sibling.write_text('{"subproject":"another-benchmark"}\n')
+    before = sibling.read_bytes()
+    monkeypatch.chdir(repository)
+
+    namespace = run_notebook(name)
+
+    assert namespace["prompt_root"] == prompts
+    assert namespace["result"]["network_requests"] == 0
+    assert sibling.read_bytes() == before
+
+
+@pytest.mark.parametrize("command", ["author", "render"])
+def test_discarded_construction_commands_are_not_registered(command, capsys):
+    with pytest.raises(SystemExit) as error:
+        main([command])
+    assert error.value.code == 2
+    assert "invalid choice" in capsys.readouterr().err
+
+
+def test_english_source_pilot_is_rejected_before_factory_import(tmp_path, monkeypatch):
+    args = pilot_inputs(tmp_path)
+    plan_path = tmp_path / "pilot-plan.json"
+    plan = json.loads(plan_path.read_text())
+    plan["source_language"] = "en"
+    plan["plan_sha256"] = digest(
+        {key: value for key, value in plan.items() if key != "plan_sha256"}
+    )
+    write_json(plan_path, plan)
+
+    def fail_factory_import(args):
+        pytest.fail("An unsupported plan must fail before the factory is imported")
+
+    monkeypatch.setattr("fairforget.construction_cli.execution_factory", fail_factory_import)
+    with pytest.raises(SystemExit) as error:
+        main([*args, "--execute", "--provider-factory", "missing:never_import"])
+    assert error.value.code == 1
+    assert not (tmp_path / "output").exists()
