@@ -13,6 +13,7 @@ def test_quality_notebook_preview_is_offline(monkeypatch):
     monkeypatch.setattr(reference, "load_reference", unexpected)
     monkeypatch.setattr(quality, "load_comet_scorer", unexpected)
     path = Path(__file__).resolve().parents[2] / "notebooks/paper/warbias_translation_quality.ipynb"
+    monkeypatch.chdir(path.parent)
     notebook = json.loads(path.read_text())
     namespace = {"__name__": "__main__"}
     for cell in notebook["cells"]:
