@@ -167,8 +167,8 @@ def _check_generated_row(plan, row):
 def build_blind_package(plan, rows, rubric, *, seed, pilot_result):
     """Randomise explicit completed pilot assignments without exposing identities.
 
-    `rows` may be a documented subset of a crossed pilot, as in the historical
-    human panel. The seed and full original rows belong only in the private key.
+    `rows` may be a subset of the pilot. The seed and full source rows belong
+    only in the private key.
     """
     from fairforget.warbias.pilot import verify_pilot_plan, verify_pilot_result
 

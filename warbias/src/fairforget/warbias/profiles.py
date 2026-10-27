@@ -1,11 +1,4 @@
-"""Natural English profile realization; outputs remain subject to direct review.
-
-The original profile renderer concatenated taxonomy labels into long noun phrases
-(``female veterans``, ``disabilities caused by war``, and repeated ``who`` clauses).
-This revision keeps every selected attribute explicit while assembling the profile as
-ordinary English.  Historical outputs are preserved in the run directory; this module
-is used for subsequent wording revisions.
-"""
+"""Render actor profiles in English while keeping every selected attribute explicit."""
 
 AGE_WORDS = {"young_adult": "young", "middle_aged": "middle-aged", "older": "older"}
 GENDER_WORDS = {"women": "women", "men": "men"}

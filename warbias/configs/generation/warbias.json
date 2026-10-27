@@ -40,6 +40,5 @@
         "unrelated": "unrelated_uk"
       }
     }
-  },
-  "note": "Candidate names are historical identities, not newly selected checkpoints. Fill provider, immutable pins and settings before execution. Freeze the explicit pilot subset, obtain blinded human decisions and record the chosen condition before full generation. Preserved prompts include later revisions; their presence does not establish the exact original pilot prompt bytes."
+  }
 }
