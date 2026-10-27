@@ -5,7 +5,7 @@
   "revision": null,
   "settings": {},
   "source_language": "uk",
-  "target_language": null,
+  "target_language": "en",
   "prompt": "prompts/current/translation.txt",
-  "note": "Translation follows a completed full-generation manifest. Declare the target language and actual translation model explicitly. The original pilot generated Ukrainian; the later English-first construction is a separate lineage. This reusable prompt is new, not a recovered historical translation protocol."
+  "note": "Generate the source corpus in Ukrainian, then translate into English and retain both aligned language versions. Translation follows a completed full-generation manifest. Declare the actual translation model explicitly. The later English-first construction is a separate lineage. This reusable prompt is new, not a recovered historical translation protocol."
 }
