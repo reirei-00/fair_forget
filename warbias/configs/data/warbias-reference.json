@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "role": "reference",
+  "repository": "FairForget/WarBias",
+  "revision": "164f355623c2da0028821e0942cad493558a6c13",
+  "license": "cc-by-sa-4.0",
+  "files": {
+    "uk": {
+      "path": "data/uk/unassigned.jsonl",
+      "sha256": "c253c3bc90b544ebed42901f1bf3c9eed63565191a278c64562e23bdc32c8c48"
+    },
+    "en": {
+      "path": "data/en/unassigned.jsonl",
+      "sha256": "0b3c34a90e51f2c0827f4f0e2f8d5ce7b19ec1cab50bc4c5a5a12adb998c425a"
+    }
+  },
+  "authorship": {
+    "path": "metadata/authorship.json",
+    "sha256": "7cdb12d52a3e782986d316ad018e16a2e10ca030bd15a4954dfe2ba293e1684c"
+  }
+}
