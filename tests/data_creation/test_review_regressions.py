@@ -397,7 +397,7 @@ def test_pending_decision_snapshot_is_inspectable_and_imports_only_matching_cont
         ("additional_tags", {"age": "older"}),
         ("reporter", "neighbour"),
         ("case_spec_sha256", "changed"),
-        ("english_sha256", "changed"),
+        ("translation_source_sha256", "changed"),
         ("prior_translation", {"stereotype": "Different source translation."}),
     ],
 )
@@ -433,7 +433,8 @@ def test_release_cannot_promote_stale_profile_reviews_to_human_validated(tmp_pat
     reviews = [human_review(row) for row in (en, uk)]
     for row in (en, uk):
         row.update(target_group="veteran", additional_tags={"age": "older"})
-    with pytest.raises(ValueError, match="current accepted linguistic review"):
+    # Source-context drift now fails before stale reviews can qualify the release.
+    with pytest.raises(ValueError, match="stale or missing source binding"):
         build_release(
             [en],
             [uk],
