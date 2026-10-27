@@ -1,94 +1,66 @@
 # WarBias pipelines
 
-WarBias is a subproject of the broader FairForget repository. This directory
-contains reusable code for its generation pilot, blinded human model/strategy
-selection, full generation, translation and unlearning experiments. The implementation
-lives in `src/fairforget/`; notebooks are thin, offline examples. Fair-UK owns the
-public data-release/intervention/exposure contracts and evaluation. This package
-uses those interfaces instead of duplicating their validators or metrics.
-
-Generate WarBias in Ukrainian first, then translate into English. Retain both
-aligned language versions throughout release and evaluation.
+WarBias provides Ukrainian data generation, blinded human model selection,
+English translation, data review and unlearning pipelines. Its code is in
+`src/fairforget/`; configuration, prompts, notebooks and tests have separate
+folders. Fair-UK provides evaluation and the shared data and training contracts.
 
 ## Install
 
-Use Python 3.10+ and a dedicated environment for this subproject. From the
-FairForget repository root, enter `warbias/`, install the paired Fair-UK checkout
-first, then this package:
-
-In a standalone export, work from its root and skip the `cd warbias` line.
+Use Python 3.10+ and a dedicated environment. Run these commands from `warbias/`
+or the root of a standalone export:
 
 ```sh
-cd warbias
 python -m pip install -e /path/to/paired-fair-uk
 python -m pip install -e '.[dev,judging,unlearning]'
 fairforget doctor
 ```
 
-The package distribution is `fairforget-warbias`; its Python namespace and CLI
-remain `fairforget`. The paired evaluator uses distribution name `lm_eval` and namespace
-`lm_eval.fair_uk`. An upstream harness installation without the public contracts
-and JEV provider API is insufficient; `doctor` checks the required interfaces.
-The install path above is a placeholder supplied by the operator, never a saved
-machine-specific dependency. Add `.[notebooks]` only to open notebooks.
+The package is `fairforget-warbias`; the Python namespace and command are
+`fairforget`. Add the `generation` extra for local vLLM execution, or the
+`notebooks` extra to open notebooks.
 
-## Workflow
+## Pipeline
 
-Run `fairforget --help` for explicit stage inputs and `fairforget <stage> --help`
-for arguments. The stages are:
+1. `sources` and `profiles` prepare source claims and actor profiles with fixed
+   source references, case IDs and matrix-row IDs.
+2. `pilot-plan` and `pilot` compare candidate models with two prompt methods:
+   zero-shot triplets and sequential stereotype → counter-stereotype → unrelated
+   sentences.
+3. `pilot-blind`, `pilot-review-template`, `pilot-review` and `pilot-select`
+   prepare blinded forms, check human ratings and record the chosen model and
+   prompt method.
+4. `generate` uses that choice for the full Ukrainian dataset.
+5. `translate` reads the completed Ukrainian data and writes matching English
+   translations. It keeps the Ukrainian source and aligned row IDs.
+6. `review-template`, `review` and `release` check text reviews and build a paired
+   data release. `neutral`, `severity` and `harm-mechanisms` provide additional
+   rewriting and annotation steps.
+7. `unlearning-validate` checks training inputs. `unlearn` runs the selected
+   method with its model, reference model and training settings.
 
-1. `sources` and `profiles`: bind selected claims to immutable source evidence
-   and resolve the explicit profile allocation.
-2. `pilot-plan` and `pilot`: freeze the selected subset and compare candidate
-   models using zero-shot triplets and sequential S→C→U prompting.
-3. `pilot-blind`, `pilot-review-template`, `pilot-review` and `pilot-select`:
-   separate reviewer-visible content from the private identity key, bind human
-   ratings and record an explicit choice of the blinded condition.
-4. `generate`: generate the full matrix using the selected model, strategy and
-   frozen prompts. `translate` then requires the complete source-run manifest
-   and explicit source/target languages. Both preserve exact raw request/response
-   caches and preview by default; execution requires `--execute` and a provider
-   factory. [Construction protocol and commands](docs/warbias-construction.md)
-   distinguish verified historical evidence from the new reusable implementation.
-5. `review-template`, `review` and `release`: freeze the full text/profile/source
-   context for review, verify the completed decisions against that same context and
-   build aligned, family-allocated releases. Machine review is recorded as
-   pending human qualification. `severity` and `harm-mechanisms` are separate
-   typed JEV annotation commands, also previewing by default.
-6. `unlearning-validate` verifies hashed token exports and partition separation.
-   `unlearn` previews its explicit configuration; execution additionally requires
-   `--execute` and a factory binding the actual local model, frozen reference,
-   optimizer, schedule and checkpoint writer.
+See the [construction guide](docs/warbias-construction.md) for input formats,
+commands, output files and review requirements. Run `fairforget COMMAND --help`
+for each command's arguments.
 
-The separate `author`/`render` commands support controlled template authoring;
-their stage reviews are distinct from the original generation comparison.
-`neutral` produces source-bound neutral-group variants for evaluation controls.
+## Execution
 
-Provider factories are named `module:callable` and receive `config=...`. Training
-factories additionally receive `output=...`. They are imported only when execution
-is requested. No provider, model, intervention setting or mixture ratio is silently
-selected. Configuration files with pending values remain templates.
+Set the provider, model version and settings in the configuration before use.
+Generation, translation and training commands preview their plans by default.
+Execution requires `--execute` and the relevant provider or training factory.
 
-Create a review template with `fairforget review-template --input rows.jsonl
---output decisions.jsonl`, inspect its frozen context and fill the reviewer,
-decision and criteria fields, then run `fairforget review --input rows.jsonl
---decisions decisions.jsonl --output reviews.jsonl`. Existing files are preserved.
-Metadata changes invalidate the old review; text-only legacy decisions cannot be
-rebound automatically. Controlled template authoring appends a versioned target-slot contract to the
-preserved prompt and records both hashes. Literal responses or profile values the
-renderer cannot realize fail before expansion. Neutral collection similarly
-requires the exact source digest retained by generation.
+Provider factories use `module:callable` and receive `config=...`. Training
+factories also receive `output=...`. The local generation factory is
+`fairforget.backends:vllm_provider`; it requires fixed model and tokenizer
+versions and explicit engine, sampling and prompt settings.
 
-Training factories must provide a `checkpoint_loader` that loads actual tensors
-from the runner's verified directory. `load_state_checkpoint` supports the tiny
-software fixtures; `load_hf_checkpoint` loads a self-contained causal HF snapshot
-offline. Remote base revisions must already be cached. PEFT or other architectures
-need an explicit compatible loader or self-contained starting snapshot. The runner
-compares model and reference with the loaded state before optimization, and records
-the reference digest, file hashes and exact tensor-state fingerprint. A caller's
-declared model identity alone cannot qualify an intervention receipt.
+Training factories supply a `checkpoint_loader` that loads the starting weights
+from the verified local checkpoint. `load_state_checkpoint` reads a tensor state
+file; `load_hf_checkpoint` loads a self-contained causal Hugging Face snapshot
+from local storage or an existing cache. The runner checks both model and
+reference weights before training and records checkpoint hashes and token use.
 
-## Offline verification
+## Tests and examples
 
 ```sh
 python -m pytest tests/data_creation tests/unlearning tests/cli -q
@@ -98,26 +70,11 @@ fairforget example translation --output outputs/check-translation
 fairforget example unlearning --output outputs/check-unlearning
 ```
 
-Run examples from this `warbias/` directory, or pass `--prompt-root` for another prompt
-asset directory. They use synthetic local providers/data and a tiny CPU model;
-the unlearning example performs one actual optimizer step. These are software
-checks, not measured study baselines, human calibration or study interventions.
-Use fresh output directories. The executable notebooks in `notebooks/paper/`
-call the same functions and write only to temporary directories.
+The examples and `notebooks/paper/` use synthetic local data, ratings and model
+responses; the training example performs one CPU update. Use a new output folder
+for each example. Pass `--prompt-root` when the prompt files are elsewhere.
 
-Original WarBias prompt files are retained byte for byte in `prompts/` with their
-original hash manifest. New reusable prompts live in `prompts/current/`.
-Published source names and immutable pins remain provenance.
-No anonymous dataset mirror or publication is implied by this local code package.
-Keep secrets, generated data, checkpoints and result evidence outside source.
-
-For explicitly executed local generation/translation, install the optional
-`generation` extra and select the provider factory
-`fairforget.backends:vllm_provider`. Pin model and tokenizer revisions and supply
-explicit engine, sampling and raw/native-chat template settings. This adapter
-uses the vLLM 0.18 token-input API; it makes no scientific setting selections.
-
-## Export this subproject
+## Export
 
 From the FairForget repository root:
 
@@ -125,7 +82,13 @@ From the FairForget repository root:
 python warbias/scripts/export_paper.py build --output /path/to/new-warbias-artifact
 ```
 
-The export is independently installable and contains this subproject's source,
-configuration, prompts, cleared notebooks and tests. It can later be copied into
-the paper's separate repository. Existing benchmark notebooks, evaluation scripts
-and their dependencies stay in the broader FairForget repository.
+From `warbias/` or a standalone export, use `python scripts/export_paper.py`.
+The export contains source, configuration, prompts, cleared notebooks and tests.
+Verify its files with:
+
+```sh
+python scripts/export_paper.py verify --directory /path/to/warbias-artifact
+```
+
+Store credentials, model weights, generated data and review results outside the
+source package. Prompt hashes are listed in `prompts/manifest.json`.

@@ -49,13 +49,10 @@ PRIVATE_CONFIG_KEYS = {
     "credential_reference",
     "credentials_file",
 }
-INSTALL = """# Install the WarBias subproject export
+INSTALL = """# Install WarBias
 
-This is the standalone `fairforget-warbias` package from FairForget's `warbias/`
-directory. Other FairForget subprojects remain in their original repository.
-Copy this entire directory into a new repository without adding old Git history.
 Use Python 3.10+ and a dedicated environment. Install the paired Fair-UK evaluator
-first, then install this source directory:
+first, then install the `fairforget-warbias` package:
 
 ```sh
 python -m venv .venv
@@ -67,17 +64,13 @@ fairforget doctor
 python -m pytest tests/data_creation tests/unlearning tests/cli -q
 ```
 
-The paired evaluator currently has distribution name `lm_eval`; use the paired
-Fair-UK implementation that supplies its public contracts and typed provider API.
-The tests/notebooks use local synthetic providers and tiny CPU models. They do not
-perform live provider requests, model downloads or study interventions. Runtime
-caches and virtual environments are omitted from source integrity checks.
+The paired Fair-UK package provides `lm_eval.fair_uk`, including the release
+validators and judging API. Set model versions and settings in `configs/` before
+running models. Supply credentials and data separately.
 
-Configuration templates retain pending choices; actual credentials, local
-credential references, models, datasets, predictions and reviewed annotations are
-not included. Scientific source references/pins and original prompts remain
-unchanged. Arrange any anonymous source mirrors required by the venue separately;
-this source export does not certify anonymity of external scientific references.
+The notebooks use synthetic examples and small CPU models. The manifest lists
+the exported source files and their hashes. Verification checks every file;
+runtime caches and virtual environments are excluded.
 """
 
 

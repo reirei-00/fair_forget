@@ -1,9 +1,4 @@
-"""Local lifecycle fixtures for paper notebooks; no historical or human results.
-
-The scores and choice below imitate the shape of human evidence solely to test
-the software gate. They are predetermined synthetic data, never qualifications
-of a real dataset, model or prompting strategy.
-"""
+"""Offline pipeline examples using synthetic text, ratings and model choices."""
 
 import json
 from copy import deepcopy
