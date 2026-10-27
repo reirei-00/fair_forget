@@ -1,0 +1,28 @@
+{
+  "intervention_id": null,
+  "language": null,
+  "seed": null,
+  "steps": null,
+  "learning_rate": null,
+  "max_grad_norm": null,
+  "trainable_parameters": null,
+  "pad_token_id": null,
+  "data_release": null,
+  "schedule": null,
+  "method": "biasunlearn",
+  "beta": null,
+  "npo_reduction": null,
+  "correction_weight": null,
+  "preservation_weight": null,
+  "kl_direction": null,
+  "adversarial_correction_ids": null,
+  "controller": null,
+  "stream_roles": {
+    "forget": "NPO stereotype and declared adversarial-subset suppression",
+    "correction": "anti-stereotype completion CE",
+    "preservation": "declared common retain-bank reference KL"
+  },
+  "purpose": "production",
+  "dropout_policy": null,
+  "tokenizer_identity": null
+}

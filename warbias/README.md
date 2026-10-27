@@ -34,3 +34,11 @@ Store credentials, generated data, model weights and review results separately.
 ```sh
 python -m pytest tests/data_creation -q
 ```
+
+## Unlearning
+
+`fairforget.unlearning` provides WGA+KL, NPO+retention, RMU, BiasUnlearn-style and
+task-vector methods. Set the data, model, loss masks and training settings in
+`configs/unlearning/`. The runner checks starting weights and records example
+IDs, training token counts and checkpoint hashes. Install the `unlearning` extra
+and run `python -m pytest tests/unlearning -q` for CPU checks.
