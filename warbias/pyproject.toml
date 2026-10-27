@@ -12,7 +12,6 @@ dependencies = ["lm_eval>=0.4.14.dev0"]
 
 [project.optional-dependencies]
 generation = ["vllm>=0.18,<0.19"]
-judging = ["httpx>=0.28,<1"]
 unlearning = ["torch>=2.2"]
 notebooks = ["jupyterlab>=4"]
 dev = ["pytest>=9", "ruff==0.16.2"]
