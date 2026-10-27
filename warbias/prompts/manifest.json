@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "source": "Original WarBias construction and translation prompt assets; copied byte for byte",
+  "source": "WarBias generation and translation prompts",
   "files": {
     "warbias_en_uk_translation_v1.txt": "08ba30a8b7d920a36b7700d7773a5db27d45db101094bf657cb458533916e7e1",
     "warbias_en_uk_translation_v2.txt": "2cef71e5929deadee033122260e949c0ae8a1e996f2bfe5334e0ce8a9fcf932e",

@@ -125,7 +125,7 @@ def derive_severity(present):
 
 def build_request(case, config):
     config = jev.validate_config(config)
-    # Earlier assistant harm notes are withheld so the coding is independent of them.
+    # Exclude existing harm labels to keep the new rating independent.
     state = without_assistant_notes(case["state"])
     request = {"model": config["model"], "state": state, "questions": questions()}
     jev.validate_request(request)

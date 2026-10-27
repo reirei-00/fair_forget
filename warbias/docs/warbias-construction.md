@@ -1,87 +1,46 @@
 # WarBias construction
 
-The paper workflow is: generate a pilot with several models and two prompting
-strategies; obtain blinded human assessments; record the selected model and
-strategy; generate the full source-language matrix; translate that completed
-artifact. The maintained paper direction is Ukrainian → English; retain both
-aligned language versions with the same matrix-unit IDs. Pilot ratings select the construction condition. They do not establish
-human validation of every subsequently generated or translated item.
+The pipeline compares models on a Ukrainian pilot, records a blinded human
+choice, generates the full Ukrainian data and translates it into English.
+Both language versions keep the same matrix-row IDs.
 
-## What the historical artifacts establish
+## Inputs
 
-The original comparison generated Ukrainian triplets using Lapa 12B
-(`LapaLLM-Gemma-3-12B-instruct`) and Mamay 27B
-(`MamayLM-Gemma-3-27B-IT-v2.0`). Zero-shot prompting generated all three sentences
-in one request. Sequential prompting generated the stereotype, then its
-counter-stereotype with the saved stereotype as input, then the unrelated
-sentence with both saved sentences as input. There was no human review between
-these three dependent model calls.
+Input tables use JSONL, with one object per line. Source cases have `case_id`,
+`source_id`, `claim`, `claim_family_id` and `target_group` (`idp` or `veteran`).
+Source records identify a repository and fixed revision, or a URI and SHA256.
 
-The initial comparison contains 80 triplets: 20 cases × two models × two
-strategies. A separate 50-case human panel assigned one condition to each case,
-with opaque shuffled identifiers and a private identity key. Saved feedback
-covers 48 of those cases, three annotators each, for 144 ratings. The two missing
-cases have no recorded exclusion reason. Conditions used different cases; their
-mean ratings cannot establish a causal model or strategy advantage.
+The full matrix contains source cases and their actor profiles. `case_id`
+identifies the semantic case; `id` or `matrix_id` identifies each profile variant.
+Matrix-row IDs must be unique. A case may have several profile variants.
 
-The subsequent frozen construction used Lapa 12B with sequential prompting:
-981 matrix rows across 129 cases and 15 actor profiles, with 980 completed
-triplets and one error. The retained development record says the choice was
-informed by pilot feedback and inspection of generation stages. The intended
-blinded selection procedure is confirmed by the study author. A separate frozen
-selection decision has not been recovered, and the exact earliest pilot prompt
-bytes have not been established. Neither is reconstructed as a historical fact
-by filling a new receipt. The full-run prompt bundle is preserved separately.
+Fill in the model configuration before creating a plan:
 
-These observations come from the original `warbias_generation_validation`,
-`warbias_human_selection_50`, `warbias_feedback_analysis_20260908` and
-`warbias_full_lapa_sequential_20260908` output records, and the sequential prompt
-revision record. The original annotation form is blank; the feedback export
-contains the actual ratings. Custodial source inventories and hashes remain
-outside this code export.
+- `configs/generation/warbias.json`: candidate IDs, providers, models, fixed model
+  versions, generation settings and prompts for both methods.
+- `configs/translation/warbias.json`: translation provider, model, version and
+  settings. The source language is `uk` and the target language is `en`.
 
-The later `warbias_en_uk_v1_20260909` English-first construction is a separate
-lineage. It is not the translation continuation of the Ukrainian pilot and full
-run. No translation of that original 981-row run was verified in the retained
-artifacts. The author's explicit clarification establishes Ukrainian → English
-for the maintained pipeline. Its configuration records that direction without
-claiming a recovered historical translation receipt.
+Each prompt has explicit response-field names. Plans save its exact text and
+hash, source rows and model settings. Raw requests and responses are cached;
+resuming requires the same inputs and settings.
 
-## Reusable implementation
+## Pilot and human selection
 
-| Module | Responsibility |
-| --- | --- |
-| `warbias/generation.py` | Shared zero-shot and sequential generation, exact prompt/parent bindings |
-| `warbias/pilot.py` | Frozen source subset, candidate models and complete strategy grid |
-| `warbias/blind_review.py` | Public text/rubric projection, private shuffled identity key, human rating coverage |
-| `warbias/selection.py` | Attributed human choice of a blinded condition and its evidence |
-| `warbias/production.py` | Full matrix generation using the selected configuration |
-| `translation/warbias.py` | Translation of the completed source artifact with explicit language roles |
-| `warbias/review.py` | Separate content review before release; translation fidelity follows the translated role |
+The pilot compares every candidate model with both prompt methods:
 
-Source case IDs identify semantic cases. Explicit matrix `id` values identify
-their profile variants. Both survive generation and translation. The common
-provider layer caches exact requests and raw responses and resumes only an
-identical request. Unknown historical model revisions remain unrecorded rather
-than being assigned a guessed pin. Re-execution must supply the actual provider,
-checkpoint/tokenizer pins and settings required by that provider.
+- **Zero-shot:** one request returns a stereotype, counter-stereotype and
+  unrelated sentence.
+- **Sequential:** the first request returns the stereotype. The second receives
+  that saved text and returns the counter-stereotype. The third receives both
+  saved sentences and returns the unrelated sentence.
 
-The controlled English template `author`/`render` commands are a separate
-construction tool. Their target-slot contract and stage reviews are not the
-original two-strategy pilot. Historical prompt assets remain byte-identical;
-`prompts/current/translation.txt` is explicitly a new reusable translation
-instruction. New software receipts demonstrate the recorded inputs and supplied
-decisions; they are not signatures authenticating a historical human action.
+Human review follows pilot generation. Public forms contain generated text,
+source and actor context, an opaque condition label and the rating rubric.
+The private key maps those labels to model and prompt identities.
 
-## Stage commands
-
-Run from the `warbias/` subproject directory, or the root of its standalone
-export. Input names below refer to operator-supplied
-artifacts. Configuration templates retain pending choices; no model or language
-is chosen by running a preview. The source and target languages are already set
-to Ukrainian and English by the agreed protocol; provider/model pins remain
-operator-supplied. Full-generation outputs retain the Ukrainian rows, translation
-writes separate English rows, and paired releases include both.
+Run commands from `warbias/` or the root of a standalone export. Input filenames
+below refer to your data and settings.
 
 ```sh
 fairforget pilot-plan --cases pilot-cases.jsonl --config configs/generation/warbias.json --output pilot-plan.json
@@ -90,33 +49,80 @@ fairforget pilot-blind --plan pilot-plan.json --input runs/pilot/triplets.jsonl 
 fairforget pilot-review-template --package review-panel/public/package.json --reviewer rater-alias --output rater-scores.jsonl
 fairforget pilot-review --package review-panel/public/package.json --decisions rater-scores.jsonl --output human-reviews.json
 fairforget pilot-select --plan pilot-plan.json --package review-panel/public/package.json --key review-panel/private/key.json --reviews human-reviews.json --decision decision.json --output selection.json
+```
+
+`pilot` previews by default. To generate responses, add
+`--execute --provider-factory module:callable`. The factory receives each
+candidate configuration and is reused for its two prompt methods. Its optional
+`close()` method runs when that candidate finishes, including after an error.
+
+The rubric JSON contains `id`, `instructions`, `score_min` and `score_max`.
+Reviewers fill in scores and comments in their rating files. Pass all rating
+files to `pilot-review --decisions`.
+
+The selection decision JSON contains `condition_label`, `decision_maker`,
+`decision_maker_kind: "human"`, `rationale` and `decided_at`. Every condition needs
+human ratings. Include `missing_review_reason` when some assigned rows have no
+ratings. The selected condition is an explicit human choice; the software does
+not choose a winner from average scores.
+
+Provide only `review-panel/public/` to raters and the blinded decision-maker.
+Keep the plan, raw responses, private key and selection record with the data
+custodian. A review subset must match the saved pilot-result hashes. Changed
+text, source context or rubric requires new ratings. Pilot ratings select the
+construction condition; full-data review is a separate step.
+
+## Full generation and English translation
+
+```sh
 fairforget generate --cases full-matrix.jsonl --plan pilot-plan.json --selection selection.json --output runs/full
 fairforget translate --input runs/full/triplets.jsonl --production runs/full/production-result.json --config configs/translation/warbias.json --prompt prompts/current/translation.txt --output runs/translation
 ```
 
-`pilot`, `generate` and `translate` preview by default; preview creates no model
-responses, so the next stage requires actual completed outputs. Execution adds
-`--execute --provider-factory module:callable`. The pilot supplies each frozen
-candidate configuration to the factory, reusing it across its two strategies.
-Factories managing local accelerators must release their model resources when
-closed. `generate` supplies only the selected candidate configuration.
+Both commands preview by default. Add `--execute --provider-factory
+module:callable` for execution. Generation uses only the selected model, prompt
+method and settings. A complete result manifest is written after all matrix
+rows have been generated and parsed.
 
-Only `review-panel/public/` is provided to raters and the blinded decision-maker.
-The pilot plan, private key, raw generation and selection receipt reveal
-condition identities and remain with the custodian. A subset can be selected
-explicitly for human review without changing the generation grid. Human rating
-files remain bound to the displayed text and rubric, including incomplete
-coverage. Selection requires ratings for every condition and an explanation for
-missing rows; it does not automatically choose the largest mean score.
+The English stage only translates existing Ukrainian triplets. It checks the
+completed source manifest and row hashes before loading the translator, then
+writes English rows with the same IDs and source hashes. Ukrainian rows stay in
+the full-generation output. Paired releases include both language versions.
 
-The rubric is an explicit JSON object with `id`, `instructions`, `score_min` and
-`score_max`. The decision is an explicit JSON object containing the chosen
-`condition_label`, `decision_maker`, `decision_maker_kind: "human"`, `rationale`
-and `decided_at`; include `missing_review_reason` when coverage is incomplete.
-The signed-off study procedure determines the rubric and choice. The software
-does not supply scientific acceptance thresholds.
+| Stage | Main outputs |
+| --- | --- |
+| Pilot | `pilot-plan.json`, `triplets.jsonl`, `pilot-result.json`, raw-response caches |
+| Blind review | `public/package.json`, `private/key.json`, rating files |
+| Selection | Human-choice record with its plan and review hashes |
+| Full generation | `production-plan.json`, `triplets.jsonl`, `production-result.json` |
+| Translation | `translation-plan.json`, `translations.jsonl`, raw-response cache |
 
-The two WarBias notebooks run this lifecycle using synthetic local responses and
-clearly labelled rating fixtures. They are executable software demonstrations,
-not recovered human annotations or new construction results. Real data, reviews,
-selection decisions and generation outputs remain outside the source repository.
+## Content review and release
+
+Triplets contain `stereotype`, `counter_stereotype` and `unrelated` string fields.
+Create text-review forms with `review-template`, then check the completed forms
+with `review`. Each decision covers the exact text, source, profile and
+translation context. Translation review includes fidelity to the Ukrainian
+source. Existing review files cannot be overwritten.
+
+`release` requires aligned English and Ukrainian rows, accepted reviews, fixed
+source references and a family-based split map. Use `--require-human` for a
+release that requires human review of every row. The release records review
+coverage and qualification.
+
+## Modules
+
+| Module | Responsibility |
+| --- | --- |
+| `warbias/generation.py` | Prompt methods and dependent requests |
+| `warbias/pilot.py` | Fixed pilot cases, candidates and comparison grid |
+| `warbias/blind_review.py` | Public forms, private identity key and rating checks |
+| `warbias/selection.py` | Human choice linked to its reviewed inputs |
+| `warbias/production.py` | Full generation with the selected configuration |
+| `translation/warbias.py` | Existing-source translation and language alignment |
+| `warbias/review.py` | Text-review forms and decisions |
+| `warbias/release.py` | Paired data releases and family splits |
+
+The `author` and `render` commands also support reviewed target-slot templates
+and profile expansion. Their stage reviews are checked before later authoring
+steps.

@@ -59,7 +59,7 @@ def cases_from(case_matrix, triplets_uk, triplets_en, examples=2):
 
 
 def without_assistant_notes(state):
-    """Case state without earlier assistant-written harm notes (independent coding)."""
+    """Exclude existing harm labels from an independent rating's input."""
     return {k: v for k, v in state.items() if k != "harm_mechanisms_uk"}
 
 
