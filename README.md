@@ -6,6 +6,9 @@ lives in `src/fairforget/`; notebooks are thin, offline examples. Fair-UK owns t
 public data-release/intervention/exposure contracts and evaluation. This package
 uses those interfaces instead of duplicating their validators or metrics.
 
+Generate WarBias in Ukrainian first, then translate into English. Retain both
+aligned language versions throughout release and evaluation.
+
 ## Install
 
 Use Python 3.10+ and a dedicated environment. Install the paired Fair-UK checkout
