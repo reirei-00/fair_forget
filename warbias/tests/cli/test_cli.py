@@ -8,48 +8,36 @@ from pathlib import Path
 from types import ModuleType
 
 import pytest
+from test_generation_cli import Provider
 
 from fairforget.cli import main
-from fairforget.examples import (
-    GENERATION_CONFIG,
-    SOURCES,
-    FixtureProvider,
-    unlearning_example_config,
-)
-from fairforget.io import read_rows, write_json, write_rows
-from fairforget.warbias.source import prepare_cases
+from fairforget.examples import unlearning_example_config
+from fairforget.io import digest, read_rows, write_json, write_rows
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def author_inputs(tmp_path):
-    cases = prepare_cases(
+def pilot_inputs(tmp_path):
+    config = json.loads((ROOT / "configs/generation/warbias.json").read_text())
+    for candidate in config["candidates"]:
+        candidate["provider"] = "fixture"
+    write_rows(tmp_path / "cases.jsonl", [{"case_id": "case", "claim": "Synthetic claim"}])
+    write_json(tmp_path / "config.json", config)
+    plan = tmp_path / "pilot-plan.json"
+    main(
         [
-            {
-                "case_id": "case",
-                "source_id": "synthetic-source",
-                "claim": "Synthetic claim",
-                "target_group": "idp",
-                "claim_family_id": "family",
-            }
-        ],
-        SOURCES,
+            "pilot-plan",
+            "--cases",
+            str(tmp_path / "cases.jsonl"),
+            "--config",
+            str(tmp_path / "config.json"),
+            "--prompt-root",
+            str(ROOT),
+            "--output",
+            str(plan),
+        ]
     )
-    write_rows(tmp_path / "cases.jsonl", cases)
-    write_json(tmp_path / "config.json", GENERATION_CONFIG)
-    return [
-        "author",
-        "--cases",
-        str(tmp_path / "cases.jsonl"),
-        "--stage",
-        "S",
-        "--config",
-        str(tmp_path / "config.json"),
-        "--prompt",
-        str(ROOT / "prompts/warbias_english_authoring_v1.txt"),
-        "--output",
-        str(tmp_path / "output"),
-    ]
+    return ["pilot", "--plan", str(plan), "--output", str(tmp_path / "output")]
 
 
 def test_doctor_requires_only_public_contracts(monkeypatch):
@@ -82,43 +70,48 @@ def test_installed_console_entrypoint_exit_status(command, exit_code, tmp_path):
         assert json.loads(result.stdout)["network_requests"] == 0
 
 
-def test_author_preview_never_imports_provider_factory(tmp_path):
-    args = author_inputs(tmp_path)
+def test_pilot_preview_never_imports_provider_factory(tmp_path):
+    args = pilot_inputs(tmp_path)
     result = main([*args, "--provider-factory", "missing_module:no_provider"])
     assert result["execute"] is False and result["records"] is None
-    assert not (tmp_path / "output/responses.jsonl").exists()
+    assert not list((tmp_path / "output").rglob("responses.jsonl"))
 
 
-def test_author_executes_injected_provider_and_resumes_without_calls(tmp_path, monkeypatch):
-    args = author_inputs(tmp_path)
-    provider = FixtureProvider(["{target} always refuse work."])
+def test_pilot_executes_injected_provider_and_resumes_without_calls(tmp_path, monkeypatch):
+    args = pilot_inputs(tmp_path)
+    provider = Provider()
     module = ModuleType("fixture_provider_plugin")
     module.make = lambda config: provider
     monkeypatch.setitem(sys.modules, module.__name__, module)
     result = main([*args, "--execute", "--provider-factory", "fixture_provider_plugin:make"])
-    assert result["records"] == 1 and len(provider.calls) == 1
-    cached = (tmp_path / "output/responses.jsonl").read_bytes()
+    assert result["records"] == 4 and len(provider.calls) == 8
+    cached = {
+        path.relative_to(tmp_path): path.read_bytes()
+        for path in (tmp_path / "output").rglob("responses.jsonl")
+    }
     main([*args, "--execute", "--provider-factory", "fixture_provider_plugin:make"])
-    assert len(provider.calls) == 1
-    assert (tmp_path / "output/responses.jsonl").read_bytes() == cached
-    assert read_rows(tmp_path / "output/stages.jsonl")[0]["review_status"] == "pending"
+    assert len(provider.calls) == 8
+    assert {relative: (tmp_path / relative).read_bytes() for relative in cached} == cached
+    assert all(
+        row["review_status"] == "pending" for row in read_rows(tmp_path / "output/triplets.jsonl")
+    )
 
 
 def test_generation_execution_requires_an_explicit_provider(tmp_path):
     with pytest.raises(SystemExit, match="1"):
-        main([*author_inputs(tmp_path), "--execute"])
-    assert not (tmp_path / "output/responses.jsonl").exists()
+        main([*pilot_inputs(tmp_path), "--execute"])
+    assert not list((tmp_path / "output").rglob("responses.jsonl"))
 
 
 def review_inputs(tmp_path):
     row = {
         "id": "fixture",
-        "language": "en",
+        "language": "uk",
         "target_group": "idp",
         "additional_tags": {},
-        "stereotype": "IDPs always refuse work.",
-        "counter_stereotype": "IDPs make their own work decisions.",
-        "unrelated": "IDPs listen to the radio.",
+        "stereotype": "ВПО завжди відмовляються працювати.",
+        "counter_stereotype": "ВПО самі вирішують, де працювати.",
+        "unrelated": "ВПО слухають радіо.",
     }
     rows, decisions = tmp_path / "rows.jsonl", tmp_path / "decisions.jsonl"
     write_rows(rows, [row])
@@ -264,3 +257,31 @@ def test_notebooks_from_broader_repository_use_warbias_prompts(name, tmp_path, m
     assert namespace["prompt_root"] == prompts
     assert namespace["result"]["network_requests"] == 0
     assert sibling.read_bytes() == before
+
+
+@pytest.mark.parametrize("command", ["author", "render"])
+def test_discarded_construction_commands_are_not_registered(command, capsys):
+    with pytest.raises(SystemExit) as error:
+        main([command])
+    assert error.value.code == 2
+    assert "invalid choice" in capsys.readouterr().err
+
+
+def test_english_source_pilot_is_rejected_before_factory_import(tmp_path, monkeypatch):
+    args = pilot_inputs(tmp_path)
+    plan_path = tmp_path / "pilot-plan.json"
+    plan = json.loads(plan_path.read_text())
+    plan["source_language"] = "en"
+    plan["plan_sha256"] = digest(
+        {key: value for key, value in plan.items() if key != "plan_sha256"}
+    )
+    write_json(plan_path, plan)
+
+    def fail_factory_import(args):
+        pytest.fail("An unsupported plan must fail before the factory is imported")
+
+    monkeypatch.setattr("fairforget.construction_cli.execution_factory", fail_factory_import)
+    with pytest.raises(SystemExit) as error:
+        main([*args, "--execute", "--provider-factory", "missing:never_import"])
+    assert error.value.code == 1
+    assert not (tmp_path / "output").exists()

@@ -154,7 +154,6 @@ def run_generation_example(output, *, prompt_root):
         "model_calls": len(provider.calls),
         "pilot_triplets": len(pilot),
         "generated_triplets": len(full),
-        "rendered_triplets": len(full),
     }
     write_json(output / "example-result.json", result)
     return result

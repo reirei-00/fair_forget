@@ -27,18 +27,8 @@ def _parser():
     )
     for key in ("cases", "profiles", "allocations", "output"):
         profiles.add_argument(f"--{key}", type=Path, required=True)
-    author = commands.add_parser("author", help="Preview or execute a reviewed S/C/U stage")
-    author.add_argument("--cases", type=Path, required=True)
-    author.add_argument("--stage", choices=("S", "C", "U"), required=True)
-    author.add_argument("--prompt", type=Path, required=True)
-    author.add_argument("--previous", nargs=2, action="append", metavar=("STAGE", "JSONL"))
-    _generation_options(author)
-    render = commands.add_parser("render", help="Render reviewed templates on frozen profiles")
-    for key in ("matrix", "templates", "output"):
-        render.add_argument(f"--{key}", type=Path, required=True)
-    render.add_argument("--dictionary", type=Path)
     translate = commands.add_parser(
-        "translate", help="Translate a complete source-generation run with raw caching"
+        "translate", help="Translate a complete Ukrainian generation run into English"
     )
     translate.add_argument("--input", type=Path, required=True)
     translate.add_argument("--production", type=Path, required=True)
@@ -113,37 +103,6 @@ def dispatch(args):
         )
         write_rows(args.output, rows)
         return {"profiles": len(rows)}
-    if args.command == "author":
-        from fairforget.warbias.authoring import author_stage
-
-        config = _json(args.config)
-        rows = author_stage(
-            read_rows(args.cases),
-            args.stage,
-            config,
-            args.prompt,
-            args.output,
-            previous={stage: read_rows(path) for stage, path in args.previous or []},
-            provider=_provider(args, config),
-            execute=args.execute,
-        )
-        if rows is not None:
-            write_rows(args.output / "stages.jsonl", rows)
-        return {
-            "execute": args.execute,
-            "stage": args.stage,
-            "records": None if rows is None else len(rows),
-        }
-    if args.command == "render":
-        from fairforget.warbias.authoring import render_profiles
-
-        rows = render_profiles(
-            read_rows(args.matrix),
-            _json(args.templates),
-            dictionary=_json(args.dictionary) if args.dictionary else None,
-        )
-        write_rows(args.output, rows)
-        return {"rendered": len(rows), "model_requests": 0}
     if args.command == "translate":
         from fairforget.translation.warbias import translate_production, validate_production_source
 

@@ -87,8 +87,10 @@ def dispatch(args):
         write_json(args.output, plan)
         return {"cases": len(plan["cases"]), "conditions": len(plan["conditions"])}
     if args.command == "pilot":
+        plan = load_json(args.plan)
+        pilot.verify_pilot_plan(plan)
         rows = pilot.run_pilot(
-            load_json(args.plan),
+            plan,
             args.output,
             provider_factory=execution_factory(args),
             execute=args.execute,

@@ -8,7 +8,8 @@ from types import ModuleType
 import pytest
 
 from fairforget.cli import main
-from fairforget.io import read_rows, write_json, write_rows
+from fairforget.examples import run_generation_example
+from fairforget.io import digest, read_rows, write_json, write_rows
 from fairforget.warbias.schema import FIELDS, STAGE_FIELD
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -20,7 +21,11 @@ UK = {
 
 
 class Provider:
+    def __init__(self):
+        self.calls = []
+
     def generate(self, request):
+        self.calls.append(request)
         if request["stage"] == "translation":
             return {
                 "text": json.dumps(
@@ -249,4 +254,60 @@ def test_invalid_full_run_is_rejected_before_provider_load(tmp_path, monkeypatch
             ]
         )
     assert loaded == []
+    assert not (tmp_path / "translation").exists()
+
+
+@pytest.mark.parametrize("change", ["reverse_direction", "english_full_run"])
+def test_unsupported_translation_lineage_is_rejected_before_provider_load(
+    tmp_path, monkeypatch, change
+):
+    run = tmp_path / "generation"
+    run_generation_example(run, prompt_root=ROOT / "prompts")
+    rows_path = run / "full/triplets.jsonl"
+    manifest_path = run / "full/production-result.json"
+    config = {
+        "provider": "fixture",
+        "model": "translator",
+        "source_language": "uk",
+        "target_language": "en",
+    }
+    if change == "reverse_direction":
+        config.update(source_language="en", target_language="uk")
+    else:
+        rows = read_rows(rows_path)
+        for row in rows:
+            row["language"] = "en"
+        manifest = json.loads(manifest_path.read_text())
+        manifest.update(source_language="en", rows_sha256=digest(rows))
+        manifest["manifest_sha256"] = digest(
+            {key: value for key, value in manifest.items() if key != "manifest_sha256"}
+        )
+        write_rows(rows_path, rows)
+        write_json(manifest_path, manifest)
+    write_json(tmp_path / "translation.json", config)
+
+    def fail_factory_import(args):
+        pytest.fail("Unsupported translation must fail before the factory is imported")
+
+    monkeypatch.setattr("fairforget.construction_cli.execution_factory", fail_factory_import)
+    with pytest.raises(SystemExit) as error:
+        main(
+            [
+                "translate",
+                "--input",
+                str(rows_path),
+                "--production",
+                str(manifest_path),
+                "--config",
+                str(tmp_path / "translation.json"),
+                "--prompt",
+                str(ROOT / "prompts/current/translation.txt"),
+                "--output",
+                str(tmp_path / "translation"),
+                "--execute",
+                "--provider-factory",
+                "missing:never_import",
+            ]
+        )
+    assert error.value.code == 1
     assert not (tmp_path / "translation").exists()
