@@ -49,29 +49,6 @@ PRIVATE_CONFIG_KEYS = {
     "credential_reference",
     "credentials_file",
 }
-INSTALL = """# Install WarBias
-
-Use Python 3.10+ and a dedicated environment. Install the paired Fair-UK evaluator
-first, then install the `fairforget-warbias` package:
-
-```sh
-python -m venv .venv
-. .venv/bin/activate
-python -m pip install -e /path/to/paired-fair-uk
-python -m pip install -e '.[dev,judging,unlearning]'
-python scripts/export_paper.py verify --directory . --check-imports
-fairforget doctor
-python -m pytest tests/data_creation tests/unlearning tests/cli -q
-```
-
-The paired Fair-UK package provides `lm_eval.fair_uk`, including the release
-validators and judging API. Set model versions and settings in `configs/` before
-running models. Supply credentials and data separately.
-
-The notebooks use synthetic examples and small CPU models. The manifest lists
-the exported source files and their hashes. Verification checks every file;
-runtime caches and virtual environments are excluded.
-"""
 
 
 def _hash(path):
@@ -232,7 +209,6 @@ def export(source, output):
         _copy_file(
             Path(__file__), staging / "scripts/export_paper.py", Path("scripts/export_paper.py")
         )
-        (staging / "INSTALL.md").write_text(INSTALL, encoding="utf-8")
         manifest = {
             "schema_version": 1,
             "kind": "producer_source_export",

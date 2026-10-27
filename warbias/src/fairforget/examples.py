@@ -70,11 +70,7 @@ def unlearning_example_config():
 
 
 def unlearning_example_bundle(*, config, output):
-    """Bind tiny local tensors and a checkpoint writer to the real training loop.
-
-    The approved source repository string is a validator fixture; these token
-    rows are synthetic and are not claimed to occur in any published dataset.
-    """
+    """Build a CPU training bundle with synthetic token data."""
     import torch
     from lm_eval.fair_uk.contracts import canonical_sha256, validate_data_release
 
