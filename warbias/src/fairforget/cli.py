@@ -301,3 +301,8 @@ def main(argv=None):
         parser.exit(1, f"{error}\n")
     print(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True))
     return result
+
+
+def entrypoint():
+    """Console scripts must return success rather than exiting with a result object."""
+    main()

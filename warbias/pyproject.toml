@@ -18,7 +18,7 @@ notebooks = ["jupyterlab>=4"]
 dev = ["pytest>=9", "ruff==0.16.2"]
 
 [project.scripts]
-fairforget = "fairforget.cli:main"
+fairforget = "fairforget.cli:entrypoint"
 
 [tool.setuptools.packages.find]
 where = ["src"]

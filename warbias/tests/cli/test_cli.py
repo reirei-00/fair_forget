@@ -2,6 +2,7 @@
 
 import json
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 from types import ModuleType
@@ -53,6 +54,27 @@ def author_inputs(tmp_path):
 
 def test_doctor_checks_the_actual_public_api():
     assert main(["doctor"])["network_requests"] == 0
+
+
+@pytest.mark.parametrize("command,exit_code", [("doctor", 0), ("unknown-command", 2)])
+def test_installed_console_entrypoint_exit_status(command, exit_code, tmp_path):
+    launcher = (
+        "from importlib.metadata import distribution; "
+        "entries = distribution('fairforget-warbias').entry_points; "
+        "entry = next(item for item in entries if item.group == 'console_scripts' "
+        "and item.name == 'fairforget'); "
+        "raise SystemExit(entry.load()())"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", launcher, command],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == exit_code, result.stderr
+    if command == "doctor":
+        assert json.loads(result.stdout)["network_requests"] == 0
 
 
 def test_author_preview_never_imports_provider_factory(tmp_path):
