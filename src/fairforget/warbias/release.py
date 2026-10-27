@@ -34,6 +34,10 @@ def build_release(
     """Build reviewed content; machine acceptance is explicitly not human validation."""
     if not release_id or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", release_id):
         raise ValueError("Declare a portable release ID")
+    if any(row.get("language") != "en" for row in english) or any(
+        row.get("language") != "uk" for row in ukrainian
+    ):
+        raise ValueError("The paired Fair-UK release expects English and Ukrainian inputs")
     pairs = align_languages(english, ukrainian)
     if not pairs:
         raise ValueError("Cannot release an empty panel")

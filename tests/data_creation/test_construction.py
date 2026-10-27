@@ -18,6 +18,8 @@ from fairforget.warbias.source import prepare_cases
 
 ROOT = Path(__file__).resolve().parents[2]
 CONFIG = {
+    "source_language": "en",
+    "target_language": "uk",
     "provider": "fixture",
     "model": "fixture-model",
     "revision": "a" * 40,
@@ -268,7 +270,7 @@ def test_translation_frozen_fields_and_speaker_contract_are_explicit(tmp_path):
     en = english()
     en["frozen_fields"] = ["stereotype"]
     en["prior_translation"] = {"stereotype": "A frozen earlier translation."}
-    en["exact_speaker_prefix_uk"] = "Сусідка каже, що "
+    en["exact_speaker_prefix"] = "Сусідка каже, що "
     uk = translate(
         [en],
         CONFIG,
