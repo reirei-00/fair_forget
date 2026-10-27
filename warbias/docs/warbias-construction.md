@@ -75,7 +75,8 @@ decisions; they are not signatures authenticating a historical human action.
 
 ## Stage commands
 
-Run from the repository root. Input names below refer to operator-supplied
+Run from the `warbias/` subproject directory, or the root of its standalone
+export. Input names below refer to operator-supplied
 artifacts. Configuration templates retain pending choices; no model or language
 is chosen by running a preview. The source and target languages are already set
 to Ukrainian and English by the agreed protocol; provider/model pins remain

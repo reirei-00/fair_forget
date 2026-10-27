@@ -1,1 +1,2 @@
--e .[dev,judging]
+pre-commit==3.5.0
+ruff==0.16.2
