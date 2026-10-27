@@ -30,7 +30,14 @@ TREES = {
     "tests/unlearning": {".py", ".json"},
     "tests/cli": {".py", ".json"},
 }
-FILES = ("README.md", "pyproject.toml", "requirements.txt", "requirements-dev.txt", ".gitignore")
+FILES = (
+    "README.md",
+    "docs/warbias-construction.md",
+    "pyproject.toml",
+    "requirements.txt",
+    "requirements-dev.txt",
+    ".gitignore",
+)
 MACHINE_PATH = re.compile(r"/(?:Users|home|scratch)/[^\s\"']+|/p/(?:project|scratch)/[^\s\"']+")
 PRIVATE_CONFIG_KEYS = {
     "keychain",

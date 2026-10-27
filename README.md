@@ -1,7 +1,7 @@
 # FairForget paper pipeline
 
-Reusable code for source-bound WarBias construction, English–Ukrainian
-translation and explicit unlearning experiments. The maintained implementation
+Reusable code for the WarBias generation pilot, blinded human model/strategy
+selection, full generation, translation and explicit unlearning experiments. The maintained implementation
 lives in `src/fairforget/`; notebooks are thin, offline examples. Fair-UK owns the
 public data-release/intervention/exposure contracts and evaluation. This package
 uses those interfaces instead of duplicating their validators or metrics.
@@ -30,20 +30,30 @@ for arguments. The stages are:
 
 1. `sources` and `profiles`: bind selected claims to immutable source evidence
    and resolve the explicit profile allocation.
-2. `author`: sequential S/C/U authoring with reviewed parent text; `render`
-   expands reviewed templates without counting rendering as new model calls.
-3. `translate` and `neutral`: source-bound generation with exact raw request and
-   response caching. Preview is the default. Execution requires `--execute` and
-   an explicitly supplied provider factory.
-4. `review-template`, `review` and `release`: freeze the full text/profile/source
+2. `pilot-plan` and `pilot`: freeze the selected subset and compare candidate
+   models using zero-shot triplets and sequential S→C→U prompting.
+3. `pilot-blind`, `pilot-review-template`, `pilot-review` and `pilot-select`:
+   separate reviewer-visible content from the private identity key, bind human
+   ratings and record an explicit choice of the blinded condition.
+4. `generate`: generate the full matrix using the selected model, strategy and
+   frozen prompts. `translate` then requires the complete source-run manifest
+   and explicit source/target languages. Both preserve exact raw request/response
+   caches and preview by default; execution requires `--execute` and a provider
+   factory. [Construction protocol and commands](docs/warbias-construction.md)
+   distinguish verified historical evidence from the new reusable implementation.
+5. `review-template`, `review` and `release`: freeze the full text/profile/source
    context for review, verify the completed decisions against that same context and
    build aligned, family-allocated releases. Machine review is recorded as
    pending human qualification. `severity` and `harm-mechanisms` are separate
    typed JEV annotation commands, also previewing by default.
-5. `unlearning-validate` verifies hashed token exports and partition separation.
+6. `unlearning-validate` verifies hashed token exports and partition separation.
    `unlearn` previews its explicit configuration; execution additionally requires
    `--execute` and a factory binding the actual local model, frozen reference,
    optimizer, schedule and checkpoint writer.
+
+The separate `author`/`render` commands support controlled template authoring;
+their stage reviews are distinct from the original generation comparison.
+`neutral` produces source-bound neutral-group variants for evaluation controls.
 
 Provider factories are named `module:callable` and receive `config=...`. Training
 factories additionally receive `output=...`. They are imported only when execution
@@ -55,7 +65,7 @@ Create a review template with `fairforget review-template --input rows.jsonl
 decision and criteria fields, then run `fairforget review --input rows.jsonl
 --decisions decisions.jsonl --output reviews.jsonl`. Existing files are preserved.
 Metadata changes invalidate the old review; text-only legacy decisions cannot be
-rebound automatically. Authoring appends a versioned target-slot contract to the
+rebound automatically. Controlled template authoring appends a versioned target-slot contract to the
 preserved prompt and records both hashes. Literal responses or profile values the
 renderer cannot realize fail before expansion. Neutral collection similarly
 requires the exact source digest retained by generation.
@@ -87,7 +97,8 @@ Use fresh output directories. The executable notebooks in `notebooks/paper/`
 call the same functions and write only to temporary directories.
 
 Original WarBias prompt files are retained byte for byte in `prompts/` with their
-hash manifest. Published source names and immutable pins remain provenance.
+original hash manifest. New reusable prompts live in `prompts/current/`.
+Published source names and immutable pins remain provenance.
 No anonymous dataset mirror or publication is implied by this local code package.
 Keep secrets, generated data, checkpoints and result evidence outside source.
 

@@ -1,6 +1,5 @@
 """Offline software fixtures used by the thin paper notebooks; not study measurements."""
 
-import json
 from copy import deepcopy
 from pathlib import Path
 from types import SimpleNamespace
@@ -35,132 +34,15 @@ SOURCES = [
 
 
 def run_generation_example(output, *, prompt_root):
-    """Exercise all three authoring stages and pure profile expansion locally."""
-    from fairforget.warbias.authoring import author_stage, render_profiles
-    from fairforget.warbias.profiles import build_profile_matrix
-    from fairforget.warbias.review import stage_review
-    from fairforget.warbias.source import prepare_cases
+    from fairforget.examples_generation import run_generation_example as run
 
-    output, prompt_root = Path(output), Path(prompt_root)
-    cases = prepare_cases(
-        [
-            {
-                "case_id": "synthetic-case",
-                "source_id": "synthetic-source",
-                "claim": "Synthetic expectation about work",
-                "target_group": "idp",
-                "claim_family_id": "synthetic-family",
-                "intrinsic_attributes": {},
-            }
-        ],
-        SOURCES,
-    )
-    matrix = build_profile_matrix(
-        cases,
-        [{"profile_id": "synthetic-profile", "additional_tags": {}}],
-        [
-            {
-                "id": "synthetic-item",
-                "case_id": "synthetic-case",
-                "profile_id": "synthetic-profile",
-                "reporter": None,
-            }
-        ],
-    )
-    previous = {}
-    texts = {
-        "S": "{target} always refuse work.",
-        "C": "{target} make their own work decisions.",
-        "U": "{target} listen to the radio.",
-    }
-    providers = []
-    for stage in ("S", "C", "U"):
-        provider = FixtureProvider([texts[stage]])
-        records = author_stage(
-            cases,
-            stage,
-            GENERATION_CONFIG,
-            prompt_root / "warbias_english_authoring_v1.txt",
-            output / stage,
-            previous=previous,
-            provider=provider,
-            execute=True,
-        )
-        for record in records:
-            # These predetermined fixture decisions exercise lineage only.
-            record["review"] = stage_review(
-                record["text"],
-                reviewer="synthetic-review-fixture",
-                reviewer_kind="model",
-                accepted=True,
-            )
-        previous[stage] = records
-        providers.append(provider)
-    templates = {"synthetic-case": {stage: previous[stage][0] for stage in previous}}
-    rows = render_profiles(matrix, templates)
-    write_rows(output / "english.jsonl", rows)
-    return {
-        "qualification": "synthetic_software_check",
-        "model_calls": sum(len(provider.calls) for provider in providers),
-        "rendered_triplets": len(rows),
-        "human_validated": False,
-    }
+    return run(output, prompt_root=prompt_root)
 
 
 def run_translation_example(output, *, prompt_root):
-    """Translate one synthetic triplet, record fixture reviews and validate a release."""
-    from fairforget.io import read_rows
-    from fairforget.translation.warbias import translate
-    from fairforget.warbias.release import build_release
-    from fairforget.warbias.review import review_record
-    from fairforget.warbias.schema import CRITERIA
+    from fairforget.examples_generation import run_translation_example as run
 
-    output, prompt_root = Path(output), Path(prompt_root)
-    run_generation_example(output / "generation", prompt_root=prompt_root)
-    english = read_rows(output / "generation/english.jsonl")
-    text = json.dumps(
-        {
-            "stereotype": "ВПО завжди відмовляються працювати.",
-            "counter_stereotype": "ВПО самі вирішують, де працювати.",
-            "unrelated": "ВПО слухають радіо.",
-        },
-        ensure_ascii=False,
-    )
-    provider = FixtureProvider([text])
-    ukrainian = translate(
-        english,
-        GENERATION_CONFIG,
-        prompt_root / "warbias_en_uk_translation_v4.txt",
-        output / "translation",
-        provider=provider,
-        execute=True,
-    )
-    reviews = [
-        review_record(
-            row,
-            reviewer="synthetic-review-fixture",
-            reviewer_kind="model",
-            decision="accepted",
-            criteria={key: "pass" for key in (*CRITERIA, "TRANSLATION_FIDELITY")},
-            comment="Predetermined software fixture; not a linguistic assessment",
-        )
-        for row in (*english, *ukrainian)
-    ]
-    release = build_release(
-        english,
-        ukrainian,
-        reviews,
-        SOURCES,
-        {"synthetic-family": "development"},
-        output / "release",
-        release_id="synthetic-software-check",
-    )
-    return {
-        "qualification": "synthetic_software_check",
-        "translated_triplets": len(ukrainian),
-        "release_qualification": release["qualification"],
-        "network_requests": 0,
-    }
+    return run(output, prompt_root=prompt_root)
 
 
 def unlearning_example_config():

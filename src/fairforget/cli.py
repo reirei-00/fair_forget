@@ -1,47 +1,22 @@
 """Readable entry points for explicit local construction and intervention stages."""
 
 import argparse
-import importlib
 import json
 from pathlib import Path
 
+from fairforget.cli_support import add_generation_options as _generation_options
+from fairforget.cli_support import load_factory as _factory
+from fairforget.cli_support import load_json as _json
+from fairforget.cli_support import provider_from_args as _provider
 from fairforget.io import read_rows, write_rows
-
-
-def _json(path):
-    return json.loads(Path(path).read_text(encoding="utf-8"))
-
-
-def _factory(value):
-    module, separator, name = value.partition(":")
-    if not separator or not module or not name:
-        raise ValueError("A factory must be written as module:callable")
-    result = getattr(importlib.import_module(module), name)
-    if not callable(result):
-        raise ValueError("The configured factory is not callable")
-    return result
-
-
-def _provider(args, config):
-    if not args.execute:
-        return None
-    if not args.provider_factory:
-        raise ValueError("--execute requires an explicit --provider-factory module:callable")
-    return _factory(args.provider_factory)(config=config)
-
-
-def _generation_options(parser):
-    parser.add_argument("--config", type=Path, required=True)
-    parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--execute", action="store_true")
-    parser.add_argument(
-        "--provider-factory", help="Factory(config=...) returning a generation provider"
-    )
 
 
 def _parser():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
+    from fairforget import construction_cli
+
+    construction_cli.add_commands(commands)
     commands.add_parser("doctor", help="Check the paired public Fair-UK API")
     sources = commands.add_parser("sources", help="Bind selected cases to immutable sources")
     sources.add_argument("--cases", type=Path, required=True)
@@ -63,9 +38,10 @@ def _parser():
         render.add_argument(f"--{key}", type=Path, required=True)
     render.add_argument("--dictionary", type=Path)
     translate = commands.add_parser(
-        "translate", help="Translate exact English triplets with raw caching"
+        "translate", help="Translate a complete source-generation run with raw caching"
     )
     translate.add_argument("--input", type=Path, required=True)
+    translate.add_argument("--production", type=Path, required=True)
     translate.add_argument("--prompt", type=Path, required=True)
     _generation_options(translate)
     neutral = commands.add_parser("neutral", help="Generate cached neutral-group variants")
@@ -119,6 +95,10 @@ def _parser():
 
 
 def dispatch(args):
+    from fairforget import construction_cli
+
+    if args.command in construction_cli.COMMANDS:
+        return construction_cli.dispatch(args)
     if args.command == "doctor":
         from lm_eval.fair_uk import contracts, jev
 
@@ -179,11 +159,14 @@ def dispatch(args):
         write_rows(args.output, rows)
         return {"rendered": len(rows), "model_requests": 0}
     if args.command == "translate":
-        from fairforget.translation.warbias import translate
+        from fairforget.translation.warbias import translate_production, validate_production_source
 
         config = _json(args.config)
-        rows = translate(
-            read_rows(args.input),
+        source_rows, manifest = read_rows(args.input), _json(args.production)
+        validate_production_source(source_rows, manifest, config)
+        rows = translate_production(
+            source_rows,
+            manifest,
             config,
             args.prompt,
             args.output,
