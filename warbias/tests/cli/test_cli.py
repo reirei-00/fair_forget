@@ -52,7 +52,12 @@ def author_inputs(tmp_path):
     ]
 
 
-def test_doctor_checks_the_actual_public_api():
+def test_doctor_requires_only_public_contracts(monkeypatch):
+    from lm_eval.fair_uk import contracts
+
+    module = ModuleType("lm_eval.fair_uk")
+    module.contracts = contracts
+    monkeypatch.setitem(sys.modules, module.__name__, module)
     assert main(["doctor"])["network_requests"] == 0
 
 

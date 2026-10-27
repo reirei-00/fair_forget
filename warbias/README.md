@@ -12,7 +12,7 @@ package:
 
 ```sh
 python -m pip install -e /path/to/paired-fair-uk
-python -m pip install -e '.[dev,judging,unlearning]'
+python -m pip install -e '.[dev,unlearning]'
 fairforget doctor
 ```
 

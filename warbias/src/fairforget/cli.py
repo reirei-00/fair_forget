@@ -62,15 +62,6 @@ def _parser():
     release.add_argument("--release-id", required=True)
     release.add_argument("--split-by-item", type=Path)
     release.add_argument("--require-human", action="store_true")
-    for name in ("severity", "harm-mechanisms"):
-        case = commands.add_parser(
-            name, help="Preview or explicitly execute typed JEV case annotation"
-        )
-        for key in ("case-matrix", "en", "uk", "config", "output"):
-            case.add_argument(f"--{key}", type=Path, required=True)
-        case.add_argument("--execute", action="store_true")
-        if name == "severity":
-            case.add_argument("--rubric", choices=("v1", "v2", "v3", "scale5"), default="scale5")
     validate = commands.add_parser(
         "unlearning-validate", help="Validate frozen token exports and partitions"
     )
@@ -100,17 +91,12 @@ def dispatch(args):
     if args.command in construction_cli.COMMANDS:
         return construction_cli.dispatch(args)
     if args.command == "doctor":
-        from lm_eval.fair_uk import contracts, jev
+        from lm_eval.fair_uk import contracts
 
         for name in ("validate_data_release", "validate_intervention", "validate_exposure"):
             if not callable(getattr(contracts, name, None)):
                 raise ValueError(
                     "The installed lm_eval distribution lacks the paired Fair-UK contracts"
-                )
-        for name in ("create_client", "submit_systemone", "validate_returned_model"):
-            if not callable(getattr(jev, name, None)):
-                raise ValueError(
-                    "The installed lm_eval distribution lacks the paired public JEV provider API"
                 )
         return {"status": "public_api_available", "network_requests": 0}
     if args.command == "sources":
@@ -230,19 +216,6 @@ def dispatch(args):
             release_id=args.release_id,
             require_human=args.require_human,
             split_by_item=_json(args.split_by_item) if args.split_by_item else None,
-        )
-    if args.command in ("severity", "harm-mechanisms"):
-        from fairforget.warbias import harm_mechanisms, severity
-        from fairforget.warbias.jev_cases import cases_from, load_config
-
-        module = severity if args.command == "severity" else harm_mechanisms
-        options = {"rubric": args.rubric} if args.command == "severity" else {}
-        return module.run(
-            cases_from(args.case_matrix, args.uk, args.en),
-            load_config(args.config),
-            args.output,
-            execute=args.execute,
-            **options,
         )
     if args.command == "unlearning-validate":
         from fairforget.unlearning.config import require_config
