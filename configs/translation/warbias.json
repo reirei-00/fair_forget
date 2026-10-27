@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "provider": null,
+  "model": null,
+  "revision": null,
+  "settings": {},
+  "source_language": "uk",
+  "target_language": null,
+  "prompt": "prompts/current/translation.txt",
+  "note": "Translation follows a completed full-generation manifest. Declare the target language and actual translation model explicitly. The original pilot generated Ukrainian; the later English-first construction is a separate lineage. This reusable prompt is new, not a recovered historical translation protocol."
+}

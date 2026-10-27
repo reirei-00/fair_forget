@@ -23,12 +23,19 @@ BINDING_FIELDS = (
 )
 
 
+def required_criteria(row):
+    """Fidelity applies to translated content, independent of which language it uses."""
+    return (
+        (*CRITERIA, "TRANSLATION_FIDELITY") if row.get("translation_source_language") else CRITERIA
+    )
+
+
 def decision_template(row):
     """Snapshot the complete review context before a human enters decisions."""
     if row["language"] not in LANGUAGES:
         raise ValueError("Unsupported linguistic-review language")
     context = review_context(row)
-    required = (*CRITERIA, "TRANSLATION_FIDELITY") if row["language"] == "uk" else CRITERIA
+    required = required_criteria(row)
     return {
         "schema_version": REVIEW_SCHEMA_VERSION,
         "id": row["id"],
@@ -81,7 +88,7 @@ def bind_decision(row, decision):
 
 
 def accepted(row, review, *, require_human=False):
-    required = (*CRITERIA, "TRANSLATION_FIDELITY") if row["language"] == "uk" else CRITERIA
+    required = required_criteria(row)
     context = review_context(row)
     return bool(
         not structural_issues(row)
