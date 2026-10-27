@@ -6,6 +6,5 @@
   "settings": {},
   "source_language": "uk",
   "target_language": "en",
-  "prompt": "prompts/current/translation.txt",
-  "note": "Generate the source corpus in Ukrainian, then translate into English and retain both aligned language versions. Translation follows a completed full-generation manifest. Declare the actual translation model explicitly. The later English-first construction is a separate lineage. This reusable prompt is new, not a recovered historical translation protocol."
+  "prompt": "prompts/current/translation.txt"
 }
