@@ -16,6 +16,8 @@ Use Python 3.10+ and a dedicated environment for this subproject. From the
 FairForget repository root, enter `warbias/`, install the paired Fair-UK checkout
 first, then this package:
 
+In a standalone export, work from its root and skip the `cd warbias` line.
+
 ```sh
 cd warbias
 python -m pip install -e /path/to/paired-fair-uk
