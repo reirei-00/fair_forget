@@ -8,7 +8,7 @@ import pytest
 
 from fairforget.io import digest, read_rows
 from fairforget.warbias.blind_review import bind_reviews, build_blind_package, decision_template
-from fairforget.warbias.generation import parse_response
+from fairforget.warbias.generation import generate_triplets, parse_response
 from fairforget.warbias.pilot import freeze_pilot, run_pilot, verify_pilot_plan, verify_pilot_result
 from fairforget.warbias.production import generate_full, verify_production_result
 from fairforget.warbias.schema import FIELDS, STAGE_FIELD
@@ -338,3 +338,66 @@ def test_selected_model_cannot_be_changed_after_blind_selection(tmp_path):
     with pytest.raises(ValueError):
         generate_full(changed["cases"], changed, selection, tmp_path / "wrong", execute=True)
     assert not (tmp_path / "wrong").exists()
+
+
+def test_pilot_rejects_english_source_even_with_a_consistent_plan_hash(tmp_path):
+    pilot_plan = plan()
+    with pytest.raises(ValueError, match="Ukrainian source_language uk"):
+        freeze_pilot(
+            pilot_plan["cases"],
+            pilot_plan["candidates"],
+            pilot_plan["strategies"],
+            source_language="en",
+        )
+    pilot_plan["source_language"] = "en"
+    pilot_plan["plan_sha256"] = digest(
+        {key: value for key, value in pilot_plan.items() if key != "plan_sha256"}
+    )
+    provider = Provider()
+    with pytest.raises(ValueError, match="Ukrainian source_language uk"):
+        run_pilot(pilot_plan, tmp_path, provider=provider, execute=True)
+    assert provider.calls == []
+    assert not list(tmp_path.iterdir())
+
+
+def test_generation_rejects_english_source_before_requests(tmp_path):
+    pilot_plan, provider = plan(), Provider()
+    with pytest.raises(ValueError, match="Ukrainian source_language uk"):
+        generate_triplets(
+            pilot_plan["cases"],
+            pilot_plan["candidates"][0],
+            "zero_shot",
+            pilot_plan["strategies"]["zero_shot"],
+            "en",
+            tmp_path,
+            condition_id="unsupported-source",
+            provenance={},
+            provider=provider,
+            execute=True,
+        )
+    assert provider.calls == []
+    assert not list(tmp_path.iterdir())
+
+
+def test_complete_manifest_cannot_qualify_an_english_source_full_run(tmp_path):
+    pilot_plan = plan()
+    pilot_rows = run_pilot(pilot_plan, tmp_path / "pilot", provider=Provider(), execute=True)
+    selected = receipt(pilot_plan, pilot_rows, tmp_path / "pilot/pilot-result.json")
+    rows = generate_full(
+        pilot_plan["cases"],
+        pilot_plan,
+        selected,
+        tmp_path / "full",
+        provider=Provider(),
+        execute=True,
+    )
+    manifest = json.loads((tmp_path / "full/production-result.json").read_text())
+    for row in rows:
+        row["language"] = "en"
+    manifest["source_language"] = "en"
+    manifest["rows_sha256"] = digest(rows)
+    manifest["manifest_sha256"] = digest(
+        {key: value for key, value in manifest.items() if key != "manifest_sha256"}
+    )
+    with pytest.raises(ValueError, match="Ukrainian source_language uk"):
+        verify_production_result(rows, manifest)

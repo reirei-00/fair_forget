@@ -18,6 +18,11 @@ STRATEGIES = {"zero_shot": ("triplet",), "sequential": STAGES}
 GENERATION_CONTRACT = "warbias_triplet_generation_v1"
 
 
+def validate_source_language(source_language):
+    if source_language != "uk":
+        raise ValueError("WarBias generation requires Ukrainian source_language uk")
+
+
 def freeze_strategies(strategies):
     """Snapshot prompt bytes and explicit response-field mappings for both strategies."""
     if set(strategies) != set(STRATEGIES):
@@ -123,11 +128,10 @@ def condition_definition(
     cases, candidate, strategy_name, strategy, source_language, *, condition_id, provenance
 ):
     """Shared identity for planned requests, generated rows and blinded review checks."""
+    validate_source_language(source_language)
     validate_cases(cases)
     validate_candidate(candidate)
     verify_strategy(strategy_name, strategy)
-    if not isinstance(source_language, str) or not source_language.strip():
-        raise ValueError("Declare the generation source language explicitly")
     if not isinstance(condition_id, str) or not re.fullmatch(
         r"[A-Za-z0-9][A-Za-z0-9_-]*", condition_id
     ):

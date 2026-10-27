@@ -1,1 +1,1 @@
-"""Source-bound English–Ukrainian translation and fidelity checks."""
+"""Source-bound Ukrainian-to-English translation and fidelity checks."""

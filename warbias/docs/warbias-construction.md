@@ -17,7 +17,8 @@ unique. Both language versions keep the same IDs.
 
 Set providers, fixed model and tokenizer versions, settings and prompts in
 `configs/generation/warbias.json` and `configs/translation/warbias.json`.
-Translation uses `uk` as the source and `en` as the target. Plans save source
+Generation uses Ukrainian (`uk`). Translation accepts only Ukrainian as the
+source and English (`en`) as the target. Plans save source
 rows, model settings, prompt text and hashes. Resume requires the same inputs.
 
 ## Pilot and selection
