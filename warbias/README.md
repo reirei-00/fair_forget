@@ -1,28 +1,36 @@
 # WarBias pipelines
 
-WarBias is a subproject of the broader FairForget repository. This directory
-contains its source-bound generation, translation and linguistic-review package.
-Fair-UK provides evaluation, scoring and the public artifact contracts.
+WarBias provides Ukrainian generation, blinded human model selection, English
+translation and data review. The Python package is in `src/fairforget/`.
+Fair-UK provides evaluation and the shared data and training contracts.
 
-Enter `warbias/`, install the paired Fair-UK checkout, then run
-`python -m pip install -e '.[dev,judging]'`. The distribution is
-`fairforget-warbias`; its Python namespace remains `fairforget`.
+## Install
 
-The construction sequence is a Ukrainian pilot across candidate models and two
-prompting strategies, blinded human assessment and explicit selection, full
-Ukrainian generation, then English translation. Both aligned versions are kept.
-See [the construction protocol](docs/warbias-construction.md) for the source
-history, evidence gaps and stage contracts.
+From `warbias/`, install the paired Fair-UK package, then this package:
 
-The reusable API is in `src/fairforget/warbias/`: `pilot.freeze_pilot`,
-`pilot.run_pilot`, `blind_review.build_blind_package`, `selection.select_condition`
-and `production.generate_full`. `translation.warbias.translate_production`
-requires the complete source run. Original prompts remain byte-identical with
-their manifest. Generation uses an explicit injected provider; model review does
-not qualify human validation. Real datasets, private reviews and checkpoints
-remain outside source.
+```sh
+python -m pip install -e /path/to/paired-fair-uk
+python -m pip install -e '.[dev,judging]'
+```
 
-Run `python -m pytest tests/data_creation -q` for offline construction checks.
-The stacked workflow PR adds the CLI, thin notebooks and portable export.
-Existing benchmark notebooks, legacy evaluation scripts and root dependencies
-remain in the broader FairForget repository.
+The distribution is `fairforget-warbias`; the Python namespace is `fairforget`.
+
+## Pipeline API
+
+`pilot.freeze_pilot` and `pilot.run_pilot` compare models on Ukrainian cases with
+zero-shot and sequential prompting. `blind_review.build_blind_package` prepares
+public forms and a private model key. `selection.select_condition` records the
+human choice. `production.generate_full` uses it for the full Ukrainian data.
+`translation.warbias.translate_production` only translates existing Ukrainian
+rows into English. Both language versions keep matching IDs.
+
+See the [construction guide](docs/warbias-construction.md) for input formats,
+review requirements and output files. Set providers, model versions and settings
+in `configs/` before execution. Prompt hashes are in `prompts/manifest.json`.
+Store credentials, generated data, model weights and review results separately.
+
+## Tests
+
+```sh
+python -m pytest tests/data_creation -q
+```
