@@ -3,7 +3,8 @@
 The paper workflow is: generate a pilot with several models and two prompting
 strategies; obtain blinded human assessments; record the selected model and
 strategy; generate the full source-language matrix; translate that completed
-artifact. Pilot ratings select the construction condition. They do not establish
+artifact. The maintained paper direction is Ukrainian → English; retain both
+aligned language versions with the same matrix-unit IDs. Pilot ratings select the construction condition. They do not establish
 human validation of every subsequently generated or translated item.
 
 ## What the historical artifacts establish
@@ -42,8 +43,9 @@ outside this code export.
 The later `warbias_en_uk_v1_20260909` English-first construction is a separate
 lineage. It is not the translation continuation of the Ukrainian pilot and full
 run. No translation of that original 981-row run was verified in the retained
-artifacts. The reusable translation stage below therefore requires an explicit
-target language and does not claim a recovered historical direction.
+artifacts. The author's explicit clarification establishes Ukrainian → English
+for the maintained pipeline. Its configuration records that direction without
+claiming a recovered historical translation receipt.
 
 ## Reusable implementation
 
@@ -75,7 +77,10 @@ decisions; they are not signatures authenticating a historical human action.
 
 Run from the repository root. Input names below refer to operator-supplied
 artifacts. Configuration templates retain pending choices; no model or language
-is chosen by running a preview.
+is chosen by running a preview. The source and target languages are already set
+to Ukrainian and English by the agreed protocol; provider/model pins remain
+operator-supplied. Full-generation outputs retain the Ukrainian rows, translation
+writes separate English rows, and paired releases include both.
 
 ```sh
 fairforget pilot-plan --cases pilot-cases.jsonl --config configs/generation/warbias.json --output pilot-plan.json
