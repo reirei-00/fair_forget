@@ -10,7 +10,6 @@ import pytest
 from test_generation_cli import Provider
 
 from fairforget.cli import main
-from fairforget.examples import unlearning_example_config
 from fairforget.io import digest, read_rows, write_json, write_rows
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -39,13 +38,32 @@ def pilot_inputs(tmp_path):
     return ["pilot", "--plan", str(plan), "--output", str(tmp_path / "output")]
 
 
-def test_doctor_requires_only_public_contracts(monkeypatch):
-    from lm_eval.fair_uk import contracts
-
+def test_doctor_requires_only_the_public_data_release_contract(monkeypatch):
+    contracts = ModuleType("lm_eval.fair_uk.contracts")
+    contracts.validate_data_release = lambda *args, **kwargs: None
     module = ModuleType("lm_eval.fair_uk")
     module.contracts = contracts
     monkeypatch.setitem(sys.modules, module.__name__, module)
     assert main(["doctor"])["network_requests"] == 0
+
+
+def test_unavailable_data_release_contract_fails_doctor(monkeypatch, capsys):
+    module = ModuleType("lm_eval.fair_uk")
+    module.contracts = ModuleType("lm_eval.fair_uk.contracts")
+    monkeypatch.setitem(sys.modules, module.__name__, module)
+    with pytest.raises(SystemExit) as error:
+        main(["doctor"])
+    assert error.value.code == 1
+    assert "data-release contract" in capsys.readouterr().err
+
+
+def test_unlearning_example_is_not_registered(tmp_path, capsys):
+    output = tmp_path / "example"
+    with pytest.raises(SystemExit) as error:
+        main(["example", "unlearning", "--output", str(output)])
+    assert error.value.code == 2
+    assert "invalid choice" in capsys.readouterr().err
+    assert not output.exists()
 
 
 @pytest.mark.parametrize("command,exit_code", [("doctor", 0), ("unknown-command", 2)])
@@ -189,56 +207,7 @@ def test_translation_example_builds_a_qualified_release(tmp_path):
     assert (tmp_path / "translation/release/manifest.json").is_file()
 
 
-def test_unlearning_preview_does_not_load_factory_and_execute_runs_real_step(tmp_path):
-    pytest.importorskip("torch")
-    config = tmp_path / "config.json"
-    write_json(config, unlearning_example_config())
-    args = ["unlearn", "--config", str(config), "--output", str(tmp_path / "run")]
-    result = main([*args, "--bundle-factory", "missing_module:never_load"])
-    assert result["optimizer_steps"] == 0 and not (tmp_path / "run").exists()
-    receipt = main(
-        [*args, "--bundle-factory", "fairforget.examples:unlearning_example_bundle", "--execute"]
-    )
-    assert receipt["training"]["optimizer_steps"] == 1
-    exposure = json.loads((tmp_path / "run/exposure.json").read_text())
-    assert exposure["events"] and all(
-        event["valid_loss_tokens"] > 0 for event in exposure["events"]
-    )
-    from lm_eval.fair_uk.lineage import bind_training_evidence
-
-    report = {
-        "kind": "paired_native_checkpoint_evaluation",
-        "provenance": {
-            state: {
-                "run": {"model_identity": {"local_files_sha256": receipt[state]["files_sha256"]}}
-            }
-            for state in ("before", "after")
-        },
-    }
-    release = json.loads((tmp_path / "run-release/manifest.json").read_text())
-    bound = bind_training_evidence(report, receipt, exposure, release)
-    assert bound["actual_exposure_events"] == len(exposure["events"])
-    assert bound["training_language"] == "en"
-
-
-def run_notebook(name):
-    notebook = json.loads((ROOT / "notebooks/unlearning" / (name + ".ipynb")).read_text())
-    namespace = {"__name__": "__main__"}
-    for cell in notebook["cells"]:
-        if cell["cell_type"] == "code":
-            assert cell["outputs"] == [] and cell["execution_count"] is None
-            exec(compile("".join(cell["source"]), name + ".ipynb", "exec"), namespace)
-    assert namespace["result"]["qualification"] == "synthetic_software_check"
-    return namespace
-
-
-def test_unlearning_notebook_runs_top_to_bottom_offline(monkeypatch):
-    pytest.importorskip("torch")
-    monkeypatch.chdir(ROOT)
-    run_notebook("unlearning")
-
-
-@pytest.mark.parametrize("command", ["author", "render"])
+@pytest.mark.parametrize("command", ["author", "render", "unlearn", "unlearning-validate"])
 def test_discarded_construction_commands_are_not_registered(command, capsys):
     with pytest.raises(SystemExit) as error:
         main([command])

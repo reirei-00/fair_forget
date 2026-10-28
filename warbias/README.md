@@ -3,7 +3,7 @@
 WarBias compares models on Ukrainian data, records a blinded human choice,
 generates the full Ukrainian dataset and translates it into English. Both
 language versions keep matching IDs. Fair-UK provides evaluation and the shared
-data and training contracts.
+data release contract.
 
 ## Install
 
@@ -12,7 +12,7 @@ package:
 
 ```sh
 python -m pip install -e /path/to/paired-fair-uk
-python -m pip install -e '.[dev,unlearning]'
+python -m pip install -e '.[dev]'
 fairforget doctor
 ```
 
@@ -27,15 +27,13 @@ commands. Run `fairforget COMMAND --help` for all arguments.
 
 Set the provider, fixed model and tokenizer versions, and settings in `configs/`.
 Model commands preview plans by default. Execution requires `--execute`.
-Specify a factory as `module:callable`. Provider factories receive `config=...`. Training factories
-also receive `output=...` and supply a `checkpoint_loader`. The runner checks the
-model and reference weights against the starting checkpoint before training.
+Specify a factory as `module:callable`. Provider factories receive `config=...`.
 
 ## Tests
 
 ```sh
-python -m pytest tests/data_creation tests/unlearning tests/cli -q
-python -m ruff check src tests/data_creation tests/unlearning tests/cli
+python -m pytest tests -q
+python -m ruff check src tests scripts notebooks/paper
 ```
 
 The five notebooks in `notebooks/paper/` use the recorded taxonomy matrix, pilot
@@ -44,8 +42,7 @@ outputs, anonymized human ratings and a Codex translation sample. Start with
 The [construction guide](docs/warbias-construction.md#paper-notebooks) lists all
 five stages. The final corpus remains under annotation.
 
-CLI examples and `notebooks/unlearning/unlearning.ipynb` use synthetic inputs.
-The unlearning example performs one CPU update.
+CLI generation and translation examples use synthetic inputs.
 
 ## Export
 
