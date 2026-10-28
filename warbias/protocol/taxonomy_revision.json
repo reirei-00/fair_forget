@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "version": "warbias-taxonomy-20261028",
+  "version": "warbias-taxonomy-20261028-v2",
   "source": {
     "sheet": "Annotator_View",
     "selection": "effective_actor_cell_background",
@@ -25,7 +25,7 @@
         "vet_hiring_discrimination"
       ],
       "category_code": "vet_employment_skills_discrimination",
-      "category_uk": "Працевлаштування, професійні навички та кар’єрна ієрархія",
+      "category_uk": "Професійна компетентність і працевлаштування",
       "scope": "Include hiring discrimination, military-to-civilian skill transfer, deskilling and career-role restrictions.",
       "affected_rows": 39
     }
@@ -76,15 +76,88 @@
       "row_origin": "author_feedback",
       "generation_status": "not_generated",
       "human_annotation_status": "not_annotated"
+    },
+    {
+      "matrix_item_id": "warbias_veteran_order_restoration_001__veteran_generic__generic_plural__unspecified",
+      "case_id": "warbias_veteran_order_restoration_001",
+      "bias_type_code": "veteran",
+      "bias_type_uk": "ветеранський статус і досвід",
+      "category_code": "vet_heroization_mandatory_resilience",
+      "category_uk": "Ідеалізація та завищені очікування від ветеранів",
+      "target_code": "veteran_generic",
+      "target_uk": "ветерани",
+      "target_definition_uk": "Люди, які мають ветеранський статус",
+      "gender_track": "generic_plural",
+      "age_track": "unspecified",
+      "stereotype_focus_uk": "обов’язок навести порядок у громаді",
+      "stereotype_claim_uk": "Ветерани повинні навести порядок у громаді.",
+      "context_uk": "громада і повсякденна взаємодія",
+      "harm_mechanism_uk": "героїзація або інструменталізація",
+      "evidence_ids": "author_naming_feedback_20261028",
+      "row_origin": "author_feedback",
+      "generation_status": "not_generated",
+      "human_annotation_status": "not_annotated"
     }
   ],
   "reviewed_matrix": {
     "path": "protocol/inputs/matrix_reviewed.csv",
-    "sha256": "78845e421255fa768b8a11875b41139a8132b18f2f35828a09f582e4131f01c9",
-    "rows": 427,
+    "sha256": "ccdfa2a24adba05cea6ceba8fcb6e354b4225aaf8be7e0204b891a989f650471",
+    "rows": 428,
     "green_source_rows": 425,
-    "author_additions": 2,
+    "author_additions": 3,
     "role": "next_generation_inputs",
     "generated_as_this_revision": false
+  },
+  "category_relabels": [
+    {
+      "category_code": "vet_helplessness_agency_entrepreneurship",
+      "category_uk": "Пасивність у розв’язанні власних проблем"
+    },
+    {
+      "category_code": "vet_heroization_mandatory_resilience",
+      "category_uk": "Ідеалізація та завищені очікування від ветеранів"
+    },
+    {
+      "category_code": "idp_aid_dependency_deservingness",
+      "category_uk": "Соціальна допомога та розподіл ресурсів"
+    }
+  ],
+  "category_splits": [
+    {
+      "source_code": "vet_disability_work_capacity",
+      "categories": [
+        {
+          "category_code": "vet_disability_appearance",
+          "category_uk": "Уявлення про зовнішні ознаки інвалідності",
+          "case_ids": [
+            "ssuk_vet_disability_work_capacity_case_001",
+            "ssuk_vet_disability_work_capacity_case_002"
+          ],
+          "rows": 9
+        },
+        {
+          "category_code": "vet_injury_simulation_accusations",
+          "category_uk": "Звинувачення в симуляції поранень",
+          "case_ids": [
+            "ssuk_vet_disability_work_capacity_case_007"
+          ],
+          "rows": 6
+        },
+        {
+          "category_code": "vet_disability_autonomy_work_capacity",
+          "category_uk": "Узагальнення щодо самостійності та працездатності",
+          "case_ids": [
+            "ssuk_vet_disability_work_capacity_case_004",
+            "ssuk_vet_disability_work_capacity_case_005",
+            "ssuk_vet_disability_work_capacity_case_006"
+          ],
+          "rows": 7
+        }
+      ]
+    }
+  ],
+  "naming_feedback_source": {
+    "id": "author_naming_feedback_20261028",
+    "kind": "author_taxonomy_feedback"
   }
 }
