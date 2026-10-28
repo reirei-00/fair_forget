@@ -125,10 +125,10 @@
     },
     "matrix_reviewed": {
       "path": "protocol/inputs/matrix_reviewed.csv",
-      "sha256": "78845e421255fa768b8a11875b41139a8132b18f2f35828a09f582e4131f01c9",
+      "sha256": "ccdfa2a24adba05cea6ceba8fcb6e354b4225aaf8be7e0204b891a989f650471",
       "format": "csv",
-      "bytes": 364568,
-      "rows": 427,
+      "bytes": 364682,
+      "rows": 428,
       "role": "green_selection_with_author_taxonomy_changes"
     }
   },
@@ -231,9 +231,9 @@
     {
       "artifact": "matrix_reviewed",
       "source_sha256": "7bbdb20773bc5b3bffce45734af7009ff00cbe9e9186ace20eb64b848d112b8e",
-      "portable_sha256": "78845e421255fa768b8a11875b41139a8132b18f2f35828a09f582e4131f01c9",
+      "portable_sha256": "ccdfa2a24adba05cea6ceba8fcb6e354b4225aaf8be7e0204b891a989f650471",
       "green_source_rows": 425,
-      "author_additions": 2,
+      "author_additions": 3,
       "revision": "protocol/taxonomy_revision.json"
     }
   ],

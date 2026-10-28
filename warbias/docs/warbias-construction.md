@@ -17,8 +17,8 @@ full Ukrainian generation → English translation.
 `configs/data/dataset-inputs.json` binds the taxonomy, matrix, pilot outputs and
 anonymized ratings to their file hashes. Final annotated data remain separate.
 `taxonomy_selected.csv` contains the 425 green combinations from the annotator
-view. `matrix_reviewed.csv` applies the category merge and adds two author-supplied
-stereotypes, for 427 current generation inputs. Green indicates dataset presence,
+view. `matrix_reviewed.csv` applies the category names and case assignments in
+`taxonomy_revision.json`, including the explicit author additions. Green indicates dataset presence,
 not human acceptance. The 981-row matrix remains a historical generation input.
 The notebooks inspect saved evidence and prepare requests by default. Model
 execution requires the corresponding run flag and configured inputs.
