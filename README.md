@@ -37,5 +37,5 @@ The WarBias pipelines live in [`warbias/`](warbias/): the Ukrainian generation
 pilot, blinded human model/strategy selection, full generation, English
 translation and review. Both aligned language versions are retained.
 See the [WarBias guide](warbias/README.md) for its separate installation, tests
-and paper-source export. Existing benchmark notebooks, evaluation scripts and
+and source export. Existing benchmark notebooks, evaluation scripts and
 their root dependencies remain independent of this subproject.

@@ -4,17 +4,17 @@ Run commands from `warbias/` or an exported package. Supply your input files and
 model settings. The sequence is Ukrainian pilot → blinded human selection →
 full Ukrainian generation → English translation.
 
-## Paper notebooks
+## Notebooks
 
 | Notebook | Inputs and purpose |
 | --- | --- |
-| [1. Ukrainian pilot](../notebooks/paper/01_ukrainian_pilot.ipynb) | Taxonomy matrix, Mamay and Lapa, zero-shot and sequential prompts, saved Ukrainian samples |
-| [2. Model selection](../notebooks/paper/02_model_selection.ipynb) | Human ratings, condition means, observed ranks and the recorded Lapa/sequential choice |
-| [3. Full Ukrainian generation](../notebooks/paper/03_full_ukrainian_generation.ipynb) | Full matrix, selected condition, final prompts and generation requests |
-| [4. Sample translation and COMET](../notebooks/paper/04_sample_translation_comet.ipynb) | Ten Ukrainian reference triplets, actual Codex translations and measured COMET scores |
-| [5. Full English translation](../notebooks/paper/05_full_english_translation.ipynb) | Full Ukrainian input, source manifest and aligned English output |
+| [1. Ukrainian pilot](../notebooks/01_ukrainian_pilot.ipynb) | Taxonomy matrix, Mamay and Lapa, zero-shot and sequential prompts, saved Ukrainian samples |
+| [2. Model selection](../notebooks/02_model_selection.ipynb) | Human ratings, condition means, observed ranks and the recorded Lapa/sequential choice |
+| [3. Full Ukrainian generation](../notebooks/03_full_ukrainian_generation.ipynb) | Full matrix, selected condition, final prompts and generation requests |
+| [4. Sample translation and COMET](../notebooks/04_sample_translation_comet.ipynb) | Ten Ukrainian reference triplets, actual Codex translations and measured COMET scores |
+| [5. Full English translation](../notebooks/05_full_english_translation.ipynb) | Full Ukrainian input, source manifest and aligned English output |
 
-`configs/data/paper-inputs.json` binds the taxonomy, matrix, pilot outputs and
+`configs/data/dataset-inputs.json` binds the taxonomy, matrix, pilot outputs and
 anonymized ratings to their file hashes. Final annotated data remain separate.
 The notebooks inspect saved evidence and prepare requests by default. Model
 execution requires the corresponding run flag and configured inputs.
@@ -121,7 +121,7 @@ Set `RUN_COMET = True` to calculate them again.
 
 The Ukrainian sample comes from the pinned Hugging Face reference in
 `configs/data/warbias-reference.json`. Its new English translations are stored
-with the paper inputs. The reference remains separate from the current
+with the dataset inputs. The reference remains separate from the current
 production corpus, whose human annotation is in progress.
 
 Model and runtime settings are in `configs/translation/quality.json`.

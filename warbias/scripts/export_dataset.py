@@ -26,7 +26,7 @@ TREES = {
     "prompts": {".txt", ".md", ".json", ".yaml", ".yml"},
     "configs": {".json"},
     "protocol": {".json", ".jsonl", ".csv"},
-    "notebooks/paper": {".ipynb"},
+    "notebooks": {".ipynb"},
     "tests/data_creation": {".py", ".json"},
     "tests/cli": {".py", ".json"},
 }
@@ -65,7 +65,7 @@ def _credentials(value):
     if isinstance(value, dict):
         if {str(key).lower() for key in value} & PRIVATE_CONFIG_KEYS:
             raise ValueError(
-                "Submission configurations must omit credentials and local credential references"
+                "Export configurations must omit credentials and local credential references"
             )
         for child in value.values():
             _credentials(child)
@@ -87,12 +87,12 @@ def _validate_text(path, relative):
             for cell in notebook.get("cells", [])
             if cell.get("cell_type") == "code"
         ):
-            raise ValueError("Submission notebooks must have cleared execution state and outputs")
+            raise ValueError("Export notebooks must have cleared execution state and outputs")
 
 
 def _copy_file(source, target, relative):
     if source.is_symlink():
-        raise ValueError("Submission source cannot contain symlinks")
+        raise ValueError("Export source cannot contain symlinks")
     _validate_text(source, relative)
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(source, target)
@@ -100,7 +100,7 @@ def _copy_file(source, target, relative):
 
 def _copy_tree(source, target, relative_root, suffixes):
     if source.is_symlink():
-        raise ValueError("Submission source cannot contain symlinks")
+        raise ValueError("Export source cannot contain symlinks")
     if not source.is_dir():
         raise ValueError(f"Missing maintained source directory: {relative_root}")
     for parent, directories, files in os.walk(source, followlinks=False):
@@ -110,7 +110,7 @@ def _copy_tree(source, target, relative_root, suffixes):
             if _runtime((*relative.parts, name)):
                 continue
             if (Path(parent) / name).is_symlink():
-                raise ValueError("Submission source cannot contain symlinks")
+                raise ValueError("Export source cannot contain symlinks")
             if not name.startswith("."):
                 keep.append(name)
         directories[:] = keep
@@ -120,7 +120,7 @@ def _copy_tree(source, target, relative_root, suffixes):
             if _runtime(parts):
                 continue
             if path.is_symlink():
-                raise ValueError("Submission source cannot contain symlinks")
+                raise ValueError("Export source cannot contain symlinks")
             if not name.startswith(".") and path.suffix in suffixes:
                 _copy_file(path, target / relative / name, relative_root / relative / name)
 
@@ -132,7 +132,7 @@ def _inventory(directory):
         if _runtime(relative.parts):
             continue
         if path.is_symlink():
-            raise ValueError("Submission export cannot contain symlinks")
+            raise ValueError("Export cannot contain symlinks")
         if path.is_file() and str(relative) != MANIFEST:
             result[str(relative)] = _hash(path)
     return result
@@ -197,7 +197,7 @@ def export(source, output):
     if output.exists() or output.is_symlink():
         raise ValueError("Export destination must not exist")
     output.parent.mkdir(parents=True, exist_ok=True)
-    staging = Path(tempfile.mkdtemp(prefix=".paper-export-", dir=output.parent))
+    staging = Path(tempfile.mkdtemp(prefix=".dataset-export-", dir=output.parent))
     try:
         for relative, suffixes in TREES.items():
             _copy_tree(source / relative, staging / relative, Path(relative), suffixes)
@@ -207,7 +207,7 @@ def export(source, output):
             if (source / name).exists():
                 _copy_file(source / name, staging / name, Path(name))
         _copy_file(
-            Path(__file__), staging / "scripts/export_paper.py", Path("scripts/export_paper.py")
+            Path(__file__), staging / "scripts/export_dataset.py", Path("scripts/export_dataset.py")
         )
         manifest = {
             "schema_version": 1,

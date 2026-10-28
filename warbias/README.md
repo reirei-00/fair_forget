@@ -33,13 +33,13 @@ Specify a factory as `module:callable`. Provider factories receive `config=...`.
 
 ```sh
 python -m pytest tests -q
-python -m ruff check src tests scripts notebooks/paper
+python -m ruff check src tests scripts notebooks
 ```
 
-The five notebooks in `notebooks/paper/` use the recorded taxonomy matrix, pilot
+The five notebooks in `notebooks/` use the recorded taxonomy matrix, pilot
 outputs, anonymized human ratings and a Codex translation sample. Start with
-[Ukrainian pilot generation](notebooks/paper/01_ukrainian_pilot.ipynb).
-The [construction guide](docs/warbias-construction.md#paper-notebooks) lists all
+[Ukrainian pilot generation](notebooks/01_ukrainian_pilot.ipynb).
+The [construction guide](docs/warbias-construction.md#notebooks) lists all
 five stages. The final corpus remains under annotation.
 
 CLI generation and translation examples use synthetic inputs.
@@ -49,11 +49,11 @@ CLI generation and translation examples use synthetic inputs.
 From the FairForget repository root:
 
 ```sh
-python warbias/scripts/export_paper.py build --output /path/to/new-warbias-artifact
+python warbias/scripts/export_dataset.py build --output /path/to/new-warbias-package
 ```
 
-From `warbias/` or an exported package, use `python scripts/export_paper.py`.
-Verify an export with `python scripts/export_paper.py verify --directory PATH`.
+From `warbias/` or an exported package, use `python scripts/export_dataset.py`.
+Verify an export with `python scripts/export_dataset.py verify --directory PATH`.
 The export contains source, settings, prompts, study inputs, notebooks and tests.
 Keep credentials, model weights, full generated corpora and full annotation files
 outside the package. Prompt hashes are in `prompts/manifest.json`.
