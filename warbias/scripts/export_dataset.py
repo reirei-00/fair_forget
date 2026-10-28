@@ -20,6 +20,8 @@ RUNTIME = {
     ".ipynb_checkpoints",
     "build",
     "dist",
+    "runs",
+    "outputs",
 }
 TREES = {
     "src": {".py"},
@@ -37,6 +39,7 @@ FILES = (
     "requirements.txt",
     "requirements-dev.txt",
     ".gitignore",
+    "scripts/run_notebooks.py",
 )
 MACHINE_PATH = re.compile(r"/(?:Users|home|scratch)/[^\s\"']+|/p/(?:project|scratch)/[^\s\"']+")
 PRIVATE_CONFIG_KEYS = {
@@ -81,13 +84,32 @@ def _validate_text(path, relative):
     if relative.parts[0] == "configs" and path.suffix == ".json":
         _credentials(json.loads(text))
     if path.suffix == ".ipynb":
-        notebook = json.loads(text)
-        if any(
-            cell.get("outputs") or cell.get("execution_count") is not None
-            for cell in notebook.get("cells", [])
-            if cell.get("cell_type") == "code"
-        ):
-            raise ValueError("Export notebooks must have cleared execution state and outputs")
+        _validate_notebook(json.loads(text))
+
+
+def _validate_notebook(notebook):
+    cells = [
+        cell
+        for cell in notebook.get("cells", [])
+        if cell.get("cell_type") == "code"
+        and ("".join(cell.get("source", [])).strip() or cell.get("outputs"))
+    ]
+    counts = [cell.get("execution_count") for cell in cells]
+    for cell in cells:
+        for output in cell.get("outputs", []):
+            if output.get("output_type") == "error":
+                raise ValueError("Export notebooks cannot contain execution errors")
+            if cell.get("execution_count") is None:
+                raise ValueError("Notebook outputs require an execution count")
+            if (
+                output.get("output_type") == "execute_result"
+                and output.get("execution_count") != cell["execution_count"]
+            ):
+                raise ValueError("Notebook result count differs from its cell")
+    if any(count is not None for count in counts) and (
+        any(type(count) is not int for count in counts) or counts != list(range(1, len(counts) + 1))
+    ):
+        raise ValueError("Export notebooks must be unrun or executed once from top to bottom")
 
 
 def _copy_file(source, target, relative):

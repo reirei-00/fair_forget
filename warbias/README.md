@@ -42,6 +42,17 @@ outputs, anonymized human ratings and a Codex translation sample. Start with
 The [construction guide](docs/warbias-construction.md#notebooks) lists all
 five stages. The final corpus remains under annotation.
 
+Run all five notebooks and save their outputs with a local Python kernel:
+
+```sh
+python -m pip install -e '.[notebooks]'
+python scripts/run_notebooks.py
+```
+
+The committed notebooks contain executed walkthroughs. Default execution reads
+saved results and prepares new requests. Model execution uses the explicit run
+flags. Local plans stay in the ignored `notebooks/runs/` directory.
+
 CLI generation and translation examples use synthetic inputs.
 
 ## Export
