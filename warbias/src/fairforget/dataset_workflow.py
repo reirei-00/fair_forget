@@ -1,6 +1,8 @@
 """Study inputs, recorded model choices and notebook execution."""
 
 import math
+import os
+import tempfile
 from copy import deepcopy
 from pathlib import Path
 
@@ -26,6 +28,17 @@ from fairforget.warbias.generation import (
 )
 from fairforget.warbias.pilot import freeze_pilot
 from fairforget.warbias.schema import FIELDS, text_payload
+
+
+def create_workspace(stage):
+    """Create a fresh, portable workspace for one notebook stage."""
+    if not stage or Path(stage).name != stage or stage in {".", ".."}:
+        raise ValueError("Use a single notebook stage name")
+    directory = Path(os.environ.get("WARBIAS_NOTEBOOK_RUN", "runs/walkthrough"))
+    if directory.is_absolute() or ".." in directory.parts:
+        raise ValueError("The notebook run directory must be relative")
+    directory.mkdir(parents=True, exist_ok=True)
+    return Path(os.path.relpath(tempfile.mkdtemp(prefix=f"{stage}-", dir=directory)))
 
 
 def find_project(start=None):

@@ -12,7 +12,7 @@ dependencies = ["lm_eval>=0.4.14.dev0"]
 
 [project.optional-dependencies]
 generation = ["vllm>=0.18,<0.19"]
-notebooks = ["jupyterlab>=4", "pandas>=2,<3"]
+notebooks = ["jupyterlab>=4", "nbclient>=0.10", "pandas>=2,<3"]
 quality = ["unbabel-comet==2.2.7", "huggingface-hub>=0.19,<1"]
 dev = ["pytest>=9", "ruff==0.16.2"]
 

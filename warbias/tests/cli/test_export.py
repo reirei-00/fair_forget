@@ -179,7 +179,7 @@ def test_export_imports_and_cli_work_without_the_parent_working_directory(export
     assert json.loads(doctor.stdout)["network_requests"] == 0
 
 
-@pytest.mark.parametrize("failure", ["symlink", "credential", "machine_path", "notebook_output"])
+@pytest.mark.parametrize("failure", ["symlink", "credential", "machine_path", "notebook_state"])
 def test_source_export_rejects_nonportable_or_private_inputs(exported, tmp_path, failure):
     if failure == "symlink":
         (exported / "configs/linked.json").symlink_to(ROOT / "pyproject.toml")
@@ -193,10 +193,65 @@ def test_source_export_rejects_nonportable_or_private_inputs(exported, tmp_path,
     else:
         path = exported / "notebooks/01_ukrainian_pilot.ipynb"
         notebook = json.loads(path.read_text())
+        notebook["cells"][1]["execution_count"] = None
         notebook["cells"][1]["outputs"] = [
             {"output_type": "stream", "name": "stdout", "text": "local output"}
         ]
         path.write_text(json.dumps(notebook))
+    with pytest.raises(ValueError):
+        exporter.export(exported, tmp_path / "rejected")
+    assert not (tmp_path / "rejected").exists()
+
+
+def test_export_preserves_successful_notebook_outputs(exported, tmp_path):
+    path = exported / "notebooks/01_ukrainian_pilot.ipynb"
+    notebook = json.loads(path.read_text())
+    count = 0
+    for cell in notebook["cells"]:
+        if cell["cell_type"] == "code":
+            count += 1
+            cell["execution_count"] = count
+            cell["outputs"] = []
+    last = next(cell for cell in reversed(notebook["cells"]) if cell["cell_type"] == "code")
+    last["outputs"] = [
+        {
+            "output_type": "execute_result",
+            "execution_count": count,
+            "data": {"text/plain": "{'conditions': 80}"},
+            "metadata": {},
+        }
+    ]
+    path.write_text(json.dumps(notebook))
+    result = exporter.export(exported, tmp_path / "executed")
+    assert (result / "notebooks/01_ukrainian_pilot.ipynb").read_bytes() == path.read_bytes()
+
+
+@pytest.mark.parametrize("damage", ["error", "partial", "duplicate_count", "result_count"])
+def test_export_rejects_failed_or_inconsistent_notebook_runs(exported, tmp_path, damage):
+    path = exported / "notebooks/01_ukrainian_pilot.ipynb"
+    notebook = json.loads(path.read_text())
+    cells = [cell for cell in notebook["cells"] if cell["cell_type"] == "code"]
+    for count, cell in enumerate(cells, 1):
+        cell["execution_count"] = count
+        cell["outputs"] = []
+    if damage == "error":
+        cells[-1]["outputs"] = [
+            {"output_type": "error", "ename": "ValueError", "evalue": "bad input", "traceback": []}
+        ]
+    elif damage == "partial":
+        cells[-1]["execution_count"] = None
+    elif damage == "duplicate_count":
+        cells[-1]["execution_count"] = 1
+    else:
+        cells[-1]["outputs"] = [
+            {
+                "output_type": "execute_result",
+                "execution_count": 1,
+                "data": {"text/plain": "stale result"},
+                "metadata": {},
+            }
+        ]
+    path.write_text(json.dumps(notebook))
     with pytest.raises(ValueError):
         exporter.export(exported, tmp_path / "rejected")
     assert not (tmp_path / "rejected").exists()

@@ -114,6 +114,22 @@
       "bytes": 3628,
       "rows": 10,
       "role": "assistant_translation_sample"
+    },
+    "taxonomy_selected": {
+      "path": "protocol/inputs/taxonomy_selected.csv",
+      "sha256": "7bbdb20773bc5b3bffce45734af7009ff00cbe9e9186ace20eb64b848d112b8e",
+      "format": "csv",
+      "bytes": 162185,
+      "rows": 425,
+      "role": "annotator_view_green_combinations"
+    },
+    "matrix_reviewed": {
+      "path": "protocol/inputs/matrix_reviewed.csv",
+      "sha256": "78845e421255fa768b8a11875b41139a8132b18f2f35828a09f582e4131f01c9",
+      "format": "csv",
+      "bytes": 364568,
+      "rows": 427,
+      "role": "green_selection_with_author_taxonomy_changes"
     }
   },
   "sampling": {
@@ -203,8 +219,27 @@
       "source_format": "xlsx",
       "score_unit": "overall_triplet_quality",
       "source_raters": 2
+    },
+    {
+      "artifact": "taxonomy_selected",
+      "source_snapshot_sha256": "ea488fe01af4aaec84a0d9cc71002455dfe241dc7bf921736d2c9efc7f88d4de",
+      "portable_sha256": "7bbdb20773bc5b3bffce45734af7009ff00cbe9e9186ace20eb64b848d112b8e",
+      "selected_rows": 425,
+      "selection": "effective_green_actor_cell",
+      "human_validation_inferred": false
+    },
+    {
+      "artifact": "matrix_reviewed",
+      "source_sha256": "7bbdb20773bc5b3bffce45734af7009ff00cbe9e9186ace20eb64b848d112b8e",
+      "portable_sha256": "78845e421255fa768b8a11875b41139a8132b18f2f35828a09f582e4131f01c9",
+      "green_source_rows": 425,
+      "author_additions": 2,
+      "revision": "protocol/taxonomy_revision.json"
     }
   ],
   "full_ukrainian_annotation": "in_progress",
-  "is_final_annotated_corpus": false
+  "is_final_annotated_corpus": false,
+  "generation_matrix": "matrix_reviewed",
+  "historical_generation_matrix": "matrix_full",
+  "taxonomy_revision": "protocol/taxonomy_revision.json"
 }
