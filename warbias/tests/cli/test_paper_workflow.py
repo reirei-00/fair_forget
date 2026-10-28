@@ -145,9 +145,27 @@ def test_recorded_choice_uses_the_exact_saved_analysis_and_author_decision():
     inputs = paper_workflow.load_inputs(ROOT)
     analysis, record = paper_workflow.recorded_selection(ROOT, inputs)
     protocol = json.loads((ROOT / "protocol/construction.json").read_text())
-    assert analysis["coverage"]["ratings"] == 144
+    assert analysis["coverage"]["ratings"] == 96
+    assert analysis["coverage"]["raters"] == 2
+    assert analysis["coverage"]["expected_ratings"] == 100
     assert analysis["coverage"]["rated_items"] == 48
     assert len(analysis["coverage"]["missing_condition_ids"]) == 2
+    assert {row["strategy"] for row in analysis["highest_mean_conditions"]} == {
+        "sequential",
+        "zero_shot",
+    }
+    assert all(
+        row["candidate_id"] == "lapa12b"
+        and row["mean_score"] == pytest.approx(107 / 24)
+        and row["ratings"] == 24
+        for row in analysis["highest_mean_conditions"]
+    )
+    corrected = [
+        row
+        for row in inputs["pilot_human_ratings"]
+        if row["blind_id"] == "WBV-DFEE19A565" and row["rater_id"] == "rater_02"
+    ]
+    assert len(corrected) == 1 and corrected[0]["score"] == "3"
     assert record["kind"] == "recorded_study_condition_choice"
     assert record["selected_condition"] == protocol["selected_condition"]
     assert record["decision_record"] == protocol["selection"]
