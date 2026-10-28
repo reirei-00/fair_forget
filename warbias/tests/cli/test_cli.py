@@ -1,7 +1,6 @@
 """CLI workflows execute the maintained functions and preserve preview boundaries."""
 
 import json
-import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -223,7 +222,7 @@ def test_unlearning_preview_does_not_load_factory_and_execute_runs_real_step(tmp
 
 
 def run_notebook(name):
-    notebook = json.loads((ROOT / "notebooks/paper" / (name + ".ipynb")).read_text())
+    notebook = json.loads((ROOT / "notebooks/unlearning" / (name + ".ipynb")).read_text())
     namespace = {"__name__": "__main__"}
     for cell in notebook["cells"]:
         if cell["cell_type"] == "code":
@@ -233,30 +232,10 @@ def run_notebook(name):
     return namespace
 
 
-@pytest.mark.parametrize("name", ["warbias_generation", "warbias_translation_review", "unlearning"])
-def test_thin_notebooks_run_top_to_bottom_offline(name, monkeypatch):
-    if name == "unlearning":
-        pytest.importorskip("torch")
+def test_unlearning_notebook_runs_top_to_bottom_offline(monkeypatch):
+    pytest.importorskip("torch")
     monkeypatch.chdir(ROOT)
-    run_notebook(name)
-
-
-@pytest.mark.parametrize("name", ["warbias_generation", "warbias_translation_review"])
-def test_notebooks_from_broader_repository_use_warbias_prompts(name, tmp_path, monkeypatch):
-    repository = tmp_path / "fairforget"
-    prompts = repository / "warbias/prompts"
-    shutil.copytree(ROOT / "prompts", prompts)
-    sibling = repository / "prompts/manifest.json"
-    sibling.parent.mkdir()
-    sibling.write_text('{"subproject":"another-benchmark"}\n')
-    before = sibling.read_bytes()
-    monkeypatch.chdir(repository)
-
-    namespace = run_notebook(name)
-
-    assert namespace["prompt_root"] == prompts
-    assert namespace["result"]["network_requests"] == 0
-    assert sibling.read_bytes() == before
+    run_notebook("unlearning")
 
 
 @pytest.mark.parametrize("command", ["author", "render"])

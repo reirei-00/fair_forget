@@ -4,6 +4,23 @@ Run commands from `warbias/` or an exported package. Supply your input files and
 model settings. The sequence is Ukrainian pilot → blinded human selection →
 full Ukrainian generation → English translation.
 
+## Paper notebooks
+
+| Notebook | Inputs and purpose |
+| --- | --- |
+| [1. Ukrainian pilot](../notebooks/paper/01_ukrainian_pilot.ipynb) | Taxonomy matrix, Mamay and Lapa, zero-shot and sequential prompts, saved Ukrainian samples |
+| [2. Model selection](../notebooks/paper/02_model_selection.ipynb) | Human ratings, condition means, observed ranks and the recorded Lapa/sequential choice |
+| [3. Full Ukrainian generation](../notebooks/paper/03_full_ukrainian_generation.ipynb) | Full matrix, selected condition, final prompts and generation requests |
+| [4. Sample translation and COMET](../notebooks/paper/04_sample_translation_comet.ipynb) | Ten Ukrainian reference triplets, actual Codex translations and measured COMET scores |
+| [5. Full English translation](../notebooks/paper/05_full_english_translation.ipynb) | Full Ukrainian input, source manifest and aligned English output |
+
+`configs/data/paper-inputs.json` binds the taxonomy, matrix, pilot outputs and
+anonymized ratings to their file hashes. Final annotated data remain separate.
+The notebooks inspect saved evidence and prepare requests by default. Model
+execution requires the corresponding run flag and configured inputs.
+Notebook 2 saves the recorded study choice. Notebook 3 checks it against the
+human ratings and protocol before running the selected full-generation condition.
+
 ## Inputs
 
 Cases and generated rows use JSONL, with one object per line. Prepared cases
@@ -93,17 +110,16 @@ row. Pilot ratings select the model; full-data review is a separate step.
 
 ## Translation quality
 
-Use `notebooks/paper/warbias_translation_quality.ipynb` with the `quality` extra.
-It scores all three sentence fields with reference-free COMET and saves exact
-input hashes, model identity, raw scores and coverage. Set `RUN_SCORING = True`
-to run the model. Set `INPUT_KIND = "production"` and supply the Ukrainian and
-English JSONL paths to check their translation bindings.
+Notebook 4 uses the `quality` extra. Codex translated ten Ukrainian reference
+triplets into English. The recorded outputs, source hashes and capture method
+are retained; no provider API response or immutable model revision is claimed.
+The notebook checks these bindings and displays the actual measured COMET scores.
+Set `RUN_COMET = True` to calculate them again.
 
-The default input is the pinned Hugging Face reference in
-`configs/data/warbias-reference.json`. It remains separate from the current
-production corpus, whose human annotation is in progress. Its authorship record
-describes older English-first and bilingual edits. Reference scores assess the
-paired text; they do not establish production Ukrainian-to-English lineage.
+The Ukrainian sample comes from the pinned Hugging Face reference in
+`configs/data/warbias-reference.json`. Its new English translations are stored
+with the paper inputs. The reference remains separate from the current
+production corpus, whose human annotation is in progress.
 
 Model and runtime settings are in `configs/translation/quality.json`.
 [COMET QE20](https://huggingface.co/Unbabel/wmt20-comet-qe-da) uses a learned raw
