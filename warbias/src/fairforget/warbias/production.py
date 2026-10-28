@@ -104,6 +104,31 @@ def verify_production_result(rows, manifest):
     return manifest
 
 
+def write_production_result(rows, plan, output, *, source_language, lineage=None):
+    """Write the common full-generation rows and content-bound result manifest."""
+    output = Path(output)
+    write_rows(output / "triplets.jsonl", rows)
+    manifest = {
+        "schema_version": 1,
+        "kind": "warbias_full_generation_result",
+        "status": "complete",
+        "production_plan_sha256": plan["plan_sha256"],
+        "selection_sha256": plan["selection_sha256"],
+        "source_language": source_language,
+        "case_ids": plan["case_ids"],
+        "unit_ids": plan["unit_ids"],
+        "case_count": len(set(plan["case_ids"])),
+        "unit_count": len(plan["cases"]),
+        "row_count": len(rows),
+        "rows_sha256": digest(rows),
+        "human_validated": False,
+        **(lineage or {}),
+    }
+    manifest["manifest_sha256"] = digest(manifest)
+    write_json(output / "production-result.json", manifest)
+    return manifest
+
+
 def generate_full(
     cases,
     pilot_plan,
@@ -167,23 +192,7 @@ def generate_full(
     )
     if rows is None:
         return None
-    write_rows(output / "triplets.jsonl", rows)
-    manifest = {
-        "schema_version": 1,
-        "kind": "warbias_full_generation_result",
-        "status": "complete",
-        "production_plan_sha256": plan["plan_sha256"],
-        "selection_sha256": plan["selection_sha256"],
-        "source_language": selected["source_language"],
-        "case_ids": plan["case_ids"],
-        "unit_ids": plan["unit_ids"],
-        "case_count": len(set(plan["case_ids"])),
-        "unit_count": len(cases),
-        "row_count": len(rows),
-        "rows_sha256": digest(rows),
-        "human_validated": False,
-        **revision_binding,
-    }
-    manifest["manifest_sha256"] = digest(manifest)
-    write_json(output / "production-result.json", manifest)
+    write_production_result(
+        rows, plan, output, source_language=selected["source_language"], lineage=revision_binding
+    )
     return rows

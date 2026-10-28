@@ -26,9 +26,11 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
     assert (exported / exporter.MANIFEST).read_bytes() == (second / exporter.MANIFEST).read_bytes()
     assert exporter.verify(exported) > 50
     assert (exported / "src/fairforget/warbias/provider.py").is_file()
-    assert (exported / "notebooks/paper/unlearning.ipynb").is_file()
+    assert (exported / "notebooks/unlearning/unlearning.ipynb").is_file()
     assert (exported / "protocol/pilot_snapshots.json").is_file()
-    assert (exported / "notebooks/paper/warbias_translation_quality.ipynb").is_file()
+    assert (exported / "notebooks/paper/04_sample_translation_comet.ipynb").is_file()
+    assert len(list((exported / "notebooks/paper").glob("*.ipynb"))) == 5
+    assert (exported / "protocol/inputs/matrix_full.csv").is_file()
     for relative in (
         ".env",
         ".git",
@@ -186,7 +188,7 @@ def test_source_export_rejects_nonportable_or_private_inputs(exported, tmp_path,
         personal = "/" + "Users" + "/example/private-model"
         (exported / "configs/private.json").write_text(json.dumps({"model_path": personal}))
     else:
-        path = exported / "notebooks/paper/unlearning.ipynb"
+        path = exported / "notebooks/unlearning/unlearning.ipynb"
         notebook = json.loads(path.read_text())
         notebook["cells"][1]["outputs"] = [
             {"output_type": "stream", "name": "stdout", "text": "local output"}

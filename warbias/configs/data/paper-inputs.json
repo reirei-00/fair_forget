@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "source_language": "uk",
+  "role": "generation_source_inputs_and_human_development_pilot",
+  "files": {
+    "taxonomy": {
+      "path": "protocol/inputs/taxonomy.csv",
+      "sha256": "fe6dbac3f8834aa40fa09c91cfc0033d3a95b05be0bc18850652fe20f3aea7e1",
+      "format": "csv",
+      "bytes": 26746,
+      "rows": 32,
+      "role": "full_generation_registry"
+    },
+    "targets": {
+      "path": "protocol/inputs/targets.csv",
+      "sha256": "a90b3f04874fef4cf15fb640d21c471026ccb2aec304d7b67ccbe9ec1eb7307f",
+      "format": "csv",
+      "bytes": 8557,
+      "rows": 15,
+      "role": "full_generation_registry"
+    },
+    "taxonomy_hierarchy": {
+      "path": "protocol/inputs/taxonomy_hierarchy.csv",
+      "sha256": "04de60ed269176628f7b55bd3e1bb663331492c7cd3182062a87f47a99781b49",
+      "format": "csv",
+      "bytes": 6946,
+      "rows": 26,
+      "role": "full_generation_registry"
+    },
+    "sources": {
+      "path": "protocol/inputs/sources.csv",
+      "sha256": "29385ba2fe71cf583229c99fda06d64e2220f3321b75313fefcffe4971ab9380",
+      "format": "csv",
+      "bytes": 13948,
+      "rows": 36,
+      "role": "full_generation_registry"
+    },
+    "matrix_full": {
+      "path": "protocol/inputs/matrix_full.csv",
+      "sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c",
+      "format": "csv",
+      "bytes": 847127,
+      "rows": 981,
+      "role": "full_generation_inputs"
+    },
+    "pilot_initial_cases": {
+      "path": "protocol/inputs/pilot_initial_cases.csv",
+      "sha256": "94308f0db3b63715966ec04bdec8bd80e2652da252aae41d66941aad48ae89c0",
+      "format": "csv",
+      "bytes": 14737,
+      "rows": 20,
+      "role": "selected_pilot_inputs"
+    },
+    "pilot_initial_conditions": {
+      "path": "protocol/inputs/pilot_initial_conditions.csv",
+      "sha256": "f422a803f72d34e2c543bb842b09fc77bbf89c7a7a41beeb07f2586a61961980",
+      "format": "csv",
+      "bytes": 22460,
+      "rows": 80,
+      "role": "saved_pilot_assignments"
+    },
+    "pilot_initial_outputs": {
+      "path": "protocol/inputs/pilot_initial_outputs.csv",
+      "sha256": "bdd4019a7b52752cb112c0da9fe15784ea2f4872c21ba3ec199f5de17fa74aba",
+      "format": "csv",
+      "bytes": 102675,
+      "rows": 80,
+      "role": "saved_ukrainian_pilot_outputs"
+    },
+    "pilot_human_cases": {
+      "path": "protocol/inputs/pilot_human_cases.csv",
+      "sha256": "2301b802e6e8814eeb5cb5200257f22a506e4aa85289eaae4b5bfc31c1b227a8",
+      "format": "csv",
+      "bytes": 37372,
+      "rows": 50,
+      "role": "selected_pilot_inputs"
+    },
+    "pilot_human_conditions": {
+      "path": "protocol/inputs/pilot_human_conditions.csv",
+      "sha256": "19d82db04a26a341ea832a3a84ecd3e80f81802f2c889de0c9171ba70dae6c9b",
+      "format": "csv",
+      "bytes": 13869,
+      "rows": 50,
+      "role": "saved_pilot_assignments"
+    },
+    "pilot_human_outputs": {
+      "path": "protocol/inputs/pilot_human_outputs.csv",
+      "sha256": "2c8f0b514cdaf57826cf3a339fab04ed1d3746689c655649b79d277c2b4ceeee",
+      "format": "csv",
+      "bytes": 47458,
+      "rows": 50,
+      "role": "saved_ukrainian_pilot_outputs"
+    },
+    "pilot_human_ratings": {
+      "path": "protocol/inputs/pilot_human_ratings.csv",
+      "sha256": "fd5bed3209fd0d35636002fff2ad40119058e67e387eabff5e5416662af66f3e",
+      "format": "csv",
+      "bytes": 41450,
+      "rows": 144,
+      "role": "anonymized_human_development_scores"
+    },
+    "translation_sample_uk": {
+      "path": "protocol/inputs/translation_sample_uk.jsonl",
+      "sha256": "59eb528b283ceeb768243c18b863e95b7b25d632e8f086071743017dbb041534",
+      "format": "jsonl",
+      "bytes": 7379,
+      "rows": 10,
+      "role": "assistant_translation_sample"
+    },
+    "translation_sample_en": {
+      "path": "protocol/inputs/translation_sample_en.jsonl",
+      "sha256": "32befdf5533c32da730386217e67c6cde418910ac48668b6ca1e1aea69463391",
+      "format": "jsonl",
+      "bytes": 3628,
+      "rows": 10,
+      "role": "assistant_translation_sample"
+    }
+  },
+  "sampling": {
+    "seed": 20260826,
+    "initial": {
+      "design": "full_factorial",
+      "cases": 20,
+      "conditions": 80
+    },
+    "human": {
+      "design": "balanced_50",
+      "cases": 50,
+      "conditions": 50,
+      "reviewed_items": 48,
+      "raters": 3,
+      "ratings": 144
+    }
+  },
+  "registry_scope": "Taxonomy and full matrix belong to the frozen full-generation stage. Selected pilot inputs retain their earlier versions.",
+  "missing_historical_inputs": [
+    "The complete original pilot sampling registry was not frozen beside the pilot exports.",
+    "The initial pilot did not record an explicit source-claim field; its association field remains unchanged."
+  ],
+  "source_bindings": [
+    {
+      "artifact": "taxonomy",
+      "source_sha256": "fe6dbac3f8834aa40fa09c91cfc0033d3a95b05be0bc18850652fe20f3aea7e1",
+      "portable_sha256": "fe6dbac3f8834aa40fa09c91cfc0033d3a95b05be0bc18850652fe20f3aea7e1",
+      "exact_bytes": true
+    },
+    {
+      "artifact": "targets",
+      "source_sha256": "a90b3f04874fef4cf15fb640d21c471026ccb2aec304d7b67ccbe9ec1eb7307f",
+      "portable_sha256": "a90b3f04874fef4cf15fb640d21c471026ccb2aec304d7b67ccbe9ec1eb7307f",
+      "exact_bytes": true
+    },
+    {
+      "artifact": "taxonomy_hierarchy",
+      "source_sha256": "04de60ed269176628f7b55bd3e1bb663331492c7cd3182062a87f47a99781b49",
+      "portable_sha256": "04de60ed269176628f7b55bd3e1bb663331492c7cd3182062a87f47a99781b49",
+      "exact_bytes": true
+    },
+    {
+      "artifact": "sources",
+      "source_sha256": "29385ba2fe71cf583229c99fda06d64e2220f3321b75313fefcffe4971ab9380",
+      "portable_sha256": "29385ba2fe71cf583229c99fda06d64e2220f3321b75313fefcffe4971ab9380",
+      "exact_bytes": true
+    },
+    {
+      "artifact": "matrix_full",
+      "source_sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c",
+      "portable_sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c",
+      "exact_bytes": true
+    },
+    {
+      "artifact": "pilot_initial_cases",
+      "source_sha256": "94308f0db3b63715966ec04bdec8bd80e2652da252aae41d66941aad48ae89c0",
+      "portable_sha256": "94308f0db3b63715966ec04bdec8bd80e2652da252aae41d66941aad48ae89c0",
+      "exact_bytes": true
+    },
+    {
+      "artifact": "pilot_initial_outputs",
+      "source_checkpoint_sha256": "f195d27e7b53159823c24cdb58460bede7634e099629d04ded8d48a7cf97774c",
+      "source_assignment_sha256": "c0e1d4b70e0306aa013348fc42a58564b2c84dac3db579e0b96c1e67c778863b",
+      "portable_sha256": "bdd4019a7b52752cb112c0da9fe15784ea2f4872c21ba3ec199f5de17fa74aba",
+      "all_complete_triplets_preserved": 80
+    },
+    {
+      "artifact": "pilot_human_cases",
+      "source_sha256": "2301b802e6e8814eeb5cb5200257f22a506e4aa85289eaae4b5bfc31c1b227a8",
+      "portable_sha256": "2301b802e6e8814eeb5cb5200257f22a506e4aa85289eaae4b5bfc31c1b227a8",
+      "exact_bytes": true
+    },
+    {
+      "artifact": "pilot_human_outputs",
+      "source_checkpoint_sha256": "14e04d6f77b950817589a8abf7c695a5a665c2f74be907384baa14ca52292d3f",
+      "source_assignment_sha256": "bba20f82d85e81fa142e0911c63fad30672fa29d011d6a3f0fc3fcd14f9db587",
+      "portable_sha256": "2c8f0b514cdaf57826cf3a339fab04ed1d3746689c655649b79d277c2b4ceeee",
+      "all_complete_triplets_preserved": 50
+    },
+    {
+      "artifact": "pilot_human_ratings",
+      "source_sha256": "722cf58177e20853d79b4bac546b42318d170e2bbde16daf1ed6cd705726bf47",
+      "portable_sha256": "fd5bed3209fd0d35636002fff2ad40119058e67e387eabff5e5416662af66f3e",
+      "scores_preserved": 144,
+      "rater_names_and_comments_included": false
+    }
+  ],
+  "full_ukrainian_annotation": "in_progress",
+  "is_final_annotated_corpus": false
+}

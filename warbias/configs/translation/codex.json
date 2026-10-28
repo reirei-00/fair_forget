@@ -1,0 +1,11 @@
+{
+  "immutable_model_version": "not_exposed",
+  "invocation": "assistant_in_current_conversation",
+  "model": "Codex",
+  "provider": "codex_conversation",
+  "revision": null,
+  "settings": {},
+  "source_language": "uk",
+  "target_language": "en",
+  "usage": null
+}

@@ -38,9 +38,14 @@ python -m pytest tests/data_creation tests/unlearning tests/cli -q
 python -m ruff check src tests/data_creation tests/unlearning tests/cli
 ```
 
-The examples and `notebooks/paper/` use synthetic data, ratings and model
-responses. The training example performs one CPU update. Use a new output
-folder for each example; run `fairforget example --help` for the commands.
+The five notebooks in `notebooks/paper/` use the recorded taxonomy matrix, pilot
+outputs, anonymized human ratings and a Codex translation sample. Start with
+[Ukrainian pilot generation](notebooks/paper/01_ukrainian_pilot.ipynb).
+The [construction guide](docs/warbias-construction.md#paper-notebooks) lists all
+five stages. The final corpus remains under annotation.
+
+CLI examples and `notebooks/unlearning/unlearning.ipynb` use synthetic inputs.
+The unlearning example performs one CPU update.
 
 ## Export
 
@@ -52,6 +57,6 @@ python warbias/scripts/export_paper.py build --output /path/to/new-warbias-artif
 
 From `warbias/` or an exported package, use `python scripts/export_paper.py`.
 Verify an export with `python scripts/export_paper.py verify --directory PATH`.
-The export contains source, settings, prompts, notebooks and tests. Store
-credentials, model weights, generated data and reviews separately. Prompt hashes
-are in `prompts/manifest.json`.
+The export contains source, settings, prompts, study inputs, notebooks and tests.
+Keep credentials, model weights, full generated corpora and full annotation files
+outside the package. Prompt hashes are in `prompts/manifest.json`.
