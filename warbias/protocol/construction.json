@@ -30,8 +30,8 @@
     ],
     "pilot_generated_items": 50,
     "pilot_reviewed_items": 48,
-    "raters": 3,
-    "valid_scores": 144,
+    "raters": 2,
+    "valid_scores": 96,
     "review_coverage": {
       "missing_items": 2,
       "missing_reason": null
@@ -39,7 +39,7 @@
     "statistical_superiority_claim": false,
     "evidence": [
       {
-        "artifact": "human_review_condition_summary",
+        "artifact": "historical_human_review_condition_summary",
         "sha256": "ae9901a6cad11a3fc66d861755b8c9def0b98ccaf210569e7bb2190076f7cc79"
       },
       {
@@ -53,8 +53,13 @@
       {
         "artifact": "full_generation_manifest",
         "sha256": "c7e33b585cc7dfe4fb8165b8f30fb77ac3595db76b20fd33b83a0d58e7aaea23"
+      },
+      {
+        "artifact": "author_supplied_annotation_workbook",
+        "sha256": "95c99aa517971f8974c68682e2a61a17632cb6fcdc4916dfef31a852444ba9cb"
       }
-    ]
+    ],
+    "rating_source": "author_supplied_annotation_workbook"
   },
   "prompt_bundle": {
     "id": "warbias-sequential-feedback-v2-20260908",

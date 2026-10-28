@@ -93,10 +93,10 @@
     },
     "pilot_human_ratings": {
       "path": "protocol/inputs/pilot_human_ratings.csv",
-      "sha256": "fd5bed3209fd0d35636002fff2ad40119058e67e387eabff5e5416662af66f3e",
+      "sha256": "64e443f417864dd1c8177dcbe30c5c5a26cbf1fca508eb127b131e6331c1878e",
       "format": "csv",
-      "bytes": 41450,
-      "rows": 144,
+      "bytes": 27661,
+      "rows": 96,
       "role": "anonymized_human_development_scores"
     },
     "translation_sample_uk": {
@@ -128,8 +128,8 @@
       "cases": 50,
       "conditions": 50,
       "reviewed_items": 48,
-      "raters": 3,
-      "ratings": 144
+      "raters": 2,
+      "ratings": 96
     }
   },
   "registry_scope": "Taxonomy and full matrix belong to the frozen full-generation stage. Selected pilot inputs retain their earlier versions.",
@@ -196,10 +196,13 @@
     },
     {
       "artifact": "pilot_human_ratings",
-      "source_sha256": "722cf58177e20853d79b4bac546b42318d170e2bbde16daf1ed6cd705726bf47",
-      "portable_sha256": "fd5bed3209fd0d35636002fff2ad40119058e67e387eabff5e5416662af66f3e",
-      "scores_preserved": 144,
-      "rater_names_and_comments_included": false
+      "source_sha256": "95c99aa517971f8974c68682e2a61a17632cb6fcdc4916dfef31a852444ba9cb",
+      "portable_sha256": "64e443f417864dd1c8177dcbe30c5c5a26cbf1fca508eb127b131e6331c1878e",
+      "scores_preserved": 96,
+      "rater_names_and_comments_included": false,
+      "source_format": "xlsx",
+      "score_unit": "overall_triplet_quality",
+      "source_raters": 2
     }
   ],
   "full_ukrainian_annotation": "in_progress",
