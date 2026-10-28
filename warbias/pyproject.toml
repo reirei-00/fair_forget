@@ -5,14 +5,13 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "fairforget-warbias"
 version = "0.1.0"
-description = "WarBias subproject: generation, translation and unlearning pipelines"
+description = "WarBias dataset generation, translation and review pipelines"
 requires-python = ">=3.10"
 readme = "README.md"
 dependencies = ["lm_eval>=0.4.14.dev0"]
 
 [project.optional-dependencies]
 generation = ["vllm>=0.18,<0.19"]
-unlearning = ["torch>=2.2"]
 notebooks = ["jupyterlab>=4", "pandas>=2,<3"]
 quality = ["unbabel-comet==2.2.7", "huggingface-hub>=0.19,<1"]
 dev = ["pytest>=9", "ruff==0.16.2"]

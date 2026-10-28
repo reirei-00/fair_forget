@@ -1,1 +1,1 @@
--e .[dev,unlearning]
+-e .[dev]

@@ -1,11 +1,10 @@
-"""Readable entry points for explicit local construction and intervention stages."""
+"""Readable entry points for dataset construction, translation and review."""
 
 import argparse
 import json
 from pathlib import Path
 
 from fairforget.cli_support import add_generation_options as _generation_options
-from fairforget.cli_support import load_factory as _factory
 from fairforget.cli_support import load_json as _json
 from fairforget.cli_support import provider_from_args as _provider
 from fairforget.io import read_rows, write_rows
@@ -52,24 +51,8 @@ def _parser():
     release.add_argument("--release-id", required=True)
     release.add_argument("--split-by-item", type=Path)
     release.add_argument("--require-human", action="store_true")
-    validate = commands.add_parser(
-        "unlearning-validate", help="Validate frozen token exports and partitions"
-    )
-    validate.add_argument("--config", type=Path, required=True)
-    for key in ("training", "development", "evaluation"):
-        validate.add_argument(f"--{key}", type=Path, required=True)
-        validate.add_argument(f"--{key}-sha256", required=True)
-    train = commands.add_parser("unlearn", help="Run an explicitly bound local training job")
-    train.add_argument("--config", type=Path, required=True)
-    train.add_argument("--output", type=Path, required=True)
-    train.add_argument(
-        "--bundle-factory",
-        required=True,
-        help="Factory(config=..., output=...) returning run_training arguments",
-    )
-    train.add_argument("--execute", action="store_true")
     example = commands.add_parser("example", help="Offline synthetic software checks")
-    example.add_argument("stage", choices=("generation", "translation", "unlearning"))
+    example.add_argument("stage", choices=("generation", "translation"))
     example.add_argument("--output", type=Path, required=True)
     example.add_argument("--prompt-root", type=Path, default=Path("prompts"))
     return parser
@@ -83,11 +66,10 @@ def dispatch(args):
     if args.command == "doctor":
         from lm_eval.fair_uk import contracts
 
-        for name in ("validate_data_release", "validate_intervention", "validate_exposure"):
-            if not callable(getattr(contracts, name, None)):
-                raise ValueError(
-                    "The installed lm_eval distribution lacks the paired Fair-UK contracts"
-                )
+        if not callable(getattr(contracts, "validate_data_release", None)):
+            raise ValueError(
+                "The installed lm_eval distribution lacks the public Fair-UK data-release contract"
+            )
         return {"status": "public_api_available", "network_requests": 0}
     if args.command == "sources":
         from fairforget.warbias.source import prepare_cases
@@ -176,45 +158,9 @@ def dispatch(args):
             require_human=args.require_human,
             split_by_item=_json(args.split_by_item) if args.split_by_item else None,
         )
-    if args.command == "unlearning-validate":
-        from fairforget.unlearning.config import require_config
-        from fairforget.unlearning.data import load_examples, validate_partitions
-
-        config = require_config(_json(args.config))
-        parts = [
-            load_examples(getattr(args, key), expected_sha256=getattr(args, key + "_sha256"))
-            for key in ("training", "development", "evaluation")
-        ]
-        validate_partitions(*parts, language=config["language"])
-        return {
-            "status": "exports_and_partitions_valid",
-            "counts": dict(zip(("training", "development", "evaluation"), map(len, parts))),
-            "optimizer_steps": 0,
-        }
-    if args.command == "unlearn":
-        from fairforget.unlearning.config import require_config
-
-        config = require_config(_json(args.config))
-        if not args.execute:
-            return {
-                "execute": False,
-                "config": config,
-                "bundle_factory": args.bundle_factory,
-                "optimizer_steps": 0,
-            }
-        from fairforget.unlearning.runner import run_training
-
-        bundle = _factory(args.bundle_factory)(config=config, output=args.output)
-        if not isinstance(bundle, dict) or {"config", "output"} & set(bundle):
-            raise ValueError(
-                "The factory must return training bindings without overriding config/output"
-            )
-        return run_training(config=config, output=args.output, **bundle)
     if args.command == "example":
         from fairforget import examples
 
-        if args.stage == "unlearning":
-            return examples.run_unlearning_example(args.output)
         function = (
             examples.run_generation_example
             if args.stage == "generation"

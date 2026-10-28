@@ -27,9 +27,7 @@ TREES = {
     "configs": {".json"},
     "protocol": {".json", ".jsonl", ".csv"},
     "notebooks/paper": {".ipynb"},
-    "notebooks/unlearning": {".ipynb"},
     "tests/data_creation": {".py", ".json"},
-    "tests/unlearning": {".py", ".json"},
     "tests/cli": {".py", ".json"},
 }
 FILES = (
