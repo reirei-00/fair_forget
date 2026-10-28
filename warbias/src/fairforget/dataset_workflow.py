@@ -46,7 +46,7 @@ def _project_file(project, relative):
     return path
 
 
-def load_inputs(project, config="configs/data/paper-inputs.json"):
+def load_inputs(project, config="configs/data/dataset-inputs.json"):
     """Load portable tables only when their bytes match the declared input hashes."""
     manifest = load_json(_project_file(project, config))
     if manifest.get("schema_version") != 1 or not manifest.get("files"):

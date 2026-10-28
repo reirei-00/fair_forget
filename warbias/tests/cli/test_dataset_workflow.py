@@ -1,4 +1,4 @@
-"""Paper notebooks use source-bound inputs and inspectable offline request plans."""
+"""Dataset notebooks use source-bound inputs and inspectable offline request plans."""
 
 import json
 from copy import deepcopy
@@ -7,7 +7,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from fairforget import paper_workflow
+from fairforget import dataset_workflow
 from fairforget.io import digest, file_digest, read_rows, write_json
 from fairforget.translation.quality import prepare_quality, score_quality
 from fairforget.translation.warbias import align_languages, ingest_translations
@@ -77,20 +77,20 @@ def test_portable_input_hashes_row_counts_and_paths_are_checked(tmp_path):
             "matrix_full": {"path": "inputs/matrix.csv", "sha256": file_digest(table), "rows": 1}
         },
     }
-    config = tmp_path / "configs/data/paper-inputs.json"
+    config = tmp_path / "configs/data/dataset-inputs.json"
     write_json(config, manifest)
-    assert paper_workflow.load_inputs(tmp_path)["matrix_full"][0]["case_id"] == "case-1"
+    assert dataset_workflow.load_inputs(tmp_path)["matrix_full"][0]["case_id"] == "case-1"
     table.write_text("matrix_item_id,case_id\nmatrix-1,changed\n")
     with pytest.raises(ValueError, match="hash differs"):
-        paper_workflow.load_inputs(tmp_path)
+        dataset_workflow.load_inputs(tmp_path)
     manifest["files"]["matrix_full"]["path"] = "../outside.csv"
     write_json(config, manifest)
     with pytest.raises(ValueError, match="portable project"):
-        paper_workflow.load_inputs(tmp_path)
+        dataset_workflow.load_inputs(tmp_path)
 
 
 def test_project_can_be_found_from_a_notebook_folder():
-    assert paper_workflow.find_project(ROOT / "notebooks/paper") == ROOT
+    assert dataset_workflow.find_project(ROOT / "notebooks") == ROOT
 
 
 def test_initial_pilot_uses_the_actual_snapshot_and_preserves_unrecorded_claim(tmp_path):
@@ -106,7 +106,7 @@ def test_initial_pilot_uses_the_actual_snapshot_and_preserves_unrecorded_claim(t
         }
         for name, model in bundle["model_ids"].items()
     ]
-    plan = paper_workflow.prepare_pilot(ROOT, matrix(), candidates=candidates)
+    plan = dataset_workflow.prepare_pilot(ROOT, matrix(), candidates=candidates)
     verify_pilot_plan(plan)
     assert len(plan["conditions"]) == 4
     assert plan["cases"][0]["claim"] is None
@@ -126,7 +126,7 @@ def test_initial_pilot_uses_the_actual_snapshot_and_preserves_unrecorded_claim(t
 def test_full_request_preview_uses_recorded_choice_and_final_prompts(tmp_path):
     rows = matrix()
     rows[0]["stereotype_claim_uk"] = "Необґрунтоване твердження про працю цієї групи."
-    result = paper_workflow.preview_full_generation(ROOT, rows, tmp_path / "full")
+    result = dataset_workflow.preview_full_generation(ROOT, rows, tmp_path / "full")
     condition = json.loads((tmp_path / "full/generation/condition.json").read_text())
     calls = json.loads((tmp_path / "full/generation/S/plan.json").read_text())["requests"]
     assert result["planned_model_calls"] == 3 and result["model_calls"] == 0
@@ -142,8 +142,8 @@ def test_full_request_preview_uses_recorded_choice_and_final_prompts(tmp_path):
 
 
 def test_recorded_choice_uses_the_exact_saved_analysis_and_author_decision():
-    inputs = paper_workflow.load_inputs(ROOT)
-    analysis, record = paper_workflow.recorded_selection(ROOT, inputs)
+    inputs = dataset_workflow.load_inputs(ROOT)
+    analysis, record = dataset_workflow.recorded_selection(ROOT, inputs)
     protocol = json.loads((ROOT / "protocol/construction.json").read_text())
     assert analysis["coverage"]["ratings"] == 96
     assert analysis["coverage"]["raters"] == 2
@@ -182,7 +182,7 @@ def test_recorded_choice_uses_the_exact_saved_analysis_and_author_decision():
     }
     inputs["pilot_human_ratings"][0]["score"] = "1"
     with pytest.raises(ValueError, match="saved human pilot"):
-        paper_workflow.recorded_selection(ROOT, inputs)
+        dataset_workflow.recorded_selection(ROOT, inputs)
 
 
 @pytest.mark.parametrize(
@@ -196,14 +196,14 @@ def test_recorded_choice_uses_the_exact_saved_analysis_and_author_decision():
     ],
 )
 def test_full_generation_rejects_selection_drift_before_output_or_provider(tmp_path, field):
-    _, record = paper_workflow.recorded_selection(ROOT)
+    _, record = dataset_workflow.recorded_selection(ROOT)
     record[field] = {} if isinstance(record[field], dict) else "0" * 64
     provider = SimpleNamespace(
         generate=lambda request: pytest.fail("Invalid selection reached provider")
     )
     output = tmp_path / "invalid-selection"
     with pytest.raises(ValueError, match="recorded study selection"):
-        paper_workflow.run_full_generation(
+        dataset_workflow.run_full_generation(
             ROOT, matrix(), record, output, provider=provider, execute=True
         )
     assert not output.exists()
@@ -212,27 +212,29 @@ def test_full_generation_rejects_selection_drift_before_output_or_provider(tmp_p
 def test_pilot_output_drift_is_rejected_even_when_rating_analysis_is_unchanged():
     from fairforget.warbias.pilot_analysis import analyse_ratings, pilot_conditions
 
-    inputs = paper_workflow.load_inputs(ROOT)
-    analysis, record = paper_workflow.recorded_selection(ROOT, inputs)
+    inputs = dataset_workflow.load_inputs(ROOT)
+    analysis, record = dataset_workflow.recorded_selection(ROOT, inputs)
     inputs["pilot_human_outputs"][0]["stereotype"] += " Змінений текст."
     conditions = pilot_conditions(inputs["pilot_human_cases"], inputs["pilot_human_conditions"])
     protocol = json.loads((ROOT / "protocol/construction.json").read_text())
     assert analyse_ratings(conditions, inputs["pilot_human_ratings"], protocol) == analysis
     assert record["input_sha256"]["pilot_human_outputs"] != digest(inputs["pilot_human_outputs"])
     with pytest.raises(ValueError, match="saved human pilot"):
-        paper_workflow.recorded_selection(ROOT, inputs)
+        dataset_workflow.recorded_selection(ROOT, inputs)
 
 
 def test_recorded_choice_executes_with_standard_full_generation_bindings(tmp_path):
     from test_generation_cli import Provider
 
-    _, record = paper_workflow.recorded_selection(ROOT)
+    _, record = dataset_workflow.recorded_selection(ROOT)
     provider = Provider()
     output = tmp_path / "full"
-    preview = paper_workflow.run_full_generation(ROOT, matrix(), record, output, provider=provider)
+    preview = dataset_workflow.run_full_generation(
+        ROOT, matrix(), record, output, provider=provider
+    )
     assert preview["status"] == "preview" and preview["recorded_selection_verified"] is True
     assert provider.calls == []
-    result = paper_workflow.run_full_generation(
+    result = dataset_workflow.run_full_generation(
         ROOT, matrix(), record, output, provider=provider, execute=True
     )
     assert result["status"] == "complete" and result["generated_rows"] == 1
@@ -260,7 +262,7 @@ def test_recorded_conversation_translation_keeps_identity_and_source_bindings(tm
     source, english, config = translation_pair()
     original = deepcopy((source, english, config))
     origin = {"kind": "published_reference", "revision": "f" * 40}
-    rows = paper_workflow.record_translations(
+    rows = dataset_workflow.record_translations(
         ROOT, source, english, tmp_path / "capture", config=config, source_origin=origin
     )
     assert (source, english, config) == original
@@ -283,7 +285,7 @@ def test_recorded_conversation_translation_keeps_identity_and_source_bindings(tm
     with pytest.raises(ValueError, match="hashes differ"):
         ingest_translations(source, calls)
     with pytest.raises(ValueError, match="new or empty"):
-        paper_workflow.record_translations(
+        dataset_workflow.record_translations(
             ROOT, source, english, tmp_path / "capture", config=config
         )
 
@@ -291,11 +293,11 @@ def test_recorded_conversation_translation_keeps_identity_and_source_bindings(tm
 def test_changed_english_cannot_overwrite_an_existing_capture(tmp_path):
     source, english, config = translation_pair()
     output = tmp_path / "capture"
-    paper_workflow.record_translations(ROOT, source, english, output, config=config)
+    dataset_workflow.record_translations(ROOT, source, english, output, config=config)
     saved = {path: path.read_bytes() for path in output.rglob("*") if path.is_file()}
     english[0]["stereotype"] = "A different recorded translation."
     with pytest.raises(ValueError, match="new or empty"):
-        paper_workflow.record_translations(ROOT, source, english, output, config=config)
+        dataset_workflow.record_translations(ROOT, source, english, output, config=config)
     assert all(path.read_bytes() == content for path, content in saved.items())
 
 
@@ -305,11 +307,11 @@ def test_invalid_full_generation_manifest_is_rejected_before_output(tmp_path, re
     output = tmp_path / "invalid-production"
     with pytest.raises(ValueError, match="complete content-bound"):
         if record:
-            paper_workflow.record_translations(
+            dataset_workflow.record_translations(
                 ROOT, source, english, output, config=config, production_manifest={}
             )
         else:
-            paper_workflow.preview_translation(
+            dataset_workflow.preview_translation(
                 ROOT, source, output, config=config, production_manifest={}
             )
     assert not output.exists()
@@ -325,7 +327,7 @@ def test_recorded_full_translation_keeps_the_verified_production_binding(tmp_pat
     _, english, config = translation_pair()
     english[0]["id"] = source[0]["id"]
     output = tmp_path / "full-translation"
-    rows = paper_workflow.record_translations(
+    rows = dataset_workflow.record_translations(
         ROOT, source, english, output, config=config, production_manifest=manifest
     )
     assert rows[0]["source_production_sha256"] == manifest["manifest_sha256"]
@@ -355,7 +357,7 @@ def test_recorded_translation_rejects_incomplete_or_ambiguous_input(tmp_path, da
     else:
         config.pop("invocation")
     with pytest.raises(ValueError):
-        paper_workflow.record_translations(
+        dataset_workflow.record_translations(
             ROOT, source, english, tmp_path / "capture", config=config
         )
     assert not (tmp_path / "capture/translations.jsonl").exists()
@@ -397,7 +399,7 @@ def test_recorded_quality_load_is_offline_and_preserves_measured_values(tmp_path
         "load_comet_scorer",
         lambda *args, **kwargs: pytest.fail("Cache loading must not load COMET"),
     )
-    assert paper_workflow.load_recorded_quality(path, plan) == report
+    assert dataset_workflow.load_recorded_quality(path, plan) == report
     assert path.read_bytes() == before
 
 
@@ -440,4 +442,4 @@ def test_recorded_quality_rejects_tampered_mapping_coverage_and_scores(tmp_path,
     path = tmp_path / "quality.json"
     path.write_text(json.dumps(report))
     with pytest.raises(ValueError):
-        paper_workflow.load_recorded_quality(path, plan)
+        dataset_workflow.load_recorded_quality(path, plan)

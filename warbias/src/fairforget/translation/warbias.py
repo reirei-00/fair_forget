@@ -31,7 +31,7 @@ def parse_translation(text):
 def translate_production(
     rows, manifest, config, prompt_path, output, *, provider=None, execute=False
 ):
-    """Require a completed, unchanged full run before the paper translation stage."""
+    """Require a completed, unchanged full run before the translation stage."""
     validate_production_source(rows, manifest, config)
     return translate(
         rows,
@@ -69,7 +69,7 @@ def _source_rows(rows, config):
 def translate(
     rows, config, prompt_path, output, *, provider=None, execute=False, production_sha256=None
 ):
-    """Low-level translation; the paper CLI additionally requires full-run evidence."""
+    """Low-level translation; the CLI additionally requires full-run evidence."""
     source, target = _source_rows(rows, config)
     prompt = prompt_record(prompt_path)
     requests = []

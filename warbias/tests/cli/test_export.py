@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-SPEC = importlib.util.spec_from_file_location("export_paper", ROOT / "scripts/export_paper.py")
+SPEC = importlib.util.spec_from_file_location("export_dataset", ROOT / "scripts/export_dataset.py")
 exporter = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(exporter)
 
@@ -27,8 +27,8 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
     assert exporter.verify(exported) > 50
     assert (exported / "src/fairforget/warbias/provider.py").is_file()
     assert (exported / "protocol/pilot_snapshots.json").is_file()
-    assert (exported / "notebooks/paper/04_sample_translation_comet.ipynb").is_file()
-    assert len(list((exported / "notebooks/paper").glob("*.ipynb"))) == 5
+    assert (exported / "notebooks/04_sample_translation_comet.ipynb").is_file()
+    assert len(list((exported / "notebooks").glob("*.ipynb"))) == 5
     assert (exported / "protocol/inputs/matrix_full.csv").is_file()
     for relative in (
         ".env",
@@ -133,7 +133,7 @@ def test_verifier_is_standalone_and_checks_import_origin(exported, tmp_path):
         [
             sys.executable,
             "-I",
-            str(exported / "scripts/export_paper.py"),
+            str(exported / "scripts/export_dataset.py"),
             "verify",
             "--directory",
             str(exported),
@@ -154,7 +154,7 @@ def test_export_imports_and_cli_work_without_the_parent_working_directory(export
     checked = subprocess.run(
         [
             sys.executable,
-            str(exported / "scripts/export_paper.py"),
+            str(exported / "scripts/export_dataset.py"),
             "verify",
             "--directory",
             str(exported),
@@ -191,7 +191,7 @@ def test_source_export_rejects_nonportable_or_private_inputs(exported, tmp_path,
         personal = "/" + "Users" + "/example/private-model"
         (exported / "configs/private.json").write_text(json.dumps({"model_path": personal}))
     else:
-        path = exported / "notebooks/paper/01_ukrainian_pilot.ipynb"
+        path = exported / "notebooks/01_ukrainian_pilot.ipynb"
         notebook = json.loads(path.read_text())
         notebook["cells"][1]["outputs"] = [
             {"output_type": "stream", "name": "stdout", "text": "local output"}
