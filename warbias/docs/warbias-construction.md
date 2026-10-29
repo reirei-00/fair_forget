@@ -21,14 +21,21 @@ allocation. Each input prepares one Ukrainian triplet. Occupation-qualified
 profiles and older women veterans remain included. Input counts do not describe
 a completed or accepted corpus.
 
-`taxonomy_selected.csv` preserves the 425 green annotator-view combinations.
-Green records source-dataset presence, not generation eligibility or human
-acceptance. The current matrix uses the complete profile allocation and the
+`taxonomy_selected.csv` preserves the 425 green combinations in the historical
+annotator-view snapshot. That colour recorded source-dataset presence.
+The current matrix uses the complete profile allocation and the
 category changes in `taxonomy_revision.json`. Each row records its case, profile,
 reporter, `evidence_ids` and `source_type`. Published references keep their
 original IDs in `sources.csv`; compilation and feedback records retain separate
 source types. The three feedback cases await generation and annotation. The
 981-row matrix remains a separate historical generation input.
+
+Notebook 1 displays the full source-case taxonomy and the current selected cases.
+Green marks cases used as a source or selected for the current design, as labelled
+above each table. The source table keeps split-parent links visible. The
+[current profile view](https://docs.google.com/spreadsheets/d/1iHOX-g7Fe_TPO45fvR8bD40ffKU8rvm0kalGpF1rdIs/edit?gid=623002450#gid=623002450)
+includes all 1,203 inputs and the three feedback additions. Green does not change
+the separate generation and human-annotation status fields.
 
 [Selection records](../protocol/selection_history.json) preserve excluded IDs,
 reasons and source hashes. Notebook 3 reconciles case changes, profile
