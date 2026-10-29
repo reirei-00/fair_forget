@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "version": "warbias-taxonomy-20261028-v2",
+  "version": "warbias-taxonomy-20261029-v3",
   "source": {
     "sheet": "Annotator_View",
     "selection": "effective_actor_cell_background",
@@ -31,8 +31,10 @@
     }
   ],
   "feedback_source": {
-    "id": "author_feedback_20261028",
-    "kind": "author_taxonomy_feedback"
+    "id": "src_feedback_displacement_service_and_voting",
+    "source_type": "feedback",
+    "kind": "user_supplied_feedback",
+    "registry": "protocol/inputs/source_feedback.jsonl"
   },
   "added_cases": [
     {
@@ -51,10 +53,11 @@
       "stereotype_claim_uk": "Чоловіки зі статусом ВПО повинні першими йти служити, а не переїжджати в безпечніші місця, бо їхні рідні території окуповані або перебувають під обстрілами.",
       "context_uk": "безпека поліція мобілізація і військовий обов’язок",
       "harm_mechanism_uk": "колективна провина",
-      "evidence_ids": "author_feedback_20261028",
+      "evidence_ids": "src_feedback_displacement_service_and_voting",
       "row_origin": "author_feedback",
       "generation_status": "not_generated",
-      "human_annotation_status": "not_annotated"
+      "human_annotation_status": "not_annotated",
+      "source_type": "feedback"
     },
     {
       "matrix_item_id": "warbias_refugee_election_exclusion_001__abroad_refugee_status__neutral__unspecified",
@@ -72,10 +75,11 @@
       "stereotype_claim_uk": "Люди з України зі статусом біженця за кордоном не повинні брати участь у наступних виборах.",
       "context_uk": "політика вибори і громадянська участь",
       "harm_mechanism_uk": "заперечення статусу досвіду або права",
-      "evidence_ids": "author_feedback_20261028",
+      "evidence_ids": "src_feedback_displacement_service_and_voting",
       "row_origin": "author_feedback",
       "generation_status": "not_generated",
-      "human_annotation_status": "not_annotated"
+      "human_annotation_status": "not_annotated",
+      "source_type": "feedback"
     },
     {
       "matrix_item_id": "warbias_veteran_order_restoration_001__veteran_generic__generic_plural__unspecified",
@@ -93,15 +97,16 @@
       "stereotype_claim_uk": "Ветерани повинні навести порядок у громаді.",
       "context_uk": "громада і повсякденна взаємодія",
       "harm_mechanism_uk": "героїзація або інструменталізація",
-      "evidence_ids": "author_naming_feedback_20261028",
+      "evidence_ids": "src_feedback_veteran_taxonomy",
       "row_origin": "author_feedback",
       "generation_status": "not_generated",
-      "human_annotation_status": "not_annotated"
+      "human_annotation_status": "not_annotated",
+      "source_type": "feedback"
     }
   ],
   "reviewed_matrix": {
     "path": "protocol/inputs/matrix_reviewed.csv",
-    "sha256": "ccdfa2a24adba05cea6ceba8fcb6e354b4225aaf8be7e0204b891a989f650471",
+    "sha256": "7d067e48f0d6413676643e85c8d121145f5887a6f0fb4433527c48125864a72f",
     "rows": 428,
     "green_source_rows": 425,
     "author_additions": 3,
@@ -157,7 +162,14 @@
     }
   ],
   "naming_feedback_source": {
-    "id": "author_naming_feedback_20261028",
-    "kind": "author_taxonomy_feedback"
+    "id": "src_feedback_veteran_taxonomy",
+    "source_type": "feedback",
+    "kind": "user_supplied_feedback",
+    "registry": "protocol/inputs/source_feedback.jsonl"
+  },
+  "evidence_registry": {
+    "published_sources": "sources",
+    "feedback_sources": "source_feedback",
+    "matrix_type_field": "source_type"
   }
 }

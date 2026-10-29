@@ -18,8 +18,12 @@ full Ukrainian generation → English translation.
 anonymized ratings to their file hashes. Final annotated data remain separate.
 `taxonomy_selected.csv` contains the 425 green combinations from the annotator
 view. `matrix_reviewed.csv` applies the category names and case assignments in
-`taxonomy_revision.json`, including the explicit author additions. Green indicates dataset presence,
-not human acceptance. The 981-row matrix remains a historical generation input.
+`taxonomy_revision.json`, including three feedback additions. Green indicates
+dataset presence, not human acceptance. Each current row records `evidence_ids`
+and `source_type`. Published references keep their original IDs in `sources.csv`.
+`source_feedback.jsonl` stores the exact supplied feedback and stable source IDs.
+The additions use `source_type: feedback` and await generation and annotation.
+The 981-row matrix remains a historical generation input.
 The notebooks inspect saved evidence and prepare requests by default. Model
 execution requires the corresponding run flag and configured inputs.
 Notebook 2 saves the recorded study choice. Notebook 3 checks it against the

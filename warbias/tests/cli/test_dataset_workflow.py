@@ -1,6 +1,7 @@
 """Dataset notebooks use source-bound inputs and inspectable offline request plans."""
 
 import json
+import shutil
 from copy import deepcopy
 from pathlib import Path
 from types import SimpleNamespace
@@ -8,7 +9,7 @@ from types import SimpleNamespace
 import pytest
 
 from fairforget import dataset_workflow
-from fairforget.io import digest, file_digest, read_rows, write_json
+from fairforget.io import digest, file_digest, read_csv, read_rows, write_json
 from fairforget.translation.quality import prepare_quality, score_quality
 from fairforget.translation.warbias import align_languages, ingest_translations
 from fairforget.warbias.pilot import run_pilot, verify_pilot_plan
@@ -32,6 +33,7 @@ def matrix():
             "stereotype_focus_uk": "Упередження щодо праці.",
             "context_uk": "Пошук роботи.",
             "harm_mechanism_uk": "Обмеження доступу до роботи.",
+            "evidence_ids": "src_idp_protection_2025",
         }
     ]
 
@@ -91,6 +93,33 @@ def test_portable_input_hashes_row_counts_and_paths_are_checked(tmp_path):
 
 def test_project_can_be_found_from_a_notebook_folder():
     assert dataset_workflow.find_project(ROOT / "notebooks") == ROOT
+
+
+@pytest.mark.parametrize("fault", ["unknown_source", "wrong_type", "missing_type"])
+def test_current_input_matrix_rejects_unresolved_or_incorrect_evidence(tmp_path, fault):
+    import csv
+
+    shutil.copytree(ROOT / "protocol", tmp_path / "protocol")
+    shutil.copytree(ROOT / "configs/data", tmp_path / "configs/data")
+    table = tmp_path / "protocol/inputs/matrix_reviewed.csv"
+    rows = read_csv(table)
+    if fault == "unknown_source":
+        rows[-1]["evidence_ids"] = "unrecorded-feedback"
+    elif fault == "wrong_type":
+        rows[-1]["source_type"] = "volunteering_research"
+    else:
+        for row in rows:
+            row.pop("source_type")
+    with table.open("w", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
+    config = tmp_path / "configs/data/dataset-inputs.json"
+    manifest = json.loads(config.read_text())
+    manifest["files"]["matrix_reviewed"]["sha256"] = file_digest(table)
+    write_json(config, manifest)
+    with pytest.raises(ValueError, match="evidence|source_type|source types"):
+        dataset_workflow.load_inputs(tmp_path)
 
 
 def test_initial_pilot_uses_the_actual_snapshot_and_preserves_unrecorded_claim(tmp_path):
@@ -256,6 +285,44 @@ def test_recorded_choice_executes_with_standard_full_generation_bindings(tmp_pat
     assert generation["production_plan_sha256"] == manifest["production_plan_sha256"]
     assert "pilot_plan_sha256" not in generation
     assert rows[0]["human_validated"] is False
+
+
+def test_feedback_evidence_survives_generation_and_translation(tmp_path):
+    from test_generation_cli import Provider
+
+    inputs = dataset_workflow.load_inputs(ROOT)
+    case = next(row for row in inputs["matrix_reviewed"] if row["source_type"] == "feedback")
+    _, record = dataset_workflow.recorded_selection(ROOT)
+    output = tmp_path / "full"
+    dataset_workflow.run_full_generation(
+        ROOT, [case], record, output, provider=Provider(), execute=True
+    )
+    plan = json.loads((output / "production-plan.json").read_text())
+    rows = read_rows(output / "triplets.jsonl")
+    manifest = json.loads((output / "production-result.json").read_text())
+    source = next(
+        item for item in inputs["source_feedback"] if item["evidence_id"] == case["evidence_ids"]
+    )
+    assert plan["evidence_sources"] == [source]
+    assert plan["evidence_sources_sha256"] == digest([source])
+    assert manifest["evidence_sources_sha256"] == digest([source])
+    assert rows[0]["generation"]["evidence_sources_sha256"] == digest([source])
+    _, text, config = translation_pair()
+    text[0]["id"] = rows[0]["id"]
+    english = dataset_workflow.record_translations(
+        ROOT,
+        rows,
+        text,
+        tmp_path / "translation",
+        config=config,
+        production_manifest=manifest,
+    )
+    for field in ("evidence_ids", "source_type", "row_origin"):
+        assert rows[0][field] == english[0][field] == case[field]
+        changed = deepcopy(english)
+        changed[0][field] = "different"
+        with pytest.raises(ValueError, match=field):
+            align_languages(rows, changed)
 
 
 def test_recorded_conversation_translation_keeps_identity_and_source_bindings(tmp_path):

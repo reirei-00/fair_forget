@@ -125,11 +125,19 @@
     },
     "matrix_reviewed": {
       "path": "protocol/inputs/matrix_reviewed.csv",
-      "sha256": "ccdfa2a24adba05cea6ceba8fcb6e354b4225aaf8be7e0204b891a989f650471",
+      "sha256": "7d067e48f0d6413676643e85c8d121145f5887a6f0fb4433527c48125864a72f",
       "format": "csv",
-      "bytes": 364682,
+      "bytes": 373259,
       "rows": 428,
       "role": "green_selection_with_author_taxonomy_changes"
+    },
+    "source_feedback": {
+      "path": "protocol/inputs/source_feedback.jsonl",
+      "sha256": "360e977778a8e78911dc983371d5522bb17ff2ab7636460a6bb68d79199a8aba",
+      "format": "jsonl",
+      "bytes": 2831,
+      "rows": 2,
+      "role": "recorded_taxonomy_feedback_sources"
     }
   },
   "sampling": {
@@ -231,15 +239,31 @@
     {
       "artifact": "matrix_reviewed",
       "source_sha256": "7bbdb20773bc5b3bffce45734af7009ff00cbe9e9186ace20eb64b848d112b8e",
-      "portable_sha256": "ccdfa2a24adba05cea6ceba8fcb6e354b4225aaf8be7e0204b891a989f650471",
+      "portable_sha256": "7d067e48f0d6413676643e85c8d121145f5887a6f0fb4433527c48125864a72f",
       "green_source_rows": 425,
       "author_additions": 3,
-      "revision": "protocol/taxonomy_revision.json"
+      "revision": "protocol/taxonomy_revision.json",
+      "evidence_registry": [
+        "sources",
+        "source_feedback"
+      ]
+    },
+    {
+      "artifact": "source_feedback",
+      "portable_sha256": "360e977778a8e78911dc983371d5522bb17ff2ab7636460a6bb68d79199a8aba",
+      "records": 2,
+      "source_type": "feedback",
+      "capture": "relevant_user_supplied_quotations"
     }
   ],
   "full_ukrainian_annotation": "in_progress",
   "is_final_annotated_corpus": false,
   "generation_matrix": "matrix_reviewed",
   "historical_generation_matrix": "matrix_full",
-  "taxonomy_revision": "protocol/taxonomy_revision.json"
+  "taxonomy_revision": "protocol/taxonomy_revision.json",
+  "current_evidence_registry": {
+    "published_sources": "sources",
+    "feedback_sources": "source_feedback",
+    "matrix_type_field": "source_type"
+  }
 }
