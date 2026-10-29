@@ -363,5 +363,10 @@
     "path": "protocol/selection_history.json",
     "sha256": "673bd19737e056ae5c0082829b2104b6910e6bee962a92726fba5c54d84634d0",
     "role": "selection_count_reconciliation"
+  },
+  "allocation_design": {
+    "path": "protocol/allocation_design.json",
+    "sha256": "864dda3a56b974ba70baf9c43a1eeccfaa6b6ffffe7656c53582882a048999c0",
+    "role": "recorded_allocation_design"
   }
 }

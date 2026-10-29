@@ -16,12 +16,10 @@ full Ukrainian generation → English translation.
 
 `configs/data/dataset-inputs.json` binds the taxonomy, matrix, pilot outputs and
 anonymized ratings to their file hashes. Final annotated data remain separate.
-The 127 semantic cases and 1,511 profiles produce 4,533 candidate combinations,
-including reporter variants. The recorded allocation selects 1,000 base units
-and 200 profile extensions. Three
-feedback additions give 1,203 current generation inputs. Each input prepares one
-Ukrainian triplet. Occupation-qualified profiles and older women veterans remain
-included. These input counts do not describe a completed or accepted corpus.
+The [matrix design](#matrix-design) defines the recorded case and profile
+allocation. Each input prepares one Ukrainian triplet. Occupation-qualified
+profiles and older women veterans remain included. Input counts do not describe
+a completed or accepted corpus.
 
 `taxonomy_selected.csv` preserves the 425 green annotator-view combinations.
 Green records source-dataset presence, not generation eligibility or human
@@ -48,10 +46,10 @@ the recorded author choice.
 
 ## Inputs
 
-Cases and generated rows use JSONL, with one object per line. Prepared cases
-include `case_id`, `source_id`, `claim`, `claim_family_id` and `target_group`
-(`idp` or `veteran`). Source records require a fixed repository revision or a URI
-with SHA256.
+Cases and generated rows use JSONL, with one object per line. The recorded
+construction cases contain the source claim, context, target group, intrinsic
+attributes, contrast constraints and evidence IDs. Core cases concern IDPs or
+veterans. The three feedback additions remain separate.
 
 The full matrix adds actor profiles. `case_id` identifies a semantic case;
 `matrix_item_id` identifies each profile and reporter variant. Matrix-row IDs
@@ -73,6 +71,70 @@ Set providers, fixed model and tokenizer versions, settings and prompts in
 Generation uses Ukrainian (`uk`). Translation accepts only Ukrainian as the
 source and English (`en`) as the target. Plans save source
 rows, model settings, prompt text and hashes. Resume requires the same inputs.
+
+## Matrix design
+
+The recorded design has 1,200 inputs. This size is a selection decision; it does
+not follow from the number of taxonomy categories. `build_matrix()` joins and
+validates the recorded allocations. It does not rerun the original selector.
+[The allocation record](../protocol/allocation_design.json) gives its rules,
+case sets, counts and source hashes.
+
+The [127 semantic cases](../protocol/inputs/construction_cases.jsonl) contain
+78 veteran cases and 49 IDP cases. Their
+[1,511 candidate profiles](../protocol/inputs/candidate_profiles.jsonl) contain
+127 profiles with no added attribute and 1,384 profiles with one added attribute.
+Intrinsic attributes remain fixed. Added attributes include gender, age,
+occupation, disability, displacement and service details. The allowed values
+are case-specific.
+
+Each candidate profile has three possible framings: no reporter, or one of the
+case's two allowed reporters. This gives **1,511 × 3 = 4,533 candidates**.
+
+The recorded base selection contains:
+
+| Component | Inputs |
+| --- | ---: |
+| One profile with no added attribute or reporter per case | 127 |
+| The same profile with one selected reporter per case | 127 |
+| Profiles with one added attribute and no reporter | 746 |
+| **Base total** | **1,000** |
+
+The selector included both baseline sets, then selected complete case–attribute
+blocks up to a 1,000-row limit. It preferred cases with fewer selected blocks,
+then attributes with fewer selected rows. Seeded SHA256 ordering resolved ties;
+the seed was `20260909`. A block contains all declared values for that case and
+attribute. It is not a product of every attribute with every other attribute.
+The frozen base includes the recorded 16-for-16 substitution in the
+[selection history](../protocol/selection_history.json).
+
+The 200 additional profiles complete selected comparison panels:
+
+| Extension | Cases | New variants per case | Inputs |
+| --- | ---: | ---: | ---: |
+| Gender in IDP cases | 25 | 2 | 50 |
+| Gender controls in veteran cases with age panels | 3 | 2 | 6 |
+| Age in IDP cases | 17 | 3 | 51 |
+| Occupation | 17 | 3 | 51 |
+| Gender × age | 7 | 6 | 42 |
+| **Extension total** | | | **200** |
+
+All extensions have no reporter. Gender variants preserve intrinsic gender
+constraints. Age panels use young, middle-aged and older adults. Occupation
+panels add three alternatives to an existing occupation profile and preserve
+its current, previous or sought-occupation reference. Gender × age panels cover
+four IDP and three veteran cases. These are selected comparison panels, not a
+population sample or a complete crossing of the taxonomy.
+
+The [1,200 recorded allocations](../protocol/inputs/profile_design.jsonl)
+therefore contain **718 veteran inputs and 482 IDP inputs**. Each row records
+its case, profile, attributes, reporter and design stage. Extensions also link
+to their base parent. One row requests one S/C/U triplet.
+
+Three feedback cases are appended separately, giving **1,203 current inputs**.
+The [CSV view](../protocol/inputs/matrix_reviewed.csv) includes both the 1,200
+allocated profiles and these three additions. Notebook 3 derives the component,
+extension and group counts from the records before preparing model requests.
 
 ## Pilot and selection
 
