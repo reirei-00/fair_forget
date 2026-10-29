@@ -178,6 +178,14 @@
       "bytes": 373259,
       "rows": 428,
       "role": "source_presence_snapshot"
+    },
+    "taxonomy_cases": {
+      "path": "protocol/inputs/taxonomy_cases.jsonl",
+      "sha256": "baed9bd87f2c266d6b9cf4e780d5d767ead835e7fd811ef1b5ce24825b778fc8",
+      "format": "jsonl",
+      "bytes": 81253,
+      "rows": 129,
+      "role": "source_taxonomy_case_inventory"
     }
   },
   "sampling": {
@@ -339,6 +347,15 @@
       "portable_sha256": "7d067e48f0d6413676643e85c8d121145f5887a6f0fb4433527c48125864a72f",
       "records": 428,
       "role": "source_presence_snapshot"
+    },
+    {
+      "artifact": "taxonomy_cases",
+      "portable_sha256": "baed9bd87f2c266d6b9cf4e780d5d767ead835e7fd811ef1b5ce24825b778fc8",
+      "source_artifact": "usage_source.json",
+      "source_sha256": "7385ab5b3c45aa215f0bad13c71934404e76b4713abf538fd7d57f25a931a37a",
+      "historical_matrix_sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c",
+      "source_case_count": 129,
+      "contains_generated_sentences": false
     }
   ],
   "full_ukrainian_annotation": "in_progress",
