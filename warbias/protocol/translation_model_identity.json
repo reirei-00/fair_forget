@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "kind": "translation_model_identity",
+  "model": "gpt-6.1-sol",
+  "application": "Codex",
+  "evidence_source": "saved_conversation_turn_metadata",
+  "translation_capture_timestamp": "2026-10-28T06:02:09.369Z",
+  "recorded_turn_model": "gpt-6.1-sol",
+  "immutable_model_revision": null,
+  "original_label": "Codex",
+  "original_config_sha256": "b3cb7ac962dc8566b1710f786a72d8c01511c121b49716baf47a285963b6f396",
+  "translation_text_file": "protocol/inputs/translation_sample_en.jsonl",
+  "translation_text_sha256": "32befdf5533c32da730386217e67c6cde418910ac48668b6ca1e1aea69463391",
+  "provider_api_capture": false
+}

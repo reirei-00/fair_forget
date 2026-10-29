@@ -40,20 +40,24 @@
     "translator": {
       "immutable_model_version": "not_exposed",
       "invocation": "assistant_in_current_conversation",
-      "model": "Codex",
+      "model": "gpt-6.1-sol",
       "provider": "codex_conversation",
       "revision": null,
       "settings": {},
       "source_language": "uk",
       "target_language": "en",
-      "usage": null
+      "usage": null,
+      "application": "Codex",
+      "model_identity_source": "saved_conversation_turn_metadata"
     }
   },
   "quality_config": "configs/translation/quality.json",
-  "quality_result": "protocol/translation_sample_quality.json",
-  "quality_result_sha256": "dc0e7c0beff907a56c4c3abda8a1efd6e182af1f2b998e33f468d725b951a482",
+  "quality_result": "protocol/translation_sample_quality_identified.json",
+  "quality_result_sha256": "d7c7b6852731455b973cf2b63902ee747defdb1ef4eb250e3a5aa73047f74c6f",
   "sample_size": 10,
   "sentence_pairs": 30,
   "human_validated": false,
-  "is_final_corpus": false
+  "is_final_corpus": false,
+  "translator_identity": "protocol/translation_model_identity.json",
+  "translator_identity_sha256": "5dfd45a0bf2e3f68dc90bc65bdd5bd288e6b4331cbecdfc7a82af1a0a14fc7cf"
 }

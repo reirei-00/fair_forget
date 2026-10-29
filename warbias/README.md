@@ -37,7 +37,7 @@ python -m ruff check src tests scripts notebooks
 ```
 
 The five notebooks in `notebooks/` use the recorded taxonomy matrix, pilot
-outputs, anonymized human ratings and a Codex translation sample. Start with
+outputs, anonymized human ratings and a GPT-6.1 Sol translation sample. Start with
 [Ukrainian pilot generation](notebooks/01_ukrainian_pilot.ipynb).
 The [construction guide](docs/warbias-construction.md#notebooks) lists all
 five stages. The final corpus remains under annotation.
