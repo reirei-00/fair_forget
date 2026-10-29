@@ -380,6 +380,78 @@ def record_translations(
     return rows
 
 
+def _verify_quality_correction(path, report):
+    correction = report["metadata_correction"]
+    fields = {
+        "kind",
+        "original_file",
+        "original_file_sha256",
+        "original_result_sha256",
+        "scores_reused_without_inference",
+    }
+    if (
+        not isinstance(correction, dict)
+        or set(correction) != fields
+        or correction["kind"] != "translator_model_identity"
+        or correction["scores_reused_without_inference"] is not True
+        or not isinstance(correction["original_file"], str)
+        or not correction["original_file"].strip()
+    ):
+        raise ValueError("Declare the exact translator metadata correction and original report")
+    directory = Path(path).resolve().parent
+    relative = Path(correction["original_file"])
+    original_path = (directory / relative).resolve()
+    if relative.is_absolute() or not original_path.is_relative_to(directory):
+        raise ValueError("The original quality report must stay within its report directory")
+    if (
+        not original_path.is_file()
+        or file_digest(original_path) != correction["original_file_sha256"]
+    ):
+        raise ValueError("The original quality report file hash differs")
+    original = load_json(original_path)
+    if (
+        not isinstance(original, dict)
+        or "metadata_correction" in original
+        or original.get("result_sha256") != correction["original_result_sha256"]
+        or original.get("result_sha256")
+        != digest({key: value for key, value in original.items() if key != "result_sha256"})
+    ):
+        raise ValueError("The original quality result identity differs")
+    original_hashes, corrected_hashes = original.get("input_sha256"), report.get("input_sha256")
+    if (
+        not isinstance(original_hashes, dict)
+        or not isinstance(corrected_hashes, dict)
+        or original_hashes.get("uk") != corrected_hashes.get("uk")
+    ):
+        raise ValueError("A translator metadata correction cannot change the Ukrainian source")
+    origins = [original.get("input_origin"), report.get("input_origin")]
+    if any(not isinstance(origin, dict) for origin in origins):
+        raise ValueError("A translator metadata correction needs source origin objects")
+    if {key: value for key, value in origins[0].items() if key != "translator"} != {
+        key: value for key, value in origins[1].items() if key != "translator"
+    }:
+        raise ValueError("A translator metadata correction cannot change the source origin")
+    translators = [origin.get("translator", {}) for origin in origins]
+    if any(not isinstance(translator, dict) for translator in translators):
+        raise ValueError("A translator metadata correction needs translator identity objects")
+    identity_fields = {"model", "application", "model_identity_source"}
+    if {key: value for key, value in translators[0].items() if key not in identity_fields} != {
+        key: value for key, value in translators[1].items() if key not in identity_fields
+    }:
+        raise ValueError("A translator metadata correction cannot change provider or settings")
+    allowed = {
+        "plan_sha256",
+        "input_sha256",
+        "input_origin",
+        "result_sha256",
+        "metadata_correction",
+    }
+    if {key: value for key, value in report.items() if key not in allowed} != {
+        key: value for key, value in original.items() if key not in allowed
+    }:
+        raise ValueError("A metadata correction cannot change measured quality results")
+
+
 def load_recorded_quality(path, plan):
     """Load measured scores only for the exact current text and quality plan."""
     from fairforget.translation.quality import verify_quality_plan
@@ -388,6 +460,8 @@ def load_recorded_quality(path, plan):
     report = load_json(path)
     if not isinstance(report, dict):
         raise ValueError("Recorded quality result must be an object")
+    if "metadata_correction" in report:
+        _verify_quality_correction(path, report)
     if (
         report.get("schema_version") != 1
         or report.get("kind") != "warbias_translation_quality_result"

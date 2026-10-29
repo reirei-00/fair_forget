@@ -68,7 +68,9 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         assert result["matrix_rows"] == 428 and result["planned_model_calls"] == 1284
         assert result["model_calls"] == 0
     elif name == "04_sample_translation_comet":
-        assert result["translation_model"] == "Codex"
+        assert result["translation_model"] == "gpt-6.1-sol"
+        assert namespace["identity"]["application"] == "Codex"
+        assert namespace["identity"]["recorded_turn_model"] == "gpt-6.1-sol"
         assert result["coverage"]["scored_segments"] == 30
         assert namespace["plan"]["alignment"]["translation_bindings_checked"] is True
         assert result["comet_recomputed"] is False

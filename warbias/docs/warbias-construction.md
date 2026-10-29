@@ -11,7 +11,7 @@ full Ukrainian generation → English translation.
 | [1. Ukrainian pilot](../notebooks/01_ukrainian_pilot.ipynb) | Taxonomy matrix, Mamay and Lapa, zero-shot and sequential prompts, saved Ukrainian samples |
 | [2. Model selection](../notebooks/02_model_selection.ipynb) | Human ratings, condition means, observed ranks and the recorded Lapa/sequential choice |
 | [3. Full Ukrainian generation](../notebooks/03_full_ukrainian_generation.ipynb) | Full matrix, selected condition, final prompts and generation requests |
-| [4. Sample translation and COMET](../notebooks/04_sample_translation_comet.ipynb) | Ten Ukrainian reference triplets, actual Codex translations and measured COMET scores |
+| [4. Sample translation and COMET](../notebooks/04_sample_translation_comet.ipynb) | Ten Ukrainian reference triplets, actual GPT-6.1 Sol translations and measured COMET scores |
 | [5. Full English translation](../notebooks/05_full_english_translation.ipynb) | Full Ukrainian input, source manifest and aligned English output |
 
 `configs/data/dataset-inputs.json` binds the taxonomy, matrix, pilot outputs and
@@ -121,9 +121,11 @@ row. Pilot ratings select the model; full-data review is a separate step.
 
 ## Translation quality
 
-Notebook 4 uses the `quality` extra. Codex translated ten Ukrainian reference
-triplets into English. The recorded outputs, source hashes and capture method
-are retained; no provider API response or immutable model revision is claimed.
+Notebook 4 uses the `quality` extra. GPT-6.1 Sol translated ten Ukrainian
+reference triplets through Codex. Saved conversation metadata identifies the
+model alias. The underlying immutable revision remains unavailable.
+`translation_model_identity.json` records this attribution. The original COMET
+report is preserved; the identified report changes metadata and retains all scores.
 The notebook checks these bindings and displays the actual measured COMET scores.
 Set `RUN_COMET = True` to calculate them again.
 

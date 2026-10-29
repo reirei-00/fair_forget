@@ -430,11 +430,14 @@ def test_recorded_translation_rejects_incomplete_or_ambiguous_input(tmp_path, da
     assert not (tmp_path / "capture/translations.jsonl").exists()
 
 
-def recorded_quality():
+def recorded_quality(input_origin=None):
     source, english, _ = translation_pair()
     english[0]["language"] = "en"
     plan = prepare_quality(
-        source, english, input_origin={"kind": "synthetic-test"}, verify_translation_bindings=False
+        source,
+        english,
+        input_origin={"kind": "synthetic-test"} if input_origin is None else input_origin,
+        verify_translation_bindings=False,
     )
     scorer = SimpleNamespace(
         predict=lambda rows, **options: SimpleNamespace(
@@ -468,6 +471,165 @@ def test_recorded_quality_load_is_offline_and_preserves_measured_values(tmp_path
     )
     assert dataset_workflow.load_recorded_quality(path, plan) == report
     assert path.read_bytes() == before
+
+
+def corrected_quality(directory, original_origin=None):
+    plan, original = recorded_quality(input_origin=original_origin)
+    original_path = directory / "quality-original.json"
+    write_json(original_path, original)
+    english = deepcopy(plan["inputs"]["en"])
+    english[0]["translation_model"] = "gpt-6.1-sol"
+    identified_origin = deepcopy(plan["input_origin"])
+    identified_origin.setdefault("translator", {})["model"] = "gpt-6.1-sol"
+    identified_plan = prepare_quality(
+        plan["inputs"]["uk"],
+        english,
+        input_origin=identified_origin,
+        verify_translation_bindings=False,
+    )
+    report = deepcopy(original)
+    for field in ("plan_sha256", "input_sha256", "input_origin"):
+        report[field] = deepcopy(identified_plan[field])
+    report["metadata_correction"] = {
+        "kind": "translator_model_identity",
+        "original_file": original_path.name,
+        "original_file_sha256": file_digest(original_path),
+        "original_result_sha256": original["result_sha256"],
+        "scores_reused_without_inference": True,
+    }
+    report["result_sha256"] = digest(
+        {key: value for key, value in report.items() if key != "result_sha256"}
+    )
+    return identified_plan, report, original_path
+
+
+def test_translator_identity_correction_reuses_exact_measured_scores(tmp_path, monkeypatch):
+    from fairforget.translation import quality
+
+    plan, report, original_path = corrected_quality(tmp_path)
+    original_bytes = original_path.read_bytes()
+    original = json.loads(original_bytes)
+    path = tmp_path / "quality-identified.json"
+    write_json(path, report)
+    monkeypatch.setattr(
+        quality,
+        "load_comet_scorer",
+        lambda *args, **kwargs: pytest.fail("An identity correction must not load COMET"),
+    )
+    assert dataset_workflow.load_recorded_quality(path, plan) == report
+    assert report["segments"] == original["segments"]
+    assert report["summary"] == original["summary"]
+    assert report["input_sha256"] != original["input_sha256"]
+    assert original_path.read_bytes() == original_bytes
+
+
+@pytest.mark.parametrize(
+    "damage",
+    [
+        "original_file",
+        "original_content_hash",
+        "original_result_hash",
+        "path_escape",
+        "absolute_path",
+        "score",
+        "model",
+        "settings",
+        "coverage",
+        "summary",
+        "reuse_claim",
+        "origin_type",
+        "translator_type",
+    ],
+)
+def test_translator_identity_correction_rejects_changed_evidence(tmp_path, damage):
+    directory = tmp_path / "reports"
+    plan, report, original_path = corrected_quality(directory)
+    correction = report["metadata_correction"]
+    if damage in {"original_file", "original_content_hash"}:
+        original = json.loads(original_path.read_text())
+        original["summary"]["mean"] = 0.9
+        write_json(original_path, original)
+        if damage == "original_content_hash":
+            correction["original_file_sha256"] = file_digest(original_path)
+    elif damage == "original_result_hash":
+        correction["original_result_sha256"] = "0" * 64
+    elif damage == "path_escape":
+        (tmp_path / "outside.json").write_bytes(original_path.read_bytes())
+        correction["original_file"] = "../outside.json"
+    elif damage == "absolute_path":
+        correction["original_file"] = str(original_path)
+    elif damage == "score":
+        report["segments"][0]["score"] = 0.9
+    elif damage == "model":
+        report["model"]["checkpoint_sha256"] = "0" * 64
+    elif damage == "settings":
+        report["prediction_options"]["batch_size"] = 4
+    elif damage == "coverage":
+        report["coverage"]["scored_segments"] = 1
+    elif damage == "summary":
+        report["summary"]["mean"] = 0.9
+    elif damage == "origin_type":
+        report["input_origin"] = []
+    elif damage == "translator_type":
+        report["input_origin"]["translator"] = []
+    else:
+        correction["scores_reused_without_inference"] = False
+    report["result_sha256"] = digest(
+        {key: value for key, value in report.items() if key != "result_sha256"}
+    )
+    path = directory / "quality-identified.json"
+    write_json(path, report)
+    with pytest.raises(
+        ValueError, match="original|metadata correction|quality results|report directory"
+    ):
+        dataset_workflow.load_recorded_quality(path, plan)
+
+
+@pytest.mark.parametrize(
+    "damage",
+    ["uk_hash", "source_reference", "sampling", "kind", "provider", "revision", "settings"],
+)
+def test_identity_correction_cannot_rebind_source_or_execution_metadata(tmp_path, damage):
+    original_origin = {
+        "kind": "synthetic-test",
+        "source_reference": {"repository": "synthetic", "revision": "a" * 40},
+        "sampling": {"method": "fixed-test-items"},
+        "translator": {
+            "model": "Codex",
+            "provider": "codex_conversation",
+            "revision": None,
+            "settings": {},
+            "invocation": "assistant_in_current_conversation",
+        },
+    }
+    plan, report, _ = corrected_quality(tmp_path, original_origin)
+    origin = deepcopy(plan["input_origin"])
+    ukrainian = deepcopy(plan["inputs"]["uk"])
+    if damage == "uk_hash":
+        ukrainian[0]["source_context"] = "A different source context."
+    elif damage == "source_reference":
+        origin["source_reference"]["revision"] = "b" * 40
+    elif damage == "sampling":
+        origin["sampling"]["method"] = "random-items"
+    elif damage == "kind":
+        origin["kind"] = "different-origin"
+    else:
+        origin["translator"][damage] = {"temperature": 0.5} if damage == "settings" else "changed"
+    changed_plan = prepare_quality(
+        ukrainian,
+        plan["inputs"]["en"],
+        input_origin=origin,
+        verify_translation_bindings=False,
+    )
+    for field in ("plan_sha256", "input_sha256", "input_origin"):
+        report[field] = deepcopy(changed_plan[field])
+    report["result_sha256"] = digest(
+        {key: value for key, value in report.items() if key != "result_sha256"}
+    )
+    path = tmp_path / "quality-identified.json"
+    write_json(path, report)
+    with pytest.raises(ValueError, match="metadata correction"):
+        dataset_workflow.load_recorded_quality(path, changed_plan)
 
 
 @pytest.mark.parametrize(
