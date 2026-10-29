@@ -29,6 +29,18 @@ def feedback():
     }
 
 
+def compilation(**changes):
+    return {
+        "evidence_id": "src_warbias_case_compilation",
+        "source_type": "compilation",
+        "source_kind": "recorded_case_specifications",
+        "title": "Recorded WarBias case specifications",
+        "source_file": "protocol/inputs/construction_cases.jsonl",
+        "source_sha256": "a" * 64,
+        **changes,
+    }
+
+
 def test_published_ids_and_fields_are_preserved_without_mutation():
     references = [published(year="2024")]
     supplied = [feedback()]
@@ -138,3 +150,51 @@ def test_evidence_sources_can_be_a_generator():
     assert bind_evidence(rows, (source for source in sources))[0]["source_type"] == (
         "feedback;published_reference"
     )
+
+
+def test_compilation_records_keep_their_type_and_file_binding_without_mutation():
+    recorded = [compilation()]
+    before = deepcopy(recorded)
+    sources = source_records([published()], [feedback()], recorded)
+    assert sources[-1] == before[0]
+    assert recorded == before
+    assert "url" not in sources[-1]
+    rows = [{"evidence_ids": "src_warbias_case_compilation"}]
+    assert bind_evidence(rows, sources) == [{**rows[0], "source_type": "compilation"}]
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("source_type", "published_reference"),
+        ("source_type", "research"),
+        ("source_kind", "volunteering_research"),
+        ("title", " "),
+        ("source_file", None),
+        ("source_file", ""),
+        ("source_file", "."),
+        ("source_file", "/tmp/cases.jsonl"),
+        ("source_file", "../cases.jsonl"),
+        ("source_file", "protocol/../cases.jsonl"),
+        ("source_file", "C:/cases.jsonl"),
+        ("source_file", "protocol\\cases.jsonl"),
+        ("source_file", "https://example.org/cases.jsonl"),
+        ("source_sha256", None),
+        ("source_sha256", ""),
+        ("source_sha256", "a" * 63),
+        ("source_sha256", "a" * 65),
+        ("source_sha256", "g" * 64),
+    ],
+)
+def test_compilation_records_reject_wrong_types_and_invalid_file_bindings(field, value):
+    with pytest.raises(ValueError):
+        source_records([], [], [compilation(**{field: value})])
+
+
+def test_compilation_source_ids_must_be_unique_across_all_registries():
+    with pytest.raises(ValueError, match="Duplicate evidence_id"):
+        source_records([published(evidence_id=compilation()["evidence_id"])], [], [compilation()])
+    with pytest.raises(ValueError, match="Duplicate evidence_id"):
+        source_records([], [feedback()], [compilation(evidence_id=feedback()["evidence_id"])])
+    with pytest.raises(ValueError, match="Duplicate evidence_id"):
+        source_records([], [], [compilation(), compilation()])

@@ -42,6 +42,12 @@ outputs, anonymized human ratings and a GPT-6.1 Sol translation sample. Start wi
 The [construction guide](docs/warbias-construction.md#notebooks) lists all
 five stages. The final corpus remains under annotation.
 
+The taxonomy produces 4,533 candidate combinations. The recorded design selects
+1,000 base units and 200 profile extensions; three feedback cases give 1,203
+generation inputs. Occupation-qualified profiles and older women veterans remain
+included. Green cells record source-dataset presence and do not filter this
+design. Notebook 3 prepares one Ukrainian triplet per input.
+
 Run all five notebooks and save their outputs with a local Python kernel:
 
 ```sh

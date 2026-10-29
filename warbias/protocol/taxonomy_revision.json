@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "version": "warbias-taxonomy-20261029-v3",
+  "version": "warbias-taxonomy-profile-design-v4",
   "source": {
     "sheet": "Annotator_View",
     "selection": "effective_actor_cell_background",
@@ -11,7 +11,8 @@
     "human_validation_inferred": false,
     "source_modified_at": "2026-10-26T12:52:05.372Z",
     "snapshot": "protocol/inputs/taxonomy_selected.csv",
-    "snapshot_sha256": "7bbdb20773bc5b3bffce45734af7009ff00cbe9e9186ace20eb64b848d112b8e"
+    "snapshot_sha256": "7bbdb20773bc5b3bffce45734af7009ff00cbe9e9186ace20eb64b848d112b8e",
+    "role": "source_presence_snapshot_only"
   },
   "historical_generation_matrix": {
     "path": "protocol/inputs/matrix_full.csv",
@@ -26,8 +27,7 @@
       ],
       "category_code": "vet_employment_skills_discrimination",
       "category_uk": "Професійна компетентність і працевлаштування",
-      "scope": "Include hiring discrimination, military-to-civilian skill transfer, deskilling and career-role restrictions.",
-      "affected_rows": 39
+      "scope": "Include hiring discrimination, military-to-civilian skill transfer, deskilling and career-role restrictions."
     }
   ],
   "feedback_source": {
@@ -106,11 +106,12 @@
   ],
   "reviewed_matrix": {
     "path": "protocol/inputs/matrix_reviewed.csv",
-    "sha256": "7d067e48f0d6413676643e85c8d121145f5887a6f0fb4433527c48125864a72f",
-    "rows": 428,
-    "green_source_rows": 425,
+    "sha256": "98a6333aa9cf06db0bf66a63964fd2cd8f47ccb7129332258ceba8e41b1416af",
+    "rows": 1203,
+    "base_allocations": 1000,
+    "profile_extensions": 200,
     "author_additions": 3,
-    "role": "next_generation_inputs",
+    "role": "next_generation_design",
     "generated_as_this_revision": false
   },
   "category_relabels": [
@@ -137,16 +138,14 @@
           "case_ids": [
             "ssuk_vet_disability_work_capacity_case_001",
             "ssuk_vet_disability_work_capacity_case_002"
-          ],
-          "rows": 9
+          ]
         },
         {
           "category_code": "vet_injury_simulation_accusations",
           "category_uk": "Звинувачення в симуляції поранень",
           "case_ids": [
             "ssuk_vet_disability_work_capacity_case_007"
-          ],
-          "rows": 6
+          ]
         },
         {
           "category_code": "vet_disability_autonomy_work_capacity",
@@ -155,8 +154,7 @@
             "ssuk_vet_disability_work_capacity_case_004",
             "ssuk_vet_disability_work_capacity_case_005",
             "ssuk_vet_disability_work_capacity_case_006"
-          ],
-          "rows": 7
+          ]
         }
       ]
     }
@@ -170,6 +168,97 @@
   "evidence_registry": {
     "published_sources": "sources",
     "feedback_sources": "source_feedback",
-    "matrix_type_field": "source_type"
+    "matrix_type_field": "source_type",
+    "compilation_sources": "source_compilation"
+  },
+  "category_assignments": [
+    {
+      "case_id": "ssuk_vet_media_status_marking_case_001",
+      "category_code": "vet_media_status_marking",
+      "category_uk": "Медійне маркування ветеранського статусу"
+    },
+    {
+      "case_id": "ssuk_vet_media_status_marking_case_003",
+      "category_code": "vet_media_status_marking",
+      "category_uk": "Медійне маркування ветеранського статусу"
+    },
+    {
+      "case_id": "wb2_vet_social_pressure_serve_again",
+      "category_code": "vet_heroization_mandatory_resilience",
+      "category_uk": "Героїзація та обов’язкова стійкість"
+    },
+    {
+      "case_id": "wb3_vet_cohort_recognition",
+      "category_code": "vet_legitimacy",
+      "category_uk": "Легітимність АТО/ООС і повномасштабної війни"
+    },
+    {
+      "case_id": "wb3_vet_enterprise_choice",
+      "category_code": "vet_enterprise_decision_autonomy",
+      "category_uk": "Самостійність у підприємництві"
+    },
+    {
+      "case_id": "wb3_idp_settlement_choice",
+      "category_code": "idp_return_integration_choice",
+      "category_uk": "Повернення місцева інтеграція і право вибору"
+    },
+    {
+      "case_id": "wb3_idp_housing_decisions",
+      "category_code": "idp_passivity_victimhood_agency",
+      "category_uk": "Пасивність віктимізація та агентність"
+    },
+    {
+      "case_id": "wb3_idp_language_belonging",
+      "category_code": "idp_regional_cultural_prejudice",
+      "category_uk": "Регіональні та культурні упередження"
+    },
+    {
+      "case_id": "wb3_idp_origin_manners",
+      "category_code": "idp_regional_cultural_prejudice",
+      "category_uk": "Регіональні та культурні упередження"
+    },
+    {
+      "case_id": "wb3_idp_pets_rental",
+      "category_code": "idp_housing_tenant_reliability",
+      "category_uk": "Житло і надійність орендаря"
+    },
+    {
+      "case_id": "wb3_idp_children_rental",
+      "category_code": "idp_housing_tenant_reliability",
+      "category_uk": "Житло і надійність орендаря"
+    },
+    {
+      "case_id": "wb3_vet_accommodation_blame",
+      "category_code": "vet_rehabilitation_autonomy",
+      "category_uk": "Реабілітація доступність і автономність"
+    },
+    {
+      "case_id": "wb3_vet_intrusive_help",
+      "category_code": "vet_rehabilitation_autonomy",
+      "category_uk": "Реабілітація доступність і автономність"
+    },
+    {
+      "case_id": "wb3_vet_universal_leadership",
+      "category_code": "vet_skill_transfer_deskilling",
+      "category_uk": "Військові навички декваліфікація і кар’єрна ієрархія"
+    }
+  ],
+  "profile_scope": {
+    "exclude_occupation_profiles": false,
+    "exclude_older_women_veterans": false,
+    "green_presence_required": false,
+    "feedback_allocation": "one_explicit_profile_per_added_case"
+  },
+  "generation_design": {
+    "cases": "construction_cases",
+    "candidate_profiles": "candidate_profiles",
+    "allocations": "profile_design",
+    "counts_derived_from_inputs": true
+  },
+  "green_matrix_snapshot": {
+    "path": "protocol/inputs/matrix_green_snapshot.csv",
+    "sha256": "7d067e48f0d6413676643e85c8d121145f5887a6f0fb4433527c48125864a72f",
+    "rows": 428,
+    "role": "source_presence_snapshot_only"
   }
 }

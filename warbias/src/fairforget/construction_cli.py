@@ -1,6 +1,5 @@
 """Pilot, blind human selection and full-generation CLI stages."""
 
-from copy import deepcopy
 from pathlib import Path
 
 from fairforget.cli_support import (
@@ -67,12 +66,9 @@ def add_commands(commands):
 
 
 def _strategy_paths(config, prompt_root):
-    strategies = deepcopy(config["strategies"])
-    for strategy in strategies.values():
-        strategy["prompts"] = {
-            stage: prompt_root / path for stage, path in strategy["prompts"].items()
-        }
-    return strategies
+    from fairforget.warbias.generation import resolve_prompt_paths
+
+    return resolve_prompt_paths(config["strategies"], lambda path: prompt_root / path)
 
 
 def _new_output(path):

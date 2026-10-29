@@ -4,7 +4,7 @@ import math
 from collections import Counter, defaultdict
 from itertools import product
 
-from fairforget.io import unique_index
+from fairforget.io import canonical_json, unique_index
 from fairforget.warbias.generation import STRATEGIES
 
 DIMENSIONS = ("bias_type_code", "category_code", "target_code", "gender_track", "age_track")
@@ -34,9 +34,22 @@ def _matrix_index(rows):
 
 
 def generation_cases(matrix_rows):
-    """Adapt saved CSV rows; an unrecorded original claim stays null."""
+    """Adapt matrix rows while preserving recorded claims and profile constraints."""
     cases = []
     for row in _matrix_index(matrix_rows).values():
+        if row.get("matrix_schema") == "case_profile":
+            claim, context = _text(row, "claim"), _text(row, "context_uk")
+            cases.append(
+                {
+                    **row,
+                    "id": row["matrix_item_id"],
+                    "matrix_id": row["matrix_item_id"],
+                    "target_group": row["bias_type_code"],
+                    "required_stereotype_claim_uk": claim,
+                    "required_context_domain_uk": context,
+                }
+            )
+            continue
         for field in (
             "target_uk",
             "target_definition_uk",
@@ -59,19 +72,35 @@ def generation_cases(matrix_rows):
     return cases
 
 
+def _profile_key(row):
+    if row.get("matrix_schema") == "case_profile":
+        return canonical_json(
+            {
+                "target_group": row["bias_type_code"],
+                "attributes": {**row["intrinsic_attributes"], **row["additional_tags"]},
+                "generalized_attributes": row.get("generalized_attributes", {}),
+                "occupation_reference": row.get("occupation_reference"),
+            }
+        )
+    return row["target_code"], row["gender_track"], row["age_track"]
+
+
 def describe_matrix(matrix_rows):
     """Count recorded categories and profile dimensions without resampling."""
     rows = list(_matrix_index(matrix_rows).values())
     return {
         "matrix_rows": len(rows),
         "case_families": len({row["case_id"] for row in rows}),
-        "profile_combinations": len(
-            {(row["target_code"], row["gender_track"], row["age_track"]) for row in rows}
-        ),
+        "profile_combinations": len({_profile_key(row) for row in rows}),
         "dimensions": {
             field: dict(sorted(Counter(row[field] for row in rows).items())) for field in DIMENSIONS
         },
-        "missing_exact_claims": sum(not row.get("stereotype_claim_uk") for row in rows),
+        "missing_exact_claims": sum(
+            not row.get(
+                "claim" if row.get("matrix_schema") == "case_profile" else "stereotype_claim_uk"
+            )
+            for row in rows
+        ),
     }
 
 

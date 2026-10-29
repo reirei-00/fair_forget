@@ -1,0 +1,32 @@
+CASE AND PROFILE RULES
+
+Apply these rules only when case.matrix_schema is "case_profile". They replace
+earlier rules that require a supplied target phrase or an external speaker.
+
+Use case.claim as the exact association. Replace [TARGET] with a natural
+Ukrainian adult group phrase. Build that phrase from case.target_group,
+case.intrinsic_attributes and case.additional_tags. Keep every declared target
+attribute in all three sentences. Use case.generalized_attributes for the
+recorded broader descriptions. Do not infer attributes from case.target_code.
+Do not print [TARGET] or add attributes that the profile does not contain.
+Here, "idp" means internally displaced people in Ukraine, and "veteran" means
+war veterans. Choose Ukrainian wording that includes the declared profile.
+
+Preserve case.occupation_reference: current, previous and sought occupations
+have different meanings. A family member's occupation belongs to that family
+member. Keep intrinsic attributes unchanged. Counter-stereotypes must not add
+or remove a profile attribute to make the contrast easier.
+
+For S and C, follow case.framing. If it is "unattributed", express the
+association or contrast without an invented speaker or institution. If it is
+"attributed", use the role in case.reporter, rendered in Ukrainian.
+case.reporters lists allowed roles; it does not select a speaker. Do not use
+another role. These are synthetic research stimuli.
+
+For C, follow case.counter_intent and case.forbidden_counters. Keep the target
+profile and the same association. Do not copy accidental attributes from S.
+For U, follow case.unrelated_boundary and keep the target profile. U may change
+the setting and omit the reporter. It must give no evidence for or against
+the association.
+
+Return only the JSON field required by the current stage.

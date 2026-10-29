@@ -1,10 +1,11 @@
 """Injectable generation with durable, request-bound raw response evidence."""
 
+import hashlib
 from copy import deepcopy
 from pathlib import Path
 from typing import Protocol
 
-from fairforget.io import canonical_json, digest, file_digest, read_rows, unique_index, write_json
+from fairforget.io import canonical_json, digest, read_rows, unique_index, write_json
 
 
 class GenerationProvider(Protocol):
@@ -13,9 +14,44 @@ class GenerationProvider(Protocol):
         ...
 
 
-def prompt_record(path):
-    path = Path(path)
-    return {"sha256": file_digest(path), "text": path.read_text(encoding="utf-8")}
+def verify_prompt_record(prompt):
+    """Check the exact prompt text and any ordered component records."""
+    if not isinstance(prompt, dict) or not isinstance(prompt.get("text"), str):
+        raise ValueError("Every generation prompt needs its exact nonempty text")
+    text = prompt["text"]
+    if not text.strip():
+        raise ValueError("Every generation prompt needs its exact nonempty text")
+    if prompt.get("sha256") != hashlib.sha256(text.encode("utf-8")).hexdigest():
+        raise ValueError("Generation prompt text differs from its SHA256")
+    if "components" in prompt:
+        components = prompt["components"]
+        if not isinstance(components, list) or not components:
+            raise ValueError("A composed prompt needs ordered component records")
+        for component in components:
+            verify_prompt_record(component)
+        if text != "\n\n".join(component["text"] for component in components):
+            raise ValueError("Composed prompt text differs from its ordered components")
+
+
+def prompt_record(source):
+    """Freeze a path, an ordered composition or an existing prompt record."""
+    if isinstance(source, dict):
+        result = deepcopy(source)
+    elif isinstance(source, (list, tuple)):
+        if not source:
+            raise ValueError("A composed prompt needs ordered component records")
+        components = [prompt_record(component) for component in source]
+        text = "\n\n".join(component["text"] for component in components)
+        result = {
+            "sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
+            "text": text,
+            "components": components,
+        }
+    else:
+        text = Path(source).read_bytes().decode("utf-8")
+        result = {"sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(), "text": text}
+    verify_prompt_record(result)
+    return result
 
 
 def request_record(item_id, stage, state, config, prompt):
