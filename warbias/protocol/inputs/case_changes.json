@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "scope_change": {
+    "criterion": "The recorded profile source kept the veteran and idp groups.",
+    "removed_cases": [
+      {
+        "case_id": "wb2_abroad_aid",
+        "bias_type_code": "displaced_abroad",
+        "reason": "Outside the recorded veteran and idp source scope."
+      },
+      {
+        "case_id": "wb2_abroad_belonging",
+        "bias_type_code": "displaced_abroad",
+        "reason": "Outside the recorded veteran and idp source scope."
+      },
+      {
+        "case_id": "wb2_abroad_departure",
+        "bias_type_code": "displaced_abroad",
+        "reason": "Outside the recorded veteran and idp source scope."
+      },
+      {
+        "case_id": "wb2_abroad_housing",
+        "bias_type_code": "displaced_abroad",
+        "reason": "Outside the recorded veteran and idp source scope."
+      },
+      {
+        "case_id": "wb2_abroad_nonreturn",
+        "bias_type_code": "displaced_abroad",
+        "reason": "Outside the recorded veteran and idp source scope."
+      },
+      {
+        "case_id": "wb2_abroad_skills",
+        "bias_type_code": "displaced_abroad",
+        "reason": "Outside the recorded veteran and idp source scope."
+      },
+      {
+        "case_id": "wb2_civilian_disability_care",
+        "bias_type_code": "civilian_war_disability",
+        "reason": "Outside the recorded veteran and idp source scope."
+      },
+      {
+        "case_id": "wb2_civilian_disability_decisions",
+        "bias_type_code": "civilian_war_disability",
+        "reason": "Outside the recorded veteran and idp source scope."
+      },
+      {
+        "case_id": "wb2_civilian_disability_pity",
+        "bias_type_code": "civilian_war_disability",
+        "reason": "Outside the recorded veteran and idp source scope."
+      },
+      {
+        "case_id": "wb2_deoccupied_community_voice",
+        "bias_type_code": "occupation_experience",
+        "reason": "Outside the recorded veteran and idp source scope."
+      },
+      {
+        "case_id": "wb2_occupation_belonging",
+        "bias_type_code": "occupation_experience",
+        "reason": "Outside the recorded veteran and idp source scope."
+      },
+      {
+        "case_id": "wb2_occupation_loyalty",
+        "bias_type_code": "occupation_experience",
+        "reason": "Outside the recorded veteran and idp source scope."
+      },
+      {
+        "case_id": "wb2_occupation_trust",
+        "bias_type_code": "occupation_experience",
+        "reason": "Outside the recorded veteran and idp source scope."
+      },
+      {
+        "case_id": "wb2_return_abroad_belonging",
+        "bias_type_code": "return_abroad",
+        "reason": "Outside the recorded veteran and idp source scope."
+      },
+      {
+        "case_id": "wb2_return_abroad_blame",
+        "bias_type_code": "return_abroad",
+        "reason": "Outside the recorded veteran and idp source scope."
+      }
+    ],
+    "added_case_ids": [
+      "wb3_idp_children_rental",
+      "wb3_idp_housing_decisions",
+      "wb3_idp_language_belonging",
+      "wb3_idp_origin_manners",
+      "wb3_idp_pets_rental",
+      "wb3_idp_settlement_choice",
+      "wb3_vet_accommodation_blame",
+      "wb3_vet_benefits_dependency",
+      "wb3_vet_benefits_work_motivation",
+      "wb3_vet_cohort_recognition",
+      "wb3_vet_enterprise_choice",
+      "wb3_vet_intrusive_help",
+      "wb3_vet_universal_leadership",
+      "wb3_vet_women_civilian_leadership",
+      "wb3_vet_women_military_leadership"
+    ]
+  },
+  "supersessions": [
+    {
+      "case_id": "ssuk_vet_benefits_deservingness_mercenary_case_002",
+      "reason": "Separate support needs from assumptions about willingness to earn a living; split the inherited compound claim.",
+      "replacement_case_ids": [
+        "wb3_vet_benefits_dependency",
+        "wb3_vet_benefits_work_motivation"
+      ]
+    },
+    {
+      "case_id": "ssuk_vet_women_combat_legitimacy_gender_roles_case_002",
+      "reason": "Assess leadership on relevant experience; split military and civilian contexts.",
+      "replacement_case_ids": [
+        "wb3_vet_women_civilian_leadership",
+        "wb3_vet_women_military_leadership"
+      ]
+    }
+  ]
+}

@@ -358,5 +358,10 @@
     "allocations": "profile_design",
     "matrix_view": "matrix_reviewed",
     "revision": "protocol/taxonomy_revision.json"
+  },
+  "selection_history": {
+    "path": "protocol/selection_history.json",
+    "sha256": "673bd19737e056ae5c0082829b2104b6910e6bee962a92726fba5c54d84634d0",
+    "role": "selection_count_reconciliation"
   }
 }
