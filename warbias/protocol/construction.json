@@ -98,7 +98,8 @@
     "raw_error_rows": 1,
     "matrix_sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c",
     "checkpoint_sha256": "0f74cb27eb71a51ae93dac539345999b7c7a44b532b81e8631a980df94655668",
-    "source_hashes_verified": 981
+    "source_hashes_verified": 981,
+    "prompt_bundle_id": "warbias-sequential-feedback-v2-20260908"
   },
   "full_ukrainian_annotation": {
     "status": "in_progress",
@@ -119,5 +120,58 @@
     "role": "reference",
     "revision": "164f355623c2da0028821e0942cad493558a6c13",
     "config": "configs/data/warbias-reference.json"
+  },
+  "generation_prompt_bundle": {
+    "id": "warbias-case-profile-v1",
+    "base_bundle": "warbias-sequential-feedback-v2-20260908",
+    "composition": "join_exact_component_text_with_two_newlines",
+    "scope": "current_case_profile_design",
+    "prompts": [
+      {
+        "stage": "stereotype",
+        "response_field": "stereotype_uk",
+        "components": [
+          {
+            "path": "prompts/warbias_validation_sequential_stereotype.txt",
+            "sha256": "77db543e649e1b0037e9ffe0df752ed551f18561a568458b781875ad3ce1c739"
+          },
+          {
+            "path": "prompts/current/profile_design.txt",
+            "sha256": "6bd7fe29699ffb76e6b2bd2859c7dbfbbde7c0a2ecfa6af4e8ea48b956ebc779"
+          }
+        ],
+        "sha256": "307efa7f3292c38b662a8e6dc070adee6a558f2233d80332c80a1113c4f8c6dd"
+      },
+      {
+        "stage": "counter",
+        "response_field": "counter_stereotype_uk",
+        "components": [
+          {
+            "path": "prompts/warbias_validation_sequential_counter.txt",
+            "sha256": "5c148ce341d19a38660aa5c0279145c99338d78b804a4e2c0c01699d5304e252"
+          },
+          {
+            "path": "prompts/current/profile_design.txt",
+            "sha256": "6bd7fe29699ffb76e6b2bd2859c7dbfbbde7c0a2ecfa6af4e8ea48b956ebc779"
+          }
+        ],
+        "sha256": "d468fc844d97019fd6b465043f310b37a49c7e46bd1553b48c830eb8a91af6d9"
+      },
+      {
+        "stage": "unrelated",
+        "response_field": "unrelated_uk",
+        "components": [
+          {
+            "path": "prompts/warbias_validation_sequential_unrelated.txt",
+            "sha256": "60fec27eb5756f1aa969e104f4ad81413da3b02c106596de9bd812af2a565e76"
+          },
+          {
+            "path": "prompts/current/profile_design.txt",
+            "sha256": "6bd7fe29699ffb76e6b2bd2859c7dbfbbde7c0a2ecfa6af4e8ea48b956ebc779"
+          }
+        ],
+        "sha256": "8b5ef68d293d87bcd2af4490f8b1ededc3b5e4d744b729b34abffcd60a13ed23"
+      }
+    ]
   }
 }

@@ -4,7 +4,11 @@ from fairforget.io import unique_index
 from fairforget.warbias.evidence import bind_evidence
 
 
-def _apply_categories(rows, revision):
+def apply_categories(rows, revision, *, assign_cases=False):
+    """Apply category edits in place; case assignments belong to the current design."""
+    case_assignments = (
+        unique_index(revision.get("category_assignments", []), "case_id") if assign_cases else {}
+    )
     splits = {}
     for split in revision.get("category_splits", []):
         source = split["source_code"]
@@ -19,6 +23,12 @@ def _apply_categories(rows, revision):
         splits[source] = assignments
     relabels = unique_index(revision.get("category_relabels", []), "category_code")
     for row in rows:
+        if row["case_id"] in case_assignments:
+            category = case_assignments[row["case_id"]]
+            row.update(category_code=category["category_code"], category_uk=category["category_uk"])
+        for merge in revision.get("category_merges", []):
+            if row["category_code"] in merge["source_codes"]:
+                row.update(category_code=merge["category_code"], category_uk=merge["category_uk"])
         if row["category_code"] in splits:
             category = splits[row["category_code"]].get(row["case_id"])
             if category is None:
@@ -34,7 +44,6 @@ def reviewed_matrix(historical_rows, selected_rows, revision, sources):
     selected = unique_index(selected_rows, "matrix_item_id")
     if not selected:
         raise ValueError("The green source selection is empty")
-    merges = revision["category_merges"]
     result = []
     for item, source in selected.items():
         if source["selection"] != "green" or item not in historical:
@@ -48,9 +57,6 @@ def reviewed_matrix(historical_rows, selected_rows, revision, sources):
             or row["stereotype_claim_uk"] != claim
         ):
             raise ValueError("The selected combination differs from its saved source case")
-        for merge in merges:
-            if row["category_code"] in merge["source_codes"]:
-                row.update(category_code=merge["category_code"], category_uk=merge["category_uk"])
         result.append(
             {
                 **row,
@@ -71,6 +77,6 @@ def reviewed_matrix(historical_rows, selected_rows, revision, sources):
         ):
             raise ValueError("A taxonomy addition must be not_generated and not_annotated")
         result.append({**addition, "source_view_row": ""})
-    _apply_categories(result, revision)
+    apply_categories(result, revision)
     unique_index(result, "matrix_item_id")
     return bind_evidence(result, sources)

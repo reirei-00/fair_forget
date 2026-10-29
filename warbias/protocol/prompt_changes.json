@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "active_bundle": "warbias-sequential-feedback-v2-20260908",
+  "active_bundle": "warbias-case-profile-v1",
   "source_snapshots": "pilot_snapshots.json",
   "changes": [
     {
@@ -65,5 +65,18 @@
     "removed_line": "Регіональне уточнення походження: не задано",
     "reason": "Avoid contradicting source profiles with explicit origin.",
     "full_generation_checkpoint_hashes_verified": 981
+  },
+  "profile_design_composition": {
+    "from_bundle": "warbias-sequential-feedback-v2-20260908",
+    "to_bundle": "warbias-case-profile-v1",
+    "instruction_path": "prompts/current/profile_design.txt",
+    "instruction_sha256": "6bd7fe29699ffb76e6b2bd2859c7dbfbbde7c0a2ecfa6af4e8ea48b956ebc779",
+    "changes": [
+      "Keep the complete recorded target profile in every sentence.",
+      "Use the declared reporter framing for S and C.",
+      "Keep occupation references and case contrast constraints."
+    ],
+    "applies_to": "matrix_schema=case_profile",
+    "historical_prompt_files_unchanged": true
   }
 }

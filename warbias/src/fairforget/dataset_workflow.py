@@ -80,13 +80,47 @@ def load_inputs(project, config="configs/data/dataset-inputs.json"):
             raise ValueError(f"Study input row count differs: {name}")
         tables[name] = rows
     registry = manifest.get("current_evidence_registry")
+    sources = None
     if registry:
+        compilation_name = registry.get("compilation_sources")
+        compilation = tables[compilation_name] if compilation_name else ()
         sources = source_records(
-            tables[registry["published_sources"]], tables[registry["feedback_sources"]]
+            tables[registry["published_sources"]],
+            tables[registry["feedback_sources"]],
+            compilation,
         )
         matrix = tables[manifest["generation_matrix"]]
         if bind_evidence(matrix, sources) != matrix:
             raise ValueError("The current matrix must record its evidence source types")
+        declared = {item["path"]: item["sha256"] for item in manifest["files"].values()}
+        for source in compilation:
+            if declared.get(source["source_file"]) != source["source_sha256"]:
+                raise ValueError("A compilation source must match a declared study input file")
+    design = manifest.get("generation_design")
+    if design is not None:
+        from fairforget.warbias.matrix import build_matrix, matrix_view
+
+        if sources is None:
+            raise ValueError("A generation design needs its current evidence registry")
+        if not isinstance(design, dict) or any(
+            not isinstance(design.get(key), str) or design[key] not in tables
+            for key in ("cases", "profiles", "allocations", "matrix_view")
+        ):
+            raise ValueError("A generation design must name its loaded study input tables")
+        if design["matrix_view"] != manifest.get("generation_matrix"):
+            raise ValueError("The design matrix view must be the active generation matrix")
+        if not isinstance(design.get("revision"), str) or not design["revision"].strip():
+            raise ValueError("A generation design needs its taxonomy revision file")
+        matrix = build_matrix(
+            tables[design["cases"]],
+            tables[design["profiles"]],
+            tables[design["allocations"]],
+            load_json(_project_file(project, design["revision"])),
+            sources,
+        )
+        if matrix_view(matrix) != tables[design["matrix_view"]]:
+            raise ValueError("The matrix view differs from its case and profile design")
+        tables[manifest["generation_matrix"]] = matrix
     return tables
 
 
@@ -172,16 +206,44 @@ def recorded_selection(project, inputs=None):
 
 
 def _full_condition(project):
+    from fairforget.warbias.generation import resolve_prompt_paths
 
     protocol = load_json(_project_file(project, "protocol/construction.json"))
     selected = protocol["selected_condition"]
     config = load_json(_project_file(project, "configs/generation/warbias.json"))
-    strategies = deepcopy(config["strategies"])
-    for strategy in strategies.values():
-        strategy["prompts"] = {
-            stage: _project_file(project, path) for stage, path in strategy["prompts"].items()
-        }
+    strategies = resolve_prompt_paths(
+        config["strategies"], lambda path: _project_file(project, path)
+    )
     strategy = freeze_strategies(strategies)[selected["strategy"]]
+    bundle = protocol.get("generation_prompt_bundle")
+    if bundle is not None:
+        labels = {"stereotype": "S", "counter": "C", "unrelated": "U"}
+        declared = {}
+        for prompt in bundle["prompts"]:
+            stage = labels.get(prompt["stage"], prompt["stage"])
+            if stage in declared:
+                raise ValueError("Duplicate stage in the generation prompt bundle")
+            declared[stage] = prompt
+        if set(declared) != set(strategy["prompts"]):
+            raise ValueError("The generation prompt bundle must cover the selected stages")
+        for stage, prompt in strategy["prompts"].items():
+            expected = declared[stage]
+            if expected.get("sha256") != prompt["sha256"]:
+                raise ValueError("Generation prompt differs from its protocol hash")
+            if "components" in expected:
+                components = expected["components"]
+                if not isinstance(components, list) or not components:
+                    raise ValueError("Declare ordered generation prompt components")
+                if [item.get("sha256") for item in components] != [
+                    item["sha256"] for item in prompt.get("components", [])
+                ]:
+                    raise ValueError("Generation prompt components differ from the protocol")
+                for component in components:
+                    if (
+                        file_digest(_project_file(project, component["path"]))
+                        != component["sha256"]
+                    ):
+                        raise ValueError("Generation prompt component differs from its file hash")
     candidate = {key: selected[key] for key in ("candidate_id", "provider", "model", "revision")}
     candidate["settings"] = dict(protocol["request_settings"])
     return protocol, selected, candidate, strategy
@@ -199,7 +261,9 @@ def run_full_generation(
         raise ValueError("Full-generation choice differs from the recorded study selection")
     protocol, selected, candidate, strategy = _full_condition(project)
     inputs = load_inputs(project)
-    sources = source_records(inputs["sources"], inputs["source_feedback"])
+    sources = source_records(
+        inputs["sources"], inputs["source_feedback"], inputs.get("source_compilation", ())
+    )
     cases = generation_cases(bind_evidence(matrix_rows, sources))
     evidence_ids = {
         identity.strip() for case in cases for identity in case["evidence_ids"].split(";")

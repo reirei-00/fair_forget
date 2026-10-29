@@ -30,9 +30,18 @@
     },
     "sequential": {
       "prompts": {
-        "S": "prompts/warbias_validation_sequential_stereotype.txt",
-        "C": "prompts/warbias_validation_sequential_counter.txt",
-        "U": "prompts/warbias_validation_sequential_unrelated.txt"
+        "S": [
+          "prompts/warbias_validation_sequential_stereotype.txt",
+          "prompts/current/profile_design.txt"
+        ],
+        "C": [
+          "prompts/warbias_validation_sequential_counter.txt",
+          "prompts/current/profile_design.txt"
+        ],
+        "U": [
+          "prompts/warbias_validation_sequential_unrelated.txt",
+          "prompts/current/profile_design.txt"
+        ]
       },
       "response_fields": {
         "stereotype": "stereotype_uk",

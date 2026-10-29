@@ -1,5 +1,6 @@
 """Dataset notebooks use source-bound inputs and inspectable offline request plans."""
 
+import csv
 import json
 import shutil
 from copy import deepcopy
@@ -9,9 +10,10 @@ from types import SimpleNamespace
 import pytest
 
 from fairforget import dataset_workflow
-from fairforget.io import digest, file_digest, read_csv, read_rows, write_json
+from fairforget.io import digest, file_digest, read_csv, read_rows, write_json, write_rows
 from fairforget.translation.quality import prepare_quality, score_quality
 from fairforget.translation.warbias import align_languages, ingest_translations
+from fairforget.warbias.matrix import build_matrix, matrix_view
 from fairforget.warbias.pilot import run_pilot, verify_pilot_plan
 from fairforget.warbias.production import verify_production_result
 
@@ -91,14 +93,201 @@ def test_portable_input_hashes_row_counts_and_paths_are_checked(tmp_path):
         dataset_workflow.load_inputs(tmp_path)
 
 
+def _write_csv(path, rows):
+    with path.open("w", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def _refresh_input(project, manifest, name):
+    item = manifest["files"][name]
+    item["sha256"] = file_digest(project / item["path"])
+    write_json(project / "configs/data/dataset-inputs.json", manifest)
+
+
+@pytest.fixture
+def design_project(tmp_path):
+    cases = [
+        {
+            "case_id": "case-a",
+            "target_group": "idp",
+            "source_claim_uk": "Упередження щодо доступу внутрішньо переміщених людей до житла.",
+            "context": "Оренда житла.",
+            "category_code": "housing",
+            "category_uk": "Доступ до житла",
+            "intrinsic_attributes": {},
+            "reporters": ["landlord"],
+            "evidence_ids": "src_warbias_case_compilation",
+        }
+    ]
+    profiles = [
+        {
+            "profile_id": "profile-a",
+            "case_id": "case-a",
+            "intrinsic_attributes": {},
+            "additional_tags": {"gender": "women"},
+        }
+    ]
+    allocations = [
+        {
+            **profiles[0],
+            "matrix_item_id": "unit-a",
+            "reporter": None,
+            "framing": "unattributed",
+            "design_stage": "base",
+        }
+    ]
+    revision = {
+        "category_relabels": [{"category_code": "housing", "category_uk": "Житло"}],
+        "added_cases": [],
+    }
+    inputs = tmp_path / "protocol/inputs"
+    inputs.mkdir(parents=True)
+    write_rows(inputs / "cases.jsonl", cases)
+    compilation = [
+        {
+            "evidence_id": "src_warbias_case_compilation",
+            "source_type": "compilation",
+            "source_kind": "recorded_case_specifications",
+            "title": "Stereotype case compilation",
+            "source_file": "protocol/inputs/cases.jsonl",
+            "source_sha256": file_digest(inputs / "cases.jsonl"),
+        }
+    ]
+    tables = {
+        "cases": cases,
+        "profiles": profiles,
+        "allocations": allocations,
+        "sources": [],
+        "feedback": [],
+        "compilation": compilation,
+    }
+    manifest = {"schema_version": 1, "files": {}}
+    for name, rows in tables.items():
+        path = inputs / f"{name}.jsonl"
+        write_rows(path, rows)
+        manifest["files"][name] = {
+            "path": path.relative_to(tmp_path).as_posix(),
+            "sha256": file_digest(path),
+            "rows": len(rows),
+        }
+    rows = matrix_view(build_matrix(cases, profiles, allocations, revision, compilation))
+    _write_csv(inputs / "matrix.csv", rows)
+    manifest["files"]["matrix"] = {
+        "path": "protocol/inputs/matrix.csv",
+        "sha256": file_digest(inputs / "matrix.csv"),
+        "rows": len(rows),
+    }
+    write_json(tmp_path / "protocol/revision.json", revision)
+    manifest.update(
+        generation_matrix="matrix",
+        current_evidence_registry={
+            "published_sources": "sources",
+            "feedback_sources": "feedback",
+            "compilation_sources": "compilation",
+        },
+        generation_design={
+            "cases": "cases",
+            "profiles": "profiles",
+            "allocations": "allocations",
+            "matrix_view": "matrix",
+            "revision": "protocol/revision.json",
+        },
+    )
+    write_json(tmp_path / "configs/data/dataset-inputs.json", manifest)
+    return tmp_path, manifest
+
+
+def test_design_inputs_expand_to_structured_runtime_rows_without_changing_csv(design_project):
+    project, _ = design_project
+    table = project / "protocol/inputs/matrix.csv"
+    original = table.read_bytes()
+    inputs = dataset_workflow.load_inputs(project)
+    row = inputs["matrix"][0]
+    assert row["matrix_schema"] == "case_profile"
+    assert row["intrinsic_attributes"] == {}
+    assert row["additional_tags"] == {"gender": "women"}
+    assert row["source_type"] == "compilation"
+    assert row["category_uk"] == "Житло"
+    assert row["generation_status"] == "not_generated"
+    assert matrix_view(inputs["matrix"]) == read_csv(table)
+    assert table.read_bytes() == original
+
+
+@pytest.mark.parametrize("fault", ["changed_cases", "undeclared_file"])
+def test_compilation_source_must_match_a_declared_input_file(design_project, fault):
+    project, manifest = design_project
+    if fault == "changed_cases":
+        table = project / manifest["files"]["cases"]["path"]
+        rows = read_rows(table)
+        rows[0]["context"] = "Змінений контекст."
+        write_rows(table, rows)
+        _refresh_input(project, manifest, "cases")
+    else:
+        table = project / manifest["files"]["compilation"]["path"]
+        rows = read_rows(table)
+        shutil.copyfile(project / rows[0]["source_file"], project / "unregistered.jsonl")
+        rows[0]["source_file"] = "unregistered.jsonl"
+        write_rows(table, rows)
+        _refresh_input(project, manifest, "compilation")
+    with pytest.raises(ValueError, match="compilation source.*declared study input"):
+        dataset_workflow.load_inputs(project)
+
+
+def test_matrix_csv_must_equal_its_case_and_profile_design(design_project):
+    project, manifest = design_project
+    table = project / manifest["files"]["matrix"]["path"]
+    rows = read_csv(table)
+    rows[0]["claim"] = "Інше твердження."
+    _write_csv(table, rows)
+    _refresh_input(project, manifest, "matrix")
+    with pytest.raises(ValueError, match="matrix view differs"):
+        dataset_workflow.load_inputs(project)
+
+
+def test_invalid_profile_design_cannot_replace_the_saved_matrix(design_project):
+    project, manifest = design_project
+    table = project / manifest["files"]["allocations"]["path"]
+    rows = read_rows(table)
+    rows[0]["additional_tags"] = {"gender": "men"}
+    write_rows(table, rows)
+    _refresh_input(project, manifest, "allocations")
+    with pytest.raises(ValueError, match="base allocation must match"):
+        dataset_workflow.load_inputs(project)
+
+
+def test_legacy_manifest_keeps_csv_runtime_rows(design_project):
+    project, manifest = design_project
+    manifest.pop("generation_design")
+    write_json(project / "configs/data/dataset-inputs.json", manifest)
+    assert dataset_workflow.load_inputs(project)["matrix"] == read_csv(
+        project / "protocol/inputs/matrix.csv"
+    )
+
+
+def test_generation_design_needs_its_evidence_registry(design_project):
+    project, manifest = design_project
+    manifest.pop("current_evidence_registry")
+    write_json(project / "configs/data/dataset-inputs.json", manifest)
+    with pytest.raises(ValueError, match="design needs its current evidence registry"):
+        dataset_workflow.load_inputs(project)
+
+
+def test_design_cannot_replace_an_unrelated_active_table(design_project):
+    project, manifest = design_project
+    manifest["generation_design"]["matrix_view"] = "cases"
+    write_json(project / "configs/data/dataset-inputs.json", manifest)
+    with pytest.raises(ValueError, match="matrix view must be the active generation matrix"):
+        dataset_workflow.load_inputs(project)
+
+
 def test_project_can_be_found_from_a_notebook_folder():
     assert dataset_workflow.find_project(ROOT / "notebooks") == ROOT
 
 
 @pytest.mark.parametrize("fault", ["unknown_source", "wrong_type", "missing_type"])
 def test_current_input_matrix_rejects_unresolved_or_incorrect_evidence(tmp_path, fault):
-    import csv
-
     shutil.copytree(ROOT / "protocol", tmp_path / "protocol")
     shutil.copytree(ROOT / "configs/data", tmp_path / "configs/data")
     table = tmp_path / "protocol/inputs/matrix_reviewed.csv"
@@ -162,9 +351,12 @@ def test_full_request_preview_uses_recorded_choice_and_final_prompts(tmp_path):
     assert result["recorded_selection_verified"] is True
     assert result["full_annotation_status"] == "in_progress"
     assert condition["candidate"]["settings"] == {"temperature": 0.3, "max_tokens": 1200}
-    assert (
-        calls[0]["messages"][0]["content"]
-        == (ROOT / "prompts/warbias_validation_sequential_stereotype.txt").read_text()
+    assert calls[0]["messages"][0]["content"] == "\n\n".join(
+        (ROOT / path).read_text()
+        for path in (
+            "prompts/warbias_validation_sequential_stereotype.txt",
+            "prompts/current/profile_design.txt",
+        )
     )
     assert json.loads(calls[0]["messages"][-1]["content"])["case"]["matrix_item_id"] == "matrix-1"
     assert not (tmp_path / "full/production-result.json").exists()
@@ -287,11 +479,15 @@ def test_recorded_choice_executes_with_standard_full_generation_bindings(tmp_pat
     assert rows[0]["human_validated"] is False
 
 
-def test_feedback_evidence_survives_generation_and_translation(tmp_path):
+@pytest.mark.parametrize(
+    ("source_type", "source_table"),
+    [("feedback", "source_feedback"), ("compilation", "source_compilation")],
+)
+def test_evidence_sources_survive_generation_and_translation(tmp_path, source_type, source_table):
     from test_generation_cli import Provider
 
     inputs = dataset_workflow.load_inputs(ROOT)
-    case = next(row for row in inputs["matrix_reviewed"] if row["source_type"] == "feedback")
+    case = next(row for row in inputs["matrix_reviewed"] if row["source_type"] == source_type)
     _, record = dataset_workflow.recorded_selection(ROOT)
     output = tmp_path / "full"
     dataset_workflow.run_full_generation(
@@ -301,7 +497,7 @@ def test_feedback_evidence_survives_generation_and_translation(tmp_path):
     rows = read_rows(output / "triplets.jsonl")
     manifest = json.loads((output / "production-result.json").read_text())
     source = next(
-        item for item in inputs["source_feedback"] if item["evidence_id"] == case["evidence_ids"]
+        item for item in inputs[source_table] if item["evidence_id"] == case["evidence_ids"]
     )
     assert plan["evidence_sources"] == [source]
     assert plan["evidence_sources_sha256"] == digest([source])

@@ -4,14 +4,19 @@ Sequential generation passes S to C, then S and C to U. Human assessment
 belongs to the subsequent blinded pilot review, not between model calls.
 """
 
-import hashlib
 import json
 import re
 from copy import deepcopy
 from pathlib import Path
 
 from fairforget.io import digest, unique_index, write_json
-from fairforget.warbias.provider import prompt_record, request_record, response_text, run_requests
+from fairforget.warbias.provider import (
+    prompt_record,
+    request_record,
+    response_text,
+    run_requests,
+    verify_prompt_record,
+)
 from fairforget.warbias.schema import FIELDS, STAGE_FIELD, STAGES, structural_issues
 
 STRATEGIES = {"zero_shot": ("triplet",), "sequential": STAGES}
@@ -23,6 +28,24 @@ def validate_source_language(source_language):
         raise ValueError("WarBias generation requires Ukrainian source_language uk")
 
 
+def resolve_prompt_paths(strategies, resolve_path):
+    """Resolve configured paths while preserving compositions and frozen records."""
+
+    def resolve(source):
+        if isinstance(source, dict):
+            return deepcopy(source)
+        if isinstance(source, (list, tuple)):
+            return [resolve(component) for component in source]
+        return resolve_path(source)
+
+    result = deepcopy(strategies)
+    for strategy in result.values():
+        strategy["prompts"] = {
+            stage: resolve(source) for stage, source in strategy["prompts"].items()
+        }
+    return result
+
+
 def freeze_strategies(strategies):
     """Snapshot prompt bytes and explicit response-field mappings for both strategies."""
     if set(strategies) != set(STRATEGIES):
@@ -32,10 +55,7 @@ def freeze_strategies(strategies):
         prompts = strategy.get("prompts", {})
         if set(prompts) != set(STRATEGIES[name]):
             raise ValueError(f"{name}: declare its exact ordered stage prompts")
-        strategy["prompts"] = {
-            stage: prompt_record(prompt) if not isinstance(prompt, dict) else prompt
-            for stage, prompt in prompts.items()
-        }
+        strategy["prompts"] = {stage: prompt_record(prompt) for stage, prompt in prompts.items()}
         strategy.setdefault("response_fields", dict(zip(FIELDS, FIELDS)))
         verify_strategy(name, strategy)
     return frozen
@@ -52,11 +72,7 @@ def verify_strategy(name, strategy):
     ):
         raise ValueError("Declare one distinct response key for every triplet field")
     for prompt in strategy["prompts"].values():
-        text = prompt.get("text")
-        if not isinstance(text, str) or not text.strip():
-            raise ValueError("Every generation prompt needs its exact nonempty text")
-        if prompt.get("sha256") != hashlib.sha256(text.encode("utf-8")).hexdigest():
-            raise ValueError("Generation prompt text differs from its SHA256")
+        verify_prompt_record(prompt)
 
 
 def _json_object(pairs):

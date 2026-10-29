@@ -81,6 +81,38 @@ def test_matrix_adapter_preserves_profiles_and_missing_historical_claim():
     assert summary["dimensions"]["bias_type_code"] == {"idp": 1, "veteran": 1}
 
 
+def test_case_profile_adapter_keeps_template_and_all_profile_constraints():
+    rows = matrix_rows(2)
+    for index, row in enumerate(rows):
+        for field in (
+            "target_uk",
+            "target_definition_uk",
+            "stereotype_focus_uk",
+            "stereotype_claim_uk",
+            "harm_mechanism_uk",
+        ):
+            row.pop(field)
+        row.update(
+            matrix_schema="case_profile",
+            claim="[TARGET] не мають технічних навичок.",
+            intrinsic_attributes={"gender": "women"},
+            additional_tags={"occupation": "engineer" if index else "teacher"},
+            generalized_attributes={"age": "all"},
+            occupation_reference="previous",
+            counter_intent="Не замінювати професію.",
+        )
+        row["bias_type_code"] = "veteran"
+    original = deepcopy(rows)
+    cases = generation_cases(rows)
+    assert cases[0]["claim"] == cases[0]["required_stereotype_claim_uk"] == rows[0]["claim"]
+    for source, case in zip(rows, cases, strict=True):
+        assert all(case[field] == value for field, value in source.items())
+    assert "required_harm_mechanism_uk" not in cases[0]
+    assert describe_matrix(rows)["profile_combinations"] == 2
+    assert describe_matrix(rows)["missing_exact_claims"] == 0
+    assert rows == original
+
+
 def test_factorial_pilot_preserves_profile_units_with_shared_case_family():
     rows = matrix_rows(2)
     rows[1]["case_id"] = rows[0]["case_id"]

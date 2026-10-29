@@ -20,10 +20,10 @@ def records():
     return inputs, revision, sources
 
 
-def test_reviewed_matrix_keeps_only_green_rows_and_explicit_additions():
+def test_green_snapshot_keeps_source_presence_and_explicit_additions():
     inputs, revision, sources = records()
     rows = reviewed_matrix(inputs["matrix_full"], inputs["taxonomy_selected"], revision, sources)
-    assert rows == inputs["matrix_reviewed"]
+    assert rows == inputs["matrix_green_snapshot"]
     green = [row for row in rows if row["row_origin"] == "green_source"]
     added = [row for row in rows if row["row_origin"] == "author_feedback"]
     assert len(rows) == 428 and len(green) == 425 and len(added) == 3

@@ -10,20 +10,27 @@ full Ukrainian generation → English translation.
 | --- | --- |
 | [1. Ukrainian pilot](../notebooks/01_ukrainian_pilot.ipynb) | Taxonomy matrix, Mamay and Lapa, zero-shot and sequential prompts, saved Ukrainian samples |
 | [2. Model selection](../notebooks/02_model_selection.ipynb) | Human ratings, condition means, observed ranks and the recorded Lapa/sequential choice |
-| [3. Full Ukrainian generation](../notebooks/03_full_ukrainian_generation.ipynb) | Full matrix, selected condition, final prompts and generation requests |
+| [3. Full Ukrainian generation](../notebooks/03_full_ukrainian_generation.ipynb) | Profile design, selected condition, final prompts and one triplet per matrix row |
 | [4. Sample translation and COMET](../notebooks/04_sample_translation_comet.ipynb) | Ten Ukrainian reference triplets, actual GPT-6.1 Sol translations and measured COMET scores |
 | [5. Full English translation](../notebooks/05_full_english_translation.ipynb) | Full Ukrainian input, source manifest and aligned English output |
 
 `configs/data/dataset-inputs.json` binds the taxonomy, matrix, pilot outputs and
 anonymized ratings to their file hashes. Final annotated data remain separate.
-`taxonomy_selected.csv` contains the 425 green combinations from the annotator
-view. `matrix_reviewed.csv` applies the category names and case assignments in
-`taxonomy_revision.json`, including three feedback additions. Green indicates
-dataset presence, not human acceptance. Each current row records `evidence_ids`
-and `source_type`. Published references keep their original IDs in `sources.csv`.
-`source_feedback.jsonl` stores the exact supplied feedback and stable source IDs.
-The additions use `source_type: feedback` and await generation and annotation.
-The 981-row matrix remains a historical generation input.
+The 127 semantic cases and 1,511 profiles produce 4,533 candidate combinations,
+including reporter variants. The recorded allocation selects 1,000 base units
+and 200 profile extensions. Three
+feedback additions give 1,203 current generation inputs. Each input prepares one
+Ukrainian triplet. Occupation-qualified profiles and older women veterans remain
+included. These input counts do not describe a completed or accepted corpus.
+
+`taxonomy_selected.csv` preserves the 425 green annotator-view combinations.
+Green records source-dataset presence, not generation eligibility or human
+acceptance. The current matrix uses the complete profile allocation and the
+category changes in `taxonomy_revision.json`. Each row records its case, profile,
+reporter, `evidence_ids` and `source_type`. Published references keep their
+original IDs in `sources.csv`; compilation and feedback records retain separate
+source types. The three feedback cases await generation and annotation. The
+981-row matrix remains a separate historical generation input.
 The notebooks inspect saved evidence and prepare requests by default. Model
 execution requires the corresponding run flag and configured inputs.
 Notebook 2 saves the recorded study choice. Notebook 3 checks it against the
@@ -40,13 +47,19 @@ include `case_id`, `source_id`, `claim`, `claim_family_id` and `target_group`
 with SHA256.
 
 The full matrix adds actor profiles. `case_id` identifies a semantic case;
-`id` or `matrix_id` identifies each profile variant. Matrix-row IDs must be
-unique. Both language versions keep the same IDs.
+`matrix_item_id` identifies each profile and reporter variant. Matrix-row IDs
+must be unique. Both language versions keep the same IDs.
+
+`construction_cases.jsonl`, `candidate_profiles.jsonl` and `profile_design.jsonl`
+define the current matrix. `matrix_reviewed.csv` is its derived table view.
+The notebooks check this view against the design before preparing requests.
 
 `protocol/construction.json` records the selected model, settings and annotation
 status. `protocol/pilot_snapshots.json` contains the original pilot prompts and
 sampling designs. `protocol/prompt_changes.json` binds the human-pilot prompts
-to the final versions. Active configurations use the final prompts.
+to the final versions. The current prompt bundle adds shared profile rules to
+the saved sequential prompts. These rules retain target attributes and the
+selected reporter framing. Plans record component and combined prompt hashes.
 
 Set providers, fixed model and tokenizer versions, settings and prompts in
 `configs/generation/warbias.json` and `configs/translation/warbias.json`.
