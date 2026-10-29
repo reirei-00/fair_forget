@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 from fairforget.dataset_workflow import load_inputs
+from fairforget.warbias.evidence import source_records
 from fairforget.warbias.taxonomy import reviewed_matrix
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -15,12 +16,13 @@ ROOT = Path(__file__).resolve().parents[2]
 def records():
     inputs = load_inputs(ROOT)
     revision = json.loads((ROOT / "protocol/taxonomy_revision.json").read_text())
-    return inputs, revision
+    sources = source_records(inputs["sources"], inputs["source_feedback"])
+    return inputs, revision, sources
 
 
 def test_reviewed_matrix_keeps_only_green_rows_and_explicit_additions():
-    inputs, revision = records()
-    rows = reviewed_matrix(inputs["matrix_full"], inputs["taxonomy_selected"], revision)
+    inputs, revision, sources = records()
+    rows = reviewed_matrix(inputs["matrix_full"], inputs["taxonomy_selected"], revision, sources)
     assert rows == inputs["matrix_reviewed"]
     green = [row for row in rows if row["row_origin"] == "green_source"]
     added = [row for row in rows if row["row_origin"] == "author_feedback"]
@@ -33,7 +35,15 @@ def test_reviewed_matrix_keeps_only_green_rows_and_explicit_additions():
         row["category_code"] for row in rows
     }
     assert all(row["human_annotation_status"] == "not_inferred" for row in green)
+    assert all(row["source_type"] == "published_reference" for row in green)
     assert all(row["generation_status"] == "not_generated" for row in added)
+    assert all(row["source_type"] == "feedback" for row in added)
+    assert all(row["human_annotation_status"] == "not_annotated" for row in added)
+    assert [row["evidence_ids"] for row in added] == [
+        "src_feedback_displacement_service_and_voting",
+        "src_feedback_displacement_service_and_voting",
+        "src_feedback_veteran_taxonomy",
+    ]
     historical = {row["matrix_item_id"]: row for row in inputs["matrix_full"]}
     for row in green:
         for field, value in historical[row["matrix_item_id"]].items():
@@ -82,7 +92,7 @@ def test_reviewed_matrix_keeps_only_green_rows_and_explicit_additions():
 
 @pytest.mark.parametrize("fault", ["yellow", "actor", "claim", "unknown", "duplicate", "empty"])
 def test_invalid_source_selection_is_rejected(fault):
-    inputs, revision = records()
+    inputs, revision, sources = records()
     selected = deepcopy(inputs["taxonomy_selected"])
     if fault == "yellow":
         selected[0]["selection"] = "yellow"
@@ -97,12 +107,12 @@ def test_invalid_source_selection_is_rejected(fault):
     else:
         selected = []
     with pytest.raises(ValueError):
-        reviewed_matrix(inputs["matrix_full"], selected, revision)
+        reviewed_matrix(inputs["matrix_full"], selected, revision, sources)
 
 
 @pytest.mark.parametrize("fault", ["missing", "duplicate", "repeated_case", "repeated_source"])
 def test_category_split_requires_one_destination_for_each_case(fault):
-    inputs, revision = records()
+    inputs, revision, sources = records()
     split = revision["category_splits"][0]
     case = split["categories"][0]["case_ids"][0]
     if fault == "missing":
@@ -114,4 +124,32 @@ def test_category_split_requires_one_destination_for_each_case(fault):
     else:
         revision["category_splits"].append(deepcopy(split))
     with pytest.raises(ValueError, match="split"):
-        reviewed_matrix(inputs["matrix_full"], inputs["taxonomy_selected"], revision)
+        reviewed_matrix(inputs["matrix_full"], inputs["taxonomy_selected"], revision, sources)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("row_origin", None),
+        ("row_origin", ""),
+        ("generation_status", None),
+        ("generation_status", "source_dataset_present"),
+        ("human_annotation_status", None),
+        ("human_annotation_status", "accepted"),
+    ],
+)
+def test_additions_require_explicit_origin_and_pending_status(field, value):
+    inputs, revision, sources = records()
+    if value is None:
+        revision["added_cases"][0].pop(field)
+    else:
+        revision["added_cases"][0][field] = value
+    with pytest.raises(ValueError, match="taxonomy addition"):
+        reviewed_matrix(inputs["matrix_full"], inputs["taxonomy_selected"], revision, sources)
+
+
+def test_matrix_addition_origin_is_preserved():
+    inputs, revision, sources = records()
+    revision["added_cases"][0]["row_origin"] = "recorded_feedback"
+    rows = reviewed_matrix(inputs["matrix_full"], inputs["taxonomy_selected"], revision, sources)
+    assert rows[-3]["row_origin"] == "recorded_feedback"

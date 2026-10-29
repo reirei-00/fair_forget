@@ -19,6 +19,7 @@ from fairforget.io import (
     write_rows,
 )
 from fairforget.translation.warbias import ingest_translations, translate, translate_production
+from fairforget.warbias.evidence import bind_evidence, source_records
 from fairforget.warbias.generation import (
     STRATEGIES,
     freeze_file,
@@ -78,6 +79,14 @@ def load_inputs(project, config="configs/data/dataset-inputs.json"):
         if "rows" in item and item["rows"] != len(rows):
             raise ValueError(f"Study input row count differs: {name}")
         tables[name] = rows
+    registry = manifest.get("current_evidence_registry")
+    if registry:
+        sources = source_records(
+            tables[registry["published_sources"]], tables[registry["feedback_sources"]]
+        )
+        matrix = tables[manifest["generation_matrix"]]
+        if bind_evidence(matrix, sources) != matrix:
+            raise ValueError("The current matrix must record its evidence source types")
     return tables
 
 
@@ -189,10 +198,17 @@ def run_full_generation(
     if selection_record != expected:
         raise ValueError("Full-generation choice differs from the recorded study selection")
     protocol, selected, candidate, strategy = _full_condition(project)
-    cases = generation_cases(matrix_rows)
+    inputs = load_inputs(project)
+    sources = source_records(inputs["sources"], inputs["source_feedback"])
+    cases = generation_cases(bind_evidence(matrix_rows, sources))
+    evidence_ids = {
+        identity.strip() for case in cases for identity in case["evidence_ids"].split(";")
+    }
+    evidence_sources = [row for row in sources if row["evidence_id"] in evidence_ids]
     lineage = {
         "source_protocol_sha256": digest(protocol),
         "selection_record_type": selection_record["kind"],
+        "evidence_sources_sha256": digest(evidence_sources),
     }
     plan = {
         "schema_version": 1,
@@ -203,6 +219,7 @@ def run_full_generation(
         "request_settings": candidate["settings"],
         "final_strategy": strategy,
         "cases": cases,
+        "evidence_sources": evidence_sources,
         "cases_sha256": digest(cases),
         "case_ids": [row["case_id"] for row in cases],
         "unit_ids": [input_id(row) for row in cases],

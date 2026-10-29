@@ -10,6 +10,8 @@ from pathlib import Path
 
 import pytest
 
+from fairforget.dataset_workflow import load_inputs
+
 ROOT = Path(__file__).resolve().parents[2]
 SPEC = importlib.util.spec_from_file_location("export_dataset", ROOT / "scripts/export_dataset.py")
 exporter = importlib.util.module_from_spec(SPEC)
@@ -30,6 +32,10 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
     assert (exported / "notebooks/04_sample_translation_comet.ipynb").is_file()
     assert len(list((exported / "notebooks").glob("*.ipynb"))) == 5
     assert (exported / "protocol/inputs/matrix_full.csv").is_file()
+    assert (exported / "protocol/inputs/source_feedback.jsonl").is_file()
+    inputs = load_inputs(exported)
+    assert len(inputs["source_feedback"]) == 2
+    assert sum(row["source_type"] == "feedback" for row in inputs["matrix_reviewed"]) == 3
     for relative in (
         ".env",
         ".git",

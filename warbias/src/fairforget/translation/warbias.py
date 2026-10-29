@@ -172,7 +172,15 @@ def align_languages(source_rows, translated_rows):
             or b.get("translation_source_context_sha256") != digest(review_context(a))
         ):
             raise ValueError("Translation has a stale or missing source binding")
-        for key in ("case_id", "claim_family_id", "profile_id", "target_group"):
+        for key in (
+            "case_id",
+            "claim_family_id",
+            "profile_id",
+            "target_group",
+            "evidence_ids",
+            "source_type",
+            "row_origin",
+        ):
             if left[item].get(key) != right[item].get(key):
                 raise ValueError(f"Translation alignment differs in {key}")
     return [(left[item], right[item]) for item in sorted(left)]

@@ -1,6 +1,7 @@
 """Apply reviewed taxonomy changes to the selected source combinations."""
 
 from fairforget.io import unique_index
+from fairforget.warbias.evidence import bind_evidence
 
 
 def _apply_categories(rows, revision):
@@ -27,7 +28,7 @@ def _apply_categories(rows, revision):
             row["category_uk"] = relabels[row["category_code"]]["category_uk"]
 
 
-def reviewed_matrix(historical_rows, selected_rows, revision):
+def reviewed_matrix(historical_rows, selected_rows, revision, sources):
     """Keep green source rows and apply explicit category changes and additions."""
     historical = unique_index(historical_rows, "matrix_item_id")
     selected = unique_index(selected_rows, "matrix_item_id")
@@ -62,7 +63,14 @@ def reviewed_matrix(historical_rows, selected_rows, revision):
     for addition in revision["added_cases"]:
         if addition["matrix_item_id"] in selected or addition["matrix_item_id"] in historical:
             raise ValueError("A taxonomy addition must use a new matrix item ID")
-        result.append({**addition, "row_origin": "author_feedback", "source_view_row": ""})
+        if not isinstance(addition.get("row_origin"), str) or not addition["row_origin"].strip():
+            raise ValueError("A taxonomy addition needs its recorded row_origin")
+        if (
+            addition.get("generation_status") != "not_generated"
+            or addition.get("human_annotation_status") != "not_annotated"
+        ):
+            raise ValueError("A taxonomy addition must be not_generated and not_annotated")
+        result.append({**addition, "source_view_row": ""})
     _apply_categories(result, revision)
     unique_index(result, "matrix_item_id")
-    return result
+    return bind_evidence(result, sources)
