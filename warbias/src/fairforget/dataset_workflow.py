@@ -124,6 +124,63 @@ def load_inputs(project, config="configs/data/dataset-inputs.json"):
     return tables
 
 
+def load_selection_history(project, inputs=None):
+    """Load pinned selection records and reconcile their IDs with current inputs."""
+    from fairforget.warbias.selection_history import reconcile_selection
+
+    manifest = load_json(_project_file(project, "configs/data/dataset-inputs.json"))
+
+    def read_bound(record):
+        path = _project_file(project, record["path"])
+        if file_digest(path) != record.get("sha256"):
+            raise ValueError("Selection history file differs from its SHA256")
+        return load_json(path)
+
+    history = read_bound(manifest["selection_history"])
+    if history.get("schema_version") != 1:
+        raise ValueError("Declare a versioned selection history")
+    sources = history["sources"]
+    records = {
+        name: read_bound(sources[name])
+        for name in ("case_changes", "profile_replacements", "profile_exclusions")
+    }
+    case_sources = {
+        item["artifact"]: item["sha256"] for item in sources["case_changes"]["source_artifacts"]
+    }
+    case_binding = next(
+        item for item in manifest["source_bindings"] if item["artifact"] == "construction_cases"
+    )
+    if case_sources != {
+        "historical_generation_matrix": manifest["files"][manifest["historical_generation_matrix"]][
+            "sha256"
+        ],
+        "construction_case_specifications": case_binding["source_sha256"],
+    }:
+        raise ValueError("Case selection history differs from its recorded source bindings")
+    saved = load_inputs(project)
+    input_names = (
+        manifest["historical_generation_matrix"],
+        "construction_cases",
+        "candidate_profiles",
+        "profile_design",
+        manifest["generation_matrix"],
+    )
+    if inputs is not None and any(inputs.get(name) != saved[name] for name in input_names):
+        raise ValueError("Selection history inputs differ from the saved design")
+    inputs = saved
+    result = reconcile_selection(
+        records["case_changes"],
+        records["profile_replacements"],
+        records["profile_exclusions"],
+        historical_matrix=inputs[manifest["historical_generation_matrix"]],
+        cases=inputs["construction_cases"],
+        profiles=inputs["candidate_profiles"],
+        allocations=inputs["profile_design"],
+        matrix=inputs[manifest["generation_matrix"]],
+    )
+    return {**result, "sources": sources}
+
+
 def prepare_pilot(project, matrix_rows, *, candidates, phase="initial"):
     """Prepare a new full-grid plan with the selected historical prompt snapshot."""
     from fairforget.warbias.pilot_analysis import generation_cases

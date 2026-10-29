@@ -31,6 +31,13 @@ reporter, `evidence_ids` and `source_type`. Published references keep their
 original IDs in `sources.csv`; compilation and feedback records retain separate
 source types. The three feedback cases await generation and annotation. The
 981-row matrix remains a separate historical generation input.
+
+[Selection records](../protocol/selection_history.json) preserve excluded IDs,
+reasons and source hashes. Notebook 3 reconciles case changes, profile
+substitutions and historical reference exclusions. The historical reference
+exclusions do not filter the current design. They were profile decisions,
+not human quality rejections.
+
 The notebooks inspect saved evidence and prepare requests by default. Model
 execution requires the corresponding run flag and configured inputs.
 Notebook 2 saves the recorded study choice. Notebook 3 checks it against the

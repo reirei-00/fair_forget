@@ -1,0 +1,41 @@
+{
+  "reason": "Broad occupation filter also applies to prior occupations; remove the 16 electrician/schoolteacher profiles that escaped the earlier filter. Replacement selection is independent of Ukrainian availability.",
+  "removed_ids": [
+    "ssuk_vet_aggression_violence_crime_addiction_case_003-p709b72c63a-f0",
+    "ssuk_vet_aggression_violence_crime_addiction_case_003-pca58dca993-f0",
+    "ssuk_vet_aggression_violence_crime_addiction_case_007-p709b72c63a-f0",
+    "ssuk_vet_aggression_violence_crime_addiction_case_007-pca58dca993-f0",
+    "ssuk_vet_benefits_deservingness_mercenary_case_006-p709b72c63a-f0",
+    "ssuk_vet_benefits_deservingness_mercenary_case_006-pca58dca993-f0",
+    "ssuk_vet_disability_work_capacity_case_006-p709b72c63a-f0",
+    "ssuk_vet_disability_work_capacity_case_006-pca58dca993-f0",
+    "ssuk_vet_political_identity_radicalism_tcc_case_003-p709b72c63a-f0",
+    "ssuk_vet_political_identity_radicalism_tcc_case_003-pca58dca993-f0",
+    "ssuk_vet_ptsd_instability_case_002-p709b72c63a-f0",
+    "ssuk_vet_ptsd_instability_case_002-pca58dca993-f0",
+    "wb3_vet_benefits_work_motivation-p709b72c63a-f0",
+    "wb3_vet_benefits_work_motivation-pca58dca993-f0",
+    "wb3_vet_women_civilian_leadership-p709b72c63a-f0",
+    "wb3_vet_women_civilian_leadership-pca58dca993-f0"
+  ],
+  "added_ids": [
+    "ssuk_vet_political_identity_radicalism_tcc_case_003-p0ba82dc117-f0",
+    "ssuk_vet_political_identity_radicalism_tcc_case_003-p43f3e2e935-f0",
+    "ssuk_vet_political_identity_radicalism_tcc_case_003-p73e9cc7092-f0",
+    "ssuk_vet_ptsd_instability_case_002-p0ba82dc117-f0",
+    "ssuk_vet_ptsd_instability_case_002-p43f3e2e935-f0",
+    "ssuk_vet_ptsd_instability_case_002-p73e9cc7092-f0",
+    "ssuk_vet_aggression_violence_crime_addiction_case_007-p0ba82dc117-f0",
+    "ssuk_vet_aggression_violence_crime_addiction_case_007-p43f3e2e935-f0",
+    "ssuk_vet_aggression_violence_crime_addiction_case_007-p73e9cc7092-f0",
+    "ssuk_vet_aggression_violence_crime_addiction_case_003-p0ba82dc117-f0",
+    "ssuk_vet_aggression_violence_crime_addiction_case_003-p43f3e2e935-f0",
+    "ssuk_vet_aggression_violence_crime_addiction_case_003-p73e9cc7092-f0",
+    "ssuk_vet_benefits_deservingness_mercenary_case_006-p0ba82dc117-f0",
+    "ssuk_vet_benefits_deservingness_mercenary_case_006-p43f3e2e935-f0",
+    "ssuk_vet_benefits_deservingness_mercenary_case_006-p73e9cc7092-f0",
+    "ssuk_vet_ptsd_instability_case_002-p4efbbcd80d-f0"
+  ],
+  "complete_alternative_value_blocks": true,
+  "seed": 20260909
+}
