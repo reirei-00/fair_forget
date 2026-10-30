@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "source_language": "uk",
+  "selected_condition": {
+    "candidate_id": "lapa12b",
+    "provider": "Lapathoniia OpenAI-compatible API",
+    "model": "LapaLLM-Gemma-3-12B-instruct",
+    "revision": null,
+    "strategy": "sequential"
+  },
+  "request_settings": {
+    "temperature": 0.3,
+    "max_tokens": 1200
+  },
+  "execution_settings": {
+    "workers": 3,
+    "requests_per_minute": 24,
+    "transport_attempts": 4,
+    "export_seed": 20260826
+  },
+  "selection": {
+    "record_type": "reconstructed_from_contemporaneous_author_instructions_and_frozen_run",
+    "author_approval_at_utc": "2026-09-08T18:54:07.884Z",
+    "author_instruction_sha256": "b9abf0e4397076b304919d1f57a3b60bb8ec21698a65efbeb256b841f366e81c",
+    "pilot_assessment": "model_and_strategy_hidden",
+    "final_choice": "author_approved_after_condition_identities_were_known",
+    "basis": [
+      "human_development_pilot",
+      "separate_component_control"
+    ],
+    "pilot_generated_items": 50,
+    "pilot_reviewed_items": 48,
+    "raters": 2,
+    "valid_scores": 96,
+    "review_coverage": {
+      "missing_items": 2,
+      "missing_reason": null
+    },
+    "statistical_superiority_claim": false,
+    "evidence": [
+      {
+        "artifact": "historical_human_review_condition_summary",
+        "sha256": "ae9901a6cad11a3fc66d861755b8c9def0b98ccaf210569e7bb2190076f7cc79"
+      },
+      {
+        "artifact": "blinded_rating_guide",
+        "sha256": "625888d13cdbf3d025454645a99f09ac9fe56672333606aab69aff513466de9a"
+      },
+      {
+        "artifact": "selected_workflow_record",
+        "sha256": "6add0c8f64adaf14112e54b2ba4c32bc7e70f31a0c784bef52a1b20ea3b60675"
+      },
+      {
+        "artifact": "full_generation_manifest",
+        "sha256": "c7e33b585cc7dfe4fb8165b8f30fb77ac3595db76b20fd33b83a0d58e7aaea23"
+      },
+      {
+        "artifact": "author_supplied_annotation_workbook",
+        "sha256": "95c99aa517971f8974c68682e2a61a17632cb6fcdc4916dfef31a852444ba9cb"
+      }
+    ],
+    "rating_source": "author_supplied_annotation_workbook"
+  },
+  "prompt_bundle": {
+    "id": "warbias-sequential-feedback-v2-20260908",
+    "source_hash_version": "warbias-generation-validation-v8",
+    "stage_order": [
+      "stereotype",
+      "counter",
+      "unrelated"
+    ],
+    "prompts": [
+      {
+        "stage": "stereotype",
+        "path": "prompts/warbias_validation_sequential_stereotype.txt",
+        "response_field": "stereotype_uk",
+        "sha256": "77db543e649e1b0037e9ffe0df752ed551f18561a568458b781875ad3ce1c739"
+      },
+      {
+        "stage": "counter",
+        "path": "prompts/warbias_validation_sequential_counter.txt",
+        "response_field": "counter_stereotype_uk",
+        "sha256": "5c148ce341d19a38660aa5c0279145c99338d78b804a4e2c0c01699d5304e252"
+      },
+      {
+        "stage": "unrelated",
+        "path": "prompts/warbias_validation_sequential_unrelated.txt",
+        "response_field": "unrelated_uk",
+        "sha256": "60fec27eb5756f1aa969e104f4ad81413da3b02c106596de9bd812af2a565e76"
+      }
+    ],
+    "pilot_snapshots": "pilot_snapshots.json",
+    "changes": "prompt_changes.json"
+  },
+  "full_generation": {
+    "matrix_rows": 981,
+    "raw_complete_rows": 980,
+    "raw_error_rows": 1,
+    "matrix_sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c",
+    "checkpoint_sha256": "0f74cb27eb71a51ae93dac539345999b7c7a44b532b81e8631a980df94655668",
+    "source_hashes_verified": 981,
+    "prompt_bundle_id": "warbias-sequential-feedback-v2-20260908"
+  },
+  "full_ukrainian_annotation": {
+    "status": "in_progress",
+    "status_authority": "author",
+    "pilot_review_is_full_annotation": false
+  },
+  "translation": {
+    "source_language": "uk",
+    "target_language": "en",
+    "retain_aligned_versions": true,
+    "model": null,
+    "revision": null,
+    "settings": null,
+    "historical_source_bound_receipt": null
+  },
+  "dataset_reference": {
+    "url": "https://huggingface.co/datasets/the-project/WarBias",
+    "role": "reference",
+    "revision": "164f355623c2da0028821e0942cad493558a6c13",
+    "config": "configs/data/warbias-reference.json"
+  },
+  "generation_prompt_bundle": {
+    "id": "warbias-case-profile-v3",
+    "base_bundle": "warbias-sequential-feedback-v2-20260908",
+    "composition": "join_exact_component_text_with_two_newlines",
+    "scope": "current_case_profile_design",
+    "prompts": [
+      {
+        "stage": "stereotype",
+        "response_field": "stereotype_uk",
+        "components": [
+          {
+            "path": "prompts/warbias_validation_sequential_stereotype.txt",
+            "sha256": "77db543e649e1b0037e9ffe0df752ed551f18561a568458b781875ad3ce1c739"
+          },
+          {
+            "path": "prompts/current/profile_design.txt",
+            "sha256": "6dc148f9eaa52f4cdbf127538148038655caf529309141a7e50cedbbd0a0ed97"
+          }
+        ],
+        "sha256": "73b6c0d7bf2c4e3120a59a854547d8b00fc88b370f251f5f60d175a8c4b7e2b4"
+      },
+      {
+        "stage": "counter",
+        "response_field": "counter_stereotype_uk",
+        "components": [
+          {
+            "path": "prompts/warbias_validation_sequential_counter.txt",
+            "sha256": "5c148ce341d19a38660aa5c0279145c99338d78b804a4e2c0c01699d5304e252"
+          },
+          {
+            "path": "prompts/current/profile_design.txt",
+            "sha256": "6dc148f9eaa52f4cdbf127538148038655caf529309141a7e50cedbbd0a0ed97"
+          }
+        ],
+        "sha256": "05e489213263650db08c573bbcaa7736caffa26971f3320d38f6d990c289723c"
+      },
+      {
+        "stage": "unrelated",
+        "response_field": "unrelated_uk",
+        "components": [
+          {
+            "path": "prompts/warbias_validation_sequential_unrelated.txt",
+            "sha256": "60fec27eb5756f1aa969e104f4ad81413da3b02c106596de9bd812af2a565e76"
+          },
+          {
+            "path": "prompts/current/profile_design.txt",
+            "sha256": "6dc148f9eaa52f4cdbf127538148038655caf529309141a7e50cedbbd0a0ed97"
+          }
+        ],
+        "sha256": "aac21f38df8bb7f53685e0b6a7b6fab60d60f3a0a7ab0911aaf11929cc3245a3"
+      }
+    ]
+  }
+}

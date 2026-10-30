@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=64.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "warbias_kit-warbias"
+version = "0.1.0"
+description = "WarBias dataset generation, translation and review pipelines"
+requires-python = ">=3.10"
+readme = "README.md"
+dependencies = ["lm_eval>=0.4.14.dev0"]
+
+[project.optional-dependencies]
+generation = ["vllm>=0.18,<0.19"]
+notebooks = ["jupyterlab>=4", "nbclient>=0.10", "pandas>=2,<3"]
+quality = ["unbabel-comet==2.2.7", "huggingface-hub>=0.19,<1"]
+dev = ["pytest>=9", "ruff==0.16.2"]
+
+[project.scripts]
+warbias_kit = "warbias_kit.cli:entrypoint"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["warbias_kit*"]
+
+[tool.ruff]
+required-version = "==0.16.2"
+target-version = "py310"
+line-length = 100
+extend-exclude = ["outputs", ".venv"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["warbias_kit"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"

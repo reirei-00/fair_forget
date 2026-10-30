@@ -1,0 +1,11 @@
+.env
+.venv/
+.cache/
+.ipynb_checkpoints/
+outputs/
+runs/
+*.zip
+__pycache__/
+.DS_Store
+
+*.egg-info/

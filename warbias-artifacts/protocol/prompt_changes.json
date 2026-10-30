@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "active_bundle": "warbias-case-profile-v1",
+  "source_snapshots": "pilot_snapshots.json",
+  "changes": [
+    {
+      "stage": "zero_shot",
+      "from_bundle": "human",
+      "from_sha256": "64d3789ea186bd3e51c3f964c959aa35b73d95f08e36d7b38c24a9d473a4dba3",
+      "to_path": "prompts/warbias_validation_zero_shot.txt",
+      "to_sha256": "0d3a2838e8909e734614a30801b73bb8b8c70ba2b7d497393157447973ae84f8",
+      "diff_sha256": "cca412be088f5433253f41faa6ad95e8e2dadfec13b254cd2da5c867067803fc",
+      "changes": [
+        "Preserve the exact association and actor profile.",
+        "Require a direct counter-stereotype and an independent unrelated sentence.",
+        "End after the required sentence role without added reactions or commentary."
+      ]
+    },
+    {
+      "stage": "stereotype",
+      "from_bundle": "human",
+      "from_sha256": "2c30411e395fb9f02d249f47b035d78924c7b69f14470555908af893256cf0f0",
+      "to_path": "prompts/warbias_validation_sequential_stereotype.txt",
+      "to_sha256": "77db543e649e1b0037e9ffe0df752ed551f18561a568458b781875ad3ce1c739",
+      "diff_sha256": "c33c8b97aa1f101b091295a2283abcc9e397cf1b0c7ae9a4772132df5fc0a21a",
+      "changes": [
+        "Preserve the exact association, its direction and actor profile.",
+        "Require a direct counter-stereotype and an independent unrelated sentence.",
+        "Remove added explanations, reactions and unsupported facts.",
+        "Define the research role and the three sentence roles."
+      ]
+    },
+    {
+      "stage": "counter",
+      "from_bundle": "human",
+      "from_sha256": "30164ee96d078c9449d467740122a199941323308676ec75ca1ea2ab55128b0c",
+      "to_path": "prompts/warbias_validation_sequential_counter.txt",
+      "to_sha256": "5c148ce341d19a38660aa5c0279145c99338d78b804a4e2c0c01699d5304e252",
+      "diff_sha256": "c9382aab1a744de92a3267baeb7030f4a9e0aa8f74a8aeba0402c6af7758f54f",
+      "changes": [
+        "Preserve the exact association, its direction and actor profile.",
+        "Require a direct counter-stereotype and an independent unrelated sentence.",
+        "Remove added explanations, reactions and unsupported facts.",
+        "Define the research role and the three sentence roles."
+      ]
+    },
+    {
+      "stage": "unrelated",
+      "from_bundle": "human",
+      "from_sha256": "bb1e03e5fa02c4bfc15a79059ffd2e958987ec53fde485199ee374ad6e17f40f",
+      "to_path": "prompts/warbias_validation_sequential_unrelated.txt",
+      "to_sha256": "60fec27eb5756f1aa969e104f4ad81413da3b02c106596de9bd812af2a565e76",
+      "diff_sha256": "1957594eba36a7d0d1aa1f5932f2f7819f5b762c693a3410b97aeeb9a86e03f1",
+      "changes": [
+        "Preserve the exact association, its direction and actor profile.",
+        "Require a direct counter-stereotype and an independent unrelated sentence.",
+        "Remove added explanations, reactions and unsupported facts.",
+        "Define the research role and the three sentence roles."
+      ]
+    }
+  ],
+  "user_prompt_change": {
+    "from": "pilot_v7/post_pilot_v8",
+    "to": "full_generation_v8",
+    "removed_line": "Регіональне уточнення походження: не задано",
+    "reason": "Avoid contradicting source profiles with explicit origin.",
+    "full_generation_checkpoint_hashes_verified": 981
+  },
+  "profile_design_composition": {
+    "from_bundle": "warbias-sequential-feedback-v2-20260908",
+    "to_bundle": "warbias-case-profile-v1",
+    "instruction_path": "prompts/current/profile_design.txt",
+    "instruction_sha256": "6bd7fe29699ffb76e6b2bd2859c7dbfbbde7c0a2ecfa6af4e8ea48b956ebc779",
+    "changes": [
+      "Keep the complete recorded target profile in every sentence.",
+      "Use the declared reporter framing for S and C.",
+      "Keep occupation references and case contrast constraints."
+    ],
+    "applies_to": "matrix_schema=case_profile",
+    "historical_prompt_files_unchanged": true
+  }
+}

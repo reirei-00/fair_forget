@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "kind": "assistant_translation_sample",
+  "source_language": "uk",
+  "target_language": "en",
+  "translator_config": "configs/translation/codex.json",
+  "source_origin": {
+    "repository": "the-project/WarBias",
+    "revision": "164f355623c2da0028821e0942cad493558a6c13",
+    "role": "reference",
+    "sampling": {
+      "actors": [
+        "idp",
+        "veteran"
+      ],
+      "method": "first_five_distinct_cases_per_actor_sorted_by_id",
+      "size": 10
+    },
+    "source_file": "data/uk/unassigned.jsonl",
+    "source_file_sha256": "c253c3bc90b544ebed42901f1bf3c9eed63565191a278c64562e23bdc32c8c48"
+  },
+  "quality_input_origin": {
+    "capture_method": "assistant_in_current_conversation",
+    "kind": "assistant_translation_sample",
+    "sampling": {
+      "actors": [
+        "idp",
+        "veteran"
+      ],
+      "method": "first_five_distinct_cases_per_actor_sorted_by_id",
+      "size": 10
+    },
+    "source_reference": {
+      "repository": "the-project/WarBias",
+      "revision": "164f355623c2da0028821e0942cad493558a6c13",
+      "role": "reference",
+      "source_file": "data/uk/unassigned.jsonl",
+      "source_file_sha256": "c253c3bc90b544ebed42901f1bf3c9eed63565191a278c64562e23bdc32c8c48"
+    },
+    "translator": {
+      "immutable_model_version": "not_exposed",
+      "invocation": "assistant_in_current_conversation",
+      "model": "gpt-6.1-sol",
+      "provider": "codex_conversation",
+      "revision": null,
+      "settings": {},
+      "source_language": "uk",
+      "target_language": "en",
+      "usage": null,
+      "application": "Codex",
+      "model_identity_source": "saved_conversation_turn_metadata"
+    }
+  },
+  "quality_config": "configs/translation/quality.json",
+  "quality_result": "protocol/translation_sample_quality_identified.json",
+  "quality_result_sha256": "d7c7b6852731455b973cf2b63902ee747defdb1ef4eb250e3a5aa73047f74c6f",
+  "sample_size": 10,
+  "sentence_pairs": 30,
+  "human_validated": false,
+  "is_final_corpus": false,
+  "translator_identity": "protocol/translation_model_identity.json",
+  "translator_identity_sha256": "5dfd45a0bf2e3f68dc90bc65bdd5bd288e6b4331cbecdfc7a82af1a0a14fc7cf"
+}

@@ -1,0 +1,278 @@
+"""Export the WarBias subproject without copying the broader the-project repository."""
+
+import argparse
+import hashlib
+import importlib.util
+import json
+import os
+import re
+import shutil
+import tempfile
+from pathlib import Path
+
+MANIFEST = "MANIFEST.sha256.json"
+RUNTIME = {
+    ".git",
+    ".venv",
+    ".pytest_cache",
+    ".ruff_cache",
+    "__pycache__",
+    ".ipynb_checkpoints",
+    "build",
+    "dist",
+    "runs",
+    "outputs",
+}
+TREES = {
+    "src": {".py"},
+    "prompts": {".txt", ".md", ".json", ".yaml", ".yml"},
+    "configs": {".json"},
+    "protocol": {".json", ".jsonl", ".csv"},
+    "notebooks": {".ipynb"},
+    "tests/data_creation": {".py", ".json"},
+    "tests/cli": {".py", ".json"},
+}
+FILES = (
+    "README.md",
+    "docs/warbias-construction.md",
+    "pyproject.toml",
+    "requirements.txt",
+    "requirements-dev.txt",
+    ".gitignore",
+    "scripts/run_notebooks.py",
+)
+MACHINE_PATH = re.compile(r"/(?:Users|home|scratch)/[^\s\"']+|/p/(?:project|scratch)/[^\s\"']+")
+PRIVATE_CONFIG_KEYS = {
+    "keychain",
+    "api_key",
+    "api_key_env",
+    "password",
+    "secret",
+    "access_token",
+    "credential_reference",
+    "credentials_file",
+}
+
+
+def _hash(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _runtime(parts):
+    return any(part in RUNTIME or part.endswith(".egg-info") for part in parts) or parts[
+        -1
+    ].endswith((".pyc", ".pyo"))
+
+
+def _credentials(value):
+    if isinstance(value, dict):
+        if {str(key).lower() for key in value} & PRIVATE_CONFIG_KEYS:
+            raise ValueError(
+                "Export configurations must omit credentials and local credential references"
+            )
+        for child in value.values():
+            _credentials(child)
+    elif isinstance(value, list):
+        for child in value:
+            _credentials(child)
+
+
+def _validate_text(path, relative):
+    text = path.read_text(encoding="utf-8")
+    if MACHINE_PATH.search(text):
+        raise ValueError(f"Machine-specific path in source file: {relative}")
+    if relative.parts[0] == "configs" and path.suffix == ".json":
+        _credentials(json.loads(text))
+    if path.suffix == ".ipynb":
+        _validate_notebook(json.loads(text))
+
+
+def _validate_notebook(notebook):
+    cells = [
+        cell
+        for cell in notebook.get("cells", [])
+        if cell.get("cell_type") == "code"
+        and ("".join(cell.get("source", [])).strip() or cell.get("outputs"))
+    ]
+    counts = [cell.get("execution_count") for cell in cells]
+    for cell in cells:
+        for output in cell.get("outputs", []):
+            if output.get("output_type") == "error":
+                raise ValueError("Export notebooks cannot contain execution errors")
+            if cell.get("execution_count") is None:
+                raise ValueError("Notebook outputs require an execution count")
+            if (
+                output.get("output_type") == "execute_result"
+                and output.get("execution_count") != cell["execution_count"]
+            ):
+                raise ValueError("Notebook result count differs from its cell")
+    if any(count is not None for count in counts) and (
+        any(type(count) is not int for count in counts) or counts != list(range(1, len(counts) + 1))
+    ):
+        raise ValueError("Export notebooks must be unrun or executed once from top to bottom")
+
+
+def _copy_file(source, target, relative):
+    if source.is_symlink():
+        raise ValueError("Export source cannot contain symlinks")
+    _validate_text(source, relative)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source, target)
+
+
+def _copy_tree(source, target, relative_root, suffixes):
+    if source.is_symlink():
+        raise ValueError("Export source cannot contain symlinks")
+    if not source.is_dir():
+        raise ValueError(f"Missing maintained source directory: {relative_root}")
+    for parent, directories, files in os.walk(source, followlinks=False):
+        relative = Path(parent).relative_to(source)
+        keep = []
+        for name in sorted(directories):
+            if _runtime((*relative.parts, name)):
+                continue
+            if (Path(parent) / name).is_symlink():
+                raise ValueError("Export source cannot contain symlinks")
+            if not name.startswith("."):
+                keep.append(name)
+        directories[:] = keep
+        for name in sorted(files):
+            parts = (*relative.parts, name)
+            path = Path(parent) / name
+            if _runtime(parts):
+                continue
+            if path.is_symlink():
+                raise ValueError("Export source cannot contain symlinks")
+            if not name.startswith(".") and path.suffix in suffixes:
+                _copy_file(path, target / relative / name, relative_root / relative / name)
+
+
+def _inventory(directory):
+    result = {}
+    for path in sorted(directory.rglob("*")):
+        relative = path.relative_to(directory)
+        if _runtime(relative.parts):
+            continue
+        if path.is_symlink():
+            raise ValueError("Export cannot contain symlinks")
+        if path.is_file() and str(relative) != MANIFEST:
+            result[str(relative)] = _hash(path)
+    return result
+
+
+def source_root(source):
+    """Accept the project repository, its exact WarBias child, or a standalone copy.
+
+    Select the child before inspecting export trees so sibling notebooks, data
+    and dependencies never become part of the source package.
+    """
+    source = Path(source).absolute()
+    if source.is_symlink():
+        raise ValueError("WarBias source cannot be a symlink")
+    child = source / "warbias"
+    if child.is_symlink():
+        raise ValueError("The WarBias subproject cannot be a symlink")
+    if child.exists():
+        source = child
+    if (
+        not (source / "pyproject.toml").is_file()
+        or not (source / "src/warbias_kit/warbias/provider.py").is_file()
+    ):
+        raise ValueError(
+            "Select the the-project repository, its warbias directory or a standalone WarBias export"
+        )
+    return source.resolve()
+
+
+def verify(directory, *, check_imports=False):
+    """Check every exported byte and optional editable-package import origin."""
+    directory = Path(directory).resolve()
+    manifest = json.loads((directory / MANIFEST).read_text(encoding="utf-8"))
+    if (
+        manifest.get("schema_version") != 1
+        or manifest.get("kind") != "producer_source_export"
+        or manifest.get("subproject", "warbias") != "warbias"
+        or not isinstance(manifest.get("files"), dict)
+    ):
+        raise ValueError("Unsupported producer source manifest")
+    actual, expected = _inventory(directory), manifest["files"]
+    if actual != expected:
+        missing = sorted(set(expected) - set(actual))
+        added = sorted(set(actual) - set(expected))
+        changed = sorted(key for key in set(actual) & set(expected) if actual[key] != expected[key])
+        raise ValueError(
+            f"Source manifest mismatch: missing={missing}, added={added}, changed={changed}"
+        )
+    if check_imports:
+        spec = importlib.util.find_spec("warbias_kit")
+        actual_origin = Path(spec.origin).resolve() if spec and spec.origin else None
+        if actual_origin != directory / "src/warbias_kit/__init__.py":
+            raise ValueError(
+                "warbias_kit must resolve to this export's src tree; install it editable in its own environment"
+            )
+    return len(actual)
+
+
+def export(source, output):
+    """Copy only allowlisted WarBias source; preserve sibling projects and exports."""
+    source, output = source_root(source), Path(output).absolute()
+    if output.exists() or output.is_symlink():
+        raise ValueError("Export destination must not exist")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    staging = Path(tempfile.mkdtemp(prefix=".dataset-export-", dir=output.parent))
+    try:
+        for relative, suffixes in TREES.items():
+            _copy_tree(source / relative, staging / relative, Path(relative), suffixes)
+        for relative in FILES:
+            _copy_file(source / relative, staging / relative, Path(relative))
+        for name in ("LICENSE", "LICENSE.md", "LICENSE.txt"):
+            if (source / name).exists():
+                _copy_file(source / name, staging / name, Path(name))
+        _copy_file(
+            Path(__file__), staging / "scripts/export_dataset.py", Path("scripts/export_dataset.py")
+        )
+        manifest = {
+            "schema_version": 1,
+            "kind": "producer_source_export",
+            "subproject": "warbias",
+            "files": _inventory(staging),
+        }
+        (staging / MANIFEST).write_text(
+            json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        verify(staging)
+        staging.rename(output)
+    except BaseException:
+        shutil.rmtree(staging, ignore_errors=True)
+        raise
+    return output
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    commands = parser.add_subparsers(dest="command", required=True)
+    build = commands.add_parser("build", help="Create a fresh portable source directory")
+    build.add_argument(
+        "--source",
+        type=Path,
+        default=Path(__file__).resolve().parents[1],
+        help="the-project repository, warbias subproject, or standalone WarBias source directory",
+    )
+    build.add_argument("--output", type=Path, required=True)
+    check = commands.add_parser("verify", help="Verify an exported source directory")
+    check.add_argument("--directory", type=Path, required=True)
+    check.add_argument("--check-imports", action="store_true")
+    args = parser.parse_args(argv)
+    try:
+        if args.command == "build":
+            print(export(args.source, args.output))
+        else:
+            print(
+                f"Verified {verify(args.directory, check_imports=args.check_imports)} source files"
+            )
+    except (ValueError, OSError) as error:
+        parser.exit(1, f"{error}\n")
+
+
+if __name__ == "__main__":
+    main()

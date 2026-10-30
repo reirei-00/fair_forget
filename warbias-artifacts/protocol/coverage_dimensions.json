@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "role": "synthetic_profile_design",
+  "axis_values": {
+    "age": [
+      "middle_aged",
+      "older",
+      "young"
+    ],
+    "caregiving": [
+      "parent",
+      "unpaid_carer"
+    ],
+    "community_type": [
+      "rural",
+      "urban"
+    ],
+    "disability": [
+      "unspecified_cause",
+      "war_caused"
+    ],
+    "discharge_recency": [
+      "longer_civilian_life",
+      "recently_discharged"
+    ],
+    "displacement_origin": [
+      "occupied_territories"
+    ],
+    "displacement_wave": [
+      "before_full_scale",
+      "during_full_scale"
+    ],
+    "dual_status": [
+      "veteran_and_idp"
+    ],
+    "ethnicity": [
+      "roma"
+    ],
+    "gender": [
+      "men",
+      "women"
+    ],
+    "housing_type": [
+      "collective_accommodation",
+      "rented_home"
+    ],
+    "language": [
+      "russian",
+      "ukrainian"
+    ],
+    "occupation": [
+      "administration",
+      "agriculture",
+      "education",
+      "engineering",
+      "finance_legal",
+      "healthcare",
+      "hospitality",
+      "it",
+      "manufacturing",
+      "media",
+      "property_services",
+      "retail",
+      "trades",
+      "transport"
+    ],
+    "rank": [
+      "enlisted",
+      "officer",
+      "sergeant"
+    ],
+    "recruitment_route": [
+      "contract",
+      "mobilized",
+      "volunteer"
+    ],
+    "region": [
+      "eastern_region",
+      "western_region"
+    ],
+    "registration": [
+      "unregistered"
+    ],
+    "service_duration": [
+      "long_service",
+      "short_service"
+    ],
+    "service_period": [
+      "ato_oos",
+      "both",
+      "full_scale"
+    ],
+    "service_role": [
+      "combat",
+      "noncombat"
+    ],
+    "service_state": [
+      "currently_serving",
+      "discharged",
+      "returned_to_service"
+    ]
+  },
+  "expansion": "one_factor_at_a_time",
+  "occupation_limit_per_case": 4,
+  "occupation_selection_seed": 0,
+  "preserve_recorded_profiles": true,
+  "preserve_recorded_gender_age_panels": true,
+  "framings_per_profile": 3,
+  "final_total_selection": "four_sectors_deferred_service_details",
+  "deferred_new_dimensions": [
+    "rank",
+    "recruitment_route",
+    "service_duration",
+    "discharge_recency"
+  ],
+  "selected_total_triplets_per_language": 13011,
+  "selected_new_triplets": 11952,
+  "deferred_service_detail_new_triplets": 2124,
+  "selection_authority": "author"
+}

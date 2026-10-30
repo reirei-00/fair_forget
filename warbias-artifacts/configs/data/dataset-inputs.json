@@ -1,0 +1,389 @@
+{
+  "schema_version": 1,
+  "source_language": "uk",
+  "role": "generation_source_inputs_and_human_development_pilot",
+  "files": {
+    "taxonomy": {
+      "path": "protocol/inputs/taxonomy.csv",
+      "sha256": "fe6dbac3f8834aa40fa09c91cfc0033d3a95b05be0bc18850652fe20f3aea7e1",
+      "format": "csv",
+      "bytes": 26746,
+      "rows": 32,
+      "role": "full_generation_registry"
+    },
+    "targets": {
+      "path": "protocol/inputs/targets.csv",
+      "sha256": "a90b3f04874fef4cf15fb640d21c471026ccb2aec304d7b67ccbe9ec1eb7307f",
+      "format": "csv",
+      "bytes": 8557,
+      "rows": 15,
+      "role": "full_generation_registry"
+    },
+    "taxonomy_hierarchy": {
+      "path": "protocol/inputs/taxonomy_hierarchy.csv",
+      "sha256": "04de60ed269176628f7b55bd3e1bb663331492c7cd3182062a87f47a99781b49",
+      "format": "csv",
+      "bytes": 6946,
+      "rows": 26,
+      "role": "full_generation_registry"
+    },
+    "sources": {
+      "path": "protocol/inputs/sources.csv",
+      "sha256": "29385ba2fe71cf583229c99fda06d64e2220f3321b75313fefcffe4971ab9380",
+      "format": "csv",
+      "bytes": 13948,
+      "rows": 36,
+      "role": "full_generation_registry"
+    },
+    "matrix_full": {
+      "path": "protocol/inputs/matrix_full.csv",
+      "sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c",
+      "format": "csv",
+      "bytes": 847127,
+      "rows": 981,
+      "role": "full_generation_inputs"
+    },
+    "pilot_initial_cases": {
+      "path": "protocol/inputs/pilot_initial_cases.csv",
+      "sha256": "94308f0db3b63715966ec04bdec8bd80e2652da252aae41d66941aad48ae89c0",
+      "format": "csv",
+      "bytes": 14737,
+      "rows": 20,
+      "role": "selected_pilot_inputs"
+    },
+    "pilot_initial_conditions": {
+      "path": "protocol/inputs/pilot_initial_conditions.csv",
+      "sha256": "f422a803f72d34e2c543bb842b09fc77bbf89c7a7a41beeb07f2586a61961980",
+      "format": "csv",
+      "bytes": 22460,
+      "rows": 80,
+      "role": "saved_pilot_assignments"
+    },
+    "pilot_initial_outputs": {
+      "path": "protocol/inputs/pilot_initial_outputs.csv",
+      "sha256": "bdd4019a7b52752cb112c0da9fe15784ea2f4872c21ba3ec199f5de17fa74aba",
+      "format": "csv",
+      "bytes": 102675,
+      "rows": 80,
+      "role": "saved_ukrainian_pilot_outputs"
+    },
+    "pilot_human_cases": {
+      "path": "protocol/inputs/pilot_human_cases.csv",
+      "sha256": "2301b802e6e8814eeb5cb5200257f22a506e4aa85289eaae4b5bfc31c1b227a8",
+      "format": "csv",
+      "bytes": 37372,
+      "rows": 50,
+      "role": "selected_pilot_inputs"
+    },
+    "pilot_human_conditions": {
+      "path": "protocol/inputs/pilot_human_conditions.csv",
+      "sha256": "19d82db04a26a341ea832a3a84ecd3e80f81802f2c889de0c9171ba70dae6c9b",
+      "format": "csv",
+      "bytes": 13869,
+      "rows": 50,
+      "role": "saved_pilot_assignments"
+    },
+    "pilot_human_outputs": {
+      "path": "protocol/inputs/pilot_human_outputs.csv",
+      "sha256": "2c8f0b514cdaf57826cf3a339fab04ed1d3746689c655649b79d277c2b4ceeee",
+      "format": "csv",
+      "bytes": 47458,
+      "rows": 50,
+      "role": "saved_ukrainian_pilot_outputs"
+    },
+    "pilot_human_ratings": {
+      "path": "protocol/inputs/pilot_human_ratings.csv",
+      "sha256": "64e443f417864dd1c8177dcbe30c5c5a26cbf1fca508eb127b131e6331c1878e",
+      "format": "csv",
+      "bytes": 27661,
+      "rows": 96,
+      "role": "anonymized_human_development_scores"
+    },
+    "translation_sample_uk": {
+      "path": "protocol/inputs/translation_sample_uk.jsonl",
+      "sha256": "59eb528b283ceeb768243c18b863e95b7b25d632e8f086071743017dbb041534",
+      "format": "jsonl",
+      "bytes": 7379,
+      "rows": 10,
+      "role": "assistant_translation_sample"
+    },
+    "translation_sample_en": {
+      "path": "protocol/inputs/translation_sample_en.jsonl",
+      "sha256": "32befdf5533c32da730386217e67c6cde418910ac48668b6ca1e1aea69463391",
+      "format": "jsonl",
+      "bytes": 3628,
+      "rows": 10,
+      "role": "assistant_translation_sample"
+    },
+    "taxonomy_selected": {
+      "path": "protocol/inputs/taxonomy_selected.csv",
+      "sha256": "7bbdb20773bc5b3bffce45734af7009ff00cbe9e9186ace20eb64b848d112b8e",
+      "format": "csv",
+      "bytes": 162185,
+      "rows": 425,
+      "role": "annotator_view_green_combinations"
+    },
+    "matrix_reviewed": {
+      "path": "protocol/inputs/matrix_reviewed.csv",
+      "sha256": "98a6333aa9cf06db0bf66a63964fd2cd8f47ccb7129332258ceba8e41b1416af",
+      "format": "csv",
+      "bytes": 551155,
+      "rows": 1203,
+      "role": "case_profile_generation_design_view"
+    },
+    "source_feedback": {
+      "path": "protocol/inputs/source_feedback.jsonl",
+      "sha256": "360e977778a8e78911dc983371d5522bb17ff2ab7636460a6bb68d79199a8aba",
+      "format": "jsonl",
+      "bytes": 2831,
+      "rows": 2,
+      "role": "recorded_taxonomy_feedback_sources"
+    },
+    "construction_cases": {
+      "path": "protocol/inputs/construction_cases.jsonl",
+      "sha256": "eecb051f7a06e78683de33f9f6c1d3fd1b199b67e1df61978ba53a91297f68dc",
+      "format": "jsonl",
+      "bytes": 142333,
+      "rows": 127,
+      "role": "taxonomy_profile_design"
+    },
+    "candidate_profiles": {
+      "path": "protocol/inputs/candidate_profiles.jsonl",
+      "sha256": "3f0d20a2214a9ba504499ffecc7ff2e69f088df1a69e856ed8cef00a87440ffd",
+      "format": "jsonl",
+      "bytes": 371708,
+      "rows": 1511,
+      "role": "taxonomy_profile_design"
+    },
+    "profile_design": {
+      "path": "protocol/inputs/profile_design.jsonl",
+      "sha256": "f47fa1896d727c4d00cca0c107a98e5b2ecf1ebe6e2dd422193ef7cb0fdf288b",
+      "format": "jsonl",
+      "bytes": 511399,
+      "rows": 1200,
+      "role": "taxonomy_profile_design"
+    },
+    "source_compilation": {
+      "path": "protocol/inputs/source_compilation.jsonl",
+      "sha256": "4e6fce162bd87ffb0557ff0e69cac350dd039af6be9a0bea4eec798af44c7541",
+      "format": "jsonl",
+      "bytes": 298,
+      "rows": 1,
+      "role": "taxonomy_profile_design"
+    },
+    "matrix_green_snapshot": {
+      "path": "protocol/inputs/matrix_green_snapshot.csv",
+      "sha256": "7d067e48f0d6413676643e85c8d121145f5887a6f0fb4433527c48125864a72f",
+      "format": "csv",
+      "bytes": 373259,
+      "rows": 428,
+      "role": "source_presence_snapshot"
+    },
+    "taxonomy_cases": {
+      "path": "protocol/inputs/taxonomy_cases.jsonl",
+      "sha256": "baed9bd87f2c266d6b9cf4e780d5d767ead835e7fd811ef1b5ce24825b778fc8",
+      "format": "jsonl",
+      "bytes": 81253,
+      "rows": 129,
+      "role": "source_taxonomy_case_inventory"
+    }
+  },
+  "sampling": {
+    "seed": 20260826,
+    "initial": {
+      "design": "full_factorial",
+      "cases": 20,
+      "conditions": 80
+    },
+    "human": {
+      "design": "balanced_50",
+      "cases": 50,
+      "conditions": 50,
+      "reviewed_items": 48,
+      "raters": 2,
+      "ratings": 96
+    }
+  },
+  "registry_scope": "Historical pilot and full-run inputs stay fixed. Current generation inputs come from the explicit case and profile design. Green source presence does not select generation inputs.",
+  "missing_historical_inputs": [
+    "The complete original pilot sampling registry was not frozen beside the pilot exports.",
+    "The initial pilot did not record an explicit source-claim field; its association field remains unchanged."
+  ],
+  "source_bindings": [
+    {
+      "artifact": "taxonomy",
+      "source_sha256": "fe6dbac3f8834aa40fa09c91cfc0033d3a95b05be0bc18850652fe20f3aea7e1",
+      "portable_sha256": "fe6dbac3f8834aa40fa09c91cfc0033d3a95b05be0bc18850652fe20f3aea7e1",
+      "exact_bytes": true
+    },
+    {
+      "artifact": "targets",
+      "source_sha256": "a90b3f04874fef4cf15fb640d21c471026ccb2aec304d7b67ccbe9ec1eb7307f",
+      "portable_sha256": "a90b3f04874fef4cf15fb640d21c471026ccb2aec304d7b67ccbe9ec1eb7307f",
+      "exact_bytes": true
+    },
+    {
+      "artifact": "taxonomy_hierarchy",
+      "source_sha256": "04de60ed269176628f7b55bd3e1bb663331492c7cd3182062a87f47a99781b49",
+      "portable_sha256": "04de60ed269176628f7b55bd3e1bb663331492c7cd3182062a87f47a99781b49",
+      "exact_bytes": true
+    },
+    {
+      "artifact": "sources",
+      "source_sha256": "29385ba2fe71cf583229c99fda06d64e2220f3321b75313fefcffe4971ab9380",
+      "portable_sha256": "29385ba2fe71cf583229c99fda06d64e2220f3321b75313fefcffe4971ab9380",
+      "exact_bytes": true
+    },
+    {
+      "artifact": "matrix_full",
+      "source_sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c",
+      "portable_sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c",
+      "exact_bytes": true
+    },
+    {
+      "artifact": "pilot_initial_cases",
+      "source_sha256": "94308f0db3b63715966ec04bdec8bd80e2652da252aae41d66941aad48ae89c0",
+      "portable_sha256": "94308f0db3b63715966ec04bdec8bd80e2652da252aae41d66941aad48ae89c0",
+      "exact_bytes": true
+    },
+    {
+      "artifact": "pilot_initial_outputs",
+      "source_checkpoint_sha256": "f195d27e7b53159823c24cdb58460bede7634e099629d04ded8d48a7cf97774c",
+      "source_assignment_sha256": "c0e1d4b70e0306aa013348fc42a58564b2c84dac3db579e0b96c1e67c778863b",
+      "portable_sha256": "bdd4019a7b52752cb112c0da9fe15784ea2f4872c21ba3ec199f5de17fa74aba",
+      "all_complete_triplets_preserved": 80
+    },
+    {
+      "artifact": "pilot_human_cases",
+      "source_sha256": "2301b802e6e8814eeb5cb5200257f22a506e4aa85289eaae4b5bfc31c1b227a8",
+      "portable_sha256": "2301b802e6e8814eeb5cb5200257f22a506e4aa85289eaae4b5bfc31c1b227a8",
+      "exact_bytes": true
+    },
+    {
+      "artifact": "pilot_human_outputs",
+      "source_checkpoint_sha256": "14e04d6f77b950817589a8abf7c695a5a665c2f74be907384baa14ca52292d3f",
+      "source_assignment_sha256": "bba20f82d85e81fa142e0911c63fad30672fa29d011d6a3f0fc3fcd14f9db587",
+      "portable_sha256": "2c8f0b514cdaf57826cf3a339fab04ed1d3746689c655649b79d277c2b4ceeee",
+      "all_complete_triplets_preserved": 50
+    },
+    {
+      "artifact": "pilot_human_ratings",
+      "source_sha256": "95c99aa517971f8974c68682e2a61a17632cb6fcdc4916dfef31a852444ba9cb",
+      "portable_sha256": "64e443f417864dd1c8177dcbe30c5c5a26cbf1fca508eb127b131e6331c1878e",
+      "scores_preserved": 96,
+      "rater_names_and_comments_included": false,
+      "source_format": "xlsx",
+      "score_unit": "overall_triplet_quality",
+      "source_raters": 2
+    },
+    {
+      "artifact": "taxonomy_selected",
+      "source_snapshot_sha256": "ea488fe01af4aaec84a0d9cc71002455dfe241dc7bf921736d2c9efc7f88d4de",
+      "portable_sha256": "7bbdb20773bc5b3bffce45734af7009ff00cbe9e9186ace20eb64b848d112b8e",
+      "selected_rows": 425,
+      "selection": "effective_green_actor_cell",
+      "human_validation_inferred": false
+    },
+    {
+      "artifact": "matrix_reviewed",
+      "portable_sha256": "98a6333aa9cf06db0bf66a63964fd2cd8f47ccb7129332258ceba8e41b1416af",
+      "design_inputs": [
+        "construction_cases",
+        "candidate_profiles",
+        "profile_design"
+      ],
+      "revision": "protocol/taxonomy_revision.json",
+      "evidence_registry": [
+        "sources",
+        "source_feedback",
+        "source_compilation"
+      ],
+      "candidate_combinations": 4533,
+      "selected_base": 1000,
+      "profile_extensions": 200,
+      "feedback_additions": 3,
+      "generation_rows": 1203
+    },
+    {
+      "artifact": "source_feedback",
+      "portable_sha256": "360e977778a8e78911dc983371d5522bb17ff2ab7636460a6bb68d79199a8aba",
+      "records": 2,
+      "source_type": "feedback",
+      "capture": "relevant_user_supplied_quotations"
+    },
+    {
+      "artifact": "construction_cases",
+      "portable_sha256": "eecb051f7a06e78683de33f9f6c1d3fd1b199b67e1df61978ba53a91297f68dc",
+      "records": 127,
+      "role": "taxonomy_profile_design",
+      "source_sha256": "bdca118dba323d2c42e066f740ddda2000eafef1cb576aa564854839830350fc",
+      "exact_bytes": false
+    },
+    {
+      "artifact": "candidate_profiles",
+      "portable_sha256": "3f0d20a2214a9ba504499ffecc7ff2e69f088df1a69e856ed8cef00a87440ffd",
+      "records": 1511,
+      "role": "taxonomy_profile_design",
+      "source_sha256": "8a0d96f5a9c0af79220e764675c4fdc8b451ca657c1b94fc277171ddf8722621",
+      "exact_bytes": false
+    },
+    {
+      "artifact": "profile_design",
+      "portable_sha256": "f47fa1896d727c4d00cca0c107a98e5b2ecf1ebe6e2dd422193ef7cb0fdf288b",
+      "records": 1200,
+      "role": "taxonomy_profile_design",
+      "source_sha256": "2665dd1ee02ef73a878b498628f5a309e203bc87b797678ce517f1062f09a041",
+      "exact_bytes": false,
+      "extension_source_sha256": "fefab899f71748263d312d0c9df83a8d9146b823ea516ef644fb9404b0fbfe4f"
+    },
+    {
+      "artifact": "source_compilation",
+      "portable_sha256": "4e6fce162bd87ffb0557ff0e69cac350dd039af6be9a0bea4eec798af44c7541",
+      "records": 1,
+      "role": "taxonomy_profile_design"
+    },
+    {
+      "artifact": "matrix_green_snapshot",
+      "portable_sha256": "7d067e48f0d6413676643e85c8d121145f5887a6f0fb4433527c48125864a72f",
+      "records": 428,
+      "role": "source_presence_snapshot"
+    },
+    {
+      "artifact": "taxonomy_cases",
+      "portable_sha256": "baed9bd87f2c266d6b9cf4e780d5d767ead835e7fd811ef1b5ce24825b778fc8",
+      "source_artifact": "usage_source.json",
+      "source_sha256": "7385ab5b3c45aa215f0bad13c71934404e76b4713abf538fd7d57f25a931a37a",
+      "historical_matrix_sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c",
+      "source_case_count": 129,
+      "contains_generated_sentences": false
+    }
+  ],
+  "full_ukrainian_annotation": "in_progress",
+  "is_final_annotated_corpus": false,
+  "generation_matrix": "matrix_reviewed",
+  "historical_generation_matrix": "matrix_full",
+  "taxonomy_revision": "protocol/taxonomy_revision.json",
+  "current_evidence_registry": {
+    "published_sources": "sources",
+    "feedback_sources": "source_feedback",
+    "matrix_type_field": "source_type",
+    "compilation_sources": "source_compilation"
+  },
+  "generation_design": {
+    "cases": "construction_cases",
+    "profiles": "candidate_profiles",
+    "allocations": "profile_design",
+    "matrix_view": "matrix_reviewed",
+    "revision": "protocol/taxonomy_revision.json"
+  },
+  "selection_history": {
+    "path": "protocol/selection_history.json",
+    "sha256": "673bd19737e056ae5c0082829b2104b6910e6bee962a92726fba5c54d84634d0",
+    "role": "selection_count_reconciliation"
+  },
+  "allocation_design": {
+    "path": "protocol/allocation_design.json",
+    "sha256": "864dda3a56b974ba70baf9c43a1eeccfaa6b6ffffe7656c53582882a048999c0",
+    "role": "recorded_allocation_design"
+  }
+}

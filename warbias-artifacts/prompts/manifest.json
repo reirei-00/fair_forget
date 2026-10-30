@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "source": "WarBias Ukrainian generation and English translation prompts",
+  "files": {
+    "current/profile_design.txt": "6dc148f9eaa52f4cdbf127538148038655caf529309141a7e50cedbbd0a0ed97",
+    "current/translation.txt": "d110baad2c37935e6cdb78f25f5adece58f3013bc80272aaad5b70c7f74df6f7",
+    "warbias_validation_sequential_counter.txt": "5c148ce341d19a38660aa5c0279145c99338d78b804a4e2c0c01699d5304e252",
+    "warbias_validation_sequential_stereotype.txt": "77db543e649e1b0037e9ffe0df752ed551f18561a568458b781875ad3ce1c739",
+    "warbias_validation_sequential_unrelated.txt": "60fec27eb5756f1aa969e104f4ad81413da3b02c106596de9bd812af2a565e76",
+    "warbias_validation_zero_shot.txt": "0d3a2838e8909e734614a30801b73bb8b8c70ba2b7d497393157447973ae84f8"
+  }
+}

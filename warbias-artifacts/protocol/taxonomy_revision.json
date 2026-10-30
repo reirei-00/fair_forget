@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "version": "warbias-taxonomy-profile-design-v4",
+  "source": {
+    "sheet": "Annotator_View",
+    "selection": "effective_actor_cell_background",
+    "rgb_hex": "E2EFDA",
+    "green_rows": 425,
+    "excluded_yellow_rows": 556,
+    "green_means": "represented_in_source_dataset",
+    "human_validation_inferred": false,
+    "source_modified_at": "2026-10-26T12:52:05.372Z",
+    "snapshot": "protocol/inputs/taxonomy_selected.csv",
+    "snapshot_sha256": "7bbdb20773bc5b3bffce45734af7009ff00cbe9e9186ace20eb64b848d112b8e",
+    "role": "source_presence_snapshot_only"
+  },
+  "historical_generation_matrix": {
+    "path": "protocol/inputs/matrix_full.csv",
+    "sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c",
+    "rows": 981
+  },
+  "category_merges": [
+    {
+      "source_codes": [
+        "vet_skill_transfer_deskilling",
+        "vet_hiring_discrimination"
+      ],
+      "category_code": "vet_employment_skills_discrimination",
+      "category_uk": "Професійна компетентність і працевлаштування",
+      "scope": "Include hiring discrimination, military-to-civilian skill transfer, deskilling and career-role restrictions."
+    }
+  ],
+  "feedback_source": {
+    "id": "src_feedback_displacement_service_and_voting",
+    "source_type": "feedback",
+    "kind": "user_supplied_feedback",
+    "registry": "protocol/inputs/source_feedback.jsonl"
+  },
+  "added_cases": [
+    {
+      "matrix_item_id": "warbias_idp_service_priority_001__idp_current__masculine__unspecified",
+      "case_id": "warbias_idp_service_priority_001",
+      "bias_type_code": "idp",
+      "bias_type_uk": "статус і досвід внутрішнього переміщення",
+      "category_code": "idp_loyalty_security_collective_blame",
+      "category_uk": "Лояльність безпека і колективна відповідальність",
+      "target_code": "idp_current",
+      "target_uk": "чоловіки зі статусом ВПО",
+      "target_definition_uk": "Люди у поточному внутрішньому переміщенні",
+      "gender_track": "masculine",
+      "age_track": "unspecified",
+      "stereotype_focus_uk": "першочерговий військовий обов’язок через походження з небезпечної території",
+      "stereotype_claim_uk": "Чоловіки зі статусом ВПО повинні першими йти служити, а не переїжджати в безпечніші місця, бо їхні рідні території окуповані або перебувають під обстрілами.",
+      "context_uk": "безпека поліція мобілізація і військовий обов’язок",
+      "harm_mechanism_uk": "колективна провина",
+      "evidence_ids": "src_feedback_displacement_service_and_voting",
+      "row_origin": "author_feedback",
+      "generation_status": "not_generated",
+      "human_annotation_status": "not_annotated",
+      "source_type": "feedback"
+    },
+    {
+      "matrix_item_id": "warbias_refugee_election_exclusion_001__abroad_refugee_status__neutral__unspecified",
+      "case_id": "warbias_refugee_election_exclusion_001",
+      "bias_type_code": "displaced_abroad",
+      "bias_type_uk": "вимушене переміщення за кордон",
+      "category_code": "displaced_abroad_civic_political_participation",
+      "category_uk": "Громадянська і політична участь",
+      "target_code": "abroad_refugee_status",
+      "target_uk": "люди з України зі статусом біженця за кордоном",
+      "target_definition_uk": "Дорослі люди, вимушено переміщені з України через війну, з індивідуально визнаним статусом біженця в країні перебування. Не виводити юридичні права з тимчасового захисту й не припускати конкретної країни.",
+      "gender_track": "neutral",
+      "age_track": "unspecified",
+      "stereotype_focus_uk": "виключення біженців із наступних виборів",
+      "stereotype_claim_uk": "Люди з України зі статусом біженця за кордоном не повинні брати участь у наступних виборах.",
+      "context_uk": "політика вибори і громадянська участь",
+      "harm_mechanism_uk": "заперечення статусу досвіду або права",
+      "evidence_ids": "src_feedback_displacement_service_and_voting",
+      "row_origin": "author_feedback",
+      "generation_status": "not_generated",
+      "human_annotation_status": "not_annotated",
+      "source_type": "feedback"
+    },
+    {
+      "matrix_item_id": "warbias_veteran_order_restoration_001__veteran_generic__generic_plural__unspecified",
+      "case_id": "warbias_veteran_order_restoration_001",
+      "bias_type_code": "veteran",
+      "bias_type_uk": "ветеранський статус і досвід",
+      "category_code": "vet_heroization_mandatory_resilience",
+      "category_uk": "Ідеалізація та завищені очікування від ветеранів",
+      "target_code": "veteran_generic",
+      "target_uk": "ветерани",
+      "target_definition_uk": "Люди, які мають ветеранський статус",
+      "gender_track": "generic_plural",
+      "age_track": "unspecified",
+      "stereotype_focus_uk": "обов’язок навести порядок у громаді",
+      "stereotype_claim_uk": "Ветерани повинні навести порядок у громаді.",
+      "context_uk": "громада і повсякденна взаємодія",
+      "harm_mechanism_uk": "героїзація або інструменталізація",
+      "evidence_ids": "src_feedback_veteran_taxonomy",
+      "row_origin": "author_feedback",
+      "generation_status": "not_generated",
+      "human_annotation_status": "not_annotated",
+      "source_type": "feedback"
+    }
+  ],
+  "reviewed_matrix": {
+    "path": "protocol/inputs/matrix_reviewed.csv",
+    "sha256": "98a6333aa9cf06db0bf66a63964fd2cd8f47ccb7129332258ceba8e41b1416af",
+    "rows": 1203,
+    "base_allocations": 1000,
+    "profile_extensions": 200,
+    "author_additions": 3,
+    "role": "next_generation_design",
+    "generated_as_this_revision": false
+  },
+  "category_relabels": [
+    {
+      "category_code": "vet_helplessness_agency_entrepreneurship",
+      "category_uk": "Пасивність у розв’язанні власних проблем"
+    },
+    {
+      "category_code": "vet_heroization_mandatory_resilience",
+      "category_uk": "Ідеалізація та завищені очікування від ветеранів"
+    },
+    {
+      "category_code": "idp_aid_dependency_deservingness",
+      "category_uk": "Соціальна допомога та розподіл ресурсів"
+    }
+  ],
+  "category_splits": [
+    {
+      "source_code": "vet_disability_work_capacity",
+      "categories": [
+        {
+          "category_code": "vet_disability_appearance",
+          "category_uk": "Уявлення про зовнішні ознаки інвалідності",
+          "case_ids": [
+            "ssuk_vet_disability_work_capacity_case_001",
+            "ssuk_vet_disability_work_capacity_case_002"
+          ]
+        },
+        {
+          "category_code": "vet_injury_simulation_accusations",
+          "category_uk": "Звинувачення в симуляції поранень",
+          "case_ids": [
+            "ssuk_vet_disability_work_capacity_case_007"
+          ]
+        },
+        {
+          "category_code": "vet_disability_autonomy_work_capacity",
+          "category_uk": "Узагальнення щодо самостійності та працездатності",
+          "case_ids": [
+            "ssuk_vet_disability_work_capacity_case_004",
+            "ssuk_vet_disability_work_capacity_case_005",
+            "ssuk_vet_disability_work_capacity_case_006"
+          ]
+        }
+      ]
+    }
+  ],
+  "naming_feedback_source": {
+    "id": "src_feedback_veteran_taxonomy",
+    "source_type": "feedback",
+    "kind": "user_supplied_feedback",
+    "registry": "protocol/inputs/source_feedback.jsonl"
+  },
+  "evidence_registry": {
+    "published_sources": "sources",
+    "feedback_sources": "source_feedback",
+    "matrix_type_field": "source_type",
+    "compilation_sources": "source_compilation"
+  },
+  "category_assignments": [
+    {
+      "case_id": "ssuk_vet_media_status_marking_case_001",
+      "category_code": "vet_media_status_marking",
+      "category_uk": "Медійне маркування ветеранського статусу"
+    },
+    {
+      "case_id": "ssuk_vet_media_status_marking_case_003",
+      "category_code": "vet_media_status_marking",
+      "category_uk": "Медійне маркування ветеранського статусу"
+    },
+    {
+      "case_id": "wb2_vet_social_pressure_serve_again",
+      "category_code": "vet_heroization_mandatory_resilience",
+      "category_uk": "Героїзація та обов’язкова стійкість"
+    },
+    {
+      "case_id": "wb3_vet_cohort_recognition",
+      "category_code": "vet_legitimacy",
+      "category_uk": "Легітимність АТО/ООС і повномасштабної війни"
+    },
+    {
+      "case_id": "wb3_vet_enterprise_choice",
+      "category_code": "vet_enterprise_decision_autonomy",
+      "category_uk": "Самостійність у підприємництві"
+    },
+    {
+      "case_id": "wb3_idp_settlement_choice",
+      "category_code": "idp_return_integration_choice",
+      "category_uk": "Повернення місцева інтеграція і право вибору"
+    },
+    {
+      "case_id": "wb3_idp_housing_decisions",
+      "category_code": "idp_passivity_victimhood_agency",
+      "category_uk": "Пасивність віктимізація та агентність"
+    },
+    {
+      "case_id": "wb3_idp_language_belonging",
+      "category_code": "idp_regional_cultural_prejudice",
+      "category_uk": "Регіональні та культурні упередження"
+    },
+    {
+      "case_id": "wb3_idp_origin_manners",
+      "category_code": "idp_regional_cultural_prejudice",
+      "category_uk": "Регіональні та культурні упередження"
+    },
+    {
+      "case_id": "wb3_idp_pets_rental",
+      "category_code": "idp_housing_tenant_reliability",
+      "category_uk": "Житло і надійність орендаря"
+    },
+    {
+      "case_id": "wb3_idp_children_rental",
+      "category_code": "idp_housing_tenant_reliability",
+      "category_uk": "Житло і надійність орендаря"
+    },
+    {
+      "case_id": "wb3_vet_accommodation_blame",
+      "category_code": "vet_rehabilitation_autonomy",
+      "category_uk": "Реабілітація доступність і автономність"
+    },
+    {
+      "case_id": "wb3_vet_intrusive_help",
+      "category_code": "vet_rehabilitation_autonomy",
+      "category_uk": "Реабілітація доступність і автономність"
+    },
+    {
+      "case_id": "wb3_vet_universal_leadership",
+      "category_code": "vet_skill_transfer_deskilling",
+      "category_uk": "Військові навички декваліфікація і кар’єрна ієрархія"
+    }
+  ],
+  "profile_scope": {
+    "exclude_occupation_profiles": false,
+    "exclude_older_women_veterans": false,
+    "green_presence_required": false,
+    "feedback_allocation": "one_explicit_profile_per_added_case"
+  },
+  "generation_design": {
+    "cases": "construction_cases",
+    "candidate_profiles": "candidate_profiles",
+    "allocations": "profile_design",
+    "counts_derived_from_inputs": true
+  },
+  "green_matrix_snapshot": {
+    "path": "protocol/inputs/matrix_green_snapshot.csv",
+    "sha256": "7d067e48f0d6413676643e85c8d121145f5887a6f0fb4433527c48125864a72f",
+    "rows": 428,
+    "role": "source_presence_snapshot_only"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "scope": "Recorded selection changes; historical reference exclusions do not filter the current design.",
+  "sources": {
+    "case_changes": {
+      "path": "protocol/inputs/case_changes.json",
+      "sha256": "af6c8c74e7262a6f9bd9437774e6f5daba29ebccfbd8dd1b4bb47978fbb0497b",
+      "source_artifacts": [
+        {
+          "artifact": "historical_generation_matrix",
+          "sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c"
+        },
+        {
+          "artifact": "construction_case_specifications",
+          "sha256": "bdca118dba323d2c42e066f740ddda2000eafef1cb576aa564854839830350fc"
+        }
+      ]
+    },
+    "profile_replacements": {
+      "path": "protocol/inputs/profile_replacements.json",
+      "sha256": "9eea74f23eb786f62f9929cf0ae1d10418fe6a006ea70e3a3cb13c49f776da2f",
+      "source_artifact": "occupation_filter_correction.json",
+      "exact_bytes": true,
+      "pairwise_replacement_mapping_recorded": false
+    },
+    "profile_exclusions": {
+      "path": "protocol/inputs/profile_exclusions.json",
+      "sha256": "b0099f2df352e108c834967fdc3bc289e585195febe968211c1193bfa1987cb2",
+      "exact_bytes": true,
+      "repository": "the-project/WarBias",
+      "revision": "164f355623c2da0028821e0942cad493558a6c13",
+      "source_path": "metadata/profile_exclusions.json",
+      "source_url": "https://huggingface.co/datasets/the-project/WarBias/blob/164f355623c2da0028821e0942cad493558a6c13/metadata/profile_exclusions.json",
+      "changes": [
+        {
+          "criterion": "Occupation-qualified actor profiles",
+          "url": "https://huggingface.co/datasets/the-project/WarBias/discussions/18",
+          "revision": "4f696b82f91731caa1b0122c183a23bae8e0abce"
+        },
+        {
+          "criterion": "Older women veterans",
+          "url": "https://huggingface.co/datasets/the-project/WarBias/discussions/19",
+          "revision": "c71e3b65f2b720e67d0705d337d0e7ec3f896316"
+        }
+      ]
+    }
+  }
+}

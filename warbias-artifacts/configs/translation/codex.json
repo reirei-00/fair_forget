@@ -1,0 +1,13 @@
+{
+  "immutable_model_version": "not_exposed",
+  "invocation": "assistant_in_current_conversation",
+  "model": "gpt-6.1-sol",
+  "provider": "codex_conversation",
+  "revision": null,
+  "settings": {},
+  "source_language": "uk",
+  "target_language": "en",
+  "usage": null,
+  "application": "Codex",
+  "model_identity_source": "saved_conversation_turn_metadata"
+}
