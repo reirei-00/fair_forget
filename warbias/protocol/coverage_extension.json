@@ -12,9 +12,11 @@
     ]
   },
   "case_selection": {
-    "coverage_unit": "semantic_case_and_target_group",
+    "coverage_unit": "case_profile_and_reporter",
     "category_role": "reporting_only",
-    "exclude_full_human_annotation_cohort": true,
+    "complete_existing_case_profiles": true,
+    "skip_existing_annotation_combinations": true,
+    "preserve_annotation_texts_and_reviews": true,
     "supersessions": "protocol/inputs/case_changes.json",
     "superseded_parent_coverage": "all_recorded_replacement_cases_in_annotation_cohort",
     "feedback_cases": "protocol/taxonomy_revision.json#/added_cases",
@@ -27,9 +29,14 @@
     "prompt_bundle_field": "generation_prompt_bundle",
     "strategy": "sequential",
     "stage_order": ["stereotype", "counter", "unrelated"],
+    "framings_per_profile": ["unattributed", "first_allowed_reporter", "second_allowed_reporter"],
     "fixed_sample_cap": null
   },
   "dimensions": {
+    "catalog": null,
+    "dimension_count": 21,
+    "expansion": "one_factor_at_a_time",
+    "preserve_existing_gender_age_panels": true,
     "applicability_by_case": null,
     "allowed_values_by_case": null,
     "preserve_intrinsic_attributes": true,
