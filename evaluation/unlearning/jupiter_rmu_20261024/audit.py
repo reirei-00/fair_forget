@@ -33,7 +33,7 @@ def audit(root=None):
         "n_non_unknown_ambig",
     ]
     for pair in manifest["pairs"]:
-        phases, metrics = {}, {}
+        phases, metrics, mapping = {}, {}, {}
         for phase, info in pair["phases"].items():
             directory = root / info["path"]
             raw = gzip.decompress((directory / "predictions.jsonl.gz").read_bytes())
@@ -45,6 +45,22 @@ def audit(root=None):
             assert {r["category"] for r in records} == {"Gender_identity"}
             assert all(r["pred_label"] in (0, 1, 2) for r in records)
             assert all(r["is_correct"] == int(r["label"] == r["pred_label"]) for r in records)
+            missing = [r for r in records if r["target_loc"] is None]
+            mapping[phase] = {
+                "total": len(records),
+                "mapped": len(records) - len(missing),
+                "unmapped": len(missing),
+                "unmapped_by_condition": {},
+                "unmapped_non_unknown_by_condition": {},
+            }
+            for condition in ("ambig", "disambig"):
+                subset = [r for r in missing if r["context_condition"] == condition]
+                mapping[phase]["unmapped_by_condition"][condition] = len(subset)
+                mapping[phase]["unmapped_non_unknown_by_condition"][condition] = sum(
+                    r["pred_label"] != r["unknown_loc"] for r in subset
+                )
+            assert mapping[phase]["mapped"] == 5656
+            assert mapping[phase]["unmapped_by_condition"] == {"ambig": 8, "disambig": 8}
             saved = json.loads((directory / "eval_results.json").read_text())
             assert saved["eval_mode"] == "model"
             calculated = scorer.compute_bbq_metrics(records)
@@ -85,6 +101,7 @@ def audit(root=None):
                 "item_metadata_equal": True,
                 "native_metrics_reproduced": True,
                 "training_steps": len(losses),
+                "target_mapping": mapping,
             }
         )
     verification = {
@@ -92,7 +109,13 @@ def audit(root=None):
         "files_hashed": len(manifest["files"]),
         "predictions_replayed": 3 * 2 * 5672,
         "pairs": checks,
-        "limitations": manifest["limitations"],
+        "limitations": manifest["limitations"]
+        + [
+            "Target mapping covers 5,656/5,672 items per phase. Sixteen target_loc values "
+            "are null (8 per condition). The historical scorer includes their non-unknown "
+            "outputs in bias-score denominators but never in the biased-answer numerator. "
+            "Original scores are preserved, not corrected or treated as fully mapped."
+        ],
     }
     return summaries, verification
 

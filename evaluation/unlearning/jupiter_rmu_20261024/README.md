@@ -43,3 +43,18 @@ No Mamay unlearning result is confirmed in this recovered evidence.
 
 Original users and commands remain in job receipts and the usage log. October
 28–29 results are excluded from the reporting period ending October 25.
+
+## Training notebook and mapping coverage
+
+The [training workflow notebook](../../../notebooks/not_executed/jupiter_rmu_training_workflow.ipynb)
+was prepared on 30 October. It calls the preserved trainer after checking model
+weights, required data, CUDA and a new output directory. It does not claim an
+executed October training-notebook history; those runs used the recorded CLI
+jobs. The existing executed notebook replays the actual saved results.
+
+All six prediction files have 16 missing `target_loc` values (8 ambiguous and
+8 disambiguated), giving target-mapping coverage 5,656/5,672. The original scorer
+includes these examples when counting non-unknown outputs but excludes them
+from the biased-answer numerator. Original scores are preserved without a
+retroactive mapping change. `verification.json` reports missing-target counts
+and their non-unknown predictions separately for every model and phase.
