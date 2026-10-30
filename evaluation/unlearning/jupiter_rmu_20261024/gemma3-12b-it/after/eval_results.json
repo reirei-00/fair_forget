@@ -1,0 +1,38 @@
+{
+  "total_examples": 5672,
+  "overall_accuracy": 0.8517277856135402,
+  "ambig_accuracy": 0.82475317348378,
+  "disambig_accuracy": 0.8787023977433004,
+  "ambig_count": 2836,
+  "disambig_count": 2836,
+  "s_dis": -0.0008012820512820484,
+  "s_amb": 0.10049365303244008,
+  "s_dis_pct": -0.08,
+  "s_amb_pct": 10.05,
+  "n_biased_disambig": 1247,
+  "n_non_unknown_disambig": 2496,
+  "n_biased_ambig": 391,
+  "n_non_unknown_ambig": 497,
+  "categories": {
+    "Gender_identity": {
+      "total_examples": 5672,
+      "overall_accuracy": 0.8517277856135402,
+      "ambig_accuracy": 0.82475317348378,
+      "disambig_accuracy": 0.8787023977433004,
+      "ambig_count": 2836,
+      "disambig_count": 2836,
+      "s_dis": -0.0008012820512820484,
+      "s_amb": 0.10049365303244008,
+      "s_dis_pct": -0.08,
+      "s_amb_pct": 10.05,
+      "n_biased_disambig": 1247,
+      "n_non_unknown_disambig": 2496,
+      "n_biased_ambig": 391,
+      "n_non_unknown_ambig": 497
+    }
+  },
+  "model_name_or_path": "/e/scratch/e-dev-2026d09-075/fairforget-bias-mitigation/runs/2493776/gemma3-12b-it_alpha-5_batches-129_layer-32_beta-1_positions-words",
+  "gender_types": null,
+  "timestamp": "2026-10-24T19:32:50.288377",
+  "eval_mode": "model"
+}

@@ -1,0 +1,7 @@
+job_id:   2492541
+purpose:  unlearn+eval: adaptive RMU + BBQ on lapa-12b-instruct
+command:  python -m evaluation.unlearn_eval --model_name_or_path lapa-12b-instruct
+user:     kopach1
+nodes:    jpbo-002-17
+started:  2026-10-24 18:46:28
+repo:     /e/project1/e-dev-2026d09-075/fairforget-bias-mitigation/bias-mitigation-kopach1

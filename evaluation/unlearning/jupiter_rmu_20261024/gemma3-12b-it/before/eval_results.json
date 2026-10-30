@@ -1,0 +1,38 @@
+{
+  "total_examples": 5672,
+  "overall_accuracy": 0.8531382228490832,
+  "ambig_accuracy": 0.8208744710860366,
+  "disambig_accuracy": 0.8854019746121298,
+  "ambig_count": 2836,
+  "disambig_count": 2836,
+  "s_dis": -0.005568814638027053,
+  "s_amb": 0.10225669957686888,
+  "s_dis_pct": -0.56,
+  "s_amb_pct": 10.23,
+  "n_biased_disambig": 1250,
+  "n_non_unknown_disambig": 2514,
+  "n_biased_ambig": 399,
+  "n_non_unknown_ambig": 508,
+  "categories": {
+    "Gender_identity": {
+      "total_examples": 5672,
+      "overall_accuracy": 0.8531382228490832,
+      "ambig_accuracy": 0.8208744710860366,
+      "disambig_accuracy": 0.8854019746121298,
+      "ambig_count": 2836,
+      "disambig_count": 2836,
+      "s_dis": -0.005568814638027053,
+      "s_amb": 0.10225669957686888,
+      "s_dis_pct": -0.56,
+      "s_amb_pct": 10.23,
+      "n_biased_disambig": 1250,
+      "n_non_unknown_disambig": 2514,
+      "n_biased_ambig": 399,
+      "n_non_unknown_ambig": 508
+    }
+  },
+  "model_name_or_path": "gemma3-12b-it",
+  "gender_types": null,
+  "timestamp": "2026-10-23T12:22:32.298724",
+  "eval_mode": "model"
+}

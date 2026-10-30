@@ -1,0 +1,35 @@
+# Shared defaults for experiments. Keep method-specific settings explicit and version-controlled.
+# Paths are for the JUPITER cluster. On a laptop, override them in config/local.yaml (git-ignored).
+seed: 42
+device: cuda
+
+paths:
+  # Shared, read-only model weights (maintained in makovska1's fairforget/ setup).
+  models_root: /e/project1/e-dev-2026d09-075/fairforget/models
+  # Team folder on /e/project1: long-term storage (kept until grant end + 3 months).
+  team_root: /e/project1/e-dev-2026d09-075/fairforget-bias-mitigation
+  # Final checkpoints and results worth keeping.
+  results_root: /e/project1/e-dev-2026d09-075/fairforget-bias-mitigation/results
+  # Intermediate checkpoints and logs, one folder per Slurm job. Files older than 90 days are deleted.
+  runs_root: /e/scratch/e-dev-2026d09-075/fairforget-bias-mitigation/runs
+  # Shared log of submitted jobs for the grant usage report. (Team-specific)
+  usage_log: /e/project1/e-dev-2026d09-075/fairforget-bias-mitigation/usage_log.tsv
+
+# Short model names -> folder names inside paths.models_root.
+# Anything not listed here is treated as a local path or a Hugging Face hub id.
+models:
+  lapa-12b-instruct: lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037
+  qwen3-8b: Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218
+  llama31-8b-instruct: Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659
+  gemma3-12b-it: gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80
+  mamay-12b-it: MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244
+  mamay-27b-it: MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7
+
+data:
+  # Relative paths are resolved from the repository root.
+  stereoset_files:
+    - data/stereoset/raw/test.json
+    - data/stereoset/raw/dev.json
+  bbq_files:
+    - data/bbq/raw/Gender_identity.jsonl
+  bbq_metadata: data/bbq/raw/additional_metadata.csv

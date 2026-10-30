@@ -39,3 +39,15 @@ translation and review. Both aligned language versions are retained.
 See the [WarBias guide](warbias/README.md) for its separate installation, tests
 and source export. Existing benchmark notebooks, evaluation scripts and
 their root dependencies remain independent of this subproject.
+
+## JUPITER unlearning results
+
+The [executed October RMU notebook](notebooks/executed/jupiter_rmu_october_2026.ipynb)
+replays the completed 23–24 October 2026 Lapa, Gemma and Qwen experiments from
+saved English BBQ predictions, with before/after tables and training-loss plots.
+The [clean notebook](notebooks/not_executed/jupiter_rmu_october_2026.ipynb) can be
+run locally with `pandas`, `matplotlib` and Jupyter; it needs no GPU or API keys.
+The [evidence package](evaluation/unlearning/jupiter_rmu_20261024/README.md)
+contains original metrics, compressed predictions, configurations, job receipts,
+the preserved historical scorer and a source snapshot. This is a separate
+English pilot, rather than a completed current Fair-UK intervention panel.

@@ -1,0 +1,38 @@
+{
+  "total_examples": 5672,
+  "overall_accuracy": 0.4541607898448519,
+  "ambig_accuracy": 0.3392101551480959,
+  "disambig_accuracy": 0.5691114245416079,
+  "ambig_count": 2836,
+  "disambig_count": 2836,
+  "s_dis": 0.02483900643974235,
+  "s_amb": 0.02679830747531737,
+  "s_dis_pct": 2.48,
+  "s_amb_pct": 2.68,
+  "n_biased_disambig": 1114,
+  "n_non_unknown_disambig": 2174,
+  "n_biased_ambig": 975,
+  "n_non_unknown_ambig": 1874,
+  "categories": {
+    "Gender_identity": {
+      "total_examples": 5672,
+      "overall_accuracy": 0.4541607898448519,
+      "ambig_accuracy": 0.3392101551480959,
+      "disambig_accuracy": 0.5691114245416079,
+      "ambig_count": 2836,
+      "disambig_count": 2836,
+      "s_dis": 0.02483900643974235,
+      "s_amb": 0.02679830747531737,
+      "s_dis_pct": 2.48,
+      "s_amb_pct": 2.68,
+      "n_biased_disambig": 1114,
+      "n_non_unknown_disambig": 2174,
+      "n_biased_ambig": 975,
+      "n_non_unknown_ambig": 1874
+    }
+  },
+  "model_name_or_path": "/e/scratch/e-dev-2026d09-075/fairforget-bias-mitigation/runs/2493909/qwen3-8b_alpha-5_batches-129_layer-17_beta-1_positions-words",
+  "gender_types": null,
+  "timestamp": "2026-10-24T19:46:00.477890",
+  "eval_mode": "model"
+}

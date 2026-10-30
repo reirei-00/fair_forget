@@ -1,0 +1,3 @@
+category,total_examples,overall_accuracy,ambig_accuracy,disambig_accuracy,s_dis,s_amb,s_dis_pct,s_amb_pct
+OVERALL,5672,0.8517,0.8248,0.8787,-0.0008,0.1005,-0.08%,10.05%
+Gender_identity,5672,0.8517,0.8248,0.8787,-0.0008,0.1005,-0.08%,10.05%

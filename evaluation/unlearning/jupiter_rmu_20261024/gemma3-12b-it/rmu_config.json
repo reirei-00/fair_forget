@@ -1,0 +1,36 @@
+{
+  "model_name_or_path": "gemma3-12b-it",
+  "module_str": null,
+  "output_dir": null,
+  "batch_size": 4,
+  "max_num_batches": 257,
+  "max_length": 512,
+  "split": true,
+  "retain_corpora": null,
+  "forget_corpora": null,
+  "alpha": [
+    5.0
+  ],
+  "steering_coeffs": "20",
+  "beta": 1.0,
+  "lr": 0.0005,
+  "layer_id": 32,
+  "layer_ids": [
+    30,
+    31,
+    32
+  ],
+  "param_names": [
+    "mlp.down_proj.weight"
+  ],
+  "loss_positions": "words",
+  "seed": 42,
+  "verbose": false,
+  "eval_batch_size": 8,
+  "eval_limit": null,
+  "gender_types": null,
+  "save_model": true,
+  "steering_coeff_list": [
+    20.0
+  ]
+}

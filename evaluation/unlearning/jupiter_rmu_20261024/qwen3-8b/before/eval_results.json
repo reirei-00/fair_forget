@@ -1,0 +1,38 @@
+{
+  "total_examples": 5672,
+  "overall_accuracy": 0.8986248236953456,
+  "ambig_accuracy": 0.9594499294781382,
+  "disambig_accuracy": 0.8377997179125529,
+  "ambig_count": 2836,
+  "disambig_count": 2836,
+  "s_dis": -0.013744273219491898,
+  "s_amb": 0.010225669957686884,
+  "s_dis_pct": -1.37,
+  "s_amb_pct": 1.02,
+  "n_biased_disambig": 1184,
+  "n_non_unknown_disambig": 2401,
+  "n_biased_ambig": 72,
+  "n_non_unknown_ambig": 115,
+  "categories": {
+    "Gender_identity": {
+      "total_examples": 5672,
+      "overall_accuracy": 0.8986248236953456,
+      "ambig_accuracy": 0.9594499294781382,
+      "disambig_accuracy": 0.8377997179125529,
+      "ambig_count": 2836,
+      "disambig_count": 2836,
+      "s_dis": -0.013744273219491898,
+      "s_amb": 0.010225669957686884,
+      "s_dis_pct": -1.37,
+      "s_amb_pct": 1.02,
+      "n_biased_disambig": 1184,
+      "n_non_unknown_disambig": 2401,
+      "n_biased_ambig": 72,
+      "n_non_unknown_ambig": 115
+    }
+  },
+  "model_name_or_path": "qwen3-8b",
+  "gender_types": null,
+  "timestamp": "2026-10-23T12:22:03.768546",
+  "eval_mode": "model"
+}
