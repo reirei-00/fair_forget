@@ -159,9 +159,10 @@ For every profile, use no reporter and each of the two allowed reporters.
 Use the 21-dimension catalog. Expand each applicable dimension separately and
 preserve the recorded gender × age panels. `coverage_dimensions.json` defines
 the values and reduced designs. `coverage_applicability.jsonl` records the case
-rules. The initial shared subset adds 11,952 triplets to the 1,059 existing
-items. A further 2,124 service-detail variants remain optional. The final total
-is not selected. New outputs retain
+rules. The selected plan contains 13,011 triplets per language: 1,059 existing
+items and 11,952 new items. New profiles for rank, recruitment route, service
+duration and time since discharge are deferred. Their 2,124 additional triplets are
+outside this generation scope. Recorded profiles remain included. New outputs retain
 `human_validated: false` and `human_annotation_status: "not_annotated"`.
 
 `coverage_design.select_items` preserves recorded profiles and selects four

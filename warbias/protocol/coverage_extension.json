@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "role": "coverage_extension_protocol",
-  "status": "reduced_designs_prepared",
+  "status": "generation_scope_selected",
   "source_language": "uk",
   "scope": {
     "included_target_groups": [
@@ -51,9 +51,11 @@
       "second_allowed_reporter"
     ],
     "fixed_sample_cap": null,
-    "initial_scope": "shared_subset_of_reduced_designs",
-    "shared_subset_new_triplets": 11952,
-    "optional_service_detail_new_triplets": 2124
+    "selected_scope": "four_sectors_deferred_service_details",
+    "selection_authority": "author",
+    "planned_total_triplets_per_language": 13011,
+    "new_triplet_target": 11952,
+    "deferred_service_detail_new_triplets": 2124
   },
   "dimensions": {
     "catalog": "protocol/coverage_dimensions.json",

@@ -106,14 +106,15 @@
   "preserve_recorded_profiles": true,
   "preserve_recorded_gender_age_panels": true,
   "framings_per_profile": 3,
-  "shared_subset_deferred_new_dimensions": [
+  "final_total_selection": "four_sectors_deferred_service_details",
+  "deferred_new_dimensions": [
     "rank",
     "recruitment_route",
     "service_duration",
     "discharge_recency"
   ],
-  "shared_subset_total_triplets_per_language": 13011,
-  "shared_subset_new_triplets": 11952,
-  "optional_service_detail_new_triplets": 2124,
-  "final_total_selection": "pending"
+  "selected_total_triplets_per_language": 13011,
+  "selected_new_triplets": 11952,
+  "deferred_service_detail_new_triplets": 2124,
+  "selection_authority": "author"
 }
