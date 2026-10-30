@@ -143,16 +143,23 @@ The [CSV view](../protocol/inputs/matrix_reviewed.csv) includes both the 1,200
 allocated profiles and these three additions. Notebook 3 derives the component,
 extension and group counts from the records before preparing model requests.
 
-The next [coverage extension](../protocol/coverage_extension.json) includes IDPs,
-veterans and people displaced abroad. It excludes people who lived under
-occupation, returnees from abroad and civilians with war-caused disabilities.
-Check coverage for each case and target group. A covered or green category
-does not cover its other cases. Skip cases already represented in the full
-human-annotation cohort and respect recorded split-case replacements. Include the three feedback cases. Use the
-selected Lapa model and sequential prompts in `protocol/construction.json`.
-Set dimension applicability and allowed values for each case before fixing the
-generation count and execution plan. New outputs retain `human_validated: false`
-and `human_annotation_status: "not_annotated"`.
+The next [coverage extension](../protocol/coverage_extension.json) fills missing
+profiles for existing and new cases. It includes IDPs, veterans and people
+displaced abroad. It excludes people who lived under occupation, returnees from
+abroad and civilians with war-caused disabilities.
+
+Check coverage for each case, target profile and reporter. A covered or green
+category does not cover its other cases or profiles. Skip only combinations
+already in the full human-annotation cohort. Preserve their texts and reviews,
+recorded split-case replacements and frozen allocations. Include the three
+feedback cases.
+
+Use the selected Lapa model and sequential prompts in `protocol/construction.json`.
+For every profile, use no reporter and each of the two allowed reporters.
+Use the 21-dimension catalog. Expand each applicable dimension separately and
+preserve the recorded gender × age panels. The dimension catalog, case applicability, allowed values
+and final generation count remain pending. New outputs retain
+`human_validated: false` and `human_annotation_status: "not_annotated"`.
 
 ## Pilot and selection
 
