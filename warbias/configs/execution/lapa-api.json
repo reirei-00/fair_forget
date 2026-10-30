@@ -1,0 +1,6 @@
+{
+  "workers": 3,
+  "requests_per_minute": 30,
+  "timeout_seconds": 120,
+  "transport_attempts": 4
+}

@@ -182,6 +182,11 @@ Set `LAPA_BASE_URL` and `LAPA_API_KEY` in the execution environment. The default
 limits are 24 requests per minute, a 120-second timeout and four transport
 attempts. Keep credentials outside the source package.
 
+`configs/execution/lapa-api.json` sets three workers and one shared limit of
+30 requests per minute. Pass this object as the provider's `transport` settings.
+Independent inputs run in parallel within each stage. C waits for S, and U
+waits for S and C. One writer saves responses and checkpoints.
+
 ## Pilot and selection
 
 The pilot compares each candidate model with two prompt methods:
