@@ -13,6 +13,7 @@
   },
   "case_selection": {
     "coverage_unit": "semantic_case_and_target_group",
+    "category_role": "reporting_only",
     "exclude_full_human_annotation_cohort": true,
     "supersessions": "protocol/inputs/case_changes.json",
     "superseded_parent_coverage": "all_recorded_replacement_cases_in_annotation_cohort",
