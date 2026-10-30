@@ -1,6 +1,7 @@
 """Injectable generation with durable, request-bound raw response evidence."""
 
 import hashlib
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from copy import deepcopy
 from pathlib import Path
 from typing import Protocol
@@ -73,6 +74,53 @@ def request_record(item_id, stage, state, config, prompt):
     }
 
 
+def _generate_response(provider, request):
+    response = provider.generate(deepcopy(request))
+    if not isinstance(response, dict):
+        raise ValueError("Generation provider must return a raw JSON object")
+    canonical_json(response)
+    return response
+
+
+def _responses(requests, provider, workers):
+    """Drain active calls after a failure so successful responses remain reusable."""
+    if workers == 1:
+        for request in requests:
+            yield request, _generate_response(provider, request)
+        return
+    pending = iter(requests)
+    failure = None
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        active = {}
+
+        def fill():
+            while len(active) < workers:
+                request = next(pending, None)
+                if request is None:
+                    return
+                active[executor.submit(_generate_response, provider, request)] = request
+
+        fill()
+        while active:
+            completed, _ = wait(active, return_when=FIRST_COMPLETED)
+            for future in completed:
+                request = active.pop(future)
+                try:
+                    response = future.result()
+                except Exception as error:
+                    failure = failure or error
+                else:
+                    yield request, response
+            if failure is None:
+                fill()
+            else:
+                for future in list(active):
+                    if future.cancel():
+                        active.pop(future)
+    if failure is not None:
+        raise failure
+
+
 def run_requests(requests, output, *, provider=None, execute=False):
     """Preview or resume exact requests; only explicit execution invokes a provider."""
     requests = list(requests)
@@ -100,11 +148,11 @@ def run_requests(requests, output, *, provider=None, execute=False):
     pending = [request for request in requests if request["id"] not in saved]
     if pending and provider is None:
         raise ValueError("Execution requires an explicitly supplied generation provider")
+    workers = getattr(provider, "workers", 1)
+    if type(workers) is not int or workers < 1:
+        raise ValueError("Generation workers must be a positive integer")
     with raw.open("a", encoding="utf-8") as stream:
-        for request in pending:
-            response = provider.generate(deepcopy(request))
-            if not isinstance(response, dict):
-                raise ValueError("Generation provider must return a raw JSON object")
+        for request, response in _responses(pending, provider, min(workers, max(1, len(pending)))):
             record = {
                 "id": request["id"],
                 "request": request,

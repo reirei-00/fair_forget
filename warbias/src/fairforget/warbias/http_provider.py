@@ -32,6 +32,7 @@ class OpenAICompatibleProvider:
         requests_per_minute=24,
         timeout_seconds=120,
         transport_attempts=4,
+        workers=1,
         opener=None,
         clock=None,
         sleep=None,
@@ -64,17 +65,29 @@ class OpenAICompatibleProvider:
             raise ValueError("Rate and timeout must be positive finite numbers")
         if type(transport_attempts) is not int or transport_attempts < 1:
             raise ValueError("Transport attempts must be a positive integer")
+        if type(workers) is not int or workers < 1:
+            raise ValueError("Generation workers must be a positive integer")
         self.endpoint = base_url.rstrip("/") + "/chat/completions"
         self.model = model
+        self.workers = workers
         self._api_key = api_key
         self._interval = 60 / requests_per_minute
         self._timeout = timeout_seconds
         self._attempt_limit = transport_attempts
-        self._open = opener or build_opener(_NoRedirect()).open
+        self._open = opener
+        self._thread = threading.local()
         self._clock = clock or time.monotonic
         self._sleep = sleep or time.sleep
         self._last_request = None
         self._lock = threading.Lock()
+
+    def _open_request(self, call):
+        opener = self._open
+        if opener is None:
+            if not hasattr(self._thread, "open"):
+                self._thread.open = build_opener(_NoRedirect()).open
+            opener = self._thread.open
+        return opener(call, timeout=self._timeout)
 
     def _wait_turn(self):
         with self._lock:
@@ -123,7 +136,7 @@ class OpenAICompatibleProvider:
             self._wait_turn()
             retry_after = None
             try:
-                with self._open(call, timeout=self._timeout) as response:
+                with self._open_request(call) as response:
                     raw = response.read(4 * 1024 * 1024 + 1)
                     status = response.status
             except HTTPError as error:

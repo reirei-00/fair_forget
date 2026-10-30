@@ -3,6 +3,7 @@
 import io
 import json
 import threading
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from email.utils import format_datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -270,3 +271,65 @@ def test_invalid_header_credentials_fail_without_echoing_value(api_key):
             base_url="https://fixture.test", api_key=api_key, model=MODEL
         )
     assert api_key not in str(caught.value)
+
+
+@pytest.mark.parametrize("workers", [0, -1, True, None, 1.5])
+def test_invalid_worker_count_is_rejected(workers):
+    with pytest.raises(ValueError, match="workers must be a positive integer"):
+        provider(lambda call, timeout: response(), workers=workers)
+
+
+def test_parallel_calls_share_one_rate_limit():
+    clock = Clock()
+    client = provider(lambda call, timeout: response(), clock=clock, workers=3)
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        outputs = list(executor.map(lambda _: client.generate(request()), range(9)))
+    assert client.workers == 3
+    assert len(outputs) == 9
+    assert clock.sleeps == [2.5] * 8
+    assert clock.now == 20
+
+
+def test_default_openers_are_reused_only_within_their_own_thread(monkeypatch):
+    created = []
+    lock = threading.Lock()
+    first_calls = threading.Barrier(2)
+
+    class Opener:
+        def __init__(self):
+            self.owner = threading.get_ident()
+            self.calls = 0
+
+        def open(self, call, *, timeout):
+            assert threading.get_ident() == self.owner
+            self.calls += 1
+            if self.calls == 1:
+                first_calls.wait(timeout=3)
+            return response()
+
+    def build(*handlers):
+        opener = Opener()
+        with lock:
+            created.append(opener)
+        return opener
+
+    monkeypatch.setattr(http_provider, "build_opener", build)
+    clock = Clock()
+    client = http_provider.OpenAICompatibleProvider(
+        base_url="https://fixture.test",
+        api_key=SECRET,
+        model=MODEL,
+        clock=clock,
+        sleep=clock.sleep,
+        workers=2,
+    )
+
+    def run():
+        return [client.generate(request()) for _ in range(2)]
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        outputs = list(executor.map(lambda _: run(), range(2)))
+    assert len(outputs) == 2
+    assert len(created) == 2
+    assert len({opener.owner for opener in created}) == 2
+    assert [opener.calls for opener in created] == [2, 2]
