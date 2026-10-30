@@ -122,3 +122,16 @@ def test_attributed_row_without_a_reporter_definition_is_explicit():
 
 def test_unattributed_row_has_no_lexical_reporter_requirement():
     assert automatic_issues(triplet(framing="unattributed", reporter_uk="керівник відділу")) == []
+
+
+def test_lowercase_sentence_start_is_flagged_without_changing_text():
+    row = triplet()
+    row["stereotype"] = row["stereotype"].lower()
+    before = deepcopy(row)
+    assert {"code": "lowercase_sentence_start", "fields": ["stereotype"]} in automatic_issues(row)
+    assert row == before
+
+
+def test_unfilled_sentence_scaffold_is_flagged():
+    row = triplet(stereotype="Ветерани у сфері ІТ [задана асоціація].")
+    assert {"code": "unrendered_placeholder", "fields": ["stereotype"]} in automatic_issues(row)

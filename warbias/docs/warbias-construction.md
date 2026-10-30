@@ -157,9 +157,29 @@ feedback cases.
 Use the selected Lapa model and sequential prompts in `protocol/construction.json`.
 For every profile, use no reporter and each of the two allowed reporters.
 Use the 21-dimension catalog. Expand each applicable dimension separately and
-preserve the recorded gender × age panels. The dimension catalog, case applicability, allowed values
-and final generation count remain pending. New outputs retain
+preserve the recorded gender × age panels. `coverage_dimensions.json` defines
+the values and reduced designs. `coverage_applicability.jsonl` records the case
+rules. The initial shared subset adds 11,952 triplets to the 1,059 existing
+items. A further 2,124 service-detail variants remain optional. The final total
+is not selected. New outputs retain
 `human_validated: false` and `human_annotation_status: "not_annotated"`.
+
+`coverage_design.select_items` preserves recorded profiles and selects four
+occupation sectors per case. It balances sector counts within target groups
+and categories, with seed 0. Small categories may not contain every sector.
+Both abroad subgroups receive the same sectors within a case.
+
+Use `coverage-cases` to bind selected items to case rules and sources. It skips
+the supplied annotation IDs and renders complete Ukrainian target and reporter
+phrases. `coverage_execution.run_batches` runs the recorded selection in resumable
+batches. Each batch saves raw calls, triplets and automatic diagnostics.
+Diagnostics flag missing phrases, copied text and structural issues. They do
+not establish semantic quality or human acceptance.
+
+The HTTP provider factory is `fairforget.warbias.http_provider:create_provider`.
+Set `LAPA_BASE_URL` and `LAPA_API_KEY` in the execution environment. The default
+limits are 24 requests per minute, a 120-second timeout and four transport
+attempts. Keep credentials outside the source package.
 
 ## Pilot and selection
 
