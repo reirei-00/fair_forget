@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "role": "coverage_extension_protocol",
+  "status": "dimension_design_pending",
+  "source_language": "uk",
+  "scope": {
+    "included_target_groups": ["idp", "veteran", "displaced_abroad"],
+    "excluded_target_groups": [
+      "occupation_experience",
+      "return_abroad",
+      "civilian_war_disability"
+    ]
+  },
+  "case_selection": {
+    "coverage_unit": "semantic_case_and_target_group",
+    "exclude_full_human_annotation_cohort": true,
+    "supersessions": "protocol/inputs/case_changes.json",
+    "superseded_parent_coverage": "all_recorded_replacement_cases_in_annotation_cohort",
+    "feedback_cases": "protocol/taxonomy_revision.json#/added_cases",
+    "include_feedback_cases": true,
+    "preserve_frozen_allocations": true
+  },
+  "generation": {
+    "protocol": "protocol/construction.json",
+    "condition_field": "selected_condition",
+    "prompt_bundle_field": "generation_prompt_bundle",
+    "strategy": "sequential",
+    "stage_order": ["stereotype", "counter", "unrelated"],
+    "fixed_sample_cap": null
+  },
+  "dimensions": {
+    "applicability_by_case": null,
+    "allowed_values_by_case": null,
+    "preserve_intrinsic_attributes": true,
+    "final_generation_inputs": null
+  },
+  "new_output_status": {
+    "human_validated": false,
+    "human_annotation_status": "not_annotated"
+  }
+}
