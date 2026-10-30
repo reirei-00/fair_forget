@@ -1,0 +1,32 @@
+{
+  "status": "verified_original_saved_protocol",
+  "files_hashed": 51,
+  "predictions_replayed": 34032,
+  "pairs": [
+    {
+      "model": "Lapa 12B",
+      "item_metadata_equal": true,
+      "native_metrics_reproduced": true,
+      "training_steps": 129
+    },
+    {
+      "model": "Gemma 3 12B",
+      "item_metadata_equal": true,
+      "native_metrics_reproduced": true,
+      "training_steps": 129
+    },
+    {
+      "model": "Qwen3 8B",
+      "item_metadata_equal": true,
+      "native_metrics_reproduced": true,
+      "training_steps": 129
+    }
+  ],
+  "limitations": [
+    "Original English StereoSet gender training and English BBQ Gender_identity evaluation; distinct from the active Fair-UK protocol and WarBias panels.",
+    "No general utility battery, calibrated judge, repeated seeds or confidence intervals in these original runs.",
+    "Current aliases resolve pinned model directories, but immutable training-time checkpoint/tokenizer/input hashes are unavailable.",
+    "Scheduler accounting returned no rows at recovery; usage log records exit=0 and full saved predictions independently support completed evaluations.",
+    "Mamay has no confirmed unlearning result in this recovered team evidence."
+  ]
+}

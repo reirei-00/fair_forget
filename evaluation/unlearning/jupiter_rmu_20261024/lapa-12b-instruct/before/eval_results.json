@@ -1,0 +1,38 @@
+{
+  "total_examples": 5672,
+  "overall_accuracy": 0.7970733427362482,
+  "ambig_accuracy": 0.6671368124118476,
+  "disambig_accuracy": 0.9270098730606487,
+  "ambig_count": 2836,
+  "disambig_count": 2836,
+  "s_dis": 0.013595166163141936,
+  "s_amb": 0.18547249647390693,
+  "s_dis_pct": 1.36,
+  "s_amb_pct": 18.55,
+  "n_biased_disambig": 1342,
+  "n_non_unknown_disambig": 2648,
+  "n_biased_ambig": 735,
+  "n_non_unknown_ambig": 944,
+  "categories": {
+    "Gender_identity": {
+      "total_examples": 5672,
+      "overall_accuracy": 0.7970733427362482,
+      "ambig_accuracy": 0.6671368124118476,
+      "disambig_accuracy": 0.9270098730606487,
+      "ambig_count": 2836,
+      "disambig_count": 2836,
+      "s_dis": 0.013595166163141936,
+      "s_amb": 0.18547249647390693,
+      "s_dis_pct": 1.36,
+      "s_amb_pct": 18.55,
+      "n_biased_disambig": 1342,
+      "n_non_unknown_disambig": 2648,
+      "n_biased_ambig": 735,
+      "n_non_unknown_ambig": 944
+    }
+  },
+  "model_name_or_path": "lapa-12b-instruct",
+  "gender_types": null,
+  "timestamp": "2026-10-23T10:49:04.865167",
+  "eval_mode": "model"
+}

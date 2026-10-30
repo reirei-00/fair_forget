@@ -1,0 +1,7 @@
+job_id:   2470343
+purpose:  eval: BBQ on qwen3-8b
+command:  python -m evaluation.bbq.evaluate --model_name_or_path qwen3-8b
+user:     hayevska1
+nodes:    jpbo-070-47
+started:  2026-10-23 12:17:53
+repo:     /e/project1/e-dev-2026d09-075/fairforget-bias-mitigation/bias-mitigation-hayevska1

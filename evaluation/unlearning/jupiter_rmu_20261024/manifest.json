@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "retrieved_utc": "2026-10-30T16:55:13.295546+00:00",
+  "host": "JUPITER",
+  "pairs": [
+    {
+      "model": "Lapa 12B",
+      "model_alias": "lapa-12b-instruct",
+      "baseline_job": "2468208",
+      "unlearning_job": "2492541",
+      "phases": {
+        "before": {
+          "path": "lapa-12b-instruct/before",
+          "predictions_sha256_uncompressed": "5218ad3e937488e8f227c90e044e13befd07857cb873c5da9de920cfebc74f3e",
+          "remote_path": "/e/scratch/e-dev-2026d09-075/fairforget-bias-mitigation/runs/2468208"
+        },
+        "after": {
+          "path": "lapa-12b-instruct/after",
+          "predictions_sha256_uncompressed": "0a02b2177d2be93077877fbf4060f6a9583ed44c88b59154808442421662dc4f",
+          "remote_path": "/e/scratch/e-dev-2026d09-075/fairforget-bias-mitigation/runs/2492541/lapa-12b-instruct_alpha-5_batches-129_layer-32_beta-1_positions-words/bbq"
+        }
+      }
+    },
+    {
+      "model": "Gemma 3 12B",
+      "model_alias": "gemma3-12b-it",
+      "baseline_job": "2470349",
+      "unlearning_job": "2493776",
+      "phases": {
+        "before": {
+          "path": "gemma3-12b-it/before",
+          "predictions_sha256_uncompressed": "84e034e6ee669e4b97daa001af31cee8fee80d0b3dde4ffe53cbdc37c5204084",
+          "remote_path": "/e/scratch/e-dev-2026d09-075/fairforget-bias-mitigation/runs/2470349"
+        },
+        "after": {
+          "path": "gemma3-12b-it/after",
+          "predictions_sha256_uncompressed": "5d7049dcaf8161d5a420e373536a2aaad0e1afe4e467382bc1101902ccb48762",
+          "remote_path": "/e/scratch/e-dev-2026d09-075/fairforget-bias-mitigation/runs/2493776/gemma3-12b-it_alpha-5_batches-129_layer-32_beta-1_positions-words/bbq"
+        }
+      }
+    },
+    {
+      "model": "Qwen3 8B",
+      "model_alias": "qwen3-8b",
+      "baseline_job": "2470343",
+      "unlearning_job": "2493909",
+      "phases": {
+        "before": {
+          "path": "qwen3-8b/before",
+          "predictions_sha256_uncompressed": "63f1880aa1abd1ad9ebdd1cdfe9f0faf209746f980044027d422ff4d96ebd872",
+          "remote_path": "/e/scratch/e-dev-2026d09-075/fairforget-bias-mitigation/runs/2470343"
+        },
+        "after": {
+          "path": "qwen3-8b/after",
+          "predictions_sha256_uncompressed": "91c70cd7a748d0cdcd517b0a9567456720d421ec18943d5469a5719662f25e58",
+          "remote_path": "/e/scratch/e-dev-2026d09-075/fairforget-bias-mitigation/runs/2493909/qwen3-8b_alpha-5_batches-129_layer-17_beta-1_positions-words/bbq"
+        }
+      }
+    }
+  ],
+  "source_snapshot": {
+    "root": "/e/project1/e-dev-2026d09-075/fairforget-bias-mitigation/bias-mitigation-ruzhylo1",
+    "retrieval_head": "8d5828d505c22ccd53a032ffea2273e082943ac4",
+    "actual_training_repo_from_job_receipts": "bias-mitigation-kopach1",
+    "kopach_retrieval_head": "8511e30e2f26213ef006b81e10dd584afc6787c1",
+    "qualification": "Retrieved source is a later snapshot, not an immutable training-time code receipt. BBQ metric source hashes match both team checkouts."
+  },
+  "limitations": [
+    "Original English StereoSet gender training and English BBQ Gender_identity evaluation; distinct from the active Fair-UK protocol and WarBias panels.",
+    "No general utility battery, calibrated judge, repeated seeds or confidence intervals in these original runs.",
+    "Current aliases resolve pinned model directories, but immutable training-time checkpoint/tokenizer/input hashes are unavailable.",
+    "Scheduler accounting returned no rows at recovery; usage log records exit=0 and full saved predictions independently support completed evaluations.",
+    "Mamay has no confirmed unlearning result in this recovered team evidence."
+  ],
+  "files": [
+    {
+      "path": "gemma3-12b-it/after/eval_results.json",
+      "bytes": 1220,
+      "sha256": "b0423180792c6832b1f5eda40118a306d737840828b37414d9fb0b1d19f0f00b"
+    },
+    {
+      "path": "gemma3-12b-it/after/eval_summary.csv",
+      "bytes": 243,
+      "sha256": "fd2b41e4fd4408c3481716e7009447583df71645bee21b519e602aec409bd705"
+    },
+    {
+      "path": "gemma3-12b-it/after/predictions.jsonl.gz",
+      "bytes": 26550,
+      "sha256": "893b2be32da9ca9e3f31f51dd69db35bb161fed932d81f1bfc2c44814bd11de1"
+    },
+    {
+      "path": "gemma3-12b-it/baseline_job.txt",
+      "bytes": 299,
+      "sha256": "7bd9b16bcfa940cb5a46e6bfd7e7492f6b045187a4d3cd8c35fdfbf4bfb7516a"
+    },
+    {
+      "path": "gemma3-12b-it/before/eval_results.json",
+      "bytes": 1101,
+      "sha256": "284c9e147d04e75122ae80931afa7e6cebacf31a79bb1df262882b16b9babf85"
+    },
+    {
+      "path": "gemma3-12b-it/before/eval_summary.csv",
+      "bytes": 243,
+      "sha256": "ca4f125db8320c8b7b1e640b6d2339c092fceed7b0c635881479b386131193b6"
+    },
+    {
+      "path": "gemma3-12b-it/before/predictions.jsonl.gz",
+      "bytes": 26591,
+      "sha256": "90497955493acb2a2905a10ab95b51e8a12219c97b3b15dfae4961a72be973a2"
+    },
+    {
+      "path": "gemma3-12b-it/config.json",
+      "bytes": 3137,
+      "sha256": "38fc4dde470ddba2a1570c64897290044f99a5c7de232f7f3f05703093b17338"
+    },
+    {
+      "path": "gemma3-12b-it/losses.csv",
+      "bytes": 42103,
+      "sha256": "8ef85849713430d799efb119b1756126ba414c8be426c068fd9711418ea3db89"
+    },
+    {
+      "path": "gemma3-12b-it/rmu_config.json",
+      "bytes": 616,
+      "sha256": "0eb7874248506f179c3cc5c95f7cce8f3a6122363658c0a53d51379948002cae"
+    },
+    {
+      "path": "gemma3-12b-it/unlearning_job.txt",
+      "bytes": 318,
+      "sha256": "de20556d37219f8869b48403022bf50b7fc1f6f6000943865431b1281433768e"
+    },
+    {
+      "path": "historical_bbq_metrics.py",
+      "bytes": 6302,
+      "sha256": "362b28ee276a13031bb0268ccb3bac7c6931c7c87002c32c2441c28aa868409a"
+    },
+    {
+      "path": "lapa-12b-instruct/after/eval_results.json",
+      "bytes": 1218,
+      "sha256": "a6340fa8670e2ff996665b3ca72a2b9b8d7afa5dd07840a2798a873eb27ff640"
+    },
+    {
+      "path": "lapa-12b-instruct/after/eval_summary.csv",
+      "bytes": 239,
+      "sha256": "9f65dde4f42bb905f71340bdfa2c61faac4c01d87e39957004c3c931d82cc571"
+    },
+    {
+      "path": "lapa-12b-instruct/after/predictions.jsonl.gz",
+      "bytes": 26884,
+      "sha256": "53e00e565ffd82f91b536100838bc01fe3c9f9c656e454fb26e487895f3a9011"
+    },
+    {
+      "path": "lapa-12b-instruct/baseline_job.txt",
+      "bytes": 307,
+      "sha256": "d1019ef1d49e79005dd25e395bb754e45c06abb3a79a8834f4466d659ad941b7"
+    },
+    {
+      "path": "lapa-12b-instruct/before/eval_results.json",
+      "bytes": 1101,
+      "sha256": "e6e34d7c4656dc31979b4ea8571f6a55aa8962094c6694c30fd28913df83f8ac"
+    },
+    {
+      "path": "lapa-12b-instruct/before/eval_summary.csv",
+      "bytes": 239,
+      "sha256": "e60cfbfc34997be36edd64053a8afb873c97f1844867641818dd7ea87f607a3c"
+    },
+    {
+      "path": "lapa-12b-instruct/before/predictions.jsonl.gz",
+      "bytes": 26873,
+      "sha256": "eb2f55e6d9bb6067e924274bf13bae58e991b2d0700eaa2a9c742c58cc4d8f60"
+    },
+    {
+      "path": "lapa-12b-instruct/config.json",
+      "bytes": 3119,
+      "sha256": "c84aa5ba69f8977e3c5c9982dd7f1d07fb24094394554590cb5c18a0d77338b3"
+    },
+    {
+      "path": "lapa-12b-instruct/losses.csv",
+      "bytes": 42022,
+      "sha256": "e2ae62d0643a8f06b651d545cf3fc98196e46eb8d3d1e21353c7406e4cce023f"
+    },
+    {
+      "path": "lapa-12b-instruct/rmu_config.json",
+      "bytes": 620,
+      "sha256": "9ea7c7c9b00c0caa757e21aed6abcdc589bbb235db20affaab1334b41dafb0ce"
+    },
+    {
+      "path": "lapa-12b-instruct/unlearning_job.txt",
+      "bytes": 326,
+      "sha256": "0086f7efa4e2430dd61325372260b050204b1759ba47e07cc4ca7d78d6dddb57"
+    },
+    {
+      "path": "qwen3-8b/after/eval_results.json",
+      "bytes": 1211,
+      "sha256": "ab2c47973b5e9845c3a8c6c435988f39f7db2b15912ffe76166c1891b930e260"
+    },
+    {
+      "path": "qwen3-8b/after/eval_summary.csv",
+      "bytes": 237,
+      "sha256": "bd6757fdd66742fb41bf0dffb1444f7d72f2d898f96030466be06af4a0ec7976"
+    },
+    {
+      "path": "qwen3-8b/after/predictions.jsonl.gz",
+      "bytes": 28054,
+      "sha256": "52d9e8061821819832087b84fbfd8d5c146100e7f4c7c9f84371068fc55bc6c5"
+    },
+    {
+      "path": "qwen3-8b/baseline_job.txt",
+      "bytes": 289,
+      "sha256": "dfad999047d9a798345f36df911a8d343215f04efb2a4fe548bc0ba1bfb6f553"
+    },
+    {
+      "path": "qwen3-8b/before/eval_results.json",
+      "bytes": 1094,
+      "sha256": "9877a2371de5f04c880395893cf1ce53647cd01370c23dc41dbcc58b9a42a365"
+    },
+    {
+      "path": "qwen3-8b/before/eval_summary.csv",
+      "bytes": 241,
+      "sha256": "46e405f25830c7969ad19c9f0ca7a41b025c316fa40115cea4591c2ba98031ec"
+    },
+    {
+      "path": "qwen3-8b/before/predictions.jsonl.gz",
+      "bytes": 26306,
+      "sha256": "c0bfbba955f69d7db1ad93732de70bab1fafd91a29ea9bbb866798aad24916ff"
+    },
+    {
+      "path": "qwen3-8b/config.json",
+      "bytes": 1595,
+      "sha256": "52d43796b5f9c977196fd7ba3b83f5304a0e6a981a1c761caa69d5dacbf97f4d"
+    },
+    {
+      "path": "qwen3-8b/losses.csv",
+      "bytes": 48370,
+      "sha256": "5c4d71c72b58ff406d8c9410cd74d67140a3beeece132cc9a5e0094074850d82"
+    },
+    {
+      "path": "qwen3-8b/rmu_config.json",
+      "bytes": 611,
+      "sha256": "e1790aa6852d3cc1a1bb7926fbb6960862177ae016475ea4ff1ec355f667252a"
+    },
+    {
+      "path": "qwen3-8b/unlearning_job.txt",
+      "bytes": 343,
+      "sha256": "5572103fc3bb5950a1622ad796b4a3c3f793befaf1c3d159bb38dceff602cff4"
+    },
+    {
+      "path": "source_snapshot/config/default.yaml",
+      "bytes": 1882,
+      "sha256": "505400c42d546e58affaddc1816efe25dbdbf386bf62468823c91b4a18e1738e"
+    },
+    {
+      "path": "source_snapshot/pyproject.toml",
+      "bytes": 1180,
+      "sha256": "a555427afe4f2a290f4301f6952cdbbdacb29ba7809f9651f74517c23c67522b"
+    },
+    {
+      "path": "source_snapshot/src/evaluation/__init__.py",
+      "bytes": 26,
+      "sha256": "8db2853c63cd82aed1d2cefa58c0e3d7d535b6a2396bd851fdf9fe425d8b7d50"
+    },
+    {
+      "path": "source_snapshot/src/evaluation/bbq/__init__.py",
+      "bytes": 222,
+      "sha256": "a78c4d37129d32691f635949ec02d5ecceab18de951bf5259261fe29bfbede9a"
+    },
+    {
+      "path": "source_snapshot/src/evaluation/bbq/data.py",
+      "bytes": 6555,
+      "sha256": "ec6acc603fea1983cf27d290073b7c64d94c4824177e991f585bbb6431a6c32d"
+    },
+    {
+      "path": "source_snapshot/src/evaluation/bbq/evaluate.py",
+      "bytes": 12356,
+      "sha256": "ae97c136445bf0ced3c288c3fa1c114659246d98afcade1299946b3f412f352d"
+    },
+    {
+      "path": "source_snapshot/src/evaluation/bbq/metrics.py",
+      "bytes": 6302,
+      "sha256": "362b28ee276a13031bb0268ccb3bac7c6931c7c87002c32c2441c28aa868409a"
+    },
+    {
+      "path": "source_snapshot/src/evaluation/unlearn_eval.py",
+      "bytes": 4103,
+      "sha256": "ed89ac5f305b129f10615ba84759de0d73290a15576c3953a713664ed986ac95"
+    },
+    {
+      "path": "source_snapshot/src/rmu/README.md",
+      "bytes": 4166,
+      "sha256": "3f6c97e53ae2a0274e43193fd6cefae73f21e5ba300517e6f1f766faeb664e9f"
+    },
+    {
+      "path": "source_snapshot/src/rmu/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "source_snapshot/src/rmu/config.py",
+      "bytes": 3087,
+      "sha256": "077bd30c21e0131d5b2b1004d40952af6388ccc6480e5bc9201f46d1312589aa"
+    },
+    {
+      "path": "source_snapshot/src/rmu/data.py",
+      "bytes": 3167,
+      "sha256": "d8eef5f5b22ec6bd4b4815dfc7f64efbc735cc87a080d7f08ba6bc3f71c48f7f"
+    },
+    {
+      "path": "source_snapshot/src/rmu/layer_sweep.py",
+      "bytes": 5938,
+      "sha256": "a12871e650963df72c3768b6b24f11f0050381cc57f67bb993c258b4307bff36"
+    },
+    {
+      "path": "source_snapshot/src/rmu/plots.py",
+      "bytes": 8529,
+      "sha256": "777fb441de85fac8b816b3d25fd4596dc11186b37a361d87eaae109b9c93d19c"
+    },
+    {
+      "path": "source_snapshot/src/rmu/unlearn.py",
+      "bytes": 26745,
+      "sha256": "0e8b1a7af0a6b9f966922c58b9dba5f19112fdf96c196e22ba5628a6e785295b"
+    },
+    {
+      "path": "source_snapshot/src/rmu/utils.py",
+      "bytes": 3228,
+      "sha256": "92d78e5e0950da091ea848bfec45348fd7071b8989c0678f3ce2936d47707808"
+    },
+    {
+      "path": "usage_log_through_20261025.tsv",
+      "bytes": 14737,
+      "sha256": "063591dad37a44448c21022079af98e6901c29e00613a3a00ddc0141fd51cd25"
+    }
+  ]
+}

@@ -7,5 +7,8 @@ repos:
     hooks:
       - id: ruff-check
         additional_dependencies: ["ruff==0.16.2"]
+        # Frozen source evidence is verified by the adjacent SHA-256 manifest.
+        exclude: ^evaluation/unlearning/jupiter_rmu_20261024/(source_snapshot/|historical_bbq_metrics\.py$)
       - id: ruff-format
         additional_dependencies: ["ruff==0.16.2"]
+        exclude: ^evaluation/unlearning/jupiter_rmu_20261024/(source_snapshot/|historical_bbq_metrics\.py$)

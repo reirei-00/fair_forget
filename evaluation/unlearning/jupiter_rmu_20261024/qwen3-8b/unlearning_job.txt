@@ -1,0 +1,7 @@
+job_id:   2493909
+purpose:  unlearn+eval: adaptive RMU + BBQ on qwen3-8b
+command:  python -m evaluation.unlearn_eval --model_name_or_path qwen3-8b --layer_id 17 --layer_ids 15,16,17
+user:     kopach1
+nodes:    jpbo-008-20
+started:  2026-10-24 19:43:15
+repo:     /e/project1/e-dev-2026d09-075/fairforget-bias-mitigation/bias-mitigation-kopach1

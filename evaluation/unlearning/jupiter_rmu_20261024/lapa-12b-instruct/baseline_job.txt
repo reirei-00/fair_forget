@@ -1,0 +1,7 @@
+job_id:   2468208
+purpose:  eval: BBQ on lapa-12b-instruct
+command:  python -m evaluation.bbq.evaluate --model_name_or_path lapa-12b-instruct
+user:     hayevska1
+nodes:    jpbo-051-26
+started:  2026-10-23 10:46:02
+repo:     /e/project1/e-dev-2026d09-075/fairforget-bias-mitigation/bias-mitigation-hayevska1
