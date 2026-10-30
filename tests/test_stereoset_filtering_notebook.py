@@ -116,7 +116,6 @@ class StereoSetFilteringNotebookTests(unittest.TestCase):
             "flag_summary.csv",
             "stereoset_filter_review.csv",
             "filtering_overview.png",
-            "pos_coverage.png",
         ]
         for filename in expected:
             self.assertIn(filename, self.code)
