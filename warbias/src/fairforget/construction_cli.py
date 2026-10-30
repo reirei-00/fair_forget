@@ -11,6 +11,7 @@ from fairforget.cli_support import (
 from fairforget.io import empty_directory, read_rows, write_json, write_rows
 
 COMMANDS = {
+    "coverage-cases",
     "pilot-plan",
     "pilot",
     "pilot-blind",
@@ -27,6 +28,10 @@ def _paths(parser, *names):
 
 
 def add_commands(commands):
+    coverage = commands.add_parser(
+        "coverage-cases", help="Prepare missing profiles from an explicit coverage manifest"
+    )
+    _paths(coverage, "items", "cases", "sources", "existing", "output")
     plan = commands.add_parser(
         "pilot-plan", help="Freeze cases, candidate models and two strategies"
     )
@@ -79,6 +84,22 @@ def _new_output(path):
 def dispatch(args):
     from fairforget.warbias import blind_review, pilot, production, selection
 
+    if args.command == "coverage-cases":
+        from fairforget.io import read_csv
+        from fairforget.warbias.coverage import prepare_generation_cases
+
+        _new_output(args.output)
+        items = (
+            read_csv(args.items) if args.items.suffix.lower() == ".csv" else read_rows(args.items)
+        )
+        rows = prepare_generation_cases(
+            items,
+            read_rows(args.cases),
+            load_json(args.sources),
+            existing_ids=[row["id"] for row in read_rows(args.existing)],
+        )
+        write_rows(args.output, rows)
+        return {"generation_rows": len(rows), "human_validated": False}
     if args.command == "pilot-plan":
         _new_output(args.output)
         config = load_json(args.config)

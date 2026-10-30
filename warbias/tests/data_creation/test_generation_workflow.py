@@ -178,6 +178,42 @@ def test_interrupted_pilot_resumes_without_repeating_completed_requests(tmp_path
     assert len(resumed.calls) == 15
 
 
+def test_profile_requests_keep_explicit_stage_target_reporter_and_parent_text(tmp_path):
+    pilot_plan, provider = plan(), Provider()
+    case = {
+        "case_id": "profile-case",
+        "matrix_schema": "case_profile",
+        "target_uk": "Дорослі внутрішньо переміщені особи",
+        "reporter": "landlord",
+        "reporter_uk": "орендодавець",
+        "framing": "attributed",
+    }
+    generate_triplets(
+        [case],
+        pilot_plan["candidates"][0],
+        "sequential",
+        pilot_plan["strategies"]["sequential"],
+        "uk",
+        tmp_path,
+        condition_id="explicit-profile",
+        provenance={},
+        provider=provider,
+        execute=True,
+    )
+    states = [json.loads(call["messages"][-1]["content"]) for call in provider.calls]
+    assert [state["current_stage"] for state in states] == ["S", "C", "U"]
+    for state, stage in zip(states, ["S", "C", "U"]):
+        assert state["profile_request_schema"] == "warbias_case_profile_request_v6"
+        assert list(state)[-1] == "task_uk"
+        assert case["target_uk"] in state["task_uk"]
+        assert STAGE_FIELD[stage] + "_uk" in state["task_uk"]
+    assert case["reporter_uk"] in states[0]["task_uk"]
+    assert case["reporter_uk"] in states[1]["task_uk"]
+    assert states[1]["previous"] == {"stereotype_uk": TEXTS["stereotype"]}
+    assert states[2]["previous"] == {field + "_uk": TEXTS[field] for field in FIELDS[:2]}
+    assert "task_uk" not in case
+
+
 def test_factory_routes_each_candidate_once_and_releases_it_before_next(tmp_path):
     pilot_plan, events, configs = plan(), [], []
 

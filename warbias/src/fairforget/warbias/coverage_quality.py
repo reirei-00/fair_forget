@@ -85,6 +85,11 @@ def automatic_issues(row):
             issues.append({"code": "required_target_missing", "fields": [field]})
         if _multiple_sentences(row[field]):
             issues.append({"code": "multiple_sentences", "fields": [field]})
+        first_letter = next((letter for letter in row[field] if letter.isalpha()), None)
+        if first_letter is not None and first_letter.islower():
+            issues.append({"code": "lowercase_sentence_start", "fields": [field]})
+        if re.search(r"\[[^\]\n]+\]", row[field]):
+            issues.append({"code": "unrendered_placeholder", "fields": [field]})
     if row.get("framing") == "attributed":
         reporter = row.get("reporter_uk")
         if not isinstance(reporter, str) or not reporter.strip():

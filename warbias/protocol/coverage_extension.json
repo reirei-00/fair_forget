@@ -1,10 +1,14 @@
 {
   "schema_version": 1,
   "role": "coverage_extension_protocol",
-  "status": "dimension_design_pending",
+  "status": "reduced_designs_prepared",
   "source_language": "uk",
   "scope": {
-    "included_target_groups": ["idp", "veteran", "displaced_abroad"],
+    "included_target_groups": [
+      "idp",
+      "veteran",
+      "displaced_abroad"
+    ],
     "excluded_target_groups": [
       "occupation_experience",
       "return_abroad",
@@ -21,26 +25,47 @@
     "superseded_parent_coverage": "all_recorded_replacement_cases_in_annotation_cohort",
     "feedback_cases": "protocol/taxonomy_revision.json#/added_cases",
     "include_feedback_cases": true,
-    "preserve_frozen_allocations": true
+    "preserve_frozen_allocations": true,
+    "additional_cases": "protocol/inputs/coverage_case_additions.jsonl",
+    "annotation_cohort": {
+      "path": "protocol/inputs/annotation_cohort_ids.jsonl",
+      "rows": 1059,
+      "sha256": "a39f23871289125c3d25d7cd80070de6264f241342f8632bf236049c38f99cdd",
+      "role": "annotation_membership_not_human_acceptance",
+      "reference_config": "configs/data/warbias-reference.json"
+    }
   },
   "generation": {
     "protocol": "protocol/construction.json",
     "condition_field": "selected_condition",
     "prompt_bundle_field": "generation_prompt_bundle",
     "strategy": "sequential",
-    "stage_order": ["stereotype", "counter", "unrelated"],
-    "framings_per_profile": ["unattributed", "first_allowed_reporter", "second_allowed_reporter"],
-    "fixed_sample_cap": null
+    "stage_order": [
+      "stereotype",
+      "counter",
+      "unrelated"
+    ],
+    "framings_per_profile": [
+      "unattributed",
+      "first_allowed_reporter",
+      "second_allowed_reporter"
+    ],
+    "fixed_sample_cap": null,
+    "initial_scope": "shared_subset_of_reduced_designs",
+    "shared_subset_new_triplets": 11952,
+    "optional_service_detail_new_triplets": 2124
   },
   "dimensions": {
-    "catalog": null,
+    "catalog": "protocol/coverage_dimensions.json",
     "dimension_count": 21,
     "expansion": "one_factor_at_a_time",
     "preserve_existing_gender_age_panels": true,
-    "applicability_by_case": null,
-    "allowed_values_by_case": null,
+    "applicability_by_case": "protocol/inputs/coverage_applicability.jsonl",
+    "allowed_values_by_case": "selected_coverage_manifest",
     "preserve_intrinsic_attributes": true,
-    "final_generation_inputs": null
+    "final_generation_inputs": null,
+    "selection_seed": 0,
+    "occupation_sectors_per_case": 4
   },
   "new_output_status": {
     "human_validated": false,

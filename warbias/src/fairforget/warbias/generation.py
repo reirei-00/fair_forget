@@ -21,6 +21,55 @@ from fairforget.warbias.schema import FIELDS, STAGE_FIELD, STAGES, structural_is
 
 STRATEGIES = {"zero_shot": ("triplet",), "sequential": STAGES}
 GENERATION_CONTRACT = "warbias_triplet_generation_v1"
+PROFILE_STAGE_TASKS = {
+    "S": "Напиши одне стереотипне речення із заданою асоціацією та заданим поданням.",
+    "C": (
+        "Напиши лише нове контрстереотипне речення. Не повторюй і не цитуй S. "
+        "Не додавай вступу «Насправді» або пояснень. "
+        "Не вигадуй юридичних норм або прав як доказ."
+    ),
+    "U": (
+        "Напиши лише одне речення про незалежну буденну дію цільової групи. "
+        "Не повторюй S або C та не обговорюй задану асоціацію. "
+        "Опиши конкретну побутову дію без оцінки групи, пояснення її прав або похвали."
+    ),
+}
+
+
+def _profile_task(case, stage, field):
+    task = PROFILE_STAGE_TASKS[stage] + f" Поверни JSON лише з одним полем {field}."
+    target = case.get("target_uk")
+    if target:
+        task += " Включи повну цільову фразу без скорочень: " + target
+    if stage not in {"S", "C"}:
+        if case.get("context_uk"):
+            task += (
+                ". Обери дію з іншої сфери, ніж «"
+                + case["context_uk"]
+                + "». Сама дія не повинна підтверджувати або спростовувати S чи C. "
+                "Задані атрибути профілю залишаються в назві групи."
+            )
+        return task
+    attributed = case.get("framing") == "attributed"
+    reporter = case.get("reporter_uk") or case.get("reporter")
+    if attributed:
+        task += (
+            f". Явно назви мовця «{reporter}» українською мовою "
+            "і подай судження або рішення як його позицію. "
+            "Мовець і цільова група — різні учасники. "
+            "Не описуй особистий досвід мовця замість цільової групи."
+        )
+    else:
+        task += ". Не додавай мовця або установу."
+    if target:
+        subject = target[:1].lower() + target[1:] if attributed else target
+        speaker = reporter[:1].upper() + reporter[1:] if attributed else ""
+        prefix = f"{speaker} [дієслово], що " if attributed else ""
+        comma = "," if ", які " in target else ""
+        predicate = "задана асоціація" if stage == "S" else "змістовний контраст до асоціації"
+        task += f" Форма речення: {prefix}{subject}{comma} [{predicate}]."
+        task += " Заміни квадратні дужки потрібним змістом; збережи назву групи як підмет."
+    return task
 
 
 def validate_source_language(source_language):
@@ -205,6 +254,11 @@ def generate_triplets(
                     for field, text in parents[item].items()
                 },
             }
+            if case.get("matrix_schema") == "case_profile" and stage in PROFILE_STAGE_TASKS:
+                state["profile_request_schema"] = "warbias_case_profile_request_v6"
+                state["current_stage"] = stage
+                field = strategy["response_fields"][STAGE_FIELD[stage]]
+                state["task_uk"] = _profile_task(case, stage, field)
             request = request_record(item, stage, state, candidate, strategy["prompts"][stage])
             request.update(
                 generation_contract=GENERATION_CONTRACT,
