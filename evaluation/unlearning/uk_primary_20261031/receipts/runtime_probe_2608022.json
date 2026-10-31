@@ -1,0 +1,21 @@
+{
+  "status": "qualified_training_runtime_only",
+  "timestamp_utc": "2026-10-31T09:44:33.776305+00:00",
+  "versions": {
+    "torch": "2.9.1+cu128",
+    "transformers": "4.57.6",
+    "peft": "0.17.1",
+    "accelerate": "1.15.0"
+  },
+  "gpu": "NVIDIA GH200 120GB",
+  "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+  "model_config_sha256": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30",
+  "zero_adapter_max_logit_delta": 0.0,
+  "trainable_parameters": 3833856,
+  "peak_cuda_allocated_bytes": 16647137280,
+  "synthetic_tokens": 24,
+  "optimizer_steps": 0,
+  "study_training_examples": 0,
+  "checkpoint_saved": false,
+  "elapsed_seconds": 9.455932694952935
+}

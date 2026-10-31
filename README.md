@@ -51,3 +51,12 @@ The [evidence package](evaluation/unlearning/jupiter_rmu_20261024/README.md)
 contains original metrics, compressed predictions, configurations, job receipts,
 the preserved historical scorer and a source snapshot. This is a separate
 English pilot, rather than a completed current Fair-UK intervention panel.
+
+## Primary Ukrainian integration
+
+The [portable primary-series notebook](notebooks/not_executed/uk_primary_unlearning.ipynb)
+walks through all five method contracts, validates an external frozen release,
+and can launch one selected method in a qualified GPU session. Its default
+mode prepares commands and reads execution receipts. The
+[deployment guide](deploy/unlearning_primary/README.md) describes the separate
+training and native-evaluation queues, frozen inputs and integration limits.

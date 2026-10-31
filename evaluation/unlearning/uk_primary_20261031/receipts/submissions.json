@@ -1,0 +1,14 @@
+{
+  "release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031",
+  "results_parent": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031",
+  "runtime_proof": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/runtime_probe_2608022.json",
+  "submitted_at_utc": "2026-10-31T09:58:39.329890+00:00",
+  "training_job_id": "2608191",
+  "training_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191",
+  "evaluation_job_id": "2608199",
+  "evaluation_dependency": "afterany:2608191",
+  "evaluation_release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v2",
+  "evaluation_wall_limit": "12:00:00",
+  "evaluation_inherited_bundle_override_cleared": true,
+  "evaluation_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608199"
+}

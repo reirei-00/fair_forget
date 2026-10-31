@@ -1,0 +1,15 @@
+{
+  "status": "all_native_input_views_validated",
+  "timestamp_utc": "2026-10-31T10:01:10.485370+00:00",
+  "release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v2",
+  "counts": {
+    "qualification/stereoset_uk": 2,
+    "evaluation/stereoset_uk": 949,
+    "evaluation/bbq_uk": 57006,
+    "evaluation/winobias_uk_natural": 1674,
+    "evaluation/winobias_uk_controlled": 1580,
+    "evaluation/winopron_uk": 4320,
+    "evaluation/warbias_triplets_uk": 249
+  },
+  "inference_performed": false
+}
