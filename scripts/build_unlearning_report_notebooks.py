@@ -401,8 +401,13 @@ print('This replay reads saved local evidence only; it launches no model, GPU jo
     cells = [
         cell(
             "markdown",
-            f"# {TITLES[method]}: WarBias training and measurements\n\nThis is a READINESS and SAVED-EVIDENCE replay. Notebook execution proves the preparation/reporting cells ran; it does not establish completed model training or mitigation. All six models remain visible. Historical StereoSet interventions do not fill any cell in this fresh WarBias series.",
+            f"# {TITLES[method]}: WarBias training and measurements\n\nRead the declared recipe, actual training receipts, training-source diagnostics, held-out pairs and all 18 metric dependencies in order. All six models remain visible, including missing results. This notebook reads saved WarBias evidence. Running its reporting cells does not train a model or collect new predictions. Historical StereoSet interventions do not fill missing WarBias results.",
             "scope",
+        ),
+        cell(
+            "markdown",
+            "## Method notebooks\n\nThis notebook covers one method. Open the [method index](../README.md) for\nRMU, task-vector negation, WGA+KL, NPO+retention and BiasUnlearn. NPO and\nBiasUnlearn currently have separate Qwen integration walkthroughs. They do not\nsupply six-model WarBias training results.\n",
+            "method-index",
         ),
         cell("code", load, "load"),
         cell(

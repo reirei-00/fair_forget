@@ -54,9 +54,9 @@ English pilot, rather than a completed current Fair-UK intervention panel.
 
 ## Primary Ukrainian integration
 
-The [portable primary-series notebook](notebooks/not_executed/uk_primary_unlearning.ipynb)
-walks through all five method contracts, validates an external frozen release,
-and can launch one selected method in a qualified GPU session. Its default
-mode prepares commands and reads execution receipts. The
-[deployment guide](deploy/unlearning_primary/README.md) describes the separate
+The [method notebook index](notebooks/README.md) links one notebook per method:
+WGA+KL, NPO+retention, fixed-target RMU, BiasUnlearn and task-vector negation.
+The existing WarBias reports retain their saved code outputs. NPO and BiasUnlearn
+have dedicated Qwen integration walkthroughs, with preparation as the default.
+The [deployment guide](deploy/unlearning_primary/README.md) describes the separate
 training and native-evaluation queues, frozen inputs and integration limits.
