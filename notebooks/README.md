@@ -4,6 +4,10 @@ Start with [setup.ipynb](setup.ipynb) or the [setup guide](SETUP.md).
 Each method notebook configures and trains **all six models**, with separate
 logs, checkpoints and receipts for every model. Saved results are optional.
 
+Use [evaluate_before_after.ipynb](evaluate_before_after.ipynb) for the shared
+Fair-UK evaluation workflow: collect the six baselines, evaluate the 30 post
+checkpoints and compare matched results. See the [evaluation setup](EVALUATION.md).
+
 | Method | Notebook |
 | --- | --- |
 | Fixed-target RMU | [rmu.ipynb](rmu.ipynb) |

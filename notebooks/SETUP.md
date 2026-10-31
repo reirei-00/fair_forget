@@ -57,3 +57,9 @@ Each method writes its own directory under `OUTPUT_ROOT`, with a separate
 subdirectory and log for every model. Choose a new output directory for a new
 run. `FAIRFORGET_OUTPUT`, `FAIRFORGET_MODELS_ROOT` and `FAIRFORGET_DATA_ROOT` can
 override the saved paths for an individual notebook.
+
+## Evaluate before and after
+
+Use the [shared Fair-UK evaluation notebook](evaluate_before_after.ipynb) and
+its [evaluation setup guide](EVALUATION.md). Evaluation runs in its own Fair-UK
+environment and reuses each base-model baseline across all five methods.
