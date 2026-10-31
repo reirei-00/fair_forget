@@ -149,11 +149,16 @@ def verify_collected_options(task_output):
     return verify_serial_parameters(run.get("model_identity", {}).get("parameters"))
 
 
-def command_for(checkpoint, manifest, task, output):
+def command_for(checkpoint, manifest, task, output, *, extra_model_options=None):
+    extra = extra_model_options or {}
+    require(
+        not extra or extra == {"attention_backend": "TRITON_ATTN"},
+        "Unsupported numerical backend override",
+    )
     command = native.command_for(checkpoint, manifest, task, output)
     index = command.index("--model-args") + 1
     command[index] += "," + ",".join(
-        f"{key}={value}" for key, value in SERIAL_MODEL_OPTIONS.items()
+        f"{key}={value}" for key, value in {**SERIAL_MODEL_OPTIONS, **extra}.items()
     )
     return command
 
@@ -400,6 +405,17 @@ def validate(addon):
             "Model profile path is not canonical",
         )
     require(config.get("settings") == SETTINGS, "Native execution settings differ")
+    extra = config.get("extra_model_options", {})
+    require(
+        not extra or extra == {"attention_backend": "TRITON_ATTN"},
+        "Unsupported numerical backend override",
+    )
+    numerical = config.get("inference_environment", {})
+    require(
+        set(numerical) <= {"VLLM_BATCH_INVARIANT"}
+        and all(value in ("0", "1") for value in numerical.values()),
+        "Unsupported numerical execution mode",
+    )
     require(
         config.get("runtime_environment", RUNTIME_ENVIRONMENT) == RUNTIME_ENVIRONMENT,
         "Native process-start profile differs",
@@ -424,7 +440,9 @@ def validate(addon):
         evaluator_files(collector) == config["evaluator_files_sha256"],
         "Frozen evaluator source changed",
     )
-    script_root = Path(__file__).resolve().parent
+    script_root = addon / "deploy/unlearning_primary"
+    if not script_root.is_dir():
+        script_root = Path(__file__).resolve().parent
     require(
         {name: native.digest(script_root / name) for name in SCRIPT_FILES}
         == config["scripts_sha256"],
@@ -680,15 +698,22 @@ def run_task(addon, checkpoint, output, task, *, qualification=False):
         "qualification_only": qualification,
         "addon_config": evidence(addon / "config.json"),
         "started_at_utc": native.utc_now(),
-        "runtime_environment": RUNTIME_ENVIRONMENT,
+        "runtime_environment": {**RUNTIME_ENVIRONMENT, **config.get("inference_environment", {})},
     }
     native.write_json(status_path, status)
-    command = command_for(checkpoint, manifest, task, task_output)
+    command = command_for(
+        checkpoint,
+        manifest,
+        task,
+        task_output,
+        extra_model_options=config.get("extra_model_options"),
+    )
     status["command"] = command
     environment = {
         **os.environ,
         "PYTHONPATH": str(collector / "evaluator"),
         **RUNTIME_ENVIRONMENT,
+        **config.get("inference_environment", {}),
     }
     process = None
     previous_handler = signal.getsignal(signal.SIGTERM)

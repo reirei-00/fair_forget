@@ -635,6 +635,39 @@ class SupplementalTests(unittest.TestCase):
         self.assertEqual(serial[serial.index("--seed") + 1], "42")
         self.assertNotIn("max_num_seqs", supplemental.native.SETTINGS)
 
+    def test_deterministic_backend_keeps_the_native_seed_and_batch(self):
+        paths = [self.root / name for name in ("checkpoint", "manifest", "output")]
+        plain = supplemental.command_for(*paths[:2], "warbias_triplets_uk", paths[2])
+        fixed = supplemental.command_for(
+            *paths[:2],
+            "warbias_triplets_uk",
+            paths[2],
+            extra_model_options={"attention_backend": "TRITON_ATTN"},
+        )
+        index = fixed.index("--model-args") + 1
+        self.assertEqual(fixed[index], plain[index] + ",attention_backend=TRITON_ATTN")
+        fixed[index] = plain[index]
+        self.assertEqual(fixed, plain)
+        with self.assertRaisesRegex(ValueError, "Unsupported"):
+            supplemental.command_for(
+                *paths[:2],
+                "warbias_triplets_uk",
+                paths[2],
+                extra_model_options={"seed": 0},
+            )
+
+    def test_deployed_addon_binds_its_own_scripts(self):
+        self.prepare()
+        directory = self.addon / "deploy/unlearning_primary"
+        directory.mkdir(parents=True)
+        for name in supplemental.SCRIPT_FILES:
+            (directory / name).write_bytes((SCRIPTS / name).read_bytes())
+        with patch.object(supplemental, "__file__", str(self.root / "different-helper.py")):
+            supplemental.validate(self.addon)
+        (directory / "supplemental.py").write_text("# changed fixture\n")
+        with self.assertRaisesRegex(ValueError, "scripts differ"):
+            supplemental.validate(self.addon)
+
     def test_prepared_settings_reject_missing_or_wrong_serial_options(self):
         config = self.prepare()
         for key, expected in supplemental.SERIAL_MODEL_OPTIONS.items():

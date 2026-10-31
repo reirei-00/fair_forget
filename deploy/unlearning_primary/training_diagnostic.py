@@ -220,17 +220,30 @@ def collect_one(context, name, manifest, entry, data, output, gpu):
     checkpoint = context["models"][name]
     require(not output.exists(), "Native diagnostic output already exists")
     output.parent.mkdir(parents=True, exist_ok=True)
-    command = supplement.command_for(checkpoint, manifest, TASK, output)
+    command = supplement.command_for(
+        checkpoint,
+        manifest,
+        TASK,
+        output,
+        extra_model_options=context.get("extra_model_options"),
+    )
+    extra_environment = context.get("runtime_environment", {})
+    require(
+        set(extra_environment) <= {"VLLM_BATCH_INVARIANT"}
+        and all(value in ("0", "1") for value in extra_environment.values()),
+        "Unsupported numerical execution mode",
+    )
+    recorded_environment = {**supplement.RUNTIME_ENVIRONMENT, **extra_environment}
     environment = {
         **os.environ,
         "CUDA_VISIBLE_DEVICES": gpu,
         "PYTHONPATH": str(context["collector"] / "evaluator"),
-        **supplement.RUNTIME_ENVIRONMENT,
+        **recorded_environment,
     }
     record = {
         "command": command,
         "gpu": gpu,
-        "runtime_environment": supplement.RUNTIME_ENVIRONMENT,
+        "runtime_environment": recorded_environment,
         "output": str(output),
         "started_at_utc": native.utc_now(),
     }

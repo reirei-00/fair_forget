@@ -119,6 +119,8 @@ def context_for(release, application, submission, alias):
         "manifest": manifest,
         "entry": entry,
         "rows": data,
+        "runtime_environment": config.get("inference_environment", {"VLLM_BATCH_INVARIANT": "0"}),
+        "extra_model_options": config.get("extra_model_options", {}),
         "baseline_files": {
             item["path"]: item["sha256"]
             for item in receipt["source_model_files"]
