@@ -1,0 +1,167 @@
+{
+  "observed_at_utc": "2026-10-31T10:48:54.106576+00:00",
+  "execution": {
+    "stage": "native_collection",
+    "started_at_utc": "2026-10-31T10:46:03.582944+00:00",
+    "checkpoints": {
+      "baseline": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+      "wga_kl": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/wga_kl/merged_checkpoint",
+      "npo_kl": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/npo_kl/merged_checkpoint",
+      "biasunlearn": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/biasunlearn/merged_checkpoint",
+      "task_vector": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/task_vector/merged_checkpoint",
+      "rmu": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/rmu/checkpoint"
+    },
+    "no_update": {
+      "passed": true,
+      "max_absolute_score_difference": 0.0,
+      "absolute_tolerance": 1e-06,
+      "scope": "two reviewed development items per checkpoint, not locked final evaluation",
+      "qualification_manifest_sha256": "be7603914b74fa6d7757a7510316739f1df74dbf57f50017f40b4c2802ff378b",
+      "ordered_ids": [
+        "4230e5053330fb0690bf485cf5066261",
+        "d467bb452bd44cb8f1ce22e2f3265f72"
+      ],
+      "checkpoints": {
+        "baseline": {
+          "passed": true,
+          "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+          "gpu": "0",
+          "runs": [
+            {
+              "repeat": 1,
+              "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608628/qualification/baseline/repeat-1",
+              "returncode": 0,
+              "predictions_sha256": "8651e418a001d4cb2860d7a7e752371c31d412e84a8da21c32d69706e943bd38"
+            },
+            {
+              "repeat": 2,
+              "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608628/qualification/baseline/repeat-2",
+              "returncode": 0,
+              "predictions_sha256": "8651e418a001d4cb2860d7a7e752371c31d412e84a8da21c32d69706e943bd38"
+            }
+          ],
+          "max_absolute_score_difference": 0.0
+        },
+        "biasunlearn": {
+          "passed": true,
+          "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/biasunlearn/merged_checkpoint",
+          "gpu": "3",
+          "runs": [
+            {
+              "repeat": 1,
+              "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608628/qualification/biasunlearn/repeat-1",
+              "returncode": 0,
+              "predictions_sha256": "308cee322a52cc8622d7aa6c667e62413f37476929f825ceb1d1f7d6961c7310"
+            },
+            {
+              "repeat": 2,
+              "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608628/qualification/biasunlearn/repeat-2",
+              "returncode": 0,
+              "predictions_sha256": "308cee322a52cc8622d7aa6c667e62413f37476929f825ceb1d1f7d6961c7310"
+            }
+          ],
+          "max_absolute_score_difference": 0.0
+        },
+        "wga_kl": {
+          "passed": true,
+          "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/wga_kl/merged_checkpoint",
+          "gpu": "1",
+          "runs": [
+            {
+              "repeat": 1,
+              "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608628/qualification/wga_kl/repeat-1",
+              "returncode": 0,
+              "predictions_sha256": "304c81436185b1065debbd32ad1b3c503b63e4d8162126666a17968485887e45"
+            },
+            {
+              "repeat": 2,
+              "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608628/qualification/wga_kl/repeat-2",
+              "returncode": 0,
+              "predictions_sha256": "304c81436185b1065debbd32ad1b3c503b63e4d8162126666a17968485887e45"
+            }
+          ],
+          "max_absolute_score_difference": 0.0
+        },
+        "npo_kl": {
+          "passed": true,
+          "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/npo_kl/merged_checkpoint",
+          "gpu": "2",
+          "runs": [
+            {
+              "repeat": 1,
+              "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608628/qualification/npo_kl/repeat-1",
+              "returncode": 0,
+              "predictions_sha256": "1ddd1f23ac3f477e0a934cc54d07023e1d834d92409d6bc47ec4255c93f6b822"
+            },
+            {
+              "repeat": 2,
+              "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608628/qualification/npo_kl/repeat-2",
+              "returncode": 0,
+              "predictions_sha256": "1ddd1f23ac3f477e0a934cc54d07023e1d834d92409d6bc47ec4255c93f6b822"
+            }
+          ],
+          "max_absolute_score_difference": 0.0
+        },
+        "task_vector": {
+          "passed": true,
+          "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/task_vector/merged_checkpoint",
+          "gpu": "0",
+          "runs": [
+            {
+              "repeat": 1,
+              "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608628/qualification/task_vector/repeat-1",
+              "returncode": 0,
+              "predictions_sha256": "8651e418a001d4cb2860d7a7e752371c31d412e84a8da21c32d69706e943bd38"
+            },
+            {
+              "repeat": 2,
+              "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608628/qualification/task_vector/repeat-2",
+              "returncode": 0,
+              "predictions_sha256": "8651e418a001d4cb2860d7a7e752371c31d412e84a8da21c32d69706e943bd38"
+            }
+          ],
+          "max_absolute_score_difference": 0.0
+        },
+        "rmu": {
+          "passed": true,
+          "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/rmu/checkpoint",
+          "gpu": "3",
+          "runs": [
+            {
+              "repeat": 1,
+              "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608628/qualification/rmu/repeat-1",
+              "returncode": 0,
+              "predictions_sha256": "1da0a3125cc9e169f90e0cc6b8e32731506284c61c80e441c1586d0a6bd2bd2f"
+            },
+            {
+              "repeat": 2,
+              "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608628/qualification/rmu/repeat-2",
+              "returncode": 0,
+              "predictions_sha256": "1da0a3125cc9e169f90e0cc6b8e32731506284c61c80e441c1586d0a6bd2bd2f"
+            }
+          ],
+          "max_absolute_score_difference": 0.0
+        }
+      },
+      "failed_checkpoints": []
+    },
+    "tasks": {
+      "baseline/bbq_uk": {
+        "status": "running",
+        "gpu": "0"
+      },
+      "wga_kl/bbq_uk": {
+        "status": "running",
+        "gpu": "1"
+      },
+      "npo_kl/bbq_uk": {
+        "status": "running",
+        "gpu": "2"
+      },
+      "biasunlearn/bbq_uk": {
+        "status": "running",
+        "gpu": "3"
+      }
+    }
+  }
+}

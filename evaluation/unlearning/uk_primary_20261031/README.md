@@ -42,7 +42,10 @@ remain in the external manifests rather than this repository folder.
 | [v4 no-update proof](receipts/no_update_check_2608489.json) | Base and WGA repeats exceeded `1e-6`; the other four checkpoints had zero difference |
 | [v4 attempt outcome](receipts/evaluation_attempt_2608489.json) | All twelve native tokenizer/input fingerprints matched; numerical gate failed and no locked collection started |
 | [Eager v5 deployment](receipts/deployment_eval_v5.json) | Runtime-only `enforce_eager=True`; sources, scoring, batch/chunk, dtype, seed, training and tolerance unchanged |
-| [Actual v5 submission](receipts/evaluation_pipeline_v5_submission.json) | Job 2608628 at `2026-10-31T10:40:40.530981+00:00`; all six fresh eager gates pending, no retraining |
+| [Actual v5 submission](receipts/evaluation_pipeline_v5_submission.json) | Job 2608628 at `2026-10-31T10:40:40.530981+00:00`; no retraining |
+| [v5 no-update proof](receipts/no_update_check_2608628.json) | All six checkpoint gates passed in twelve fresh runs; maximum repeated-score difference 0 on two development items only |
+| [v5 qualification evidence](receipts/qualification_evidence_2608628.json) | Twelve matching native tokenizer/input fingerprints and hashes for the external 49-file archive |
+| [Native collection snapshot](receipts/evaluation_snapshot_2608628_20261031T104854Z.json) | Full collection started at 10:46:03.582944 UTC; four BBQ collections active at 10:48:54 UTC, complete native and paired results pending |
 | [Tokenizer semantic comparison](receipts/tokenizer_semantics_20261031T101314Z.json) | CPU semantic identity across base and all five exports; native backend fingerprint remains a separate check |
 
 Training was queued for priority at the original preparation snapshot. That
@@ -81,7 +84,8 @@ Initial evaluation 2608199 failed before locked collection. First retry
 2608380 was deliberately cancelled before locked collection. Replacement
 pipeline 2608489 failed the development-only numerical repeat gate before
 locked collection. Eager replacement pipeline 2608628 was submitted at
-`2026-10-31T10:40:40.530981+00:00`. All six fresh eager checkpoint gates, full
+`2026-10-31T10:40:40.530981+00:00`. All six fresh eager checkpoint gates passed.
+Locked native collection started at `2026-10-31T10:46:03.582944+00:00`; complete
 native scores and paired analysis remain pending. Completed
 training and numeric loss changes do not establish successful mitigation,
 general utility retention or native evaluation completion.
@@ -204,10 +208,24 @@ use the same eager profile. The full offline software suite passed 73 tests;
 software verification does not establish GPU qualification or a study result.
 
 The [actual v5 submission](receipts/evaluation_pipeline_v5_submission.json)
-records pipeline 2608628 at `2026-10-31T10:40:40.530981+00:00`. All six
-checkpoint gates must pass afresh before any locked panel. No training is
-repeated. After native collection, the same allocation runs saved-only CPU
+records pipeline 2608628 at `2026-10-31T10:40:40.530981+00:00`. Its
+[no-update proof](receipts/no_update_check_2608628.json) confirms all six
+checkpoint gates passed in twelve fresh native runs, each with maximum repeated
+score difference 0 at the unchanged `1e-6` tolerance. The
+[qualification evidence](receipts/qualification_evidence_2608628.json) records
+matching tokenizer and effective-input fingerprints across all twelve runs and
+binds the external 49-file archive. Only metadata receipts are included here;
+the archive and development predictions remain external. This qualifies raw
+likelihood repeatability on only two frozen development items, not full native
+panels, generation, general utility or the complete study matrix.
+
+The [execution snapshot](receipts/evaluation_snapshot_2608628_20261031T104854Z.json)
+records stage `native_collection` started at
+`2026-10-31T10:46:03.582944+00:00`. At its observation time
+`2026-10-31T10:48:54.106576+00:00`, four BBQ collections were active within the
+36 planned checkpoint-by-task native collections. No training is repeated.
+After native collection, the same allocation runs saved-only CPU
 `compare-native` for 30 planned method-by-task pairs with the unchanged
 [analysis release](receipts/deployment_analysis.json). Analysis requires no
-additional GPU job or network access. Eager GPU qualification, all full native
-scores and all paired results remain pending.
+additional GPU job or network access. Complete native panels and all 30 paired
+results remain pending.
