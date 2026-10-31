@@ -19,8 +19,8 @@ access use your Hugging Face account and `HF_TOKEN` environment variable.
 ```bash
 python scripts/setup_unlearning.py \
   --models-root /absolute/path/to/models \
-  --warbias-data /absolute/path/to/approved/warbias-data \
-  --primary-data /absolute/path/to/approved/primary-data \
+  --warbias-data /absolute/path/to/warbias-data \
+  --primary-data /absolute/path/to/primary-data \
   --output-root /absolute/path/to/new-unlearning-runs \
   --download-models
 ```
@@ -31,15 +31,14 @@ Instruct, Mamay 12B v2 and Mamay 27B v2 at the revisions in
 already staged checkpoints. The checkpoint layout is
 `MODELS_ROOT/CHECKPOINT_DIRECTORY/IMMUTABLE_REVISION/`.
 
-Each approved data directory must contain `training_binding.json`,
+Each data directory must contain `training_binding.json`,
 `forget_train.jsonl`, `correct_train.jsonl`, `retain_train.jsonl`, `dev.jsonl`
-and `retain_dev.jsonl`. The setup reads their bound hashes without rewriting
-source text, review decisions or splits. The WarBias directory supplies RMU,
-task vector and WGA. The primary directory supplies NPO and BiasUnlearn.
+and `retain_dev.jsonl`. The setup checks the file hashes. The WarBias directory
+supplies RMU, task vector and WGA. The primary directory supplies NPO and BiasUnlearn.
 
 Your machine-specific paths are saved in `configs/unlearning/local.json`,
 which Git ignores. Each method notebook reads this setup automatically.
-No study training starts during setup.
+Run training from a method notebook after setup.
 
 ## Run a method
 

@@ -1,4 +1,4 @@
-"""Build five runnable unlearning notebooks without launching study training."""
+"""Build the five unlearning method notebooks."""
 
 from pathlib import Path
 
@@ -9,8 +9,8 @@ METHODS = {
     "rmu": ("Fixed-target RMU", "rmu", "WarBias"),
     "task_vector": ("Task-vector negation", "task_vector", "WarBias"),
     "wga_kl": ("WGA+KL", "wga_kl", "WarBias"),
-    "npo_kl": ("NPO+retention (KL)", "npo_retention", "StereoSet primary integration"),
-    "biasunlearn": ("BiasUnlearn", "biasunlearn", "StereoSet primary integration"),
+    "npo_kl": ("NPO+retention (KL)", "npo_retention", "StereoSet"),
+    "biasunlearn": ("BiasUnlearn", "biasunlearn", "StereoSet"),
 }
 SETUP = """import json
 import os
@@ -29,8 +29,7 @@ from fairforget.unlearning import notebook_matrix, objectives, rmu  # noqa: E402
 print('Algorithm source:', repo / 'src/fairforget/unlearning')
 print('PyTorch:', torch.__version__)
 """
-TOKENS = """# Synthetic tensors exercise the real objective and optimizer on CPU.
-# They are software examples, not benchmark data or experiment results.
+TOKENS = """# Synthetic tensors for one optimizer step on CPU.
 torch.manual_seed(42)
 forget_logits = torch.nn.Parameter(torch.randn(2, 4, 7))
 retain_logits = torch.nn.Parameter(torch.randn(2, 4, 7))
@@ -88,7 +87,7 @@ optimizer.step()
 direction = objectives.select_biasunlearn_direction(preference=0.6, current='normal')
 assert direction == 'normal'
 print('Separate suppression, correction and preservation losses: CPU step completed.')
-print('The full trainer below builds the adversarial pools and applies the development controller.')
+print('The trainer builds adversarial pools and updates their direction on development data.')
 """,
 }
 RMU = """torch.manual_seed(42)
@@ -127,26 +126,25 @@ acquisition_loss = objectives.completion_ce_loss(logps, mask, reduction='example
 acquisition_loss.backward()
 optimizer.step()
 positive = {'layer.lora_A.weight': a.detach().clone(), 'layer.lora_B.weight': b.detach().clone()}
-# A software-example scale; the full trainer selects its scale on development data.
+# Example scale; training selects it on development data.
 scale = 0.5
 negated = objectives.negate_lora_state(positive, scale=scale, initial_state=initial)
 torch.testing.assert_close(negated['layer.lora_B.weight'] @ negated['layer.lora_A.weight'], -scale * (positive['layer.lora_B.weight'] @ positive['layer.lora_A.weight']))
 print('Positive acquisition and B-only task-vector negation completed on CPU.')
 """
 NOTES = {
-    "rmu": "The fixed seeded target is shared across batches. Production training captures the selected decoder layer, applies the reviewed completion masks, preserves reference retain activations and updates only the configured projections.",
-    "task_vector": "Acquisition uses positive completion CE. Negation preserves acquired A and scales B by a negative development-selected factor. Scale zero is a valid null intervention. The production trainer evaluates the frozen development scale grid under its declared retention gate.",
-    "wga_kl": "Confidence weights are detached. The denominator is the count of valid completion tokens. Preservation uses frozen-base KL on genuine retain tokens; this arm has no corrective CE.",
-    "npo_kl": "NPO uses the current-versus-reference token-mean completion likelihood ratio. Separate reference KL supplies retention. The reference receives no gradients; corrective CE is absent.",
-    "biasunlearn": "The production trainer includes NPO suppression, a distinct anti-stereotype correction stream, genuine preservation, adversarial forget-pool construction and development-controlled pool reversal. The loss-only CPU example is one part of that full algorithm.",
+    "rmu": "RMU moves target activations toward a fixed seeded vector and preserves reference activations on retain data. Training updates the specified decoder projections.",
+    "task_vector": "The acquisition step minimizes completion cross-entropy. Negation keeps the acquired A matrix and multiplies B by a negative scale. The scale is selected on development data using a retain-KL limit.",
+    "wga_kl": "WGA suppresses target completions using detached confidence weights, normalized by valid completion-token count. Reference KL preserves predictions on retain tokens.",
+    "npo_kl": "NPO suppresses target completions using their token-mean log-likelihood ratio against a fixed reference. Reference KL preserves predictions on retain data.",
+    "biasunlearn": "BiasUnlearn combines NPO suppression, anti-stereotype correction and reference KL. The trainer builds adversarial pools and uses development scores to update their direction.",
 }
 
 
 def build():
-    for method, (title, name, study) in METHODS.items():
+    for method, (title, name, dataset) in METHODS.items():
         setup = SETUP + f"\nMETHOD = {method!r}\nRUN_TRAINING = False\n"
-        configure = """# Every method uses all six pinned models from the maintained registry.
-# Optional roots rebase paths; original data hashes and model identities stay fixed.
+        configure = """# Load the six-model plan and optional path overrides.
 DATA_ROOT = os.environ.get('FAIRFORGET_DATA_ROOT')
 MODELS_ROOT = os.environ.get('FAIRFORGET_MODELS_ROOT')
 settings_path = repo / 'configs/unlearning/local.json'
@@ -154,12 +152,12 @@ settings = json.loads(settings_path.read_text()) if settings_path.exists() else 
 output_value = os.environ.get('FAIRFORGET_OUTPUT') or str(Path(settings.get('output_root', repo / 'outputs/unlearning')) / METHOD)
 OUTPUT = Path(output_value).expanduser().resolve()
 PLAN = notebook_matrix.method_plan(repo, METHOD, data_root=DATA_ROOT, models_root=MODELS_ROOT)
-assert len(PLAN) == 6, 'This notebook must cover all six study models.'
+assert len(PLAN) == 6, 'Expected six models in the training plan.'
 for item in PLAN:
     recipe = item['recipe']
     print(item['model_alias'], recipe['model_id'], recipe['model_revision'], 'GPUs:', item['required_gpus'])
 print('Models:', len(PLAN), '| Method:', METHOD)
-print('Protocol:', PLAN[0]['recipe']['notebook_matrix']['protocol'])
+print('Dataset:', 'WarBias' if PLAN[0]['recipe']['notebook_matrix']['protocol'] == 'warbias' else 'StereoSet')
 """
         run = r"""if RUN_TRAINING:
     if OUTPUT is None:
@@ -171,7 +169,7 @@ print('Protocol:', PLAN[0]['recipe']['notebook_matrix']['protocol'])
             raise RuntimeError(f'Use requirements-unlearning.txt: {package}=={expected} is required for full training.')
     if not torch.cuda.is_available() or torch.cuda.device_count() < max(item['required_gpus'] for item in PLAN):
         raise RuntimeError('Allocate the GPUs listed above; RMU for Mamay 27B needs two visible GPUs.')
-    # Preflight validates ALL models, data hashes and reviewed roles before any training.
+    # Validate model configs, input hashes and dataset roles.
     recipe_paths = notebook_matrix.prepare_recipes(PLAN, OUTPUT)
     environment = dict(os.environ)
     environment['PYTHONPATH'] = str(repo / 'src') + os.pathsep + environment.get('PYTHONPATH', '')
@@ -199,14 +197,14 @@ else:
 """
         cells = [
             nbformat.v4.new_markdown_cell(
-                f"# {title}: algorithm and training\n\nRun the cells in order. The CPU example calls the same objective implementation as the production trainer. The full training cell runs the actual algorithm separately on all six pinned study models, with reviewed streams and staged checkpoints. Results are optional.\n\n{NOTES[method]}"
+                f"# {title}: algorithm and training\n\nRun the cells in order to see one optimizer step on CPU, then train the six models listed in the configuration.\n\n{NOTES[method]}"
             ),
             nbformat.v4.new_markdown_cell(
-                "## Setup\n\nStart with [setup.ipynb](setup.ipynb) or the [setup guide](SETUP.md). Install `requirements-unlearning.txt` in an isolated environment. The setup configures all six pinned checkpoints and the reviewed data directories. The CPU algorithm example needs only PyTorch."
+                "## Setup\n\nStart with [setup.ipynb](setup.ipynb) or the [setup guide](SETUP.md). Install `requirements-unlearning.txt` and configure the model and data paths. The CPU example requires PyTorch."
             ),
             nbformat.v4.new_code_cell(setup),
             nbformat.v4.new_markdown_cell(
-                "## Executable algorithm step\n\nThe following synthetic CPU example checks the implementation. Its tensors and learning rate are software examples, not study settings or measured model results."
+                "## CPU example\n\nSynthetic tensors illustrate one optimizer step. Training parameters are loaded from the recipe files in the next section."
             ),
         ]
         if method == "rmu":
@@ -220,14 +218,14 @@ else:
         cells.extend(
             [
                 nbformat.v4.new_markdown_cell(
-                    "## Approved full-model training\n\nEvery notebook covers Qwen3 8B, Llama 3.1 8B Instruct, Gemma 3 12B IT, Lapa 12B Instruct, Mamay 12B v2 and Mamay 27B v2. Set `FAIRFORGET_DATA_ROOT` to the approved data directory for this protocol, optionally set `FAIRFORGET_MODELS_ROOT` to the staged checkpoint root, and set `FAIRFORGET_OUTPUT` to a new method output directory. All six inputs pass validation before training starts. Original source hashes, model revisions, masks and development splits remain bound. Set `RUN_TRAINING=True` to run six independent trainers in sequence. Mamay 27B RMU needs two allocated GPUs; the other runs need one. Logs, receipts and checkpoints are saved separately for every model.\n\nThis notebook uses the **"
-                    + study
-                    + "** protocol. See the [setup guide](SETUP.md) for installation, checkpoint downloads and data paths. The original NPO/BiasUnlearn primary data must be mounted externally; the reviewed WarBias data are bound by the published recipes. This model expansion changes no gradient source or objective setting."
+                    "## Training\n\nSet the data, checkpoint and output paths in [setup.ipynb](setup.ipynb), then enable `RUN_TRAINING` to train all six models in sequence. Each model has a separate log and output directory. RMU for Mamay 27B uses two GPUs; other runs use one.\n\nTraining data: **"
+                    + dataset
+                    + "**. See the [setup guide](SETUP.md) for the required files."
                 ),
                 nbformat.v4.new_code_cell(configure),
                 nbformat.v4.new_code_cell(run),
                 nbformat.v4.new_markdown_cell(
-                    "## Implementation\n\n- [Loss implementations](../src/fairforget/unlearning/objectives.py)\n- [Full NPO, WGA, task-vector and BiasUnlearn trainer](../src/fairforget/unlearning/trainer.py)\n- [Full fixed-target RMU trainer](../src/fairforget/unlearning/rmu.py)\n\nThe trainer writes the checkpoint, numeric history, actual valid-token exposure and provenance to the new output directory. Evaluation and reporting are separate workflows; use the [notebook index](README.md) to find saved reports."
+                    "## Implementation\n\n- [Loss implementations](../src/fairforget/unlearning/objectives.py)\n- [Full NPO, WGA, task-vector and BiasUnlearn trainer](../src/fairforget/unlearning/trainer.py)\n- [Full fixed-target RMU trainer](../src/fairforget/unlearning/rmu.py)\n\nEach run saves a checkpoint, loss history and token-exposure log. Use the [Fair-UK evaluation notebook](evaluate_before_after.ipynb) to compare measurements before and after training."
                 ),
             ]
         )
@@ -243,10 +241,9 @@ else:
                 "fairforget": {
                     "kind": "working_unlearning_algorithm",
                     "method": method,
-                    "study": study,
+                    "dataset": dataset,
                     "automatic_gpu_training": False,
-                    "study_results_required": False,
-                    "models": "all_six_pinned_study_models",
+                    "models": "all_six_models",
                 },
             },
         )
