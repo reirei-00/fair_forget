@@ -712,6 +712,301 @@ def _completed_training_dependencies(root, manifest, models, source, training, e
     )
 
 
+def _completed_heldout_dependencies(root, manifest, models, source, evidence):
+    """Accept only hash-bound completed native jobs as fulfilled CPU inputs."""
+    declared = source["plan"].get("completed_heldout_dependencies", {})
+    require(isinstance(declared, dict), "Invalid fulfilled heldout dependency registry")
+    if not declared:
+        return set()
+    aliases = {model["id"] for model in models}
+    require(set(declared).issubset(aliases), "Unknown fulfilled heldout model")
+    reference = manifest.get("heldout_completion_source")
+    require(reference, "Fulfilled heldout dependency requires a bound completion proof")
+    path, audit = bound_json(root, reference)
+    _, matrix = bound_json(root, manifest["preparation"]["training_matrix"])
+    _, training = bound_json(root, manifest["training_completion_source"])
+    plan = source["plan"]
+    require(
+        audit.get("schema_version") == 1
+        and audit.get("kind") == "actual_six_model_heldout_collection_completion"
+        and audit.get("status") in {"completed_subset_heldout_verified", "all_six_heldout_verified"}
+        and set(audit.get("models", {})) == aliases
+        and set(declared).issubset(audit.get("completed_models", []))
+        and audit.get("collector_release") == plan["collector_release"]
+        and audit.get("collector_checksums_sha256") == plan["collector_checksums_sha256"]
+        and audit.get("training_release") == plan["training_release"]
+        and audit.get("training_checksums_sha256") == plan["training_checksums_sha256"]
+        and audit.get("model_calls") == 0
+        and audit.get("new_metrics_computed") is False
+        and audit.get("weights_hashed_or_downloaded") is False
+        and audit.get("remote_mutations") is False,
+        "Heldout completion proof has wrong scope, source or completion status",
+    )
+
+    def valid_hash(value):
+        return (
+            isinstance(value, str)
+            and len(value) == 64
+            and not (set(value) - set("0123456789abcdef"))
+        )
+
+    def fingerprint(value):
+        return hashlib.sha256(
+            json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
+        ).hexdigest()
+
+    def file_reference(value, expected):
+        return (
+            isinstance(value, dict)
+            and set(value) == {"path", "sha256"}
+            and value["path"] == expected
+            and valid_hash(value["sha256"])
+        )
+
+    jobs = {source["models"][alias]["heldout"]["job_id"] for alias in aliases}
+    accounting = audit.get("accounting", {})
+    command = accounting.get("command", [])
+    require(
+        accounting.get("returncode") == 0
+        and len(command) == 7
+        and command[:6] == ["sacct", "-X", "-n", "-P", "--format=JobIDRaw,State,ExitCode", "-j"]
+        and len(command[6].split(",")) == 6
+        and set(command[6].split(",")) == jobs,
+        "Heldout completion requires the exact original six-job sacct query",
+    )
+    states = {}
+    for line in accounting.get("stdout", "").splitlines():
+        fields = line.split("|")
+        require(
+            len(fields) == 3 and fields[0] in jobs and fields[0] not in states,
+            "Invalid heldout raw sacct evidence",
+        )
+        states[fields[0]] = {"state": fields[1], "exit_code": fields[2]}
+    require(
+        set(states) == jobs and states == audit.get("verified_accounting_states"),
+        "Heldout raw and verified sacct states differ",
+    )
+    identity = audit.get("collector_code_identity", {})
+    require(
+        identity
+        and all(valid_hash(value) for value in identity.values())
+        and fingerprint(identity) == audit.get("collector_code_identity_sha256"),
+        "Heldout collector code identity differs",
+    )
+    tasks = manifest["warbias_tasks"]
+    checkpoint_names = {"baseline", *METHODS}
+    expected_native = {name + "/" + task for name in checkpoint_names for task in WARBIAS_TASKS}
+    expected_pairs = {method + "/" + task for method in METHODS for task in WARBIAS_TASKS}
+    for alias, selected in declared.items():
+        actual, event, profile = (
+            audit["models"][alias],
+            source["models"][alias]["heldout"],
+            matrix["models"][alias],
+        )
+        submitted = plan["models"][alias]
+        require(
+            selected.get("audit_sha256") == reference["sha256"]
+            and selected.get("job_id") == actual.get("job_id") == event["job_id"]
+            and actual.get("heldout_submission") == event
+            and actual.get("status") == "completed_zero_exit_and_all_saved_evidence_verified"
+            and actual.get("accounting")
+            == states[event["job_id"]]
+            == {"state": "COMPLETED", "exit_code": "0:0"},
+            "Fulfilled heldout job, proof hash or COMPLETED0:0 evidence differs",
+        )
+        require(
+            actual.get("model_profile")
+            == {
+                key: profile[key]
+                for key in (
+                    "model_path",
+                    "model_id",
+                    "model_revision",
+                    "tokenizer_revision",
+                    "config_sha256",
+                )
+            }
+            and actual.get("training_execution") == training["models"][alias]["execution"]
+            and actual.get("original_training_receipts") == submitted["original_receipts"],
+            "Heldout completed model pins or training source differs",
+        )
+        collection, analysis = event["collection_output"], event["native_analysis_output"]
+        for field, expected in (
+            ("collection_execution", collection + "/supplemental_execution.json"),
+            ("native_analysis_execution", analysis + "/supplemental_analysis.json"),
+        ):
+            require(
+                file_reference(actual.get(field), expected)
+                and selected.get(field) == actual[field],
+                "Heldout completion execution reference differs",
+            )
+        require(
+            actual.get("source_manifest")
+            == {
+                "path": plan["collector_release"] + "/evaluation/manifest.json",
+                "sha256": manifest["preparation"]["heldout_manifest"]["sha256"],
+            }
+            and actual.get("source_tasks") == tasks
+            and actual.get("no_update_passed") is True
+            and actual.get("qualification_gates") == 24
+            and actual.get("native_collection_count") == 48
+            and actual.get("native_pair_count") == 36
+            and set(actual.get("native_collections", {})) == expected_native
+            and set(actual.get("native_pairs", {})) == expected_pairs,
+            "Heldout full source, 48 collections or 36 pairs are incomplete",
+        )
+        checkpoints, identities = (
+            actual.get("checkpoints", {}),
+            actual.get("native_checkpoint_identities", {}),
+        )
+        require(
+            set(checkpoints) == set(identities) == checkpoint_names
+            and checkpoints["baseline"] == profile["model_path"],
+            "Heldout checkpoint registry differs",
+        )
+        for name, checkpoint in checkpoints.items():
+            observed = identities[name]
+            files = observed.get("local_files_sha256", {})
+            require(
+                observed.get("parameters", {}).get("pretrained") == checkpoint
+                and files
+                and all(valid_hash(value) for value in files.values()),
+                "Heldout native checkpoint identity differs",
+            )
+        require(
+            identities["baseline"]["local_files_sha256"].get("config.json")
+            == profile["config_sha256"],
+            "Heldout baseline config pin differs",
+        )
+        require(
+            actual.get("inference_views") == plan["inference_views"]
+            and set(actual.get("inference_view_proofs", {})) == set(METHODS),
+            "Heldout inference-view source differs",
+        )
+        for method in METHODS:
+            view = actual["inference_view_proofs"][method]
+            trained = training["models"][alias]["methods"][method]
+            original, observed, assets = (
+                view.get("original_files_sha256", {}),
+                identities[method]["local_files_sha256"],
+                view.get("added_assets", {}),
+            )
+            require(
+                view.get("status") == "validated_inference_view_of_actual_training_checkpoint"
+                and view.get("model_id") == profile["model_id"]
+                and view.get("method") == method
+                and view.get("sidecar") == plan["inference_views"]
+                and view.get("original_receipt") == trained["receipt"]
+                and view.get("original_checkpoint") == trained["original_checkpoint"]
+                and view.get("evaluation_checkpoint") == checkpoints[method]
+                and view.get("evaluation_files_sha256") == observed
+                and original
+                and all(valid_hash(value) for value in original.values())
+                and view.get("original_weight_config_tokenizer_files_unchanged") is True,
+                "Heldout post checkpoint is not the verified original training view",
+            )
+            if view.get("kind") == "original":
+                require(
+                    not assets
+                    and original == observed
+                    and checkpoints[method] == trained["original_checkpoint"],
+                    "Original heldout checkpoint view changed",
+                )
+            else:
+                require(
+                    view.get("kind") == "add_pinned_processor_assets"
+                    and alias in MODEL_IDS[2:]
+                    and set(assets) == {"preprocessor_config.json", "processor_config.json"}
+                    and not (set(original) & set(assets)),
+                    "Unsupported heldout derived view",
+                )
+                expected = dict(original)
+                for filename, asset in assets.items():
+                    require(
+                        asset.get("source_path") == profile["model_path"] + "/" + filename
+                        and asset.get("sha256")
+                        == identities["baseline"]["local_files_sha256"].get(filename)
+                        and valid_hash(asset.get("sha256")),
+                        "Heldout processor source differs",
+                    )
+                    expected[filename] = asset["sha256"]
+                require(observed == expected, "Heldout derived view changes original files")
+        for key, native in actual["native_collections"].items():
+            name, task = key.split("/")
+            require(
+                native.get("status") == "verified_full_native_collection"
+                and native.get("checkpoint") == checkpoints[name]
+                and native.get("source_task") == task
+                and native.get("source_sha256") == tasks[task]["sha256"]
+                and native.get("source_rows") == native.get("selected_rows") == tasks[task]["rows"]
+                and native.get("protocol") == tasks[task]["protocol"]
+                and native.get("source_bundle_manifest_sha256")
+                == actual["source_manifest"]["sha256"]
+                and valid_hash(native.get("selected_ids_sha256"))
+                and native.get("model_identity_sha256") == fingerprint(identities[name])
+                and file_reference(
+                    native.get("status_receipt"),
+                    collection + "/" + name + "/status/" + task + ".json",
+                )
+                and set(native.get("files", {}))
+                == {"run.json", "report.json", "predictions.jsonl"},
+                "Heldout full native source or checkpoint binding differs",
+            )
+            for filename, record in native["files"].items():
+                require(
+                    file_reference(record, collection + "/" + name + "/" + task + "/" + filename)
+                    and actual.get("validated_input_sha256", {}).get(record["path"])
+                    == record["sha256"],
+                    "Heldout native file reference differs",
+                )
+            baseline = actual["native_collections"]["baseline/" + task]
+            require(
+                native.get("selected_ids_sha256") == baseline.get("selected_ids_sha256")
+                and native.get("evaluation_asset_identity")
+                == baseline.get("evaluation_asset_identity")
+                and all(
+                    valid_hash(native["evaluation_asset_identity"].get(field))
+                    for field in ("tokenizer_sha256", "input_sha256")
+                ),
+                "Heldout paired tokenizer, inputs or selected IDs differ",
+            )
+        for key, pair in actual["native_pairs"].items():
+            method, task = key.split("/")
+            expected_inputs = {
+                name + "/" + filename: actual["native_collections"][name + "/" + task]["files"][
+                    filename
+                ]
+                for name in ("baseline", method)
+                for filename in ("run.json", "report.json", "predictions.jsonl")
+            }
+            require(
+                pair.get("status") == "verified_native_pair"
+                and file_reference(
+                    pair.get("report"), analysis + "/" + method + "/" + task + "/paired.json"
+                )
+                and pair.get("inputs") == expected_inputs
+                and pair.get("source_rows") == tasks[task]["rows"]
+                and valid_hash(pair.get("source_rows_sha256"))
+                and pair.get("direction") == "after_minus_before"
+                and pair.get("bootstrap")
+                == {
+                    "draws": 1000,
+                    "paired": True,
+                    "seed": 42,
+                    "unit": "semantic_component_within_stratum",
+                },
+                "Heldout native pair hash or source binding differs",
+            )
+    evidence.append(
+        {
+            "role": "completed_heldout_for_scheduler_dependencies_only",
+            "path": str(path),
+            "sha256": reference["sha256"],
+        }
+    )
+    return set(declared)
+
+
 def _warbias_measurement_schedule(root, manifest, models, evidence):
     if not manifest.get("measurement_source"):
         return []
@@ -735,6 +1030,11 @@ def _warbias_measurement_schedule(root, manifest, models, evidence):
     )
     if completed_dependencies:
         _completed_training_dependencies(root, manifest, models, source, training, evidence)
+    completed_heldout = _completed_heldout_dependencies(root, manifest, models, source, evidence)
+    require(
+        not completed_heldout or completed_dependencies,
+        "Fulfilled heldout inputs require the verified completed-training policy",
+    )
     states = {}
     for line in source["scheduler_snapshot"].splitlines():
         fields = line.split("|", 2)
@@ -769,7 +1069,11 @@ def _warbias_measurement_schedule(root, manifest, models, evidence):
                 ]
                 require(
                     edges
-                    == (["--dependency=afterok:" + dependency] if name == "all_metrics" else []),
+                    == (
+                        ["--dependency=afterok:" + dependency]
+                        if name == "all_metrics" and model["id"] not in completed_heldout
+                        else []
+                    ),
                     "Completed training policy has an unexpected or missing fresh success dependency",
                 )
                 require(

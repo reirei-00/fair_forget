@@ -22,7 +22,7 @@ import supplemental
 
 METHODS = ("rmu", "task_vector", "wga_kl")
 WARBIAS_REVISION = "164f355623c2da0028821e0942cad493558a6c13"
-ANALYSIS_COMMIT = "b0bdb6431e1e65eafa1a25ef6a3f5a3690202271"
+ANALYSIS_COMMIT = "8f5915e89bc35713de32155ef5ebeb16202556e0"
 METRIC_IDS = frozenset(
     "forget_efficacy NNR retain_utility LMS ICAT M1 M1b M2 M3a M3b M3c M3d RI M4a M4b BBQ training_imbalance severity".split()
 )

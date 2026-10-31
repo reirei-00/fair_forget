@@ -28,10 +28,12 @@ python "$RUNNER_RELEASE/deploy/unlearning_primary/run_warbias_metrics.py" \
   --collector-release "$COLLECTOR_RELEASE" --output "$NEW_ANALYSIS_OUTPUT"
 ```
 
-`ANALYSIS_RELEASE` is the separately frozen all-metrics v3 source at commit
-`88224db75bd80e85f5227897188904e9c470f4d1`; its package and evaluator checksums
-must match. `COLLECTOR_RELEASE` selects the original frozen v5 evaluator and
-full evaluation manifest. These two code identities remain distinct. The new
+`ANALYSIS_RELEASE` is the separately frozen saved-analysis source selected by
+the current deployment receipt. Its package commit must match the driver's
+`ANALYSIS_COMMIT`, and all package and evaluator checksums must match. The
+interpreter repair selects commit `8f5915e89bc35713de32155ef5ebeb16202556e0`.
+`COLLECTOR_RELEASE` selects the original frozen collector v6 and its full
+evaluation manifest. These two code identities remain distinct. The new
 runner release must include exact copies of `supplemental.py`,
 `evaluate_checkpoint.py` and `supplemental_checkpoint.sh` bound by the actual
 supplemental configuration. Dataset bytes stay in their external frozen release.
@@ -50,6 +52,13 @@ sbatch --dependency="afterok:$PAIRED_COLLECTION_JOB" --kill-on-invalid-dep=yes \
 The wrapper requests one eight-CPU allocation for at most 12 hours and starts
 three independent saved-analysis processes. GPU visibility is empty; offline
 settings and one math thread per process apply. It submits no other jobs.
+
+The example requires a collection job still known to the scheduler. A completed
+job that has left scheduler memory needs a separately bound completion audit
+before submitting its saved analysis without that dependency. The audit must
+verify successful accounting, all 48 collections, all 36 native pairs and their
+exact source and checkpoint identities. A recorded completion proof does not
+populate numerical report cells.
 
 The new output contains actual `training_evidence.json` file hashes, generated
 method configs, `warbias_metrics_execution.json`, and one
