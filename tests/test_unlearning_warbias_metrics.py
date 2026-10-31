@@ -119,10 +119,28 @@ class WarBiasMetricsTests(unittest.TestCase):
                 b"synthetic wrapper test fixture - no model execution"
             )
             history = directory / ("history.jsonl" if method == "rmu" else "losses.jsonl")
-            jsonl(history, [{"step": 1}, {"step": 2}])
+            indices = [1, 2] if method == "rmu" else [0, 1]
+            jsonl(history, [{"step": step} for step in indices])
+            roles = (
+                ("positive_acquisition",) if method == "task_vector" else ("forget", "preservation")
+            )
             jsonl(
                 directory / "exposure.jsonl",
-                [{"fixture": "actual events are validated by maintained CLI"}],
+                [
+                    {
+                        "step": step,
+                        "role": role,
+                        "weight": 1.0,
+                        "direction": "normal",
+                        "id": role + "-fixture",
+                        "family_id": "fixture-family",
+                        "source_item_id": "fixture-source",
+                        "valid_loss_tokens": 1,
+                        "effective_input": {},
+                    }
+                    for step in indices
+                    for role in roles
+                ],
             )
             receipt = {
                 "method": method,
@@ -216,6 +234,62 @@ class WarBiasMetricsTests(unittest.TestCase):
             files["rmu/history.jsonl"], driver.native.digest(self.training / "rmu/history.jsonl")
         )
         self.assertEqual(receipts["task_vector"]["task_vector_selection"]["selected"], 0)
+
+    def rewrite_history(self, method, indices):
+        directory = self.training / method
+        history = directory / ("history.jsonl" if method == "rmu" else "losses.jsonl")
+        jsonl(history, [{"step": index} for index in indices])
+        receipt_path = directory / ("run.json" if method == "rmu" else "intervention.json")
+        receipt = driver.read(receipt_path)
+        if method != "rmu":
+            receipt["loss_log_sha256"] = driver.native.digest(history)
+        write(receipt_path, receipt)
+        execution_path = self.training / "execution.json"
+        execution = driver.read(execution_path)
+        execution["methods"][method]["receipt"] = driver.evidence(receipt_path)
+        write(execution_path, execution)
+
+    def reject_history(self, mutation):
+        for method in driver.METHODS:
+            original = [1, 2] if method == "rmu" else [0, 1]
+            with self.subTest(method=method):
+                self.rewrite_history(method, mutation(original))
+                with self.assertRaisesRegex(ValueError, "Complete ordered actual loss history"):
+                    self.training_inputs()
+                self.rewrite_history(method, original)
+
+    def test_history_and_exposure_fixtures_match_actual_method_index_contracts(self):
+        self.training_inputs()
+        for method in driver.METHODS:
+            directory = self.training / method
+            history = driver.supplemental.rows(
+                directory / ("history.jsonl" if method == "rmu" else "losses.jsonl")
+            )
+            expected = [1, 2] if method == "rmu" else [0, 1]
+            self.assertEqual([row["step"] for row in history], expected)
+            exposure = driver.supplemental.rows(directory / "exposure.jsonl")
+            roles = (
+                ("positive_acquisition",) if method == "task_vector" else ("forget", "preservation")
+            )
+            for role in roles:
+                self.assertEqual([row["step"] for row in exposure if row["role"] == role], expected)
+
+    def test_duplicate_loss_steps_are_rejected_even_with_fresh_hashes(self):
+        self.reject_history(lambda values: [values[0], values[0]])
+
+    def test_missing_loss_steps_are_rejected_even_with_fresh_hashes(self):
+        self.reject_history(lambda values: values[:-1])
+
+    def test_shifted_method_origin_is_rejected_even_with_fresh_hashes(self):
+        self.reject_history(
+            lambda values: [value + (1 if values[0] == 0 else -1) for value in values]
+        )
+
+    def test_reordered_loss_steps_are_rejected_even_with_fresh_hashes(self):
+        self.reject_history(lambda values: list(reversed(values)))
+
+    def test_noninteger_loss_steps_are_rejected_even_with_fresh_hashes(self):
+        self.reject_history(lambda values: [float(value) for value in values])
 
     def test_old_stereoset_gradient_source_cannot_pass_as_warbias(self):
         path = self.release / "data/data_manifest.json"

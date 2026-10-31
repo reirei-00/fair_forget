@@ -1,0 +1,41 @@
+{
+  "status": "deployed_verified",
+  "plan": {
+    "target": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v4",
+    "input_checksums_sha256": "7247f359a022d1df01891901f7daaed139bf32075278cd3cab2de0d95dfeb25c",
+    "input_files": {
+      "deploy/unlearning_primary/WARBIAS_METRICS.md": "fc5c91cf1672826bb8fc2f27190fa613a3b65d4feeb46ce1a6a4020c3c923366",
+      "deploy/unlearning_primary/evaluate_checkpoint.py": "665902aa8f2e2790f73706d1a50cad42795d6f57d3b99fb702397b22266b00c0",
+      "deploy/unlearning_primary/materialize_inference_views.py": "6452899a475bdc4fc161817ae0f2f8499096161aeb6a02a7ee89d89df800b5bf",
+      "deploy/unlearning_primary/run_warbias_metrics.py": "84b40043d915d7cae810da6647c39e51dd701ded1f976429aa05d9c1f73bbdd8",
+      "deploy/unlearning_primary/supplemental.py": "5b02fdd793d268078124b40add6c0c383f8e17905573497dba35d2717f84379c",
+      "deploy/unlearning_primary/supplemental_checkpoint.sh": "994a8261cc5cf863b69abded01a1b9fde88c40c637937005924d2da118ee8dbd",
+      "deploy/unlearning_primary/training_diagnostic.py": "b66196b2aa22b822114bad06d63437f4c9ad95afcdb952d16332b71e77c3fbf0",
+      "deploy/unlearning_primary/training_diagnostic.sbatch": "9f7c56f2e1157c8a8a20fe36c473460e98c3ebe001b76712e880a10ba16a3836",
+      "deploy/unlearning_primary/warbias_metrics.sbatch": "9d5e77ca711f6e1378ee0b3dc2d6cc43323887b3bedf44e8d9545435fcae809e",
+      "package.json": "91e03b89a32c6a56298fc23ba46c72d2829feaedc4df87611f991a445758353e",
+      "tests/test_unlearning_inference_views_producer.py": "3bef68f3c0356b4c61376faee20c68f6fdc6ee1ad6067221b8a4b10625b4489b",
+      "tests/test_unlearning_supplemental.py": "5317dfb602a3e0fff0663e0d985bcf5c05cc2afc922ee4cb3badfbb812c81822",
+      "tests/test_unlearning_training_diagnostic.py": "d696648731446bcee411d5d754494e96f27069bf74ab439c557509d22c78debc",
+      "tests/test_unlearning_warbias_metrics.py": "eaea0dfb1da51c6bec942f9a44d2ec63a63cdea3f5073d0789ac9c68a0733387"
+    },
+    "helper_sha256": "81f66d20e1b813c929afd20fdf5e55147250b7dc7ef16002b4490bd8affb8f34",
+    "archive_sha256": "cc62022b21eace85cbf5508664bd52048b8c115b4640f83508b75c433efa2cad"
+  },
+  "returncode": 0,
+  "stderr": "",
+  "remote": {
+    "target": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v4",
+    "preparation_inputs": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v4.inputs",
+    "incoming": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v4.incoming",
+    "promotion_fallback_claims": [
+      "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v4.promotion.lock"
+    ],
+    "status": "deployed_verified",
+    "timestamp_utc": "2026-10-31T14:30:49.418512+00:00",
+    "files_verified": 14,
+    "checksum_manifest_sha256": "7247f359a022d1df01891901f7daaed139bf32075278cd3cab2de0d95dfeb25c",
+    "input_checksums_sha256": "7247f359a022d1df01891901f7daaed139bf32075278cd3cab2de0d95dfeb25c",
+    "input_archive_sha256": "cc62022b21eace85cbf5508664bd52048b8c115b4640f83508b75c433efa2cad"
+  }
+}

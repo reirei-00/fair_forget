@@ -108,6 +108,27 @@ def checked_analysis(source, inputs):
     return {name: native.digest(source / "lm_eval/fair_uk" / name) for name in ANALYSIS_FILES}
 
 
+def validate_loss_history(method, events, optimizer_steps):
+    """Preserve the deployed trainers' method-specific raw index conventions."""
+    require(
+        method in METHODS and type(optimizer_steps) is int and optimizer_steps > 0,
+        "Invalid method or optimizer-step budget",
+    )
+    first = 1 if method == "rmu" else 0
+    expected = list(range(first, first + optimizer_steps))
+    require(
+        len(events) == optimizer_steps
+        and all(type(row.get("step")) is int for row in events)
+        and [row["step"] for row in events] == expected,
+        "Complete ordered actual loss history is required: "
+        + method
+        + " steps "
+        + str(first)
+        + ".."
+        + str(expected[-1]),
+    )
+
+
 def checked_training(release, model_id, training, inputs):
     matrix_path = snapshot(release / "matrix.json", inputs)
     matrix = read(matrix_path)
@@ -201,11 +222,7 @@ def checked_training(release, model_id, training, inputs):
             )
         history = training / method / ("history.jsonl" if method == "rmu" else "losses.jsonl")
         events = supplemental.rows(snapshot(history, inputs))
-        require(
-            len(events) == receipt["steps"]
-            and {row["step"] for row in events} == set(range(1, receipt["steps"] + 1)),
-            "Complete actual loss history is required",
-        )
+        validate_loss_history(method, events, receipt["steps"])
         exposure = snapshot(training / method / "exposure.jsonl", inputs)
         require(bool(supplemental.rows(exposure)), "Actual exposure events are missing")
         if method != "rmu":

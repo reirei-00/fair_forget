@@ -192,13 +192,14 @@ class WarBiasAssemblyTests(unittest.TestCase):
             receipt_path = training / method / assembler.RECEIPTS[method]
             history = training / method / assembler.HISTORIES[method]
             exposure = training / method / "exposure.jsonl"
+            logged_steps = [1, 2] if method == "rmu" else [0, 1]
             write_json(receipt_path, receipt)
-            write_rows(history, [{"step": 1}, {"step": 2}])
+            write_rows(history, [{"step": step} for step in logged_steps])
             write_rows(
                 exposure,
                 [
                     {"step": i, "source_id": item_id, "input_ids": [1, 2]}
-                    for i, item_id in enumerate(("g1", "g2"), 1)
+                    for i, item_id in zip(logged_steps, ("g1", "g2"))
                 ],
             )
             # Checkpoint weights exist alongside saved evidence but must not be copied.
@@ -257,7 +258,7 @@ class WarBiasAssemblyTests(unittest.TestCase):
                         name: {
                             "events": 2,
                             "source_ids": ["g1", "g2"],
-                            "steps": [1, 2],
+                            "steps": logged_steps,
                             "valid_loss_tokens": 4,
                         }
                         for name in roles
@@ -318,6 +319,16 @@ class WarBiasAssemblyTests(unittest.TestCase):
             for arm in context["arms"].values():
                 self.assertTrue(
                     all(metric["status"] == "pending" for metric in arm["report_data"]["metrics"])
+                )
+        for context in contexts.values():
+            for method, arm in context["arms"].items():
+                expected = [1, 2] if method == "rmu" else [0, 1]
+                self.assertEqual([row["step"] for row in assembler.rows(arm["history"])], expected)
+                self.assertTrue(
+                    all(
+                        observed["steps"] == expected
+                        for observed in arm["report_data"]["training_exposure"]["summary"].values()
+                    )
                 )
 
     def test_incomplete_training_and_native_diagnostic_are_rejected(self):
@@ -387,6 +398,69 @@ class WarBiasAssemblyTests(unittest.TestCase):
         write_json(archive_path, archive)
         with self.assertRaisesRegex(ValueError, "history does not cover the full pass"):
             self.preflight()
+
+    def test_each_actual_method_rejects_shifted_missing_duplicate_or_unordered_history(self):
+        paths = self.context_paths[assembler.MODELS[0]]
+        archive_path = paths["metrics"] / "training_evidence.json"
+        original_archive = archive_path.read_bytes()
+        for method in assembler.METHODS:
+            history = paths["training"] / method / assembler.HISTORIES[method]
+            original_history = history.read_bytes()
+            expected = [1, 2] if method == "rmu" else [0, 1]
+            invalid = (
+                [step + 1 for step in expected],
+                expected[:1],
+                [expected[0], expected[0]],
+                list(reversed(expected)),
+                [bool(expected[0]), expected[1]],
+            )
+            for steps in invalid:
+                with self.subTest(method=method, steps=steps):
+                    try:
+                        write_rows(history, [{"step": step} for step in steps])
+                        archive = json.loads(original_archive)
+                        archive["files"][method + "/" + assembler.HISTORIES[method]] = digest(
+                            history
+                        )
+                        write_json(archive_path, archive)
+                        with self.assertRaisesRegex(
+                            ValueError, "history does not cover the full pass"
+                        ):
+                            self.preflight()
+                    finally:
+                        history.write_bytes(original_history)
+                        archive_path.write_bytes(original_archive)
+
+    def test_each_actual_method_rejects_shifted_missing_duplicate_or_unordered_exposure_steps(self):
+        metrics = self.context_paths[assembler.MODELS[0]]["metrics"]
+        execution_path = metrics / "warbias_metrics_execution.json"
+        original_execution = execution_path.read_bytes()
+        for method in assembler.METHODS:
+            report_path = metrics / method / "all_metrics.json"
+            original_report = report_path.read_bytes()
+            expected = [1, 2] if method == "rmu" else [0, 1]
+            invalid = (
+                [step + 1 for step in expected],
+                expected[:1],
+                [expected[0], expected[0]],
+                list(reversed(expected)),
+                [bool(expected[0]), expected[1]],
+            )
+            for steps in invalid:
+                with self.subTest(method=method, steps=steps):
+                    try:
+                        report = json.loads(original_report)
+                        for observed in report["training_exposure"]["summary"].values():
+                            observed["steps"] = steps
+                        write_json(report_path, report)
+                        execution = json.loads(original_execution)
+                        execution["methods"][method]["report"]["sha256"] = digest(report_path)
+                        write_json(execution_path, execution)
+                        with self.assertRaisesRegex(ValueError, "Every reviewed source ID"):
+                            self.preflight()
+                    finally:
+                        report_path.write_bytes(original_report)
+                        execution_path.write_bytes(original_execution)
 
     def test_unavailable_heldout_native_pair_cannot_be_completed_by_pending_inventory(self):
         identifier, method = assembler.MODELS[0], assembler.METHODS[0]

@@ -350,7 +350,12 @@ def preflight(base_manifest, training_submission, measurement_submission, releas
                 "Archived receipt/history differs",
             )
             require(
-                len(history) == count and {r["step"] for r in history} == set(range(1, count + 1)),
+                # The actual RMU logger increments before recording; the PEFT
+                # trainer records its current zero-based step before incrementing.
+                len(history) == count
+                and all(type(row.get("step")) is int for row in history)
+                and [row["step"] for row in history]
+                == (list(range(1, count + 1)) if method == "rmu" else list(range(count))),
                 "Applied training history does not cover the full pass",
             )
             report_path = metrics / method / "all_metrics.json"
@@ -424,7 +429,10 @@ def preflight(base_manifest, training_submission, measurement_submission, releas
                 require(
                     observed["events"] == count
                     and set(observed["source_ids"]) == expected_ids
-                    and set(observed["steps"]) == set(range(1, count + 1))
+                    and isinstance(observed["steps"], list)
+                    and all(type(step) is int for step in observed["steps"])
+                    and observed["steps"]
+                    == (list(range(1, count + 1)) if method == "rmu" else list(range(count)))
                     and observed["valid_loss_tokens"] > 0,
                     "Every reviewed source ID must have actual exposure in the full pass",
                 )

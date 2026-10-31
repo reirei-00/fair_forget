@@ -10,7 +10,7 @@ These are the current readiness and saved-evidence reports for **WarBias trainin
 
 Every report retains all six pinned models and all eighteen metric commitments. All eighteen training arms have completed, as recorded in the [dated completion audit](../training_completion_v1.json). The submission replay keeps training and numeric cells pending until full receipt bundles and native reports are imported. The corrected eighteen measurement jobs are shown separately with their recorded submission time. Executed notebook cells establish that the readiness/reporting code ran; they do not establish applied training steps, model performance or mitigation.
 
-The hash-bound [current manifest](manifest_v3.json), preserving the [v2 snapshot](manifest_v2.json) and [initial snapshot](manifest.json), verifies the exact reviewed inputs: 137 training rows from 12 cases in nine components, 96 development rows in nine other components, original predicate masks, the six-tokenizer span audit, model pins and eighteen planned method recipes. One full pass is **137 planned optimizer steps per arm**. Human validation is false. All 13 training components linked to locked legacy views were excluded, including their ordinary preservation text; the complete protected component union is 33.
+The hash-bound [current manifest](manifest_v4.json), preserving the [v2 snapshot](manifest_v2.json) and [initial snapshot](manifest.json), verifies the exact reviewed inputs: 137 training rows from 12 cases in nine components, 96 development rows in nine other components, original predicate masks, the six-tokenizer span audit, model pins and eighteen planned method recipes. One full pass is **137 planned optimizer steps per arm**. Human validation is false. All 13 training components linked to locked legacy views were excluded, including their ordinary preservation text; the complete protected component union is 33.
 
 Three stages remain separate:
 
@@ -24,7 +24,7 @@ Reproduce only the report replay from the repository root:
 
 ```bash
 python scripts/build_unlearning_report_notebooks.py --study warbias \
-  --manifest evaluation/unlearning/warbias_primary_20261031/reports/manifest_v3.json --execute
+  --manifest evaluation/unlearning/warbias_primary_20261031/reports/manifest_v4.json --execute
 ```
 
 The kernel needs nbformat, nbclient, pandas and Matplotlib. No model weights, GPU allocation, API access or judge is used. Without `--execute`, the builder writes source notebooks under `notebooks/not_executed`.
@@ -43,9 +43,9 @@ Complete all six saved result panels in a new portable output directory:
 
 ```bash
 python scripts/assemble_warbias_report.py \
-  --base-manifest evaluation/unlearning/warbias_primary_20261031/reports/manifest_v3.json \
+  --base-manifest evaluation/unlearning/warbias_primary_20261031/reports/manifest_v4.json \
   --training-submission evaluation/unlearning/warbias_primary_20261031/training_submission.json \
-  --measurement-submission evaluation/unlearning/warbias_primary_20261031/measurement_submission_v2_retry1.json \
+  --measurement-submission evaluation/unlearning/warbias_primary_20261031/measurement_submission_v3.json \
   --training-release /absolute/path/to/frozen/warbias-training-release \
   --output /absolute/path/to/new-completed-report-bundle --execute \
   --kernel-name fairforget-report-v1
@@ -57,6 +57,6 @@ The explicit kernel option is supported by both tools. Local replay defaults to 
 
 Completed assembly also writes spreadsheet-ready UTF-8 CSV files under `tables/` for each method: held-out native values, native training-source comparisons, eighteen-entry metric status, actual exposure, training parameters and model/task coverage. All three shared-loader replays must pass before any CSV is created. These are copies of the existing returned tables, with no new metric calculation or pooling. Missing numeric values stay blank with their statuses; nested native scopes and intervals use JSON cells. CSV row counts and SHA-256 hashes are recorded in `assembly_execution.json`, and every CSV is included in the final `checksums.json`.
 
-The [automatic report job](report_submission_v1.json), **2610782**, waits for all six saved-metric jobs and all six TRAIN diagnostic jobs. Its immutable report package is bound by the [deployment receipt](report_deployment_v1.json). It will execute the three completed notebooks and write twenty-four CSV tables only after the full saved-evidence checks pass. The job being queued does not establish completed outputs.
+The preserved [first automatic report job](report_submission_v1.json), **2610782**, was cancelled while pending, before producing outputs. A new report package reads the corrected method-specific log indexes and the [replacement CPU submission](../measurement_submission_v3.json). The first immutable package remains bound by its [deployment receipt](report_deployment_v1.json). Completed assembly will execute the three completed notebooks and write twenty-four CSV tables only after the full saved-evidence checks pass. The job being queued does not establish completed outputs.
 
 All eighteen native TRAIN-source pairs are also preserved in the [completed training-source snapshot](../training_source_results/README.md), with all fifty-four component-macro SS/LMS/ICAT values and their existing confidence intervals. This dated snapshot does not fill held-out panels or establish mitigation. The completed report assembly will import the full training receipts and metric evidence together.

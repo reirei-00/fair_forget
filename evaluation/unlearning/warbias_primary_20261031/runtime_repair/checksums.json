@@ -12,7 +12,11 @@
   "measurement_submission_v2_failed.json": "34df89f74764fe095ea34beac45b9798518b7f2c67560544debb334a2646275e",
   "notebook_runtime_qualification.json": "885c40645ef6f1041b8d6fdfaf23aa1797ea219169c0f2c2a2fc59b76b2a1010",
   "runner_deployment_v3.json": "8de437e8feddeb1c505656eed378c1d8d2d3bdadd87de9f089f0775269547438",
+  "runner_deployment_v4.json": "f7e3f689f6cb64a615812ef49f75518d69daa10d6f24ffa35bc6be73a10f4d02",
   "runner_preflight_v3.json": "be45e72ea32593a846bd5b0037ef6ebf4cdf3a41a00a3718c6228152e1b71231",
+  "runner_preflight_v4.json": "513255f0c04cc85507e490e60e1eb82e0d0e7007ab9d7bc0d145dd9944cc1863",
   "software_verification.json": "f6f5a6c75ad51cca74f836f86b06cdd4d7e7ecd97fcc8c14b20d17d211e089a4",
-  "software_verification_v2.json": "4cb4fee16ac2192903910afe96bf23b8e7f0550b6fff82c8b57ece3f3f07cd76"
+  "software_verification_v2.json": "4cb4fee16ac2192903910afe96bf23b8e7f0550b6fff82c8b57ece3f3f07cd76",
+  "software_verification_v3.json": "685b309e7027e5cb4ff8e8e2950fafc5a61aeac6b5e375dfdebebc4ee99dcbca",
+  "step_index_cpu_cancellation_v1.json": "9d5d02a39d64b9ca23cb00c2b1d45b90d535b3b10fa19b1944ada6248cb5e7e7"
 }

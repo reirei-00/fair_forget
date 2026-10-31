@@ -30,3 +30,5 @@ The notebook runtime is separate from training and evaluation. Its qualification
 executed a saved-data notebook and a plot without Torch, vLLM, model weights or
 GPU calls. It does not establish model results. `checksums.json` binds the dated
 records in this directory.
+
+The saved-analysis/report index repair uses the actual logger contracts: RMU records ordered integer steps 1..N; WGA and task-vector record 0..N-1. Both represent N applied updates. Runners v4 and the new report package validate those exact ranges, including order and uniqueness, without changing raw histories or exposure events. All 249 local regressions and 75 deployed runner checks pass; the deployed check also reads all eighteen actual loss histories. Only pending CPU/report jobs were replaced.

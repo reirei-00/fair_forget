@@ -1,0 +1,203 @@
+{
+  "kind": "pending_saved_CPU_analysis_guard_repair_cancellation",
+  "status": "all_seven_confirmed_cancelled_before_start",
+  "requested_at_utc": "2026-10-31T14:29:29.719939+00:00",
+  "target_jobs": [
+    "2610276",
+    "2610279",
+    "2610282",
+    "2610285",
+    "2610288",
+    "2610291",
+    "2610782"
+  ],
+  "protected_running_heldout_jobs_not_cancelled": [
+    "2610274",
+    "2610277",
+    "2610280",
+    "2610283",
+    "2610286",
+    "2610289"
+  ],
+  "reason": "Pending analysis guards incorrectly assume 1..137 for every trainer. Actual PEFT optimizer logs use 0..136; RMU uses 1..137. Preserve actual training and heldout collection; replace only saved CPU analysis/report scheduling with repaired runners_v4/report_v2.",
+  "new_model_calls": 0,
+  "new_result_calculations": 0,
+  "existing_checkpoints_or_results_changed": false,
+  "outputs": {
+    "2610276": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/warbias-metrics-2610276",
+    "2610279": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/warbias-metrics-2610279",
+    "2610282": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/warbias-metrics-2610282",
+    "2610285": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/warbias-metrics-2610285",
+    "2610288": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/warbias-metrics-2610288",
+    "2610291": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/warbias-metrics-2610291",
+    "2610782": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_reports_v1/reports-2610782"
+  },
+  "before": {
+    "observed_at_utc": "2026-10-31T14:29:34.210456+00:00",
+    "command": [
+      "squeue",
+      "-j",
+      "2610276,2610279,2610282,2610285,2610288,2610291,2610782",
+      "-h",
+      "-o",
+      "%i|%T|%R|%M|%N"
+    ],
+    "returncode": 0,
+    "stdout": "2610782|PENDING|(Dependency)|0:00|\n2610291|PENDING|(Dependency)|0:00|\n2610288|PENDING|(Dependency)|0:00|\n2610285|PENDING|(Dependency)|0:00|\n2610282|PENDING|(Dependency)|0:00|\n2610279|PENDING|(Dependency)|0:00|\n2610276|PENDING|(Dependency)|0:00|\n",
+    "stderr": ""
+  },
+  "output_results_before": {
+    "2610276": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/warbias-metrics-2610276",
+      "exists": false,
+      "all_metrics_reports": 0,
+      "executed_notebooks": 0,
+      "assembly_execution_exists": false
+    },
+    "2610279": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/warbias-metrics-2610279",
+      "exists": false,
+      "all_metrics_reports": 0,
+      "executed_notebooks": 0,
+      "assembly_execution_exists": false
+    },
+    "2610282": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/warbias-metrics-2610282",
+      "exists": false,
+      "all_metrics_reports": 0,
+      "executed_notebooks": 0,
+      "assembly_execution_exists": false
+    },
+    "2610285": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/warbias-metrics-2610285",
+      "exists": false,
+      "all_metrics_reports": 0,
+      "executed_notebooks": 0,
+      "assembly_execution_exists": false
+    },
+    "2610288": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/warbias-metrics-2610288",
+      "exists": false,
+      "all_metrics_reports": 0,
+      "executed_notebooks": 0,
+      "assembly_execution_exists": false
+    },
+    "2610291": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/warbias-metrics-2610291",
+      "exists": false,
+      "all_metrics_reports": 0,
+      "executed_notebooks": 0,
+      "assembly_execution_exists": false
+    },
+    "2610782": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_reports_v1/reports-2610782",
+      "exists": false,
+      "all_metrics_reports": 0,
+      "executed_notebooks": 0,
+      "assembly_execution_exists": false
+    }
+  },
+  "other_jobs_signalled": false,
+  "cancellation": {
+    "at_utc": "2026-10-31T14:29:34.463332+00:00",
+    "command": [
+      "scancel",
+      "--state=PENDING",
+      "2610276",
+      "2610279",
+      "2610282",
+      "2610285",
+      "2610288",
+      "2610291",
+      "2610782"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "after": {
+    "observed_at_utc": "2026-10-31T14:29:36.686750+00:00",
+    "command": [
+      "squeue",
+      "-j",
+      "2610276,2610279,2610282,2610285,2610288,2610291,2610782",
+      "-h",
+      "-o",
+      "%i|%T|%R|%M|%N"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "accounting_after": {
+    "observed_at_utc": "2026-10-31T14:29:36.910412+00:00",
+    "command": [
+      "sacct",
+      "-X",
+      "-j",
+      "2610276,2610279,2610282,2610285,2610288,2610291,2610782",
+      "-P",
+      "-n",
+      "--format=JobIDRaw,State,ExitCode,Start,End"
+    ],
+    "returncode": 0,
+    "stdout": "2610276|CANCELLED by 35666|0:0|None|2026-10-31T15:29:34\n2610279|CANCELLED by 35666|0:0|None|2026-10-31T15:29:34\n2610282|CANCELLED by 35666|0:0|None|2026-10-31T15:29:34\n2610285|CANCELLED by 35666|0:0|None|2026-10-31T15:29:34\n2610288|CANCELLED by 35666|0:0|None|2026-10-31T15:29:34\n2610291|CANCELLED by 35666|0:0|None|2026-10-31T15:29:34\n2610782|CANCELLED by 35666|0:0|None|2026-10-31T15:29:34\n",
+    "stderr": ""
+  },
+  "output_results_after": {
+    "2610276": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/warbias-metrics-2610276",
+      "exists": false,
+      "all_metrics_reports": 0,
+      "executed_notebooks": 0,
+      "assembly_execution_exists": false
+    },
+    "2610279": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/warbias-metrics-2610279",
+      "exists": false,
+      "all_metrics_reports": 0,
+      "executed_notebooks": 0,
+      "assembly_execution_exists": false
+    },
+    "2610282": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/warbias-metrics-2610282",
+      "exists": false,
+      "all_metrics_reports": 0,
+      "executed_notebooks": 0,
+      "assembly_execution_exists": false
+    },
+    "2610285": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/warbias-metrics-2610285",
+      "exists": false,
+      "all_metrics_reports": 0,
+      "executed_notebooks": 0,
+      "assembly_execution_exists": false
+    },
+    "2610288": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/warbias-metrics-2610288",
+      "exists": false,
+      "all_metrics_reports": 0,
+      "executed_notebooks": 0,
+      "assembly_execution_exists": false
+    },
+    "2610291": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/warbias-metrics-2610291",
+      "exists": false,
+      "all_metrics_reports": 0,
+      "executed_notebooks": 0,
+      "assembly_execution_exists": false
+    },
+    "2610782": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_reports_v1/reports-2610782",
+      "exists": false,
+      "all_metrics_reports": 0,
+      "executed_notebooks": 0,
+      "assembly_execution_exists": false
+    }
+  },
+  "ssh_returncode": 0,
+  "ssh_stderr": "",
+  "actual_results_before": 0,
+  "actual_results_after": 0,
+  "actual_model_calls_in_cancelled_jobs": 0
+}
