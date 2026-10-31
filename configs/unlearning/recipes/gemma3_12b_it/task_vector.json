@@ -5,7 +5,8 @@
   "user_decisions": [
     "One notebook per method",
     "All six pinned study models",
-    "Saved results optional"
+    "Saved results optional",
+    "Apply the saved task vector at scale one without scale search; never use zero intervention"
   ],
   "model_path": "../../../../models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
   "model_id": "google/gemma-3-12b-it",
@@ -68,14 +69,13 @@
   },
   "task_vector": {
     "scales": [
-      0.0,
-      0.25,
-      0.5,
       1.0
     ],
     "selection": {
       "max_retain_token_kl": 0.05,
-      "scope": "predeclared engineering diagnostic gate only; not calibrated general utility"
+      "scope": "fixed user-selected scale one; retained-token KL is diagnostic only; no scale search",
+      "require_nonzero": true,
+      "mode": "fixed"
     }
   },
   "rmu": {

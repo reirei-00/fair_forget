@@ -214,15 +214,22 @@ def validate_config(config_path: Path | str, *, methods=None):
         raise ValueError("adversarial_fraction must be strictly between zero and one")
     if config["method"] == "task_vector":
         scales = config.get("task_vector", {}).get("scales", [])
-        gate = config.get("task_vector", {}).get("selection", {}).get("max_retain_token_kl")
+        selection = config.get("task_vector", {}).get("selection", {})
+        gate = selection.get("max_retain_token_kl")
         if (
             not scales
             or len(scales) != len(set(scales))
-            or any(not math.isfinite(s) or s < 0 for s in scales)
+            or any(not math.isfinite(s) or s <= 0 for s in scales)
         ):
-            raise ValueError("task-vector scales must be explicit, unique, finite and nonnegative")
+            raise ValueError("task-vector intervention scales must be finite, unique and positive")
+        if selection.get("mode", "development") not in {"fixed", "development"}:
+            raise ValueError("unknown task-vector application mode")
+        if selection.get("mode") == "fixed" and len(scales) != 1:
+            raise ValueError("fixed task-vector application requires exactly one scale")
         if gate is None or not math.isfinite(gate) or gate < 0:
             raise ValueError("task-vector development retain KL gate must be explicit")
+        if selection.get("require_nonzero", True) is not True:
+            raise ValueError("zero-strength interventions are not supported")
         if not streams.get("retain_development"):
             raise ValueError("task-vector scale selection requires held-out retain_development")
     if config["method"] != "rmu":
@@ -491,7 +498,11 @@ def evaluate_development(
         model.train(training)
 
 
-def select_task_vector_scale(candidates, *, max_retain_token_kl, require_heldout_retain=True):
+def select_task_vector_scale(
+    candidates, *, max_retain_token_kl, require_heldout_retain=True, require_nonzero=True
+):
+    if require_nonzero is not True:
+        raise ValueError("zero-strength interventions are not supported")
     if not candidates or not math.isfinite(max_retain_token_kl) or max_retain_token_kl < 0:
         raise ValueError("explicit finite nonnegative development retention gate is required")
     feasible = [
@@ -500,11 +511,13 @@ def select_task_vector_scale(candidates, *, max_retain_token_kl, require_heldout
         if x["retain_token_kl"] is not None
         and x["retain_token_kl"] <= max_retain_token_kl
         and (not require_heldout_retain or x["retain_scope"] == "heldout_development")
+        and (not require_nonzero or x["scale"] > 0)
     ]
     if not feasible:
         return {
             "selected": None,
             "qualification": "no candidate satisfies the declared development gate",
+            "require_nonzero": require_nonzero,
         }
     chosen = min(
         feasible,
@@ -514,6 +527,21 @@ def select_task_vector_scale(candidates, *, max_retain_token_kl, require_heldout
         "selected": chosen["scale"],
         "development": chosen,
         "qualification": "exploratory development gate only; general utility qualification unavailable",
+        "require_nonzero": require_nonzero,
+    }
+
+
+def fixed_task_vector_application(scale, development):
+    """Record a fixed positive application without ranking or a retention veto."""
+    if not math.isfinite(scale) or scale <= 0:
+        raise ValueError("a fixed intervention scale must be positive")
+    return {
+        "mode": "fixed",
+        "selected": scale,
+        "search_performed": False,
+        "require_nonzero": True,
+        "development": development,
+        "qualification": "fixed user-selected scale; retained-token KL is diagnostic only",
     }
 
 
@@ -862,9 +890,13 @@ def run(config_path: Path | str, output: Path | str):
                     model, tokenizer, streams["development"], heldout_retain, **encoding
                 )
                 candidates.append({"scale": scale, "retain_scope": "heldout_development", **dev})
-            selection = select_task_vector_scale(
-                candidates, max_retain_token_kl=tv["selection"]["max_retain_token_kl"]
-            )
+            if tv["selection"].get("mode") == "fixed":
+                selection = fixed_task_vector_application(tv["scales"][0], candidates[0])
+            else:
+                selection = select_task_vector_scale(
+                    candidates,
+                    max_retain_token_kl=tv["selection"]["max_retain_token_kl"],
+                )
             write_json(out / "task_vector_selection.json", {"candidates": candidates, **selection})
             if selection["selected"] is None:
                 receipt.update(status="unqualified_no_scale", task_vector_selection=selection)

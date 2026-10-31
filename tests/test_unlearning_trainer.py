@@ -18,6 +18,7 @@ from fairforget.unlearning.trainer import (
     build_biasunlearn_pools,
     encode_batch,
     file_hash,
+    fixed_task_vector_application,
     prepare_output,
     read_jsonl_verified,
     record_exposures,
@@ -312,6 +313,49 @@ class ScaleTests(unittest.TestCase):
             select_task_vector_scale([values[0]], max_retain_token_kl=0.05)["selected"]
         )
 
+    def test_nonzero_intervention_excludes_a_better_null_control(self):
+        candidates = [
+            {
+                "scale": scale,
+                "distance_from_half": distance,
+                "mean_completion_margin": 0.2,
+                "retain_token_kl": kl,
+                "retain_scope": "heldout_development",
+            }
+            for scale, distance, kl in [(0, 0, 0), (0.25, 0.1, 0.01), (0.5, 0.05, 0.03)]
+        ]
+        self.assertEqual(
+            select_task_vector_scale(candidates, max_retain_token_kl=0.05)["selected"], 0.5
+        )
+        selected = select_task_vector_scale(
+            candidates, max_retain_token_kl=0.05, require_nonzero=True
+        )
+        self.assertEqual(selected["selected"], 0.5)
+        self.assertTrue(selected["require_nonzero"])
+
+    def test_fixed_application_preserves_scale_one_despite_high_kl(self):
+        result = fixed_task_vector_application(1.0, {"retain_token_kl": 0.25})
+        self.assertEqual(result["selected"], 1.0)
+        self.assertFalse(result["search_performed"])
+        with self.assertRaises(ValueError):
+            fixed_task_vector_application(0.0, {})
+
+    def test_nonzero_intervention_keeps_the_retention_gate(self):
+        candidates = [
+            {
+                "scale": scale,
+                "distance_from_half": 0.1,
+                "mean_completion_margin": 0.2,
+                "retain_token_kl": kl,
+                "retain_scope": "heldout_development",
+            }
+            for scale, kl in [(0, 0), (0.25, 0.2)]
+        ]
+        selected = select_task_vector_scale(
+            candidates, max_retain_token_kl=0.05, require_nonzero=True
+        )
+        self.assertIsNone(selected["selected"])
+
 
 class TinyBase(torch.nn.Module):
     def __init__(self):
@@ -424,8 +468,8 @@ class PipelineTests(unittest.TestCase):
         )
         self.config["lora"].update({"r": 2, "alpha": 2})
         self.config["task_vector"] = {
-            "scales": [0.0, 0.5],
-            "selection": {"max_retain_token_kl": 0.05},
+            "scales": [1.0],
+            "selection": {"max_retain_token_kl": 0.05, "mode": "fixed", "require_nonzero": True},
         }
 
         class Tokenizer(CharacterTokenizer):

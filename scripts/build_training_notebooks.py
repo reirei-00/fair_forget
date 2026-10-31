@@ -127,15 +127,15 @@ acquisition_loss = objectives.completion_ce_loss(logps, mask, reduction='example
 acquisition_loss.backward()
 optimizer.step()
 positive = {'layer.lora_A.weight': a.detach().clone(), 'layer.lora_B.weight': b.detach().clone()}
-# A software-example scale; the full trainer selects its scale on development data.
-scale = 0.5
+# Use the same fixed scale one as the model applications.
+scale = 1.0
 negated = objectives.negate_lora_state(positive, scale=scale, initial_state=initial)
 torch.testing.assert_close(negated['layer.lora_B.weight'] @ negated['layer.lora_A.weight'], -scale * (positive['layer.lora_B.weight'] @ positive['layer.lora_A.weight']))
 print('Positive acquisition and B-only task-vector negation completed on CPU.')
 """
 NOTES = {
     "rmu": "The fixed seeded target is shared across batches. Production training captures the selected decoder layer, applies the reviewed completion masks, preserves reference retain activations and updates only the configured projections.",
-    "task_vector": "Acquisition uses positive completion CE. Negation preserves acquired A and scales B by a negative development-selected factor. Scale zero is a valid null intervention. The production trainer evaluates the frozen development scale grid under its declared retention gate.",
+    "task_vector": "Acquisition uses positive completion CE. Negation preserves acquired A and multiplies B by -1. Apply scale one without scale search. Zero-strength interventions are forbidden. Retained-token KL is reported as a diagnostic and does not select another scale.",
     "wga_kl": "Confidence weights are detached. The denominator is the count of valid completion tokens. Preservation uses frozen-base KL on genuine retain tokens; this arm has no corrective CE.",
     "npo_kl": "NPO uses the current-versus-reference token-mean completion likelihood ratio. Separate reference KL supplies retention. The reference receives no gradients; corrective CE is absent.",
     "biasunlearn": "The production trainer includes NPO suppression, a distinct anti-stereotype correction stream, genuine preservation, adversarial forget-pool construction and development-controlled pool reversal. The loss-only CPU example is one part of that full algorithm.",

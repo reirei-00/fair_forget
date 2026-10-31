@@ -5,7 +5,8 @@
   "user_decisions": [
     "One notebook per method",
     "All six pinned study models",
-    "Saved results optional"
+    "Saved results optional",
+    "Apply the saved task vector at scale one without scale search; never use zero intervention"
   ],
   "model_path": "../../../../models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
   "model_id": "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0",
@@ -68,14 +69,13 @@
   },
   "task_vector": {
     "scales": [
-      0.0,
-      0.25,
-      0.5,
       1.0
     ],
     "selection": {
       "max_retain_token_kl": 0.05,
-      "scope": "predeclared engineering diagnostic gate only; not calibrated general utility"
+      "scope": "fixed user-selected scale one; retained-token KL is diagnostic only; no scale search",
+      "require_nonzero": true,
+      "mode": "fixed"
     }
   },
   "rmu": {

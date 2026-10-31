@@ -261,7 +261,9 @@ def seed_warbias_manifest(repo):
 
 
 def warbias_notebook(
-    method, default_manifest="evaluation/unlearning/warbias_primary_20261031/reports/manifest.json"
+    method,
+    default_manifest="evaluation/unlearning/warbias_primary_20261031/reports/manifest.json",
+    fixed_task_vector=False,
 ):
     """Executed preparation/replay cells are never represented as training runs."""
     objective = {
@@ -269,6 +271,8 @@ def warbias_notebook(
         "task_vector": "Acquire the reviewed stereotype predicates with completion-only positive CE and LoRA. Negation keeps acquired A and multiplies B by minus the selected scale. Do not negate both matrices. Select among 0, 0.25, 0.5 and 1 on separate development families under the declared 0.05-nat retain-KL engineering gate. Scale 0 is a null intervention. Actual selected scales, when supplied, are read from fresh WarBias receipts below.",
         "wga_kl": "WGA+KL is the selected GA-family arm: minimize mean_valid(stopgrad(p_token ** alpha) * log(p_token)) plus retain_weight * KL(base || current). Alpha and retain weight are 1. Forgetting masks cover the original predicate completion; KL uses valid ordinary-retain prediction tokens. No anti-stereotype CE is used. Exact planned LoRA/optimizer settings are displayed below.",
     }[method]
+    if method == "task_vector" and fixed_task_vector:
+        objective = "Apply each saved positive-acquisition LoRA task vector at scale 1. Negation keeps acquired A and multiplies B by -1. No acquisition training is repeated. There is no scale search or zero-strength fallback. Retained-token KL is diagnostic only. The receipts below bind the changed merged checkpoints and fresh measurements."
     load = f"""import importlib.util
 import json
 import os
@@ -719,6 +723,7 @@ def main():
         "--new-manifest", type=Path, help="New, absent snapshot path used with --schedule"
     )
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--method", choices=METHODS, action="append")
     args = parser.parse_args()
     repo = args.repo.resolve()
     seeded_manifest = None
@@ -751,12 +756,16 @@ def main():
         manifest = add_schedule_manifest(manifest, args.schedule, args.new_manifest.resolve())
     elif args.new_manifest:
         parser.error("--new-manifest requires --schedule")
-    for method in METHODS:
+    fixed_policy = json.loads(manifest.read_text()).get("task_vector_policy", {})
+    fixed_task_vector = (
+        fixed_policy.get("scale") == 1.0 and fixed_policy.get("scale_search") is False
+    )
+    for method in args.method or METHODS:
         default_manifest = (
             os.path.relpath(manifest, repo) if manifest.is_relative_to(repo) else str(manifest)
         )
         document = (
-            warbias_notebook(method, default_manifest)
+            warbias_notebook(method, default_manifest, fixed_task_vector=fixed_task_vector)
             if args.study == "warbias"
             else notebook(method)
         )

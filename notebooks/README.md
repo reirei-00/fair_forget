@@ -32,3 +32,6 @@ existing source hashes, objective settings and train/development boundaries.
 These two data protocols remain separate.
 
 Existing saved reports remain under [executed/](executed/).
+
+Task-vector applications use fixed scale 1.0 without scale search. Zero-strength
+interventions are forbidden. See the [application protocol](../docs/task_vector_nonzero.md).
