@@ -147,6 +147,26 @@ enforced by Fair-UK. A zero-scale task vector remains a null intervention, and
 native score changes do not establish broad utility retention or calibrated
 neutrality.
 
+To run evaluation and saved analysis in one existing four-GPU allocation, use
+the pipeline wrapper instead of separate evaluation and analysis submissions:
+
+```bash
+sbatch --output="$RESULTS/logs/pipeline-%j.log" \
+  deploy/unlearning_primary/pipeline.sbatch \
+  "$RELEASE" "$TRAINING" "$RESULTS" "$ANALYSIS_RELEASE"
+```
+
+All four paths must be absolute. The frozen release must contain
+`evaluate.sbatch`; the separate analysis package must contain `analyze.sbatch`
+and its driver. The parent requests four GPUs, 32 CPU cores and 12 hours for
+both stages together. It invokes both wrappers with `bash`, so their scheduler
+headers request no additional allocation. Analysis hides the allocated GPUs.
+Outputs use the shared job ID: `evaluation-JOB_ID`, `analysis-JOB_ID` and
+`pipeline-JOB_ID.json`. The receipt records both stage return codes. Analysis
+is attempted after an evaluation failure and retains its own prerequisite
+checks. Either failed stage produces a nonzero pipeline exit. Existing output
+paths are refused.
+
 ## Checks without GPUs or source downloads
 
 ```bash
