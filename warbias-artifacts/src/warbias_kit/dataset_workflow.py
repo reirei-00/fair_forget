@@ -307,7 +307,14 @@ def _full_condition(project):
 
 
 def run_full_generation(
-    project, matrix_rows, selection_record, output, *, provider=None, execute=False
+    project,
+    matrix_rows,
+    selection_record,
+    output,
+    *,
+    provider=None,
+    execute=False,
+    execution_config=None,
 ):
     """Run the recorded study choice; previews and new outputs retain its exact evidence."""
     from warbias_kit.warbias.pilot_analysis import generation_cases
@@ -317,6 +324,15 @@ def run_full_generation(
     if selection_record != expected:
         raise ValueError("Full-generation choice differs from the recorded study selection")
     protocol, selected, candidate, strategy = _full_condition(project)
+    execution_lineage = {}
+    if execution_config is not None:
+        from warbias_kit.warbias.execution_config import execution_candidate
+
+        candidate = execution_candidate(selected, protocol["request_settings"], execution_config)
+        execution_lineage = {
+            "execution_config_sha256": digest(execution_config),
+            "api_equivalence": execution_config["api_equivalence"],
+        }
     inputs = load_inputs(project)
     sources = source_records(
         inputs["sources"], inputs["source_feedback"], inputs.get("source_compilation", ())
@@ -330,6 +346,7 @@ def run_full_generation(
         "source_protocol_sha256": digest(protocol),
         "selection_record_type": selection_record["kind"],
         "evidence_sources_sha256": digest(evidence_sources),
+        **execution_lineage,
     }
     plan = {
         "schema_version": 1,
@@ -337,6 +354,9 @@ def run_full_generation(
         "selection_sha256": digest(selection_record),
         "selection_record": deepcopy(selection_record),
         "selected_condition": deepcopy(selected),
+        **(
+            {"execution_config": deepcopy(execution_config)} if execution_config is not None else {}
+        ),
         "request_settings": candidate["settings"],
         "final_strategy": strategy,
         "cases": cases,

@@ -111,15 +111,30 @@ def _aggregate(output, rows, plan, batch_bindings):
     freeze_file(output / "coverage-result.json", manifest)
 
 
-def run_batches(project, matrix_rows, output, *, provider=None, execute=False, batch_size=12):
+def run_batches(
+    project,
+    matrix_rows,
+    output,
+    *,
+    provider=None,
+    execute=False,
+    batch_size=12,
+    execution_config=None,
+):
     """Resume exact batches; retain every generated row and its quality issues."""
     with _writer_lock(Path(output)):
         return _run_batches(
-            project, matrix_rows, output, provider=provider, execute=execute, batch_size=batch_size
+            project,
+            matrix_rows,
+            output,
+            provider=provider,
+            execute=execute,
+            batch_size=batch_size,
+            execution_config=execution_config,
         )
 
 
-def _run_batches(project, matrix_rows, output, *, provider, execute, batch_size):
+def _run_batches(project, matrix_rows, output, *, provider, execute, batch_size, execution_config):
     if isinstance(batch_size, bool) or not isinstance(batch_size, int) or batch_size < 1:
         raise ValueError("Generation batch_size must be a positive integer")
     project, output = Path(project), Path(output)
@@ -137,6 +152,7 @@ def _run_batches(project, matrix_rows, output, *, provider, execute, batch_size)
         "project_files_sha256": bindings,
         "unit_ids": [row["id"] for row in cases],
         "batch_size": batch_size,
+        **({"execution_config": execution_config} if execution_config is not None else {}),
     }
     plan["plan_sha256"] = digest(plan)
     freeze_file(output / "coverage-plan.json", plan)
@@ -173,6 +189,7 @@ def _run_batches(project, matrix_rows, output, *, provider, execute, batch_size)
                 directory,
                 provider=None if complete else provider,
                 execute=execute or complete,
+                **({"execution_config": execution_config} if execution_config is not None else {}),
             )
             if result["status"] == "complete":
                 batch_rows, manifest = _completed_batch(directory)

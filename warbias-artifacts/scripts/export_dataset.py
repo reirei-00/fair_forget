@@ -40,6 +40,7 @@ FILES = (
     "requirements-dev.txt",
     ".gitignore",
     "scripts/run_notebooks.py",
+    "scripts/run_coverage.py",
 )
 MACHINE_PATH = re.compile(r"/(?:Users|home|scratch)/[^\s\"']+|/p/(?:project|scratch)/[^\s\"']+")
 PRIVATE_CONFIG_KEYS = {

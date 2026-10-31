@@ -137,6 +137,43 @@ def request(config):
     )
 
 
+def test_structured_output_uses_the_declared_stage_schema(runtime, monkeypatch):
+    @dataclass
+    class StructuredOutputsParams:
+        json: dict
+
+    monkeypatch.setitem(
+        sys.modules,
+        "vllm.sampling_params",
+        SimpleNamespace(StructuredOutputsParams=StructuredOutputsParams),
+    )
+    config = configuration()
+    schema = {
+        "type": "object",
+        "properties": {"uk": {"type": "string"}},
+        "required": ["uk"],
+        "additionalProperties": False,
+    }
+    config["settings"]["response_schemas"] = {"translation": schema}
+    response = vllm_provider(config=config).generate(request(config))
+    assert runtime["sampling"][-1]["structured_outputs"].json == schema
+    assert response["response_schema_sha256"] == digest(schema)
+    assert response["provider_config"]["settings"]["response_schemas"] == {"translation": schema}
+
+
+def test_missing_stage_schema_prevents_inference(runtime, monkeypatch):
+    monkeypatch.setitem(
+        sys.modules,
+        "vllm.sampling_params",
+        SimpleNamespace(StructuredOutputsParams=lambda **kwargs: kwargs),
+    )
+    config = configuration()
+    config["settings"]["response_schemas"] = {"S": {"type": "object"}}
+    with pytest.raises(ValueError, match="stage has no declared JSON schema"):
+        vllm_provider(config=config).generate(request(config))
+    assert not runtime["generate"]
+
+
 def test_native_adapter_preserves_exact_settings_messages_and_raw_evidence(runtime, tmp_path):
     config = configuration()
     config["unused_api_key"] = "must-not-be-retained-by-local-backend"

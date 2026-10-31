@@ -93,6 +93,8 @@ def verify_production_result(rows, manifest):
             or not manifest.get("selection_sha256")
             or generation.get("production_plan_sha256") != manifest["production_plan_sha256"]
             or generation.get("selection_sha256") != manifest["selection_sha256"]
+            or generation.get("execution_config_sha256") != manifest.get("execution_config_sha256")
+            or generation.get("api_equivalence") != manifest.get("api_equivalence")
             or generation.get("prompt_revision") != revision
             or revision is not None
             and (

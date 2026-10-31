@@ -226,6 +226,13 @@ source context or rubric requires new ratings.
 
 ## Full generation and translation
 
+For local GPU generation, use `configs/execution/lapa-vllm.json` with
+`python scripts/run_coverage.py --inputs PARTITION --execution-config PROFILE --output RUN`.
+Add `--execute` to load the model. The profile pins the Lapa and tokenizer
+revisions, keeps temperature 0.3 and the 1,200-token limit, and constrains the
+three JSON response fields. Results retain the recorded API choice and the
+actual local backend. Equivalence to the unpinned API model remains unverified.
+
 ```sh
 warbias_kit generate --cases full-matrix.jsonl --plan pilot-plan.json --selection selection.json --final-prompts configs/generation/warbias.json --prompt-root . --output runs/full
 warbias_kit translate --input runs/full/triplets.jsonl --production runs/full/production-result.json --config configs/translation/warbias.json --prompt prompts/current/translation.txt --output runs/translation
