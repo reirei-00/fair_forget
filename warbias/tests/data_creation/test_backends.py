@@ -137,6 +137,43 @@ def request(config):
     )
 
 
+def test_structured_output_uses_the_declared_stage_schema(runtime, monkeypatch):
+    @dataclass
+    class StructuredOutputsParams:
+        json: dict
+
+    monkeypatch.setitem(
+        sys.modules,
+        "vllm.sampling_params",
+        SimpleNamespace(StructuredOutputsParams=StructuredOutputsParams),
+    )
+    config = configuration()
+    schema = {
+        "type": "object",
+        "properties": {"uk": {"type": "string"}},
+        "required": ["uk"],
+        "additionalProperties": False,
+    }
+    config["settings"]["response_schemas"] = {"translation": schema}
+    response = vllm_provider(config=config).generate(request(config))
+    assert runtime["sampling"][-1]["structured_outputs"].json == schema
+    assert response["response_schema_sha256"] == digest(schema)
+    assert response["provider_config"]["settings"]["response_schemas"] == {"translation": schema}
+
+
+def test_missing_stage_schema_prevents_inference(runtime, monkeypatch):
+    monkeypatch.setitem(
+        sys.modules,
+        "vllm.sampling_params",
+        SimpleNamespace(StructuredOutputsParams=lambda **kwargs: kwargs),
+    )
+    config = configuration()
+    config["settings"]["response_schemas"] = {"S": {"type": "object"}}
+    with pytest.raises(ValueError, match="stage has no declared JSON schema"):
+        vllm_provider(config=config).generate(request(config))
+    assert not runtime["generate"]
+
+
 def test_native_adapter_preserves_exact_settings_messages_and_raw_evidence(runtime, tmp_path):
     config = configuration()
     config["unused_api_key"] = "must-not-be-retained-by-local-backend"
@@ -190,6 +227,53 @@ def test_explicit_literal_template_is_forwarded_without_tokenizer_default(runtim
     response = vllm_provider(config=config).generate(request(config))
     assert runtime["templates"][0][1]["chat_template"] == "An exact custom template"
     assert response["input"]["chat_template"] == "An exact custom template"
+
+
+@pytest.mark.parametrize("change", [None, "model", "tokenizer", "revision"])
+def test_offline_runtime_accepts_only_the_pinned_cached_snapshots(
+    runtime, monkeypatch, tmp_path, change
+):
+    config = configuration()
+    snapshots = {}
+    for name in ("model", "tokenizer", "other"):
+        snapshots[name] = tmp_path / name
+        snapshots[name].mkdir()
+    lookups = []
+
+    def snapshot_download(**kwargs):
+        lookups.append(kwargs)
+        return str(snapshots[kwargs["repo_id"].split("/")[-1]])
+
+    monkeypatch.setitem(
+        sys.modules, "huggingface_hub", SimpleNamespace(snapshot_download=snapshot_download)
+    )
+    original = sys.modules["vllm"].LLM
+
+    class OfflineLLM(original):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            actual = self.llm_engine.model_config
+            actual.model = str(snapshots["model"])
+            actual.tokenizer = str(snapshots["tokenizer"])
+            if change in {"model", "tokenizer"}:
+                setattr(actual, change, str(snapshots["other"]))
+            elif change == "revision":
+                actual.revision = "c" * 40
+
+    monkeypatch.setattr(sys.modules["vllm"], "LLM", OfflineLLM)
+    if change:
+        with pytest.raises(ValueError, match="differs from the frozen configuration"):
+            vllm_provider(config=config)
+        assert not runtime["generate"]
+        return
+    response = vllm_provider(config=config).generate(request(config))
+    assert lookups == [
+        {"repo_id": "owner/model", "revision": "a" * 40, "local_files_only": True},
+        {"repo_id": "owner/tokenizer", "revision": "b" * 40, "local_files_only": True},
+    ]
+    assert response["model_identity"]["model"] == "owner/model"
+    assert response["loaded_identity"]["model"] == str(snapshots["model"])
+    assert response["loaded_identity"]["tokenizer"] == str(snapshots["tokenizer"])
 
 
 def test_raw_prompt_never_guesses_message_concatenation_or_special_tokens(runtime):

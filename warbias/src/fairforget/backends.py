@@ -24,7 +24,12 @@ ENGINE_REQUIRED = {
     "enforce_eager",
     "gpu_memory_utilization",
 }
-ENGINE_ALLOWED = ENGINE_REQUIRED | {"tokenizer_mode", "quantization", "download_dir"}
+ENGINE_ALLOWED = ENGINE_REQUIRED | {
+    "tokenizer_mode",
+    "quantization",
+    "download_dir",
+    "limit_mm_per_prompt",
+}
 SAMPLING_REQUIRED = {
     "temperature",
     "top_p",
@@ -59,7 +64,8 @@ def _repository(value, name):
         raise ValueError(f"{name} must identify a pinned Hub repository, not a mutable local path")
 
 
-def _configuration(config):
+def validate_vllm_config(config):
+    """Validate pinned model, tokenizer, prompt and sampling settings without loading a model."""
     config = deepcopy(config)
     if config.get("provider") != "vllm":
         raise ValueError("The vLLM factory requires provider='vllm'")
@@ -72,9 +78,21 @@ def _configuration(config):
         "prompt_format",
         "chat_template",
         "add_special_tokens",
+        "response_schemas",
     }:
         raise ValueError("Declare engine, sampling and prompt protocol under settings")
     engine, sampling = settings.get("engine"), settings.get("sampling")
+    schemas = settings.get("response_schemas")
+    if schemas is not None and (
+        not isinstance(schemas, dict)
+        or not schemas
+        or any(not isinstance(stage, str) or not stage for stage in schemas)
+        or any(
+            not isinstance(schema, dict) or schema.get("type") != "object"
+            for schema in schemas.values()
+        )
+    ):
+        raise ValueError("Declare a JSON object schema for each constrained response stage")
     if (
         not isinstance(engine, dict)
         or not ENGINE_REQUIRED <= set(engine)
@@ -163,10 +181,36 @@ def _json(value):
     raise ValueError(f"Unsupported raw vLLM field type: {type(value).__name__}")
 
 
+def _loaded_identity(actual, expected):
+    loaded = {key: getattr(actual, key) for key in expected}
+    for key in ("model", "tokenizer"):
+        revision_key = "revision" if key == "model" else "tokenizer_revision"
+        if loaded[revision_key] != expected[revision_key]:
+            raise ValueError("Loaded vLLM revision differs from the frozen configuration")
+        if loaded[key] == expected[key]:
+            continue
+        path = Path(loaded[key])
+        if not path.is_absolute() or not path.is_dir():
+            raise ValueError("Loaded vLLM repository differs from the frozen configuration")
+        # Offline vLLM resolves Hub IDs to their cached snapshot directories.
+        snapshot = importlib.import_module("huggingface_hub").snapshot_download(
+            repo_id=expected[key], revision=expected[revision_key], local_files_only=True
+        )
+        if path.resolve(strict=True) != Path(snapshot).resolve(strict=True):
+            raise ValueError("Loaded vLLM snapshot differs from the frozen configuration")
+    return loaded
+
+
 class VllmProvider:
     def __init__(self, config, runtime):
-        self.config = _configuration(config)
+        self.config = validate_vllm_config(config)
         self.settings = self.config["settings"]
+        self.runtime = runtime
+        self.structured_type = (
+            importlib.import_module("vllm.sampling_params").StructuredOutputsParams
+            if self.settings.get("response_schemas")
+            else None
+        )
         self.sampling = runtime.SamplingParams(**self.settings["sampling"])
         self.llm = runtime.LLM(
             model=self.config["model"], revision=self.config["revision"], **self.settings["engine"]
@@ -180,10 +224,7 @@ class VllmProvider:
             "tokenizer": self.settings["engine"]["tokenizer"],
             "tokenizer_revision": self.settings["engine"]["tokenizer_revision"],
         }
-        if any(getattr(actual, key) != value for key, value in identity.items()):
-            raise ValueError(
-                "Loaded vLLM model/tokenizer identity differs from the frozen configuration"
-            )
+        self.loaded_identity = _loaded_identity(actual, identity)
         self.identity = identity
         self.template = None
         if self.settings["prompt_format"] == "native-chat":
@@ -202,6 +243,16 @@ class VllmProvider:
                 raise ValueError(
                     "Generation request differs from the loaded provider configuration"
                 )
+        sampling = self.sampling
+        schema = None
+        if self.structured_type is not None:
+            schema = self.settings["response_schemas"].get(request.get("stage"))
+            if schema is None:
+                raise ValueError("The response stage has no declared JSON schema")
+            sampling = self.runtime.SamplingParams(
+                **self.settings["sampling"],
+                structured_outputs=self.structured_type(json=schema),
+            )
         messages = request.get("messages")
         if (
             not isinstance(messages, list)
@@ -242,7 +293,7 @@ class VllmProvider:
             > self.settings["engine"]["max_model_len"]
         ):
             raise ValueError("Prompt plus output limit exceeds the pinned context size")
-        result = self.llm.generate([{"prompt_token_ids": tokens}], self.sampling, use_tqdm=False)
+        result = self.llm.generate([{"prompt_token_ids": tokens}], sampling, use_tqdm=False)
         if (
             len(result) != 1
             or len(result[0].outputs) != 1
@@ -259,9 +310,11 @@ class VllmProvider:
             "text": output.text,
             "model": self.config["model"],
             "model_identity": dict(self.identity),
+            "loaded_identity": dict(self.loaded_identity),
             "backend": {"name": "vllm", "version": self.version},
             "provider_config": deepcopy(self.config),
-            "sampling_params_repr": repr(self.sampling),
+            "sampling_params_repr": repr(sampling),
+            **({"response_schema_sha256": digest(schema)} if schema is not None else {}),
             "input": {
                 "messages": deepcopy(messages),
                 "prompt_token_ids": tokens,
@@ -282,6 +335,6 @@ class VllmProvider:
 
 def vllm_provider(*, config):
     """Execute-only factory for ``--provider-factory fairforget.backends:vllm_provider``."""
-    checked = _configuration(config)
+    checked = validate_vllm_config(config)
     runtime = importlib.import_module("vllm")
     return VllmProvider(checked, runtime)

@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "decision_authority": "author",
+  "selected_condition": {
+    "candidate_id": "lapa12b",
+    "provider": "Lapathoniia OpenAI-compatible API",
+    "model": "LapaLLM-Gemma-3-12B-instruct",
+    "revision": null,
+    "strategy": "sequential"
+  },
+  "api_equivalence": "unverified",
+  "candidate": {
+    "candidate_id": "lapa12b",
+    "provider": "vllm",
+    "model": "lapa-llm/lapa-v0.1.2-instruct",
+    "revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+    "settings": {
+      "engine": {
+        "tokenizer": "lapa-llm/lapa-v0.1.2-instruct",
+        "tokenizer_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "dtype": "bfloat16",
+        "tensor_parallel_size": 1,
+        "max_model_len": 8192,
+        "seed": 20260826,
+        "trust_remote_code": false,
+        "enforce_eager": true,
+        "gpu_memory_utilization": 0.7,
+        "limit_mm_per_prompt": {
+          "image": 0
+        }
+      },
+      "sampling": {
+        "temperature": 0.3,
+        "top_p": 1.0,
+        "top_k": -1,
+        "max_tokens": 1200,
+        "seed": 20260826,
+        "n": 1,
+        "presence_penalty": 0.0,
+        "frequency_penalty": 0.0,
+        "repetition_penalty": 1.0,
+        "stop": null,
+        "stop_token_ids": [
+          1,
+          106
+        ],
+        "ignore_eos": false,
+        "detokenize": true,
+        "skip_special_tokens": true,
+        "spaces_between_special_tokens": false
+      },
+      "prompt_format": "native-chat",
+      "chat_template": {
+        "source": "tokenizer",
+        "add_generation_prompt": true,
+        "kwargs": {}
+      },
+      "response_schemas": {
+        "S": {
+          "type": "object",
+          "properties": {
+            "stereotype_uk": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "stereotype_uk"
+          ],
+          "additionalProperties": false
+        },
+        "C": {
+          "type": "object",
+          "properties": {
+            "counter_stereotype_uk": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "counter_stereotype_uk"
+          ],
+          "additionalProperties": false
+        },
+        "U": {
+          "type": "object",
+          "properties": {
+            "unrelated_uk": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "unrelated_uk"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  }
+}

@@ -55,7 +55,11 @@
     "selection_authority": "author",
     "planned_total_triplets_per_language": 13011,
     "new_triplet_target": 11952,
-    "deferred_service_detail_new_triplets": 2124
+    "deferred_service_detail_new_triplets": 2124,
+    "execution_profiles": {
+      "api": "configs/execution/lapa-api.json",
+      "local": "configs/execution/lapa-vllm.json"
+    }
   },
   "dimensions": {
     "catalog": "protocol/coverage_dimensions.json",
