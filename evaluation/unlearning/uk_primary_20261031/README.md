@@ -291,3 +291,21 @@ passed all seventeen views. The
 job 2609074 at `2026-10-31T11:29:07.344394+00:00`. Earlier attempts remain
 historical. Submission alone does not establish passed runtime qualification
 or complete before/after scores.
+
+The new [analysis deployment](receipts/deployment_analysis_v2_summary.json)
+binds 15,650 files to checksum manifest
+`13a54e103a1bbfee8f4cf5b5d5c33edfd2aecb6a712c1aa28d26514a448a15c4`.
+Actual cluster preflights validated all five saved exposure streams. The
+[runtime metadata](receipts/runtime_versions_analysis_v2_20261031T113418Z.json)
+records Python 3.12.12, NumPy 2.2.6, SciPy 1.18.1, Torch 2.10.0+cu129 and
+Transformers 4.57.6.
+
+The [actual CPU submission](receipts/analysis_submission_v2.json) records job
+2609195 at `2026-10-31T11:36:29.340506+00:00`, with
+`afterok:2608628:2609074`. At submission, twelve individual native qualification
+processes had completed successfully and three repeated baseline protocol
+pairs had passed in v3. This is partial startup evidence, not the global
+72-process qualification gate. CPU analysis waits for both complete successful
+collections and runs five method reports in parallel without model or judge
+requests. All 18 metric entries remain visible; missing scientific inputs stay
+pending. Its initial scheduler state is `PENDING (Dependency)`.

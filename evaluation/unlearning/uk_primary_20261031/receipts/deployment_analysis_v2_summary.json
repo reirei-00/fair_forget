@@ -1,0 +1,39 @@
+{
+  "status": "deployed_verified_actual_exposure_preflight_passed",
+  "target": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031_all_metrics_v2",
+  "checksum_manifest_sha256": "13a54e103a1bbfee8f4cf5b5d5c33edfd2aecb6a712c1aa28d26514a448a15c4",
+  "files": 15650,
+  "analysis_commit": "88224db75bd80e85f5227897188904e9c470f4d1",
+  "source_archive_sha256": "aec6855856b2795c9c045efded022e2ca78810dfcb04d4a2126a0aa1ab4101c6",
+  "prior_cancelled_cpu_job_id": "2609024",
+  "afterok_dependency": "2608628:2609074",
+  "upload_archive_sha256": "299c4fb5e0f00c3c21e27e483b71dbd71b47f45777d63666cd61776a2a39a601",
+  "ssh_returncode": 0,
+  "selected_runtime_versions": {
+    "observed_at_utc": "2026-10-31T11:34:18.954942+00:00",
+    "interpreter": "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+    "python": "3.12.12",
+    "packages": {
+      "numpy": "2.2.6",
+      "scipy": "1.18.1",
+      "torch": "2.10.0+cu129",
+      "transformers": "4.57.6"
+    },
+    "measurement_runtime": "baseline-vllm018-py312",
+    "package_modules_imported_for_query": false
+  },
+  "runtime_version_evidence": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/uk_multimethod_20261031/all_metrics/runtime_versions_analysis_v2_20261031T113418Z.json",
+    "sha256": "5d83ccde08e146053db68793ba218fb7f62add25709a08449225db73ca5edcb9"
+  },
+  "kind": "summarized_verified_analysis_deployment",
+  "source_receipt_sha256": "b30c28626844e06d85d959672e709269d18ae03711c9e1171c63b5598c5a516a",
+  "actual_exposure_preflight_steps": {
+    "wga_kl": 40,
+    "npo_kl": 40,
+    "rmu": 40,
+    "biasunlearn": 50,
+    "task_vector": 40
+  },
+  "runtime_evidence": "runtime_versions_analysis_v2_20261031T113418Z.json"
+}
