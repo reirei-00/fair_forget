@@ -1,0 +1,233 @@
+{
+  "kind": "observed_training_exposure_not_outcome_correlation",
+  "methods": {
+    "wga_kl": {
+      "source": "outputs/uk_multimethod_20261031/training/wga_kl/exposure.jsonl",
+      "sha256": "02487f4650de0aa34cda1a14d24c21e50784236b1113adbca2d8052d46cae0ae",
+      "optimizer_steps": 40,
+      "streams": {
+        "forget": {
+          "events": 40,
+          "valid_loss_tokens": 750,
+          "unique_items": 4,
+          "families_or_components": 4,
+          "family_valid_tokens": {
+            "uk_gender_embroidery_surgery_roles": 410,
+            "uk_gender_masculine_self_discipline": 160,
+            "uk_gender_schoolgirl_skirt_length": 90,
+            "uk_gender_toy_colour": 90
+          }
+        },
+        "preservation": {
+          "events": 40,
+          "valid_loss_tokens": 1654,
+          "unique_items": 40,
+          "families_or_components": 22,
+          "family_valid_tokens": {
+            "SG-010c821bc1f78844": 35,
+            "SG-06117e01819c9b24": 86,
+            "SG-1c751e91da6b5065": 94,
+            "SG-38930dd1687e8cf3": 48,
+            "SG-38e5468e2f52bdf6": 99,
+            "SG-3cd38910f371e820": 73,
+            "SG-4769fc078725d9e8": 81,
+            "SG-4d48a473a7c941a4": 84,
+            "SG-6a1bcb7ea6f26454": 37,
+            "SG-6ad8723097852ffb": 77,
+            "SG-6be715f53a024c59": 86,
+            "SG-925049cdf91b00ba": 88,
+            "SG-afebd7e7234cf7af": 80,
+            "SG-b62d13596a2134c5": 71,
+            "SG-c4c8e54a350ccfae": 73,
+            "SG-c6f4011373fb7e5f": 111,
+            "SG-d061fa1e65d75e4a": 81,
+            "SG-d8b947111b5d1a53": 81,
+            "SG-db7c2639204e2058": 72,
+            "SG-f021440547f8d669": 78,
+            "SG-fd25696cec0da707": 42,
+            "SG-ffc1ad81fac4cac3": 77
+          }
+        }
+      }
+    },
+    "npo_kl": {
+      "source": "outputs/uk_multimethod_20261031/training/npo_kl/exposure.jsonl",
+      "sha256": "02487f4650de0aa34cda1a14d24c21e50784236b1113adbca2d8052d46cae0ae",
+      "optimizer_steps": 40,
+      "streams": {
+        "forget": {
+          "events": 40,
+          "valid_loss_tokens": 750,
+          "unique_items": 4,
+          "families_or_components": 4,
+          "family_valid_tokens": {
+            "uk_gender_embroidery_surgery_roles": 410,
+            "uk_gender_masculine_self_discipline": 160,
+            "uk_gender_schoolgirl_skirt_length": 90,
+            "uk_gender_toy_colour": 90
+          }
+        },
+        "preservation": {
+          "events": 40,
+          "valid_loss_tokens": 1654,
+          "unique_items": 40,
+          "families_or_components": 22,
+          "family_valid_tokens": {
+            "SG-010c821bc1f78844": 35,
+            "SG-06117e01819c9b24": 86,
+            "SG-1c751e91da6b5065": 94,
+            "SG-38930dd1687e8cf3": 48,
+            "SG-38e5468e2f52bdf6": 99,
+            "SG-3cd38910f371e820": 73,
+            "SG-4769fc078725d9e8": 81,
+            "SG-4d48a473a7c941a4": 84,
+            "SG-6a1bcb7ea6f26454": 37,
+            "SG-6ad8723097852ffb": 77,
+            "SG-6be715f53a024c59": 86,
+            "SG-925049cdf91b00ba": 88,
+            "SG-afebd7e7234cf7af": 80,
+            "SG-b62d13596a2134c5": 71,
+            "SG-c4c8e54a350ccfae": 73,
+            "SG-c6f4011373fb7e5f": 111,
+            "SG-d061fa1e65d75e4a": 81,
+            "SG-d8b947111b5d1a53": 81,
+            "SG-db7c2639204e2058": 72,
+            "SG-f021440547f8d669": 78,
+            "SG-fd25696cec0da707": 42,
+            "SG-ffc1ad81fac4cac3": 77
+          }
+        }
+      }
+    },
+    "rmu": {
+      "source": "outputs/uk_multimethod_20261031/training/rmu/exposure.jsonl",
+      "sha256": "efb41463f1a8fcebf2b9fede7d22a6e5f376ec6ca9068431bf367e333339d392",
+      "optimizer_steps": 40,
+      "streams": {
+        "forget": {
+          "events": 40,
+          "valid_loss_tokens": 750,
+          "unique_items": 4,
+          "families_or_components": 4,
+          "family_valid_tokens": {
+            "uk_gender_embroidery_surgery_roles": 410,
+            "uk_gender_masculine_self_discipline": 160,
+            "uk_gender_schoolgirl_skirt_length": 90,
+            "uk_gender_toy_colour": 90
+          }
+        },
+        "preservation": {
+          "events": 40,
+          "valid_loss_tokens": 1654,
+          "unique_items": 40,
+          "families_or_components": 22,
+          "family_valid_tokens": {
+            "SG-010c821bc1f78844": 35,
+            "SG-06117e01819c9b24": 86,
+            "SG-1c751e91da6b5065": 94,
+            "SG-38930dd1687e8cf3": 48,
+            "SG-38e5468e2f52bdf6": 99,
+            "SG-3cd38910f371e820": 73,
+            "SG-4769fc078725d9e8": 81,
+            "SG-4d48a473a7c941a4": 84,
+            "SG-6a1bcb7ea6f26454": 37,
+            "SG-6ad8723097852ffb": 77,
+            "SG-6be715f53a024c59": 86,
+            "SG-925049cdf91b00ba": 88,
+            "SG-afebd7e7234cf7af": 80,
+            "SG-b62d13596a2134c5": 71,
+            "SG-c4c8e54a350ccfae": 73,
+            "SG-c6f4011373fb7e5f": 111,
+            "SG-d061fa1e65d75e4a": 81,
+            "SG-d8b947111b5d1a53": 81,
+            "SG-db7c2639204e2058": 72,
+            "SG-f021440547f8d669": 78,
+            "SG-fd25696cec0da707": 42,
+            "SG-ffc1ad81fac4cac3": 77
+          }
+        }
+      }
+    },
+    "biasunlearn": {
+      "source": "outputs/uk_multimethod_20261031/training/biasunlearn/exposure.jsonl",
+      "sha256": "51fe06da89743638bb69cfdcb632136cf16ea144622682f7e3ab81de52fa79e8",
+      "optimizer_steps": 50,
+      "streams": {
+        "correction": {
+          "events": 50,
+          "valid_loss_tokens": 666,
+          "unique_items": 4,
+          "families_or_components": 4,
+          "family_valid_tokens": {
+            "uk_gender_embroidery_surgery_roles": 360,
+            "uk_gender_masculine_self_discipline": 72,
+            "uk_gender_schoolgirl_skirt_length": 104,
+            "uk_gender_toy_colour": 130
+          }
+        },
+        "forget": {
+          "events": 50,
+          "valid_loss_tokens": 850,
+          "unique_items": 5,
+          "families_or_components": 4,
+          "family_valid_tokens": {
+            "uk_gender_embroidery_surgery_roles": 410,
+            "uk_gender_masculine_self_discipline": 160,
+            "uk_gender_schoolgirl_skirt_length": 90,
+            "uk_gender_toy_colour": 190
+          }
+        },
+        "preservation": {
+          "events": 50,
+          "valid_loss_tokens": 2050,
+          "unique_items": 50,
+          "families_or_components": 22,
+          "family_valid_tokens": {
+            "SG-010c821bc1f78844": 74,
+            "SG-06117e01819c9b24": 86,
+            "SG-1c751e91da6b5065": 133,
+            "SG-38930dd1687e8cf3": 85,
+            "SG-38e5468e2f52bdf6": 99,
+            "SG-3cd38910f371e820": 103,
+            "SG-4769fc078725d9e8": 81,
+            "SG-4d48a473a7c941a4": 84,
+            "SG-6a1bcb7ea6f26454": 68,
+            "SG-6ad8723097852ffb": 111,
+            "SG-6be715f53a024c59": 86,
+            "SG-925049cdf91b00ba": 88,
+            "SG-afebd7e7234cf7af": 118,
+            "SG-b62d13596a2134c5": 71,
+            "SG-c4c8e54a350ccfae": 73,
+            "SG-c6f4011373fb7e5f": 158,
+            "SG-d061fa1e65d75e4a": 81,
+            "SG-d8b947111b5d1a53": 81,
+            "SG-db7c2639204e2058": 72,
+            "SG-f021440547f8d669": 78,
+            "SG-fd25696cec0da707": 88,
+            "SG-ffc1ad81fac4cac3": 132
+          }
+        }
+      }
+    },
+    "task_vector": {
+      "source": "outputs/uk_multimethod_20261031/training/task_vector/exposure.jsonl",
+      "sha256": "f4a98e6b131fd15c15781eb54065ffff3068e5a75a83fa64fba2973241328f30",
+      "optimizer_steps": 40,
+      "streams": {
+        "positive_acquisition": {
+          "events": 40,
+          "valid_loss_tokens": 750,
+          "unique_items": 4,
+          "families_or_components": 4,
+          "family_valid_tokens": {
+            "uk_gender_embroidery_surgery_roles": 410,
+            "uk_gender_masculine_self_discipline": 160,
+            "uk_gender_schoolgirl_skirt_length": 90,
+            "uk_gender_toy_colour": 90
+          }
+        }
+      }
+    }
+  },
+  "limitations": "Observed source-bound loss-token events; no causal imbalance claim or correlation without matched outcome changes. Task-vector acquisition selected scale0."
+}

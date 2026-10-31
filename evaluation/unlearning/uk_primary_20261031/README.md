@@ -229,3 +229,49 @@ After native collection, the same allocation runs saved-only CPU
 [analysis release](receipts/deployment_analysis.json). Analysis requires no
 additional GPU job or network access. Complete native panels and all 30 paired
 results remain pending.
+
+## Complete study metric coverage
+
+The user requires all 18 Tetiana metric entries. The six native panels above
+are only one part of that package. The
+[coverage record](metric_coverage_preflight.json) lists every metric and its
+current dependency status. Empty outcomes remain unavailable. This record is
+not a completed measurement or a successful mitigation result.
+
+The additive [collection profile](../../../deploy/unlearning_primary/README.md)
+uses the unchanged v5 evaluator for eleven other active WarBias views in both
+languages. It contains 5,833 rows per checkpoint, or 34,998 records across the
+base and five posts. English StereoSet remains blocked. The existing collection
+and trained checkpoints are preserved.
+
+The separate Fair-UK saved-only analysis binds collector verification and
+analysis code independently. Its pure metric kernels come from preserved
+Fair-UK commit `710ae774a327e948e8957879dcc1ce071bbc5eae`; it does not reactivate
+the old collector, JEV or an external capability battery. Frozen native
+mean-token WarBias panels remain distinct from an annotated original+neutral
+prior-normalised evaluation.
+
+[Observed exposure](training_exposure_summary.json) reports actual valid loss
+tokens. WGA, NPO and RMU each use 750 forget and 1,654 preservation tokens.
+BiasUnlearn uses 850 forget, 666 corrective and 2,050 preservation tokens.
+Task-vector acquisition uses 750 positive-acquisition tokens and selects
+scale 0. These counts are not an exposure-outcome correlation or gradient
+strength estimates. Qualification, native collection, calibration and the
+complete study matrix remain separate evidence.
+
+The [actual submission](receipts/supplemental_submission_v2.json) records
+supplemental job 2608960. All
+[seventeen native input views](receipts/native_input_validation_v2_20261031T111709Z.json)
+passed the unchanged frozen evaluator's validation: eleven full task views
+and six separate development representatives. This is input validation, not
+model inference. The [independent review](receipts/independent_supplement_review_20261031T111832Z.json)
+binds 72 fresh checkpoint/protocol/language repeat processes before any of the
+66 full supplemental collections. The native QA validator requires full
+six-variant panels; the six representative views contain 20 rows in total.
+
+The [software verification](receipts/all_metrics_software_verification.json)
+binds Fair-UK commit `88224db75bd80e85f5227897188904e9c470f4d1`,
+[draft PR 9](https://github.com/reirei-00/fair-uk/pull/9), 590 passing evaluator
+tests and one optional-data skip. The broader trainer/orchestration suite
+passes 92 tests. Actual saved exposure and checkpoint lineage pass for all
+five arms. Native study outcomes remain pending.

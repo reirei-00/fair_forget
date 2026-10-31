@@ -1,0 +1,36 @@
+{
+  "status": "submitted",
+  "submitted_at_utc": "2026-10-31T11:17:46.278690+00:00",
+  "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/uk_primary_20261031_all_metrics_v2",
+  "addon_checksum_manifest_sha256": "ac5da74091307b4a4333fd5de89e207cf2a1ad429f5ce528779032d474a9113c",
+  "training": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191",
+  "training_repeated": false,
+  "original_pipeline_job_id": "2608628",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/supplemental-%j.log",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/uk_primary_20261031_all_metrics_v2/deploy/unlearning_primary/supplemental.sbatch",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/uk_primary_20261031_all_metrics_v2",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031"
+  ],
+  "native_input_validation": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/uk_multimethod_20261031/all_metrics/native_input_validation_v2_20261031T111709Z.json",
+    "sha256": "6a973247f67bedb29678c017bac635241db6d3c9cdd55e211c9aad71c42b7996"
+  },
+  "planned_full_checkpoint_task_collections": 66,
+  "planned_fresh_qualification_collections": 72,
+  "planned_saved_only_native_pairs": 55,
+  "judge_calls_authorized_or_performed": false,
+  "sbatch_returncode": 0,
+  "sbatch_stdout": "2608960\n",
+  "sbatch_stderr": "",
+  "job_id": "2608960",
+  "collection_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/supplemental-2608960",
+  "analysis_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/supplemental-analysis-2608960",
+  "pipeline_receipt": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/supplemental-pipeline-2608960.json",
+  "initial_queue_status": "PENDING|(Priority)",
+  "ssh_returncode": 0,
+  "ssh_stderr": ""
+}

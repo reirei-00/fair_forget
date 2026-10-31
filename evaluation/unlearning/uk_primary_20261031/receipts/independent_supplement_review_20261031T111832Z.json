@@ -1,0 +1,71 @@
+{
+  "kind": "independent_supplemental_release_review_and_execution_receipt",
+  "observed_at_utc": "2026-10-31T11:18:31.999691+00:00",
+  "review_status": "passed_for_supplemental_native_collection",
+  "release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/uk_primary_20261031_all_metrics_v2",
+  "checks": {
+    "stdlib_collector_tests_passed": 12,
+    "ruff_lint_and_format": "passed",
+    "bash_syntax_both_wrappers": "passed",
+    "actual_frozen_native_cli_views_validated": 17,
+    "full_rows_per_checkpoint": 5833,
+    "qualification_source_rows": 20,
+    "model_inference_performed_by_validation": false,
+    "receipt_python_before_and_after_module_purge": "baseline_py312_passed"
+  },
+  "gate_review": {
+    "checkpoints": 6,
+    "representative_protocol_language_views": 6,
+    "fresh_independent_qualification_processes_before_any_locked_collection": 72,
+    "full_checkpoint_task_collections": 66,
+    "saved_native_pairs_after_collection": 55,
+    "likelihood_atol": 1e-06,
+    "generation_repeat_rule": "exact raw response equality",
+    "checkpoint_tokenizer_effective_input_identity": "required equal between repeats",
+    "data_sources_and_native_scorers": "unchanged frozen v5 evaluator and manifest",
+    "broad_capability_or_judgment_calibration_claim": false
+  },
+  "resolved_findings": [
+    {
+      "issue": "training Python cannot run receipt writer after module purge because libpython3.13 is unavailable",
+      "resolution": "receipt writer always uses verified baseline py312",
+      "sbatch_sha256": "200911ffc85050d139c32d5f2f4c082c16967be130f503da51b792848f882b8a"
+    },
+    {
+      "issue": "strict native expansion adapter requires exact adapted rows and complete QA panels",
+      "resolution": "genuine paired subsets with unchanged rows; 2triplets/6QA/2benign per language"
+    },
+    {
+      "issue": "deployment directory freeze before cross-parent promotion denied rename",
+      "resolution": "staging root remains owner-writable until atomic rename then immediately frozen"
+    },
+    {
+      "issue": "project filesystem rejects Linux RENAME_NOREPLACE",
+      "resolution": "exclusive per-destination claim plus absence check and ordinary atomic rename; old staging and failed receipts preserved"
+    }
+  ],
+  "artifacts": {
+    "deployment": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/uk_multimethod_20261031/deployment_supplement_v2_retry1.json",
+      "sha256": "81977261f4521fe386110c0f6c30a21f25329182458b7df03123112dec3dd9bd"
+    },
+    "native_validation": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/uk_multimethod_20261031/all_metrics/native_input_validation_v2_20261031T111709Z.json",
+      "sha256": "6a973247f67bedb29678c017bac635241db6d3c9cdd55e211c9aad71c42b7996"
+    },
+    "submission": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/uk_multimethod_20261031/all_metrics/supplemental_submission_v2.json",
+      "sha256": "1f03bebd182976cb19e227753b1a4f105d651f1e1a031a495c93258cb7f8f37f"
+    }
+  },
+  "submitted_job": "2608960",
+  "initial_queue_status": "PENDING|(Priority)",
+  "collection_or_scientific_metric_completion_established": false,
+  "existing_native_pipeline_job_2608628_modified": false,
+  "training_repeated": false,
+  "cpu_all_metrics_job_submitted": false,
+  "preserved_failed_deployment_receipts": [
+    "/Users/vittoriadiachenko/Documents/fairForget/outputs/uk_multimethod_20261031/deployment_supplement.json",
+    "/Users/vittoriadiachenko/Documents/fairForget/outputs/uk_multimethod_20261031/deployment_supplement_v2.json"
+  ]
+}

@@ -56,7 +56,9 @@ qualification is software/runtime evidence, not model training or calibration.
 The [31 October preparation evidence](../../evaluation/unlearning/uk_primary_20261031/README.md)
 preserves the actual runtime, deployment, input-validation and submission
 receipts with the five frozen recipes. It contains no private example exports
-or model scores and does not establish completed interventions.
+or completed native scores. It records five actual checkpoint exports and 210
+optimizer steps; the task-vector selection has scale 0. Native effects and
+study qualification remain separate.
 
 The Slurm files select the verified JUPITER account, Booster partition and
 existing Python 3.13/PyTorch 2.9.1 training environment. The evaluation Slurm
@@ -175,6 +177,113 @@ is attempted after an evaluation failure and retains its own prerequisite
 checks. Either failed stage produces a nonzero pipeline exit. Existing output
 paths are refused.
 
+## Supplemental collection for all 18 reporting entries
+
+The original six-task queue is preserved. `supplemental.py` adds the eleven
+missing active views from the **same original full manifest**, using the
+unchanged v5 Fair-UK evaluator and inference settings. Ukrainian training is
+unchanged; English views measure transfer after that training. The blocked
+English StereoSet preparation view is never collected.
+
+| Supplemental task | Full frozen rows |
+| --- | ---: |
+| `warbias_triplets_en` | 249 |
+| `warbias_cross_actor_uk`, `warbias_cross_actor_en` | 46 each |
+| `warbias_expanded_qa_uk`, `warbias_expanded_qa_en` | 1,116 each |
+| `warbias_benign_uk`, `warbias_benign_en` | 70 each |
+| `warbias_uk`, `warbias_en` | 240 each |
+| `warbias_intersectional_uk`, `warbias_intersectional_en` | 1,320 each |
+
+This adds 5,833 rows per checkpoint, 34,998 across the base and all five saved
+posts. Counts are verified from the frozen source. These are eleven additional
+views, not eleven independent datasets. The existing six plus these eleven
+cover seventeen active tasks; the eighteenth manifest task is blocked English
+StereoSet. Tetiana's **18 metrics** are a separate reporting inventory.
+
+Prepare a new addon directory against the actual external collector release
+and the preserved development bundle. Python 3.10 or later is required. This
+command reads local files and performs no inference or downloads:
+
+```bash
+python3.12 deploy/unlearning_primary/supplemental.py prepare \
+  --collector-release "$RELEASE" \
+  --development-bundle "$DEVELOPMENT_MANIFEST" --output "$NEW_ADDON"
+```
+
+Preparation binds the collector's original checksum manifest, all registered
+evaluator source files, full evaluation manifest and source hashes. It copies
+six development representatives: the first two Ukrainian triplet/benign rows,
+one complete six-variant Ukrainian expanded-QA panel, and their original English
+pairs. Strict-ABC validation requires the full three-condition by two-polarity
+panel, so two QA rows would be invalid. The six representatives contain 20
+rows total, with explicit per-task counts. Preparation records original
+IDs, source hashes, split and semantic families, rejects overlap with the
+matching locked task by ID or family, and preserves exact adapted rows with
+genuine subsets of the original language pairing maps. The original
+sources remain unchanged. These small
+subsets qualify engineering repeatability; they do not calibrate neutrality,
+utility, judge confidence or scientific precision.
+
+Package the matching `supplemental.py`, `supplemental_checkpoint.sh`,
+`evaluate_checkpoint.py` and `supplemental.sbatch` under
+`NEW_ADDON/deploy/unlearning_primary/`, then freeze all addon bytes with a
+separate checksum manifest. The first three script hashes are also bound by
+the addon configuration. The addon can reference the v5 evaluator and original
+source manifest without copying or modifying either. Validate the prepared
+package at its final path before launch:
+
+```bash
+python3.12 "$NEW_ADDON/deploy/unlearning_primary/supplemental.py" validate \
+  --addon "$NEW_ADDON"
+sbatch --output="$RESULTS/logs/supplemental-%j.log" \
+  "$NEW_ADDON/deploy/unlearning_primary/supplemental.sbatch" \
+  "$NEW_ADDON" "$TRAINING" "$RESULTS"
+```
+
+All six checkpoints must exist. Before any full addon collection, each
+checkpoint completes two fresh native processes on each representative,
+totalling **72 independent qualification collections**. Both repeats use the
+same assigned GPU. Full-sentence candidate scores must be finite and agree at
+the unchanged absolute `1e-6` tolerance. Strict-ABC and benign generated raw
+responses must match exactly. Tokenizer, effective input and checkpoint
+identities must match. Any failure prevents every full addon collection; no
+tolerance is raised automatically. Qualification rows never count as full
+evaluation completion.
+
+After every gate passes, four workers collect all 66 checkpoint-task pairs.
+`supplemental_execution.json` records started and finished tasks, commands,
+return codes and native completion-receipt hashes. Each task retains native
+`run.json`, `report.json` and `predictions.jsonl`, full ordered IDs, source and
+checkpoint identity, and file hashes. Existing outputs are refused.
+
+In that same allocation, the wrapper then uses the qualified Python 3.12
+evaluation runtime for 55 saved native before/after comparisons. Analysis hides
+GPUs, fixes CPU math libraries to one thread, verifies collection receipts and
+all input hashes, and delegates every pair to `paper compare-native` with
+1,000 component bootstrap draws. It creates no additional GPU allocation.
+`supplemental_analysis.json` and `supplemental-pipeline-JOB_ID.json` retain
+separate collection and analysis states and return codes. This CPU stage may
+also be run later in the qualified evaluator environment:
+
+```bash
+python supplemental.py analyze --addon "$NEW_ADDON" \
+  --evaluation "$SUPPLEMENTAL_OUTPUT" --output "$NEW_NATIVE_ANALYSIS"
+```
+
+The separate saved-evidence aggregation command is
+`python -m lm_eval.fair_uk paper all-metrics --config CONFIG.json --output NEWDIR`
+in its explicitly selected analysis release. Its configuration binds the
+original six-task collection, supplemental collection, original collector
+identity, intervention and actual training/exposure records. The resulting
+`all_metrics.json` preserves all 18 metric entries with `available`, `partial`
+or `pending` states. A task queue finishing does not make every metric
+available. No free-text judge, neutrality threshold, independent-support rule,
+practical target-improvement minimum or human-reviewed severity/topic map is
+invented by these launchers. Missing judgments/labels/calibration remain null;
+native correctness, margins, raw side effects and collected responses remain
+available for the analyses they support. All-gender training does not itself
+declare an actor/topic/demographic target contrast.
+
 ## Checks without GPUs or source downloads
 
 ```bash
@@ -255,3 +364,40 @@ bash deploy/unlearning_primary/evaluate_checkpoint.sh \
   /e/scratch/e-dev-2026d09-075/fairforget/primary/evaluation/RUN \
   bbq_uk
 ```
+
+## Complete saved metric package
+
+For the complete metric package, the saved-only
+[`run_all_metrics.py`](run_all_metrics.py) driver runs all five method reports
+through Fair-UK's `paper all-metrics` CLI. Use a separately frozen analysis
+evaluator and keep the original collector source selected in every config.
+The driver requires successful, qualified original and supplemental collections,
+checks frozen config hashes and requires all 17 active task analyses. The
+preparation-only English StereoSet task remains explicitly blocked.
+
+Each report retains all 18 metric entries. Null calibration/review dependencies
+are valid pending outcomes; missing native measurements are a failed package.
+The driver does not infer a judge, scientific threshold or actor/subgroup target.
+The source-bound training exposure and post-checkpoint hashes remain separate
+from the evidence needed to interpret mitigation.
+
+Supply a `package.json` with schema version 1, all five `configs` entries
+(`filename` and `sha256`), and `collections.native` / `collections.supplemental`
+entries (`path` and `required_stage`). Configs follow the maintained Fair-UK
+all-metrics schema. Collection stages are `native_collection_complete` and
+`supplemental_collection_complete`; both no-update gates must pass.
+
+```bash
+sbatch --dependency=afterok:NATIVE_JOB:SUPPLEMENTAL_JOB \
+  --kill-on-invalid-dep=yes --output="$RESULTS/logs/all-metrics-%j.log" \
+  deploy/unlearning_primary/all_metrics.sbatch \
+  "$ANALYSIS_RELEASE" "$ANALYSIS_RELEASE/package.json" "$RESULTS"
+```
+
+This job runs five independent method analyses in parallel, with one numerical
+thread each, eight requested CPU cores and hidden GPUs. The verified JUPITER
+partitions allocate and charge a whole node even without a GPU request. The
+12-hour scheduler limit is a cap, not a completion estimate. Bootstrap remains
+1,000 draws; it is not reduced to hide runtime cost. Outputs are
+`all-metrics-JOB_ID/METHOD/all_metrics.json` with a combined execution receipt.
+No model inference or live judging occurs in this step.
