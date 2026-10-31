@@ -10,6 +10,8 @@ from warbias_kit.backends import vllm_provider
 from warbias_kit.io import digest, file_digest, read_rows, write_json
 from warbias_kit.warbias.coverage_execution import run_batches
 from warbias_kit.warbias.execution_config import execution_candidate
+from warbias_kit.warbias.format_retry import JsonRetryProvider
+from warbias_kit.warbias.provider import run_requests
 
 
 def smoke_rows(rows):
@@ -31,6 +33,18 @@ def run(args):
     provider = vllm_provider(config=candidate) if args.execute else None
     output = args.output
     output.mkdir(parents=True, exist_ok=True)
+    if provider is not None:
+        provider = JsonRetryProvider(
+            provider,
+            output / "format-retries.jsonl",
+            attempts=config.get("format_retry_attempts", 3),
+        )
+        if args.qualification_request:
+            request = json.loads(args.qualification_request.read_text())
+            request.update(
+                {key: candidate[key] for key in ("provider", "model", "revision", "settings")}
+            )
+            run_requests([request], output / "qualification", provider=provider, execute=True)
     if args.ready_gate and args.execute:
         samples = smoke_rows(rows)
         smoke_outputs = []
@@ -69,6 +83,9 @@ def run(args):
             "vllm": vllm.__version__,
             "gpu": torch.cuda.get_device_name(0),
             "smoke_role": "runtime_qualification_not_corpus",
+            "qualification_request_sha256": (
+                file_digest(args.qualification_request) if args.qualification_request else None
+            ),
         }
         write_json(output / "smoke-ready.json", ready)
         deadline = time.monotonic() + 1200
@@ -100,6 +117,7 @@ def main():
     parser.add_argument("--execute", action="store_true")
     parser.add_argument("--ready-gate", type=Path)
     parser.add_argument("--worker", type=int, default=0)
+    parser.add_argument("--qualification-request", type=Path)
     args = parser.parse_args()
     print(json.dumps(run(args), indent=2), flush=True)
 

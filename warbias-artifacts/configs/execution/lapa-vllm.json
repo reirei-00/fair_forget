@@ -47,7 +47,10 @@
         "ignore_eos": false,
         "detokenize": true,
         "skip_special_tokens": true,
-        "spaces_between_special_tokens": false
+        "spaces_between_special_tokens": false,
+        "bad_words": [
+          "<end_of_turn>"
+        ]
       },
       "prompt_format": "native-chat",
       "chat_template": {
@@ -97,5 +100,6 @@
         }
       }
     }
-  }
+  },
+  "format_retry_attempts": 3
 }
