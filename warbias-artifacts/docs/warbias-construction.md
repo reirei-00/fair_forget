@@ -232,6 +232,9 @@ Add `--execute` to load the model. The profile pins the Lapa and tokenizer
 revisions, keeps temperature 0.3 and the 1,200-token limit, and constrains the
 three JSON response fields. Results retain the recorded API choice and the
 actual local backend. Equivalence to the unpinned API model remains unverified.
+The profile blocks early end-of-turn tokens inside JSON. Malformed responses
+receive up to three attempts with the same inputs and sampling. Failed raw
+responses remain in `format-retries.jsonl`.
 
 ```sh
 warbias_kit generate --cases full-matrix.jsonl --plan pilot-plan.json --selection selection.json --final-prompts configs/generation/warbias.json --prompt-root . --output runs/full
