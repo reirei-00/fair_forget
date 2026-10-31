@@ -6,11 +6,11 @@ import nbformat
 
 ROOT = Path(__file__).resolve().parents[1]
 METHODS = {
-    "rmu": ("Fixed-target RMU", "warbias_rmu_results", "WarBias"),
-    "task_vector": ("Task-vector negation", "warbias_task_vector_results", "WarBias"),
-    "wga_kl": ("WGA+KL", "warbias_wga_kl_results", "WarBias"),
-    "npo_kl": ("NPO+retention (KL)", "uk_primary_npo_kl", "StereoSet primary integration"),
-    "biasunlearn": ("BiasUnlearn", "uk_primary_biasunlearn", "StereoSet primary integration"),
+    "rmu": ("Fixed-target RMU", "rmu", "WarBias"),
+    "task_vector": ("Task-vector negation", "task_vector", "WarBias"),
+    "wga_kl": ("WGA+KL", "wga_kl", "WarBias"),
+    "npo_kl": ("NPO+retention (KL)", "npo_retention", "StereoSet primary integration"),
+    "biasunlearn": ("BiasUnlearn", "biasunlearn", "StereoSet primary integration"),
 }
 SETUP = """import json
 import os
@@ -149,8 +149,10 @@ def build():
 # Optional roots rebase paths; original data hashes and model identities stay fixed.
 DATA_ROOT = os.environ.get('FAIRFORGET_DATA_ROOT')
 MODELS_ROOT = os.environ.get('FAIRFORGET_MODELS_ROOT')
-output_value = os.environ.get('FAIRFORGET_OUTPUT')
-OUTPUT = Path(output_value).expanduser().resolve() if output_value else None
+settings_path = repo / 'configs/unlearning/local.json'
+settings = json.loads(settings_path.read_text()) if settings_path.exists() else {}
+output_value = os.environ.get('FAIRFORGET_OUTPUT') or str(Path(settings.get('output_root', repo / 'outputs/unlearning')) / METHOD)
+OUTPUT = Path(output_value).expanduser().resolve()
 PLAN = notebook_matrix.method_plan(repo, METHOD, data_root=DATA_ROOT, models_root=MODELS_ROOT)
 assert len(PLAN) == 6, 'This notebook must cover all six study models.'
 for item in PLAN:
@@ -200,7 +202,7 @@ else:
                 f"# {title}: algorithm and training\n\nRun the cells in order. The CPU example calls the same objective implementation as the production trainer. The full training cell runs the actual algorithm separately on all six pinned study models, with reviewed streams and staged checkpoints. Results are optional.\n\n{NOTES[method]}"
             ),
             nbformat.v4.new_markdown_cell(
-                "## Environment\n\nUse `requirements-unlearning.txt` in an isolated environment. The CPU example needs PyTorch. Full training uses the qualified CUDA build and the pinned model/data recipe. Repository code lives in `src/fairforget/unlearning/`; it is not downloaded by the notebook."
+                "## Setup\n\nStart with [setup.ipynb](setup.ipynb) or the [setup guide](SETUP.md). Install `requirements-unlearning.txt` in an isolated environment. The setup configures all six pinned checkpoints and the reviewed data directories. The CPU algorithm example needs only PyTorch."
             ),
             nbformat.v4.new_code_cell(setup),
             nbformat.v4.new_markdown_cell(
@@ -220,19 +222,23 @@ else:
                 nbformat.v4.new_markdown_cell(
                     "## Approved full-model training\n\nEvery notebook covers Qwen3 8B, Llama 3.1 8B Instruct, Gemma 3 12B IT, Lapa 12B Instruct, Mamay 12B v2 and Mamay 27B v2. Set `FAIRFORGET_DATA_ROOT` to the approved data directory for this protocol, optionally set `FAIRFORGET_MODELS_ROOT` to the staged checkpoint root, and set `FAIRFORGET_OUTPUT` to a new method output directory. All six inputs pass validation before training starts. Original source hashes, model revisions, masks and development splits remain bound. Set `RUN_TRAINING=True` to run six independent trainers in sequence. Mamay 27B RMU needs two allocated GPUs; the other runs need one. Logs, receipts and checkpoints are saved separately for every model.\n\nThis notebook uses the **"
                     + study
-                    + "** protocol. See the [deployment guide](../../deploy/unlearning_primary/README.md) for qualified releases and cluster execution. The original NPO/BiasUnlearn primary data must be mounted externally; the reviewed WarBias data are bound by the published recipes. This model expansion changes no gradient source or objective setting."
+                    + "** protocol. See the [setup guide](SETUP.md) for installation, checkpoint downloads and data paths. The original NPO/BiasUnlearn primary data must be mounted externally; the reviewed WarBias data are bound by the published recipes. This model expansion changes no gradient source or objective setting."
                 ),
                 nbformat.v4.new_code_cell(configure),
                 nbformat.v4.new_code_cell(run),
                 nbformat.v4.new_markdown_cell(
-                    "## Implementation and checks\n\n- [Loss implementations](../../src/fairforget/unlearning/objectives.py)\n- [Full NPO, WGA, task-vector and BiasUnlearn trainer](../../src/fairforget/unlearning/trainer.py)\n- [Full fixed-target RMU trainer](../../src/fairforget/unlearning/rmu.py)\n- [Objective, masking and trainer checks](../../tests/)\n\nThe trainer writes the checkpoint, numeric history, actual valid-token exposure and provenance to the new output directory. Evaluation and reporting are separate workflows; use the [notebook index](../README.md) to find saved reports."
+                    "## Implementation\n\n- [Loss implementations](../src/fairforget/unlearning/objectives.py)\n- [Full NPO, WGA, task-vector and BiasUnlearn trainer](../src/fairforget/unlearning/trainer.py)\n- [Full fixed-target RMU trainer](../src/fairforget/unlearning/rmu.py)\n\nThe trainer writes the checkpoint, numeric history, actual valid-token exposure and provenance to the new output directory. Evaluation and reporting are separate workflows; use the [notebook index](README.md) to find saved reports."
                 ),
             ]
         )
         notebook = nbformat.v4.new_notebook(
             cells=cells,
             metadata={
-                "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
+                "kernelspec": {
+                    "display_name": "FairForget",
+                    "language": "python",
+                    "name": "fairforget",
+                },
                 "language_info": {"name": "python"},
                 "fairforget": {
                     "kind": "working_unlearning_algorithm",
@@ -246,7 +252,7 @@ else:
         )
         for index, cell in enumerate(notebook.cells):
             cell["id"] = f"{method}-{index}"
-        nbformat.write(notebook, ROOT / f"notebooks/not_executed/{name}.ipynb")
+        nbformat.write(notebook, ROOT / f"notebooks/{name}.ipynb")
         print(method, name, flush=True)
 
 

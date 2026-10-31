@@ -24,11 +24,11 @@ ALIASES = {
     "mamay27b_v2",
 }
 NOTEBOOKS = {
-    "rmu": "warbias_rmu_results",
-    "task_vector": "warbias_task_vector_results",
-    "wga_kl": "warbias_wga_kl_results",
-    "npo_kl": "uk_primary_npo_kl",
-    "biasunlearn": "uk_primary_biasunlearn",
+    "rmu": "rmu",
+    "task_vector": "task_vector",
+    "wga_kl": "wga_kl",
+    "npo_kl": "npo_retention",
+    "biasunlearn": "biasunlearn",
 }
 
 
@@ -83,11 +83,7 @@ class MatrixTests(unittest.TestCase):
         return plan
 
     def test_all_thirty_pairs_preserve_source_settings_and_use_each_pinned_model(self):
-        registry = json.loads(
-            (
-                ROOT / "evaluation/unlearning/warbias_primary_20261031/model_registry.json"
-            ).read_text()
-        )["models"]
+        registry = json.loads((ROOT / "configs/unlearning/models.json").read_text())["models"]
         identities = {item["id"]: item for item in registry}
         for method in METHODS:
             plan = method_plan(ROOT, method)
@@ -160,7 +156,7 @@ class MatrixTests(unittest.TestCase):
         from fairforget.unlearning import notebook_matrix
 
         for method, name in NOTEBOOKS.items():
-            notebook = json.loads((ROOT / "notebooks/not_executed" / f"{name}.ipynb").read_text())
+            notebook = json.loads((ROOT / "notebooks" / f"{name}.ipynb").read_text())
             code = next(
                 "".join(cell["source"])
                 for cell in reversed(notebook["cells"])

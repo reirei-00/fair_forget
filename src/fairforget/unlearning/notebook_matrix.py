@@ -23,57 +23,44 @@ def method_plan(repo, method, *, data_root=None, models_root=None):
     if method not in METHODS:
         raise ValueError("unknown notebook method")
     repo = Path(repo).resolve()
-    evidence = repo / "evaluation/unlearning"
-    warbias = evidence / "warbias_primary_20261031"
-    registry_path = warbias / "model_registry.json"
+    configuration = repo / "configs/unlearning"
+    registry_path = configuration / "models.json"
     registry = json.loads(registry_path.read_text())["models"]
     if not registry or len({model["id"] for model in registry}) != len(registry):
         raise ValueError("model registry must contain unique model IDs")
+    local_path = configuration / "local.json"
+    local = json.loads(local_path.read_text()) if local_path.exists() else {}
+    models_root = models_root or local.get("models_root") or repo / "models"
     plan = []
     for model in registry:
-        profile_path = warbias / "recipes" / model["id"] / "wga_kl.json"
-        profile = json.loads(profile_path.read_text())
-        if any(
-            profile[key] != model[registered]
+        source = configuration / "recipes" / model["id"] / f"{method}.json"
+        recipe = copy.deepcopy(json.loads(source.read_text()))
+        if recipe["method"] != method or any(
+            recipe[key] != model[registered]
             for key, registered in (
                 ("model_id", "repository"),
                 ("model_revision", "revision"),
                 ("tokenizer_revision", "tokenizer_revision"),
             )
         ):
-            raise ValueError("model profile differs from the pinned registry")
-        if method in WARBIAS_METHODS:
-            source = warbias / "recipes" / model["id"] / f"{method}.json"
-            protocol = "WarBias integration"
-        else:
-            source = evidence / "uk_primary_20261031/recipes" / f"{method}.json"
-            protocol = "StereoSet primary integration"
-        recipe = copy.deepcopy(json.loads(source.read_text()))
-        for key in ("model_id", "model_revision", "tokenizer_revision", "model_path"):
-            recipe[key] = profile[key]
-        if models_root is not None:
-            original = Path(profile["model_path"])
-            recipe["model_path"] = str(
-                Path(models_root).expanduser().resolve() / original.parent.name / original.name
-            )
-        root = Path(data_root).expanduser().resolve() if data_root is not None else None
-        manifest = Path(recipe["data_manifest"])
-        recipe["data_manifest"] = str(
-            root / manifest.name if root is not None else (source.parent / manifest).resolve()
+            raise ValueError("model recipe differs from the pinned registry")
+        recipe["model_path"] = str(
+            Path(models_root).expanduser().resolve() / model["directory"] / model["revision"]
         )
+        protocol = recipe["notebook_matrix"]["protocol"]
+        configured_data = data_root or local.get("data_roots", {}).get(protocol)
+        root = (
+            Path(configured_data).expanduser().resolve()
+            if configured_data
+            else repo / "data/unlearning" / protocol
+        )
+        recipe["data_manifest"] = str(root / "training_binding.json")
         for stream in recipe["streams"].values():
-            original = Path(stream["path"])
-            stream["path"] = str(
-                root / original.name if root is not None else (source.parent / original).resolve()
-            )
-        recipe["study_stage"] = "six-model runnable notebook expansion; no results asserted"
-        recipe["notebook_matrix"] = {
-            "source_template": {"path": str(source), "sha256": file_hash(source)},
-            "model_registry": {"path": str(registry_path), "sha256": file_hash(registry_path)},
-            "protocol": protocol,
-            "model_alias": model["id"],
-            "source_data_and_objective_settings_unchanged": True,
-        }
+            stream["path"] = str(root / Path(stream["path"]).name)
+        recipe["notebook_matrix"].update(
+            source_template={"path": str(source), "sha256": file_hash(source)},
+            model_registry={"path": str(registry_path), "sha256": file_hash(registry_path)},
+        )
         plan.append(
             {
                 "model_alias": model["id"],

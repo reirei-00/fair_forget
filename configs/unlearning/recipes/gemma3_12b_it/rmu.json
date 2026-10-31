@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "method": "rmu",
+  "study_stage": "unlearning notebook training",
+  "user_decisions": [
+    "One notebook per method",
+    "All six pinned study models",
+    "Saved results optional"
+  ],
+  "model_path": "../../../../models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
+  "model_id": "google/gemma-3-12b-it",
+  "model_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+  "tokenizer_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+  "data_manifest": "../../../../data/unlearning/warbias/training_binding.json",
+  "data_manifest_sha256": "88682f9dcb475973b2cba55f13f60ba6d6086dc0697df8e1a07b55d7475ccff2",
+  "streams": {
+    "forget": {
+      "path": "../../../../data/unlearning/warbias/forget_train.jsonl",
+      "sha256": "e92ed545a8bc06da26f423da858a06ac4e5e4a648fd670ed3e79d9b3ec88a0ba"
+    },
+    "correction": {
+      "path": "../../../../data/unlearning/warbias/correct_train.jsonl",
+      "sha256": "6b4388e617824681ef3855c0f68dd8842b53769f50fae540b2301b504e1257f9"
+    },
+    "retain": {
+      "path": "../../../../data/unlearning/warbias/retain_train.jsonl",
+      "sha256": "6d7f8524ca52fa3cf5adbb35d953f7fd4bbd46b7327252e0597d3210bcab87e2"
+    },
+    "development": {
+      "path": "../../../../data/unlearning/warbias/dev.jsonl",
+      "sha256": "bfc6e8be8a755f9d36d7971f174f29c9e23ae7df49dd8f8626f9db785217a520"
+    },
+    "retain_development": {
+      "path": "../../../../data/unlearning/warbias/retain_dev.jsonl",
+      "sha256": "a5849fec3e5c003d06701d0755db14a75ea1a9c46633b21512c1dd2107659536"
+    }
+  },
+  "lora": {
+    "r": 8,
+    "alpha": 16,
+    "target_modules": [
+      "q_proj",
+      "v_proj"
+    ],
+    "dropout": 0.0,
+    "bias": "none"
+  },
+  "training": {
+    "seed": 42,
+    "learning_rate": 1e-05,
+    "epochs": 1,
+    "max_steps": 137,
+    "batch_size": 1,
+    "max_length": 256,
+    "max_grad_norm": 1.0,
+    "gradient_checkpointing": true,
+    "retain_sampler": "seeded_family_round_robin_v1",
+    "retain_weight": 1.0,
+    "retain_reduction": "token_mean",
+    "wga_alpha": 1.0,
+    "npo_beta": 0.1,
+    "correction_reduction": "token_mean",
+    "acquisition_reduction": "token_mean",
+    "suppression_weight": 1.0,
+    "correction_weight": 1.0,
+    "adversarial_fraction": 0.25,
+    "add_special_tokens": true
+  },
+  "task_vector": {
+    "scales": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "selection": {
+      "max_retain_token_kl": 0.05,
+      "scope": "predeclared engineering diagnostic gate only; not calibrated general utility"
+    }
+  },
+  "rmu": {
+    "adaptive": false,
+    "steering_coefficient": 20.0,
+    "hook_layer": 7,
+    "updated_layers": [
+      5,
+      6,
+      7
+    ],
+    "parameter_suffix": "mlp.down_proj.weight",
+    "retain_weight": 1.0,
+    "trainable_dtype": "float32",
+    "compute_dtype": "bfloat16",
+    "reference_device": "cuda:0"
+  },
+  "limitations": [
+    "Nine independent training components; exploratory first integration, not confirmatory.",
+    "AI content review; human validation pending.",
+    "Reference preservation uses ordinary WarBias text, not a broad capability battery.",
+    "Final locked evaluations measure held-out association transfer; separate training-source diagnostics measure trained examples.",
+    "No final evaluation selects configurations or task-vector scale."
+  ],
+  "notebook_matrix": {
+    "protocol": "warbias",
+    "model_alias": "gemma3_12b_it",
+    "source_template_sha256": "9cc1bd16b826775026f25cfcd45aea7a1c5703444ada4c7c0039bd1e0c4dd743",
+    "source_data_and_objective_settings_unchanged": true
+  }
+}
