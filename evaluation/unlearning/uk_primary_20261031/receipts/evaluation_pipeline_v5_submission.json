@@ -1,0 +1,29 @@
+{
+  "submitted_at_utc": "2026-10-31T10:40:40.530981+00:00",
+  "job_id": "2608628",
+  "prior_failed_evaluation_job_id": "2608199",
+  "prior_cancelled_pipeline_job_id": "2608380",
+  "prior_numerically_unstable_pipeline_job_id": "2608489",
+  "training_job_id": "2608191",
+  "evaluation_release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5",
+  "analysis_release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031",
+  "pipeline_release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/pipelines/uk_primary_20261031",
+  "pipeline_identity_sha256": "1bf2212af468b426727360ffe6d7bfaf55191c356d403d948c005f40f9aabd23",
+  "evaluation_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608628",
+  "analysis_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/analysis-2608628",
+  "pipeline_receipt": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/pipeline-2608628.json",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/evaluation-pipeline-%j.log",
+    "--export=ALL,FAIRFORGET_EVAL_BUNDLE=",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/pipelines/uk_primary_20261031/pipeline.sbatch",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031"
+  ],
+  "training_repeated": false,
+  "analysis_reuses_allocation": true,
+  "maximum_wall_time": "12:00:00"
+}

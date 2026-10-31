@@ -38,7 +38,11 @@ remain in the external manifests rather than this repository folder.
 | [First retry submission](receipts/retry_pipeline_submission.json) | Historical job 2608380, later cancelled before locked collection |
 | [First retry cancellation](receipts/evaluation_attempt_2608380.json) | Deliberate cancellation to enforce repeated qualification of every actual checkpoint; training preserved |
 | [Per-checkpoint v4 deployment](receipts/deployment_eval_v4.json) | Base plus all five actual posts, each twice on two development items; all must pass before any locked panel |
-| [Replacement pipeline submission](receipts/evaluation_pipeline_v4_submission.json) | Job 2608489 at `2026-10-31T10:27:45.139074+00:00`; evaluation then saved-only analysis in the same allocation, without retraining |
+| [v4 pipeline submission](receipts/evaluation_pipeline_v4_submission.json) | Historical job 2608489, later failed the development-only repeat gate before locked collection |
+| [v4 no-update proof](receipts/no_update_check_2608489.json) | Base and WGA repeats exceeded `1e-6`; the other four checkpoints had zero difference |
+| [v4 attempt outcome](receipts/evaluation_attempt_2608489.json) | All twelve native tokenizer/input fingerprints matched; numerical gate failed and no locked collection started |
+| [Eager v5 deployment](receipts/deployment_eval_v5.json) | Runtime-only `enforce_eager=True`; sources, scoring, batch/chunk, dtype, seed, training and tolerance unchanged |
+| [Actual v5 submission](receipts/evaluation_pipeline_v5_submission.json) | Job 2608628 at `2026-10-31T10:40:40.530981+00:00`; all six fresh eager gates pending, no retraining |
 | [Tokenizer semantic comparison](receipts/tokenizer_semantics_20261031T101314Z.json) | CPU semantic identity across base and all five exports; native backend fingerprint remains a separate check |
 
 Training was queued for priority at the original preparation snapshot. That
@@ -75,10 +79,10 @@ that receipt remain external. Their hashes are metadata, not their file bytes.
 
 Initial evaluation 2608199 failed before locked collection. First retry
 2608380 was deliberately cancelled before locked collection. Replacement
-pipeline 2608489 was submitted at `2026-10-31T10:27:45.139074+00:00`. The
-latest scheduler observation at 10:28 UTC placed it in `CONFIGURING` on
-`jpbo-001-23`. Allocation is not qualification: completed native qualification,
-full native scores and paired analysis are pending. Completed
+pipeline 2608489 failed the development-only numerical repeat gate before
+locked collection. Eager replacement pipeline 2608628 was submitted at
+`2026-10-31T10:40:40.530981+00:00`. All six fresh eager checkpoint gates, full
+native scores and paired analysis remain pending. Completed
 training and numeric loss changes do not establish successful mitigation,
 general utility retention or native evaluation completion.
 
@@ -136,7 +140,7 @@ mitigation follows from input validation.
 
 ## Immutable releases and repository packaging
 
-The v1 training and v2/v3/v4 evaluation releases identified by the receipts
+The v1 training and v2/v3/v4/v5 evaluation releases identified by the receipts
 remain immutable. Repository orchestration is packaged separately under
 [`deploy/unlearning_primary`](../../../deploy/unlearning_primary/README.md).
 Its evaluation default is 12 hours, and its multi-task launcher clears an
@@ -172,16 +176,38 @@ enforced. The [v4 release](receipts/deployment_eval_v4.json) changes qualificati
 coverage, not scientific inputs, numerical inference settings or completed
 training. The original failed attempt and v2 metadata repair remain historical.
 
-The [replacement pipeline](receipts/evaluation_pipeline_v4_submission.json),
-job 2608489, uses the completed saved checkpoints without retraining.
-After native evaluation, it runs saved-only CPU `compare-native`
-analysis for the 30 planned method-by-task pairs (five methods times six tasks)
-within the same allocation. The separate
-[analysis release](receipts/deployment_analysis.json) requires no new GPU job or
-network access. There is no retraining. Submission is not a completed runtime
-qualification; all native and paired results remain pending.
+The [v4 pipeline](receipts/evaluation_pipeline_v4_submission.json), job 2608489,
+failed the development-only repeat gate before locked collection. Its records
+remain historical and unchanged. The current eager retry is described below.
 
 The [tokenizer-semantic receipt](receipts/tokenizer_semantics_20261031T101314Z.json)
 records identical CPU tokenizer semantics across the pinned base and all five
 exports. It does not establish native backend identity or matched effective
 evaluation inputs; the native path must verify those separately.
+
+## Numerical gate failure and current eager retry
+
+The [v4 no-update proof](receipts/no_update_check_2608489.json) records maximum
+repeated-score differences of `0.0013666665033880143` for the baseline and
+`0.030402222006691737` for WGA, above `1e-6`. NPO, BiasUnlearn, fixed RMU and
+the null task-vector export each had difference 0. The
+[attempt outcome](receipts/evaluation_attempt_2608489.json) confirms all twelve
+native tokenizer and effective-input fingerprints matched, but no locked
+collection started. These diagnostics establish a numerical gate failure, not
+a benchmark effect or an input-asset mismatch.
+
+The [immutable v5 deployment](receipts/deployment_eval_v5.json) changes runtime
+execution to `enforce_eager=True`, the established stable project profile.
+Sources, scoring definitions, batch/chunk sizes, dtype, seed, training and the
+`1e-6` engineering tolerance are unchanged. Base and every post collection must
+use the same eager profile. The full offline software suite passed 73 tests;
+software verification does not establish GPU qualification or a study result.
+
+The [actual v5 submission](receipts/evaluation_pipeline_v5_submission.json)
+records pipeline 2608628 at `2026-10-31T10:40:40.530981+00:00`. All six
+checkpoint gates must pass afresh before any locked panel. No training is
+repeated. After native collection, the same allocation runs saved-only CPU
+`compare-native` for 30 planned method-by-task pairs with the unchanged
+[analysis release](receipts/deployment_analysis.json). Analysis requires no
+additional GPU job or network access. Eager GPU qualification, all full native
+scores and all paired results remain pending.

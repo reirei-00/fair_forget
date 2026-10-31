@@ -1,0 +1,18 @@
+{
+  "status": "deployed_eager_execution_revision",
+  "timestamp_utc": "2026-10-31T10:39:30.890564+00:00",
+  "release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5",
+  "checksum_manifest_sha256": "b6aeb131826c735f4e3afde4ea140278342d3ad745222979f36a93b63ce37c52",
+  "parent_release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v4",
+  "parent_checksum_manifest_sha256": "b8957cef8b29b4c6242d5eade15842de323798d1e97143224f811545e9226b93",
+  "repository_commit": "d026a8384f829e2e4ed990fc08ddbfc9ea432d0f",
+  "wrapper_sha256": "665902aa8f2e2790f73706d1a50cad42795d6f57d3b99fb702397b22266b00c0",
+  "prior_stability_failure_job_id": "2608489",
+  "changed_execution_setting": {
+    "enforce_eager": true
+  },
+  "reason": "Compiled-mode independent repeats differed for the base and WGA; eager execution is checked afresh before locked panels.",
+  "engineering_numerical_atol_unchanged": 1e-06,
+  "training_sources_scoring_definitions_batch_chunk_dtype_seed_unchanged": true,
+  "all_base_and_post_native_collection_must_use_same_eager_profile": true
+}
