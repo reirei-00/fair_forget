@@ -97,9 +97,14 @@ sbatch --output="$RESULTS/logs/evaluate-%j.log" \
 ```
 
 `evaluate_all.py` first repeats native scoring of the frozen development-only
-qualification view twice. It requires equal ordered IDs and an absolute score
-difference at most `1e-6` before starting locked collection. This tolerance is
-an engineering stability check, not a scientific neutrality threshold.
+qualification view twice for the base and every available post checkpoint,
+including a zero-scale task vector at its actual saved path. Each repeat starts
+a fresh collector process. Both repeats for one checkpoint use the same GPU;
+up to four checkpoints qualify concurrently. Every checkpoint must pass before
+any locked collection starts. The check requires the exact two ordered unique
+development IDs, three finite candidate scores per item, and an absolute score
+difference at most `1e-6`. This tolerance is an engineering stability check,
+not a scientific neutrality threshold.
 
 It then queues all six full native tasks for the base and each successfully
 saved post checkpoint. This can collect the available subset after a partial
@@ -110,7 +115,10 @@ five-arm path has six checkpoints and 36 checkpoint-task collections.
 Qualification rows are separate and never count
 as locked-panel completion.
 
-`no_update_check.json` binds the repeated numerical check. Each checkpoint-task
+`no_update_check.json` records each checkpoint, repeat return code, prediction
+hash and numerical result, plus the combined pass/fail decision. Failed proofs
+are preserved when the launcher stops before locked collection. Qualification
+outputs are separate under `qualification/CHECKPOINT/repeat-N/`. Each checkpoint-task
 collector additionally writes native predictions, reports, effective-input
 identities and `status/TASK.json`. Collection completion, calibrated dependent
 judgments, paired scientific analysis and successful mitigation remain separate
