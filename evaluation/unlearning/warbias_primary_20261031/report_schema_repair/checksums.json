@@ -1,0 +1,8 @@
+{
+  "actual_saved_input_qualification.json": "081033bc1b556abb520a4a98168e421e99a8d0293c5aa94afce5186f52aa2243",
+  "integration_verification.json": "9e21e6a0f2b185e95569e9905465f767926c40d14ee25f6435b681b704b3969a",
+  "qualification_summary.json": "034a7b7194b82301fcdb43b2e9c130805da0d2250f5dd1860e7d60297a8ac6b9",
+  "ruff_check.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+  "ruff_format.log": "177f260a5645724013185e4b140c7045cc39e56c0c97b120f5cb23599f85f0de",
+  "software_tests.log": "1f4f049567f53f7bfab9b0d09d3e68ce0d1ccaeaca082ac82830bfb34a4ad70f"
+}

@@ -1,0 +1,111 @@
+{
+  "stage": "training_complete",
+  "started_at_utc": "2026-10-31T10:06:38.022327+00:00",
+  "slurm_job_id": "2608191",
+  "runtime_proof": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/runtime_probe_2608022.json",
+  "release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031",
+  "methods": {
+    "wga_kl": {
+      "status": "trained_checkpoint_saved",
+      "gpu_allocation_token": "0",
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/unlearning-primary-py313-20261031/bin/python",
+        "-m",
+        "fairforget.unlearning.trainer",
+        "--config",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031/recipes/wga_kl.json",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/wga_kl"
+      ],
+      "started_at_utc": "2026-10-31T10:06:38.104756+00:00",
+      "returncode": 0,
+      "finished_at_utc": "2026-10-31T10:08:47.915279+00:00",
+      "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/wga_kl/merged_checkpoint",
+      "steps": 40,
+      "trainer_status": "trained_merged",
+      "receipt": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/wga_kl/intervention.json"
+    },
+    "npo_kl": {
+      "status": "trained_checkpoint_saved",
+      "gpu_allocation_token": "1",
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/unlearning-primary-py313-20261031/bin/python",
+        "-m",
+        "fairforget.unlearning.trainer",
+        "--config",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031/recipes/npo_kl.json",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/npo_kl"
+      ],
+      "started_at_utc": "2026-10-31T10:06:38.105208+00:00",
+      "returncode": 0,
+      "finished_at_utc": "2026-10-31T10:08:43.567529+00:00",
+      "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/npo_kl/merged_checkpoint",
+      "steps": 40,
+      "trainer_status": "trained_merged",
+      "receipt": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/npo_kl/intervention.json"
+    },
+    "biasunlearn": {
+      "status": "trained_checkpoint_saved",
+      "gpu_allocation_token": "2",
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/unlearning-primary-py313-20261031/bin/python",
+        "-m",
+        "fairforget.unlearning.trainer",
+        "--config",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031/recipes/biasunlearn.json",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/biasunlearn"
+      ],
+      "started_at_utc": "2026-10-31T10:06:38.105576+00:00",
+      "returncode": 0,
+      "finished_at_utc": "2026-10-31T10:09:11.778763+00:00",
+      "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/biasunlearn/merged_checkpoint",
+      "steps": 50,
+      "trainer_status": "trained_merged",
+      "receipt": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/biasunlearn/intervention.json"
+    },
+    "task_vector": {
+      "status": "trained_checkpoint_saved",
+      "gpu_allocation_token": "3",
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/unlearning-primary-py313-20261031/bin/python",
+        "-m",
+        "fairforget.unlearning.trainer",
+        "--config",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031/recipes/task_vector.json",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/task_vector"
+      ],
+      "started_at_utc": "2026-10-31T10:06:38.105938+00:00",
+      "returncode": 0,
+      "finished_at_utc": "2026-10-31T10:10:14.791815+00:00",
+      "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/task_vector/merged_checkpoint",
+      "steps": 40,
+      "trainer_status": "trained_merged",
+      "receipt": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/task_vector/intervention.json"
+    },
+    "rmu": {
+      "status": "trained_checkpoint_saved",
+      "gpu_allocation_token": "1",
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/unlearning-primary-py313-20261031/bin/python",
+        "-m",
+        "fairforget.unlearning.rmu",
+        "--config",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031/recipes/rmu.json",
+        "--output-dir",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/rmu"
+      ],
+      "started_at_utc": "2026-10-31T10:08:43.572447+00:00",
+      "returncode": 0,
+      "finished_at_utc": "2026-10-31T10:09:20.125182+00:00",
+      "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/rmu/checkpoint",
+      "steps": 40,
+      "trainer_status": "trained_not_evaluated",
+      "receipt": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/rmu/run.json"
+    }
+  },
+  "failed_methods": [],
+  "finished_at_utc": "2026-10-31T10:10:14.796101+00:00"
+}

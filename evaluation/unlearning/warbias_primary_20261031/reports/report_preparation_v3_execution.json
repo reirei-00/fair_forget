@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "status": "report_release_deployed_and_global_report_dependency_job_submitted",
+  "observed_at_utc": "2026-10-31T15:31:31.504020+00:00",
+  "global_job_id": "2611634",
+  "report_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_reports_v3/reports-2611634",
+  "dependencies_afterok": [
+    "2611593",
+    "2611594",
+    "2611595",
+    "2611596",
+    "2611597",
+    "2611598"
+  ],
+  "actual_scheduler_snapshot": {
+    "state": "PENDING",
+    "reason": "Dependency",
+    "edges": "afterok:2611593(unfulfilled),afterok:2611594(unfulfilled),afterok:2611595(unfulfilled),afterok:2611596(unfulfilled),afterok:2611597(unfulfilled),afterok:2611598(unfulfilled)",
+    "assembly_exists": false,
+    "source": "fetch_complete_reports_v3.py --check tool output immediately after submission"
+  },
+  "sources": {
+    "measurement_submission_v4.json": {
+      "path": "outputs/warbias_unlearning_20261031/measurement_submission_v4.json",
+      "sha256": "5d579d91e7467adecfb04a5ff06b69602ded2fc60a3d01e8798efe301fb32bda"
+    },
+    "report_submission_v3.json": {
+      "path": "outputs/warbias_unlearning_20261031/report_submission_v3.json",
+      "sha256": "41a0b834f69921b3c3852eeeaea7dcd79c15f4228ad7b72e9a4dbc3e33c55585"
+    },
+    "report_deployment_v3.json": {
+      "path": "outputs/warbias_unlearning_20261031/report_deployment_v3.json",
+      "sha256": "06acc311898c006b5a07a894582ddd05a88657ff54b4ff9be390938e3df18471"
+    },
+    "report_readiness_verification_v5.json": {
+      "path": "outputs/warbias_unlearning_20261031/report_readiness_verification_v5.json",
+      "sha256": "a146ddbf69e77e3110c9d3202dc41f76262b7f34178dbd18d7ce38f7461d1b9d"
+    },
+    "fetch_complete_reports_v3.py": {
+      "path": "outputs/warbias_unlearning_20261031/fetch_complete_reports_v3.py",
+      "sha256": "9c40a166736f98bb1e052ccc3ad4f195f5b2a5a2230f3e42dee21c8ed5427275"
+    }
+  },
+  "release_checksums_sha256": "937e783b48a5ba8a30652a30e5ac7090012fa75970e01e8a65dd29e97d6dc157",
+  "public_manifest_v5_sha256": "663aa0062754fe29a7cdeb301b687694bce70bfd4eb500c7488b4097277a74ff",
+  "completed_training_diagnostics": 6,
+  "completed_training_diagnostic_pairs": 18,
+  "new_model_calls": 0,
+  "no_metric_recalculation": true
+}

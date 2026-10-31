@@ -1,0 +1,36 @@
+{
+  "kind": "software_and_actual_saved_exposure_preflight_not_native_study_results",
+  "model_requests": 0,
+  "pytest": {
+    "passed": 590,
+    "skipped": 1,
+    "skip_reason": "Optional FAIR_UK_WARBIAS_GOLDEN not set"
+  },
+  "ruff": "passed",
+  "format": "passed",
+  "preserved_pure_kernels_byte_exact": true,
+  "historical_source_commit": "710ae774a327e948e8957879dcc1ce071bbc5eae",
+  "module_sha256": {
+    "lm_eval/fair_uk/all_metrics.py": "875480df5177ae97c1c55c6781feb04eed1a142c3b3fa7b502420b1389aa2745",
+    "lm_eval/fair_uk/analysis_inputs.py": "1b34236f29040b4f2773a118ae480e32c327b0effba124e0ab73beb7be7133d2",
+    "lm_eval/fair_uk/baseline.py": "6b21336dc1f486c86f5ebcae29c8d80082d2850c508eade242921556490df57d",
+    "lm_eval/fair_uk/collector_export.py": "e1409d43695f5862ad6d7771e7a83e038e27a3b856defd380aab32c20e9444e9",
+    "lm_eval/fair_uk/intervention_metrics.py": "bb552a303ac2040b328bb9d127140ad4b248f12dd073ee797d86a0580b4e90d6",
+    "lm_eval/fair_uk/paper.py": "7616d672b5d96553aa448ebcf7241dc3150da51b690580ebfecce59dde106c61",
+    "lm_eval/fair_uk/study_metric_sources.json": "c27065da8446fba5c1a2fdbb450e610296c97f89c9f64f3e1009b36afc55aa32",
+    "lm_eval/fair_uk/transfer_metrics.py": "01acff8ac023a60e0dd13b2fb2bded168039637e5b6a33da22b3c3517eeea522"
+  },
+  "log_sha256": {
+    "pytest_release_20261031.log": "e9d3ed6b7a2cdaab5791c30fe8c22e0c1ec7509d1ac666fc584bc10de5f1ea70",
+    "ruff_release_20261031.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "format_release_20261031.log": "f114d83b30c5c657ee43a847a45bafccaea255d82673feb87c26d252c61e29c1"
+  },
+  "commit": "88224db75bd80e85f5227897188904e9c470f4d1",
+  "pull_request": "https://github.com/reirei-00/fair-uk/pull/9",
+  "source_package_sha256": "aec6855856b2795c9c045efded022e2ca78810dfcb04d4a2126a0aa1ab4101c6",
+  "orchestration_tests_passed": 105,
+  "actual_saved_exposure_and_checkpoint_lineage": "Passed for all five methods; saved preflights perform no native study inference.",
+  "slurm_spool_regressions_passed": 9,
+  "serial_collector_tests_passed": 16,
+  "serial_native_input_views_validated": 18
+}

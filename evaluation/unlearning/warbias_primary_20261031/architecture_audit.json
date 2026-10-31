@@ -1,0 +1,724 @@
+{
+  "schema_version": 1,
+  "kind": "actual_cpu_only_six_model_architecture_and_tokenizer_audit",
+  "written_at_utc": "2026-10-31T12:10:08.247976+00:00",
+  "host": "login.jupiter.fz-juelich.de",
+  "runtime": {
+    "python": "3.13.5",
+    "torch": "2.9.1+cu128",
+    "transformers": "4.57.6",
+    "peft": "0.17.1",
+    "accelerate": "1.15.0"
+  },
+  "runtime_matches_2608022": true,
+  "audit_operations": {
+    "live_config_and_tokenizer_metadata_read": true,
+    "actual_transformers_meta_model_constructions": 6,
+    "all_parameters_meta": true,
+    "tokenizer_native_prompt_and_current_stream_encoding": true,
+    "model_weight_loads": 0,
+    "model_forward_passes": 0,
+    "gpu_model_calls": 0,
+    "new_scheduler_jobs": 0,
+    "downloads": 0
+  },
+  "models": [
+    {
+      "id": "qwen3_8b",
+      "repository": "Qwen/Qwen3-8B",
+      "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "local_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+      "config_sha256": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30",
+      "config_matches_historical_staging": true,
+      "model_type": "qwen3",
+      "loader": "AutoModelForCausalLM",
+      "actual_meta_model_class": "Qwen3ForCausalLM",
+      "decoder_path": "model.layers",
+      "text_only": true,
+      "hidden_size": 4096,
+      "intermediate_size": 12288,
+      "num_hidden_layers": 36,
+      "num_attention_heads": 32,
+      "num_key_value_heads": 8,
+      "head_dim": 128,
+      "qv_linear_modules": 72,
+      "q_proj_shape": [
+        4096,
+        4096
+      ],
+      "v_proj_shape": [
+        1024,
+        4096
+      ],
+      "lora": {
+        "r": 8,
+        "alpha": 16,
+        "dropout": 0,
+        "bias": "none",
+        "target_leaf_modules": [
+          "q_proj",
+          "v_proj"
+        ],
+        "parameters": 3833856,
+        "vision_excluded": true
+      },
+      "rmu": {
+        "hook_layer": 7,
+        "updated_layers": [
+          5,
+          6,
+          7
+        ],
+        "parameter_names": [
+          "model.layers.5.mlp.down_proj.weight",
+          "model.layers.6.mlp.down_proj.weight",
+          "model.layers.7.mlp.down_proj.weight"
+        ],
+        "parameter_shape": [
+          4096,
+          12288
+        ],
+        "selected_parameters": 150994944,
+        "control_vector_hidden_size": 4096,
+        "steering_coefficient": 20,
+        "reference_device_recommendation": "same",
+        "reserved_gpus_required": 1,
+        "weights_plus_fp32_master_gradient_adam_state_lower_bound_training_gpu_gib": 32.48161697387695,
+        "memory_bound_is_estimate_excludes_activations_workspaces": true
+      },
+      "tokenizer": {
+        "is_fast": true,
+        "original_pad_token_id": 151643,
+        "eos_token_id": 151645,
+        "eos_as_pad_needed": false,
+        "tokenizer_config_sha256": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+        "effective_chat_template_sha256": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+        "native_uk_probe_prompt_sha256": "451314fd59ff30b4060dd88f60f383e37736fd3ff2da65cef7c2c06501a2c819",
+        "enable_thinking_false_applied": true,
+        "training_input_format": "literal reviewed prompt + target with offset masks; no chat template"
+      },
+      "current_existing_bundle_encoding": {
+        "forget": {
+          "rows": 4,
+          "max_tokens": 53,
+          "over_256": 0
+        },
+        "correction": {
+          "rows": 4,
+          "max_tokens": 42,
+          "over_256": 0
+        },
+        "retain": {
+          "rows": 792,
+          "max_tokens": 71,
+          "over_256": 0
+        },
+        "development": {
+          "rows": 2,
+          "max_tokens": 44,
+          "over_256": 0
+        },
+        "retain_development": {
+          "rows": 257,
+          "max_tokens": 57,
+          "over_256": 0
+        }
+      },
+      "historical_loading_memory": {
+        "job_id": "2251521",
+        "parameter_gib": 15.256433486938477,
+        "peak_allocated_gib": 15.25840425491333,
+        "parameter_count": 8190735360,
+        "does_not_qualify_training_or_inference": true
+      },
+      "meta_only_all_parameters": true
+    },
+    {
+      "id": "llama31_8b_instruct",
+      "repository": "meta-llama/Llama-3.1-8B-Instruct",
+      "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+      "tokenizer_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+      "local_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659",
+      "config_sha256": "29e4c210b0d6ac178b16b2a255a568bdb23b581e50ca1ef6a6d071dd85704e6e",
+      "config_matches_historical_staging": true,
+      "model_type": "llama",
+      "loader": "AutoModelForCausalLM",
+      "actual_meta_model_class": "LlamaForCausalLM",
+      "decoder_path": "model.layers",
+      "text_only": true,
+      "hidden_size": 4096,
+      "intermediate_size": 14336,
+      "num_hidden_layers": 32,
+      "num_attention_heads": 32,
+      "num_key_value_heads": 8,
+      "head_dim": 128,
+      "qv_linear_modules": 64,
+      "q_proj_shape": [
+        4096,
+        4096
+      ],
+      "v_proj_shape": [
+        1024,
+        4096
+      ],
+      "lora": {
+        "r": 8,
+        "alpha": 16,
+        "dropout": 0,
+        "bias": "none",
+        "target_leaf_modules": [
+          "q_proj",
+          "v_proj"
+        ],
+        "parameters": 3407872,
+        "vision_excluded": true
+      },
+      "rmu": {
+        "hook_layer": 7,
+        "updated_layers": [
+          5,
+          6,
+          7
+        ],
+        "parameter_names": [
+          "model.layers.5.mlp.down_proj.weight",
+          "model.layers.6.mlp.down_proj.weight",
+          "model.layers.7.mlp.down_proj.weight"
+        ],
+        "parameter_shape": [
+          4096,
+          14336
+        ],
+        "selected_parameters": 176160768,
+        "control_vector_hidden_size": 4096,
+        "steering_coefficient": 20,
+        "reference_device_recommendation": "same",
+        "reserved_gpus_required": 1,
+        "weights_plus_fp32_master_gradient_adam_state_lower_bound_training_gpu_gib": 32.21192932128906,
+        "memory_bound_is_estimate_excludes_activations_workspaces": true
+      },
+      "tokenizer": {
+        "is_fast": true,
+        "original_pad_token_id": null,
+        "eos_token_id": 128009,
+        "eos_as_pad_needed": true,
+        "tokenizer_config_sha256": "177c7b61e616fecb84c17ce0591acb92c6c4d60e9ac5ababfb940ff23bbcd424",
+        "effective_chat_template_sha256": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+        "native_uk_probe_prompt_sha256": "dad4a378805e9278c38f01c2df225d9d1d964f614451021aba2659bc6f1f55c1",
+        "enable_thinking_false_applied": false,
+        "training_input_format": "literal reviewed prompt + target with offset masks; no chat template"
+      },
+      "current_existing_bundle_encoding": {
+        "forget": {
+          "rows": 4,
+          "max_tokens": 32,
+          "over_256": 0
+        },
+        "correction": {
+          "rows": 4,
+          "max_tokens": 23,
+          "over_256": 0
+        },
+        "retain": {
+          "rows": 792,
+          "max_tokens": 43,
+          "over_256": 0
+        },
+        "development": {
+          "rows": 2,
+          "max_tokens": 32,
+          "over_256": 0
+        },
+        "retain_development": {
+          "rows": 257,
+          "max_tokens": 37,
+          "over_256": 0
+        }
+      },
+      "historical_loading_memory": {
+        "job_id": "2251521",
+        "parameter_gib": 14.957527160644531,
+        "peak_allocated_gib": 14.95752763748169,
+        "parameter_count": 8030261248,
+        "does_not_qualify_training_or_inference": true
+      },
+      "meta_only_all_parameters": true
+    },
+    {
+      "id": "gemma3_12b_it",
+      "repository": "google/gemma-3-12b-it",
+      "revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+      "tokenizer_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+      "local_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
+      "config_sha256": "39172c4124d3470341bbbb25f2926fd97edf68f0fe3a9fa4cde6acb9b7ed2cc6",
+      "config_matches_historical_staging": true,
+      "model_type": "gemma3",
+      "loader": "Gemma3ForConditionalGeneration",
+      "actual_meta_model_class": "Gemma3ForConditionalGeneration",
+      "decoder_path": "model.language_model.layers",
+      "text_only": true,
+      "hidden_size": 3840,
+      "intermediate_size": 15360,
+      "num_hidden_layers": 48,
+      "num_attention_heads": 16,
+      "num_key_value_heads": 8,
+      "head_dim": 256,
+      "qv_linear_modules": 96,
+      "q_proj_shape": [
+        4096,
+        3840
+      ],
+      "v_proj_shape": [
+        2048,
+        3840
+      ],
+      "lora": {
+        "r": 8,
+        "alpha": 16,
+        "dropout": 0,
+        "bias": "none",
+        "target_leaf_modules": [
+          "q_proj",
+          "v_proj"
+        ],
+        "parameters": 5308416,
+        "vision_excluded": true
+      },
+      "rmu": {
+        "hook_layer": 7,
+        "updated_layers": [
+          5,
+          6,
+          7
+        ],
+        "parameter_names": [
+          "model.language_model.layers.5.mlp.down_proj.weight",
+          "model.language_model.layers.6.mlp.down_proj.weight",
+          "model.language_model.layers.7.mlp.down_proj.weight"
+        ],
+        "parameter_shape": [
+          3840,
+          15360
+        ],
+        "selected_parameters": 176947200,
+        "control_vector_hidden_size": 3840,
+        "steering_coefficient": 20,
+        "reference_device_recommendation": "same",
+        "reserved_gpus_required": 1,
+        "weights_plus_fp32_master_gradient_adam_state_lower_bound_training_gpu_gib": 47.70845264196396,
+        "memory_bound_is_estimate_excludes_activations_workspaces": true
+      },
+      "tokenizer": {
+        "is_fast": true,
+        "original_pad_token_id": 0,
+        "eos_token_id": 1,
+        "eos_as_pad_needed": false,
+        "tokenizer_config_sha256": "bfe25c2735e395407beb78456ea9a6984a1f00d8c16fa04a8b75f2a614cf53e1",
+        "effective_chat_template_sha256": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+        "native_uk_probe_prompt_sha256": "82b44b1b26505638134741b3d91dbb9d1edba64743a5d5cb097f98bffc0aa853",
+        "enable_thinking_false_applied": false,
+        "training_input_format": "literal reviewed prompt + target with offset masks; no chat template"
+      },
+      "current_existing_bundle_encoding": {
+        "forget": {
+          "rows": 4,
+          "max_tokens": 31,
+          "over_256": 0
+        },
+        "correction": {
+          "rows": 4,
+          "max_tokens": 24,
+          "over_256": 0
+        },
+        "retain": {
+          "rows": 792,
+          "max_tokens": 42,
+          "over_256": 0
+        },
+        "development": {
+          "rows": 2,
+          "max_tokens": 31,
+          "over_256": 0
+        },
+        "retain_development": {
+          "rows": 257,
+          "max_tokens": 37,
+          "over_256": 0
+        }
+      },
+      "historical_loading_memory": {
+        "job_id": "2251521",
+        "parameter_gib": 22.70066186785698,
+        "peak_allocated_gib": 22.701171875,
+        "parameter_count": 12187325040,
+        "does_not_qualify_training_or_inference": true
+      },
+      "meta_only_all_parameters": true
+    },
+    {
+      "id": "lapa12b_instruct",
+      "repository": "lapa-llm/lapa-v0.1.2-instruct",
+      "revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+      "tokenizer_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+      "local_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037",
+      "config_sha256": "f02a640a945f26b004b32384e962b6820957ac363df96cd3246298b30a283451",
+      "config_matches_historical_staging": true,
+      "model_type": "gemma3",
+      "loader": "Gemma3ForConditionalGeneration",
+      "actual_meta_model_class": "Gemma3ForConditionalGeneration",
+      "decoder_path": "model.language_model.layers",
+      "text_only": true,
+      "hidden_size": 3840,
+      "intermediate_size": 15360,
+      "num_hidden_layers": 48,
+      "num_attention_heads": 16,
+      "num_key_value_heads": 8,
+      "head_dim": 256,
+      "qv_linear_modules": 96,
+      "q_proj_shape": [
+        4096,
+        3840
+      ],
+      "v_proj_shape": [
+        2048,
+        3840
+      ],
+      "lora": {
+        "r": 8,
+        "alpha": 16,
+        "dropout": 0,
+        "bias": "none",
+        "target_leaf_modules": [
+          "q_proj",
+          "v_proj"
+        ],
+        "parameters": 5308416,
+        "vision_excluded": true
+      },
+      "rmu": {
+        "hook_layer": 7,
+        "updated_layers": [
+          5,
+          6,
+          7
+        ],
+        "parameter_names": [
+          "model.language_model.layers.5.mlp.down_proj.weight",
+          "model.language_model.layers.6.mlp.down_proj.weight",
+          "model.language_model.layers.7.mlp.down_proj.weight"
+        ],
+        "parameter_shape": [
+          3840,
+          15360
+        ],
+        "selected_parameters": 176947200,
+        "control_vector_hidden_size": 3840,
+        "steering_coefficient": 20,
+        "reference_device_recommendation": "same",
+        "reserved_gpus_required": 1,
+        "weights_plus_fp32_master_gradient_adam_state_lower_bound_training_gpu_gib": 47.70845264196396,
+        "memory_bound_is_estimate_excludes_activations_workspaces": true
+      },
+      "tokenizer": {
+        "is_fast": true,
+        "original_pad_token_id": 0,
+        "eos_token_id": 1,
+        "eos_as_pad_needed": false,
+        "tokenizer_config_sha256": "db3a11754c0b4cfb080a08020bfe1a8b4ab83894992fe97483de44e7994f1fb9",
+        "effective_chat_template_sha256": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+        "native_uk_probe_prompt_sha256": "82b44b1b26505638134741b3d91dbb9d1edba64743a5d5cb097f98bffc0aa853",
+        "enable_thinking_false_applied": false,
+        "training_input_format": "literal reviewed prompt + target with offset masks; no chat template"
+      },
+      "current_existing_bundle_encoding": {
+        "forget": {
+          "rows": 4,
+          "max_tokens": 22,
+          "over_256": 0
+        },
+        "correction": {
+          "rows": 4,
+          "max_tokens": 17,
+          "over_256": 0
+        },
+        "retain": {
+          "rows": 792,
+          "max_tokens": 23,
+          "over_256": 0
+        },
+        "development": {
+          "rows": 2,
+          "max_tokens": 19,
+          "over_256": 0
+        },
+        "retain_development": {
+          "rows": 257,
+          "max_tokens": 21,
+          "over_256": 0
+        }
+      },
+      "historical_loading_memory": {
+        "job_id": "2251521",
+        "parameter_gib": 22.70066186785698,
+        "peak_allocated_gib": 22.701171875,
+        "parameter_count": 12187325040,
+        "does_not_qualify_training_or_inference": true
+      },
+      "meta_only_all_parameters": true
+    },
+    {
+      "id": "mamay12b_v2",
+      "repository": "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0",
+      "revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+      "tokenizer_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+      "local_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+      "config_sha256": "89795290a04de188c98bded7b65fcc8366d3b4586d883dcc5751395b9cd76c78",
+      "config_matches_historical_staging": true,
+      "model_type": "gemma3",
+      "loader": "Gemma3ForConditionalGeneration",
+      "actual_meta_model_class": "Gemma3ForConditionalGeneration",
+      "decoder_path": "model.language_model.layers",
+      "text_only": true,
+      "hidden_size": 3840,
+      "intermediate_size": 15360,
+      "num_hidden_layers": 48,
+      "num_attention_heads": 16,
+      "num_key_value_heads": 8,
+      "head_dim": 256,
+      "qv_linear_modules": 96,
+      "q_proj_shape": [
+        4096,
+        3840
+      ],
+      "v_proj_shape": [
+        2048,
+        3840
+      ],
+      "lora": {
+        "r": 8,
+        "alpha": 16,
+        "dropout": 0,
+        "bias": "none",
+        "target_leaf_modules": [
+          "q_proj",
+          "v_proj"
+        ],
+        "parameters": 5308416,
+        "vision_excluded": true
+      },
+      "rmu": {
+        "hook_layer": 7,
+        "updated_layers": [
+          5,
+          6,
+          7
+        ],
+        "parameter_names": [
+          "model.language_model.layers.5.mlp.down_proj.weight",
+          "model.language_model.layers.6.mlp.down_proj.weight",
+          "model.language_model.layers.7.mlp.down_proj.weight"
+        ],
+        "parameter_shape": [
+          3840,
+          15360
+        ],
+        "selected_parameters": 176947200,
+        "control_vector_hidden_size": 3840,
+        "steering_coefficient": 20,
+        "reference_device_recommendation": "same",
+        "reserved_gpus_required": 1,
+        "weights_plus_fp32_master_gradient_adam_state_lower_bound_training_gpu_gib": 47.70845264196396,
+        "memory_bound_is_estimate_excludes_activations_workspaces": true
+      },
+      "tokenizer": {
+        "is_fast": true,
+        "original_pad_token_id": 0,
+        "eos_token_id": 1,
+        "eos_as_pad_needed": false,
+        "tokenizer_config_sha256": "bfe25c2735e395407beb78456ea9a6984a1f00d8c16fa04a8b75f2a614cf53e1",
+        "effective_chat_template_sha256": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+        "native_uk_probe_prompt_sha256": "82b44b1b26505638134741b3d91dbb9d1edba64743a5d5cb097f98bffc0aa853",
+        "enable_thinking_false_applied": false,
+        "training_input_format": "literal reviewed prompt + target with offset masks; no chat template"
+      },
+      "current_existing_bundle_encoding": {
+        "forget": {
+          "rows": 4,
+          "max_tokens": 31,
+          "over_256": 0
+        },
+        "correction": {
+          "rows": 4,
+          "max_tokens": 24,
+          "over_256": 0
+        },
+        "retain": {
+          "rows": 792,
+          "max_tokens": 42,
+          "over_256": 0
+        },
+        "development": {
+          "rows": 2,
+          "max_tokens": 31,
+          "over_256": 0
+        },
+        "retain_development": {
+          "rows": 257,
+          "max_tokens": 37,
+          "over_256": 0
+        }
+      },
+      "historical_loading_memory": {
+        "job_id": "2251521",
+        "parameter_gib": 22.70066186785698,
+        "peak_allocated_gib": 22.701171875,
+        "parameter_count": 12187325040,
+        "does_not_qualify_training_or_inference": true
+      },
+      "meta_only_all_parameters": true
+    },
+    {
+      "id": "mamay27b_v2",
+      "repository": "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0",
+      "revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+      "tokenizer_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+      "local_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+      "config_sha256": "7b912e354dd6973e1bc397b7ee4a8ac6c9f406da95e33e5789a3468f71644d15",
+      "config_matches_historical_staging": true,
+      "model_type": "gemma3",
+      "loader": "Gemma3ForConditionalGeneration",
+      "actual_meta_model_class": "Gemma3ForConditionalGeneration",
+      "decoder_path": "model.language_model.layers",
+      "text_only": true,
+      "hidden_size": 5376,
+      "intermediate_size": 21504,
+      "num_hidden_layers": 62,
+      "num_attention_heads": 32,
+      "num_key_value_heads": 16,
+      "head_dim": 128,
+      "qv_linear_modules": 124,
+      "q_proj_shape": [
+        4096,
+        5376
+      ],
+      "v_proj_shape": [
+        2048,
+        5376
+      ],
+      "lora": {
+        "r": 8,
+        "alpha": 16,
+        "dropout": 0,
+        "bias": "none",
+        "target_leaf_modules": [
+          "q_proj",
+          "v_proj"
+        ],
+        "parameters": 8380416,
+        "vision_excluded": true
+      },
+      "rmu": {
+        "hook_layer": 7,
+        "updated_layers": [
+          5,
+          6,
+          7
+        ],
+        "parameter_names": [
+          "model.language_model.layers.5.mlp.down_proj.weight",
+          "model.language_model.layers.6.mlp.down_proj.weight",
+          "model.language_model.layers.7.mlp.down_proj.weight"
+        ],
+        "parameter_shape": [
+          5376,
+          21504
+        ],
+        "selected_parameters": 346816512,
+        "control_vector_hidden_size": 5376,
+        "steering_coefficient": 20,
+        "reference_device_recommendation": "cuda:1",
+        "reserved_gpus_required": 2,
+        "weights_plus_fp32_master_gradient_adam_state_lower_bound_training_gpu_gib": 55.6188118159771,
+        "memory_bound_is_estimate_excludes_activations_workspaces": true
+      },
+      "tokenizer": {
+        "is_fast": true,
+        "original_pad_token_id": 0,
+        "eos_token_id": 1,
+        "eos_as_pad_needed": false,
+        "tokenizer_config_sha256": "bfe25c2735e395407beb78456ea9a6984a1f00d8c16fa04a8b75f2a614cf53e1",
+        "effective_chat_template_sha256": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+        "native_uk_probe_prompt_sha256": "82b44b1b26505638134741b3d91dbb9d1edba64743a5d5cb097f98bffc0aa853",
+        "enable_thinking_false_applied": false,
+        "training_input_format": "literal reviewed prompt + target with offset masks; no chat template"
+      },
+      "current_existing_bundle_encoding": {
+        "forget": {
+          "rows": 4,
+          "max_tokens": 31,
+          "over_256": 0
+        },
+        "correction": {
+          "rows": 4,
+          "max_tokens": 24,
+          "over_256": 0
+        },
+        "retain": {
+          "rows": 792,
+          "max_tokens": 42,
+          "over_256": 0
+        },
+        "development": {
+          "rows": 2,
+          "max_tokens": 31,
+          "over_256": 0
+        },
+        "retain_development": {
+          "rows": 257,
+          "max_tokens": 37,
+          "over_256": 0
+        }
+      },
+      "historical_loading_memory": {
+        "job_id": "2251521",
+        "parameter_gib": 51.0968391597271,
+        "peak_allocated_gib": 51.09765625,
+        "parameter_count": 27432406640,
+        "does_not_qualify_training_or_inference": true
+      },
+      "meta_only_all_parameters": true
+    }
+  ],
+  "sources": {
+    "staging_inventory": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/models_staging_20261009/inventory.json",
+      "sha256": "38779e526fc4cdfa9ab59a96fc50f809417004a5e46fb2e3ea73eb7c3c40154d"
+    },
+    "historical_load_probe": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/models_staging_20261009/memory_probe_2251521.json",
+      "sha256": "4aaa5c2e586be0eb5232a0ab439583b6b616974fb4c2d23e0538d178c19ef0a3"
+    },
+    "current_training_recipe": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/uk_multimethod_20261031/recipes/wga_kl.json",
+      "sha256": "17a27240e4fea9338724aa9b57b41c6b9d774080818e54439305b6284761ecd4"
+    },
+    "runtime_gpu_proof": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/uk_multimethod_20261031/runtime_probe_2608022.json",
+      "sha256": "387d4a0949d52c4a951a2071f38056eedb5fa78d364ba183293518b2a9497c71"
+    }
+  },
+  "target_scope": "Future six-model training source selection is pending user clarification. Encoding counts refer only to the existing StereoSet-target/WarBias-preservation bundle, not a new WarBias target approval.",
+  "launch_readiness": "Architecture/tokenizer metadata verified; new per-model CUDA forward/backward/reference and native repeated-evaluation gates still required.",
+  "source_changes": {
+    "rmu.py": "41693860b41e014020ad58ecc6c337c9fcbefa70ee9f9503ab877194b37fd1db",
+    "test_unlearning_rmu.py": "38d6f85e8d5f9dd9aa18a25413fbf19f1088e29a82ca484a9c65004824db573b"
+  },
+  "targeted_rmu_tests": {
+    "count": 16,
+    "passed": true,
+    "cuda_required": false,
+    "weights_downloaded": false,
+    "ruff_passed": true
+  }
+}

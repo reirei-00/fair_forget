@@ -40,14 +40,13 @@ See the [WarBias guide](warbias/README.md) for its separate installation, tests
 and source export. Existing benchmark notebooks, evaluation scripts and
 their root dependencies remain independent of this subproject.
 
-## JUPITER unlearning results
+## Unlearning
 
-The [executed October RMU notebook](notebooks/executed/jupiter_rmu_october_2026.ipynb)
-replays the completed 23–24 October 2026 Lapa, Gemma and Qwen experiments from
-saved English BBQ predictions, with before/after tables and training-loss plots.
-The [clean notebook](notebooks/not_executed/jupiter_rmu_october_2026.ipynb) can be
-run locally with `pandas`, `matplotlib` and Jupyter; it needs no GPU or API keys.
-The [evidence package](evaluation/unlearning/jupiter_rmu_20261024/README.md)
-contains original metrics, compressed predictions, configurations, job receipts,
-the preserved historical scorer and a source snapshot. This is a separate
-English pilot, rather than a completed current Fair-UK intervention panel.
+The [unlearning notebooks](notebooks/README.md) contain one notebook per method:
+RMU, task-vector negation, WGA+KL, NPO+retention and BiasUnlearn. Every method
+supports all six pinned models. Start with the [setup notebook](notebooks/setup.ipynb)
+or [setup guide](notebooks/SETUP.md) for installation, checkpoint downloads and
+reviewed data paths. The [model configurations](configs/unlearning/) contain the
+complete 30-combination setup.
+
+Saved unlearning reports remain under [executed notebooks](notebooks/executed/).

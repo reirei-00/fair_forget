@@ -1,0 +1,339 @@
+{
+  "kind": "actual_frozen_fair_uk_input_validation_no_inference",
+  "observed_at_utc": "2026-10-31T11:17:09.045516+00:00",
+  "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/uk_primary_20261031_all_metrics_v2",
+  "collector": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5",
+  "addon_checksums_sha256": "ac5da74091307b4a4333fd5de89e207cf2a1ad429f5ce528779032d474a9113c",
+  "results": [
+    {
+      "scope": "full",
+      "task": "warbias_triplets_en",
+      "expected_rows": 249,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_triplets_en",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5/evaluation/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_triplets_en\", \"rows\": 249, \"source_cases\": 14, \"groups\": [\"idp|men|middle_aged\", \"idp|men|not_stated\", \"idp|men|older\", \"idp|men|young\", \"idp|not_stated|middle_aged\", \"idp|not_stated|not_stated\", \"idp|not_stated|older\", \"idp|not_stated|young\", \"idp|women|middle_aged\", \"idp|women|not_stated\", \"idp|women|older\", \"idp|women|young\", \"veteran|men|middle_aged\", \"veteran|men|not_stated\", \"veteran|men|older\", \"veteran|men|young\", \"veteran|not_stated|middle_aged\", \"veteran|not_stated|not_stated\", \"veteran|not_stated|older\", \"veteran|not_stated|young\", \"veteran|women|middle_aged\", \"veteran|women|not_stated\", \"veteran|women|young\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "1e36749c745982356639dff450c0db4c30b9567605a210d9e408ebc574578d51"
+    },
+    {
+      "scope": "full",
+      "task": "warbias_cross_actor_uk",
+      "expected_rows": 46,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_cross_actor_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5/evaluation/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_cross_actor_uk\", \"rows\": 46, \"source_cases\": 2, \"groups\": [\"idp|men|middle_aged\", \"idp|men|not_stated\", \"idp|men|older\", \"idp|men|young\", \"idp|not_stated|middle_aged\", \"idp|not_stated|not_stated\", \"idp|not_stated|older\", \"idp|not_stated|young\", \"idp|women|middle_aged\", \"idp|women|not_stated\", \"idp|women|older\", \"idp|women|young\", \"veteran|men|middle_aged\", \"veteran|men|not_stated\", \"veteran|men|older\", \"veteran|men|young\", \"veteran|not_stated|middle_aged\", \"veteran|not_stated|not_stated\", \"veteran|not_stated|older\", \"veteran|not_stated|young\", \"veteran|women|middle_aged\", \"veteran|women|not_stated\", \"veteran|women|young\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "1e36749c745982356639dff450c0db4c30b9567605a210d9e408ebc574578d51"
+    },
+    {
+      "scope": "full",
+      "task": "warbias_cross_actor_en",
+      "expected_rows": 46,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_cross_actor_en",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5/evaluation/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_cross_actor_en\", \"rows\": 46, \"source_cases\": 2, \"groups\": [\"idp|men|middle_aged\", \"idp|men|not_stated\", \"idp|men|older\", \"idp|men|young\", \"idp|not_stated|middle_aged\", \"idp|not_stated|not_stated\", \"idp|not_stated|older\", \"idp|not_stated|young\", \"idp|women|middle_aged\", \"idp|women|not_stated\", \"idp|women|older\", \"idp|women|young\", \"veteran|men|middle_aged\", \"veteran|men|not_stated\", \"veteran|men|older\", \"veteran|men|young\", \"veteran|not_stated|middle_aged\", \"veteran|not_stated|not_stated\", \"veteran|not_stated|older\", \"veteran|not_stated|young\", \"veteran|women|middle_aged\", \"veteran|women|not_stated\", \"veteran|women|young\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "1e36749c745982356639dff450c0db4c30b9567605a210d9e408ebc574578d51"
+    },
+    {
+      "scope": "full",
+      "task": "warbias_expanded_qa_uk",
+      "expected_rows": 1116,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_expanded_qa_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5/evaluation/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_expanded_qa_uk\", \"rows\": 1116, \"source_cases\": 7, \"groups\": [\"idp|men|middle_aged\", \"idp|men|not_stated\", \"idp|men|older\", \"idp|men|young\", \"idp|not_stated|middle_aged\", \"idp|not_stated|not_stated\", \"idp|not_stated|older\", \"idp|not_stated|young\", \"idp|women|middle_aged\", \"idp|women|not_stated\", \"idp|women|older\", \"idp|women|young\", \"veteran|men|middle_aged\", \"veteran|men|not_stated\", \"veteran|men|older\", \"veteran|men|young\", \"veteran|not_stated|middle_aged\", \"veteran|not_stated|not_stated\", \"veteran|not_stated|older\", \"veteran|not_stated|young\", \"veteran|women|middle_aged\", \"veteran|women|not_stated\", \"veteran|women|young\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "1e36749c745982356639dff450c0db4c30b9567605a210d9e408ebc574578d51"
+    },
+    {
+      "scope": "full",
+      "task": "warbias_expanded_qa_en",
+      "expected_rows": 1116,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_expanded_qa_en",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5/evaluation/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_expanded_qa_en\", \"rows\": 1116, \"source_cases\": 7, \"groups\": [\"idp|men|middle_aged\", \"idp|men|not_stated\", \"idp|men|older\", \"idp|men|young\", \"idp|not_stated|middle_aged\", \"idp|not_stated|not_stated\", \"idp|not_stated|older\", \"idp|not_stated|young\", \"idp|women|middle_aged\", \"idp|women|not_stated\", \"idp|women|older\", \"idp|women|young\", \"veteran|men|middle_aged\", \"veteran|men|not_stated\", \"veteran|men|older\", \"veteran|men|young\", \"veteran|not_stated|middle_aged\", \"veteran|not_stated|not_stated\", \"veteran|not_stated|older\", \"veteran|not_stated|young\", \"veteran|women|middle_aged\", \"veteran|women|not_stated\", \"veteran|women|young\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "1e36749c745982356639dff450c0db4c30b9567605a210d9e408ebc574578d51"
+    },
+    {
+      "scope": "full",
+      "task": "warbias_benign_uk",
+      "expected_rows": 70,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_benign_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5/evaluation/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_benign_uk\", \"rows\": 70, \"source_cases\": 2, \"groups\": [\"idp|men|middle_aged\", \"idp|men|not_stated\", \"idp|men|older\", \"idp|men|young\", \"idp|not_stated|middle_aged\", \"idp|not_stated|not_stated\", \"idp|not_stated|older\", \"idp|not_stated|young\", \"idp|women|middle_aged\", \"idp|women|not_stated\", \"idp|women|older\", \"idp|women|young\", \"not_stated|men|middle_aged\", \"not_stated|men|not_stated\", \"not_stated|men|older\", \"not_stated|men|young\", \"not_stated|not_stated|middle_aged\", \"not_stated|not_stated|not_stated\", \"not_stated|not_stated|older\", \"not_stated|not_stated|young\", \"not_stated|women|middle_aged\", \"not_stated|women|not_stated\", \"not_stated|women|older\", \"not_stated|women|young\", \"veteran|men|middle_aged\", \"veteran|men|not_stated\", \"veteran|men|older\", \"veteran|men|young\", \"veteran|not_stated|middle_aged\", \"veteran|not_stated|not_stated\", \"veteran|not_stated|older\", \"veteran|not_stated|young\", \"veteran|women|middle_aged\", \"veteran|women|not_stated\", \"veteran|women|young\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "1e36749c745982356639dff450c0db4c30b9567605a210d9e408ebc574578d51"
+    },
+    {
+      "scope": "full",
+      "task": "warbias_benign_en",
+      "expected_rows": 70,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_benign_en",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5/evaluation/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_benign_en\", \"rows\": 70, \"source_cases\": 2, \"groups\": [\"idp|men|middle_aged\", \"idp|men|not_stated\", \"idp|men|older\", \"idp|men|young\", \"idp|not_stated|middle_aged\", \"idp|not_stated|not_stated\", \"idp|not_stated|older\", \"idp|not_stated|young\", \"idp|women|middle_aged\", \"idp|women|not_stated\", \"idp|women|older\", \"idp|women|young\", \"not_stated|men|middle_aged\", \"not_stated|men|not_stated\", \"not_stated|men|older\", \"not_stated|men|young\", \"not_stated|not_stated|middle_aged\", \"not_stated|not_stated|not_stated\", \"not_stated|not_stated|older\", \"not_stated|not_stated|young\", \"not_stated|women|middle_aged\", \"not_stated|women|not_stated\", \"not_stated|women|older\", \"not_stated|women|young\", \"veteran|men|middle_aged\", \"veteran|men|not_stated\", \"veteran|men|older\", \"veteran|men|young\", \"veteran|not_stated|middle_aged\", \"veteran|not_stated|not_stated\", \"veteran|not_stated|older\", \"veteran|not_stated|young\", \"veteran|women|middle_aged\", \"veteran|women|not_stated\", \"veteran|women|young\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "1e36749c745982356639dff450c0db4c30b9567605a210d9e408ebc574578d51"
+    },
+    {
+      "scope": "full",
+      "task": "warbias_uk",
+      "expected_rows": 240,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5/evaluation/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_uk\", \"rows\": 240, \"source_cases\": 40, \"groups\": [\"idp\", \"veteran\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "1e36749c745982356639dff450c0db4c30b9567605a210d9e408ebc574578d51"
+    },
+    {
+      "scope": "full",
+      "task": "warbias_en",
+      "expected_rows": 240,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_en",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5/evaluation/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_en\", \"rows\": 240, \"source_cases\": 40, \"groups\": [\"idp\", \"veteran\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "1e36749c745982356639dff450c0db4c30b9567605a210d9e408ebc574578d51"
+    },
+    {
+      "scope": "full",
+      "task": "warbias_intersectional_uk",
+      "expected_rows": 1320,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_intersectional_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5/evaluation/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_intersectional_uk\", \"rows\": 1320, \"source_cases\": 40, \"groups\": [\"idp|men|middle_aged\", \"idp|men|older\", \"idp|men|young\", \"idp|women|middle_aged\", \"idp|women|older\", \"idp|women|young\", \"veteran|men|middle_aged\", \"veteran|men|older\", \"veteran|men|young\", \"veteran|women|middle_aged\", \"veteran|women|young\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "1e36749c745982356639dff450c0db4c30b9567605a210d9e408ebc574578d51"
+    },
+    {
+      "scope": "full",
+      "task": "warbias_intersectional_en",
+      "expected_rows": 1320,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_intersectional_en",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5/evaluation/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_intersectional_en\", \"rows\": 1320, \"source_cases\": 40, \"groups\": [\"idp|men|middle_aged\", \"idp|men|older\", \"idp|men|young\", \"idp|women|middle_aged\", \"idp|women|older\", \"idp|women|young\", \"veteran|men|middle_aged\", \"veteran|men|older\", \"veteran|men|young\", \"veteran|women|middle_aged\", \"veteran|women|young\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "1e36749c745982356639dff450c0db4c30b9567605a210d9e408ebc574578d51"
+    },
+    {
+      "scope": "qualification",
+      "task": "warbias_triplets_uk",
+      "expected_rows": 2,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/uk_primary_20261031_all_metrics_v2/qualification/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_triplets_uk\", \"rows\": 2, \"source_cases\": 1, \"groups\": [\"idp|men|middle_aged\", \"idp|men|not_stated\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "b86662d10a4dc592de8ce58a372ed0df93880f0ef1060fe5447b9eefd221cb76"
+    },
+    {
+      "scope": "qualification",
+      "task": "warbias_triplets_en",
+      "expected_rows": 2,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_triplets_en",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/uk_primary_20261031_all_metrics_v2/qualification/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_triplets_en\", \"rows\": 2, \"source_cases\": 1, \"groups\": [\"idp|men|middle_aged\", \"idp|men|not_stated\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "b86662d10a4dc592de8ce58a372ed0df93880f0ef1060fe5447b9eefd221cb76"
+    },
+    {
+      "scope": "qualification",
+      "task": "warbias_expanded_qa_uk",
+      "expected_rows": 6,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_expanded_qa_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/uk_primary_20261031_all_metrics_v2/qualification/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_expanded_qa_uk\", \"rows\": 6, \"source_cases\": 1, \"groups\": [\"idp|men|middle_aged\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "b86662d10a4dc592de8ce58a372ed0df93880f0ef1060fe5447b9eefd221cb76"
+    },
+    {
+      "scope": "qualification",
+      "task": "warbias_expanded_qa_en",
+      "expected_rows": 6,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_expanded_qa_en",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/uk_primary_20261031_all_metrics_v2/qualification/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_expanded_qa_en\", \"rows\": 6, \"source_cases\": 1, \"groups\": [\"idp|men|middle_aged\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "b86662d10a4dc592de8ce58a372ed0df93880f0ef1060fe5447b9eefd221cb76"
+    },
+    {
+      "scope": "qualification",
+      "task": "warbias_benign_uk",
+      "expected_rows": 2,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_benign_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/uk_primary_20261031_all_metrics_v2/qualification/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_benign_uk\", \"rows\": 2, \"source_cases\": 1, \"groups\": [\"idp|men|middle_aged\", \"idp|men|not_stated\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "b86662d10a4dc592de8ce58a372ed0df93880f0ef1060fe5447b9eefd221cb76"
+    },
+    {
+      "scope": "qualification",
+      "task": "warbias_benign_en",
+      "expected_rows": 2,
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_benign_en",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/uk_primary_20261031_all_metrics_v2/qualification/manifest.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"task\": \"warbias_benign_en\", \"rows\": 2, \"source_cases\": 1, \"groups\": [\"idp|men|middle_aged\", \"idp|men|not_stated\"], \"passed\": true}\n",
+      "stderr": "",
+      "manifest_sha256": "b86662d10a4dc592de8ce58a372ed0df93880f0ef1060fe5447b9eefd221cb76"
+    }
+  ],
+  "passed": true,
+  "full_rows": 5833,
+  "qualification_rows": 20,
+  "gpu_inference_performed": false,
+  "network_source_fetch_performed": false,
+  "ssh_returncode": 0,
+  "ssh_stderr": "The following modules were not unloaded:\n  (Use \"module --force purge\" to unload all):\n\n  1) Stages/2026\n"
+}

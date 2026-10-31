@@ -1,0 +1,139 @@
+{
+  "passed": false,
+  "max_absolute_score_difference": 0.030402222006691737,
+  "absolute_tolerance": 1e-06,
+  "scope": "two reviewed development items per checkpoint, not locked final evaluation",
+  "qualification_manifest_sha256": "be7603914b74fa6d7757a7510316739f1df74dbf57f50017f40b4c2802ff378b",
+  "ordered_ids": [
+    "4230e5053330fb0690bf485cf5066261",
+    "d467bb452bd44cb8f1ce22e2f3265f72"
+  ],
+  "checkpoints": {
+    "baseline": {
+      "passed": false,
+      "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+      "gpu": "0",
+      "runs": [
+        {
+          "repeat": 1,
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608489/qualification/baseline/repeat-1",
+          "returncode": 0,
+          "predictions_sha256": "f6f8721ed9979d0eb5562d9ca057e353a9d64f34935939f128fdfe119d9ce6a6"
+        },
+        {
+          "repeat": 2,
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608489/qualification/baseline/repeat-2",
+          "returncode": 0,
+          "predictions_sha256": "998eafb698b18ca1b12c58c72553f39155054b989e1d02f311dfbb6be8e7a04e"
+        }
+      ],
+      "max_absolute_score_difference": 0.0013666665033880143,
+      "error": "Development-only no-update numerical tolerance exceeded"
+    },
+    "biasunlearn": {
+      "passed": true,
+      "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/biasunlearn/merged_checkpoint",
+      "gpu": "3",
+      "runs": [
+        {
+          "repeat": 1,
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608489/qualification/biasunlearn/repeat-1",
+          "returncode": 0,
+          "predictions_sha256": "3ee7837fe27c11ff5ec257da10ac2a745c1018bac4d2c218907be6f64ee395f0"
+        },
+        {
+          "repeat": 2,
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608489/qualification/biasunlearn/repeat-2",
+          "returncode": 0,
+          "predictions_sha256": "3ee7837fe27c11ff5ec257da10ac2a745c1018bac4d2c218907be6f64ee395f0"
+        }
+      ],
+      "max_absolute_score_difference": 0.0
+    },
+    "npo_kl": {
+      "passed": true,
+      "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/npo_kl/merged_checkpoint",
+      "gpu": "2",
+      "runs": [
+        {
+          "repeat": 1,
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608489/qualification/npo_kl/repeat-1",
+          "returncode": 0,
+          "predictions_sha256": "c2da9ab55d67afa69ecad27ffeb4d4329ad2e4d724373e53cd947e2c87ffe61a"
+        },
+        {
+          "repeat": 2,
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608489/qualification/npo_kl/repeat-2",
+          "returncode": 0,
+          "predictions_sha256": "c2da9ab55d67afa69ecad27ffeb4d4329ad2e4d724373e53cd947e2c87ffe61a"
+        }
+      ],
+      "max_absolute_score_difference": 0.0
+    },
+    "wga_kl": {
+      "passed": false,
+      "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/wga_kl/merged_checkpoint",
+      "gpu": "1",
+      "runs": [
+        {
+          "repeat": 1,
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608489/qualification/wga_kl/repeat-1",
+          "returncode": 0,
+          "predictions_sha256": "52ed59a051e9d0c5d05b57b44b5cd9a831316581dd858929cdfef8bd4204925a"
+        },
+        {
+          "repeat": 2,
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608489/qualification/wga_kl/repeat-2",
+          "returncode": 0,
+          "predictions_sha256": "02c8fd7aba78a790ec9fc0361f59af37981a344842281b321a355c2112ec199c"
+        }
+      ],
+      "max_absolute_score_difference": 0.030402222006691737,
+      "error": "Development-only no-update numerical tolerance exceeded"
+    },
+    "task_vector": {
+      "passed": true,
+      "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/task_vector/merged_checkpoint",
+      "gpu": "0",
+      "runs": [
+        {
+          "repeat": 1,
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608489/qualification/task_vector/repeat-1",
+          "returncode": 0,
+          "predictions_sha256": "f6f8721ed9979d0eb5562d9ca057e353a9d64f34935939f128fdfe119d9ce6a6"
+        },
+        {
+          "repeat": 2,
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608489/qualification/task_vector/repeat-2",
+          "returncode": 0,
+          "predictions_sha256": "f6f8721ed9979d0eb5562d9ca057e353a9d64f34935939f128fdfe119d9ce6a6"
+        }
+      ],
+      "max_absolute_score_difference": 0.0
+    },
+    "rmu": {
+      "passed": true,
+      "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/rmu/checkpoint",
+      "gpu": "3",
+      "runs": [
+        {
+          "repeat": 1,
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608489/qualification/rmu/repeat-1",
+          "returncode": 0,
+          "predictions_sha256": "a981408f43bdff9ccaff682e3e830865e9667cd71d85e1e994282593086e1ed9"
+        },
+        {
+          "repeat": 2,
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/evaluation-2608489/qualification/rmu/repeat-2",
+          "returncode": 0,
+          "predictions_sha256": "a981408f43bdff9ccaff682e3e830865e9667cd71d85e1e994282593086e1ed9"
+        }
+      ],
+      "max_absolute_score_difference": 0.0
+    }
+  },
+  "failed_checkpoints": [
+    "baseline",
+    "wga_kl"
+  ]
+}

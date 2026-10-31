@@ -1,0 +1,7 @@
+model,source_rows,status,heldout,reason
+Qwen3 8B,137,available,False,
+Llama 3.1 8B Instruct,137,available,False,
+Gemma 3 12B IT,137,available,False,
+Lapa 12B Instruct,137,available,False,
+Mamay 12B v2,137,available,False,
+Mamay 27B v2,137,available,False,

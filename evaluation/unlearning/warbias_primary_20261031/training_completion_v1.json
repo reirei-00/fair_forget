@@ -1,0 +1,388 @@
+{
+  "schema_version": 1,
+  "kind": "actual_six_model_eighteen_WarBias_training_completion",
+  "observed_at_utc": "2026-10-31T13:39:35.391010+00:00",
+  "status": "all_18_actual_training_arms_completed",
+  "source_dataset": "FairForget/WarBias",
+  "target_rows": 137,
+  "primary_epochs": 1,
+  "source_binding_sha256": "88682f9dcb475973b2cba55f13f60ba6d6086dc0697df8e1a07b55d7475ccff2",
+  "source_matrix_sha256": "3c640bf1ae270d126f45a8a69edab63b1a155bbd4ecd937486ca85ebc4fdc3f9",
+  "model_calls": 0,
+  "weights_downloaded": false,
+  "measurements_complete": false,
+  "models": {
+    "qwen3_8b": {
+      "training_job_id": "2609596",
+      "execution": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/execution.json",
+        "sha256": "90de9646c8a18d5f6f2b5da4d9cc89b9d0eefd54b0af7008c5a6fba06b865c53"
+      },
+      "stage": "training_complete",
+      "finished_at_utc": "2026-10-31T12:50:00.038266+00:00",
+      "repository": "Qwen/Qwen3-8B",
+      "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "qualification": {
+        "rmu": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        },
+        "task_vector": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        },
+        "wga_kl": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        }
+      },
+      "methods": {
+        "rmu": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/rmu/run.json",
+            "sha256": "4a5e64fcd4901c95bfab2a3bc3bda710ac7da78f5f90347da96ace07de40cb3e"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/rmu/checkpoint"
+        },
+        "task_vector": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/task_vector/intervention.json",
+            "sha256": "13410db9b1d119c894c78503aa295bb8fda56fa258756293a5f17e1adc772e1d"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/task_vector/merged_checkpoint",
+          "selected_scale": 0.0,
+          "null_intervention_selected": true
+        },
+        "wga_kl": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/wga_kl/intervention.json",
+            "sha256": "9119dd60300528099576c7af8e32d47edab3c4174bf585a4f8aaccc642db47ec"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/wga_kl/merged_checkpoint"
+        }
+      }
+    },
+    "llama31_8b_instruct": {
+      "training_job_id": "2609597",
+      "execution": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/execution.json",
+        "sha256": "41711cc2e666eea4008b6840070d3f7a6dc492cdbbfb9184694d1bb6efe54242"
+      },
+      "stage": "training_complete",
+      "finished_at_utc": "2026-10-31T12:48:52.956088+00:00",
+      "repository": "meta-llama/Llama-3.1-8B-Instruct",
+      "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+      "qualification": {
+        "rmu": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        },
+        "task_vector": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        },
+        "wga_kl": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        }
+      },
+      "methods": {
+        "rmu": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/run.json",
+            "sha256": "17d321189b631e96f8862550b29cac54687bb312f1ab00be2133b37a2d17f249"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint"
+        },
+        "task_vector": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/intervention.json",
+            "sha256": "4a0934fa99fde474a91838adcf5855123578d2c7c064168ebae57fae8304c22d"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint",
+          "selected_scale": 0.0,
+          "null_intervention_selected": true
+        },
+        "wga_kl": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/intervention.json",
+            "sha256": "cfa9c2f246298c0e3e662e3d091c0fcb1286e7abffde1607a589d21c975c79e9"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint"
+        }
+      }
+    },
+    "gemma3_12b_it": {
+      "training_job_id": "2609598",
+      "execution": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/execution.json",
+        "sha256": "4f34411ef0f28b89f7e564424ce4f917f4598f0de6e350551e46295051768a19"
+      },
+      "stage": "training_complete",
+      "finished_at_utc": "2026-10-31T12:52:44.954272+00:00",
+      "repository": "google/gemma-3-12b-it",
+      "revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+      "qualification": {
+        "rmu": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        },
+        "task_vector": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        },
+        "wga_kl": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        }
+      },
+      "methods": {
+        "rmu": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/rmu/run.json",
+            "sha256": "11c17b353e0015268a9dbdcf2a99836cf4bc9390c4d6f02a6c8777c637cacc25"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/rmu/checkpoint"
+        },
+        "task_vector": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/task_vector/intervention.json",
+            "sha256": "0976f6a3334a693b4e08e1c3305fa23cd7afeadce25fcfc476e8e0560ec9e51b"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/task_vector/merged_checkpoint",
+          "selected_scale": 1.0,
+          "null_intervention_selected": false
+        },
+        "wga_kl": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/wga_kl/intervention.json",
+            "sha256": "a38175d9b157bc6f17d41aa13bee1641ea9a9ec7b0ed4f26ef643768b2032697"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/wga_kl/merged_checkpoint"
+        }
+      }
+    },
+    "lapa12b_instruct": {
+      "training_job_id": "2609599",
+      "execution": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/execution.json",
+        "sha256": "9a8527360e77603e6c1ff76f614dcc7c9607013f4d4eb83944b6bbab1c84f24d"
+      },
+      "stage": "training_complete",
+      "finished_at_utc": "2026-10-31T12:53:01.933364+00:00",
+      "repository": "lapa-llm/lapa-v0.1.2-instruct",
+      "revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+      "qualification": {
+        "rmu": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        },
+        "task_vector": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        },
+        "wga_kl": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        }
+      },
+      "methods": {
+        "rmu": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/rmu/run.json",
+            "sha256": "b243bf61af6a23cf87533e7c16ab3850d657396215a3d25d95b42dcf20abbc1d"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/rmu/checkpoint"
+        },
+        "task_vector": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/task_vector/intervention.json",
+            "sha256": "53a175b9dbef84adbf1da4553ce84ba2f7a0d2859928297f86518be48c137b3f"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/task_vector/merged_checkpoint",
+          "selected_scale": 0.0,
+          "null_intervention_selected": true
+        },
+        "wga_kl": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/wga_kl/intervention.json",
+            "sha256": "b9d0a9ac110d67c4b7e422a5186c9e920b102fc3927202bd6e07371e4bd91913"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/wga_kl/merged_checkpoint"
+        }
+      }
+    },
+    "mamay12b_v2": {
+      "training_job_id": "2609600",
+      "execution": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/execution.json",
+        "sha256": "82d5b9f180579c275b789dbc29dbafcd0a9c37890b987a63e68f91d7a1128fc7"
+      },
+      "stage": "training_complete",
+      "finished_at_utc": "2026-10-31T12:53:21.277160+00:00",
+      "repository": "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0",
+      "revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+      "qualification": {
+        "rmu": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        },
+        "task_vector": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        },
+        "wga_kl": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        }
+      },
+      "methods": {
+        "rmu": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/rmu/run.json",
+            "sha256": "b646feefa96f04d040130857ffeb316330bcc900c0007fd333282aefa98f128c"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/rmu/checkpoint"
+        },
+        "task_vector": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/task_vector/intervention.json",
+            "sha256": "d63d36fc1b9522df2b699463d1df20c1d04a23d96d1c28e63fabb5b2d495aeb1"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/task_vector/merged_checkpoint",
+          "selected_scale": 0.25,
+          "null_intervention_selected": false
+        },
+        "wga_kl": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/wga_kl/intervention.json",
+            "sha256": "45ad555d3a5c3af5f05dd85a5c9938d3cfa2f6b1f11c0e8294457cc102de6f6e"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/wga_kl/merged_checkpoint"
+        }
+      }
+    },
+    "mamay27b_v2": {
+      "training_job_id": "2609601",
+      "execution": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/execution.json",
+        "sha256": "9825a0817ed5c136009b4329583a52312f5a628914fc21fbc26f29303154a151"
+      },
+      "stage": "training_complete",
+      "finished_at_utc": "2026-10-31T12:57:07.672011+00:00",
+      "repository": "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0",
+      "revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+      "qualification": {
+        "rmu": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        },
+        "task_vector": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        },
+        "wga_kl": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 1
+        }
+      },
+      "methods": {
+        "rmu": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/rmu/run.json",
+            "sha256": "522cd56bbda49ef7c99d0689b3d5c8c8e8019fb6e704e0352abbb0c7e34df6dd"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/rmu/checkpoint"
+        },
+        "task_vector": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/task_vector/intervention.json",
+            "sha256": "74deff5468f4ded32290cee23b4056ff5a841dc5adc14de2a8bd47cf832d7c70"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/task_vector/merged_checkpoint",
+          "selected_scale": 0.0,
+          "null_intervention_selected": true
+        },
+        "wga_kl": {
+          "status": "trained_checkpoint_saved",
+          "returncode": 0,
+          "actual_steps": 137,
+          "receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/wga_kl/intervention.json",
+            "sha256": "150de2e0335e7e04fd9b489c5576cfe8290de82072e606590175e3c682f6be34"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/wga_kl/merged_checkpoint"
+        }
+      }
+    }
+  }
+}

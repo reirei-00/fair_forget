@@ -6,3 +6,8 @@ outputs/
 *.zip
 __pycache__/
 .DS_Store
+
+# Local unlearning setup and model/data payloads
+/configs/unlearning/local.json
+/models/
+/data/unlearning/

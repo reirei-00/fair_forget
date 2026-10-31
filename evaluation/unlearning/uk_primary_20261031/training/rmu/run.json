@@ -1,0 +1,353 @@
+{
+  "method": "rmu",
+  "status": "trained_not_evaluated",
+  "steps": 40,
+  "settings": {
+    "adaptive": false,
+    "steering_coefficient": 20.0,
+    "hook_layer": 7,
+    "updated_layers": [
+      5,
+      6,
+      7
+    ],
+    "parameter_suffix": "mlp.down_proj.weight",
+    "retain_weight": 1.0,
+    "trainable_dtype": "float32",
+    "compute_dtype": "bfloat16"
+  },
+  "retain_sampler": "seeded_family_round_robin_v1",
+  "config": {
+    "schema_version": 1,
+    "method": "rmu",
+    "study_stage": "first Ukrainian primary-series method-integration pilot; not confirmatory",
+    "user_decisions": [
+      "Primary Ukrainian series",
+      "All verified gender associations"
+    ],
+    "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+    "model_id": "Qwen/Qwen3-8B",
+    "model_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+    "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+    "data_manifest": "../data/training_binding.json",
+    "data_manifest_sha256": "20534908e25dafbb7b1307cad750c0d44b45f8a2653a94426bfed825e745cb0a",
+    "streams": {
+      "forget": {
+        "path": "../data/forget_train.jsonl",
+        "sha256": "6d283e13b7dfdeb862e79e70ef272a171452a90b9a4c4719b980125ff9aabc20"
+      },
+      "correction": {
+        "path": "../data/correct_train.jsonl",
+        "sha256": "622cc0977687827adcb79e1872d13452acd34a65886b7cb20901d57c6f7f673f"
+      },
+      "retain": {
+        "path": "../data/retain_train.jsonl",
+        "sha256": "cd539850753d701f337e9c6a265715019cfec286729a9a61133c62b9ec38d5bc"
+      },
+      "development": {
+        "path": "../data/dev.jsonl",
+        "sha256": "8c1d0d18518f495495546b6b3fcf61014e4f6642a6e59e0274498afb63ae0c3f"
+      },
+      "retain_development": {
+        "path": "../data/retain_dev.jsonl",
+        "sha256": "27c38efef18d1f65d26edab07dbe53e6488aeddc454fe27381394dd17fdbcc9c"
+      }
+    },
+    "lora": {
+      "r": 8,
+      "alpha": 16,
+      "target_modules": [
+        "q_proj",
+        "v_proj"
+      ],
+      "dropout": 0.0,
+      "bias": "none"
+    },
+    "training": {
+      "seed": 42,
+      "learning_rate": 1e-05,
+      "epochs": 10,
+      "max_steps": 128,
+      "batch_size": 1,
+      "max_length": 256,
+      "max_grad_norm": 1.0,
+      "gradient_checkpointing": true,
+      "retain_sampler": "seeded_family_round_robin_v1",
+      "retain_weight": 1.0,
+      "retain_reduction": "token_mean",
+      "wga_alpha": 1.0,
+      "npo_beta": 0.1,
+      "correction_reduction": "token_mean",
+      "acquisition_reduction": "token_mean",
+      "suppression_weight": 1.0,
+      "correction_weight": 1.0,
+      "adversarial_fraction": 0.25,
+      "add_special_tokens": true
+    },
+    "task_vector": {
+      "scales": [
+        0.0,
+        0.25,
+        0.5,
+        1.0
+      ],
+      "selection": {
+        "max_retain_token_kl": 0.05,
+        "scope": "predeclared engineering diagnostic gate only; not calibrated general utility"
+      }
+    },
+    "rmu": {
+      "adaptive": false,
+      "steering_coefficient": 20.0,
+      "hook_layer": 7,
+      "updated_layers": [
+        5,
+        6,
+        7
+      ],
+      "parameter_suffix": "mlp.down_proj.weight",
+      "retain_weight": 1.0,
+      "trainable_dtype": "float32",
+      "compute_dtype": "bfloat16"
+    },
+    "limitations": [
+      "Four gradient target families and two development families; insufficient for confirmatory mitigation claims.",
+      "AI review, human validation pending.",
+      "Retain bank tests ordinary WarBias language preservation, not general reasoning utility.",
+      "No final evaluation is used for configuration or scale selection.",
+      "Exact deployed paths are bound in this receipt; original source manifest is unchanged."
+    ]
+  },
+  "provenance": {
+    "config_sha256": "ee712677b22178dc0261e17545859d386b02e610af273157f3f11b65019509ca",
+    "data_manifest": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031/data/training_binding.json",
+      "sha256": "20534908e25dafbb7b1307cad750c0d44b45f8a2653a94426bfed825e745cb0a"
+    },
+    "streams": {
+      "forget": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031/data/forget_train.jsonl",
+        "sha256": "6d283e13b7dfdeb862e79e70ef272a171452a90b9a4c4719b980125ff9aabc20",
+        "rows": 4
+      },
+      "correction": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031/data/correct_train.jsonl",
+        "sha256": "622cc0977687827adcb79e1872d13452acd34a65886b7cb20901d57c6f7f673f",
+        "rows": 4
+      },
+      "retain": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031/data/retain_train.jsonl",
+        "sha256": "cd539850753d701f337e9c6a265715019cfec286729a9a61133c62b9ec38d5bc",
+        "rows": 792
+      },
+      "development": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031/data/dev.jsonl",
+        "sha256": "8c1d0d18518f495495546b6b3fcf61014e4f6642a6e59e0274498afb63ae0c3f",
+        "rows": 2
+      },
+      "retain_development": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031/data/retain_dev.jsonl",
+        "sha256": "27c38efef18d1f65d26edab07dbe53e6488aeddc454fe27381394dd17fdbcc9c",
+        "rows": 257
+      }
+    },
+    "source_code": [
+      {
+        "path": "README.md",
+        "bytes": 5919,
+        "sha256": "bc289bf356cc6ceda53fe663141937992259501669e1fc094aea90209f6f5480"
+      },
+      {
+        "path": "__init__.py",
+        "bytes": 78,
+        "sha256": "405b1238a2d7c0ec39a5dc1d0ac842ba188b2bef4a48fc0319056410e074976f"
+      },
+      {
+        "path": "objectives.py",
+        "bytes": 11838,
+        "sha256": "35421cdb06bf463e46c09a6f2d94dd787c65bd7369da5519875a0507ca22f34a"
+      },
+      {
+        "path": "rmu.py",
+        "bytes": 17302,
+        "sha256": "08381a3cb5f11820080d389654f193c8166c8234cccc4cd2b413d02f5b872e08"
+      },
+      {
+        "path": "trainer.py",
+        "bytes": 41676,
+        "sha256": "264ba7f4d16432d8c9fedfec67ef60908ead7698fe60113a62b1455aa086fa72"
+      }
+    ],
+    "gradient_families": [
+      "SG-010c821bc1f78844",
+      "SG-06117e01819c9b24",
+      "SG-1c751e91da6b5065",
+      "SG-38930dd1687e8cf3",
+      "SG-38e5468e2f52bdf6",
+      "SG-3cd38910f371e820",
+      "SG-4769fc078725d9e8",
+      "SG-4d48a473a7c941a4",
+      "SG-6a1bcb7ea6f26454",
+      "SG-6ad8723097852ffb",
+      "SG-6be715f53a024c59",
+      "SG-925049cdf91b00ba",
+      "SG-afebd7e7234cf7af",
+      "SG-b62d13596a2134c5",
+      "SG-c4c8e54a350ccfae",
+      "SG-c6f4011373fb7e5f",
+      "SG-d061fa1e65d75e4a",
+      "SG-d8b947111b5d1a53",
+      "SG-db7c2639204e2058",
+      "SG-f021440547f8d669",
+      "SG-fd25696cec0da707",
+      "SG-ffc1ad81fac4cac3",
+      "uk_gender_embroidery_surgery_roles",
+      "uk_gender_masculine_self_discipline",
+      "uk_gender_schoolgirl_skirt_length",
+      "uk_gender_toy_colour"
+    ],
+    "development_families": [
+      "SG-1828bcaebaf69d6d",
+      "SG-3cbc679a36c370e6",
+      "SG-4eabd5332caf4b51",
+      "SG-628d448cf96e0a0a",
+      "SG-6fe3ada93761804c",
+      "SG-7306b2d4e8e13955",
+      "SG-8626f0dc673b1c26",
+      "SG-8e528e0bafa5ad13",
+      "SG-95ac2d609aff645e",
+      "SG-9fe80280078e929b",
+      "SG-a423ef8bd62b5a9f",
+      "SG-bf356f25ef4ff318",
+      "SG-c7b067dbf78e11fe",
+      "SG-cfa0799885adccb2",
+      "SG-d1e7e2277d024e79",
+      "uk_gender_gaming_cheerleading",
+      "uk_gender_psychology_emotionality"
+    ],
+    "data_review_kind": "AI content review under explicit user authority"
+  },
+  "trainable_parameters": {
+    "model.layers.5.mlp.down_proj.weight": 50331648,
+    "model.layers.6.mlp.down_proj.weight": 50331648,
+    "model.layers.7.mlp.down_proj.weight": 50331648
+  },
+  "parameter_changes": {
+    "model.layers.5.mlp.down_proj.weight": {
+      "changed_elements": 50331518,
+      "elements": 50331648,
+      "max_absolute_change": 0.00044458359479904175,
+      "delta_l2_norm": 1.3280830383300781,
+      "bfloat16_roundtrip_changed_elements": 41757047,
+      "bfloat16_roundtrip_delta_l2_norm": 1.3455891609191895
+    },
+    "model.layers.6.mlp.down_proj.weight": {
+      "changed_elements": 50331497,
+      "elements": 50331648,
+      "max_absolute_change": 0.0004484131932258606,
+      "delta_l2_norm": 1.2607715129852295,
+      "bfloat16_roundtrip_changed_elements": 40747333,
+      "bfloat16_roundtrip_delta_l2_norm": 1.2837203741073608
+    },
+    "model.layers.7.mlp.down_proj.weight": {
+      "changed_elements": 50331521,
+      "elements": 50331648,
+      "max_absolute_change": 0.0004594511119648814,
+      "delta_l2_norm": 1.4547141790390015,
+      "bfloat16_roundtrip_changed_elements": 42279414,
+      "bfloat16_roundtrip_delta_l2_norm": 1.4717119932174683
+    }
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "weight_decay": 0,
+    "parameter_dtype": "torch.float32",
+    "compute_dtype": "torch.bfloat16",
+    "precision_policy": "selected FP32 master parameters; BF16 CUDA autocast forward"
+  },
+  "source_sha256": "08381a3cb5f11820080d389654f193c8166c8234cccc4cd2b413d02f5b872e08",
+  "source_files_sha256": {
+    "rmu.py": "08381a3cb5f11820080d389654f193c8166c8234cccc4cd2b413d02f5b872e08",
+    "trainer.py": "264ba7f4d16432d8c9fedfec67ef60908ead7698fe60113a62b1455aa086fa72",
+    "objectives.py": "35421cdb06bf463e46c09a6f2d94dd787c65bd7369da5519875a0507ca22f34a"
+  },
+  "control_vector_sha256": "99886509d8314b82f0fd51a0c009269c8bbf031b05be674e8360f233c0c49d93",
+  "control_norm": 20.000001907348633,
+  "checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191/rmu/checkpoint",
+  "checkpoint_identity": [
+    {
+      "path": "added_tokens.json",
+      "bytes": 707,
+      "sha256": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680"
+    },
+    {
+      "path": "chat_template.jinja",
+      "bytes": 4168,
+      "sha256": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8"
+    },
+    {
+      "path": "config.json",
+      "bytes": 1539,
+      "sha256": "38a8a5a58ef8dfdfe121758e5ed011e66d9e46f42c4dde7b0ed4d111f0596775"
+    },
+    {
+      "path": "generation_config.json",
+      "bytes": 214,
+      "sha256": "64d86df2173901c58389974bde21f7d2ab9eb7d79f35a337753329d39cf265c0"
+    },
+    {
+      "path": "merges.txt",
+      "bytes": 1671853,
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+    },
+    {
+      "path": "model-00001-of-00004.safetensors",
+      "bytes": 4919016856,
+      "sha256": "13c12b72b6156fa0c8d56a958323adc6112d66286c421fc3efa84699e2c94060"
+    },
+    {
+      "path": "model-00002-of-00004.safetensors",
+      "bytes": 4915960360,
+      "sha256": "0ddf1130f101e65ad9f813b89b1d642bf71cf007b95ecaf21c88ab46d59ecab5"
+    },
+    {
+      "path": "model-00003-of-00004.safetensors",
+      "bytes": 4915960368,
+      "sha256": "02db582c0cb370f72bd246a697e7798e538774864693c5d2ce3a0c9cdc51164f"
+    },
+    {
+      "path": "model-00004-of-00004.safetensors",
+      "bytes": 1932569112,
+      "sha256": "cb1bec53cc50bf978d0b7a9d89a49a1d202586c33729e11418b24459638bf4f1"
+    },
+    {
+      "path": "model.safetensors.index.json",
+      "bytes": 32914,
+      "sha256": "1dc3d24d292a3e6a7b5ca130ad0f56ab6632b9c83a11a7d512c660fecc64bbaf"
+    },
+    {
+      "path": "special_tokens_map.json",
+      "bytes": 613,
+      "sha256": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd"
+    },
+    {
+      "path": "tokenizer.json",
+      "bytes": 11422654,
+      "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+    },
+    {
+      "path": "tokenizer_config.json",
+      "bytes": 5404,
+      "sha256": "443bfa629eb16387a12edbf92a76f6a6f10b2af3b53d87ba1550adfcf45f7fa0"
+    },
+    {
+      "path": "vocab.json",
+      "bytes": 2776833,
+      "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+    }
+  ],
+  "activation_masks": {
+    "forget": "completion_mask on hidden[:,1:,:]",
+    "retain": "prediction_mask on hidden[:,1:,:]"
+  }
+}

@@ -1,0 +1,6 @@
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_reports_v4/reports-2612815/notebooks/executed/warbias_rmu_results.ipynb
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_reports_v4/reports-2612815/notebooks/executed/warbias_task_vector_results.ipynb
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_reports_v4/reports-2612815/notebooks/executed/warbias_wga_kl_results.ipynb

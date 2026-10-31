@@ -1,0 +1,13 @@
+{
+  "status": "deployed_evaluation_revision",
+  "timestamp_utc": "2026-10-31T10:00:46.099171+00:00",
+  "release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v2",
+  "parent_release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031",
+  "checksum_manifest_sha256": "5bdac6aeafa68c0dc09498768094bf88a3b2b7aefbbdfa647b81c83a3f96f846",
+  "changed_paths": [
+    "qualification/manifest.json",
+    "qualification/stereoset_uk.jsonl"
+  ],
+  "training_unchanged": true,
+  "locked_evaluation_unchanged": true
+}

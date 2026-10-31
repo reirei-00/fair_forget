@@ -1,0 +1,145 @@
+{
+  "kind": "engineering_startup_probe_not_paper_measurement",
+  "started_at_utc": "2026-10-31T13:21:06.052710+00:00",
+  "job_id": "2609479",
+  "new_allocation": false,
+  "new_gpu_jobs": 0,
+  "original_processes_signalled": false,
+  "task": "warbias_triplets_uk",
+  "expected_ids": [
+    "WBX-C004-men-middle_aged",
+    "WBX-C004-men-not_stated"
+  ],
+  "expected_model_calls": 1,
+  "single_control_change": {
+    "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+  },
+  "native_model_args_unchanged": true,
+  "seed_unchanged": 42,
+  "atol_unchanged": 1e-06,
+  "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/gemma_spawn_probe_20261031T132106Z/native",
+  "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_gemma3_12b_it_v1",
+  "model": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
+  "scope": "two safe development rows only; no locked collection, no gradient updates",
+  "input_hashes": {
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_gemma3_12b_it_v1/deploy/unlearning_primary/supplemental_checkpoint.sh": "58e4f15c037e587799e15b7abedbb4bb17b9b50057ff76801e25ce4233f2f84d",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_gemma3_12b_it_v1/config.json": "e853e3b5d1780c595f653740e293e474a810ff4b8550aaf4caafe94ba9115449",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_gemma3_12b_it_v1/qualification/manifest.json": "36e78d44340134ff26d56af8d4e7bf20cbfa54e77ddca3ae9c0bf3c0fa6a01ad"
+  },
+  "command": [
+    "srun",
+    "--jobid=2609479",
+    "--overlap",
+    "--nodes=1",
+    "--ntasks=1",
+    "--cpus-per-task=8",
+    "--gres=gpu:gh200:1",
+    "--time=00:06:00",
+    "--immediate=15",
+    "--cpu-bind=none",
+    "bash",
+    "-lc",
+    "export VLLM_WORKER_MULTIPROC_METHOD=spawn; python3 -c '\nfrom pathlib import Path\nimport os,json,socket\nsafe=['\"'\"'VLLM_WORKER_MULTIPROC_METHOD'\"'\"','\"'\"'OMP_NUM_THREADS'\"'\"','\"'\"'TOKENIZERS_PARALLELISM'\"'\"','\"'\"'CUDA_VISIBLE_DEVICES'\"'\"','\"'\"'SLURM_STEP_GPUS'\"'\"','\"'\"'SLURM_JOB_ID'\"'\"','\"'\"'SLURM_STEP_ID'\"'\"']\nrecords={}\nfor pid in [4032526,4032799]:\n p=Path('\"'\"'/proc'\"'\"')/str(pid)\n if not p.exists():continue\n env={}\n for item in (p/'\"'\"'environ'\"'\"').read_bytes().split(b'\"'\"'\\0'\"'\"'):\n  k,_,v=item.partition(b'\"'\"'='\"'\"')\n  if k.decode(errors='\"'\"'ignore'\"'\"') in safe:env[k.decode()]=v.decode(errors='\"'\"'replace'\"'\"')\n records[str(pid)]={'\"'\"'comm'\"'\"':(p/'\"'\"'comm'\"'\"').read_text().strip(),'\"'\"'threads'\"'\"':len(list((p/'\"'\"'task'\"'\"').iterdir())),'\"'\"'selected_environment'\"'\"':env,'\"'\"'loaded_thread_libraries'\"'\"':sorted({line.split()[-1] for line in (p/'\"'\"'maps'\"'\"').read_text().splitlines() if any(x in line for x in ['\"'\"'libgomp'\"'\"','\"'\"'libtorch_cpu'\"'\"','\"'\"'libiomp'\"'\"'])})}\nprint(json.dumps({'\"'\"'node'\"'\"':socket.gethostname(),'\"'\"'probe_selected_environment'\"'\"':{k:os.environ.get(k) for k in safe},'\"'\"'original_process_metadata'\"'\"':records}))\n'; timeout --signal=TERM --kill-after=15s 300s bash /e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_gemma3_12b_it_v1/deploy/unlearning_primary/supplemental_checkpoint.sh /e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_gemma3_12b_it_v1 /e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80 /e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/gemma_spawn_probe_20261031T132106Z/native warbias_triplets_uk qualification"
+  ],
+  "srun_pid": 3799314,
+  "returncode": 0,
+  "elapsed_seconds": 117.82854067301378,
+  "finished_at_utc": "2026-10-31T13:23:03.886793+00:00",
+  "files": {
+    "planned_probe.json": {
+      "sha256": "488315effc4e2c819a0bfb593acf6bdf25a675bcce7de401ebdeee8bce9ab9c1",
+      "size": 1653
+    },
+    "probe.log": {
+      "sha256": "9cfd0eea22ce348624cf4a17feb561a51889c5ccfd79ad7a9ef83e417fc3a21d",
+      "size": 12137
+    },
+    "native/warbias_triplets_uk/matched.csv": {
+      "sha256": "bbf27022e1fa6e115797c6d969d7ce0760727808daa4333732290469cac8f1ce",
+      "size": 845
+    },
+    "native/warbias_triplets_uk/report.json": {
+      "sha256": "326f5232d385ef5d75f422de6aab8b0bb75106376ca6706a937befe2ca70d0f7",
+      "size": 30839
+    },
+    "native/warbias_triplets_uk/run.json": {
+      "sha256": "b32362918f7dc46db478ceaca29cb950d84fc5bddef89c6b64303b69adcb2ba2",
+      "size": 10492
+    },
+    "native/warbias_triplets_uk/groups.csv": {
+      "sha256": "39b75e0491c51193a3824a348c7fa2d79e28097a474bb80910ab49442f868d05",
+      "size": 550
+    },
+    "native/warbias_triplets_uk/report.md": {
+      "sha256": "2557307d1f73ad1eabc9e23f78ce1cfb51bc83cded81305b6fa8531b676a4d4a",
+      "size": 5370
+    },
+    "native/warbias_triplets_uk/predictions.jsonl": {
+      "sha256": "b09350e3ddafe8ea30b50af03c3d3db5e8e9c86052dbf2a00694e92e98a5e723",
+      "size": 273
+    },
+    "native/warbias_triplets_uk/records.jsonl": {
+      "sha256": "0d0e3c58e21cae88735886a060f56ef043d9fdf1a956efc761fbd2396c38565f",
+      "size": 2310
+    },
+    "native/status/warbias_triplets_uk.json": {
+      "sha256": "072e87f81ae8d78ce54a5a597143d9da13d64ebb997c84567d5237d7c04d736a",
+      "size": 2907
+    },
+    "native/status/.warbias_triplets_uk.lock": {
+      "sha256": "c42ac5c7632938de6d053d39c254de3573b58f8dfe65e4572db9409715038cdb",
+      "size": 7
+    }
+  },
+  "native_run_exists": true,
+  "remote_root": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/gemma_spawn_probe_20261031T132106Z",
+  "log_tail": [
+    "(EngineCore pid=4034593) INFO 10-31 14:22:02 [cuda.py:373] Using backend AttentionBackendEnum.FLASH_ATTN for vit attention",
+    "(EngineCore pid=4034593) INFO 10-31 14:22:02 [mm_encoder_attention.py:230] Using AttentionBackendEnum.FLASH_ATTN for MMEncoderAttention.",
+    "(EngineCore pid=4034593) INFO 10-31 14:22:02 [vllm.py:775] Asynchronous scheduling is disabled.",
+    "(EngineCore pid=4034593) WARNING 10-31 14:22:02 [vllm.py:809] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none",
+    "(EngineCore pid=4034593) WARNING 10-31 14:22:02 [vllm.py:820] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.",
+    "(EngineCore pid=4034593) INFO 10-31 14:22:02 [vllm.py:985] Cudagraph is disabled under eager mode",
+    "(EngineCore pid=4034593) INFO 10-31 14:22:02 [compilation.py:289] Enabled custom fusions: norm_quant, act_quant",
+    "(EngineCore pid=4034593) INFO 10-31 14:22:09 [cuda.py:317] Using TRITON_ATTN attention backend out of potential backends: ['TRITON_ATTN', 'FLEX_ATTENTION'].",
+    "(EngineCore pid=4034593) ",
+    "Loading safetensors checkpoint shards:   0% Completed | 0/5 [00:00<?, ?it/s]",
+    "(EngineCore pid=4034593) ",
+    "Loading safetensors checkpoint shards:  20% Completed | 1/5 [00:03<00:12,  3.08s/it]",
+    "(EngineCore pid=4034593) ",
+    "Loading safetensors checkpoint shards:  40% Completed | 2/5 [00:05<00:08,  2.69s/it]",
+    "(EngineCore pid=4034593) ",
+    "Loading safetensors checkpoint shards:  60% Completed | 3/5 [00:07<00:05,  2.56s/it]",
+    "(EngineCore pid=4034593) ",
+    "Loading safetensors checkpoint shards:  80% Completed | 4/5 [00:10<00:02,  2.39s/it]",
+    "(EngineCore pid=4034593) ",
+    "Loading safetensors checkpoint shards: 100% Completed | 5/5 [00:12<00:00,  2.30s/it]",
+    "(EngineCore pid=4034593) ",
+    "Loading safetensors checkpoint shards: 100% Completed | 5/5 [00:12<00:00,  2.43s/it]",
+    "(EngineCore pid=4034593) ",
+    "(EngineCore pid=4034593) INFO 10-31 14:22:21 [default_loader.py:384] Loading weights took 12.19 seconds",
+    "(EngineCore pid=4034593) INFO 10-31 14:22:21 [gpu_model_runner.py:4566] Model loading took 23.31 GiB memory and 19.333836 seconds",
+    "(EngineCore pid=4034593) INFO 10-31 14:22:21 [gpu_model_runner.py:5488] Encoder cache will be initialized with a budget of 4096 tokens, and profiled with 16 image items of the maximum feature size.",
+    "(EngineCore pid=4034593) INFO 10-31 14:22:51 [gpu_worker.py:456] Available KV cache memory: 60.23 GiB",
+    "(EngineCore pid=4034593) INFO 10-31 14:22:51 [kv_cache_utils.py:1316] GPU KV cache size: 164,464 tokens",
+    "(EngineCore pid=4034593) INFO 10-31 14:22:51 [kv_cache_utils.py:1321] Maximum concurrency for 4,096 tokens per request: 40.03x",
+    "(EngineCore pid=4034593) 2026-10-31 14:22:51,694 - INFO - autotuner.py:262 - flashinfer.jit: [Autotuner]: Autotuning process starts ...",
+    "(EngineCore pid=4034593) 2026-10-31 14:22:52,812 - INFO - autotuner.py:268 - flashinfer.jit: [Autotuner]: Autotuning process ends",
+    "(EngineCore pid=4034593) INFO 10-31 14:22:53 [core.py:281] init engine (profile, create kv cache, warmup model) took 32.18 seconds",
+    "(EngineCore pid=4034593) WARNING 10-31 14:22:54 [vllm.py:809] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none",
+    "(EngineCore pid=4034593) WARNING 10-31 14:22:54 [vllm.py:820] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.",
+    "(EngineCore pid=4034593) INFO 10-31 14:22:54 [vllm.py:985] Cudagraph is disabled under eager mode",
+    "INFO 10-31 14:22:54 [llm.py:391] Supported tasks: ['generate']",
+    "",
+    "Running loglikelihood requests:   0%|          | 0/6 [00:00<?, ?it/s]",
+    "Running loglikelihood requests:  17%|\u2588\u258b        | 1/6 [00:02<00:11,  2.39s/it]",
+    "Running loglikelihood requests: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 6/6 [00:02<00:00,  2.51it/s]",
+    "Scored 2/2 items",
+    "(EngineCore pid=4034593) INFO 10-31 14:23:01 [core.py:1201] Shutdown initiated (timeout=0)",
+    "(EngineCore pid=4034593) INFO 10-31 14:23:01 [core.py:1224] Shutdown complete",
+    "[rank0]:[W1031 14:23:01.608270223 ProcessGroupNCCL.cpp:1553] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())",
+    "Report written to /e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/gemma_spawn_probe_20261031T132106Z/native/warbias_triplets_uk/report.md"
+  ],
+  "ssh_returncode": 0,
+  "ssh_stderr": ""
+}

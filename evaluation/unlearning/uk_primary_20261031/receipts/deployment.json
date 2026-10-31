@@ -1,0 +1,8 @@
+{
+  "status": "deployed_verified",
+  "timestamp_utc": "2026-10-31T09:55:33.497894+00:00",
+  "release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031",
+  "archive_sha256": "c5da390d51c302eb47ffdec22be594cdd02e7d972dbbc7eefb4f45efb487d112",
+  "files_verified": 15709,
+  "checksum_manifest_sha256": "01fb41c52e7ba26c16d2b5ddfc26fe6a00c63668e0c2ae554621ab2d52b2d720"
+}

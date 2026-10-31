@@ -1,0 +1,343 @@
+{
+  "schema_version": 2,
+  "kind": "fairforget_unlearning_notebook_inputs",
+  "as_of_utc": "2026-10-31T12:17:35.381633+00:00",
+  "models": [
+    {
+      "id": "qwen3_8b",
+      "label": "Qwen3 8B",
+      "repository": "Qwen/Qwen3-8B",
+      "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218"
+    },
+    {
+      "id": "llama31_8b_instruct",
+      "label": "Llama 3.1 8B Instruct",
+      "repository": "meta-llama/Llama-3.1-8B-Instruct",
+      "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+      "tokenizer_revision": "0e9e39f249a16976918f6564b8830bc894c89659"
+    },
+    {
+      "id": "gemma3_12b_it",
+      "label": "Gemma 3 12B IT",
+      "repository": "google/gemma-3-12b-it",
+      "revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+      "tokenizer_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80"
+    },
+    {
+      "id": "lapa12b_instruct",
+      "label": "Lapa 12B Instruct",
+      "repository": "lapa-llm/lapa-v0.1.2-instruct",
+      "revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+      "tokenizer_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037"
+    },
+    {
+      "id": "mamay12b_v2",
+      "label": "Mamay 12B v2",
+      "repository": "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0",
+      "revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+      "tokenizer_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244"
+    },
+    {
+      "id": "mamay27b_v2",
+      "label": "Mamay 27B v2",
+      "repository": "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0",
+      "revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+      "tokenizer_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7"
+    }
+  ],
+  "runs": {
+    "qwen3_8b": {
+      "rmu": {
+        "training": {
+          "recipe": {
+            "path": "../uk_primary_20261031/recipes/rmu.json",
+            "sha256": "ee712677b22178dc0261e17545859d386b02e610af273157f3f11b65019509ca"
+          },
+          "receipt": {
+            "path": "../uk_primary_20261031/training/rmu/run.json",
+            "sha256": "d373caba4f54e3836d306a0b108d883b6c12b5d0d3965262f135f9592a626ece"
+          },
+          "execution": {
+            "path": "../uk_primary_20261031/training/execution.json",
+            "sha256": "d5e2515e903c834ad70e4be2bfa7e6e12517501ddacf1580b5d57dc0d0aa6358"
+          },
+          "evidence_manifest": {
+            "path": "../uk_primary_20261031/receipts/training_evidence_2608191.json",
+            "sha256": "26e76d749c494b8ae641a456daa4f903b25910d15528ea5595dbcd0fb7dc66cd"
+          },
+          "loss_log": {
+            "path": "../uk_primary_20261031/training/rmu/history.jsonl",
+            "sha256": "2c030588e409d3e9ec59dddf7fc8b2d06a5ff983fd01849824abccc9881db029"
+          },
+          "exposure_summary": {
+            "path": "../uk_primary_20261031/training_exposure_summary.json",
+            "sha256": "931fbdccab3fb9d3a82797e31bec75e06d6bb7531676b3000b2722b7f5394029"
+          }
+        },
+        "analysis": null,
+        "pending_reason": "Actual Qwen training is saved; locked WarBias before/after measurements and paired analysis remain pending in this snapshot",
+        "expected_analysis_location": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/all-metrics-2609430/rmu/all_metrics.json"
+      },
+      "task_vector": {
+        "training": {
+          "recipe": {
+            "path": "../uk_primary_20261031/recipes/task_vector.json",
+            "sha256": "40fb8ccc68c5d2e764d6092343507c7187bc880e31e5c7a393f921724f7d2a5a"
+          },
+          "receipt": {
+            "path": "../uk_primary_20261031/training/task_vector/intervention.json",
+            "sha256": "12d97f7967fa1e0346ef3eee62cd803275fda418e817ef919ee321e7ed578990"
+          },
+          "execution": {
+            "path": "../uk_primary_20261031/training/execution.json",
+            "sha256": "d5e2515e903c834ad70e4be2bfa7e6e12517501ddacf1580b5d57dc0d0aa6358"
+          },
+          "evidence_manifest": {
+            "path": "../uk_primary_20261031/receipts/training_evidence_2608191.json",
+            "sha256": "26e76d749c494b8ae641a456daa4f903b25910d15528ea5595dbcd0fb7dc66cd"
+          },
+          "loss_log": {
+            "path": "../uk_primary_20261031/training/task_vector/losses.jsonl",
+            "sha256": "c227f0ef071dbc5d3da1dffdfd414f7d27d5f05a0c203d570a064ec71c06bbf2"
+          },
+          "exposure_summary": {
+            "path": "../uk_primary_20261031/training_exposure_summary.json",
+            "sha256": "931fbdccab3fb9d3a82797e31bec75e06d6bb7531676b3000b2722b7f5394029"
+          }
+        },
+        "analysis": null,
+        "pending_reason": "Actual Qwen training is saved; locked WarBias before/after measurements and paired analysis remain pending in this snapshot",
+        "expected_analysis_location": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/all-metrics-2609430/task_vector/all_metrics.json"
+      },
+      "wga_kl": {
+        "training": {
+          "recipe": {
+            "path": "../uk_primary_20261031/recipes/wga_kl.json",
+            "sha256": "17a27240e4fea9338724aa9b57b41c6b9d774080818e54439305b6284761ecd4"
+          },
+          "receipt": {
+            "path": "../uk_primary_20261031/training/wga_kl/intervention.json",
+            "sha256": "6ff6c6f589d2a2c505af27954fff42b3e37be8634a4429eec033c24947361481"
+          },
+          "execution": {
+            "path": "../uk_primary_20261031/training/execution.json",
+            "sha256": "d5e2515e903c834ad70e4be2bfa7e6e12517501ddacf1580b5d57dc0d0aa6358"
+          },
+          "evidence_manifest": {
+            "path": "../uk_primary_20261031/receipts/training_evidence_2608191.json",
+            "sha256": "26e76d749c494b8ae641a456daa4f903b25910d15528ea5595dbcd0fb7dc66cd"
+          },
+          "loss_log": {
+            "path": "../uk_primary_20261031/training/wga_kl/losses.jsonl",
+            "sha256": "601623ea85d6680ce7aafdc3201fc7986130a4dee29f911d72194edcdd026828"
+          },
+          "exposure_summary": {
+            "path": "../uk_primary_20261031/training_exposure_summary.json",
+            "sha256": "931fbdccab3fb9d3a82797e31bec75e06d6bb7531676b3000b2722b7f5394029"
+          }
+        },
+        "analysis": null,
+        "pending_reason": "Actual Qwen training is saved; locked WarBias before/after measurements and paired analysis remain pending in this snapshot",
+        "expected_analysis_location": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/all-metrics-2609430/wga_kl/all_metrics.json"
+      }
+    },
+    "llama31_8b_instruct": {
+      "rmu": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      },
+      "task_vector": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      },
+      "wga_kl": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      }
+    },
+    "gemma3_12b_it": {
+      "rmu": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      },
+      "task_vector": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      },
+      "wga_kl": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      }
+    },
+    "lapa12b_instruct": {
+      "rmu": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      },
+      "task_vector": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      },
+      "wga_kl": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      }
+    },
+    "mamay12b_v2": {
+      "rmu": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      },
+      "task_vector": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      },
+      "wga_kl": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      }
+    },
+    "mamay27b_v2": {
+      "rmu": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      },
+      "task_vector": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      },
+      "wga_kl": {
+        "training": null,
+        "analysis": null,
+        "pending_reason": "Actual model jobs were submitted; completed training receipts and locked WarBias pairs are not available in this snapshot"
+      }
+    }
+  },
+  "inventory_source": {
+    "path": "source_inventory.json",
+    "sha256": "f6e2ac798c7e6b1adaf9613b731e4c94dcefa2589b105773dacbbc3450a94d2e"
+  },
+  "training_scope": {
+    "id": "uk_primary_20261031_stereoset_gender",
+    "target": "Reviewed StereoSet-UK gender associations, four training families",
+    "forget_source": "FairForget/StereoSet-UK-Unlearning",
+    "forget_revision": "8810fc35680b398521c7264dab2c512b5ced7f30",
+    "preservation_source": "FairForget/WarBias",
+    "review_kind": "AI content review under explicit user authority",
+    "human_validated": false,
+    "review_manifest_sha256": "a4b26028849e7f1d8cafe645a04c04af5f7f0fdb408df5dca26a1a52eb900405",
+    "counts": {
+      "reviewed_rows": 143,
+      "eligible_rows": 6,
+      "excluded_rows": 137,
+      "eligible_families": 6,
+      "forget_train": 4,
+      "correct_train": 4,
+      "dev": 2,
+      "retain_train": 792,
+      "retain_dev": 257,
+      "retain_train_components": 22,
+      "retain_dev_components": 15
+    },
+    "forget_stream_sha256": "6d283e13b7dfdeb862e79e70ef272a171452a90b9a4c4719b980125ff9aabc20",
+    "train_families": [
+      "uk_gender_embroidery_surgery_roles",
+      "uk_gender_masculine_self_discipline",
+      "uk_gender_schoolgirl_skirt_length",
+      "uk_gender_toy_colour"
+    ],
+    "development_families": [
+      "uk_gender_gaming_cheerleading",
+      "uk_gender_psychology_emotionality"
+    ],
+    "interpretation": "WarBias is the evaluation endpoint and preservation source; the current forget target is StereoSet gender. A WarBias-trained intervention requires a separately authorized frozen recipe.",
+    "training_binding_sha256": "20534908e25dafbb7b1307cad750c0d44b45f8a2653a94426bfed825e745cb0a"
+  },
+  "warbias_tasks": {
+    "warbias_triplets_uk": {
+      "rows": 249,
+      "sha256": "ee475312111acdd09fb3e54e0dce5ab4d4245bd1edc25c1d482275fce5640054",
+      "protocol": "warbias_full_sentence_mean_token_logprob_v1"
+    },
+    "warbias_triplets_en": {
+      "rows": 249,
+      "sha256": "234d908f6a778468f5c50afe3cda83ecbfabc354f8cd2ca3c659e70606de44ad",
+      "protocol": "warbias_full_sentence_mean_token_logprob_v1"
+    },
+    "warbias_cross_actor_uk": {
+      "rows": 46,
+      "sha256": "6e2bf111cc0ea1fdfb3802ed8f473fb5d5e3d5e7644ea79aa98eabf24f762889",
+      "protocol": "warbias_full_sentence_mean_token_logprob_v1"
+    },
+    "warbias_cross_actor_en": {
+      "rows": 46,
+      "sha256": "aa526b998a99d97942d05944a4527d3a09624af4ef280c86afb310330c0d968e",
+      "protocol": "warbias_full_sentence_mean_token_logprob_v1"
+    },
+    "warbias_expanded_qa_uk": {
+      "rows": 1116,
+      "sha256": "17ff0b185a660208272e4f9b3c2778220c23ac361dd3a9caf5b8e88d361dcc2f",
+      "protocol": "strict_abc_generation_v1"
+    },
+    "warbias_expanded_qa_en": {
+      "rows": 1116,
+      "sha256": "c3f171aff77bc41f21790cf1c2e556da21df297f9cc1c75d112b58b4bc25a4a3",
+      "protocol": "strict_abc_generation_v1"
+    },
+    "warbias_benign_uk": {
+      "rows": 70,
+      "sha256": "d583f22e12b1712d02f12f10808ac558d5c3679f73d95bdf8c3f12e38ea2f39e",
+      "protocol": "warbias_benign_generation_with_rubric_v1"
+    },
+    "warbias_benign_en": {
+      "rows": 70,
+      "sha256": "af5d826bded956710d7b6ba40b1aeef3f0a9378030dc0487da4ab984eecd6464",
+      "protocol": "warbias_benign_generation_with_rubric_v1"
+    },
+    "warbias_uk": {
+      "rows": 240,
+      "sha256": "59b0be41d08088e69d59aed23aece9b547675956a67c0cf9f564daec4f9fcc68",
+      "protocol": "strict_abc_generation_v1"
+    },
+    "warbias_en": {
+      "rows": 240,
+      "sha256": "b7cb0be4240762b613e6ec2fe8c0c76fd874cc1dd0788bb9b64eb07bdb3e6726",
+      "protocol": "strict_abc_generation_v1"
+    },
+    "warbias_intersectional_uk": {
+      "rows": 1320,
+      "sha256": "84fb6a7b5debc728cc9b57ab247c027fec9df0c92b96c9e3133da0e5c17096ba",
+      "protocol": "strict_abc_generation_v1"
+    },
+    "warbias_intersectional_en": {
+      "rows": 1320,
+      "sha256": "2330527fa06d54235341f9ded758d11b7e26d00ca0b621d8ee54e03472169f55",
+      "protocol": "strict_abc_generation_v1"
+    }
+  },
+  "historical_policy": "Original/neutral historical baselines and English BBQ RMU pilots are separate evidence; neither supplies a method post-run here.",
+  "training_evidence_as_of_utc": "2026-10-31T12:06:58.967084+00:00",
+  "parent_manifest": {
+    "path": "manifest.json",
+    "sha256": "d21e324043ffb612cbb1aaddb3f347839b8fc06425cf340147bdaf498dc1eb44"
+  },
+  "schedule_source": {
+    "path": "../uk_primary_20261031/six_model_warbias/submission.json",
+    "sha256": "1d793790127fb21ca43246e1691b43c8bb393d3918e31d6623cb3e5c629cbb6c"
+  }
+}

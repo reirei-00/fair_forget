@@ -1,0 +1,1563 @@
+{
+  "kind": "training_source_diagnostic_not_heldout",
+  "stage": "training_diagnostic_complete",
+  "model_id": "lapa12b_instruct",
+  "bindings": {
+    "matrix": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/matrix.json",
+      "sha256": "3c640bf1ae270d126f45a8a69edab63b1a155bbd4ecd937486ca85ebc4fdc3f9"
+    },
+    "data_manifest": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/data/training_binding.json",
+      "sha256": "88682f9dcb475973b2cba55f13f60ba6d6086dc0697df8e1a07b55d7475ccff2"
+    },
+    "recipes": {
+      "rmu": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/recipes/lapa12b_instruct/rmu.json",
+        "sha256": "a14ada869cae03da0e6dee8239243a767b59167961b317d4d637a6002bc8b94b"
+      },
+      "task_vector": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/recipes/lapa12b_instruct/task_vector.json",
+        "sha256": "cd9e7342020621d81291304ebd6dc0de10a54c2b4fab715168c50b42ec5d0d14"
+      },
+      "wga_kl": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/recipes/lapa12b_instruct/wga_kl.json",
+        "sha256": "8e30ea40f2b2557296c3a6505855881b8f6a7896a34c56a379b91ea1c7e16fa5"
+      }
+    },
+    "source_adapted": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/sources/original_train_uk.jsonl",
+      "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+    },
+    "diagnostic_manifest": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+      "sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088"
+    },
+    "diagnostic_rows": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/data/warbias_triplets_uk.jsonl",
+      "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb"
+    },
+    "addon_config": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_lapa12b_instruct_v2/config.json",
+      "sha256": "92ac4918b2bf6f95fd2cc2757d1a26f76c6d6cf94bc95b0abcee5ceeffd34a09"
+    },
+    "training_execution": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/execution.json",
+      "sha256": "9a8527360e77603e6c1ff76f614dcc7c9607013f4d4eb83944b6bbab1c84f24d"
+    },
+    "inference_views": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+      "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+    }
+  },
+  "checkpoints": {
+    "baseline": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037",
+    "rmu": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/rmu",
+    "task_vector": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/task_vector",
+    "wga_kl": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/wga_kl"
+  },
+  "qualification": {
+    "baseline": {
+      "passed": true,
+      "runs": [
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_lapa12b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/baseline/repeat-1/warbias_triplets_uk"
+          ],
+          "gpu": "0",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/baseline/repeat-1/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:45:35.939106+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "5bf8ccd702ab2e873a2b953748d05a852c429422c21244a7640295ce00387e02",
+            "report.json": "6f4a0338cc0e1cd06d8877f1d37da9bc361276a27082e3587d4ea394f208ae05",
+            "predictions.jsonl": "f48684f467fdc810bd63f3344fcad95cb6dc93559c3d371d5c548e5001923ca6"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/baseline/repeat-1/warbias_triplets_uk/run.json",
+              "sha256": "5bf8ccd702ab2e873a2b953748d05a852c429422c21244a7640295ce00387e02"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/baseline/repeat-1/warbias_triplets_uk/report.json",
+              "sha256": "6f4a0338cc0e1cd06d8877f1d37da9bc361276a27082e3587d4ea394f208ae05"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/baseline/repeat-1/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "f48684f467fdc810bd63f3344fcad95cb6dc93559c3d371d5c548e5001923ca6"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:49:50.911030+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/baseline/repeat-1/warbias_triplets_uk.log",
+            "sha256": "e7f6f1170a6a2cc682b8521d1aa90ffd85e831c442fd1dee13e1ff9dd731e5dc"
+          }
+        },
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_lapa12b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/baseline/repeat-2/warbias_triplets_uk"
+          ],
+          "gpu": "0",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/baseline/repeat-2/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:49:50.913477+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "5bf8ccd702ab2e873a2b953748d05a852c429422c21244a7640295ce00387e02",
+            "report.json": "6f4a0338cc0e1cd06d8877f1d37da9bc361276a27082e3587d4ea394f208ae05",
+            "predictions.jsonl": "f48684f467fdc810bd63f3344fcad95cb6dc93559c3d371d5c548e5001923ca6"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/baseline/repeat-2/warbias_triplets_uk/run.json",
+              "sha256": "5bf8ccd702ab2e873a2b953748d05a852c429422c21244a7640295ce00387e02"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/baseline/repeat-2/warbias_triplets_uk/report.json",
+              "sha256": "6f4a0338cc0e1cd06d8877f1d37da9bc361276a27082e3587d4ea394f208ae05"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/baseline/repeat-2/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "f48684f467fdc810bd63f3344fcad95cb6dc93559c3d371d5c548e5001923ca6"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:51:16.611367+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/baseline/repeat-2/warbias_triplets_uk.log",
+            "sha256": "5744c6335c58ec39769a79dca6a04fe4dd93aa33a6a90a67b7c7d8de881d621c"
+          }
+        }
+      ],
+      "max_absolute_score_difference": 0.0,
+      "exact_generation_match": null
+    },
+    "rmu": {
+      "passed": true,
+      "runs": [
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_lapa12b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/rmu,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/rmu/repeat-1/warbias_triplets_uk"
+          ],
+          "gpu": "1",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/rmu/repeat-1/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:45:35.949840+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "ab191504f74c2b07044d5c898fd63a36f27e95c86b068922ab9e6f47bb93a4ac",
+            "report.json": "5d5639e8b0bf2c059c3bc946ba5f9c693b054a433814f294e402bf3f9e8dcd31",
+            "predictions.jsonl": "2bc9d8bebe013d339c6fb42ebc97a9510634d28e3720c03bbe4639f47df1d8a6"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "inference_view": {
+            "status": "validated_inference_view_of_actual_training_checkpoint",
+            "kind": "add_pinned_processor_assets",
+            "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+            "method": "rmu",
+            "sidecar": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+              "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+            },
+            "original_receipt": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/rmu/run.json",
+              "sha256": "b243bf61af6a23cf87533e7c16ab3850d657396215a3d25d95b42dcf20abbc1d"
+            },
+            "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/rmu/checkpoint",
+            "original_files_sha256": {
+              "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+              "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+              "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+              "model-00001-of-00005.safetensors": "beedc0137aca3c07aa92587f1f21e5850b95fdff04e29131b3b62ee519bf8937",
+              "model-00002-of-00005.safetensors": "a9802d278b246de783fde8f1f19f819fc8d57edd3aee1a595b914f2cf3654a56",
+              "model-00003-of-00005.safetensors": "5cb8eebd80f319d81b4eb24136aae9d48f80d5d238a4779eb46674fcec1155fd",
+              "model-00004-of-00005.safetensors": "e3dc5d4e000e6f98814aac2a59ba7b49b616d3e5fba3331fac71a187adaf20a6",
+              "model-00005-of-00005.safetensors": "a83ea23bc2a2b462f36924990437d83e1add8404361f26ce3a57dcd3064ef341",
+              "model.safetensors.index.json": "a14357220054c5baf74612fa0193d94ff9277a2d1d45aaf8f6d32ae5a379f53c",
+              "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+              "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+              "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+            },
+            "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/rmu",
+            "evaluation_files_sha256": {
+              "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+              "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+              "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+              "model-00001-of-00005.safetensors": "beedc0137aca3c07aa92587f1f21e5850b95fdff04e29131b3b62ee519bf8937",
+              "model-00002-of-00005.safetensors": "a9802d278b246de783fde8f1f19f819fc8d57edd3aee1a595b914f2cf3654a56",
+              "model-00003-of-00005.safetensors": "5cb8eebd80f319d81b4eb24136aae9d48f80d5d238a4779eb46674fcec1155fd",
+              "model-00004-of-00005.safetensors": "e3dc5d4e000e6f98814aac2a59ba7b49b616d3e5fba3331fac71a187adaf20a6",
+              "model-00005-of-00005.safetensors": "a83ea23bc2a2b462f36924990437d83e1add8404361f26ce3a57dcd3064ef341",
+              "model.safetensors.index.json": "a14357220054c5baf74612fa0193d94ff9277a2d1d45aaf8f6d32ae5a379f53c",
+              "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+              "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+              "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+              "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+              "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+            },
+            "added_assets": {
+              "preprocessor_config.json": {
+                "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/preprocessor_config.json",
+                "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+              },
+              "processor_config.json": {
+                "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/processor_config.json",
+                "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+              }
+            },
+            "processor_asset_base_binding": "measured_native_base_files",
+            "original_weight_config_tokenizer_files_unchanged": true
+          },
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/rmu/repeat-1/warbias_triplets_uk/run.json",
+              "sha256": "ab191504f74c2b07044d5c898fd63a36f27e95c86b068922ab9e6f47bb93a4ac"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/rmu/repeat-1/warbias_triplets_uk/report.json",
+              "sha256": "5d5639e8b0bf2c059c3bc946ba5f9c693b054a433814f294e402bf3f9e8dcd31"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/rmu/repeat-1/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "2bc9d8bebe013d339c6fb42ebc97a9510634d28e3720c03bbe4639f47df1d8a6"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:49:51.354914+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/rmu/repeat-1/warbias_triplets_uk.log",
+            "sha256": "ef77c7351169a7e7d227f29c5541e00eb06eff5a77e3b5e075384796e89baa5c"
+          }
+        },
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_lapa12b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/rmu,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/rmu/repeat-2/warbias_triplets_uk"
+          ],
+          "gpu": "1",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/rmu/repeat-2/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:49:51.357286+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "ab191504f74c2b07044d5c898fd63a36f27e95c86b068922ab9e6f47bb93a4ac",
+            "report.json": "5d5639e8b0bf2c059c3bc946ba5f9c693b054a433814f294e402bf3f9e8dcd31",
+            "predictions.jsonl": "2bc9d8bebe013d339c6fb42ebc97a9510634d28e3720c03bbe4639f47df1d8a6"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "inference_view": {
+            "status": "validated_inference_view_of_actual_training_checkpoint",
+            "kind": "add_pinned_processor_assets",
+            "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+            "method": "rmu",
+            "sidecar": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+              "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+            },
+            "original_receipt": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/rmu/run.json",
+              "sha256": "b243bf61af6a23cf87533e7c16ab3850d657396215a3d25d95b42dcf20abbc1d"
+            },
+            "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/rmu/checkpoint",
+            "original_files_sha256": {
+              "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+              "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+              "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+              "model-00001-of-00005.safetensors": "beedc0137aca3c07aa92587f1f21e5850b95fdff04e29131b3b62ee519bf8937",
+              "model-00002-of-00005.safetensors": "a9802d278b246de783fde8f1f19f819fc8d57edd3aee1a595b914f2cf3654a56",
+              "model-00003-of-00005.safetensors": "5cb8eebd80f319d81b4eb24136aae9d48f80d5d238a4779eb46674fcec1155fd",
+              "model-00004-of-00005.safetensors": "e3dc5d4e000e6f98814aac2a59ba7b49b616d3e5fba3331fac71a187adaf20a6",
+              "model-00005-of-00005.safetensors": "a83ea23bc2a2b462f36924990437d83e1add8404361f26ce3a57dcd3064ef341",
+              "model.safetensors.index.json": "a14357220054c5baf74612fa0193d94ff9277a2d1d45aaf8f6d32ae5a379f53c",
+              "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+              "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+              "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+            },
+            "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/rmu",
+            "evaluation_files_sha256": {
+              "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+              "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+              "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+              "model-00001-of-00005.safetensors": "beedc0137aca3c07aa92587f1f21e5850b95fdff04e29131b3b62ee519bf8937",
+              "model-00002-of-00005.safetensors": "a9802d278b246de783fde8f1f19f819fc8d57edd3aee1a595b914f2cf3654a56",
+              "model-00003-of-00005.safetensors": "5cb8eebd80f319d81b4eb24136aae9d48f80d5d238a4779eb46674fcec1155fd",
+              "model-00004-of-00005.safetensors": "e3dc5d4e000e6f98814aac2a59ba7b49b616d3e5fba3331fac71a187adaf20a6",
+              "model-00005-of-00005.safetensors": "a83ea23bc2a2b462f36924990437d83e1add8404361f26ce3a57dcd3064ef341",
+              "model.safetensors.index.json": "a14357220054c5baf74612fa0193d94ff9277a2d1d45aaf8f6d32ae5a379f53c",
+              "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+              "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+              "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+              "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+              "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+            },
+            "added_assets": {
+              "preprocessor_config.json": {
+                "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/preprocessor_config.json",
+                "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+              },
+              "processor_config.json": {
+                "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/processor_config.json",
+                "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+              }
+            },
+            "processor_asset_base_binding": "measured_native_base_files",
+            "original_weight_config_tokenizer_files_unchanged": true
+          },
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/rmu/repeat-2/warbias_triplets_uk/run.json",
+              "sha256": "ab191504f74c2b07044d5c898fd63a36f27e95c86b068922ab9e6f47bb93a4ac"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/rmu/repeat-2/warbias_triplets_uk/report.json",
+              "sha256": "5d5639e8b0bf2c059c3bc946ba5f9c693b054a433814f294e402bf3f9e8dcd31"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/rmu/repeat-2/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "2bc9d8bebe013d339c6fb42ebc97a9510634d28e3720c03bbe4639f47df1d8a6"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:51:18.965449+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/rmu/repeat-2/warbias_triplets_uk.log",
+            "sha256": "640d38479acf1d6c77b0da8be30641c8ef296c3979507d5ac0f49c4e9218e8a6"
+          }
+        }
+      ],
+      "max_absolute_score_difference": 0.0,
+      "exact_generation_match": null
+    },
+    "task_vector": {
+      "passed": true,
+      "runs": [
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_lapa12b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/task_vector,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/task_vector/repeat-1/warbias_triplets_uk"
+          ],
+          "gpu": "2",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/task_vector/repeat-1/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:45:35.940693+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "591aad422014a30484500b39872e00263f01e96bab53db8c1af91e1616f6477f",
+            "report.json": "8f7dff398cf093e6a4fdba6772ffc78787a3b7a2e1417a730c24be3b8e9013df",
+            "predictions.jsonl": "f48684f467fdc810bd63f3344fcad95cb6dc93559c3d371d5c548e5001923ca6"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "inference_view": {
+            "status": "validated_inference_view_of_actual_training_checkpoint",
+            "kind": "add_pinned_processor_assets",
+            "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+            "method": "task_vector",
+            "sidecar": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+              "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+            },
+            "original_receipt": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/task_vector/intervention.json",
+              "sha256": "53a175b9dbef84adbf1da4553ce84ba2f7a0d2859928297f86518be48c137b3f"
+            },
+            "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/task_vector/merged_checkpoint",
+            "original_files_sha256": {
+              "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+              "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+              "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+              "model-00001-of-00007.safetensors": "12b25f16ca4012bac8e10d5099e489c8947a728313e1652ad975d800903cd034",
+              "model-00002-of-00007.safetensors": "93f81645e429d47597e866ad5c304d9bf1e8e74b17e1bc37c51d48778b396e9a",
+              "model-00003-of-00007.safetensors": "0b91994d29d91cd704d436dc54310c482abe8d03963a260e0e3f8c2fa3935505",
+              "model-00004-of-00007.safetensors": "c575e7abc09c0f19abbfee0ada3eaf6da0eabd3a136880e26eb47dbe61433e7f",
+              "model-00005-of-00007.safetensors": "6ed506b9b1090ff508024df15ddb1942123933745fd70e5afb65cd49a8640a5f",
+              "model-00006-of-00007.safetensors": "04c44803b8870dda6d95d64ef1b31e709ed6f931c3b036aded5bfe6805cdc11a",
+              "model-00007-of-00007.safetensors": "c45f6f5ee5afe34279d76ab0590df51b1fbb3138f00cbba0e2b9708b7f65b26b",
+              "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+              "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+              "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+              "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+            },
+            "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/task_vector",
+            "evaluation_files_sha256": {
+              "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+              "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+              "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+              "model-00001-of-00007.safetensors": "12b25f16ca4012bac8e10d5099e489c8947a728313e1652ad975d800903cd034",
+              "model-00002-of-00007.safetensors": "93f81645e429d47597e866ad5c304d9bf1e8e74b17e1bc37c51d48778b396e9a",
+              "model-00003-of-00007.safetensors": "0b91994d29d91cd704d436dc54310c482abe8d03963a260e0e3f8c2fa3935505",
+              "model-00004-of-00007.safetensors": "c575e7abc09c0f19abbfee0ada3eaf6da0eabd3a136880e26eb47dbe61433e7f",
+              "model-00005-of-00007.safetensors": "6ed506b9b1090ff508024df15ddb1942123933745fd70e5afb65cd49a8640a5f",
+              "model-00006-of-00007.safetensors": "04c44803b8870dda6d95d64ef1b31e709ed6f931c3b036aded5bfe6805cdc11a",
+              "model-00007-of-00007.safetensors": "c45f6f5ee5afe34279d76ab0590df51b1fbb3138f00cbba0e2b9708b7f65b26b",
+              "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+              "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+              "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+              "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+              "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+              "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+            },
+            "added_assets": {
+              "preprocessor_config.json": {
+                "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/preprocessor_config.json",
+                "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+              },
+              "processor_config.json": {
+                "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/processor_config.json",
+                "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+              }
+            },
+            "processor_asset_base_binding": "measured_native_base_files",
+            "original_weight_config_tokenizer_files_unchanged": true
+          },
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/task_vector/repeat-1/warbias_triplets_uk/run.json",
+              "sha256": "591aad422014a30484500b39872e00263f01e96bab53db8c1af91e1616f6477f"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/task_vector/repeat-1/warbias_triplets_uk/report.json",
+              "sha256": "8f7dff398cf093e6a4fdba6772ffc78787a3b7a2e1417a730c24be3b8e9013df"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/task_vector/repeat-1/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "f48684f467fdc810bd63f3344fcad95cb6dc93559c3d371d5c548e5001923ca6"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:49:51.088405+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/task_vector/repeat-1/warbias_triplets_uk.log",
+            "sha256": "5b105eb0b0ac310361c2db63b0a0051c65c1dfac08e44105c1087459f05939bf"
+          }
+        },
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_lapa12b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/task_vector,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/task_vector/repeat-2/warbias_triplets_uk"
+          ],
+          "gpu": "2",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/task_vector/repeat-2/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:49:51.090999+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "591aad422014a30484500b39872e00263f01e96bab53db8c1af91e1616f6477f",
+            "report.json": "8f7dff398cf093e6a4fdba6772ffc78787a3b7a2e1417a730c24be3b8e9013df",
+            "predictions.jsonl": "f48684f467fdc810bd63f3344fcad95cb6dc93559c3d371d5c548e5001923ca6"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "inference_view": {
+            "status": "validated_inference_view_of_actual_training_checkpoint",
+            "kind": "add_pinned_processor_assets",
+            "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+            "method": "task_vector",
+            "sidecar": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+              "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+            },
+            "original_receipt": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/task_vector/intervention.json",
+              "sha256": "53a175b9dbef84adbf1da4553ce84ba2f7a0d2859928297f86518be48c137b3f"
+            },
+            "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/task_vector/merged_checkpoint",
+            "original_files_sha256": {
+              "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+              "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+              "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+              "model-00001-of-00007.safetensors": "12b25f16ca4012bac8e10d5099e489c8947a728313e1652ad975d800903cd034",
+              "model-00002-of-00007.safetensors": "93f81645e429d47597e866ad5c304d9bf1e8e74b17e1bc37c51d48778b396e9a",
+              "model-00003-of-00007.safetensors": "0b91994d29d91cd704d436dc54310c482abe8d03963a260e0e3f8c2fa3935505",
+              "model-00004-of-00007.safetensors": "c575e7abc09c0f19abbfee0ada3eaf6da0eabd3a136880e26eb47dbe61433e7f",
+              "model-00005-of-00007.safetensors": "6ed506b9b1090ff508024df15ddb1942123933745fd70e5afb65cd49a8640a5f",
+              "model-00006-of-00007.safetensors": "04c44803b8870dda6d95d64ef1b31e709ed6f931c3b036aded5bfe6805cdc11a",
+              "model-00007-of-00007.safetensors": "c45f6f5ee5afe34279d76ab0590df51b1fbb3138f00cbba0e2b9708b7f65b26b",
+              "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+              "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+              "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+              "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+            },
+            "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/task_vector",
+            "evaluation_files_sha256": {
+              "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+              "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+              "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+              "model-00001-of-00007.safetensors": "12b25f16ca4012bac8e10d5099e489c8947a728313e1652ad975d800903cd034",
+              "model-00002-of-00007.safetensors": "93f81645e429d47597e866ad5c304d9bf1e8e74b17e1bc37c51d48778b396e9a",
+              "model-00003-of-00007.safetensors": "0b91994d29d91cd704d436dc54310c482abe8d03963a260e0e3f8c2fa3935505",
+              "model-00004-of-00007.safetensors": "c575e7abc09c0f19abbfee0ada3eaf6da0eabd3a136880e26eb47dbe61433e7f",
+              "model-00005-of-00007.safetensors": "6ed506b9b1090ff508024df15ddb1942123933745fd70e5afb65cd49a8640a5f",
+              "model-00006-of-00007.safetensors": "04c44803b8870dda6d95d64ef1b31e709ed6f931c3b036aded5bfe6805cdc11a",
+              "model-00007-of-00007.safetensors": "c45f6f5ee5afe34279d76ab0590df51b1fbb3138f00cbba0e2b9708b7f65b26b",
+              "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+              "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+              "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+              "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+              "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+              "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+            },
+            "added_assets": {
+              "preprocessor_config.json": {
+                "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/preprocessor_config.json",
+                "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+              },
+              "processor_config.json": {
+                "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/processor_config.json",
+                "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+              }
+            },
+            "processor_asset_base_binding": "measured_native_base_files",
+            "original_weight_config_tokenizer_files_unchanged": true
+          },
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/task_vector/repeat-2/warbias_triplets_uk/run.json",
+              "sha256": "591aad422014a30484500b39872e00263f01e96bab53db8c1af91e1616f6477f"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/task_vector/repeat-2/warbias_triplets_uk/report.json",
+              "sha256": "8f7dff398cf093e6a4fdba6772ffc78787a3b7a2e1417a730c24be3b8e9013df"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/task_vector/repeat-2/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "f48684f467fdc810bd63f3344fcad95cb6dc93559c3d371d5c548e5001923ca6"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:51:22.761030+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/task_vector/repeat-2/warbias_triplets_uk.log",
+            "sha256": "a6150f7171f57714434067c49ce30f74735539f0ac5040659a353789e310db8a"
+          }
+        }
+      ],
+      "max_absolute_score_difference": 0.0,
+      "exact_generation_match": null
+    },
+    "wga_kl": {
+      "passed": true,
+      "runs": [
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_lapa12b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/wga_kl,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/wga_kl/repeat-1/warbias_triplets_uk"
+          ],
+          "gpu": "3",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/wga_kl/repeat-1/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:45:35.940864+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "aadfd3bf29bfe05f353c80d3a4a7cb7a1223be163688a2cc468702a728aa3937",
+            "report.json": "bb3a7ed3210ddb5976a4ec9c8065342d47c9be033f00dd2a1bc60e3a65f1312a",
+            "predictions.jsonl": "c999097e3e8d7e5e07b38becd90423a0e830cf149a4602f15188eeab73f7706a"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "inference_view": {
+            "status": "validated_inference_view_of_actual_training_checkpoint",
+            "kind": "add_pinned_processor_assets",
+            "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+            "method": "wga_kl",
+            "sidecar": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+              "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+            },
+            "original_receipt": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/wga_kl/intervention.json",
+              "sha256": "b9d0a9ac110d67c4b7e422a5186c9e920b102fc3927202bd6e07371e4bd91913"
+            },
+            "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/wga_kl/merged_checkpoint",
+            "original_files_sha256": {
+              "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+              "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+              "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+              "model-00001-of-00007.safetensors": "5e3dff212e37f742269fb905b44a95c18da0c4aaa89426a228823538cd810747",
+              "model-00002-of-00007.safetensors": "d7e38bd35eaacbed3cd49e850fff614c48228bf6d1a4030fc15601335debf559",
+              "model-00003-of-00007.safetensors": "5e23a4254a2804af3a09845371d6fe72da388a59b2337b3573fe983d65f3688f",
+              "model-00004-of-00007.safetensors": "e019402bddfa9446a7b035916b73a1d70da580b12290674f48d06871522d9346",
+              "model-00005-of-00007.safetensors": "3f7c54535b95728de61f9b895209d5da0a71dcd06615485d410bb17ec0475b22",
+              "model-00006-of-00007.safetensors": "f4613f98e78d439e4e17d8faed1b1503f29835b77bd457596d41ee1062b93393",
+              "model-00007-of-00007.safetensors": "808fcddb7bfa76fc45ab8e0f43369a7a798c4ef70505564a3486d226ebe294db",
+              "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+              "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+              "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+              "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+            },
+            "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/wga_kl",
+            "evaluation_files_sha256": {
+              "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+              "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+              "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+              "model-00001-of-00007.safetensors": "5e3dff212e37f742269fb905b44a95c18da0c4aaa89426a228823538cd810747",
+              "model-00002-of-00007.safetensors": "d7e38bd35eaacbed3cd49e850fff614c48228bf6d1a4030fc15601335debf559",
+              "model-00003-of-00007.safetensors": "5e23a4254a2804af3a09845371d6fe72da388a59b2337b3573fe983d65f3688f",
+              "model-00004-of-00007.safetensors": "e019402bddfa9446a7b035916b73a1d70da580b12290674f48d06871522d9346",
+              "model-00005-of-00007.safetensors": "3f7c54535b95728de61f9b895209d5da0a71dcd06615485d410bb17ec0475b22",
+              "model-00006-of-00007.safetensors": "f4613f98e78d439e4e17d8faed1b1503f29835b77bd457596d41ee1062b93393",
+              "model-00007-of-00007.safetensors": "808fcddb7bfa76fc45ab8e0f43369a7a798c4ef70505564a3486d226ebe294db",
+              "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+              "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+              "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+              "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+              "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+              "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+            },
+            "added_assets": {
+              "preprocessor_config.json": {
+                "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/preprocessor_config.json",
+                "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+              },
+              "processor_config.json": {
+                "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/processor_config.json",
+                "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+              }
+            },
+            "processor_asset_base_binding": "measured_native_base_files",
+            "original_weight_config_tokenizer_files_unchanged": true
+          },
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/wga_kl/repeat-1/warbias_triplets_uk/run.json",
+              "sha256": "aadfd3bf29bfe05f353c80d3a4a7cb7a1223be163688a2cc468702a728aa3937"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/wga_kl/repeat-1/warbias_triplets_uk/report.json",
+              "sha256": "bb3a7ed3210ddb5976a4ec9c8065342d47c9be033f00dd2a1bc60e3a65f1312a"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/wga_kl/repeat-1/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "c999097e3e8d7e5e07b38becd90423a0e830cf149a4602f15188eeab73f7706a"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:49:51.215859+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/wga_kl/repeat-1/warbias_triplets_uk.log",
+            "sha256": "668603b0ac98089c26a823bfcc4f4a58e4717ea6523343b372bb9d88e6c297a9"
+          }
+        },
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_lapa12b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/wga_kl,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/wga_kl/repeat-2/warbias_triplets_uk"
+          ],
+          "gpu": "3",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/wga_kl/repeat-2/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:49:51.218205+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "aadfd3bf29bfe05f353c80d3a4a7cb7a1223be163688a2cc468702a728aa3937",
+            "report.json": "bb3a7ed3210ddb5976a4ec9c8065342d47c9be033f00dd2a1bc60e3a65f1312a",
+            "predictions.jsonl": "c999097e3e8d7e5e07b38becd90423a0e830cf149a4602f15188eeab73f7706a"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "inference_view": {
+            "status": "validated_inference_view_of_actual_training_checkpoint",
+            "kind": "add_pinned_processor_assets",
+            "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+            "method": "wga_kl",
+            "sidecar": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+              "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+            },
+            "original_receipt": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/wga_kl/intervention.json",
+              "sha256": "b9d0a9ac110d67c4b7e422a5186c9e920b102fc3927202bd6e07371e4bd91913"
+            },
+            "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/wga_kl/merged_checkpoint",
+            "original_files_sha256": {
+              "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+              "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+              "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+              "model-00001-of-00007.safetensors": "5e3dff212e37f742269fb905b44a95c18da0c4aaa89426a228823538cd810747",
+              "model-00002-of-00007.safetensors": "d7e38bd35eaacbed3cd49e850fff614c48228bf6d1a4030fc15601335debf559",
+              "model-00003-of-00007.safetensors": "5e23a4254a2804af3a09845371d6fe72da388a59b2337b3573fe983d65f3688f",
+              "model-00004-of-00007.safetensors": "e019402bddfa9446a7b035916b73a1d70da580b12290674f48d06871522d9346",
+              "model-00005-of-00007.safetensors": "3f7c54535b95728de61f9b895209d5da0a71dcd06615485d410bb17ec0475b22",
+              "model-00006-of-00007.safetensors": "f4613f98e78d439e4e17d8faed1b1503f29835b77bd457596d41ee1062b93393",
+              "model-00007-of-00007.safetensors": "808fcddb7bfa76fc45ab8e0f43369a7a798c4ef70505564a3486d226ebe294db",
+              "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+              "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+              "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+              "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+            },
+            "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/wga_kl",
+            "evaluation_files_sha256": {
+              "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+              "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+              "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+              "model-00001-of-00007.safetensors": "5e3dff212e37f742269fb905b44a95c18da0c4aaa89426a228823538cd810747",
+              "model-00002-of-00007.safetensors": "d7e38bd35eaacbed3cd49e850fff614c48228bf6d1a4030fc15601335debf559",
+              "model-00003-of-00007.safetensors": "5e23a4254a2804af3a09845371d6fe72da388a59b2337b3573fe983d65f3688f",
+              "model-00004-of-00007.safetensors": "e019402bddfa9446a7b035916b73a1d70da580b12290674f48d06871522d9346",
+              "model-00005-of-00007.safetensors": "3f7c54535b95728de61f9b895209d5da0a71dcd06615485d410bb17ec0475b22",
+              "model-00006-of-00007.safetensors": "f4613f98e78d439e4e17d8faed1b1503f29835b77bd457596d41ee1062b93393",
+              "model-00007-of-00007.safetensors": "808fcddb7bfa76fc45ab8e0f43369a7a798c4ef70505564a3486d226ebe294db",
+              "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+              "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+              "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+              "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+              "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+              "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+            },
+            "added_assets": {
+              "preprocessor_config.json": {
+                "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/preprocessor_config.json",
+                "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+              },
+              "processor_config.json": {
+                "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/processor_config.json",
+                "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+              }
+            },
+            "processor_asset_base_binding": "measured_native_base_files",
+            "original_weight_config_tokenizer_files_unchanged": true
+          },
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/wga_kl/repeat-2/warbias_triplets_uk/run.json",
+              "sha256": "aadfd3bf29bfe05f353c80d3a4a7cb7a1223be163688a2cc468702a728aa3937"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/wga_kl/repeat-2/warbias_triplets_uk/report.json",
+              "sha256": "bb3a7ed3210ddb5976a4ec9c8065342d47c9be033f00dd2a1bc60e3a65f1312a"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/wga_kl/repeat-2/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "c999097e3e8d7e5e07b38becd90423a0e830cf149a4602f15188eeab73f7706a"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:51:23.529000+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/qualification/wga_kl/repeat-2/warbias_triplets_uk.log",
+            "sha256": "5a3089130e7e0f4e55de7ecca61c1cdc6484f6bca14439883c3f55a1cdf2e471"
+          }
+        }
+      ],
+      "max_absolute_score_difference": 0.0,
+      "exact_generation_match": null
+    }
+  },
+  "tasks": {
+    "rmu": {
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "run",
+        "--task",
+        "warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+        "--model",
+        "vllm",
+        "--model-args",
+        "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/rmu,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+        "--batch-size",
+        "8",
+        "--chunk-size",
+        "128",
+        "--max-output-tokens",
+        "512",
+        "--generation-prompt-format",
+        "native-chat",
+        "--answer-policy",
+        "abc_option_text_v2",
+        "--bootstrap",
+        "1000",
+        "--seed",
+        "42",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/rmu/warbias_triplets_uk"
+      ],
+      "gpu": "1",
+      "runtime_environment": {
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+      },
+      "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/rmu/warbias_triplets_uk",
+      "started_at_utc": "2026-10-31T13:51:23.547280+00:00",
+      "returncode": 0,
+      "prediction_rows": 137,
+      "selected_ids_sha256": "988ff509e8b8c33c6a42cc57dedb9177241b163013c822ff88a9c3098b90ac64",
+      "native_files_sha256": {
+        "run.json": "b1aab1766ecf2e14a734baaac933f617f9dfea98110b9d6d62bee18c9862b105",
+        "report.json": "4f0eac5c4d1e479e1f71e52f7d618decda0f1aa5ad861d6c26d4ae51a06e01ab",
+        "predictions.jsonl": "293c4d075a950a4fa9bac72d2d98f5870ed9527562dff618f0e6f44d2d14d7a8"
+      },
+      "model_identity_recorded": true,
+      "evaluation_assets_recorded": true,
+      "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+      "inference_view": {
+        "status": "validated_inference_view_of_actual_training_checkpoint",
+        "kind": "add_pinned_processor_assets",
+        "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+        "method": "rmu",
+        "sidecar": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+          "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+        },
+        "original_receipt": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/rmu/run.json",
+          "sha256": "b243bf61af6a23cf87533e7c16ab3850d657396215a3d25d95b42dcf20abbc1d"
+        },
+        "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/rmu/checkpoint",
+        "original_files_sha256": {
+          "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+          "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+          "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+          "model-00001-of-00005.safetensors": "beedc0137aca3c07aa92587f1f21e5850b95fdff04e29131b3b62ee519bf8937",
+          "model-00002-of-00005.safetensors": "a9802d278b246de783fde8f1f19f819fc8d57edd3aee1a595b914f2cf3654a56",
+          "model-00003-of-00005.safetensors": "5cb8eebd80f319d81b4eb24136aae9d48f80d5d238a4779eb46674fcec1155fd",
+          "model-00004-of-00005.safetensors": "e3dc5d4e000e6f98814aac2a59ba7b49b616d3e5fba3331fac71a187adaf20a6",
+          "model-00005-of-00005.safetensors": "a83ea23bc2a2b462f36924990437d83e1add8404361f26ce3a57dcd3064ef341",
+          "model.safetensors.index.json": "a14357220054c5baf74612fa0193d94ff9277a2d1d45aaf8f6d32ae5a379f53c",
+          "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+          "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+          "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+        },
+        "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/rmu",
+        "evaluation_files_sha256": {
+          "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+          "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+          "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+          "model-00001-of-00005.safetensors": "beedc0137aca3c07aa92587f1f21e5850b95fdff04e29131b3b62ee519bf8937",
+          "model-00002-of-00005.safetensors": "a9802d278b246de783fde8f1f19f819fc8d57edd3aee1a595b914f2cf3654a56",
+          "model-00003-of-00005.safetensors": "5cb8eebd80f319d81b4eb24136aae9d48f80d5d238a4779eb46674fcec1155fd",
+          "model-00004-of-00005.safetensors": "e3dc5d4e000e6f98814aac2a59ba7b49b616d3e5fba3331fac71a187adaf20a6",
+          "model-00005-of-00005.safetensors": "a83ea23bc2a2b462f36924990437d83e1add8404361f26ce3a57dcd3064ef341",
+          "model.safetensors.index.json": "a14357220054c5baf74612fa0193d94ff9277a2d1d45aaf8f6d32ae5a379f53c",
+          "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+          "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+          "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+          "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+          "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+        },
+        "added_assets": {
+          "preprocessor_config.json": {
+            "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/preprocessor_config.json",
+            "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+          },
+          "processor_config.json": {
+            "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/processor_config.json",
+            "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          }
+        },
+        "processor_asset_base_binding": "measured_native_base_files",
+        "original_weight_config_tokenizer_files_unchanged": true
+      },
+      "status": "completed",
+      "files": {
+        "run.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/rmu/warbias_triplets_uk/run.json",
+          "sha256": "b1aab1766ecf2e14a734baaac933f617f9dfea98110b9d6d62bee18c9862b105"
+        },
+        "report.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/rmu/warbias_triplets_uk/report.json",
+          "sha256": "4f0eac5c4d1e479e1f71e52f7d618decda0f1aa5ad861d6c26d4ae51a06e01ab"
+        },
+        "predictions.jsonl": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/rmu/warbias_triplets_uk/predictions.jsonl",
+          "sha256": "293c4d075a950a4fa9bac72d2d98f5870ed9527562dff618f0e6f44d2d14d7a8"
+        }
+      },
+      "finished_at_utc": "2026-10-31T13:53:16.183976+00:00",
+      "log": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/rmu/warbias_triplets_uk.log",
+        "sha256": "bfaab6efd997cb6aa34e74a320b2cc8d8a05e37638435b10b58daa8372ae4849"
+      }
+    },
+    "baseline": {
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "run",
+        "--task",
+        "warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+        "--model",
+        "vllm",
+        "--model-args",
+        "pretrained=/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+        "--batch-size",
+        "8",
+        "--chunk-size",
+        "128",
+        "--max-output-tokens",
+        "512",
+        "--generation-prompt-format",
+        "native-chat",
+        "--answer-policy",
+        "abc_option_text_v2",
+        "--bootstrap",
+        "1000",
+        "--seed",
+        "42",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/baseline/warbias_triplets_uk"
+      ],
+      "gpu": "0",
+      "runtime_environment": {
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+      },
+      "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/baseline/warbias_triplets_uk",
+      "started_at_utc": "2026-10-31T13:51:23.546754+00:00",
+      "returncode": 0,
+      "prediction_rows": 137,
+      "selected_ids_sha256": "988ff509e8b8c33c6a42cc57dedb9177241b163013c822ff88a9c3098b90ac64",
+      "native_files_sha256": {
+        "run.json": "dd4e17ffa7aef44559be3d7fb796b116c3d4a3f98ed3f55d8450973fbb9b31d2",
+        "report.json": "bfd87efd77b1c3aabfb169649cb73fd554c14aea2f1e4079b847d6ebf7e01a44",
+        "predictions.jsonl": "a579b921272edfcafb1cc0ed6658c4b5d4a278983f8f58bb77ee76c27c8c419c"
+      },
+      "model_identity_recorded": true,
+      "evaluation_assets_recorded": true,
+      "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+      "status": "completed",
+      "files": {
+        "run.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/baseline/warbias_triplets_uk/run.json",
+          "sha256": "dd4e17ffa7aef44559be3d7fb796b116c3d4a3f98ed3f55d8450973fbb9b31d2"
+        },
+        "report.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/baseline/warbias_triplets_uk/report.json",
+          "sha256": "bfd87efd77b1c3aabfb169649cb73fd554c14aea2f1e4079b847d6ebf7e01a44"
+        },
+        "predictions.jsonl": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/baseline/warbias_triplets_uk/predictions.jsonl",
+          "sha256": "a579b921272edfcafb1cc0ed6658c4b5d4a278983f8f58bb77ee76c27c8c419c"
+        }
+      },
+      "finished_at_utc": "2026-10-31T13:53:19.368697+00:00",
+      "log": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/baseline/warbias_triplets_uk.log",
+        "sha256": "47fb718acdcb79ba3c2d613b28801c5bdf3bc256f29ca9ed35865ca6511d6b0a"
+      }
+    },
+    "wga_kl": {
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "run",
+        "--task",
+        "warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+        "--model",
+        "vllm",
+        "--model-args",
+        "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/wga_kl,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+        "--batch-size",
+        "8",
+        "--chunk-size",
+        "128",
+        "--max-output-tokens",
+        "512",
+        "--generation-prompt-format",
+        "native-chat",
+        "--answer-policy",
+        "abc_option_text_v2",
+        "--bootstrap",
+        "1000",
+        "--seed",
+        "42",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/wga_kl/warbias_triplets_uk"
+      ],
+      "gpu": "3",
+      "runtime_environment": {
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+      },
+      "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/wga_kl/warbias_triplets_uk",
+      "started_at_utc": "2026-10-31T13:51:23.547843+00:00",
+      "returncode": 0,
+      "prediction_rows": 137,
+      "selected_ids_sha256": "988ff509e8b8c33c6a42cc57dedb9177241b163013c822ff88a9c3098b90ac64",
+      "native_files_sha256": {
+        "run.json": "2c10a4bfe689fe27b2194b80d99cc1d2986f6ac4e9b163f35a6cfb58d800131c",
+        "report.json": "d64497585c1d1f31429473da6ae83a6a642a7862b01f2992835d326eec91efbc",
+        "predictions.jsonl": "1885ef1ab966261c92f4bbf34576cfdab5bf3acf2162d7dd810235f6ada519d2"
+      },
+      "model_identity_recorded": true,
+      "evaluation_assets_recorded": true,
+      "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+      "inference_view": {
+        "status": "validated_inference_view_of_actual_training_checkpoint",
+        "kind": "add_pinned_processor_assets",
+        "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+        "method": "wga_kl",
+        "sidecar": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+          "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+        },
+        "original_receipt": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/wga_kl/intervention.json",
+          "sha256": "b9d0a9ac110d67c4b7e422a5186c9e920b102fc3927202bd6e07371e4bd91913"
+        },
+        "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/wga_kl/merged_checkpoint",
+        "original_files_sha256": {
+          "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+          "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+          "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+          "model-00001-of-00007.safetensors": "5e3dff212e37f742269fb905b44a95c18da0c4aaa89426a228823538cd810747",
+          "model-00002-of-00007.safetensors": "d7e38bd35eaacbed3cd49e850fff614c48228bf6d1a4030fc15601335debf559",
+          "model-00003-of-00007.safetensors": "5e23a4254a2804af3a09845371d6fe72da388a59b2337b3573fe983d65f3688f",
+          "model-00004-of-00007.safetensors": "e019402bddfa9446a7b035916b73a1d70da580b12290674f48d06871522d9346",
+          "model-00005-of-00007.safetensors": "3f7c54535b95728de61f9b895209d5da0a71dcd06615485d410bb17ec0475b22",
+          "model-00006-of-00007.safetensors": "f4613f98e78d439e4e17d8faed1b1503f29835b77bd457596d41ee1062b93393",
+          "model-00007-of-00007.safetensors": "808fcddb7bfa76fc45ab8e0f43369a7a798c4ef70505564a3486d226ebe294db",
+          "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+          "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+          "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+          "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+        },
+        "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/wga_kl",
+        "evaluation_files_sha256": {
+          "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+          "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+          "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+          "model-00001-of-00007.safetensors": "5e3dff212e37f742269fb905b44a95c18da0c4aaa89426a228823538cd810747",
+          "model-00002-of-00007.safetensors": "d7e38bd35eaacbed3cd49e850fff614c48228bf6d1a4030fc15601335debf559",
+          "model-00003-of-00007.safetensors": "5e23a4254a2804af3a09845371d6fe72da388a59b2337b3573fe983d65f3688f",
+          "model-00004-of-00007.safetensors": "e019402bddfa9446a7b035916b73a1d70da580b12290674f48d06871522d9346",
+          "model-00005-of-00007.safetensors": "3f7c54535b95728de61f9b895209d5da0a71dcd06615485d410bb17ec0475b22",
+          "model-00006-of-00007.safetensors": "f4613f98e78d439e4e17d8faed1b1503f29835b77bd457596d41ee1062b93393",
+          "model-00007-of-00007.safetensors": "808fcddb7bfa76fc45ab8e0f43369a7a798c4ef70505564a3486d226ebe294db",
+          "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+          "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+          "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+          "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+          "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+          "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+        },
+        "added_assets": {
+          "preprocessor_config.json": {
+            "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/preprocessor_config.json",
+            "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+          },
+          "processor_config.json": {
+            "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/processor_config.json",
+            "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          }
+        },
+        "processor_asset_base_binding": "measured_native_base_files",
+        "original_weight_config_tokenizer_files_unchanged": true
+      },
+      "status": "completed",
+      "files": {
+        "run.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/wga_kl/warbias_triplets_uk/run.json",
+          "sha256": "2c10a4bfe689fe27b2194b80d99cc1d2986f6ac4e9b163f35a6cfb58d800131c"
+        },
+        "report.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/wga_kl/warbias_triplets_uk/report.json",
+          "sha256": "d64497585c1d1f31429473da6ae83a6a642a7862b01f2992835d326eec91efbc"
+        },
+        "predictions.jsonl": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/wga_kl/warbias_triplets_uk/predictions.jsonl",
+          "sha256": "1885ef1ab966261c92f4bbf34576cfdab5bf3acf2162d7dd810235f6ada519d2"
+        }
+      },
+      "finished_at_utc": "2026-10-31T13:53:19.703094+00:00",
+      "log": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/wga_kl/warbias_triplets_uk.log",
+        "sha256": "340621cab799237f0ca65e431b9c621e2c1bfdd468b51d330c0a093220ed21b5"
+      }
+    },
+    "task_vector": {
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "run",
+        "--task",
+        "warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+        "--model",
+        "vllm",
+        "--model-args",
+        "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/task_vector,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+        "--batch-size",
+        "8",
+        "--chunk-size",
+        "128",
+        "--max-output-tokens",
+        "512",
+        "--generation-prompt-format",
+        "native-chat",
+        "--answer-policy",
+        "abc_option_text_v2",
+        "--bootstrap",
+        "1000",
+        "--seed",
+        "42",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/task_vector/warbias_triplets_uk"
+      ],
+      "gpu": "2",
+      "runtime_environment": {
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+      },
+      "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/task_vector/warbias_triplets_uk",
+      "started_at_utc": "2026-10-31T13:51:23.548300+00:00",
+      "returncode": 0,
+      "prediction_rows": 137,
+      "selected_ids_sha256": "988ff509e8b8c33c6a42cc57dedb9177241b163013c822ff88a9c3098b90ac64",
+      "native_files_sha256": {
+        "run.json": "eee3f002c2c5d23bac1f2e93387a1f7942e839e4b95b6d580632aa6a7d7d29aa",
+        "report.json": "45b83f09ffc90455a32c62547517d3558c2d988a208ddc407e836ce5a2b21b67",
+        "predictions.jsonl": "a579b921272edfcafb1cc0ed6658c4b5d4a278983f8f58bb77ee76c27c8c419c"
+      },
+      "model_identity_recorded": true,
+      "evaluation_assets_recorded": true,
+      "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+      "inference_view": {
+        "status": "validated_inference_view_of_actual_training_checkpoint",
+        "kind": "add_pinned_processor_assets",
+        "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+        "method": "task_vector",
+        "sidecar": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+          "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+        },
+        "original_receipt": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/task_vector/intervention.json",
+          "sha256": "53a175b9dbef84adbf1da4553ce84ba2f7a0d2859928297f86518be48c137b3f"
+        },
+        "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/task_vector/merged_checkpoint",
+        "original_files_sha256": {
+          "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+          "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+          "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+          "model-00001-of-00007.safetensors": "12b25f16ca4012bac8e10d5099e489c8947a728313e1652ad975d800903cd034",
+          "model-00002-of-00007.safetensors": "93f81645e429d47597e866ad5c304d9bf1e8e74b17e1bc37c51d48778b396e9a",
+          "model-00003-of-00007.safetensors": "0b91994d29d91cd704d436dc54310c482abe8d03963a260e0e3f8c2fa3935505",
+          "model-00004-of-00007.safetensors": "c575e7abc09c0f19abbfee0ada3eaf6da0eabd3a136880e26eb47dbe61433e7f",
+          "model-00005-of-00007.safetensors": "6ed506b9b1090ff508024df15ddb1942123933745fd70e5afb65cd49a8640a5f",
+          "model-00006-of-00007.safetensors": "04c44803b8870dda6d95d64ef1b31e709ed6f931c3b036aded5bfe6805cdc11a",
+          "model-00007-of-00007.safetensors": "c45f6f5ee5afe34279d76ab0590df51b1fbb3138f00cbba0e2b9708b7f65b26b",
+          "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+          "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+          "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+          "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+        },
+        "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/task_vector",
+        "evaluation_files_sha256": {
+          "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+          "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+          "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+          "model-00001-of-00007.safetensors": "12b25f16ca4012bac8e10d5099e489c8947a728313e1652ad975d800903cd034",
+          "model-00002-of-00007.safetensors": "93f81645e429d47597e866ad5c304d9bf1e8e74b17e1bc37c51d48778b396e9a",
+          "model-00003-of-00007.safetensors": "0b91994d29d91cd704d436dc54310c482abe8d03963a260e0e3f8c2fa3935505",
+          "model-00004-of-00007.safetensors": "c575e7abc09c0f19abbfee0ada3eaf6da0eabd3a136880e26eb47dbe61433e7f",
+          "model-00005-of-00007.safetensors": "6ed506b9b1090ff508024df15ddb1942123933745fd70e5afb65cd49a8640a5f",
+          "model-00006-of-00007.safetensors": "04c44803b8870dda6d95d64ef1b31e709ed6f931c3b036aded5bfe6805cdc11a",
+          "model-00007-of-00007.safetensors": "c45f6f5ee5afe34279d76ab0590df51b1fbb3138f00cbba0e2b9708b7f65b26b",
+          "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+          "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+          "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+          "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+          "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+          "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+        },
+        "added_assets": {
+          "preprocessor_config.json": {
+            "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/preprocessor_config.json",
+            "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+          },
+          "processor_config.json": {
+            "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/processor_config.json",
+            "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          }
+        },
+        "processor_asset_base_binding": "measured_native_base_files",
+        "original_weight_config_tokenizer_files_unchanged": true
+      },
+      "status": "completed",
+      "files": {
+        "run.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/task_vector/warbias_triplets_uk/run.json",
+          "sha256": "eee3f002c2c5d23bac1f2e93387a1f7942e839e4b95b6d580632aa6a7d7d29aa"
+        },
+        "report.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/task_vector/warbias_triplets_uk/report.json",
+          "sha256": "45b83f09ffc90455a32c62547517d3558c2d988a208ddc407e836ce5a2b21b67"
+        },
+        "predictions.jsonl": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/task_vector/warbias_triplets_uk/predictions.jsonl",
+          "sha256": "a579b921272edfcafb1cc0ed6658c4b5d4a278983f8f58bb77ee76c27c8c419c"
+        }
+      },
+      "finished_at_utc": "2026-10-31T13:53:19.955553+00:00",
+      "log": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/task_vector/warbias_triplets_uk.log",
+        "sha256": "3f9e01b3416799c3f20db6bd0be22dc2b49db8f40e1d070fb4fe808c4e1468d8"
+      }
+    }
+  },
+  "pairs": {
+    "rmu": {
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "paper",
+        "compare-native",
+        "--before-run",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/baseline/warbias_triplets_uk",
+        "--after-run",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/rmu/warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+        "--bootstrap",
+        "1000",
+        "--seed",
+        "42",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/rmu"
+      ],
+      "returncode": 0,
+      "status": "analyzed",
+      "report": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/rmu/paired.json",
+        "sha256": "12b8b662ccf15da932d13cb6ad88abaaa0fb96891b9b078b42ae503496515b4c"
+      }
+    },
+    "task_vector": {
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "paper",
+        "compare-native",
+        "--before-run",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/baseline/warbias_triplets_uk",
+        "--after-run",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/task_vector/warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+        "--bootstrap",
+        "1000",
+        "--seed",
+        "42",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/task_vector"
+      ],
+      "returncode": 0,
+      "status": "analyzed",
+      "report": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/task_vector/paired.json",
+        "sha256": "ef54932e5a036b496759e17eb9adc5f591810953ad9c617533a1d3d53c5dd61d"
+      }
+    },
+    "wga_kl": {
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "paper",
+        "compare-native",
+        "--before-run",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/baseline/warbias_triplets_uk",
+        "--after-run",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/native/wga_kl/warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+        "--bootstrap",
+        "1000",
+        "--seed",
+        "42",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/wga_kl"
+      ],
+      "returncode": 0,
+      "status": "analyzed",
+      "report": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/wga_kl/paired.json",
+        "sha256": "89dd3ab983e89562368dff7503aee0faf1241bcf55bfaa540a146d22fb7456cd"
+      }
+    }
+  },
+  "no_update_passed": true,
+  "qualification_scope": "two development triplets per checkpoint, likelihood only",
+  "runtime_environment": {
+    "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+  },
+  "task_vector_selection_input": false,
+  "heldout_evaluation": false,
+  "scientific_calibration_established": false,
+  "baseline_lineage": "Full baseline hashes match both WGA and task-vector trainer source_model_files; RMU additionally binds the same matrix model path/pins and its exact saved output, without an independent recorded source-weight hash map.",
+  "started_at_utc": "2026-10-31T13:45:35.907004+00:00",
+  "driver": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v3/deploy/unlearning_primary/training_diagnostic.py",
+    "sha256": "b66196b2aa22b822114bad06d63437f4c9ad95afcdb952d16332b71e77c3fbf0"
+  },
+  "finished_at_utc": "2026-10-31T13:53:28.605925+00:00"
+}

@@ -1,0 +1,162 @@
+{
+  "kind": "real_saved_analysis_end_to_end_qualification",
+  "status": "qualified_saved_only_analysis",
+  "started_at_utc": "2026-10-31T14:57:49.753687+00:00",
+  "analysis_commit": "8f5915e89bc35713de32155ef5ebeb16202556e0",
+  "analysis_package": {
+    "schema_version": 1,
+    "analysis_commit": "8f5915e89bc35713de32155ef5ebeb16202556e0",
+    "parent_analysis_commit": "b0bdb6431e1e65eafa1a25ef6a3f5a3690202271",
+    "historical_kernel_commit": "88224db75bd80e85f5227897188904e9c470f4d1",
+    "source_archive": "fair_uk_8f5915e89.tar.gz",
+    "source_archive_scope": [
+      "lm_eval",
+      "docs",
+      "pyproject.toml",
+      "tests/fair_uk/test_all_metrics_interpreter.py"
+    ],
+    "source_archive_sha256": "822279cb6276fcf2065121ce618c3bb1a676070a473c9484cea72662c562dd8d",
+    "model_requests": 0,
+    "repair_scope": "Preserve the configured collector virtual-environment executable path; no source data, model calls, scoring or metric math changes.",
+    "source_delta": {
+      "changed": [
+        "lm_eval/fair_uk/all_metrics.py"
+      ],
+      "added": [
+        "tests/fair_uk/test_all_metrics_interpreter.py"
+      ],
+      "removed": []
+    },
+    "unchanged_native_kernels_sha256": {
+      "collector_export.py": "e1409d43695f5862ad6d7771e7a83e038e27a3b856defd380aab32c20e9444e9",
+      "checkpoint_views.py": "3f7ea32922331900fbeaa3473eabc68e64b1c4fc5ffcf42e79c8dfc078b0e16c",
+      "intervention_metrics.py": "bb552a303ac2040b328bb9d127140ad4b248f12dd073ee797d86a0580b4e90d6",
+      "transfer_metrics.py": "01acff8ac023a60e0dd13b2fb2bded168039637e5b6a33da22b3c3517eeea522",
+      "analysis_inputs.py": "1b34236f29040b4f2773a118ae480e32c327b0effba124e0ab73beb7be7133d2",
+      "baseline.py": "6b21336dc1f486c86f5ebcae29c8d80082d2850c508eade242921556490df57d",
+      "study_metric_sources.json": "c27065da8446fba5c1a2fdbb450e610296c97f89c9f64f3e1009b36afc55aa32",
+      "metrics.py": "85936490709f9d9ec20c35e6ad832b7775b0770a8886ce5d6277a2bf1f0c994f",
+      "data.py": "d16ca25ae896f529f03d00b05d914cd02e15c75a280102dc7dafd4fd85724be4",
+      "runner.py": "3c4721a0345134197d6371c46e16ece21b10a9b4c163b4f44ad963d9bf18312d"
+    },
+    "all_metrics_sha256": "018e339b38e985bba97b185cdf342ecb693233fa18e5fff5126d2b21c514224d"
+  },
+  "analysis_checksums_sha256": "b2830c0223d135836ec5568ad0eff48b2250bb251c0fd06bb841c20196c6a625",
+  "config": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_metrics_v3/llama31_8b_instruct/warbias-metrics-2611129/rmu-config.json",
+    "sha256": "dd0c5c7d049afcf78ae22b949f675cb7242565f15a97673c1f6a3458c3a19811"
+  },
+  "command": [
+    "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+    "-m",
+    "lm_eval.fair_uk",
+    "paper",
+    "all-metrics",
+    "--config",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_metrics_v3/llama31_8b_instruct/warbias-metrics-2611129/rmu-config.json",
+    "--output",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_qualification/warbias_primary_20261031_v2_llama_rmu"
+  ],
+  "new_scheduler_jobs": 0,
+  "new_model_calls": 0,
+  "gpu_visible_devices": "",
+  "purpose": "CPU saved-only qualification; not new native collection or calibration",
+  "environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "PYTHONPATH": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_analysis_v2/evaluator",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "HF_DATASETS_OFFLINE": "1",
+    "HF_HUB_DISABLE_IMPLICIT_TOKEN": "1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "analysis_returncode": 0,
+  "native_exports": {
+    "warbias_benign_en": {
+      "validated_pair_sha256": "67212570033f735c15bfdcc9b309b25d7d5d3c5811a24a686db189f436769d0d",
+      "analysis_sha256": "a64bd99df04c7ff9e2f7f42fd5922b9ee108ad55fea0add35ac760b369b39102"
+    },
+    "warbias_benign_uk": {
+      "validated_pair_sha256": "a54fb9171359cbcabf2406e6e731e4fae1d236510e7ff0e08cb0f87259e47802",
+      "analysis_sha256": "e23d793b94614173521e90e5742eb6d4f283973c08eab62d77139108aedf0444"
+    },
+    "warbias_cross_actor_en": {
+      "validated_pair_sha256": "8384ff2e516d3855ae903f6627971d92a9b8da47099104fece1f38bddc2304e9",
+      "analysis_sha256": "e8352ec4810dd5cb8422c38da1cdbee362301f656593f001cc999e1561662e23"
+    },
+    "warbias_cross_actor_uk": {
+      "validated_pair_sha256": "884fabf0c2d0c45281995d54deaef5c44bf4476f5a3916ff223032ecd1ba7a1d",
+      "analysis_sha256": "b3ff16070f25edfd6e774a594349aac6744196efd9857feeec5fdc7c67f53641"
+    },
+    "warbias_en": {
+      "validated_pair_sha256": "e38d2f4f24a6f2fbe925272bea5d98887c075c7733796df5e010c76643a19b99",
+      "analysis_sha256": "c11b485603cf86337395fd941d3cd1216aa5366555bc5b1decb60fecc1b41abb"
+    },
+    "warbias_expanded_qa_en": {
+      "validated_pair_sha256": "a67c0ce66112441d73123e042dfb3da61cb5a3066d3b668d38a12a949501b3a1",
+      "analysis_sha256": "38568c6bfb2135dc213b0857ff362c3a2d9e8f88561a7032d98419efcf60ecc6"
+    },
+    "warbias_expanded_qa_uk": {
+      "validated_pair_sha256": "6b0c8fc9d29ca06e53a28489167ca4813b5f245dc733d51f26aac4530a52998b",
+      "analysis_sha256": "6f847b00efaca5bb3ad1f1ebfa6bf819b93babeb004517ff79ab639c6a0e5a1a"
+    },
+    "warbias_intersectional_en": {
+      "validated_pair_sha256": "123f4159574730b950faeeb579a10c9c9ef6453a7f0052eaba0f475d82f8a5ca",
+      "analysis_sha256": "a30159fcf4836cacae21c204a701d7ff440d60e6439afeaeec7c735288ddfb00"
+    },
+    "warbias_intersectional_uk": {
+      "validated_pair_sha256": "db3a992932445749ab510d717ee7bc816be3a00350725c2d7803297cae5d2f8a",
+      "analysis_sha256": "9d0b36bfa5eb94cd4e349f9caf6fbcd394293cae0c199f137c8e575c02498235"
+    },
+    "warbias_triplets_en": {
+      "validated_pair_sha256": "79afcce688818085db1cadf8995934df6adb9e7922eac9d334b5e37704f22000",
+      "analysis_sha256": "03e532413179ccb1747500eb2fe9a282a7609d8235bfeeb2ae1b97c1eb16e74b"
+    },
+    "warbias_triplets_uk": {
+      "validated_pair_sha256": "48df739b0bd6613dc272c1b99028d43eb34e9ba480c7ec0ff5c98092c23de5ef",
+      "analysis_sha256": "61f1a34aca56be6416f5754e89c2d6583fa4a2c92adb37e951793147e441293e"
+    },
+    "warbias_uk": {
+      "validated_pair_sha256": "a8a0ca73860fa82509c1585e9cdce343588a63267659c975036a0876ed02b338",
+      "analysis_sha256": "8a349372ac6c4111e8e34394a2beaf86faad5c2b9f49d4c42ca110eb13546031"
+    }
+  },
+  "metric_statuses": {
+    "forget_efficacy": "available",
+    "NNR": "pending",
+    "retain_utility": "partial",
+    "LMS": "available",
+    "ICAT": "available",
+    "M1": "pending",
+    "M1b": "pending",
+    "M2": "pending",
+    "M3a": "pending",
+    "M3b": "pending",
+    "M3c": "pending",
+    "M3d": "partial",
+    "RI": "pending",
+    "M4a": "partial",
+    "M4b": "partial",
+    "BBQ": "partial",
+    "training_imbalance": "partial",
+    "severity": "pending"
+  },
+  "available_native_tasks": 12,
+  "metric_inventory_entries": 18,
+  "report": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_qualification/warbias_primary_20261031_v2_llama_rmu/all_metrics.json",
+    "sha256": "73796e2a8993ea5a7cfa9cab71d6bd341d0623a9435741cfb4bcf42dc1ceb720"
+  },
+  "finished_at_utc": "2026-10-31T15:17:51.615835+00:00",
+  "original_inputs_unchanged": true,
+  "changed_inputs": [],
+  "input_files_verified": 31462,
+  "proof_files_sha256": {
+    "analysis.log": "79a946371ba50c33c27c3e9f1bea784b8c6d11db58e655d0cfdbf818de591ec2",
+    "inputs_after.json": "fa9bacfc3a74fb82733732ab571a7ad55ee718371234abffeb0b321093b0496d",
+    "input_config.original.json": "dd0c5c7d049afcf78ae22b949f675cb7242565f15a97673c1f6a3458c3a19811",
+    "inputs_before.json": "fa9bacfc3a74fb82733732ab571a7ad55ee718371234abffeb0b321093b0496d"
+  }
+}

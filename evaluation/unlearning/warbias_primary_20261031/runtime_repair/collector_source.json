@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "analysis_commit": "b0bdb6431e1e65eafa1a25ef6a3f5a3690202271",
+  "historical_kernel_commit": "88224db75bd80e85f5227897188904e9c470f4d1",
+  "source_archive_sha256": "4a5edaf2616df4a5086f38be42a891486979476b3bdefe1348dd6858e33b69cd",
+  "source_archive": "fair_uk_b0bdb6431.tar.gz",
+  "model_requests": 0,
+  "repair_scope": "Strict optional add-only Gemma processor views and semantic special-token metadata canonicalization; no scoring or intervention math changes."
+}

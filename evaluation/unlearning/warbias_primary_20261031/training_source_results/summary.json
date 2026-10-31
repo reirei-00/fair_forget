@@ -1,0 +1,4679 @@
+{
+  "kind": "direct_extraction_of_all18_saved_native_training_source_pairs",
+  "created_at_utc": "2026-10-31T14:03:47.488935+00:00",
+  "fetched_at_utc": "2026-10-31T14:03:47.083365+00:00",
+  "task": "warbias_triplets_uk",
+  "measurement_purpose": "training_source_diagnostic_not_heldout",
+  "heldout_evaluation": false,
+  "task_vector_selection_input": false,
+  "recomputed_metrics": false,
+  "new_model_calls": 0,
+  "human_validated": false,
+  "native_metric_keys": {
+    "ss": {
+      "native_effect_unit": "percent",
+      "endpoint_display": "percent",
+      "delta_interpretation": "after minus before on percentage scale"
+    },
+    "lms": {
+      "native_effect_unit": "percent",
+      "endpoint_display": "percent",
+      "delta_interpretation": "after minus before on percentage scale"
+    },
+    "icat": {
+      "native_effect_unit": "score_points",
+      "endpoint_display": "score points",
+      "delta_interpretation": "after minus before in score points"
+    }
+  },
+  "rows": [
+    {
+      "model": "qwen3_8b",
+      "method": "rmu",
+      "job_id": "2610275",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 41.15467376490107,
+          "lms": 67.67681995942864,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 30.405295187903885,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 50.0
+        },
+        "after": {
+          "icat": 19.78930193247277,
+          "lms": 41.3903005207353,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 23.905723905723907,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 35.714285714285715
+        }
+      },
+      "native_effects": [
+        {
+          "after": 23.905723905723907,
+          "after_minus_before": -6.4995712821799785,
+          "before": 30.405295187903885,
+          "ci95": [
+            -16.222462722462723,
+            1.9250475772214912
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 41.3903005207353,
+          "after_minus_before": -26.28651943869334,
+          "before": 67.67681995942864,
+          "ci95": [
+            -38.187366679214506,
+            -14.386724386724385
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 19.78930193247277,
+          "after_minus_before": -21.3653718324283,
+          "before": 41.15467376490107,
+          "ci95": [
+            -41.76597090194481,
+            -5.978382304286775
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "qwen3_8b/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/rmu/paired.json",
+        "sha256": "f3e73a61b3523d1f72a4ea42ce7ecaf14b17d01f83f7c00fa2f8322c2869abd3"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "0d699aedb286025c540ed6e9517547de5ef68fd5ec29c928b172acb38779585f",
+        "after": "77379247f57682aa225950a09acce95e1a0cd6c479822cdeda24024f10783935"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+        "model_id": "Qwen/Qwen3-8B",
+        "model_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "config_sha256": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/rmu/run.json",
+        "sha256": "4a5e64fcd4901c95bfab2a3bc3bda710ac7da78f5f90347da96ace07de40cb3e"
+      }
+    },
+    {
+      "model": "qwen3_8b",
+      "method": "task_vector",
+      "job_id": "2610275",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 41.15467376490107,
+          "lms": 67.67681995942864,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 30.405295187903885,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 50.0
+        },
+        "after": {
+          "icat": 41.15467376490107,
+          "lms": 67.67681995942864,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 30.405295187903885,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 50.0
+        }
+      },
+      "native_effects": [
+        {
+          "after": 30.405295187903885,
+          "after_minus_before": 0.0,
+          "before": 30.405295187903885,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 67.67681995942864,
+          "after_minus_before": 0.0,
+          "before": 67.67681995942864,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 41.15467376490107,
+          "after_minus_before": 0.0,
+          "before": 41.15467376490107,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "qwen3_8b/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/task_vector/paired.json",
+        "sha256": "234d34101fde89cb01d8e1ae69acea92f160675067dc0df2ea85a584a3d56194"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "0d699aedb286025c540ed6e9517547de5ef68fd5ec29c928b172acb38779585f",
+        "after": "0d699aedb286025c540ed6e9517547de5ef68fd5ec29c928b172acb38779585f"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+        "model_id": "Qwen/Qwen3-8B",
+        "model_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "config_sha256": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/task_vector/intervention.json",
+        "sha256": "13410db9b1d119c894c78503aa295bb8fda56fa258756293a5f17e1adc772e1d"
+      },
+      "actual_selected_scale": 0.0,
+      "null_intervention_selected": true
+    },
+    {
+      "model": "qwen3_8b",
+      "method": "wga_kl",
+      "job_id": "2610275",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 41.15467376490107,
+          "lms": 67.67681995942864,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 30.405295187903885,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 50.0
+        },
+        "after": {
+          "icat": 41.25475846248384,
+          "lms": 68.18187046447916,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 30.253466340422865,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 50.0
+        }
+      },
+      "native_effects": [
+        {
+          "after": 30.253466340422865,
+          "after_minus_before": -0.15182884748102055,
+          "before": 30.405295187903885,
+          "ci95": [
+            -1.9047619047619087,
+            1.4492753623188364
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 68.18187046447916,
+          "after_minus_before": 0.5050505050505194,
+          "before": 67.67681995942864,
+          "ci95": [
+            0.0,
+            1.5151515151515298
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 41.25475846248384,
+          "after_minus_before": 0.10008469758277272,
+          "before": 41.15467376490107,
+          "ci95": [
+            -2.8536040678897865,
+            2.3231188078299443
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "qwen3_8b/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/wga_kl/paired.json",
+        "sha256": "f5eea6b5729b5877a9745fe76203a4b648b5700e7ba41dea06f08317480bba21"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "0d699aedb286025c540ed6e9517547de5ef68fd5ec29c928b172acb38779585f",
+        "after": "7ed1fb98d743164872054f3ca0bffdf0549f8807fffb6261dc686811fee6aa20"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+        "model_id": "Qwen/Qwen3-8B",
+        "model_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "config_sha256": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/wga_kl/intervention.json",
+        "sha256": "9119dd60300528099576c7af8e32d47edab3c4174bf585a4f8aaccc642db47ec"
+      }
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "rmu",
+      "job_id": "2610278",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 68.66331445261102,
+          "lms": 79.95718050065877,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 42.93755358972751,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        },
+        "after": {
+          "icat": 0.0,
+          "lms": 0.0,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 37.83152435326348,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        }
+      },
+      "native_effects": [
+        {
+          "after": 37.83152435326348,
+          "after_minus_before": -5.106029236464025,
+          "before": 42.93755358972751,
+          "ci95": [
+            -50.81557029926595,
+            39.16143578643576
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 0.0,
+          "after_minus_before": -79.95718050065877,
+          "before": 79.95718050065877,
+          "ci95": [
+            -93.5935441370224,
+            -66.03302042160738
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 0.0,
+          "after_minus_before": -68.66331445261102,
+          "before": 68.66331445261102,
+          "ci95": [
+            -83.30533838849033,
+            -21.20256132756133
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "llama31_8b_instruct/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/rmu/paired.json",
+        "sha256": "e2b60617c97fa635b06e50da30096b080f0d30d3c8349ba78511c347ebc8df09"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "e28475b6bee2976ff3939922990425550235ff6a06f72830785f3e41473282b6",
+        "after": "24db12ca2621150a6b89eebf6cd9f24684fec0855c593bcc26a4c87d734ec855"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659",
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "model_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "tokenizer_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "config_sha256": "29e4c210b0d6ac178b16b2a255a568bdb23b581e50ca1ef6a6d071dd85704e6e"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/run.json",
+        "sha256": "17d321189b631e96f8862550b29cac54687bb312f1ab00be2133b37a2d17f249"
+      }
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "task_vector",
+      "job_id": "2610278",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 68.66331445261102,
+          "lms": 79.95718050065877,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 42.93755358972751,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        },
+        "after": {
+          "icat": 68.66331445261102,
+          "lms": 79.95718050065877,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 42.93755358972751,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        }
+      },
+      "native_effects": [
+        {
+          "after": 42.93755358972751,
+          "after_minus_before": 0.0,
+          "before": 42.93755358972751,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 79.95718050065877,
+          "after_minus_before": 0.0,
+          "before": 79.95718050065877,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 68.66331445261102,
+          "after_minus_before": 0.0,
+          "before": 68.66331445261102,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "llama31_8b_instruct/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/task_vector/paired.json",
+        "sha256": "336ce7dad1ce9abfc6da0260fe2d65d93db830effd48ece7ba18811fd79155a3"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "e28475b6bee2976ff3939922990425550235ff6a06f72830785f3e41473282b6",
+        "after": "e28475b6bee2976ff3939922990425550235ff6a06f72830785f3e41473282b6"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659",
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "model_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "tokenizer_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "config_sha256": "29e4c210b0d6ac178b16b2a255a568bdb23b581e50ca1ef6a6d071dd85704e6e"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/intervention.json",
+        "sha256": "4a0934fa99fde474a91838adcf5855123578d2c7c064168ebae57fae8304c22d"
+      },
+      "actual_selected_scale": 0.0,
+      "null_intervention_selected": true
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "wga_kl",
+      "job_id": "2610278",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 68.66331445261102,
+          "lms": 79.95718050065877,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 42.93755358972751,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        },
+        "after": {
+          "icat": 56.567549007077965,
+          "lms": 75.27824832172658,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 37.572306920133,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        }
+      },
+      "native_effects": [
+        {
+          "after": 37.572306920133,
+          "after_minus_before": -5.365246669594505,
+          "before": 42.93755358972751,
+          "ci95": [
+            -10.247401551749377,
+            -0.9661835748792277
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 75.27824832172658,
+          "after_minus_before": -4.678932178932186,
+          "before": 79.95718050065877,
+          "ci95": [
+            -7.969336219336222,
+            -1.5151515151515151
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 56.567549007077965,
+          "after_minus_before": -12.095765445533054,
+          "before": 68.66331445261102,
+          "ci95": [
+            -17.24692468940215,
+            16.19388240062346
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "llama31_8b_instruct/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/wga_kl/paired.json",
+        "sha256": "41d49a3e7b80d2a05dd7a93cf8537acbea7ba3e82845cd95023578fba3ae3467"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "e28475b6bee2976ff3939922990425550235ff6a06f72830785f3e41473282b6",
+        "after": "60d1f1509c8f623e452bb2734365e753c33082708f2a26e1c84209067e6b975f"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659",
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "model_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "tokenizer_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "config_sha256": "29e4c210b0d6ac178b16b2a255a568bdb23b581e50ca1ef6a6d071dd85704e6e"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/intervention.json",
+        "sha256": "cfa9c2f246298c0e3e662e3d091c0fcb1286e7abffde1607a589d21c975c79e9"
+      }
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "rmu",
+      "job_id": "2610281",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 40.63851676792135,
+          "lms": 75.25587134282786,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 27.000230043708306,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 35.714285714285715
+        },
+        "after": {
+          "icat": 21.279031941907434,
+          "lms": 61.937281719890414,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 17.177886525712612,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 50.0
+        }
+      },
+      "native_effects": [
+        {
+          "after": 17.177886525712612,
+          "after_minus_before": -9.822343517995694,
+          "before": 27.000230043708306,
+          "ci95": [
+            -23.930218332392247,
+            0.483091787439613
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 61.937281719890414,
+          "after_minus_before": -13.318589622937445,
+          "before": 75.25587134282786,
+          "ci95": [
+            -21.651922956270774,
+            -5.02801304975216
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 21.279031941907434,
+          "after_minus_before": -19.35948482601392,
+          "before": 40.63851676792135,
+          "ci95": [
+            -40.43300705069159,
+            -0.9151286724275588
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "gemma3_12b_it/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/rmu/paired.json",
+        "sha256": "b46217b6ffb33bb50826d80a9bb43768639d57a45af41b37b573379740e66e49"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "36d018fcaf3b334f82c67e701157c4c762105cdaf0151224eb0e723aa3731102",
+        "after": "4e5dba5a42a7f314b2c18438305a7c08ec55ecaa02b1f4186766edf80811e845"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "model_id": "google/gemma-3-12b-it",
+        "model_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "tokenizer_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "config_sha256": "39172c4124d3470341bbbb25f2926fd97edf68f0fe3a9fa4cde6acb9b7ed2cc6"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/rmu/run.json",
+        "sha256": "11c17b353e0015268a9dbdcf2a99836cf4bc9390c4d6f02a6c8777c637cacc25"
+      }
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "task_vector",
+      "job_id": "2610281",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 40.63851676792135,
+          "lms": 75.25587134282786,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 27.000230043708306,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 35.714285714285715
+        },
+        "after": {
+          "icat": 27.6972985748835,
+          "lms": 68.16974088713219,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 20.31495074973336,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 50.0
+        }
+      },
+      "native_effects": [
+        {
+          "after": 20.31495074973336,
+          "after_minus_before": -6.685279293974947,
+          "before": 27.000230043708306,
+          "ci95": [
+            -13.241436100131754,
+            -1.0101010101010104
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 68.16974088713219,
+          "after_minus_before": -7.086130455695667,
+          "before": 75.25587134282786,
+          "ci95": [
+            -12.585998441976706,
+            -1.0822510822510907
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 27.6972985748835,
+          "after_minus_before": -12.941218193037852,
+          "before": 40.63851676792135,
+          "ci95": [
+            -24.93397679421523,
+            -2.307400814327357
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "gemma3_12b_it/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/task_vector/paired.json",
+        "sha256": "45e471300f302caff6f604a6caab9190aefc7dac0e1178ac2044b1e4f32d58c7"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "36d018fcaf3b334f82c67e701157c4c762105cdaf0151224eb0e723aa3731102",
+        "after": "39af5961efe6b354a1be4906896bfa4791220e63dcb934c166d5111feec13b6b"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "model_id": "google/gemma-3-12b-it",
+        "model_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "tokenizer_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "config_sha256": "39172c4124d3470341bbbb25f2926fd97edf68f0fe3a9fa4cde6acb9b7ed2cc6"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/task_vector/intervention.json",
+        "sha256": "0976f6a3334a693b4e08e1c3305fa23cd7afeadce25fcfc476e8e0560ec9e51b"
+      },
+      "actual_selected_scale": 1.0,
+      "null_intervention_selected": false
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "wga_kl",
+      "job_id": "2610281",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 40.63851676792135,
+          "lms": 75.25587134282786,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 27.000230043708306,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 35.714285714285715
+        },
+        "after": {
+          "icat": 32.97347300700938,
+          "lms": 70.05311918355397,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 23.534621578099838,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        }
+      },
+      "native_effects": [
+        {
+          "after": 23.534621578099838,
+          "after_minus_before": -3.4656084656084687,
+          "before": 27.000230043708306,
+          "ci95": [
+            -9.470899470899468,
+            0.0
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 70.05311918355397,
+          "after_minus_before": -5.202752159273885,
+          "before": 75.25587134282786,
+          "ci95": [
+            -9.02360562143171,
+            -1.7317742643829577
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 32.97347300700938,
+          "after_minus_before": -7.665043760911971,
+          "before": 40.63851676792135,
+          "ci95": [
+            -17.774818194894273,
+            -0.6724653946876157
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "gemma3_12b_it/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/wga_kl/paired.json",
+        "sha256": "ce899267412dd8c16c5c3a2ca1985f55cb794b2336b4a4f7510213c16f78228c"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "36d018fcaf3b334f82c67e701157c4c762105cdaf0151224eb0e723aa3731102",
+        "after": "e20cea2fbc7ddd799464e0a3cad1fa36f08f1e289bb656a736a5d2b56315ad11"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "model_id": "google/gemma-3-12b-it",
+        "model_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "tokenizer_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "config_sha256": "39172c4124d3470341bbbb25f2926fd97edf68f0fe3a9fa4cde6acb9b7ed2cc6"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/wga_kl/intervention.json",
+        "sha256": "a38175d9b157bc6f17d41aa13bee1641ea9a9ec7b0ed4f26ef643768b2032697"
+      }
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "rmu",
+      "job_id": "2610284",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 61.28196313178642,
+          "lms": 75.95358345358345,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 59.65828052784574,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        },
+        "after": {
+          "icat": 33.76034808708631,
+          "lms": 53.63202417550244,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 31.47405734362256,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 50.0
+        }
+      },
+      "native_effects": [
+        {
+          "after": 31.47405734362256,
+          "after_minus_before": -28.18422318422318,
+          "before": 59.65828052784574,
+          "ci95": [
+            -49.437590187590196,
+            -7.491582491582491
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 53.63202417550244,
+          "after_minus_before": -22.32155927808101,
+          "before": 75.95358345358345,
+          "ci95": [
+            -30.59033006043877,
+            -12.893662295836219
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 33.76034808708631,
+          "after_minus_before": -27.521615044700113,
+          "before": 61.28196313178642,
+          "ci95": [
+            -58.60867544051965,
+            4.744589509210502
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "lapa12b_instruct/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/rmu/paired.json",
+        "sha256": "12b8b662ccf15da932d13cb6ad88abaaa0fb96891b9b078b42ae503496515b4c"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "a579b921272edfcafb1cc0ed6658c4b5d4a278983f8f58bb77ee76c27c8c419c",
+        "after": "293c4d075a950a4fa9bac72d2d98f5870ed9527562dff618f0e6f44d2d14d7a8"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+        "model_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "tokenizer_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "config_sha256": "f02a640a945f26b004b32384e962b6820957ac363df96cd3246298b30a283451"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/rmu/run.json",
+        "sha256": "b243bf61af6a23cf87533e7c16ab3850d657396215a3d25d95b42dcf20abbc1d"
+      }
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "task_vector",
+      "job_id": "2610284",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 61.28196313178642,
+          "lms": 75.95358345358345,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 59.65828052784574,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        },
+        "after": {
+          "icat": 61.28196313178642,
+          "lms": 75.95358345358345,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 59.65828052784574,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        }
+      },
+      "native_effects": [
+        {
+          "after": 59.65828052784574,
+          "after_minus_before": 0.0,
+          "before": 59.65828052784574,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 75.95358345358345,
+          "after_minus_before": 0.0,
+          "before": 75.95358345358345,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 61.28196313178642,
+          "after_minus_before": 0.0,
+          "before": 61.28196313178642,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "lapa12b_instruct/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/task_vector/paired.json",
+        "sha256": "ef54932e5a036b496759e17eb9adc5f591810953ad9c617533a1d3d53c5dd61d"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "a579b921272edfcafb1cc0ed6658c4b5d4a278983f8f58bb77ee76c27c8c419c",
+        "after": "a579b921272edfcafb1cc0ed6658c4b5d4a278983f8f58bb77ee76c27c8c419c"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+        "model_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "tokenizer_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "config_sha256": "f02a640a945f26b004b32384e962b6820957ac363df96cd3246298b30a283451"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/task_vector/intervention.json",
+        "sha256": "53a175b9dbef84adbf1da4553ce84ba2f7a0d2859928297f86518be48c137b3f"
+      },
+      "actual_selected_scale": 0.0,
+      "null_intervention_selected": true
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "wga_kl",
+      "job_id": "2610284",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 61.28196313178642,
+          "lms": 75.95358345358345,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 59.65828052784574,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        },
+        "after": {
+          "icat": 63.964260327394776,
+          "lms": 70.46897546897547,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 54.615304180521576,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 35.71428571428571
+        }
+      },
+      "native_effects": [
+        {
+          "after": 54.615304180521576,
+          "after_minus_before": -5.0429763473241636,
+          "before": 59.65828052784574,
+          "ci95": [
+            -10.64935064935063,
+            -0.9661835748792311
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 70.46897546897547,
+          "after_minus_before": -5.484607984607976,
+          "before": 75.95358345358345,
+          "ci95": [
+            -8.59532828282829,
+            -2.4095418470418406
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 63.964260327394776,
+          "after_minus_before": 2.6822971956083563,
+          "before": 61.28196313178642,
+          "ci95": [
+            -14.101393235592354,
+            12.146755407468103
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "lapa12b_instruct/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/wga_kl/paired.json",
+        "sha256": "89dd3ab983e89562368dff7503aee0faf1241bcf55bfaa540a146d22fb7456cd"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "a579b921272edfcafb1cc0ed6658c4b5d4a278983f8f58bb77ee76c27c8c419c",
+        "after": "1885ef1ab966261c92f4bbf34576cfdab5bf3acf2162d7dd810235f6ada519d2"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+        "model_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "tokenizer_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "config_sha256": "f02a640a945f26b004b32384e962b6820957ac363df96cd3246298b30a283451"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/wga_kl/intervention.json",
+        "sha256": "b9d0a9ac110d67c4b7e422a5186c9e920b102fc3927202bd6e07371e4bd91913"
+      }
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "rmu",
+      "job_id": "2610287",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 51.41660457815027,
+          "lms": 66.09924294706903,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 38.89348976305499,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 50.0
+        },
+        "after": {
+          "icat": 11.260301033675475,
+          "lms": 53.65398289311333,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 10.49344375431332,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 50.0
+        }
+      },
+      "native_effects": [
+        {
+          "after": 10.49344375431332,
+          "after_minus_before": -28.40004600874167,
+          "before": 38.89348976305499,
+          "ci95": [
+            -54.28571428571429,
+            -5.595813204508857
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 53.65398289311333,
+          "after_minus_before": -12.4452600539557,
+          "before": 66.09924294706903,
+          "ci95": [
+            -21.906463705376744,
+            -3.787878787878796
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 11.260301033675475,
+          "after_minus_before": -40.156303544474795,
+          "before": 51.41660457815027,
+          "ci95": [
+            -56.93581983859761,
+            -9.852124540026256
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "mamay12b_v2/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/rmu/paired.json",
+        "sha256": "cffee1b1ecaaae56356514e38a7577ab6450f385b10c9a470fe57dfc038f36d2"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "7d13f012a9f98cbf4487d134f13a87fd053728b0a6e3ff45aa2fe7b2fb621fa2",
+        "after": "0f20373b1a178d0d145572ae386c5dd77879b33516efd54cbf6ad432fed1aa51"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "model_id": "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0",
+        "model_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "tokenizer_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "config_sha256": "89795290a04de188c98bded7b65fcc8366d3b4586d883dcc5751395b9cd76c78"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/rmu/run.json",
+        "sha256": "b646feefa96f04d040130857ffeb316330bcc900c0007fd333282aefa98f128c"
+      }
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "task_vector",
+      "job_id": "2610287",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 51.41660457815027,
+          "lms": 66.09924294706903,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 38.89348976305499,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 50.0
+        },
+        "after": {
+          "icat": 49.315907847166294,
+          "lms": 65.78178262960873,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 37.48447204968944,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 50.0
+        }
+      },
+      "native_effects": [
+        {
+          "after": 37.48447204968944,
+          "after_minus_before": -1.4090177133655502,
+          "before": 38.89348976305499,
+          "ci95": [
+            -3.7037037037037024,
+            0.0
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 65.78178262960873,
+          "after_minus_before": -0.3174603174603021,
+          "before": 66.09924294706903,
+          "ci95": [
+            -0.952380952380949,
+            0.0
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 49.315907847166294,
+          "after_minus_before": -2.1006967309839766,
+          "before": 51.41660457815027,
+          "ci95": [
+            -5.701267632625088,
+            2.993829218995808
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "mamay12b_v2/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/task_vector/paired.json",
+        "sha256": "88f8ef2d6702a69bed0ac837455085d9831c4f712c8888c90102f9d52ef315ec"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "7d13f012a9f98cbf4487d134f13a87fd053728b0a6e3ff45aa2fe7b2fb621fa2",
+        "after": "fac5dc2c6c2f8e0880c9ecd87a699910cd73868ec5cc83041dacf9de79cf1a5c"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "model_id": "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0",
+        "model_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "tokenizer_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "config_sha256": "89795290a04de188c98bded7b65fcc8366d3b4586d883dcc5751395b9cd76c78"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/task_vector/intervention.json",
+        "sha256": "d63d36fc1b9522df2b699463d1df20c1d04a23d96d1c28e63fabb5b2d495aeb1"
+      },
+      "actual_selected_scale": 0.25,
+      "null_intervention_selected": false
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "wga_kl",
+      "job_id": "2610287",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 51.41660457815027,
+          "lms": 66.09924294706903,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 38.89348976305499,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 50.0
+        },
+        "after": {
+          "icat": 31.59380253628661,
+          "lms": 59.541428780559215,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 26.530940878766966,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        }
+      },
+      "native_effects": [
+        {
+          "after": 26.530940878766966,
+          "after_minus_before": -12.362548884288021,
+          "before": 38.89348976305499,
+          "ci95": [
+            -22.18541522889349,
+            -3.7037037037037024
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 59.541428780559215,
+          "after_minus_before": -6.557814166509814,
+          "before": 66.09924294706903,
+          "ci95": [
+            -12.158189033189027,
+            -1.8026538678712647
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 31.59380253628661,
+          "after_minus_before": -19.82280204186366,
+          "before": 51.41660457815027,
+          "ci95": [
+            -36.588647087655666,
+            6.755453449515175
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "mamay12b_v2/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/wga_kl/paired.json",
+        "sha256": "7242abe509c3668c2406a4380903b91d2a170dd6d1e31bfcbb148e1bc0c4f236"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "7d13f012a9f98cbf4487d134f13a87fd053728b0a6e3ff45aa2fe7b2fb621fa2",
+        "after": "731c8413796059d3578b4a25f5471fc991ead3dd0ce61c42f89e75b890ff4ef8"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "model_id": "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0",
+        "model_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "tokenizer_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "config_sha256": "89795290a04de188c98bded7b65fcc8366d3b4586d883dcc5751395b9cd76c78"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/wga_kl/intervention.json",
+        "sha256": "45ad555d3a5c3af5f05dd85a5c9938d3cfa2f6b1f11c0e8294457cc102de6f6e"
+      }
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "rmu",
+      "job_id": "2610290",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 38.00817376080676,
+          "lms": 69.81978166760776,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 27.218771566597656,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        },
+        "after": {
+          "icat": 39.13692496956817,
+          "lms": 71.13275613275614,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 27.50977685760294,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        }
+      },
+      "native_effects": [
+        {
+          "after": 27.50977685760294,
+          "after_minus_before": 0.29100529100528405,
+          "before": 27.218771566597656,
+          "ci95": [
+            -1.904761904761898,
+            2.7777777777777786
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 71.13275613275614,
+          "after_minus_before": 1.3129744651483861,
+          "before": 69.81978166760776,
+          "ci95": [
+            -0.7108350586611465,
+            4.332298136645974
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 39.13692496956817,
+          "after_minus_before": 1.1287512087614076,
+          "before": 38.00817376080676,
+          "ci95": [
+            -2.1610401502981063,
+            4.796686156083943
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "mamay27b_v2/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/rmu/paired.json",
+        "sha256": "6d7613797ec8dcc28c7da62fd424f86e5c8b7493e48d861f4a8010cb03f85f10"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "e3735889889b2b42cc628c6fa6f8ef5f51c44d90a85134edf3fe85543c8e5ad7",
+        "after": "485312f2ae1d0ec93b65e620540576bd791c23c1cc79e7cedb7c4317b4bde4e6"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "model_id": "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0",
+        "model_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "tokenizer_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "config_sha256": "7b912e354dd6973e1bc397b7ee4a8ac6c9f406da95e33e5789a3468f71644d15"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/rmu/run.json",
+        "sha256": "522cd56bbda49ef7c99d0689b3d5c8c8e8019fb6e704e0352abbb0c7e34df6dd"
+      }
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "task_vector",
+      "job_id": "2610290",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 38.00817376080676,
+          "lms": 69.81978166760776,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 27.218771566597656,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        },
+        "after": {
+          "icat": 38.00817376080676,
+          "lms": 69.81978166760776,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 27.218771566597656,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        }
+      },
+      "native_effects": [
+        {
+          "after": 27.218771566597656,
+          "after_minus_before": 0.0,
+          "before": 27.218771566597656,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 69.81978166760776,
+          "after_minus_before": 0.0,
+          "before": 69.81978166760776,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 38.00817376080676,
+          "after_minus_before": 0.0,
+          "before": 38.00817376080676,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "mamay27b_v2/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/task_vector/paired.json",
+        "sha256": "8f171b229b566240db7bf17dd58429c7078478ad9e719521d438a002bfcc2624"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "e3735889889b2b42cc628c6fa6f8ef5f51c44d90a85134edf3fe85543c8e5ad7",
+        "after": "e3735889889b2b42cc628c6fa6f8ef5f51c44d90a85134edf3fe85543c8e5ad7"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "model_id": "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0",
+        "model_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "tokenizer_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "config_sha256": "7b912e354dd6973e1bc397b7ee4a8ac6c9f406da95e33e5789a3468f71644d15"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/task_vector/intervention.json",
+        "sha256": "74deff5468f4ded32290cee23b4056ff5a841dc5adc14de2a8bd47cf832d7c70"
+      },
+      "actual_selected_scale": 0.0,
+      "null_intervention_selected": true
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "wga_kl",
+      "job_id": "2610290",
+      "task": "warbias_triplets_uk",
+      "scope": "component_macro",
+      "coverage": {
+        "components_per_stratum": {
+          "warbias_expansion": 9
+        },
+        "full_source_rows": 137,
+        "selected_rows": 137
+      },
+      "source_cases": 12,
+      "sampling_units": 9,
+      "native_primary": {
+        "before": {
+          "icat": 38.00817376080676,
+          "lms": 69.81978166760776,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 27.218771566597656,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        },
+        "after": {
+          "icat": 35.54184204089686,
+          "lms": 66.84855804421022,
+          "n": 137,
+          "sampling_units": 9,
+          "scope": "component_macro",
+          "source_cases": 12,
+          "ss": 26.583850931677016,
+          "stereotype_tie_rate": 0.0,
+          "worst_profile_ss_distance_from_50": 37.5
+        }
+      },
+      "native_effects": [
+        {
+          "after": 26.583850931677016,
+          "after_minus_before": -0.6349206349206398,
+          "before": 27.218771566597656,
+          "ci95": [
+            -1.904761904761905,
+            0.0
+          ],
+          "metric": "ss",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 66.84855804421022,
+          "after_minus_before": -2.9712236233975347,
+          "before": 69.81978166760776,
+          "ci95": [
+            -5.5692013300708885,
+            -0.7246376811594217
+          ],
+          "metric": "lms",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "percent",
+          "valid_replicates": 1000
+        },
+        {
+          "after": 35.54184204089686,
+          "after_minus_before": -2.4663317199099026,
+          "before": 38.00817376080676,
+          "ci95": [
+            -5.877498362495516,
+            0.0
+          ],
+          "metric": "icat",
+          "scope": "component_macro",
+          "status": "available",
+          "uncertainty_status": "paired_component_percentile",
+          "unit": "score_points",
+          "valid_replicates": 1000
+        }
+      ],
+      "bootstrap": {
+        "draws": 1000,
+        "paired": true,
+        "seed": 42,
+        "unit": "semantic_component_within_stratum"
+      },
+      "source_paired": {
+        "relative_path": "mamay27b_v2/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/wga_kl/paired.json",
+        "sha256": "09da6e4eaa69d667a3018ac925fcb3684e0b6dee05516206891d28ba539ba8a6"
+      },
+      "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+      "native_predictions_sha256": {
+        "before": "e3735889889b2b42cc628c6fa6f8ef5f51c44d90a85134edf3fe85543c8e5ad7",
+        "after": "176e82a46e92881a3243857dc6d24b8389c5e37dfd784b812f1923d792cbfd06"
+      },
+      "source_dataset": {
+        "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+        "counterpart": "warbias_triplets_en",
+        "filename": "data/warbias_triplets_uk.jsonl",
+        "format": "adapted_jsonl_v1",
+        "human_validated": false,
+        "independent_clusters": 9,
+        "language": "uk",
+        "measurement_eligibility": "active",
+        "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+        "measurement_purpose": "training_source_diagnostic_not_heldout",
+        "original_adapted_source": {
+          "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+          "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+        },
+        "pairing": {
+          "alignment": "source_identity_and_scoring_metadata",
+          "en_task": "warbias_triplets_en",
+          "excluded_uk_rows": 0,
+          "filename": "pairs/warbias_triplets.jsonl",
+          "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+          "matched_rows": 137,
+          "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+          "uk_task": "warbias_triplets_uk"
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "release_state": "published_source_evaluator_adaptation",
+        "repo": "FairForget/WarBias",
+        "revision": "164f355623c2da0028821e0942cad493558a6c13",
+        "rows": 137,
+        "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+        "source_provenance": [
+          {
+            "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+          },
+          {
+            "path": "research/september-2026/preparation/case_splits.csv",
+            "published": true,
+            "repo_id": "FairForget/WarBias",
+            "revision": "164f355623c2da0028821e0942cad493558a6c13",
+            "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+          }
+        ],
+        "source_role": "training_signal",
+        "split": "train",
+        "training_gradients_authorized": false
+      },
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "model_id": "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0",
+        "model_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "tokenizer_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "config_sha256": "7b912e354dd6973e1bc397b7ee4a8ac6c9f406da95e33e5789a3468f71644d15"
+      },
+      "actual_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/wga_kl/intervention.json",
+        "sha256": "150de2e0335e7e04fd9b489c5576cfe8290de82072e606590175e3c682f6be34"
+      }
+    }
+  ],
+  "metric_rows": [
+    {
+      "model": "qwen3_8b",
+      "method": "rmu",
+      "job_id": "2610275",
+      "after": 23.905723905723907,
+      "after_minus_before": -6.4995712821799785,
+      "before": 30.405295187903885,
+      "ci95": [
+        -16.222462722462723,
+        1.9250475772214912
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "qwen3_8b/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/rmu/paired.json",
+        "sha256": "f3e73a61b3523d1f72a4ea42ce7ecaf14b17d01f83f7c00fa2f8322c2869abd3"
+      }
+    },
+    {
+      "model": "qwen3_8b",
+      "method": "rmu",
+      "job_id": "2610275",
+      "after": 41.3903005207353,
+      "after_minus_before": -26.28651943869334,
+      "before": 67.67681995942864,
+      "ci95": [
+        -38.187366679214506,
+        -14.386724386724385
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "qwen3_8b/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/rmu/paired.json",
+        "sha256": "f3e73a61b3523d1f72a4ea42ce7ecaf14b17d01f83f7c00fa2f8322c2869abd3"
+      }
+    },
+    {
+      "model": "qwen3_8b",
+      "method": "rmu",
+      "job_id": "2610275",
+      "after": 19.78930193247277,
+      "after_minus_before": -21.3653718324283,
+      "before": 41.15467376490107,
+      "ci95": [
+        -41.76597090194481,
+        -5.978382304286775
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "qwen3_8b/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/rmu/paired.json",
+        "sha256": "f3e73a61b3523d1f72a4ea42ce7ecaf14b17d01f83f7c00fa2f8322c2869abd3"
+      }
+    },
+    {
+      "model": "qwen3_8b",
+      "method": "task_vector",
+      "job_id": "2610275",
+      "after": 30.405295187903885,
+      "after_minus_before": 0.0,
+      "before": 30.405295187903885,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "qwen3_8b/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/task_vector/paired.json",
+        "sha256": "234d34101fde89cb01d8e1ae69acea92f160675067dc0df2ea85a584a3d56194"
+      }
+    },
+    {
+      "model": "qwen3_8b",
+      "method": "task_vector",
+      "job_id": "2610275",
+      "after": 67.67681995942864,
+      "after_minus_before": 0.0,
+      "before": 67.67681995942864,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "qwen3_8b/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/task_vector/paired.json",
+        "sha256": "234d34101fde89cb01d8e1ae69acea92f160675067dc0df2ea85a584a3d56194"
+      }
+    },
+    {
+      "model": "qwen3_8b",
+      "method": "task_vector",
+      "job_id": "2610275",
+      "after": 41.15467376490107,
+      "after_minus_before": 0.0,
+      "before": 41.15467376490107,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "qwen3_8b/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/task_vector/paired.json",
+        "sha256": "234d34101fde89cb01d8e1ae69acea92f160675067dc0df2ea85a584a3d56194"
+      }
+    },
+    {
+      "model": "qwen3_8b",
+      "method": "wga_kl",
+      "job_id": "2610275",
+      "after": 30.253466340422865,
+      "after_minus_before": -0.15182884748102055,
+      "before": 30.405295187903885,
+      "ci95": [
+        -1.9047619047619087,
+        1.4492753623188364
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "qwen3_8b/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/wga_kl/paired.json",
+        "sha256": "f5eea6b5729b5877a9745fe76203a4b648b5700e7ba41dea06f08317480bba21"
+      }
+    },
+    {
+      "model": "qwen3_8b",
+      "method": "wga_kl",
+      "job_id": "2610275",
+      "after": 68.18187046447916,
+      "after_minus_before": 0.5050505050505194,
+      "before": 67.67681995942864,
+      "ci95": [
+        0.0,
+        1.5151515151515298
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "qwen3_8b/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/wga_kl/paired.json",
+        "sha256": "f5eea6b5729b5877a9745fe76203a4b648b5700e7ba41dea06f08317480bba21"
+      }
+    },
+    {
+      "model": "qwen3_8b",
+      "method": "wga_kl",
+      "job_id": "2610275",
+      "after": 41.25475846248384,
+      "after_minus_before": 0.10008469758277272,
+      "before": 41.15467376490107,
+      "ci95": [
+        -2.8536040678897865,
+        2.3231188078299443
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "qwen3_8b/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/wga_kl/paired.json",
+        "sha256": "f5eea6b5729b5877a9745fe76203a4b648b5700e7ba41dea06f08317480bba21"
+      }
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "rmu",
+      "job_id": "2610278",
+      "after": 37.83152435326348,
+      "after_minus_before": -5.106029236464025,
+      "before": 42.93755358972751,
+      "ci95": [
+        -50.81557029926595,
+        39.16143578643576
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "llama31_8b_instruct/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/rmu/paired.json",
+        "sha256": "e2b60617c97fa635b06e50da30096b080f0d30d3c8349ba78511c347ebc8df09"
+      }
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "rmu",
+      "job_id": "2610278",
+      "after": 0.0,
+      "after_minus_before": -79.95718050065877,
+      "before": 79.95718050065877,
+      "ci95": [
+        -93.5935441370224,
+        -66.03302042160738
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "llama31_8b_instruct/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/rmu/paired.json",
+        "sha256": "e2b60617c97fa635b06e50da30096b080f0d30d3c8349ba78511c347ebc8df09"
+      }
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "rmu",
+      "job_id": "2610278",
+      "after": 0.0,
+      "after_minus_before": -68.66331445261102,
+      "before": 68.66331445261102,
+      "ci95": [
+        -83.30533838849033,
+        -21.20256132756133
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "llama31_8b_instruct/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/rmu/paired.json",
+        "sha256": "e2b60617c97fa635b06e50da30096b080f0d30d3c8349ba78511c347ebc8df09"
+      }
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "task_vector",
+      "job_id": "2610278",
+      "after": 42.93755358972751,
+      "after_minus_before": 0.0,
+      "before": 42.93755358972751,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "llama31_8b_instruct/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/task_vector/paired.json",
+        "sha256": "336ce7dad1ce9abfc6da0260fe2d65d93db830effd48ece7ba18811fd79155a3"
+      }
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "task_vector",
+      "job_id": "2610278",
+      "after": 79.95718050065877,
+      "after_minus_before": 0.0,
+      "before": 79.95718050065877,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "llama31_8b_instruct/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/task_vector/paired.json",
+        "sha256": "336ce7dad1ce9abfc6da0260fe2d65d93db830effd48ece7ba18811fd79155a3"
+      }
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "task_vector",
+      "job_id": "2610278",
+      "after": 68.66331445261102,
+      "after_minus_before": 0.0,
+      "before": 68.66331445261102,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "llama31_8b_instruct/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/task_vector/paired.json",
+        "sha256": "336ce7dad1ce9abfc6da0260fe2d65d93db830effd48ece7ba18811fd79155a3"
+      }
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "wga_kl",
+      "job_id": "2610278",
+      "after": 37.572306920133,
+      "after_minus_before": -5.365246669594505,
+      "before": 42.93755358972751,
+      "ci95": [
+        -10.247401551749377,
+        -0.9661835748792277
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "llama31_8b_instruct/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/wga_kl/paired.json",
+        "sha256": "41d49a3e7b80d2a05dd7a93cf8537acbea7ba3e82845cd95023578fba3ae3467"
+      }
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "wga_kl",
+      "job_id": "2610278",
+      "after": 75.27824832172658,
+      "after_minus_before": -4.678932178932186,
+      "before": 79.95718050065877,
+      "ci95": [
+        -7.969336219336222,
+        -1.5151515151515151
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "llama31_8b_instruct/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/wga_kl/paired.json",
+        "sha256": "41d49a3e7b80d2a05dd7a93cf8537acbea7ba3e82845cd95023578fba3ae3467"
+      }
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "wga_kl",
+      "job_id": "2610278",
+      "after": 56.567549007077965,
+      "after_minus_before": -12.095765445533054,
+      "before": 68.66331445261102,
+      "ci95": [
+        -17.24692468940215,
+        16.19388240062346
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "llama31_8b_instruct/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/wga_kl/paired.json",
+        "sha256": "41d49a3e7b80d2a05dd7a93cf8537acbea7ba3e82845cd95023578fba3ae3467"
+      }
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "rmu",
+      "job_id": "2610281",
+      "after": 17.177886525712612,
+      "after_minus_before": -9.822343517995694,
+      "before": 27.000230043708306,
+      "ci95": [
+        -23.930218332392247,
+        0.483091787439613
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "gemma3_12b_it/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/rmu/paired.json",
+        "sha256": "b46217b6ffb33bb50826d80a9bb43768639d57a45af41b37b573379740e66e49"
+      }
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "rmu",
+      "job_id": "2610281",
+      "after": 61.937281719890414,
+      "after_minus_before": -13.318589622937445,
+      "before": 75.25587134282786,
+      "ci95": [
+        -21.651922956270774,
+        -5.02801304975216
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "gemma3_12b_it/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/rmu/paired.json",
+        "sha256": "b46217b6ffb33bb50826d80a9bb43768639d57a45af41b37b573379740e66e49"
+      }
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "rmu",
+      "job_id": "2610281",
+      "after": 21.279031941907434,
+      "after_minus_before": -19.35948482601392,
+      "before": 40.63851676792135,
+      "ci95": [
+        -40.43300705069159,
+        -0.9151286724275588
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "gemma3_12b_it/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/rmu/paired.json",
+        "sha256": "b46217b6ffb33bb50826d80a9bb43768639d57a45af41b37b573379740e66e49"
+      }
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "task_vector",
+      "job_id": "2610281",
+      "after": 20.31495074973336,
+      "after_minus_before": -6.685279293974947,
+      "before": 27.000230043708306,
+      "ci95": [
+        -13.241436100131754,
+        -1.0101010101010104
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "gemma3_12b_it/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/task_vector/paired.json",
+        "sha256": "45e471300f302caff6f604a6caab9190aefc7dac0e1178ac2044b1e4f32d58c7"
+      }
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "task_vector",
+      "job_id": "2610281",
+      "after": 68.16974088713219,
+      "after_minus_before": -7.086130455695667,
+      "before": 75.25587134282786,
+      "ci95": [
+        -12.585998441976706,
+        -1.0822510822510907
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "gemma3_12b_it/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/task_vector/paired.json",
+        "sha256": "45e471300f302caff6f604a6caab9190aefc7dac0e1178ac2044b1e4f32d58c7"
+      }
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "task_vector",
+      "job_id": "2610281",
+      "after": 27.6972985748835,
+      "after_minus_before": -12.941218193037852,
+      "before": 40.63851676792135,
+      "ci95": [
+        -24.93397679421523,
+        -2.307400814327357
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "gemma3_12b_it/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/task_vector/paired.json",
+        "sha256": "45e471300f302caff6f604a6caab9190aefc7dac0e1178ac2044b1e4f32d58c7"
+      }
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "wga_kl",
+      "job_id": "2610281",
+      "after": 23.534621578099838,
+      "after_minus_before": -3.4656084656084687,
+      "before": 27.000230043708306,
+      "ci95": [
+        -9.470899470899468,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "gemma3_12b_it/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/wga_kl/paired.json",
+        "sha256": "ce899267412dd8c16c5c3a2ca1985f55cb794b2336b4a4f7510213c16f78228c"
+      }
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "wga_kl",
+      "job_id": "2610281",
+      "after": 70.05311918355397,
+      "after_minus_before": -5.202752159273885,
+      "before": 75.25587134282786,
+      "ci95": [
+        -9.02360562143171,
+        -1.7317742643829577
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "gemma3_12b_it/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/wga_kl/paired.json",
+        "sha256": "ce899267412dd8c16c5c3a2ca1985f55cb794b2336b4a4f7510213c16f78228c"
+      }
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "wga_kl",
+      "job_id": "2610281",
+      "after": 32.97347300700938,
+      "after_minus_before": -7.665043760911971,
+      "before": 40.63851676792135,
+      "ci95": [
+        -17.774818194894273,
+        -0.6724653946876157
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "gemma3_12b_it/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/wga_kl/paired.json",
+        "sha256": "ce899267412dd8c16c5c3a2ca1985f55cb794b2336b4a4f7510213c16f78228c"
+      }
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "rmu",
+      "job_id": "2610284",
+      "after": 31.47405734362256,
+      "after_minus_before": -28.18422318422318,
+      "before": 59.65828052784574,
+      "ci95": [
+        -49.437590187590196,
+        -7.491582491582491
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "lapa12b_instruct/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/rmu/paired.json",
+        "sha256": "12b8b662ccf15da932d13cb6ad88abaaa0fb96891b9b078b42ae503496515b4c"
+      }
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "rmu",
+      "job_id": "2610284",
+      "after": 53.63202417550244,
+      "after_minus_before": -22.32155927808101,
+      "before": 75.95358345358345,
+      "ci95": [
+        -30.59033006043877,
+        -12.893662295836219
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "lapa12b_instruct/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/rmu/paired.json",
+        "sha256": "12b8b662ccf15da932d13cb6ad88abaaa0fb96891b9b078b42ae503496515b4c"
+      }
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "rmu",
+      "job_id": "2610284",
+      "after": 33.76034808708631,
+      "after_minus_before": -27.521615044700113,
+      "before": 61.28196313178642,
+      "ci95": [
+        -58.60867544051965,
+        4.744589509210502
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "lapa12b_instruct/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/rmu/paired.json",
+        "sha256": "12b8b662ccf15da932d13cb6ad88abaaa0fb96891b9b078b42ae503496515b4c"
+      }
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "task_vector",
+      "job_id": "2610284",
+      "after": 59.65828052784574,
+      "after_minus_before": 0.0,
+      "before": 59.65828052784574,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "lapa12b_instruct/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/task_vector/paired.json",
+        "sha256": "ef54932e5a036b496759e17eb9adc5f591810953ad9c617533a1d3d53c5dd61d"
+      }
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "task_vector",
+      "job_id": "2610284",
+      "after": 75.95358345358345,
+      "after_minus_before": 0.0,
+      "before": 75.95358345358345,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "lapa12b_instruct/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/task_vector/paired.json",
+        "sha256": "ef54932e5a036b496759e17eb9adc5f591810953ad9c617533a1d3d53c5dd61d"
+      }
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "task_vector",
+      "job_id": "2610284",
+      "after": 61.28196313178642,
+      "after_minus_before": 0.0,
+      "before": 61.28196313178642,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "lapa12b_instruct/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/task_vector/paired.json",
+        "sha256": "ef54932e5a036b496759e17eb9adc5f591810953ad9c617533a1d3d53c5dd61d"
+      }
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "wga_kl",
+      "job_id": "2610284",
+      "after": 54.615304180521576,
+      "after_minus_before": -5.0429763473241636,
+      "before": 59.65828052784574,
+      "ci95": [
+        -10.64935064935063,
+        -0.9661835748792311
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "lapa12b_instruct/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/wga_kl/paired.json",
+        "sha256": "89dd3ab983e89562368dff7503aee0faf1241bcf55bfaa540a146d22fb7456cd"
+      }
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "wga_kl",
+      "job_id": "2610284",
+      "after": 70.46897546897547,
+      "after_minus_before": -5.484607984607976,
+      "before": 75.95358345358345,
+      "ci95": [
+        -8.59532828282829,
+        -2.4095418470418406
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "lapa12b_instruct/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/wga_kl/paired.json",
+        "sha256": "89dd3ab983e89562368dff7503aee0faf1241bcf55bfaa540a146d22fb7456cd"
+      }
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "wga_kl",
+      "job_id": "2610284",
+      "after": 63.964260327394776,
+      "after_minus_before": 2.6822971956083563,
+      "before": 61.28196313178642,
+      "ci95": [
+        -14.101393235592354,
+        12.146755407468103
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "lapa12b_instruct/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/wga_kl/paired.json",
+        "sha256": "89dd3ab983e89562368dff7503aee0faf1241bcf55bfaa540a146d22fb7456cd"
+      }
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "rmu",
+      "job_id": "2610287",
+      "after": 10.49344375431332,
+      "after_minus_before": -28.40004600874167,
+      "before": 38.89348976305499,
+      "ci95": [
+        -54.28571428571429,
+        -5.595813204508857
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay12b_v2/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/rmu/paired.json",
+        "sha256": "cffee1b1ecaaae56356514e38a7577ab6450f385b10c9a470fe57dfc038f36d2"
+      }
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "rmu",
+      "job_id": "2610287",
+      "after": 53.65398289311333,
+      "after_minus_before": -12.4452600539557,
+      "before": 66.09924294706903,
+      "ci95": [
+        -21.906463705376744,
+        -3.787878787878796
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay12b_v2/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/rmu/paired.json",
+        "sha256": "cffee1b1ecaaae56356514e38a7577ab6450f385b10c9a470fe57dfc038f36d2"
+      }
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "rmu",
+      "job_id": "2610287",
+      "after": 11.260301033675475,
+      "after_minus_before": -40.156303544474795,
+      "before": 51.41660457815027,
+      "ci95": [
+        -56.93581983859761,
+        -9.852124540026256
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay12b_v2/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/rmu/paired.json",
+        "sha256": "cffee1b1ecaaae56356514e38a7577ab6450f385b10c9a470fe57dfc038f36d2"
+      }
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "task_vector",
+      "job_id": "2610287",
+      "after": 37.48447204968944,
+      "after_minus_before": -1.4090177133655502,
+      "before": 38.89348976305499,
+      "ci95": [
+        -3.7037037037037024,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay12b_v2/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/task_vector/paired.json",
+        "sha256": "88f8ef2d6702a69bed0ac837455085d9831c4f712c8888c90102f9d52ef315ec"
+      }
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "task_vector",
+      "job_id": "2610287",
+      "after": 65.78178262960873,
+      "after_minus_before": -0.3174603174603021,
+      "before": 66.09924294706903,
+      "ci95": [
+        -0.952380952380949,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay12b_v2/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/task_vector/paired.json",
+        "sha256": "88f8ef2d6702a69bed0ac837455085d9831c4f712c8888c90102f9d52ef315ec"
+      }
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "task_vector",
+      "job_id": "2610287",
+      "after": 49.315907847166294,
+      "after_minus_before": -2.1006967309839766,
+      "before": 51.41660457815027,
+      "ci95": [
+        -5.701267632625088,
+        2.993829218995808
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay12b_v2/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/task_vector/paired.json",
+        "sha256": "88f8ef2d6702a69bed0ac837455085d9831c4f712c8888c90102f9d52ef315ec"
+      }
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "wga_kl",
+      "job_id": "2610287",
+      "after": 26.530940878766966,
+      "after_minus_before": -12.362548884288021,
+      "before": 38.89348976305499,
+      "ci95": [
+        -22.18541522889349,
+        -3.7037037037037024
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay12b_v2/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/wga_kl/paired.json",
+        "sha256": "7242abe509c3668c2406a4380903b91d2a170dd6d1e31bfcbb148e1bc0c4f236"
+      }
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "wga_kl",
+      "job_id": "2610287",
+      "after": 59.541428780559215,
+      "after_minus_before": -6.557814166509814,
+      "before": 66.09924294706903,
+      "ci95": [
+        -12.158189033189027,
+        -1.8026538678712647
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay12b_v2/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/wga_kl/paired.json",
+        "sha256": "7242abe509c3668c2406a4380903b91d2a170dd6d1e31bfcbb148e1bc0c4f236"
+      }
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "wga_kl",
+      "job_id": "2610287",
+      "after": 31.59380253628661,
+      "after_minus_before": -19.82280204186366,
+      "before": 51.41660457815027,
+      "ci95": [
+        -36.588647087655666,
+        6.755453449515175
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay12b_v2/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/wga_kl/paired.json",
+        "sha256": "7242abe509c3668c2406a4380903b91d2a170dd6d1e31bfcbb148e1bc0c4f236"
+      }
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "rmu",
+      "job_id": "2610290",
+      "after": 27.50977685760294,
+      "after_minus_before": 0.29100529100528405,
+      "before": 27.218771566597656,
+      "ci95": [
+        -1.904761904761898,
+        2.7777777777777786
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay27b_v2/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/rmu/paired.json",
+        "sha256": "6d7613797ec8dcc28c7da62fd424f86e5c8b7493e48d861f4a8010cb03f85f10"
+      }
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "rmu",
+      "job_id": "2610290",
+      "after": 71.13275613275614,
+      "after_minus_before": 1.3129744651483861,
+      "before": 69.81978166760776,
+      "ci95": [
+        -0.7108350586611465,
+        4.332298136645974
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay27b_v2/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/rmu/paired.json",
+        "sha256": "6d7613797ec8dcc28c7da62fd424f86e5c8b7493e48d861f4a8010cb03f85f10"
+      }
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "rmu",
+      "job_id": "2610290",
+      "after": 39.13692496956817,
+      "after_minus_before": 1.1287512087614076,
+      "before": 38.00817376080676,
+      "ci95": [
+        -2.1610401502981063,
+        4.796686156083943
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay27b_v2/paired/rmu/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/rmu/paired.json",
+        "sha256": "6d7613797ec8dcc28c7da62fd424f86e5c8b7493e48d861f4a8010cb03f85f10"
+      }
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "task_vector",
+      "job_id": "2610290",
+      "after": 27.218771566597656,
+      "after_minus_before": 0.0,
+      "before": 27.218771566597656,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay27b_v2/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/task_vector/paired.json",
+        "sha256": "8f171b229b566240db7bf17dd58429c7078478ad9e719521d438a002bfcc2624"
+      }
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "task_vector",
+      "job_id": "2610290",
+      "after": 69.81978166760776,
+      "after_minus_before": 0.0,
+      "before": 69.81978166760776,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay27b_v2/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/task_vector/paired.json",
+        "sha256": "8f171b229b566240db7bf17dd58429c7078478ad9e719521d438a002bfcc2624"
+      }
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "task_vector",
+      "job_id": "2610290",
+      "after": 38.00817376080676,
+      "after_minus_before": 0.0,
+      "before": 38.00817376080676,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay27b_v2/paired/task_vector/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/task_vector/paired.json",
+        "sha256": "8f171b229b566240db7bf17dd58429c7078478ad9e719521d438a002bfcc2624"
+      }
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "wga_kl",
+      "job_id": "2610290",
+      "after": 26.583850931677016,
+      "after_minus_before": -0.6349206349206398,
+      "before": 27.218771566597656,
+      "ci95": [
+        -1.904761904761905,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay27b_v2/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/wga_kl/paired.json",
+        "sha256": "09da6e4eaa69d667a3018ac925fcb3684e0b6dee05516206891d28ba539ba8a6"
+      }
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "wga_kl",
+      "job_id": "2610290",
+      "after": 66.84855804421022,
+      "after_minus_before": -2.9712236233975347,
+      "before": 69.81978166760776,
+      "ci95": [
+        -5.5692013300708885,
+        -0.7246376811594217
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay27b_v2/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/wga_kl/paired.json",
+        "sha256": "09da6e4eaa69d667a3018ac925fcb3684e0b6dee05516206891d28ba539ba8a6"
+      }
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "wga_kl",
+      "job_id": "2610290",
+      "after": 35.54184204089686,
+      "after_minus_before": -2.4663317199099026,
+      "before": 38.00817376080676,
+      "ci95": [
+        -5.877498362495516,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000,
+      "source_paired": {
+        "relative_path": "mamay27b_v2/paired/wga_kl/paired.json",
+        "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/wga_kl/paired.json",
+        "sha256": "09da6e4eaa69d667a3018ac925fcb3684e0b6dee05516206891d28ba539ba8a6"
+      }
+    }
+  ],
+  "provenance_proofs": [
+    {
+      "model": "qwen3_8b",
+      "method": "rmu",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+        "model_id": "Qwen/Qwen3-8B",
+        "model_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "config_sha256": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/rmu/run.json",
+        "sha256": "4a5e64fcd4901c95bfab2a3bc3bda710ac7da78f5f90347da96ace07de40cb3e"
+      },
+      "inference_view_kind": "original"
+    },
+    {
+      "model": "qwen3_8b",
+      "method": "task_vector",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+        "model_id": "Qwen/Qwen3-8B",
+        "model_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "config_sha256": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/task_vector/intervention.json",
+        "sha256": "13410db9b1d119c894c78503aa295bb8fda56fa258756293a5f17e1adc772e1d"
+      },
+      "inference_view_kind": "original"
+    },
+    {
+      "model": "qwen3_8b",
+      "method": "wga_kl",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+        "model_id": "Qwen/Qwen3-8B",
+        "model_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "config_sha256": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/wga_kl/intervention.json",
+        "sha256": "9119dd60300528099576c7af8e32d47edab3c4174bf585a4f8aaccc642db47ec"
+      },
+      "inference_view_kind": "original"
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "rmu",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659",
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "model_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "tokenizer_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "config_sha256": "29e4c210b0d6ac178b16b2a255a568bdb23b581e50ca1ef6a6d071dd85704e6e"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/run.json",
+        "sha256": "17d321189b631e96f8862550b29cac54687bb312f1ab00be2133b37a2d17f249"
+      },
+      "inference_view_kind": "original"
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "task_vector",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659",
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "model_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "tokenizer_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "config_sha256": "29e4c210b0d6ac178b16b2a255a568bdb23b581e50ca1ef6a6d071dd85704e6e"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/intervention.json",
+        "sha256": "4a0934fa99fde474a91838adcf5855123578d2c7c064168ebae57fae8304c22d"
+      },
+      "inference_view_kind": "original"
+    },
+    {
+      "model": "llama31_8b_instruct",
+      "method": "wga_kl",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659",
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "model_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "tokenizer_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "config_sha256": "29e4c210b0d6ac178b16b2a255a568bdb23b581e50ca1ef6a6d071dd85704e6e"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/intervention.json",
+        "sha256": "cfa9c2f246298c0e3e662e3d091c0fcb1286e7abffde1607a589d21c975c79e9"
+      },
+      "inference_view_kind": "original"
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "rmu",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "model_id": "google/gemma-3-12b-it",
+        "model_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "tokenizer_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "config_sha256": "39172c4124d3470341bbbb25f2926fd97edf68f0fe3a9fa4cde6acb9b7ed2cc6"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/rmu/run.json",
+        "sha256": "11c17b353e0015268a9dbdcf2a99836cf4bc9390c4d6f02a6c8777c637cacc25"
+      },
+      "inference_view_kind": "add_pinned_processor_assets"
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "task_vector",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "model_id": "google/gemma-3-12b-it",
+        "model_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "tokenizer_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "config_sha256": "39172c4124d3470341bbbb25f2926fd97edf68f0fe3a9fa4cde6acb9b7ed2cc6"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/task_vector/intervention.json",
+        "sha256": "0976f6a3334a693b4e08e1c3305fa23cd7afeadce25fcfc476e8e0560ec9e51b"
+      },
+      "inference_view_kind": "add_pinned_processor_assets"
+    },
+    {
+      "model": "gemma3_12b_it",
+      "method": "wga_kl",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "model_id": "google/gemma-3-12b-it",
+        "model_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "tokenizer_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "config_sha256": "39172c4124d3470341bbbb25f2926fd97edf68f0fe3a9fa4cde6acb9b7ed2cc6"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/wga_kl/intervention.json",
+        "sha256": "a38175d9b157bc6f17d41aa13bee1641ea9a9ec7b0ed4f26ef643768b2032697"
+      },
+      "inference_view_kind": "add_pinned_processor_assets"
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "rmu",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+        "model_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "tokenizer_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "config_sha256": "f02a640a945f26b004b32384e962b6820957ac363df96cd3246298b30a283451"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/rmu/run.json",
+        "sha256": "b243bf61af6a23cf87533e7c16ab3850d657396215a3d25d95b42dcf20abbc1d"
+      },
+      "inference_view_kind": "add_pinned_processor_assets"
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "task_vector",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+        "model_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "tokenizer_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "config_sha256": "f02a640a945f26b004b32384e962b6820957ac363df96cd3246298b30a283451"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/task_vector/intervention.json",
+        "sha256": "53a175b9dbef84adbf1da4553ce84ba2f7a0d2859928297f86518be48c137b3f"
+      },
+      "inference_view_kind": "add_pinned_processor_assets"
+    },
+    {
+      "model": "lapa12b_instruct",
+      "method": "wga_kl",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+        "model_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "tokenizer_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "config_sha256": "f02a640a945f26b004b32384e962b6820957ac363df96cd3246298b30a283451"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/wga_kl/intervention.json",
+        "sha256": "b9d0a9ac110d67c4b7e422a5186c9e920b102fc3927202bd6e07371e4bd91913"
+      },
+      "inference_view_kind": "add_pinned_processor_assets"
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "rmu",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "model_id": "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0",
+        "model_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "tokenizer_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "config_sha256": "89795290a04de188c98bded7b65fcc8366d3b4586d883dcc5751395b9cd76c78"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/rmu/run.json",
+        "sha256": "b646feefa96f04d040130857ffeb316330bcc900c0007fd333282aefa98f128c"
+      },
+      "inference_view_kind": "add_pinned_processor_assets"
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "task_vector",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "model_id": "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0",
+        "model_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "tokenizer_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "config_sha256": "89795290a04de188c98bded7b65fcc8366d3b4586d883dcc5751395b9cd76c78"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/task_vector/intervention.json",
+        "sha256": "d63d36fc1b9522df2b699463d1df20c1d04a23d96d1c28e63fabb5b2d495aeb1"
+      },
+      "inference_view_kind": "add_pinned_processor_assets"
+    },
+    {
+      "model": "mamay12b_v2",
+      "method": "wga_kl",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "model_id": "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0",
+        "model_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "tokenizer_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "config_sha256": "89795290a04de188c98bded7b65fcc8366d3b4586d883dcc5751395b9cd76c78"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/wga_kl/intervention.json",
+        "sha256": "45ad555d3a5c3af5f05dd85a5c9938d3cfa2f6b1f11c0e8294457cc102de6f6e"
+      },
+      "inference_view_kind": "add_pinned_processor_assets"
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "rmu",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "model_id": "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0",
+        "model_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "tokenizer_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "config_sha256": "7b912e354dd6973e1bc397b7ee4a8ac6c9f406da95e33e5789a3468f71644d15"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/rmu/run.json",
+        "sha256": "522cd56bbda49ef7c99d0689b3d5c8c8e8019fb6e704e0352abbb0c7e34df6dd"
+      },
+      "inference_view_kind": "add_pinned_processor_assets"
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "task_vector",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "model_id": "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0",
+        "model_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "tokenizer_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "config_sha256": "7b912e354dd6973e1bc397b7ee4a8ac6c9f406da95e33e5789a3468f71644d15"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/task_vector/intervention.json",
+        "sha256": "74deff5468f4ded32290cee23b4056ff5a841dc5adc14de2a8bd47cf832d7c70"
+      },
+      "inference_view_kind": "add_pinned_processor_assets"
+    },
+    {
+      "model": "mamay27b_v2",
+      "method": "wga_kl",
+      "actual_pair_sha_matches_completed_diagnostic_receipt": true,
+      "collector_code_identity_matches_frozen_v6": true,
+      "baseline_path_and_config_sha_match_pins": true,
+      "post_checkpoint_path_and_complete_native_file_map_match_certified_view": true,
+      "certified_original_receipt_and_checkpoint_match_actual_training_completion": true,
+      "shared_before_predictions_identical_across_methods": true,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "model_id": "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0",
+        "model_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "tokenizer_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "config_sha256": "7b912e354dd6973e1bc397b7ee4a8ac6c9f406da95e33e5789a3468f71644d15"
+      },
+      "source_training_receipt": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/wga_kl/intervention.json",
+        "sha256": "150de2e0335e7e04fd9b489c5576cfe8290de82072e606590175e3c682f6be34"
+      },
+      "inference_view_kind": "add_pinned_processor_assets"
+    }
+  ],
+  "interpretation_limits": [
+    "The137 source rows were used as forget training targets. These are descriptive training-source diagnostics, not heldout effects or general utility qualification.",
+    "WarBias component-macro SS/LMS/ICAT retain their native meanings. Lower SS is not universally better; neutrality is centered at50.",
+    "Task-vector scale0 selections are explicitly null interventions and are labelled per model.",
+    "No score, delta, confidence interval or bootstrap result was recomputed. Values are read directly from each saved native paired.json."
+  ],
+  "additional_evidence": {
+    "training_completion": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_completion_v1.json",
+      "sha256": "3064337dc9ffd821d4cc0ec21aa45de6ac793cd8ceaddc097f73c79d4bbbb55e"
+    },
+    "runner_preflight": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/runner_preflight_v3.json",
+      "sha256": "be45e72ea32593a846bd5b0037ef6ebf4cdf3a41a00a3718c6228152e1b71231"
+    },
+    "inference_views": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/runtime_repair/materialization_20261031T132345Z/fetched_sidecar_receipt/inference_views.json",
+      "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+    },
+    "fetch_receipt": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/fetch_receipt.json",
+      "sha256": "69850de83483c04cd4279e052d4438948c4b7a581f99050cde959c630568108d"
+    }
+  }
+}

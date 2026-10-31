@@ -1,0 +1,277 @@
+{
+  "schema_version": 1,
+  "kind": "clean_development_with_explicit_engineering_generation_fixtures",
+  "datasets": {
+    "warbias_triplets_uk": {
+      "counterpart": "warbias_triplets_en",
+      "filename": "data/warbias_triplets_uk.jsonl",
+      "format": "adapted_jsonl_v1",
+      "human_validated": false,
+      "independent_clusters": 9,
+      "language": "uk",
+      "measurement_eligibility": "active",
+      "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+      "measurement_purpose": "pre_intervention_development_measurement",
+      "pairing": {
+        "alignment": "source_identity_and_scoring_metadata",
+        "en_task": "warbias_triplets_en",
+        "excluded_uk_rows": 0,
+        "filename": "pairs/warbias_triplets.jsonl",
+        "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+        "matched_rows": 96,
+        "sha256": "d6b19f60fa8e2b969f65bdc9f07b8a38f796b9cad067e2cfb75e8a7e88c0eedf",
+        "uk_task": "warbias_triplets_uk"
+      },
+      "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+      "release_state": "published_source_evaluator_adaptation",
+      "repo": "FairForget/WarBias",
+      "revision": "164f355623c2da0028821e0942cad493558a6c13",
+      "rows": 96,
+      "sha256": "10e4061ec759f7ce6b87436cd82fb76f1df776538c699beb0bd22110f36294ac",
+      "source_provenance": [
+        {
+          "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+          "published": true,
+          "repo_id": "FairForget/WarBias",
+          "revision": "164f355623c2da0028821e0942cad493558a6c13",
+          "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+        },
+        {
+          "path": "research/september-2026/preparation/case_splits.csv",
+          "published": true,
+          "repo_id": "FairForget/WarBias",
+          "revision": "164f355623c2da0028821e0942cad493558a6c13",
+          "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+        }
+      ],
+      "source_role": "development",
+      "split": "development",
+      "training_gradients_authorized": false
+    },
+    "warbias_triplets_en": {
+      "counterpart": "warbias_triplets_uk",
+      "filename": "data/warbias_triplets_en.jsonl",
+      "format": "adapted_jsonl_v1",
+      "human_validated": false,
+      "independent_clusters": 9,
+      "language": "en",
+      "measurement_eligibility": "active",
+      "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+      "measurement_purpose": "pre_intervention_development_measurement",
+      "pairing": {
+        "alignment": "source_identity_and_scoring_metadata",
+        "en_task": "warbias_triplets_en",
+        "excluded_uk_rows": 0,
+        "filename": "pairs/warbias_triplets.jsonl",
+        "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+        "matched_rows": 96,
+        "sha256": "d6b19f60fa8e2b969f65bdc9f07b8a38f796b9cad067e2cfb75e8a7e88c0eedf",
+        "uk_task": "warbias_triplets_uk"
+      },
+      "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+      "release_state": "published_source_evaluator_adaptation",
+      "repo": "FairForget/WarBias",
+      "revision": "164f355623c2da0028821e0942cad493558a6c13",
+      "rows": 96,
+      "sha256": "0474d8eca3c899cdd12e23b66d6b0f18c1f66fe84d1a22994e2e05d3abcd9dde",
+      "source_provenance": [
+        {
+          "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+          "published": true,
+          "repo_id": "FairForget/WarBias",
+          "revision": "164f355623c2da0028821e0942cad493558a6c13",
+          "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+        },
+        {
+          "path": "research/september-2026/preparation/case_splits.csv",
+          "published": true,
+          "repo_id": "FairForget/WarBias",
+          "revision": "164f355623c2da0028821e0942cad493558a6c13",
+          "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+        }
+      ],
+      "source_role": "development",
+      "split": "development",
+      "training_gradients_authorized": false
+    },
+    "warbias_expanded_qa_uk": {
+      "counterpart": "warbias_expanded_qa_en",
+      "filename": "data/warbias_expanded_qa_uk.jsonl",
+      "format": "adapted_jsonl_v1",
+      "human_validated": false,
+      "independent_clusters": 4,
+      "language": "uk",
+      "measurement_eligibility": "active",
+      "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+      "measurement_purpose": "pre_intervention_development_measurement",
+      "pairing": {
+        "alignment": "source_identity_and_scoring_metadata",
+        "en_task": "warbias_expanded_qa_en",
+        "excluded_uk_rows": 0,
+        "filename": "pairs/warbias_expanded_qa.jsonl",
+        "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+        "matched_rows": 540,
+        "sha256": "b28727eed1d85156545ca7d19115383041e3d9a12062d9c0ac5c8acacb351c1d",
+        "uk_task": "warbias_expanded_qa_uk"
+      },
+      "protocol": "strict_abc_generation_v1",
+      "release_state": "published_source_evaluator_adaptation",
+      "repo": "FairForget/WarBias",
+      "revision": "164f355623c2da0028821e0942cad493558a6c13",
+      "rows": 540,
+      "sha256": "bc3c7f27814cde0c87d6c85bb805009b9f212221ac1b7a00522cc45ecaa73607",
+      "source_provenance": [
+        {
+          "path": "research/september-2026/expansion/data/qa.jsonl",
+          "published": true,
+          "repo_id": "FairForget/WarBias",
+          "revision": "164f355623c2da0028821e0942cad493558a6c13",
+          "sha256": "5a566f964447ab59970b3dc1efc14456440b3efaa1e3de993457d78343104ee1"
+        },
+        {
+          "path": "research/september-2026/preparation/case_splits.csv",
+          "published": true,
+          "repo_id": "FairForget/WarBias",
+          "revision": "164f355623c2da0028821e0942cad493558a6c13",
+          "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+        }
+      ],
+      "source_role": "development",
+      "split": "development",
+      "training_gradients_authorized": false
+    },
+    "warbias_expanded_qa_en": {
+      "counterpart": "warbias_expanded_qa_uk",
+      "filename": "data/warbias_expanded_qa_en.jsonl",
+      "format": "adapted_jsonl_v1",
+      "human_validated": false,
+      "independent_clusters": 4,
+      "language": "en",
+      "measurement_eligibility": "active",
+      "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+      "measurement_purpose": "pre_intervention_development_measurement",
+      "pairing": {
+        "alignment": "source_identity_and_scoring_metadata",
+        "en_task": "warbias_expanded_qa_en",
+        "excluded_uk_rows": 0,
+        "filename": "pairs/warbias_expanded_qa.jsonl",
+        "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+        "matched_rows": 540,
+        "sha256": "b28727eed1d85156545ca7d19115383041e3d9a12062d9c0ac5c8acacb351c1d",
+        "uk_task": "warbias_expanded_qa_uk"
+      },
+      "protocol": "strict_abc_generation_v1",
+      "release_state": "published_source_evaluator_adaptation",
+      "repo": "FairForget/WarBias",
+      "revision": "164f355623c2da0028821e0942cad493558a6c13",
+      "rows": 540,
+      "sha256": "687f4961042adbdf20f6e39dccffa5657fc52ef237f8350e583d4139516a7aaa",
+      "source_provenance": [
+        {
+          "path": "research/september-2026/expansion/data/qa.jsonl",
+          "published": true,
+          "repo_id": "FairForget/WarBias",
+          "revision": "164f355623c2da0028821e0942cad493558a6c13",
+          "sha256": "5a566f964447ab59970b3dc1efc14456440b3efaa1e3de993457d78343104ee1"
+        },
+        {
+          "path": "research/september-2026/preparation/case_splits.csv",
+          "published": true,
+          "repo_id": "FairForget/WarBias",
+          "revision": "164f355623c2da0028821e0942cad493558a6c13",
+          "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+        }
+      ],
+      "source_role": "development",
+      "split": "development",
+      "training_gradients_authorized": false
+    },
+    "warbias_benign_uk": {
+      "filename": "data/warbias_benign_uk.jsonl",
+      "format": "adapted_jsonl_v1",
+      "language": "uk",
+      "protocol": "warbias_benign_generation_with_rubric_v1",
+      "rows": 2,
+      "sha256": "394fc7c7f4188624cd8b9bd2f55e622b50ae187f10ffef2c47924c40e9d92ac7",
+      "independent_clusters": 1,
+      "measurement_eligibility": "active",
+      "measurement_eligibility_reason": "Explicit source-derived engineering fixture for exact generation repeatability only; not a published study measurement source.",
+      "measurement_purpose": "engineering_exact_generation_repeat_only",
+      "source_role": "development",
+      "split": "development",
+      "fixture_only": true,
+      "measurement_results_eligible": false,
+      "release_state": "local_source_derived_engineering_fixture_not_published",
+      "derived_prompt_published": false,
+      "human_validated": false,
+      "source_repository": "FairForget/WarBias",
+      "source_revision": "164f355623c2da0028821e0942cad493558a6c13",
+      "source_provenance": [
+        {
+          "repo_id": "FairForget/WarBias",
+          "revision": "164f355623c2da0028821e0942cad493558a6c13",
+          "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+          "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9",
+          "published": true,
+          "role": "literal ordinary-sentence ancestor only; derived prompt is local"
+        }
+      ],
+      "pairing": {
+        "filename": "pairs/warbias_benign.jsonl",
+        "sha256": "3dda26fc226237602b235b545755fada6ead6911769444b7569344600a13f680",
+        "uk_task": "warbias_benign_uk",
+        "en_task": "warbias_benign_en",
+        "matched_rows": 2,
+        "excluded_uk_rows": 0,
+        "alignment": "same literal-source bilingual pairing and fixed counterpart instructions; engineering-only",
+        "fixture_only": true
+      }
+    },
+    "warbias_benign_en": {
+      "filename": "data/warbias_benign_en.jsonl",
+      "format": "adapted_jsonl_v1",
+      "language": "en",
+      "protocol": "warbias_benign_generation_with_rubric_v1",
+      "rows": 2,
+      "sha256": "c4c16c00534c05f5ace11668d4ddb03d10312b6b03ce88d4f9cc0d15d5f731fe",
+      "independent_clusters": 1,
+      "measurement_eligibility": "active",
+      "measurement_eligibility_reason": "Explicit source-derived engineering fixture for exact generation repeatability only; not a published study measurement source.",
+      "measurement_purpose": "engineering_exact_generation_repeat_only",
+      "source_role": "development",
+      "split": "development",
+      "fixture_only": true,
+      "measurement_results_eligible": false,
+      "release_state": "local_source_derived_engineering_fixture_not_published",
+      "derived_prompt_published": false,
+      "human_validated": false,
+      "source_repository": "FairForget/WarBias",
+      "source_revision": "164f355623c2da0028821e0942cad493558a6c13",
+      "source_provenance": [
+        {
+          "repo_id": "FairForget/WarBias",
+          "revision": "164f355623c2da0028821e0942cad493558a6c13",
+          "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+          "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9",
+          "published": true,
+          "role": "literal ordinary-sentence ancestor only; derived prompt is local"
+        }
+      ],
+      "pairing": {
+        "filename": "pairs/warbias_benign.jsonl",
+        "sha256": "3dda26fc226237602b235b545755fada6ead6911769444b7569344600a13f680",
+        "uk_task": "warbias_benign_uk",
+        "en_task": "warbias_benign_en",
+        "matched_rows": 2,
+        "excluded_uk_rows": 0,
+        "alignment": "same literal-source bilingual pairing and fixed counterpart instructions; engineering-only",
+        "fixture_only": true
+      }
+    }
+  },
+  "engineering_fixture_tasks": [
+    "warbias_benign_uk",
+    "warbias_benign_en"
+  ],
+  "engineering_fixture_scope": "Exact generation repeatability only; derived fixtures are excluded from study measurement counts and judgments."
+}

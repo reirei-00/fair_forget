@@ -1,0 +1,13 @@
+{
+  "observed_at_utc": "2026-10-31T11:34:18.954942+00:00",
+  "interpreter": "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+  "python": "3.12.12",
+  "packages": {
+    "numpy": "2.2.6",
+    "scipy": "1.18.1",
+    "torch": "2.10.0+cu129",
+    "transformers": "4.57.6"
+  },
+  "measurement_runtime": "baseline-vllm018-py312",
+  "package_modules_imported_for_query": false
+}

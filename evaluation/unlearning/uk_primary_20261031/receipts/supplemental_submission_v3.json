@@ -1,0 +1,37 @@
+{
+  "status": "submitted",
+  "submitted_at_utc": "2026-10-31T11:29:07.344394+00:00",
+  "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/uk_primary_20261031_all_metrics_v3",
+  "addon_checksum_manifest_sha256": "8051858a76afed4313f889acc9f5b039c6ed93585df720323f167e58c648919d",
+  "native_input_validation": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/uk_multimethod_20261031/all_metrics/native_input_validation_v3_20261031T112845Z.json",
+    "sha256": "b9ae9c9f70ea89a09b24409d4e9bec83f9729bc6da4daeaccb7a6715aa903ffe"
+  },
+  "prior_failed_addon_job_id": "2608960",
+  "prior_cancelled_cpu_job_id": "2609024",
+  "reason": "Standalone Slurm spool-path fix; data, training, scoring and inference settings unchanged.",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/supplemental-%j.log",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/uk_primary_20261031_all_metrics_v3/deploy/unlearning_primary/supplemental.sbatch",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/uk_primary_20261031_all_metrics_v3",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/training-2608191",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031"
+  ],
+  "original_pipeline_job_id": "2608628",
+  "training_repeated": false,
+  "planned_full_checkpoint_task_collections": 66,
+  "planned_fresh_qualification_collections": 72,
+  "planned_saved_only_native_pairs": 55,
+  "sbatch_returncode": 0,
+  "sbatch_stdout": "2609074\n",
+  "sbatch_stderr": "",
+  "job_id": "2609074",
+  "collection_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/supplemental-2609074",
+  "analysis_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/supplemental-analysis-2609074",
+  "pipeline_receipt": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/supplemental-pipeline-2609074.json",
+  "initial_queue_status": "PENDING|(Priority)",
+  "ssh_returncode": 0,
+  "ssh_stderr": ""
+}

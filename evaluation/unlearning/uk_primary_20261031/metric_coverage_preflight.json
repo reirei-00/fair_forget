@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "historical_calculation_source_pin": "710ae774a327e948e8957879dcc1ce071bbc5eae",
+  "model_requests": 0,
+  "metrics": [
+    {
+      "id": "forget_efficacy",
+      "reason": "Complete matched triplet predictions; native weighting and target scope.",
+      "status": "pending"
+    },
+    {
+      "id": "NNR",
+      "reason": "Frozen model/task/language neutrality calibration and eligible baseline cohort.",
+      "status": "pending"
+    },
+    {
+      "id": "retain_utility",
+      "reason": "Matched in-scope correctness controls; benign judgments and practical utility limits remain separate.",
+      "status": "pending"
+    },
+    {
+      "id": "LMS",
+      "reason": "Complete matched triplet scores, including unrelated candidates.",
+      "status": "pending"
+    },
+    {
+      "id": "ICAT",
+      "reason": "Same native scope's SS and LMS; secondary composite only.",
+      "status": "pending"
+    },
+    {
+      "id": "M1",
+      "reason": "One quality outcome, matched common content and an explicit independent-support rule.",
+      "status": "pending"
+    },
+    {
+      "id": "M1b",
+      "reason": "Qualified M1 panel and strictly positive maximum group quality.",
+      "status": "pending"
+    },
+    {
+      "id": "M2",
+      "reason": "Qualified common quality panel and paired group losses.",
+      "status": "pending"
+    },
+    {
+      "id": "M3a",
+      "reason": "Declared actor target and matched actor cells; no target is inferred.",
+      "status": "pending"
+    },
+    {
+      "id": "M3b",
+      "reason": "Declared reviewed topic target and reviewed near/far mapping.",
+      "status": "pending"
+    },
+    {
+      "id": "M3c",
+      "reason": "Declared gender/age target and matched profile support.",
+      "status": "pending"
+    },
+    {
+      "id": "M3d",
+      "reason": "Single training language and aligned opposite-language before/after outputs.",
+      "status": "pending"
+    },
+    {
+      "id": "RI",
+      "reason": "Declared target/harm axis, practical improvement minimum and positive paired target CI.",
+      "status": "pending"
+    },
+    {
+      "id": "M4a",
+      "reason": "Benign raw responses, response-bound judgments and human calibration; no judge is selected implicitly.",
+      "status": "pending"
+    },
+    {
+      "id": "M4b",
+      "reason": "Sufficient-evidence QA, factual favorable/adverse assignments and unknown/accuracy/invalid outcomes.",
+      "status": "pending"
+    },
+    {
+      "id": "BBQ",
+      "reason": "Native BBQ outputs and separately labelled WarBias QA with validated semantic roles/denominators.",
+      "status": "pending"
+    },
+    {
+      "id": "training_imbalance",
+      "reason": "Actual stream/family/token exposure only; outcome correlation and causal imbalance remain unavailable.",
+      "status": "partial"
+    },
+    {
+      "id": "severity",
+      "reason": "Reviewed high/standard annotations bound to adapted dataset bytes; descriptive only.",
+      "status": "pending"
+    }
+  ],
+  "limitations": "One integration arm; no benchmark pooling, invented calibration, judge selection, external capability scope or causal exposure claim. Missing metrics remain pending or partial, not zero.",
+  "kind": "complete_metric_coverage_before_native_completion",
+  "scope": "All five Qwen3-8B Ukrainian-training arms; common scientific dependency status, observed exposure recorded separately.",
+  "native_panels": {
+    "original": 6,
+    "supplemental": 11,
+    "active_total": 17,
+    "blocked": [
+      "stereoset_en"
+    ]
+  },
+  "supplemental_rows_per_checkpoint": 5833,
+  "planned_supplemental_records": 34998,
+  "analysis_commit": "88224db75bd80e85f5227897188904e9c470f4d1",
+  "source_report_sha256": "6411bf9018de4f04a112335fe8af87384765341c665cecb8357697a162b49ebc",
+  "pending_active_tasks": [
+    "bbq_uk",
+    "stereoset_uk",
+    "warbias_benign_en",
+    "warbias_benign_uk",
+    "warbias_cross_actor_en",
+    "warbias_cross_actor_uk",
+    "warbias_en",
+    "warbias_expanded_qa_en",
+    "warbias_expanded_qa_uk",
+    "warbias_intersectional_en",
+    "warbias_intersectional_uk",
+    "warbias_triplets_en",
+    "warbias_triplets_uk",
+    "warbias_uk",
+    "winobias_uk_controlled",
+    "winobias_uk_natural",
+    "winopron_uk"
+  ]
+}

@@ -1,0 +1,1434 @@
+{
+  "kind": "training_source_diagnostic_not_heldout",
+  "stage": "training_diagnostic_complete",
+  "model_id": "llama31_8b_instruct",
+  "bindings": {
+    "matrix": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/matrix.json",
+      "sha256": "3c640bf1ae270d126f45a8a69edab63b1a155bbd4ecd937486ca85ebc4fdc3f9"
+    },
+    "data_manifest": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/data/training_binding.json",
+      "sha256": "88682f9dcb475973b2cba55f13f60ba6d6086dc0697df8e1a07b55d7475ccff2"
+    },
+    "recipes": {
+      "rmu": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/recipes/llama31_8b_instruct/rmu.json",
+        "sha256": "153868cabcd7a90c6d73ea0fe127350f3bd3af09af9606c24c197a15e3f12abd"
+      },
+      "task_vector": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/recipes/llama31_8b_instruct/task_vector.json",
+        "sha256": "2dae49fe271a414a7ec04b0bb6cd8c4ef1fce2e0559347a5b856b4b2ce1c6080"
+      },
+      "wga_kl": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/recipes/llama31_8b_instruct/wga_kl.json",
+        "sha256": "9373ece571849b1ce8ba0c8943f6f20880ff5a35d96bfa18112f326f25077e74"
+      }
+    },
+    "source_adapted": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/sources/original_train_uk.jsonl",
+      "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+    },
+    "diagnostic_manifest": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+      "sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088"
+    },
+    "diagnostic_rows": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/data/warbias_triplets_uk.jsonl",
+      "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb"
+    },
+    "addon_config": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_llama31_8b_instruct_v2/config.json",
+      "sha256": "3aa11c1973631ac38416f53682e534dd004e6de18d7e65a96fcb65ec9c23f0ef"
+    },
+    "training_execution": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/execution.json",
+      "sha256": "41711cc2e666eea4008b6840070d3f7a6dc492cdbbfb9184694d1bb6efe54242"
+    },
+    "inference_views": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+      "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+    }
+  },
+  "checkpoints": {
+    "baseline": "/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659",
+    "rmu": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint",
+    "task_vector": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint",
+    "wga_kl": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint"
+  },
+  "qualification": {
+    "rmu": {
+      "passed": true,
+      "runs": [
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_llama31_8b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/rmu/repeat-1/warbias_triplets_uk"
+          ],
+          "gpu": "1",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/rmu/repeat-1/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:45:26.437748+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "a419dde9812a5bdf4b15c2e056f3b2359d25d4904b79226d2dbd5444cc4f94ad",
+            "report.json": "f484c525b2ae073ab87053b5eaf75e107903cc40c17946cb6c92bbed9f526ea8",
+            "predictions.jsonl": "e1856654b898d2a8c3f35e3408fbca72e06294afb3c78b8662cfc5ef182f7cb4"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "inference_view": {
+            "status": "validated_inference_view_of_actual_training_checkpoint",
+            "kind": "original",
+            "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+            "method": "rmu",
+            "sidecar": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+              "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+            },
+            "original_receipt": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/run.json",
+              "sha256": "17d321189b631e96f8862550b29cac54687bb312f1ab00be2133b37a2d17f249"
+            },
+            "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint",
+            "original_files_sha256": {
+              "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+              "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+              "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+              "model-00001-of-00004.safetensors": "0efcebfc48e7a47aac501485e87cf36aa69ac37f1b7a4ea168638ea9d58a0dbd",
+              "model-00002-of-00004.safetensors": "d2cf9881cc299ddf1a1b2bb49a4fa213b9805187b9cec9000497aef12c16b886",
+              "model-00003-of-00004.safetensors": "ab936aa358eb625777816bfd869c70c82fef3224e2606d6b4391cbc9ecf2742b",
+              "model-00004-of-00004.safetensors": "4a0ea61872ff6e2db1f3f04b84dacde88c922ed261949b73a043f49a032e070f",
+              "model.safetensors.index.json": "543d14a60c0a4d9ed4f0eb2f2dcc417c775e1a8de1537e32fa3c70db1fef25d5",
+              "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+              "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+              "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+            },
+            "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint",
+            "evaluation_files_sha256": {
+              "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+              "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+              "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+              "model-00001-of-00004.safetensors": "0efcebfc48e7a47aac501485e87cf36aa69ac37f1b7a4ea168638ea9d58a0dbd",
+              "model-00002-of-00004.safetensors": "d2cf9881cc299ddf1a1b2bb49a4fa213b9805187b9cec9000497aef12c16b886",
+              "model-00003-of-00004.safetensors": "ab936aa358eb625777816bfd869c70c82fef3224e2606d6b4391cbc9ecf2742b",
+              "model-00004-of-00004.safetensors": "4a0ea61872ff6e2db1f3f04b84dacde88c922ed261949b73a043f49a032e070f",
+              "model.safetensors.index.json": "543d14a60c0a4d9ed4f0eb2f2dcc417c775e1a8de1537e32fa3c70db1fef25d5",
+              "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+              "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+              "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+            },
+            "added_assets": {},
+            "processor_asset_base_binding": "not_applicable",
+            "original_weight_config_tokenizer_files_unchanged": true
+          },
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/rmu/repeat-1/warbias_triplets_uk/run.json",
+              "sha256": "a419dde9812a5bdf4b15c2e056f3b2359d25d4904b79226d2dbd5444cc4f94ad"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/rmu/repeat-1/warbias_triplets_uk/report.json",
+              "sha256": "f484c525b2ae073ab87053b5eaf75e107903cc40c17946cb6c92bbed9f526ea8"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/rmu/repeat-1/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "e1856654b898d2a8c3f35e3408fbca72e06294afb3c78b8662cfc5ef182f7cb4"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:49:33.542831+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/rmu/repeat-1/warbias_triplets_uk.log",
+            "sha256": "56f3e672c1c195726059a312ec747f4f0ccb6ec64dff8fdd15cf316d54d99525"
+          }
+        },
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_llama31_8b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/rmu/repeat-2/warbias_triplets_uk"
+          ],
+          "gpu": "1",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/rmu/repeat-2/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:49:33.545228+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "a419dde9812a5bdf4b15c2e056f3b2359d25d4904b79226d2dbd5444cc4f94ad",
+            "report.json": "f484c525b2ae073ab87053b5eaf75e107903cc40c17946cb6c92bbed9f526ea8",
+            "predictions.jsonl": "e1856654b898d2a8c3f35e3408fbca72e06294afb3c78b8662cfc5ef182f7cb4"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "inference_view": {
+            "status": "validated_inference_view_of_actual_training_checkpoint",
+            "kind": "original",
+            "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+            "method": "rmu",
+            "sidecar": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+              "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+            },
+            "original_receipt": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/run.json",
+              "sha256": "17d321189b631e96f8862550b29cac54687bb312f1ab00be2133b37a2d17f249"
+            },
+            "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint",
+            "original_files_sha256": {
+              "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+              "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+              "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+              "model-00001-of-00004.safetensors": "0efcebfc48e7a47aac501485e87cf36aa69ac37f1b7a4ea168638ea9d58a0dbd",
+              "model-00002-of-00004.safetensors": "d2cf9881cc299ddf1a1b2bb49a4fa213b9805187b9cec9000497aef12c16b886",
+              "model-00003-of-00004.safetensors": "ab936aa358eb625777816bfd869c70c82fef3224e2606d6b4391cbc9ecf2742b",
+              "model-00004-of-00004.safetensors": "4a0ea61872ff6e2db1f3f04b84dacde88c922ed261949b73a043f49a032e070f",
+              "model.safetensors.index.json": "543d14a60c0a4d9ed4f0eb2f2dcc417c775e1a8de1537e32fa3c70db1fef25d5",
+              "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+              "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+              "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+            },
+            "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint",
+            "evaluation_files_sha256": {
+              "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+              "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+              "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+              "model-00001-of-00004.safetensors": "0efcebfc48e7a47aac501485e87cf36aa69ac37f1b7a4ea168638ea9d58a0dbd",
+              "model-00002-of-00004.safetensors": "d2cf9881cc299ddf1a1b2bb49a4fa213b9805187b9cec9000497aef12c16b886",
+              "model-00003-of-00004.safetensors": "ab936aa358eb625777816bfd869c70c82fef3224e2606d6b4391cbc9ecf2742b",
+              "model-00004-of-00004.safetensors": "4a0ea61872ff6e2db1f3f04b84dacde88c922ed261949b73a043f49a032e070f",
+              "model.safetensors.index.json": "543d14a60c0a4d9ed4f0eb2f2dcc417c775e1a8de1537e32fa3c70db1fef25d5",
+              "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+              "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+              "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+            },
+            "added_assets": {},
+            "processor_asset_base_binding": "not_applicable",
+            "original_weight_config_tokenizer_files_unchanged": true
+          },
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/rmu/repeat-2/warbias_triplets_uk/run.json",
+              "sha256": "a419dde9812a5bdf4b15c2e056f3b2359d25d4904b79226d2dbd5444cc4f94ad"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/rmu/repeat-2/warbias_triplets_uk/report.json",
+              "sha256": "f484c525b2ae073ab87053b5eaf75e107903cc40c17946cb6c92bbed9f526ea8"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/rmu/repeat-2/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "e1856654b898d2a8c3f35e3408fbca72e06294afb3c78b8662cfc5ef182f7cb4"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:50:22.530453+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/rmu/repeat-2/warbias_triplets_uk.log",
+            "sha256": "646221cef25af209cd449c90df55dc1a3f83bf8e88f58d8bfdce5e9a18f7dfc7"
+          }
+        }
+      ],
+      "max_absolute_score_difference": 0.0,
+      "exact_generation_match": null
+    },
+    "task_vector": {
+      "passed": true,
+      "runs": [
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_llama31_8b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/task_vector/repeat-1/warbias_triplets_uk"
+          ],
+          "gpu": "2",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/task_vector/repeat-1/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:45:26.436867+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "15328dc5631d805c0a17dedc9728955d183e37913ff7156c01bc3b9dee065772",
+            "report.json": "a38c068ffa5ac8ba9fce71617a96a9f9c7cc9f9f1d2b9a530b35523bc29b249a",
+            "predictions.jsonl": "c6ec21840c0d8c729050ed86306214686e8df6da5f20cf41362b7a2264905c01"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "inference_view": {
+            "status": "validated_inference_view_of_actual_training_checkpoint",
+            "kind": "original",
+            "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+            "method": "task_vector",
+            "sidecar": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+              "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+            },
+            "original_receipt": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/intervention.json",
+              "sha256": "4a0934fa99fde474a91838adcf5855123578d2c7c064168ebae57fae8304c22d"
+            },
+            "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint",
+            "original_files_sha256": {
+              "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+              "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+              "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+              "model-00001-of-00005.safetensors": "2a37f6565cd20bbeb90033635d01222b672e6216c23f2e031b9b0c7feb9bcfca",
+              "model-00002-of-00005.safetensors": "0c4d494587a3328773d6e3d9db66e2c88ea38d241db74c54c889172a45a70af4",
+              "model-00003-of-00005.safetensors": "1f0d5d2cadae6bd055b756a744311402f6bc18629c7848eccbf0d30b70b2c6fa",
+              "model-00004-of-00005.safetensors": "0aaebe8e6a1865f418cba4004c321e2260a018fc011ac7f8f158644057034a72",
+              "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+              "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+              "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+              "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+              "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+            },
+            "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint",
+            "evaluation_files_sha256": {
+              "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+              "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+              "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+              "model-00001-of-00005.safetensors": "2a37f6565cd20bbeb90033635d01222b672e6216c23f2e031b9b0c7feb9bcfca",
+              "model-00002-of-00005.safetensors": "0c4d494587a3328773d6e3d9db66e2c88ea38d241db74c54c889172a45a70af4",
+              "model-00003-of-00005.safetensors": "1f0d5d2cadae6bd055b756a744311402f6bc18629c7848eccbf0d30b70b2c6fa",
+              "model-00004-of-00005.safetensors": "0aaebe8e6a1865f418cba4004c321e2260a018fc011ac7f8f158644057034a72",
+              "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+              "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+              "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+              "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+              "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+            },
+            "added_assets": {},
+            "processor_asset_base_binding": "not_applicable",
+            "original_weight_config_tokenizer_files_unchanged": true
+          },
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/task_vector/repeat-1/warbias_triplets_uk/run.json",
+              "sha256": "15328dc5631d805c0a17dedc9728955d183e37913ff7156c01bc3b9dee065772"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/task_vector/repeat-1/warbias_triplets_uk/report.json",
+              "sha256": "a38c068ffa5ac8ba9fce71617a96a9f9c7cc9f9f1d2b9a530b35523bc29b249a"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/task_vector/repeat-1/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "c6ec21840c0d8c729050ed86306214686e8df6da5f20cf41362b7a2264905c01"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:49:33.855115+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/task_vector/repeat-1/warbias_triplets_uk.log",
+            "sha256": "feebac4834c939cab06df5f716c0c348856a5fe62ddaac63a54f433fe18824be"
+          }
+        },
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_llama31_8b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/task_vector/repeat-2/warbias_triplets_uk"
+          ],
+          "gpu": "2",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/task_vector/repeat-2/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:49:33.857171+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "15328dc5631d805c0a17dedc9728955d183e37913ff7156c01bc3b9dee065772",
+            "report.json": "a38c068ffa5ac8ba9fce71617a96a9f9c7cc9f9f1d2b9a530b35523bc29b249a",
+            "predictions.jsonl": "c6ec21840c0d8c729050ed86306214686e8df6da5f20cf41362b7a2264905c01"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "inference_view": {
+            "status": "validated_inference_view_of_actual_training_checkpoint",
+            "kind": "original",
+            "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+            "method": "task_vector",
+            "sidecar": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+              "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+            },
+            "original_receipt": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/intervention.json",
+              "sha256": "4a0934fa99fde474a91838adcf5855123578d2c7c064168ebae57fae8304c22d"
+            },
+            "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint",
+            "original_files_sha256": {
+              "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+              "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+              "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+              "model-00001-of-00005.safetensors": "2a37f6565cd20bbeb90033635d01222b672e6216c23f2e031b9b0c7feb9bcfca",
+              "model-00002-of-00005.safetensors": "0c4d494587a3328773d6e3d9db66e2c88ea38d241db74c54c889172a45a70af4",
+              "model-00003-of-00005.safetensors": "1f0d5d2cadae6bd055b756a744311402f6bc18629c7848eccbf0d30b70b2c6fa",
+              "model-00004-of-00005.safetensors": "0aaebe8e6a1865f418cba4004c321e2260a018fc011ac7f8f158644057034a72",
+              "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+              "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+              "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+              "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+              "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+            },
+            "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint",
+            "evaluation_files_sha256": {
+              "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+              "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+              "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+              "model-00001-of-00005.safetensors": "2a37f6565cd20bbeb90033635d01222b672e6216c23f2e031b9b0c7feb9bcfca",
+              "model-00002-of-00005.safetensors": "0c4d494587a3328773d6e3d9db66e2c88ea38d241db74c54c889172a45a70af4",
+              "model-00003-of-00005.safetensors": "1f0d5d2cadae6bd055b756a744311402f6bc18629c7848eccbf0d30b70b2c6fa",
+              "model-00004-of-00005.safetensors": "0aaebe8e6a1865f418cba4004c321e2260a018fc011ac7f8f158644057034a72",
+              "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+              "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+              "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+              "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+              "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+            },
+            "added_assets": {},
+            "processor_asset_base_binding": "not_applicable",
+            "original_weight_config_tokenizer_files_unchanged": true
+          },
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/task_vector/repeat-2/warbias_triplets_uk/run.json",
+              "sha256": "15328dc5631d805c0a17dedc9728955d183e37913ff7156c01bc3b9dee065772"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/task_vector/repeat-2/warbias_triplets_uk/report.json",
+              "sha256": "a38c068ffa5ac8ba9fce71617a96a9f9c7cc9f9f1d2b9a530b35523bc29b249a"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/task_vector/repeat-2/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "c6ec21840c0d8c729050ed86306214686e8df6da5f20cf41362b7a2264905c01"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:50:22.745571+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/task_vector/repeat-2/warbias_triplets_uk.log",
+            "sha256": "fa1fe9aa0f80617ed16aaa37c52d4c652d23fa240492ec7e5bebb40104355aa4"
+          }
+        }
+      ],
+      "max_absolute_score_difference": 0.0,
+      "exact_generation_match": null
+    },
+    "wga_kl": {
+      "passed": true,
+      "runs": [
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_llama31_8b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/wga_kl/repeat-1/warbias_triplets_uk"
+          ],
+          "gpu": "3",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/wga_kl/repeat-1/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:45:26.438416+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "89997d4da73c3ca16f54a848d4aea27be01b810cba275dd2b3e3c50613d4ad9d",
+            "report.json": "e690ce74e6e68bf39e7fd1b53d61057723765567716be8e3e0db01d15337ee7b",
+            "predictions.jsonl": "f127d97006f6986e077d0c5e5bf84c03ae7752bd92b802bc5b23a904f7d05943"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "inference_view": {
+            "status": "validated_inference_view_of_actual_training_checkpoint",
+            "kind": "original",
+            "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+            "method": "wga_kl",
+            "sidecar": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+              "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+            },
+            "original_receipt": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/intervention.json",
+              "sha256": "cfa9c2f246298c0e3e662e3d091c0fcb1286e7abffde1607a589d21c975c79e9"
+            },
+            "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint",
+            "original_files_sha256": {
+              "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+              "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+              "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+              "model-00001-of-00005.safetensors": "5f9eef0a3d8736d8cf06e9dba6691d637574702ed13aaeda10cd9182cd76f4ae",
+              "model-00002-of-00005.safetensors": "5bdbd6a650189a592144f3b438315aea2054b313f063fe341752cba5f66b7969",
+              "model-00003-of-00005.safetensors": "0f3d936d2d6e4820d13dc876b10000741b790a5970d188e49e88c5b9600d2f66",
+              "model-00004-of-00005.safetensors": "fa5d13faf88247e3364cd31071236eb38b351b391e250fd938f7e6ee7cafc9f9",
+              "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+              "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+              "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+              "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+              "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+            },
+            "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint",
+            "evaluation_files_sha256": {
+              "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+              "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+              "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+              "model-00001-of-00005.safetensors": "5f9eef0a3d8736d8cf06e9dba6691d637574702ed13aaeda10cd9182cd76f4ae",
+              "model-00002-of-00005.safetensors": "5bdbd6a650189a592144f3b438315aea2054b313f063fe341752cba5f66b7969",
+              "model-00003-of-00005.safetensors": "0f3d936d2d6e4820d13dc876b10000741b790a5970d188e49e88c5b9600d2f66",
+              "model-00004-of-00005.safetensors": "fa5d13faf88247e3364cd31071236eb38b351b391e250fd938f7e6ee7cafc9f9",
+              "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+              "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+              "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+              "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+              "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+            },
+            "added_assets": {},
+            "processor_asset_base_binding": "not_applicable",
+            "original_weight_config_tokenizer_files_unchanged": true
+          },
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/wga_kl/repeat-1/warbias_triplets_uk/run.json",
+              "sha256": "89997d4da73c3ca16f54a848d4aea27be01b810cba275dd2b3e3c50613d4ad9d"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/wga_kl/repeat-1/warbias_triplets_uk/report.json",
+              "sha256": "e690ce74e6e68bf39e7fd1b53d61057723765567716be8e3e0db01d15337ee7b"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/wga_kl/repeat-1/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "f127d97006f6986e077d0c5e5bf84c03ae7752bd92b802bc5b23a904f7d05943"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:49:33.705146+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/wga_kl/repeat-1/warbias_triplets_uk.log",
+            "sha256": "ded9295911029aa4ae1ff6f70210b82ce1e002ff4061ce43a47ab968eb33de34"
+          }
+        },
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_llama31_8b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/wga_kl/repeat-2/warbias_triplets_uk"
+          ],
+          "gpu": "3",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/wga_kl/repeat-2/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:49:33.707614+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "89997d4da73c3ca16f54a848d4aea27be01b810cba275dd2b3e3c50613d4ad9d",
+            "report.json": "e690ce74e6e68bf39e7fd1b53d61057723765567716be8e3e0db01d15337ee7b",
+            "predictions.jsonl": "f127d97006f6986e077d0c5e5bf84c03ae7752bd92b802bc5b23a904f7d05943"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "inference_view": {
+            "status": "validated_inference_view_of_actual_training_checkpoint",
+            "kind": "original",
+            "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+            "method": "wga_kl",
+            "sidecar": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+              "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+            },
+            "original_receipt": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/intervention.json",
+              "sha256": "cfa9c2f246298c0e3e662e3d091c0fcb1286e7abffde1607a589d21c975c79e9"
+            },
+            "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint",
+            "original_files_sha256": {
+              "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+              "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+              "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+              "model-00001-of-00005.safetensors": "5f9eef0a3d8736d8cf06e9dba6691d637574702ed13aaeda10cd9182cd76f4ae",
+              "model-00002-of-00005.safetensors": "5bdbd6a650189a592144f3b438315aea2054b313f063fe341752cba5f66b7969",
+              "model-00003-of-00005.safetensors": "0f3d936d2d6e4820d13dc876b10000741b790a5970d188e49e88c5b9600d2f66",
+              "model-00004-of-00005.safetensors": "fa5d13faf88247e3364cd31071236eb38b351b391e250fd938f7e6ee7cafc9f9",
+              "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+              "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+              "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+              "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+              "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+            },
+            "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint",
+            "evaluation_files_sha256": {
+              "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+              "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+              "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+              "model-00001-of-00005.safetensors": "5f9eef0a3d8736d8cf06e9dba6691d637574702ed13aaeda10cd9182cd76f4ae",
+              "model-00002-of-00005.safetensors": "5bdbd6a650189a592144f3b438315aea2054b313f063fe341752cba5f66b7969",
+              "model-00003-of-00005.safetensors": "0f3d936d2d6e4820d13dc876b10000741b790a5970d188e49e88c5b9600d2f66",
+              "model-00004-of-00005.safetensors": "fa5d13faf88247e3364cd31071236eb38b351b391e250fd938f7e6ee7cafc9f9",
+              "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+              "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+              "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+              "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+              "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+            },
+            "added_assets": {},
+            "processor_asset_base_binding": "not_applicable",
+            "original_weight_config_tokenizer_files_unchanged": true
+          },
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/wga_kl/repeat-2/warbias_triplets_uk/run.json",
+              "sha256": "89997d4da73c3ca16f54a848d4aea27be01b810cba275dd2b3e3c50613d4ad9d"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/wga_kl/repeat-2/warbias_triplets_uk/report.json",
+              "sha256": "e690ce74e6e68bf39e7fd1b53d61057723765567716be8e3e0db01d15337ee7b"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/wga_kl/repeat-2/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "f127d97006f6986e077d0c5e5bf84c03ae7752bd92b802bc5b23a904f7d05943"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:50:22.819211+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/wga_kl/repeat-2/warbias_triplets_uk.log",
+            "sha256": "22bc5713a2db52bc5aa025a4cc7b9b7523f3345e3063df0694f41786d4ab6ca6"
+          }
+        }
+      ],
+      "max_absolute_score_difference": 0.0,
+      "exact_generation_match": null
+    },
+    "baseline": {
+      "passed": true,
+      "runs": [
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_llama31_8b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/baseline/repeat-1/warbias_triplets_uk"
+          ],
+          "gpu": "0",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/baseline/repeat-1/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:45:26.436231+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "3dcd09cb4574c6fadc940be55f9c1732095b173bce8d8e1fdf1283ddb4dab724",
+            "report.json": "15da489624ba550c914d2bdea9a74bf6b963c07af69583b0d0a84fded4d8d9ad",
+            "predictions.jsonl": "c6ec21840c0d8c729050ed86306214686e8df6da5f20cf41362b7a2264905c01"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/baseline/repeat-1/warbias_triplets_uk/run.json",
+              "sha256": "3dcd09cb4574c6fadc940be55f9c1732095b173bce8d8e1fdf1283ddb4dab724"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/baseline/repeat-1/warbias_triplets_uk/report.json",
+              "sha256": "15da489624ba550c914d2bdea9a74bf6b963c07af69583b0d0a84fded4d8d9ad"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/baseline/repeat-1/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "c6ec21840c0d8c729050ed86306214686e8df6da5f20cf41362b7a2264905c01"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:49:33.358057+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/baseline/repeat-1/warbias_triplets_uk.log",
+            "sha256": "141063d1f565f901fa40899f6584758efce7bfaf965ea78d31d37290882e42a5"
+          }
+        },
+        {
+          "command": [
+            "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+            "-m",
+            "lm_eval.fair_uk",
+            "run",
+            "--task",
+            "warbias_triplets_uk",
+            "--dataset-bundle",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_llama31_8b_instruct_v2/qualification/manifest.json",
+            "--model",
+            "vllm",
+            "--model-args",
+            "pretrained=/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+            "--batch-size",
+            "8",
+            "--chunk-size",
+            "128",
+            "--max-output-tokens",
+            "512",
+            "--generation-prompt-format",
+            "native-chat",
+            "--answer-policy",
+            "abc_option_text_v2",
+            "--bootstrap",
+            "1000",
+            "--seed",
+            "42",
+            "--output",
+            "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/baseline/repeat-2/warbias_triplets_uk"
+          ],
+          "gpu": "0",
+          "runtime_environment": {
+            "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+          },
+          "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/baseline/repeat-2/warbias_triplets_uk",
+          "started_at_utc": "2026-10-31T13:49:33.360267+00:00",
+          "returncode": 0,
+          "prediction_rows": 2,
+          "selected_ids_sha256": "a2da35357cd1c970ab9483f3474d810480ce1f54ea329f45b8d7aefc10549d47",
+          "native_files_sha256": {
+            "run.json": "3dcd09cb4574c6fadc940be55f9c1732095b173bce8d8e1fdf1283ddb4dab724",
+            "report.json": "15da489624ba550c914d2bdea9a74bf6b963c07af69583b0d0a84fded4d8d9ad",
+            "predictions.jsonl": "c6ec21840c0d8c729050ed86306214686e8df6da5f20cf41362b7a2264905c01"
+          },
+          "model_identity_recorded": true,
+          "evaluation_assets_recorded": true,
+          "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+          "status": "completed",
+          "files": {
+            "run.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/baseline/repeat-2/warbias_triplets_uk/run.json",
+              "sha256": "3dcd09cb4574c6fadc940be55f9c1732095b173bce8d8e1fdf1283ddb4dab724"
+            },
+            "report.json": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/baseline/repeat-2/warbias_triplets_uk/report.json",
+              "sha256": "15da489624ba550c914d2bdea9a74bf6b963c07af69583b0d0a84fded4d8d9ad"
+            },
+            "predictions.jsonl": {
+              "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/baseline/repeat-2/warbias_triplets_uk/predictions.jsonl",
+              "sha256": "c6ec21840c0d8c729050ed86306214686e8df6da5f20cf41362b7a2264905c01"
+            }
+          },
+          "finished_at_utc": "2026-10-31T13:50:24.983566+00:00",
+          "log": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/qualification/baseline/repeat-2/warbias_triplets_uk.log",
+            "sha256": "0e432d0a6838106ab722a0a901fbf9b90694aea8cd93ef773baa8767e999c4b7"
+          }
+        }
+      ],
+      "max_absolute_score_difference": 0.0,
+      "exact_generation_match": null
+    }
+  },
+  "tasks": {
+    "task_vector": {
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "run",
+        "--task",
+        "warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+        "--model",
+        "vllm",
+        "--model-args",
+        "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+        "--batch-size",
+        "8",
+        "--chunk-size",
+        "128",
+        "--max-output-tokens",
+        "512",
+        "--generation-prompt-format",
+        "native-chat",
+        "--answer-policy",
+        "abc_option_text_v2",
+        "--bootstrap",
+        "1000",
+        "--seed",
+        "42",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/task_vector/warbias_triplets_uk"
+      ],
+      "gpu": "2",
+      "runtime_environment": {
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+      },
+      "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/task_vector/warbias_triplets_uk",
+      "started_at_utc": "2026-10-31T13:50:24.990588+00:00",
+      "returncode": 0,
+      "prediction_rows": 137,
+      "selected_ids_sha256": "988ff509e8b8c33c6a42cc57dedb9177241b163013c822ff88a9c3098b90ac64",
+      "native_files_sha256": {
+        "run.json": "344cc515c140303e90de8bd28d261395f3af6f5cb54b0d17d8cc2383808ba05b",
+        "report.json": "d537159ff05ac05996894c6504ed7589e01236007629ca9c24b98b484fa9a5ba",
+        "predictions.jsonl": "e28475b6bee2976ff3939922990425550235ff6a06f72830785f3e41473282b6"
+      },
+      "model_identity_recorded": true,
+      "evaluation_assets_recorded": true,
+      "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+      "inference_view": {
+        "status": "validated_inference_view_of_actual_training_checkpoint",
+        "kind": "original",
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "method": "task_vector",
+        "sidecar": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+          "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+        },
+        "original_receipt": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/intervention.json",
+          "sha256": "4a0934fa99fde474a91838adcf5855123578d2c7c064168ebae57fae8304c22d"
+        },
+        "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint",
+        "original_files_sha256": {
+          "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+          "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+          "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+          "model-00001-of-00005.safetensors": "2a37f6565cd20bbeb90033635d01222b672e6216c23f2e031b9b0c7feb9bcfca",
+          "model-00002-of-00005.safetensors": "0c4d494587a3328773d6e3d9db66e2c88ea38d241db74c54c889172a45a70af4",
+          "model-00003-of-00005.safetensors": "1f0d5d2cadae6bd055b756a744311402f6bc18629c7848eccbf0d30b70b2c6fa",
+          "model-00004-of-00005.safetensors": "0aaebe8e6a1865f418cba4004c321e2260a018fc011ac7f8f158644057034a72",
+          "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+          "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+          "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+          "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+          "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+        },
+        "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint",
+        "evaluation_files_sha256": {
+          "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+          "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+          "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+          "model-00001-of-00005.safetensors": "2a37f6565cd20bbeb90033635d01222b672e6216c23f2e031b9b0c7feb9bcfca",
+          "model-00002-of-00005.safetensors": "0c4d494587a3328773d6e3d9db66e2c88ea38d241db74c54c889172a45a70af4",
+          "model-00003-of-00005.safetensors": "1f0d5d2cadae6bd055b756a744311402f6bc18629c7848eccbf0d30b70b2c6fa",
+          "model-00004-of-00005.safetensors": "0aaebe8e6a1865f418cba4004c321e2260a018fc011ac7f8f158644057034a72",
+          "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+          "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+          "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+          "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+          "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+        },
+        "added_assets": {},
+        "processor_asset_base_binding": "not_applicable",
+        "original_weight_config_tokenizer_files_unchanged": true
+      },
+      "status": "completed",
+      "files": {
+        "run.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/task_vector/warbias_triplets_uk/run.json",
+          "sha256": "344cc515c140303e90de8bd28d261395f3af6f5cb54b0d17d8cc2383808ba05b"
+        },
+        "report.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/task_vector/warbias_triplets_uk/report.json",
+          "sha256": "d537159ff05ac05996894c6504ed7589e01236007629ca9c24b98b484fa9a5ba"
+        },
+        "predictions.jsonl": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/task_vector/warbias_triplets_uk/predictions.jsonl",
+          "sha256": "e28475b6bee2976ff3939922990425550235ff6a06f72830785f3e41473282b6"
+        }
+      },
+      "finished_at_utc": "2026-10-31T13:51:25.444834+00:00",
+      "log": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/task_vector/warbias_triplets_uk.log",
+        "sha256": "b4d308b86865165ba68a7ee54488286d822cbb1ab2257da9015a5de3d9b44801"
+      }
+    },
+    "wga_kl": {
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "run",
+        "--task",
+        "warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+        "--model",
+        "vllm",
+        "--model-args",
+        "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+        "--batch-size",
+        "8",
+        "--chunk-size",
+        "128",
+        "--max-output-tokens",
+        "512",
+        "--generation-prompt-format",
+        "native-chat",
+        "--answer-policy",
+        "abc_option_text_v2",
+        "--bootstrap",
+        "1000",
+        "--seed",
+        "42",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/wga_kl/warbias_triplets_uk"
+      ],
+      "gpu": "3",
+      "runtime_environment": {
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+      },
+      "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/wga_kl/warbias_triplets_uk",
+      "started_at_utc": "2026-10-31T13:50:24.989221+00:00",
+      "returncode": 0,
+      "prediction_rows": 137,
+      "selected_ids_sha256": "988ff509e8b8c33c6a42cc57dedb9177241b163013c822ff88a9c3098b90ac64",
+      "native_files_sha256": {
+        "run.json": "151e97d2959bea29b5e34be614d80d4cfe7a4b8910af5b4cb4ce05cd8f9c205b",
+        "report.json": "2ab1f5c552d16d43e8da6360d1baa97f7fc6c1b488de867b972ef25c91f16994",
+        "predictions.jsonl": "60d1f1509c8f623e452bb2734365e753c33082708f2a26e1c84209067e6b975f"
+      },
+      "model_identity_recorded": true,
+      "evaluation_assets_recorded": true,
+      "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+      "inference_view": {
+        "status": "validated_inference_view_of_actual_training_checkpoint",
+        "kind": "original",
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "method": "wga_kl",
+        "sidecar": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+          "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+        },
+        "original_receipt": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/intervention.json",
+          "sha256": "cfa9c2f246298c0e3e662e3d091c0fcb1286e7abffde1607a589d21c975c79e9"
+        },
+        "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint",
+        "original_files_sha256": {
+          "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+          "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+          "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+          "model-00001-of-00005.safetensors": "5f9eef0a3d8736d8cf06e9dba6691d637574702ed13aaeda10cd9182cd76f4ae",
+          "model-00002-of-00005.safetensors": "5bdbd6a650189a592144f3b438315aea2054b313f063fe341752cba5f66b7969",
+          "model-00003-of-00005.safetensors": "0f3d936d2d6e4820d13dc876b10000741b790a5970d188e49e88c5b9600d2f66",
+          "model-00004-of-00005.safetensors": "fa5d13faf88247e3364cd31071236eb38b351b391e250fd938f7e6ee7cafc9f9",
+          "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+          "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+          "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+          "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+          "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+        },
+        "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint",
+        "evaluation_files_sha256": {
+          "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+          "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+          "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+          "model-00001-of-00005.safetensors": "5f9eef0a3d8736d8cf06e9dba6691d637574702ed13aaeda10cd9182cd76f4ae",
+          "model-00002-of-00005.safetensors": "5bdbd6a650189a592144f3b438315aea2054b313f063fe341752cba5f66b7969",
+          "model-00003-of-00005.safetensors": "0f3d936d2d6e4820d13dc876b10000741b790a5970d188e49e88c5b9600d2f66",
+          "model-00004-of-00005.safetensors": "fa5d13faf88247e3364cd31071236eb38b351b391e250fd938f7e6ee7cafc9f9",
+          "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+          "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+          "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+          "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+          "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+        },
+        "added_assets": {},
+        "processor_asset_base_binding": "not_applicable",
+        "original_weight_config_tokenizer_files_unchanged": true
+      },
+      "status": "completed",
+      "files": {
+        "run.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/wga_kl/warbias_triplets_uk/run.json",
+          "sha256": "151e97d2959bea29b5e34be614d80d4cfe7a4b8910af5b4cb4ce05cd8f9c205b"
+        },
+        "report.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/wga_kl/warbias_triplets_uk/report.json",
+          "sha256": "2ab1f5c552d16d43e8da6360d1baa97f7fc6c1b488de867b972ef25c91f16994"
+        },
+        "predictions.jsonl": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/wga_kl/warbias_triplets_uk/predictions.jsonl",
+          "sha256": "60d1f1509c8f623e452bb2734365e753c33082708f2a26e1c84209067e6b975f"
+        }
+      },
+      "finished_at_utc": "2026-10-31T13:51:25.616935+00:00",
+      "log": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/wga_kl/warbias_triplets_uk.log",
+        "sha256": "0250c428604c55d22208d6d2bfba0f437edcdc5832d68e1a23252d7a0dd0bc17"
+      }
+    },
+    "rmu": {
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "run",
+        "--task",
+        "warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+        "--model",
+        "vllm",
+        "--model-args",
+        "pretrained=/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+        "--batch-size",
+        "8",
+        "--chunk-size",
+        "128",
+        "--max-output-tokens",
+        "512",
+        "--generation-prompt-format",
+        "native-chat",
+        "--answer-policy",
+        "abc_option_text_v2",
+        "--bootstrap",
+        "1000",
+        "--seed",
+        "42",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/rmu/warbias_triplets_uk"
+      ],
+      "gpu": "1",
+      "runtime_environment": {
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+      },
+      "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/rmu/warbias_triplets_uk",
+      "started_at_utc": "2026-10-31T13:50:24.989619+00:00",
+      "returncode": 0,
+      "prediction_rows": 137,
+      "selected_ids_sha256": "988ff509e8b8c33c6a42cc57dedb9177241b163013c822ff88a9c3098b90ac64",
+      "native_files_sha256": {
+        "run.json": "ccb37d22618657d7524d511ee040960c068b5513bc0de8ff7da98c72e8f6e78e",
+        "report.json": "368fc6a171ff254f5f23db25cdbecb260713315b10545a1e97dd2c0a6d36ed04",
+        "predictions.jsonl": "24db12ca2621150a6b89eebf6cd9f24684fec0855c593bcc26a4c87d734ec855"
+      },
+      "model_identity_recorded": true,
+      "evaluation_assets_recorded": true,
+      "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+      "inference_view": {
+        "status": "validated_inference_view_of_actual_training_checkpoint",
+        "kind": "original",
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "method": "rmu",
+        "sidecar": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+          "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+        },
+        "original_receipt": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/run.json",
+          "sha256": "17d321189b631e96f8862550b29cac54687bb312f1ab00be2133b37a2d17f249"
+        },
+        "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint",
+        "original_files_sha256": {
+          "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+          "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+          "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+          "model-00001-of-00004.safetensors": "0efcebfc48e7a47aac501485e87cf36aa69ac37f1b7a4ea168638ea9d58a0dbd",
+          "model-00002-of-00004.safetensors": "d2cf9881cc299ddf1a1b2bb49a4fa213b9805187b9cec9000497aef12c16b886",
+          "model-00003-of-00004.safetensors": "ab936aa358eb625777816bfd869c70c82fef3224e2606d6b4391cbc9ecf2742b",
+          "model-00004-of-00004.safetensors": "4a0ea61872ff6e2db1f3f04b84dacde88c922ed261949b73a043f49a032e070f",
+          "model.safetensors.index.json": "543d14a60c0a4d9ed4f0eb2f2dcc417c775e1a8de1537e32fa3c70db1fef25d5",
+          "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+          "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+          "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+        },
+        "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint",
+        "evaluation_files_sha256": {
+          "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+          "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+          "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+          "model-00001-of-00004.safetensors": "0efcebfc48e7a47aac501485e87cf36aa69ac37f1b7a4ea168638ea9d58a0dbd",
+          "model-00002-of-00004.safetensors": "d2cf9881cc299ddf1a1b2bb49a4fa213b9805187b9cec9000497aef12c16b886",
+          "model-00003-of-00004.safetensors": "ab936aa358eb625777816bfd869c70c82fef3224e2606d6b4391cbc9ecf2742b",
+          "model-00004-of-00004.safetensors": "4a0ea61872ff6e2db1f3f04b84dacde88c922ed261949b73a043f49a032e070f",
+          "model.safetensors.index.json": "543d14a60c0a4d9ed4f0eb2f2dcc417c775e1a8de1537e32fa3c70db1fef25d5",
+          "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+          "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+          "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+        },
+        "added_assets": {},
+        "processor_asset_base_binding": "not_applicable",
+        "original_weight_config_tokenizer_files_unchanged": true
+      },
+      "status": "completed",
+      "files": {
+        "run.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/rmu/warbias_triplets_uk/run.json",
+          "sha256": "ccb37d22618657d7524d511ee040960c068b5513bc0de8ff7da98c72e8f6e78e"
+        },
+        "report.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/rmu/warbias_triplets_uk/report.json",
+          "sha256": "368fc6a171ff254f5f23db25cdbecb260713315b10545a1e97dd2c0a6d36ed04"
+        },
+        "predictions.jsonl": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/rmu/warbias_triplets_uk/predictions.jsonl",
+          "sha256": "24db12ca2621150a6b89eebf6cd9f24684fec0855c593bcc26a4c87d734ec855"
+        }
+      },
+      "finished_at_utc": "2026-10-31T13:51:25.709950+00:00",
+      "log": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/rmu/warbias_triplets_uk.log",
+        "sha256": "a5bb4a181f516bd53cbf06bcb26cb6bbb2d52d32179abe98f9626c74ea85fd86"
+      }
+    },
+    "baseline": {
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "run",
+        "--task",
+        "warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+        "--model",
+        "vllm",
+        "--model-args",
+        "pretrained=/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659,dtype=bfloat16,tensor_parallel_size=1,max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True,max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False",
+        "--batch-size",
+        "8",
+        "--chunk-size",
+        "128",
+        "--max-output-tokens",
+        "512",
+        "--generation-prompt-format",
+        "native-chat",
+        "--answer-policy",
+        "abc_option_text_v2",
+        "--bootstrap",
+        "1000",
+        "--seed",
+        "42",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/baseline/warbias_triplets_uk"
+      ],
+      "gpu": "0",
+      "runtime_environment": {
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+      },
+      "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/baseline/warbias_triplets_uk",
+      "started_at_utc": "2026-10-31T13:50:24.990113+00:00",
+      "returncode": 0,
+      "prediction_rows": 137,
+      "selected_ids_sha256": "988ff509e8b8c33c6a42cc57dedb9177241b163013c822ff88a9c3098b90ac64",
+      "native_files_sha256": {
+        "run.json": "fa875554c6349d6d9a3611413c077dc9bafb10e3733d34091864d6f20f643ae5",
+        "report.json": "47d616612b22734dbe3380dffe08b6a015aef96dc66f527e9395c27310cf05ac",
+        "predictions.jsonl": "e28475b6bee2976ff3939922990425550235ff6a06f72830785f3e41473282b6"
+      },
+      "model_identity_recorded": true,
+      "evaluation_assets_recorded": true,
+      "metrics_interpretation": "native benchmark outcomes; completion is not a claim of mitigation or utility preservation",
+      "status": "completed",
+      "files": {
+        "run.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/baseline/warbias_triplets_uk/run.json",
+          "sha256": "fa875554c6349d6d9a3611413c077dc9bafb10e3733d34091864d6f20f643ae5"
+        },
+        "report.json": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/baseline/warbias_triplets_uk/report.json",
+          "sha256": "47d616612b22734dbe3380dffe08b6a015aef96dc66f527e9395c27310cf05ac"
+        },
+        "predictions.jsonl": {
+          "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/baseline/warbias_triplets_uk/predictions.jsonl",
+          "sha256": "e28475b6bee2976ff3939922990425550235ff6a06f72830785f3e41473282b6"
+        }
+      },
+      "finished_at_utc": "2026-10-31T13:51:27.526126+00:00",
+      "log": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/baseline/warbias_triplets_uk.log",
+        "sha256": "1452de7fa5c3898b4e713b556c1ed1198c830447a3d2cc5b7ecb15341bd73e6b"
+      }
+    }
+  },
+  "pairs": {
+    "rmu": {
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "paper",
+        "compare-native",
+        "--before-run",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/baseline/warbias_triplets_uk",
+        "--after-run",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/rmu/warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+        "--bootstrap",
+        "1000",
+        "--seed",
+        "42",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/rmu"
+      ],
+      "returncode": 0,
+      "status": "analyzed",
+      "report": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/rmu/paired.json",
+        "sha256": "e2b60617c97fa635b06e50da30096b080f0d30d3c8349ba78511c347ebc8df09"
+      }
+    },
+    "task_vector": {
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "paper",
+        "compare-native",
+        "--before-run",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/baseline/warbias_triplets_uk",
+        "--after-run",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/task_vector/warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+        "--bootstrap",
+        "1000",
+        "--seed",
+        "42",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/task_vector"
+      ],
+      "returncode": 0,
+      "status": "analyzed",
+      "report": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/task_vector/paired.json",
+        "sha256": "336ce7dad1ce9abfc6da0260fe2d65d93db830effd48ece7ba18811fd79155a3"
+      }
+    },
+    "wga_kl": {
+      "command": [
+        "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "paper",
+        "compare-native",
+        "--before-run",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/baseline/warbias_triplets_uk",
+        "--after-run",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/native/wga_kl/warbias_triplets_uk",
+        "--dataset-bundle",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1/diagnostics/manifest.json",
+        "--bootstrap",
+        "1000",
+        "--seed",
+        "42",
+        "--output",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/wga_kl"
+      ],
+      "returncode": 0,
+      "status": "analyzed",
+      "report": {
+        "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/wga_kl/paired.json",
+        "sha256": "41d49a3e7b80d2a05dd7a93cf8537acbea7ba3e82845cd95023578fba3ae3467"
+      }
+    }
+  },
+  "no_update_passed": true,
+  "qualification_scope": "two development triplets per checkpoint, likelihood only",
+  "runtime_environment": {
+    "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+  },
+  "task_vector_selection_input": false,
+  "heldout_evaluation": false,
+  "scientific_calibration_established": false,
+  "baseline_lineage": "Full baseline hashes match both WGA and task-vector trainer source_model_files; RMU additionally binds the same matrix model path/pins and its exact saved output, without an independent recorded source-weight hash map.",
+  "started_at_utc": "2026-10-31T13:45:26.243850+00:00",
+  "driver": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v3/deploy/unlearning_primary/training_diagnostic.py",
+    "sha256": "b66196b2aa22b822114bad06d63437f4c9ad95afcdb952d16332b71e77c3fbf0"
+  },
+  "finished_at_utc": "2026-10-31T13:51:36.151804+00:00"
+}

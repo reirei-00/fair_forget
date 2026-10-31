@@ -1,0 +1,170 @@
+{
+  "created_at_utc": "2026-10-31T13:24:30.352463+00:00",
+  "kind": "Gemma-family startup diagnosis and one authorized safe-development spawn probe",
+  "conclusion": "The unchanged Gemma model/data/runtime kwargs complete startup and native scoring with an explicit spawn process start method. The old default-fork engine wait is consistent with inherited CPU/image-processor thread synchronization state; exact blocked Python/native stack was not inspected because no signals/attach were used.",
+  "old_jobs_observed": {
+    "2609479": {
+      "model": "gemma3_12b_it",
+      "stage": "qualification",
+      "qualification_records": 0,
+      "full_task_records": 0
+    },
+    "2609482": {
+      "model": "lapa12b_instruct",
+      "stage": "qualification",
+      "qualification_records": 0,
+      "full_task_records": 0
+    },
+    "2609485": {
+      "model": "mamay12b_v2",
+      "stage": "qualification",
+      "qualification_records": 0,
+      "full_task_records": 0
+    },
+    "2609488": {
+      "model": "mamay27b_v2",
+      "stage": "qualification",
+      "qualification_records": 0,
+      "full_task_records": 0
+    }
+  },
+  "live_process_scope": {
+    "job_id": "2609479",
+    "node": "jpbo-057-33",
+    "engine_processes": 4,
+    "engine_wait": "futex",
+    "one_second_cpu_tick_delta": 0,
+    "one_second_read_byte_delta": 0,
+    "open_weight_fds": 0,
+    "gpu_percent": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gpu_memory_used_mib": [
+      737,
+      736,
+      736,
+      737
+    ],
+    "parent_threads": 21,
+    "parent_thread_libraries": [
+      "torch/lib/libgomp.so.1",
+      "torch/lib/libtorch_cpu.so",
+      "scikit_learn.libs/libgomp-a49a47f9.so.1.0.0"
+    ],
+    "old_start_method_override": null,
+    "installed_default_start_method": "fork"
+  },
+  "probe": {
+    "job_id": "2609479",
+    "step_id": "3",
+    "new_allocation": false,
+    "new_gpu_jobs": 0,
+    "original_processes_signalled": false,
+    "model_calls": 1,
+    "gradient_updates": 0,
+    "locked_rows": 0,
+    "task": "warbias_triplets_uk",
+    "phase": "development",
+    "ids": [
+      "WBX-C004-men-middle_aged",
+      "WBX-C004-men-not_stated"
+    ],
+    "only_new_control": {
+      "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+    },
+    "native_model_args": {
+      "pretrained": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
+      "dtype": "bfloat16",
+      "tensor_parallel_size": 1,
+      "max_model_len": 4096,
+      "seed": 42,
+      "enable_thinking": false,
+      "enforce_eager": true,
+      "max_num_seqs": 1,
+      "enable_prefix_caching": false,
+      "enable_chunked_prefill": false,
+      "async_scheduling": false
+    },
+    "started_at_utc": "2026-10-31T13:21:06.052710+00:00",
+    "finished_at_utc": "2026-10-31T13:23:03.886793+00:00",
+    "exit_code": 0,
+    "elapsed_seconds": 117.82854067301378,
+    "completed_rows": 2,
+    "likelihood_requests": 6,
+    "weight_load_seconds": 12.19,
+    "weight_memory_gib": 23.31,
+    "engine_profile_cache_warmup_seconds": 32.18,
+    "encoder_profile_items": 16,
+    "successful_repeat_gate": false,
+    "scope": "Engineering startup proof only, not study baseline or reproducibility proof"
+  },
+  "alternative_flags": {
+    "language_model_only": {
+      "supported": true,
+      "effect": "Sets all modality limits to0; Gemma image tower/projector modules omitted, MM encoder profiling skipped; language backbone still used for text. Processor/dummy-text initialization can still occur.",
+      "changes_runtime_graph_identity": true,
+      "changed_in_probe": false
+    },
+    "limit_mm_per_prompt": {
+      "supported": true,
+      "image0_effect": "Equivalent text-only modality limit for image-only Gemma; simple comma-split model_args parser cannot directly carry arbitrary JSON dictionary.",
+      "changed_in_probe": false
+    },
+    "skip_mm_profiling": {
+      "supported": true,
+      "effect": "Skips encoder profiling, not tower weight loading or all processor initialization.",
+      "changed_in_probe": false
+    }
+  },
+  "recommended_next_step": "Freeze an explicit spawn environment in a new runtime release/outer receipt, then require the existing unchanged per-checkpoint repeated development gate before any locked collection. Preserve all old runs/checkpoints. No tolerance change or language-only flag is necessary on the evidence of this startup test.",
+  "limitations": [
+    "Only one Gemma BASE native model call was run; no before/after numerical agreement or other models were tested by this probe.",
+    "The exact lock stack was not collected. Evidence isolates the start-method control as the successful startup workaround and is consistent with a forked CPU threadpool/processor lock.",
+    "The first entry-only attempt used a non-executable frozen shell directly and failed126 before any model call; its receipt is retained separately."
+  ],
+  "evidence": {
+    "gemma_base_startup_audit_20261031.json": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/gemma_base_startup_audit_20261031.json",
+      "sha256": "56d2d211c0907cdfcc26f9ad5c877dd6444a0ff3ae4e62ef37832ee1e66680a2"
+    },
+    "gemma_base_process_audit_20261031.json": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/gemma_base_process_audit_20261031.json",
+      "sha256": "db2f1b9d67aa54fd679e7955da56f886746526ccb6edc21e4c9702335d5cda59"
+    },
+    "gemma_installed_initialization_source_20261031.json": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/gemma_installed_initialization_source_20261031.json",
+      "sha256": "7e8976125c8c4646093fd32b2b7eb4332192b26d61f1fbf9ac7272d8074942c7"
+    },
+    "gemma_installed_initialization_details_20261031.json": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/gemma_installed_initialization_details_20261031.json",
+      "sha256": "b7b747ec0cfab2bac68786776fba64841747b88fb4a3c2351fb505715c18d4e1"
+    },
+    "gemma_multiprocessing_source_20261031.json": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/gemma_multiprocessing_source_20261031.json",
+      "sha256": "b0f8c89ba6cbd6465994d2b55a319dbe93d546609700a3601843c4cc67c714f5"
+    },
+    "gemma_seed_budget_source_20261031.json": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/gemma_seed_budget_source_20261031.json",
+      "sha256": "2ef80e8b4f7c1a8e6783f13f21dbc5a39254ff1d8da2896412c04287c20c40a9"
+    },
+    "gemma_spawn_probe_entry_attempt_20261031.json": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/gemma_spawn_probe_entry_attempt_20261031.json",
+      "sha256": "7bfbff5f9291ce688ab21ebdf01df576aa1d3bb1bd02f30ce88ac29e3c99367b"
+    },
+    "gemma_spawn_probe_execution_20261031.json": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/gemma_spawn_probe_execution_20261031.json",
+      "sha256": "9e745f687c07566f2f471fa599116f361d89b87d6c488d2277ae96adfd5fad4a"
+    },
+    "run.json": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/gemma_spawn_probe_20261031T132106Z/native/warbias_triplets_uk/run.json",
+      "sha256": "b32362918f7dc46db478ceaca29cb950d84fc5bddef89c6b64303b69adcb2ba2"
+    },
+    "predictions.jsonl": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/gemma_spawn_probe_20261031T132106Z/native/warbias_triplets_uk/predictions.jsonl",
+      "sha256": "b09350e3ddafe8ea30b50af03c3d3db5e8e9c86052dbf2a00694e92e98a5e723"
+    }
+  }
+}

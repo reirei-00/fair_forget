@@ -1,0 +1,5 @@
+# Complete saved WarBias reports
+
+This bundle contains 18 actual training arms, 18 native training-source comparisons and 216 held-out native pairs across six models and three methods. All eighteen metric commitments per arm remain visible; missing judging, calibration and support are not promoted to qualified outcomes.
+
+The three notebooks are under notebooks/executed. Replays use local saved evidence only. The tables/ directory contains UTF-8 CSV exports of the validated held-out results, training-source comparisons, metric dependency inventory, exposure, parameters and coverage for every method. Missing numeric values stay blank with their original statuses; nested native scopes and intervals are preserved as JSON cells. These exports calculate no new metrics and are included in checksums.json. Original native JSON/provenance paths are preserved without rewriting; portable manifest references locate copied artifacts. Model weights, evaluator source and exposure token logs are not copied. Their recorded hashes and maintained observed-exposure summaries remain available.

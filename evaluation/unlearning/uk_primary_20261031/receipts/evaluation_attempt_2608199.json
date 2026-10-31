@@ -1,0 +1,12 @@
+{
+  "job_id": "2608199",
+  "status": "failed_before_locked_collection",
+  "stage": "first_development_only_no_update_check",
+  "root_cause": "Triton could not find a C compiler after the evaluation shell purged modules.",
+  "failure_log_sha256": "9fcb7e231585e19fda11a0b4819379c41abed49e3c9190268c674398fa3c55c4",
+  "locked_collection_started": false,
+  "no_update_completed": false,
+  "training_job_id": "2608191",
+  "trained_checkpoints_preserved": true,
+  "repair": "New evaluation release loads GCCcore/.14.3.0 with CUDA/13 and resolves CC and CXX before inference. No numerical inference or source settings changed."
+}

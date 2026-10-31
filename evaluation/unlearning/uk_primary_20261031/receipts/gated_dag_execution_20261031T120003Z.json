@@ -1,0 +1,82 @@
+{
+  "kind": "authorized_measurement_dag_execution_snapshot",
+  "observed_at_utc": "2026-10-31T12:00:03.455818+00:00",
+  "probe": {
+    "job_id": "2609317",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "passed": true,
+    "fresh_native_processes": 6,
+    "baseline_max_absolute_difference": 0.0,
+    "wga_max_absolute_difference": 0.0,
+    "absolute_tolerance": 1e-06,
+    "locked_data_read": false
+  },
+  "native": {
+    "job_id": "2608628",
+    "state": "RUNNING",
+    "stage": "native_collection",
+    "active_tasks": 4,
+    "completed_tasks_observed": 0,
+    "no_update_passed": true,
+    "untouched": true
+  },
+  "supplemental": {
+    "job_id": "2609355",
+    "state": "PENDING",
+    "reason": "Priority",
+    "afterok": "2609317",
+    "fresh_checkpoint_protocol_qualification_processes_required": 72,
+    "full_collections_planned": 72,
+    "native_pairs_planned": 60,
+    "locked_collection_started": false
+  },
+  "saved_only_analysis": {
+    "job_id": "2609430",
+    "state": "PENDING",
+    "reason": "Dependency",
+    "afterok": "2608628:2609355",
+    "model_requests_planned": 0,
+    "gpu_request": false,
+    "requested_cpus": 8,
+    "workers": 5,
+    "omp_threads": 1,
+    "maximum_wall_time": "12:00:00",
+    "whole_billed_node_limitation": true,
+    "full_qualification_pending": true
+  },
+  "receipts": {
+    "dev_serial_probe_2609317_proof_20261031T115724Z.json": {
+      "path": "outputs/uk_multimethod_20261031/all_metrics/dev_serial_probe_2609317_proof_20261031T115724Z.json",
+      "sha256": "22be09d861de588f524362dd84b2092a7d3ba301b9c0f5cd59f8f07ae61eb506"
+    },
+    "supplemental_submission_v4.json": {
+      "path": "outputs/uk_multimethod_20261031/all_metrics/supplemental_submission_v4.json",
+      "sha256": "e26e97e54ae9bec8b0de64c88d1c3e45593a80b818bf5c698c616980e6071906"
+    },
+    "analysis_submission_v3.json": {
+      "path": "outputs/uk_multimethod_20261031/all_metrics/analysis_submission_v3.json",
+      "sha256": "8c1f4e30f7430cc82867fc528d1bd7d4e3e025f3f775ab208339c716bb347b97"
+    },
+    "deployment_analysis_v3_retry1.json": {
+      "path": "outputs/uk_multimethod_20261031/all_metrics/deployment_analysis_v3_retry1.json",
+      "sha256": "8a8027578c30079f9abdaf0700d6f10dcc555699c93538ee849e18553f93b6c8"
+    },
+    "independent_review_supplement_v4.json": {
+      "path": "outputs/uk_multimethod_20261031/all_metrics/independent_review_supplement_v4.json",
+      "sha256": "f557716ebdc5ca89950a2fff06d0a164dcc608caf7ae3f04ead72ace14d6ed0e"
+    },
+    "native_input_validation_v4_20261031T115326Z.json": {
+      "path": "outputs/uk_multimethod_20261031/all_metrics/native_input_validation_v4_20261031T115326Z.json",
+      "sha256": "52656dbb2aae25965ea71a85a79101db9c4d01f7c549fce4962dd41b2f80f728"
+    },
+    "cancelled_gate_2609074_dependent_2609195.json": {
+      "path": "outputs/uk_multimethod_20261031/all_metrics/cancelled_gate_2609074_dependent_2609195.json",
+      "sha256": "6def134bc1b73e25a7c6c79f00f46c7b83fa1d409dff7136346f7e3ee9e8a547"
+    }
+  },
+  "analysis_config_task_selection": "All12WarBias taskpairs from serial addon2609355, five non-WarBias taskpairs from native2608628; source18thStereoSetEN remains explicitly blocked.",
+  "runtime_status": "development_probe_passed_checkpoint_protocol_gate_pending",
+  "scientific_thresholds_changed": false,
+  "training_repeated": false
+}
