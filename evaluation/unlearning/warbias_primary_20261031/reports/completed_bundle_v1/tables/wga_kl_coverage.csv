@@ -1,0 +1,7 @@
+model_id,model,repository,revision,tokenizer_revision,training,actual_steps,warbias_pairs,expected_warbias_pairs,measurement_status,reason,null_intervention
+qwen3_8b,Qwen3 8B,Qwen/Qwen3-8B,b968826d9c46dd6066d109eabc6255188de91218,b968826d9c46dd6066d109eabc6255188de91218,actual_completed,137,12,12,complete,,
+llama31_8b_instruct,Llama 3.1 8B Instruct,meta-llama/Llama-3.1-8B-Instruct,0e9e39f249a16976918f6564b8830bc894c89659,0e9e39f249a16976918f6564b8830bc894c89659,actual_completed,137,12,12,complete,,
+gemma3_12b_it,Gemma 3 12B IT,google/gemma-3-12b-it,96b6f1eccf38110c56df3a15bffe176da04bfd80,96b6f1eccf38110c56df3a15bffe176da04bfd80,actual_completed,137,12,12,complete,,
+lapa12b_instruct,Lapa 12B Instruct,lapa-llm/lapa-v0.1.2-instruct,2969fd997f07b33727c6f10795d78ef23cc5c037,2969fd997f07b33727c6f10795d78ef23cc5c037,actual_completed,137,12,12,complete,,
+mamay12b_v2,Mamay 12B v2,INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0,3cb02013b6b37cfe10f4b3da0fcddc1acef7f244,3cb02013b6b37cfe10f4b3da0fcddc1acef7f244,actual_completed,137,12,12,complete,,
+mamay27b_v2,Mamay 27B v2,INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0,ad1bdfed9646939358adfcba9c88bb4031b50ed7,ad1bdfed9646939358adfcba9c88bb4031b50ed7,actual_completed,137,12,12,complete,,

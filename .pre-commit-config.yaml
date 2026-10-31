@@ -9,7 +9,7 @@ repos:
         additional_dependencies: ["ruff==0.16.2"]
         # Preserve byte-bound snapshots and generated notebook evidence.
         # Their source scripts and saved-evidence replay are checked separately.
-        exclude: ^(evaluation/unlearning/(jupiter_rmu_20261024/(source_snapshot/|historical_bbq_metrics\.py$)|report_notebooks_20261031/source_snapshot/|warbias_primary_20261031/data/build_streams\.py$)|notebooks/(executed|not_executed)/(uk_primary|warbias)_(rmu|task_vector|wga_kl)_results\.ipynb$)
+        exclude: ^(evaluation/unlearning/(jupiter_rmu_20261024/(source_snapshot/|historical_bbq_metrics\.py$)|report_notebooks_20261031/source_snapshot/|warbias_primary_20261031/(data/build_streams\.py$|reports/completed_bundle_v1/|reports/completed_bundle_v1_verify\.py$))|notebooks/(executed|not_executed)/(uk_primary|warbias)_(rmu|task_vector|wga_kl)_results\.ipynb$)
       - id: ruff-format
         additional_dependencies: ["ruff==0.16.2"]
-        exclude: ^(evaluation/unlearning/(jupiter_rmu_20261024/(source_snapshot/|historical_bbq_metrics\.py$)|report_notebooks_20261031/source_snapshot/|warbias_primary_20261031/data/build_streams\.py$)|notebooks/(executed|not_executed)/(uk_primary|warbias)_(rmu|task_vector|wga_kl)_results\.ipynb$)
+        exclude: ^(evaluation/unlearning/(jupiter_rmu_20261024/(source_snapshot/|historical_bbq_metrics\.py$)|report_notebooks_20261031/source_snapshot/|warbias_primary_20261031/(data/build_streams\.py$|reports/completed_bundle_v1/|reports/completed_bundle_v1_verify\.py$))|notebooks/(executed|not_executed)/(uk_primary|warbias)_(rmu|task_vector|wga_kl)_results\.ipynb$)

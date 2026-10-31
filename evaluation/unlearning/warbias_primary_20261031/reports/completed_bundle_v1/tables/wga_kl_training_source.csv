@@ -1,0 +1,799 @@
+model,after,after_minus_before,before,ci95,metric,scope,status,uncertainty_status,unit,valid_replicates
+Qwen3 8B,30.253466340422865,-0.15182884748102055,30.405295187903885,"[-1.9047619047619087, 1.4492753623188364]",ss,component_macro,available,paired_component_percentile,percent,1000
+Qwen3 8B,68.18187046447916,0.5050505050505194,67.67681995942864,"[0.0, 1.5151515151515298]",lms,component_macro,available,paired_component_percentile,percent,1000
+Qwen3 8B,41.25475846248384,0.10008469758277272,41.15467376490107,"[-2.8536040678897865, 2.3231188078299443]",icat,component_macro,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,component_macro,available,paired_component_percentile,rate,1000
+Qwen3 8B,50.0,0.0,50.0,"[0.0, 0.0]",worst_profile_ss_distance_from_50,component_macro,available,paired_component_percentile,percentage_points,1000
+Qwen3 8B,0.0,0.0,0.0,,ss,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,68.75,0.0,68.75,,lms,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,0.0,0.0,0.0,,icat,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Qwen3 8B,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Qwen3 8B,37.5,0.0,37.5,,ss,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,0.0,87.5,,lms,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,65.625,0.0,65.625,,icat,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Qwen3 8B,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,rate,996
+Qwen3 8B,0.0,0.0,0.0,,ss,profile / idp|men|older,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,6.25,81.25,,lms,profile / idp|men|older,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,0.0,0.0,0.0,,icat,profile / idp|men|older,available,undefined_bootstrap_replicates,score_points,996
+Qwen3 8B,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|older,available,undefined_bootstrap_replicates,rate,996
+Qwen3 8B,62.5,25.0,37.5,,ss,profile / idp|men|young,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,0.0,87.5,,lms,profile / idp|men|young,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,65.625,0.0,65.625,,icat,profile / idp|men|young,available,undefined_bootstrap_replicates,score_points,996
+Qwen3 8B,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|young,available,undefined_bootstrap_replicates,rate,996
+Qwen3 8B,25.0,0.0,25.0,,ss,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,0.0,87.5,,lms,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,43.75,0.0,43.75,,icat,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Qwen3 8B,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Qwen3 8B,37.5,0.0,37.5,,ss,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,0.0,87.5,,lms,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,65.625,0.0,65.625,,icat,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Qwen3 8B,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,rate,996
+Qwen3 8B,25.0,0.0,25.0,,ss,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,0.0,87.5,,lms,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,43.75,0.0,43.75,,icat,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,score_points,996
+Qwen3 8B,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,rate,996
+Qwen3 8B,50.0,0.0,50.0,,ss,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,0.0,87.5,,lms,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,0.0,87.5,,icat,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,score_points,996
+Qwen3 8B,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,rate,996
+Qwen3 8B,50.0,0.0,50.0,,ss,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,0.0,87.5,,lms,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,0.0,87.5,,icat,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Qwen3 8B,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Qwen3 8B,50.0,0.0,50.0,,ss,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,0.0,87.5,,lms,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,0.0,87.5,,icat,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Qwen3 8B,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,rate,996
+Qwen3 8B,50.0,0.0,50.0,,ss,profile / idp|women|older,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,0.0,87.5,,lms,profile / idp|women|older,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,0.0,87.5,,icat,profile / idp|women|older,available,undefined_bootstrap_replicates,score_points,996
+Qwen3 8B,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|older,available,undefined_bootstrap_replicates,rate,996
+Qwen3 8B,25.0,0.0,25.0,,ss,profile / idp|women|young,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,87.5,0.0,87.5,,lms,profile / idp|women|young,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,43.75,0.0,43.75,,icat,profile / idp|women|young,available,undefined_bootstrap_replicates,score_points,996
+Qwen3 8B,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|young,available,undefined_bootstrap_replicates,rate,996
+Qwen3 8B,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|men|middle_aged,available,paired_component_percentile,percent,1000
+Qwen3 8B,78.57142857142857,7.142857142857139,71.42857142857143,"[0.0, 25.0]",lms,profile / veteran|men|middle_aged,available,paired_component_percentile,percent,1000
+Qwen3 8B,67.3469387755102,6.12244897959183,61.224489795918366,"[0.0, 18.367346938775512]",icat,profile / veteran|men|middle_aged,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|middle_aged,available,paired_component_percentile,rate,1000
+Qwen3 8B,28.57142857142857,0.0,28.57142857142857,"[0.0, 0.0]",ss,profile / veteran|men|not_stated,available,paired_component_percentile,percent,1000
+Qwen3 8B,64.28571428571429,0.0,64.28571428571429,"[0.0, 0.0]",lms,profile / veteran|men|not_stated,available,paired_component_percentile,percent,1000
+Qwen3 8B,36.734693877551024,0.0,36.734693877551024,"[0.0, 0.0]",icat,profile / veteran|men|not_stated,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|not_stated,available,paired_component_percentile,rate,1000
+Qwen3 8B,42.857142857142854,-14.285714285714285,57.14285714285714,"[-44.58333333333332, 0.0]",ss,profile / veteran|men|older,available,paired_component_percentile,percent,1000
+Qwen3 8B,71.42857142857143,0.0,71.42857142857143,"[0.0, 0.0]",lms,profile / veteran|men|older,available,paired_component_percentile,percent,1000
+Qwen3 8B,61.224489795918366,-7.105427357601002e-15,61.22448979591837,"[-48.97959183673469, 48.9795918367347]",icat,profile / veteran|men|older,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|older,available,paired_component_percentile,rate,1000
+Qwen3 8B,14.285714285714285,0.0,14.285714285714285,"[0.0, 0.0]",ss,profile / veteran|men|young,available,paired_component_percentile,percent,1000
+Qwen3 8B,28.57142857142857,-7.142857142857146,35.714285714285715,"[-22.29166666666666, 0.0]",lms,profile / veteran|men|young,available,paired_component_percentile,percent,1000
+Qwen3 8B,8.163265306122447,-2.0408163265306136,10.204081632653061,"[-8.163265306122447, 0.0]",icat,profile / veteran|men|young,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|young,available,paired_component_percentile,rate,1000
+Qwen3 8B,14.285714285714285,-14.285714285714285,28.57142857142857,"[-44.583333333333336, 0.0]",ss,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,percent,1000
+Qwen3 8B,64.28571428571429,0.0,64.28571428571429,"[0.0, 0.0]",lms,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,percent,1000
+Qwen3 8B,18.367346938775512,-18.367346938775512,36.734693877551024,"[-66.66666666666666, 0.0]",icat,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,rate,1000
+Qwen3 8B,28.57142857142857,0.0,28.57142857142857,"[0.0, 0.0]",ss,profile / veteran|not_stated|not_stated,available,paired_component_percentile,percent,1000
+Qwen3 8B,57.14285714285714,0.0,57.14285714285714,"[0.0, 0.0]",lms,profile / veteran|not_stated|not_stated,available,paired_component_percentile,percent,1000
+Qwen3 8B,32.65306122448979,0.0,32.65306122448979,"[0.0, 0.0]",icat,profile / veteran|not_stated|not_stated,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|not_stated,available,paired_component_percentile,rate,1000
+Qwen3 8B,14.285714285714285,0.0,14.285714285714285,"[0.0, 0.0]",ss,profile / veteran|not_stated|older,available,paired_component_percentile,percent,1000
+Qwen3 8B,21.428571428571427,0.0,21.428571428571427,"[0.0, 0.0]",lms,profile / veteran|not_stated|older,available,paired_component_percentile,percent,1000
+Qwen3 8B,6.1224489795918355,0.0,6.1224489795918355,"[0.0, 0.0]",icat,profile / veteran|not_stated|older,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|older,available,paired_component_percentile,rate,1000
+Qwen3 8B,28.57142857142857,0.0,28.57142857142857,"[0.0, 0.0]",ss,profile / veteran|not_stated|young,available,paired_component_percentile,percent,1000
+Qwen3 8B,64.28571428571429,0.0,64.28571428571429,"[0.0, 0.0]",lms,profile / veteran|not_stated|young,available,paired_component_percentile,percent,1000
+Qwen3 8B,36.734693877551024,0.0,36.734693877551024,"[0.0, 0.0]",icat,profile / veteran|not_stated|young,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|young,available,paired_component_percentile,rate,1000
+Qwen3 8B,71.42857142857143,0.0,71.42857142857143,"[0.0, 0.0]",ss,profile / veteran|women|middle_aged,available,paired_component_percentile,percent,1000
+Qwen3 8B,85.71428571428571,0.0,85.71428571428571,"[0.0, 0.0]",lms,profile / veteran|women|middle_aged,available,paired_component_percentile,percent,1000
+Qwen3 8B,48.979591836734684,0.0,48.979591836734684,"[0.0, 0.0]",icat,profile / veteran|women|middle_aged,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|middle_aged,available,paired_component_percentile,rate,1000
+Qwen3 8B,57.14285714285714,0.0,57.14285714285714,"[0.0, 0.0]",ss,profile / veteran|women|not_stated,available,paired_component_percentile,percent,1000
+Qwen3 8B,85.71428571428571,0.0,85.71428571428571,"[0.0, 0.0]",lms,profile / veteran|women|not_stated,available,paired_component_percentile,percent,1000
+Qwen3 8B,73.46938775510205,0.0,73.46938775510205,"[0.0, 0.0]",icat,profile / veteran|women|not_stated,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|not_stated,available,paired_component_percentile,rate,1000
+Qwen3 8B,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|women|young,available,paired_component_percentile,percent,1000
+Qwen3 8B,71.42857142857143,0.0,71.42857142857143,"[0.0, 0.0]",lms,profile / veteran|women|young,available,paired_component_percentile,percent,1000
+Qwen3 8B,61.224489795918366,0.0,61.224489795918366,"[0.0, 0.0]",icat,profile / veteran|women|young,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|young,available,paired_component_percentile,rate,1000
+Qwen3 8B,34.375,2.0833333333333357,32.291666666666664,,ss,actor / idp,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,85.9375,0.5208333333333286,85.41666666666667,,lms,actor / idp,available,undefined_bootstrap_replicates,percent,996
+Qwen3 8B,59.08203125,3.91710069444445,55.16493055555555,,icat,actor / idp,available,undefined_bootstrap_replicates,score_points,996
+Qwen3 8B,0.0,0.0,0.0,,stereotype_tie_rate,actor / idp,available,undefined_bootstrap_replicates,rate,996
+Qwen3 8B,35.064935064935064,-2.597402597402592,37.662337662337656,"[-8.106060606060614, 0.0]",ss,actor / veteran,available,paired_component_percentile,percent,1000
+Qwen3 8B,62.98701298701299,0.0,62.98701298701299,"[-1.948051948051941, 2.2727272727272663]",lms,actor / veteran,available,paired_component_percentile,percent,1000
+Qwen3 8B,44.17271040647664,-3.2720526227019704,47.44476302917861,"[-13.568801652892555, 3.88441464740165]",icat,actor / veteran,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,actor / veteran,available,paired_component_percentile,rate,1000
+Qwen3 8B,26.851851851851848,0.46296296296295836,26.38888888888889,"[-2.7777777777777786, 4.166666666666671]",ss,gender / men,available,paired_component_percentile,percent,1000
+Qwen3 8B,65.0462962962963,1.3888888888889,63.657407407407405,"[0.0, 4.166666666666671]",lms,gender / men,available,paired_component_percentile,percent,1000
+Qwen3 8B,34.93227023319616,1.3353052126200282,33.59696502057613,"[-3.4617734053497964, 6.771262002743486]",icat,gender / men,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / men,available,paired_component_percentile,rate,1000
+Qwen3 8B,18.51851851851852,-0.9259259259259274,19.444444444444446,"[-2.7777777777777786, 0.0]",ss,gender / not_stated,available,paired_component_percentile,percent,1000
+Qwen3 8B,62.268518518518526,0.0,62.268518518518526,"[0.0, 0.0]",lms,gender / not_stated,available,paired_component_percentile,percent,1000
+Qwen3 8B,23.062414266117976,-1.1531207133058956,24.21553497942387,"[-4.361496913580249, 0.0]",icat,gender / not_stated,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / not_stated,available,paired_component_percentile,rate,1000
+Qwen3 8B,48.58104858104858,0.0,48.58104858104858,"[0.0, 0.0]",ss,gender / women,available,paired_component_percentile,percent,1000
+Qwen3 8B,79.62962962962963,0.0,79.62962962962963,"[0.0, 0.0]",lms,gender / women,available,paired_component_percentile,percent,1000
+Qwen3 8B,77.36981811055885,0.0,77.36981811055885,"[0.0, 0.0]",icat,gender / women,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / women,available,paired_component_percentile,rate,1000
+Qwen3 8B,32.716049382716044,-1.2345679012345698,33.95061728395061,"[-3.703703703703706, 0.0]",ss,age / middle_aged,available,paired_component_percentile,percent,1000
+Qwen3 8B,74.38271604938271,1.8518518518518476,72.53086419753086,"[0.0, 5.555555555555557]",lms,age / middle_aged,available,paired_component_percentile,percent,1000
+Qwen3 8B,48.670172229843,-0.5791800030483216,49.24935223289132,"[-6.035665294924556, 5.42009602194788]",icat,age / middle_aged,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / middle_aged,available,paired_component_percentile,rate,1000
+Qwen3 8B,30.864197530864196,0.0,30.864197530864196,"[0.0, 0.0]",ss,age / not_stated,available,paired_component_percentile,percent,1000
+Qwen3 8B,72.22222222222221,0.0,72.22222222222221,"[0.0, 0.0]",lms,age / not_stated,available,paired_component_percentile,percent,1000
+Qwen3 8B,44.58161865569272,0.0,44.58161865569272,"[0.0, 0.0]",icat,age / not_stated,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / not_stated,available,paired_component_percentile,rate,1000
+Qwen3 8B,23.703703703703706,-1.3888888888888893,25.092592592592595,"[-4.166666666666668, 0.0]",ss,age / older,available,paired_component_percentile,percent,1000
+Qwen3 8B,60.27777777777777,0.6944444444444358,59.583333333333336,"[0.0, 2.083333333333343]",lms,age / older,available,paired_component_percentile,percent,1000
+Qwen3 8B,28.576131687242796,-1.3258744855967137,29.90200617283951,"[-5.344907407407404, 0.0]",icat,age / older,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / older,available,paired_component_percentile,rate,1000
+Qwen3 8B,32.71604938271605,1.8518518518518547,30.864197530864196,"[0.0, 5.555555555555564]",ss,age / young,available,paired_component_percentile,percent,1000
+Qwen3 8B,63.27160493827161,-0.6172839506172778,63.888888888888886,"[-1.8518518518518619, 0.0]",lms,age / young,available,paired_component_percentile,percent,1000
+Qwen3 8B,41.39993903368389,1.962353299801869,39.437585733882024,"[-5.349794238683117, 7.19840725499163]",icat,age / young,available,paired_component_percentile,score_points,1000
+Qwen3 8B,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / young,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,37.572306920133,-5.365246669594505,42.93755358972751,"[-10.247401551749377, -0.9661835748792277]",ss,component_macro,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,75.27824832172658,-4.678932178932186,79.95718050065877,"[-7.969336219336222, -1.5151515151515151]",lms,component_macro,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,56.567549007077965,-12.095765445533054,68.66331445261102,"[-17.24692468940215, 16.19388240062346]",icat,component_macro,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,component_macro,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,37.5,0.0,37.5,"[-25.0, 0.0]",worst_profile_ss_distance_from_50,component_macro,available,paired_component_percentile,percentage_points,1000
+Llama 3.1 8B Instruct,50.0,0.0,50.0,,ss,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,0.0,87.5,,lms,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,0.0,87.5,,icat,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Llama 3.1 8B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Llama 3.1 8B Instruct,50.0,0.0,50.0,,ss,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,0.0,87.5,,lms,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,0.0,87.5,,icat,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Llama 3.1 8B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,rate,996
+Llama 3.1 8B Instruct,50.0,0.0,50.0,,ss,profile / idp|men|older,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,0.0,87.5,,lms,profile / idp|men|older,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,0.0,87.5,,icat,profile / idp|men|older,available,undefined_bootstrap_replicates,score_points,996
+Llama 3.1 8B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|older,available,undefined_bootstrap_replicates,rate,996
+Llama 3.1 8B Instruct,50.0,0.0,50.0,,ss,profile / idp|men|young,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,75.0,0.0,75.0,,lms,profile / idp|men|young,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,75.0,0.0,75.0,,icat,profile / idp|men|young,available,undefined_bootstrap_replicates,score_points,996
+Llama 3.1 8B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|young,available,undefined_bootstrap_replicates,rate,996
+Llama 3.1 8B Instruct,25.0,-25.0,50.0,,ss,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,0.0,87.5,,lms,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,43.75,-43.75,87.5,,icat,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Llama 3.1 8B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Llama 3.1 8B Instruct,12.5,0.0,12.5,,ss,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,68.75,-6.25,75.0,,lms,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,17.1875,-1.5625,18.75,,icat,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Llama 3.1 8B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,rate,996
+Llama 3.1 8B Instruct,25.0,-25.0,50.0,,ss,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,0.0,87.5,,lms,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,43.75,-43.75,87.5,,icat,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,score_points,996
+Llama 3.1 8B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,rate,996
+Llama 3.1 8B Instruct,50.0,-25.0,75.0,,ss,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,0.0,87.5,,lms,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,43.75,43.75,,icat,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,score_points,996
+Llama 3.1 8B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,rate,996
+Llama 3.1 8B Instruct,50.0,0.0,50.0,,ss,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,-12.5,100.0,,lms,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,-12.5,100.0,,icat,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Llama 3.1 8B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Llama 3.1 8B Instruct,50.0,0.0,50.0,,ss,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,-12.5,100.0,,lms,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,-12.5,100.0,,icat,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Llama 3.1 8B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,rate,996
+Llama 3.1 8B Instruct,50.0,0.0,50.0,,ss,profile / idp|women|older,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,-12.5,100.0,,lms,profile / idp|women|older,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,87.5,-12.5,100.0,,icat,profile / idp|women|older,available,undefined_bootstrap_replicates,score_points,996
+Llama 3.1 8B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|older,available,undefined_bootstrap_replicates,rate,996
+Llama 3.1 8B Instruct,50.0,0.0,50.0,,ss,profile / idp|women|young,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,75.0,0.0,75.0,,lms,profile / idp|women|young,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,75.0,0.0,75.0,,icat,profile / idp|women|young,available,undefined_bootstrap_replicates,score_points,996
+Llama 3.1 8B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|young,available,undefined_bootstrap_replicates,rate,996
+Llama 3.1 8B Instruct,57.14285714285714,0.0,57.14285714285714,"[0.0, 0.0]",ss,profile / veteran|men|middle_aged,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,85.71428571428571,-7.142857142857153,92.85714285714286,"[-21.42857142857143, 0.0]",lms,profile / veteran|men|middle_aged,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,73.46938775510205,-6.122448979591837,79.59183673469389,"[-16.666666666666657, 0.0]",icat,profile / veteran|men|middle_aged,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|middle_aged,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,42.857142857142854,-14.285714285714285,57.14285714285714,"[-49.99999999999999, 0.0]",ss,profile / veteran|men|not_stated,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,78.57142857142857,0.0,78.57142857142857,"[0.0, 0.0]",lms,profile / veteran|men|not_stated,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,67.3469387755102,-1.4210854715202004e-14,67.34693877551021,"[-40.889668367346935, 57.2420634920634]",icat,profile / veteran|men|not_stated,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|not_stated,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,42.857142857142854,-14.285714285714285,57.14285714285714,"[-49.99999999999999, 0.0]",ss,profile / veteran|men|older,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,71.42857142857143,-21.42857142857143,92.85714285714286,"[-41.66666666666666, 0.0]",lms,profile / veteran|men|older,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,61.224489795918366,-18.36734693877552,79.59183673469389,"[-64.0, 52.784863945578245]",icat,profile / veteran|men|older,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|older,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|men|young,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,64.28571428571429,-7.142857142857139,71.42857142857143,"[-22.291666666666668, 0.0]",lms,profile / veteran|men|young,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,55.102040816326536,-6.12244897959183,61.224489795918366,"[-18.36734693877552, 0.0]",icat,profile / veteran|men|young,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|young,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,64.28571428571429,-14.285714285714278,78.57142857142857,"[-44.583333333333336, 0.0]",lms,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,55.102040816326536,-12.24489795918366,67.3469387755102,"[-36.734693877551024, 0.0]",icat,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|not_stated|not_stated,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,71.42857142857143,-7.142857142857139,78.57142857142857,"[-22.291666666666668, 0.0]",lms,profile / veteran|not_stated|not_stated,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,61.224489795918366,-6.12244897959183,67.3469387755102,"[-18.367346938775512, 0.0]",icat,profile / veteran|not_stated|not_stated,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|not_stated,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|not_stated|older,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,64.28571428571429,-14.285714285714278,78.57142857142857,"[-44.583333333333336, 0.0]",lms,profile / veteran|not_stated|older,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,55.102040816326536,-12.24489795918366,67.3469387755102,"[-36.734693877551024, 0.0]",icat,profile / veteran|not_stated|older,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|older,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|not_stated|young,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,71.42857142857143,0.0,71.42857142857143,"[0.0, 0.0]",lms,profile / veteran|not_stated|young,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,61.224489795918366,0.0,61.224489795918366,"[0.0, 0.0]",icat,profile / veteran|not_stated|young,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|young,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,57.14285714285714,0.0,57.14285714285714,"[0.0, 0.0]",ss,profile / veteran|women|middle_aged,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,78.57142857142857,0.0,78.57142857142857,"[0.0, 0.0]",lms,profile / veteran|women|middle_aged,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,67.34693877551021,0.0,67.34693877551021,"[0.0, 0.0]",icat,profile / veteran|women|middle_aged,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|middle_aged,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|women|not_stated,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,78.57142857142857,-7.142857142857139,85.71428571428571,"[-25.0, 0.0]",lms,profile / veteran|women|not_stated,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,67.3469387755102,-6.122448979591837,73.46938775510203,"[-16.666666666666657, 0.0]",icat,profile / veteran|women|not_stated,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|not_stated,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,42.857142857142854,-14.285714285714285,57.14285714285714,"[-49.99999999999999, 0.0]",ss,profile / veteran|women|young,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,78.57142857142857,0.0,78.57142857142857,"[0.0, 0.0]",lms,profile / veteran|women|young,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,67.3469387755102,-1.4210854715202004e-14,67.34693877551021,"[-40.889668367346935, 57.2420634920634]",icat,profile / veteran|women|young,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|young,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,42.708333333333336,-6.249999999999993,48.95833333333333,,ss,actor / idp,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,83.85416666666666,-3.645833333333343,87.5,,lms,actor / idp,available,undefined_bootstrap_replicates,percent,996
+Llama 3.1 8B Instruct,71.62543402777777,-14.051649305555557,85.67708333333333,,icat,actor / idp,available,undefined_bootstrap_replicates,score_points,996
+Llama 3.1 8B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,actor / idp,available,undefined_bootstrap_replicates,rate,996
+Llama 3.1 8B Instruct,45.45454545454545,-3.896103896103895,49.35064935064935,"[-9.0909090909091, 0.0]",ss,actor / veteran,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,73.37662337662339,-7.142857142857139,80.51948051948052,"[-17.04545454545454, -1.1363636363636402]",lms,actor / veteran,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,66.7060212514758,-12.767751728790685,79.47377298026649,"[-18.221526342975206, 12.266154442148766]",icat,actor / veteran,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,actor / veteran,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,41.66666666666667,-5.55555555555555,47.22222222222222,"[-13.888888888888886, 0.0]",ss,gender / men,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,76.1574074074074,-5.092592592592595,81.25,"[-10.659722222222225, 0.0]",lms,gender / men,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,63.464506172839506,-13.271604938271608,76.73611111111111,"[-20.217013888888882, 21.38792438271604]",icat,gender / men,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / men,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,29.629629629629626,-6.944444444444443,36.57407407407407,"[-19.444444444444443, 0.0]",ss,gender / not_stated,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,72.91666666666666,-2.7777777777777857,75.69444444444444,"[-8.333333333333343, 0.0]",lms,gender / not_stated,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,43.209876543209866,-12.159207818930042,55.36908436213991,"[-28.204732510288082, 11.48903677983537]",icat,gender / not_stated,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / not_stated,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,41.7989417989418,-3.7037037037037024,45.5026455026455,"[-11.111111111111114, 0.0]",ss,gender / women,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,76.98412698412699,-6.018518518518519,83.0026455026455,"[-14.351851851851862, 0.0]",lms,gender / women,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,64.35710086503737,-11.179698216735261,75.53679908177263,"[-21.347001763668427, 13.756613756613781]",icat,gender / women,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / women,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,42.59259259259259,-3.7037037037037166,46.296296296296305,"[-11.111111111111121, 0.0]",ss,age / middle_aged,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,78.39506172839505,-4.9382716049382935,83.33333333333334,"[-10.493827160493808, 0.0]",lms,age / middle_aged,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,66.78097850937355,-10.379515317786954,77.16049382716051,"[-17.661179698216735, 18.8957475994513]",icat,age / middle_aged,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / middle_aged,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,33.95061728395061,-3.7037037037037095,37.65432098765432,"[-11.111111111111114, 0.0]",ss,age / not_stated,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,75.61728395061729,-4.938271604938265,80.55555555555556,"[-9.876543209876537, 0.0]",lms,age / not_stated,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,51.34506934918458,-9.320225575369612,60.66529492455419,"[-21.82594116750495, 6.37936290199664]",icat,age / not_stated,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / not_stated,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,34.074074074074076,-9.25925925925926,43.333333333333336,"[-22.22222222222223, 0.0]",ss,age / older,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,75.69444444444444,-9.490740740740748,85.18518518518519,"[-16.666666666666657, -2.0833333333333424]",lms,age / older,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,51.584362139917694,-22.24279835390947,73.82716049382717,"[-33.79629629629629, 30.322402263374492]",icat,age / older,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / older,available,paired_component_percentile,rate,1000
+Llama 3.1 8B Instruct,38.88888888888889,-5.55555555555555,44.44444444444444,"[-12.962962962962969, 0.0]",ss,age / young,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,71.60493827160495,-0.6172839506172636,72.22222222222221,"[-1.8518518518518619, 0.0]",lms,age / young,available,paired_component_percentile,percent,1000
+Llama 3.1 8B Instruct,55.69272976680385,-8.504801097393667,64.19753086419752,"[-20.16460905349794, 15.433813443072703]",icat,age / young,available,paired_component_percentile,score_points,1000
+Llama 3.1 8B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / young,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,23.534621578099838,-3.4656084656084687,27.000230043708306,"[-9.470899470899468, 0.0]",ss,component_macro,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,70.05311918355397,-5.202752159273885,75.25587134282786,"[-9.02360562143171, -1.7317742643829577]",lms,component_macro,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,32.97347300700938,-7.665043760911971,40.63851676792135,"[-17.774818194894273, -0.6724653946876157]",icat,component_macro,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,component_macro,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,37.5,1.7857142857142847,35.714285714285715,"[0.0, 12.5]",worst_profile_ss_distance_from_50,component_macro,available,paired_component_percentile,percentage_points,1000
+Gemma 3 12B IT,25.0,-25.0,50.0,,ss,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,100.0,0.0,100.0,,lms,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,50.0,-50.0,100.0,,icat,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Gemma 3 12B IT,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Gemma 3 12B IT,25.0,0.0,25.0,,ss,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,100.0,0.0,100.0,,lms,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,50.0,0.0,50.0,,icat,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Gemma 3 12B IT,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,rate,996
+Gemma 3 12B IT,50.0,0.0,50.0,,ss,profile / idp|men|older,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,87.5,-12.5,100.0,,lms,profile / idp|men|older,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,87.5,-12.5,100.0,,icat,profile / idp|men|older,available,undefined_bootstrap_replicates,score_points,996
+Gemma 3 12B IT,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|older,available,undefined_bootstrap_replicates,rate,996
+Gemma 3 12B IT,25.0,0.0,25.0,,ss,profile / idp|men|young,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,68.75,-6.25,75.0,,lms,profile / idp|men|young,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,34.375,-3.125,37.5,,icat,profile / idp|men|young,available,undefined_bootstrap_replicates,score_points,996
+Gemma 3 12B IT,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|young,available,undefined_bootstrap_replicates,rate,996
+Gemma 3 12B IT,12.5,-12.5,25.0,,ss,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,75.0,-12.5,87.5,,lms,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,18.75,-25.0,43.75,,icat,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Gemma 3 12B IT,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Gemma 3 12B IT,25.0,0.0,25.0,,ss,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,75.0,-12.5,87.5,,lms,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,37.5,-6.25,43.75,,icat,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Gemma 3 12B IT,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,rate,996
+Gemma 3 12B IT,12.5,-12.5,25.0,,ss,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,100.0,0.0,100.0,,lms,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,25.0,-25.0,50.0,,icat,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,score_points,996
+Gemma 3 12B IT,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,rate,996
+Gemma 3 12B IT,12.5,-12.5,25.0,,ss,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,62.5,-6.25,68.75,,lms,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,15.625,-18.75,34.375,,icat,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,score_points,996
+Gemma 3 12B IT,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,rate,996
+Gemma 3 12B IT,25.0,0.0,25.0,,ss,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,75.0,-12.5,87.5,,lms,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,37.5,-6.25,43.75,,icat,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Gemma 3 12B IT,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Gemma 3 12B IT,25.0,0.0,25.0,,ss,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,100.0,0.0,100.0,,lms,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,50.0,0.0,50.0,,icat,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Gemma 3 12B IT,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,rate,996
+Gemma 3 12B IT,12.5,-12.5,25.0,,ss,profile / idp|women|older,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,75.0,-25.0,100.0,,lms,profile / idp|women|older,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,18.75,-31.25,50.0,,icat,profile / idp|women|older,available,undefined_bootstrap_replicates,score_points,996
+Gemma 3 12B IT,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|older,available,undefined_bootstrap_replicates,rate,996
+Gemma 3 12B IT,25.0,0.0,25.0,,ss,profile / idp|women|young,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,75.0,0.0,75.0,,lms,profile / idp|women|young,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,37.5,0.0,37.5,,icat,profile / idp|women|young,available,undefined_bootstrap_replicates,score_points,996
+Gemma 3 12B IT,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|young,available,undefined_bootstrap_replicates,rate,996
+Gemma 3 12B IT,28.57142857142857,-14.285714285714285,42.857142857142854,"[-44.583333333333336, 0.0]",ss,profile / veteran|men|middle_aged,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,50.0,-7.142857142857139,57.14285714285714,"[-21.428571428571438, 0.0]",lms,profile / veteran|men|middle_aged,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,28.57142857142857,-20.408163265306115,48.979591836734684,"[-36.12670068027211, 16.000000000000004]",icat,profile / veteran|men|middle_aged,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|middle_aged,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,14.285714285714285,0.0,14.285714285714285,"[0.0, 0.0]",ss,profile / veteran|men|not_stated,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,71.42857142857143,0.0,71.42857142857143,"[0.0, 0.0]",lms,profile / veteran|men|not_stated,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,20.408163265306122,0.0,20.408163265306122,"[0.0, 0.0]",icat,profile / veteran|men|not_stated,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|not_stated,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,28.57142857142857,-14.285714285714285,42.857142857142854,"[-44.583333333333336, 0.0]",ss,profile / veteran|men|older,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,50.0,0.0,50.0,"[0.0, 0.0]",lms,profile / veteran|men|older,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,28.57142857142857,-14.285714285714285,42.857142857142854,"[-28.57142857142857, 16.666666666666664]",icat,profile / veteran|men|older,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|older,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,28.57142857142857,0.0,28.57142857142857,"[0.0, 0.0]",ss,profile / veteran|men|young,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,71.42857142857143,-14.285714285714278,85.71428571428571,"[-33.33333333333332, 0.0]",lms,profile / veteran|men|young,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,40.816326530612244,-8.16326530612244,48.979591836734684,"[-18.75, 0.0]",icat,profile / veteran|men|young,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|young,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,28.57142857142857,0.0,28.57142857142857,"[0.0, 0.0]",ss,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,50.0,-7.142857142857139,57.14285714285714,"[-22.291666666666668, 0.0]",lms,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,28.57142857142857,-4.08163265306122,32.65306122448979,"[-18.36734693877552, 0.0]",icat,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,28.57142857142857,0.0,28.57142857142857,"[0.0, 0.0]",ss,profile / veteran|not_stated|not_stated,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,78.57142857142857,0.0,78.57142857142857,"[0.0, 0.0]",lms,profile / veteran|not_stated|not_stated,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,44.897959183673464,0.0,44.897959183673464,"[0.0, 0.0]",icat,profile / veteran|not_stated|not_stated,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|not_stated,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,28.57142857142857,0.0,28.57142857142857,"[0.0, 0.0]",ss,profile / veteran|not_stated|older,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,78.57142857142857,0.0,78.57142857142857,"[0.0, 0.0]",lms,profile / veteran|not_stated|older,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,44.897959183673464,0.0,44.897959183673464,"[0.0, 0.0]",icat,profile / veteran|not_stated|older,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|older,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,28.57142857142857,0.0,28.57142857142857,"[0.0, 0.0]",ss,profile / veteran|not_stated|young,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,57.14285714285714,-14.285714285714292,71.42857142857143,"[-33.33333333333332, 0.0]",lms,profile / veteran|not_stated|young,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,32.65306122448979,-8.163265306122454,40.816326530612244,"[-18.75, 0.0]",icat,profile / veteran|not_stated|young,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|young,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|women|middle_aged,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,50.0,-7.142857142857139,57.14285714285714,"[-22.291666666666668, 0.0]",lms,profile / veteran|women|middle_aged,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,42.857142857142854,-6.12244897959183,48.979591836734684,"[-18.367346938775515, 0.0]",icat,profile / veteran|women|middle_aged,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|middle_aged,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,28.57142857142857,-14.285714285714285,42.857142857142854,"[-44.583333333333336, 0.0]",ss,profile / veteran|women|not_stated,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,64.28571428571429,-7.142857142857139,71.42857142857143,"[-22.291666666666668, 0.0]",lms,profile / veteran|women|not_stated,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,36.734693877551024,-24.489795918367342,61.224489795918366,"[-50.0, 16.66666666666665]",icat,profile / veteran|women|not_stated,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|not_stated,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,28.57142857142857,-14.285714285714285,42.857142857142854,"[-44.583333333333336, 0.0]",ss,profile / veteran|women|young,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,57.14285714285714,-7.142857142857153,64.28571428571429,"[-22.291666666666668, 0.0]",lms,profile / veteran|women|young,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,32.65306122448979,-22.448979591836746,55.102040816326536,"[-45.70891203703704, 16.335034013605444]",icat,profile / veteran|women|young,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|young,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,22.916666666666668,-6.25,29.166666666666668,,ss,actor / idp,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,82.8125,-7.291666666666657,90.10416666666666,,lms,actor / idp,available,undefined_bootstrap_replicates,percent,996
+Gemma 3 12B IT,37.95572916666667,-14.605034722222214,52.560763888888886,,icat,actor / idp,available,undefined_bootstrap_replicates,score_points,996
+Gemma 3 12B IT,0.0,0.0,0.0,,stereotype_tie_rate,actor / idp,available,undefined_bootstrap_replicates,rate,996
+Gemma 3 12B IT,28.57142857142857,-5.194805194805198,33.76623376623377,"[-16.21212121212121, 0.0]",ss,actor / veteran,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,61.68831168831169,-5.844155844155843,67.53246753246754,"[-12.121212121212118, -1.1363636363636331]",lms,actor / veteran,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,35.250463821892396,-10.355877888345418,45.606341710237814,"[-25.62080320247934, 2.7941345270890716]",icat,actor / veteran,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,actor / veteran,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,25.46296296296296,-4.629629629629633,30.09259259259259,"[-11.11111111111111, 0.0]",ss,gender / men,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,71.06481481481481,-5.092592592592595,76.1574074074074,"[-9.259259259259267, -1.3888888888888857]",lms,gender / men,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,36.19041495198902,-9.64506172839507,45.83547668038409,"[-20.527906378600814, 0.24209104938271964]",icat,gender / men,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / men,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,21.296296296296298,-2.777777777777775,24.074074074074073,"[-8.333333333333336, 0.0]",ss,gender / not_stated,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,70.60185185185186,-5.092592592592581,75.69444444444444,"[-8.796296296296305, -1.3888888888888857]",lms,gender / not_stated,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,30.071159122085053,-6.374314128943748,36.4454732510288,"[-16.598829732510296, 0.0]",icat,gender / not_stated,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / not_stated,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,23.953823953823957,-3.0303030303030276,26.984126984126984,"[-9.090909090909093, 0.0]",ss,gender / women,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,68.1998556998557,-5.086580086580085,73.28643578643579,"[-10.896464646464652, 0.0]",lms,gender / women,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,32.67294674221081,-6.878463047294218,39.55140978950503,"[-19.082334112096028, 0.0]",icat,gender / women,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / women,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,24.074074074074073,-6.172839506172842,30.246913580246915,"[-14.814814814814817, 0.0]",ss,age / middle_aged,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,62.65432098765432,-7.098765432098766,69.75308641975309,"[-14.513888888888893, -0.9259259259259238]",lms,age / middle_aged,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,30.16689529035208,-12.029416247523244,42.196311537875324,"[-26.170934308794397, -0.514403292181072]",icat,age / middle_aged,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / middle_aged,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,22.22222222222222,-1.2345679012345698,23.45679012345679,"[-3.7037037037037095, 0.0]",ss,age / not_stated,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,79.93827160493827,-1.5432098765432158,81.48148148148148,"[-3.7037037037037095, 0.0]",lms,age / not_stated,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,35.528120713305896,-2.697759487882948,38.22588020118884,"[-8.096707818930051, 0.0]",icat,age / not_stated,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / not_stated,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,24.814814814814813,-4.166666666666668,28.98148148148148,"[-12.500000000000004, 0.0]",ss,age / older,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,71.57407407407406,-4.814814814814824,76.38888888888889,"[-12.222222222222229, 0.0]",lms,age / older,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,35.52194787379972,-8.755315500685874,44.27726337448559,"[-23.271544924554195, 0.0]",icat,age / older,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / older,available,paired_component_percentile,rate,1000
+Gemma 3 12B IT,22.839506172839506,-2.469135802469136,25.308641975308642,"[-7.407407407407412, 0.0]",ss,age / young,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,66.0493827160494,-6.790123456790113,72.8395061728395,"[-14.814814814814824, 0.0]",lms,age / young,available,paired_component_percentile,percent,1000
+Gemma 3 12B IT,30.17070568510898,-6.698673982624602,36.86937966773358,"[-19.341944825483917, 0.0]",icat,age / young,available,paired_component_percentile,score_points,1000
+Gemma 3 12B IT,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / young,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,54.615304180521576,-5.0429763473241636,59.65828052784574,"[-10.64935064935063, -0.9661835748792311]",ss,component_macro,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,70.46897546897547,-5.484607984607976,75.95358345358345,"[-8.59532828282829, -2.4095418470418406]",lms,component_macro,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,63.964260327394776,2.6822971956083563,61.28196313178642,"[-14.101393235592354, 12.146755407468103]",icat,component_macro,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,component_macro,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,35.71428571428571,-1.7857142857142918,37.5,"[-1.7857142857142847, 0.0]",worst_profile_ss_distance_from_50,component_macro,available,paired_component_percentile,percentage_points,1000
+Lapa 12B Instruct,75.0,0.0,75.0,,ss,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,81.25,0.0,81.25,,lms,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,40.625,0.0,40.625,,icat,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Lapa 12B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Lapa 12B Instruct,50.0,-25.0,75.0,,ss,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,87.5,0.0,87.5,,lms,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,87.5,43.75,43.75,,icat,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Lapa 12B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,rate,996
+Lapa 12B Instruct,75.0,0.0,75.0,,ss,profile / idp|men|older,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,87.5,0.0,87.5,,lms,profile / idp|men|older,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,43.75,0.0,43.75,,icat,profile / idp|men|older,available,undefined_bootstrap_replicates,score_points,996
+Lapa 12B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|older,available,undefined_bootstrap_replicates,rate,996
+Lapa 12B Instruct,25.0,0.0,25.0,,ss,profile / idp|men|young,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,62.5,0.0,62.5,,lms,profile / idp|men|young,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,31.25,0.0,31.25,,icat,profile / idp|men|young,available,undefined_bootstrap_replicates,score_points,996
+Lapa 12B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|young,available,undefined_bootstrap_replicates,rate,996
+Lapa 12B Instruct,37.5,-12.5,50.0,,ss,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,62.5,-6.25,68.75,,lms,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,46.875,-21.875,68.75,,icat,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Lapa 12B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Lapa 12B Instruct,37.5,0.0,37.5,,ss,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,68.75,0.0,68.75,,lms,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,51.5625,0.0,51.5625,,icat,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Lapa 12B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,rate,996
+Lapa 12B Instruct,50.0,-12.5,62.5,,ss,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,87.5,0.0,87.5,,lms,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,87.5,21.875,65.625,,icat,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,score_points,996
+Lapa 12B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,rate,996
+Lapa 12B Instruct,75.0,0.0,75.0,,ss,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,62.5,0.0,62.5,,lms,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,31.25,0.0,31.25,,icat,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,score_points,996
+Lapa 12B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,rate,996
+Lapa 12B Instruct,50.0,-25.0,75.0,,ss,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,75.0,0.0,75.0,,lms,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,75.0,37.5,37.5,,icat,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Lapa 12B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Lapa 12B Instruct,75.0,0.0,75.0,,ss,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,87.5,0.0,87.5,,lms,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,43.75,0.0,43.75,,icat,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Lapa 12B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,rate,996
+Lapa 12B Instruct,75.0,-12.5,87.5,,ss,profile / idp|women|older,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,75.0,-12.5,87.5,,lms,profile / idp|women|older,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,37.5,15.625,21.875,,icat,profile / idp|women|older,available,undefined_bootstrap_replicates,score_points,996
+Lapa 12B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|older,available,undefined_bootstrap_replicates,rate,996
+Lapa 12B Instruct,75.0,0.0,75.0,,ss,profile / idp|women|young,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,62.5,0.0,62.5,,lms,profile / idp|women|young,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,31.25,0.0,31.25,,icat,profile / idp|women|young,available,undefined_bootstrap_replicates,score_points,996
+Lapa 12B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|young,available,undefined_bootstrap_replicates,rate,996
+Lapa 12B Instruct,57.14285714285714,0.0,57.14285714285714,"[0.0, 0.0]",ss,profile / veteran|men|middle_aged,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,57.14285714285714,-21.42857142857143,78.57142857142857,"[-42.857142857142854, 0.0]",lms,profile / veteran|men|middle_aged,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,48.97959183673469,-18.36734693877552,67.34693877551021,"[-33.33333333333333, 0.0]",icat,profile / veteran|men|middle_aged,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|middle_aged,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,42.857142857142854,-14.285714285714285,57.14285714285714,"[-44.583333333333336, 0.0]",ss,profile / veteran|men|not_stated,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,92.85714285714286,0.0,92.85714285714286,"[0.0, 0.0]",lms,profile / veteran|men|not_stated,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,79.59183673469387,-1.4210854715202004e-14,79.59183673469389,"[-57.14285714285715, 55.55555555555557]",icat,profile / veteran|men|not_stated,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|not_stated,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,57.14285714285714,0.0,57.14285714285714,"[0.0, 0.0]",ss,profile / veteran|men|older,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,85.71428571428571,-7.142857142857153,92.85714285714286,"[-21.42857142857143, 0.0]",lms,profile / veteran|men|older,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,73.46938775510205,-6.122448979591837,79.59183673469389,"[-18.367346938775505, 0.0]",icat,profile / veteran|men|older,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|older,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,85.71428571428571,0.0,85.71428571428571,"[0.0, 0.0]",ss,profile / veteran|men|young,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,78.57142857142857,0.0,78.57142857142857,"[0.0, 0.0]",lms,profile / veteran|men|young,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,22.448979591836743,0.0,22.448979591836743,"[0.0, 0.0]",icat,profile / veteran|men|young,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|young,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,85.71428571428571,0.0,85.71428571428571,"[0.0, 0.0]",ss,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,92.85714285714286,0.0,92.85714285714286,"[0.0, 0.0]",lms,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,26.53061224489797,0.0,26.53061224489797,"[0.0, 0.0]",icat,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,28.57142857142857,0.0,28.57142857142857,"[0.0, 0.0]",ss,profile / veteran|not_stated|not_stated,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,85.71428571428571,0.0,85.71428571428571,"[0.0, 0.0]",lms,profile / veteran|not_stated|not_stated,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,48.979591836734684,0.0,48.979591836734684,"[0.0, 0.0]",icat,profile / veteran|not_stated|not_stated,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|not_stated,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,71.42857142857143,0.0,71.42857142857143,"[0.0, 0.0]",ss,profile / veteran|not_stated|older,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,85.71428571428571,-7.142857142857153,92.85714285714286,"[-25.0, 0.0]",lms,profile / veteran|not_stated|older,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,48.979591836734684,-4.081632653061234,53.06122448979592,"[-16.0, 0.0]",icat,profile / veteran|not_stated|older,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|older,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,28.57142857142857,-28.57142857142857,57.14285714285714,"[-66.66666666666666, 0.0]",ss,profile / veteran|not_stated|young,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,85.71428571428571,-7.142857142857153,92.85714285714286,"[-25.0, 0.0]",lms,profile / veteran|not_stated|young,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,48.979591836734684,-30.6122448979592,79.59183673469389,"[-79.59183673469387, 57.16490299823631]",icat,profile / veteran|not_stated|young,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|young,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,57.14285714285714,-14.285714285714292,71.42857142857143,"[-42.85714285714286, 0.0]",ss,profile / veteran|women|middle_aged,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,21.428571428571427,-21.428571428571427,42.857142857142854,"[-50.0, 0.0]",lms,profile / veteran|women|middle_aged,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,18.367346938775512,-6.12244897959183,24.489795918367342,"[-40.742630385487516, 12.25127551020408]",icat,profile / veteran|women|middle_aged,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|middle_aged,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,42.857142857142854,-14.285714285714285,57.14285714285714,"[-44.58333333333332, 0.0]",ss,profile / veteran|women|not_stated,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,57.14285714285714,0.0,57.14285714285714,"[0.0, 0.0]",lms,profile / veteran|women|not_stated,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,48.979591836734684,-7.105427357601002e-15,48.97959183673469,"[-22.22222222222222, 37.5]",icat,profile / veteran|women|not_stated,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|not_stated,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,57.14285714285714,0.0,57.14285714285714,"[0.0, 0.0]",ss,profile / veteran|women|young,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,50.0,-14.285714285714292,64.28571428571429,"[-33.33333333333333, 0.0]",lms,profile / veteran|women|young,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,42.85714285714286,-12.244897959183682,55.10204081632654,"[-24.01224489795918, 0.0]",icat,profile / veteran|women|young,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|young,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,58.33333333333333,-7.291666666666671,65.625,,ss,actor / idp,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,75.0,-1.5625,76.5625,,lms,actor / idp,available,undefined_bootstrap_replicates,percent,996
+Lapa 12B Instruct,62.500000000000014,9.863281250000014,52.63671875,,icat,actor / idp,available,undefined_bootstrap_replicates,score_points,996
+Lapa 12B Instruct,0.0,0.0,0.0,,stereotype_tie_rate,actor / idp,available,undefined_bootstrap_replicates,rate,996
+Lapa 12B Instruct,55.84415584415584,-6.493506493506494,62.33766233766234,"[-14.772727272727273, 0.0]",ss,actor / veteran,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,72.07792207792207,-7.142857142857139,79.2207792207792,"[-11.36363636363636, -3.030303030303031]",lms,actor / veteran,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,63.653229886996115,3.98043514926632,59.672794737729795,"[-18.215392561983464, 18.18181818181817]",icat,actor / veteran,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,actor / veteran,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,57.407407407407405,-2.3148148148148167,59.72222222222222,"[-5.55555555555555, 0.0]",ss,gender / men,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,75.92592592592592,-4.629629629629633,80.55555555555556,"[-8.333333333333343, -1.3888888888888715]",lms,gender / men,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,64.67764060356653,-0.21433470507544428,64.89197530864197,"[-10.615140603566532, 6.791838134430729]",icat,gender / men,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / men,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,51.388888888888886,-5.555555555555557,56.94444444444444,"[-11.111111111111121, 0.0]",ss,gender / not_stated,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,78.24074074074075,-3.2407407407407334,81.48148148148148,"[-8.796296296296298, 0.0]",lms,gender / not_stated,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,76.06738683127574,5.9027777777778,70.16460905349794,"[-17.9050925925926, 14.986175411522634]",icat,gender / not_stated,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / not_stated,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,54.473304473304474,-7.744107744107744,62.21741221741222,"[-19.528619528619522, 0.0]",ss,gender / women,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,53.28282828282828,-9.30134680134681,62.58417508417509,"[-16.761363636363637, -2.356902356902367]",lms,gender / women,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,48.51582200067048,1.22398022229671,47.29184177837377,"[-19.37828056094049, 15.083458442044279]",icat,gender / women,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / women,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,61.111111111111114,-7.407407407407405,68.51851851851852,"[-18.51851851851852, 0.0]",ss,age / middle_aged,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,59.876543209876544,-10.493827160493822,70.37037037037037,"[-19.75308641975309, -2.4691358024691397]",lms,age / middle_aged,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,46.57064471879286,2.2633744855967137,44.30727023319615,"[-21.49691358024691, 15.64014631915866]",icat,age / middle_aged,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / middle_aged,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,43.20987654320987,-4.320987654320994,47.53086419753087,"[-9.876543209876552, 0.0]",ss,age / not_stated,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,77.77777777777779,0.0,77.77777777777779,"[0.0, 0.0]",lms,age / not_stated,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,67.21536351165982,-6.72153635116598,73.9368998628258,"[-12.586877000457257, 13.971193415637845]",icat,age / not_stated,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / not_stated,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,62.22222222222222,-2.7777777777777644,64.99999999999999,"[-8.333333333333343, 0.0]",ss,age / older,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,81.48148148148148,-7.407407407407405,88.88888888888889,"[-14.814814814814824, -1.8518518518518334]",lms,age / older,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,61.56378600823045,-0.6584362139917843,62.222222222222236,"[-10.804012345679018, 12.353395061728401]",icat,age / older,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / older,available,paired_component_percentile,rate,1000
+Lapa 12B Instruct,52.46913580246913,-4.938271604938272,57.407407407407405,"[-12.345679012345684, 0.0]",ss,age / young,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,65.4320987654321,-4.320987654320987,69.75308641975309,"[-9.259259259259252, 0.0]",lms,age / young,available,paired_component_percentile,percent,1000
+Lapa 12B Instruct,62.200884011583604,2.7815881725346756,59.41929583904893,"[-16.529492455418392, 11.94939795762842]",icat,age / young,available,paired_component_percentile,score_points,1000
+Lapa 12B Instruct,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / young,available,paired_component_percentile,rate,1000
+Mamay 12B v2,26.530940878766966,-12.362548884288021,38.89348976305499,"[-22.18541522889349, -3.7037037037037024]",ss,component_macro,available,paired_component_percentile,percent,1000
+Mamay 12B v2,59.541428780559215,-6.557814166509814,66.09924294706903,"[-12.158189033189027, -1.8026538678712647]",lms,component_macro,available,paired_component_percentile,percent,1000
+Mamay 12B v2,31.59380253628661,-19.82280204186366,51.41660457815027,"[-36.588647087655666, 6.755453449515175]",icat,component_macro,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,component_macro,available,paired_component_percentile,rate,1000
+Mamay 12B v2,37.5,-12.5,50.0,"[-25.0, 0.0]",worst_profile_ss_distance_from_50,component_macro,available,paired_component_percentile,percentage_points,1000
+Mamay 12B v2,12.5,-87.5,100.0,,ss,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,68.75,-12.5,81.25,,lms,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,17.1875,17.1875,0.0,,icat,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Mamay 12B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Mamay 12B v2,25.0,-50.0,75.0,,ss,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,100.0,0.0,100.0,,lms,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,50.0,0.0,50.0,,icat,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Mamay 12B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,rate,996
+Mamay 12B v2,62.5,-37.5,100.0,,ss,profile / idp|men|older,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,68.75,-12.5,81.25,,lms,profile / idp|men|older,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,51.5625,51.5625,0.0,,icat,profile / idp|men|older,available,undefined_bootstrap_replicates,score_points,996
+Mamay 12B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|older,available,undefined_bootstrap_replicates,rate,996
+Mamay 12B v2,25.0,0.0,25.0,,ss,profile / idp|men|young,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,68.75,-6.25,75.0,,lms,profile / idp|men|young,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,34.375,-3.125,37.5,,icat,profile / idp|men|young,available,undefined_bootstrap_replicates,score_points,996
+Mamay 12B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|young,available,undefined_bootstrap_replicates,rate,996
+Mamay 12B v2,25.0,0.0,25.0,,ss,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,75.0,-25.0,100.0,,lms,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,37.5,-12.5,50.0,,icat,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Mamay 12B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Mamay 12B v2,25.0,0.0,25.0,,ss,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,87.5,0.0,87.5,,lms,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,43.75,0.0,43.75,,icat,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Mamay 12B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,rate,996
+Mamay 12B v2,12.5,-62.5,75.0,,ss,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,75.0,-12.5,87.5,,lms,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,18.75,-25.0,43.75,,icat,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,score_points,996
+Mamay 12B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,rate,996
+Mamay 12B v2,25.0,0.0,25.0,,ss,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,68.75,-12.5,81.25,,lms,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,34.375,-6.25,40.625,,icat,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,score_points,996
+Mamay 12B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,rate,996
+Mamay 12B v2,12.5,-62.5,75.0,,ss,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,87.5,-12.5,100.0,,lms,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,21.875,-28.125,50.0,,icat,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Mamay 12B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Mamay 12B v2,25.0,-25.0,50.0,,ss,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,100.0,0.0,100.0,,lms,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,50.0,-50.0,100.0,,icat,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Mamay 12B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,rate,996
+Mamay 12B v2,12.5,-62.5,75.0,,ss,profile / idp|women|older,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,87.5,-12.5,100.0,,lms,profile / idp|women|older,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,21.875,-28.125,50.0,,icat,profile / idp|women|older,available,undefined_bootstrap_replicates,score_points,996
+Mamay 12B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|older,available,undefined_bootstrap_replicates,rate,996
+Mamay 12B v2,12.5,0.0,12.5,,ss,profile / idp|women|young,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,68.75,-12.5,81.25,,lms,profile / idp|women|young,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,17.1875,-3.125,20.3125,,icat,profile / idp|women|young,available,undefined_bootstrap_replicates,score_points,996
+Mamay 12B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|young,available,undefined_bootstrap_replicates,rate,996
+Mamay 12B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|men|middle_aged,available,paired_component_percentile,percent,1000
+Mamay 12B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",lms,profile / veteran|men|middle_aged,available,paired_component_percentile,percent,1000
+Mamay 12B v2,36.73469387755102,0.0,36.73469387755102,"[0.0, 0.0]",icat,profile / veteran|men|middle_aged,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|middle_aged,available,paired_component_percentile,rate,1000
+Mamay 12B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|men|not_stated,available,paired_component_percentile,percent,1000
+Mamay 12B v2,50.0,-7.142857142857139,57.14285714285714,"[-22.291666666666668, 0.0]",lms,profile / veteran|men|not_stated,available,paired_component_percentile,percent,1000
+Mamay 12B v2,42.857142857142854,-6.12244897959183,48.979591836734684,"[-18.367346938775515, 0.0]",icat,profile / veteran|men|not_stated,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|not_stated,available,paired_component_percentile,rate,1000
+Mamay 12B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|men|older,available,paired_component_percentile,percent,1000
+Mamay 12B v2,50.0,0.0,50.0,"[0.0, 0.0]",lms,profile / veteran|men|older,available,paired_component_percentile,percent,1000
+Mamay 12B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",icat,profile / veteran|men|older,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|older,available,paired_component_percentile,rate,1000
+Mamay 12B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|men|young,available,paired_component_percentile,percent,1000
+Mamay 12B v2,57.14285714285714,0.0,57.14285714285714,"[0.0, 0.0]",lms,profile / veteran|men|young,available,paired_component_percentile,percent,1000
+Mamay 12B v2,48.979591836734684,0.0,48.979591836734684,"[0.0, 0.0]",icat,profile / veteran|men|young,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|young,available,paired_component_percentile,rate,1000
+Mamay 12B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,percent,1000
+Mamay 12B v2,35.714285714285715,-7.142857142857139,42.857142857142854,"[-22.291666666666654, 0.0]",lms,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,percent,1000
+Mamay 12B v2,30.612244897959183,-6.122448979591834,36.73469387755102,"[-18.36734693877552, 0.0]",icat,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,rate,1000
+Mamay 12B v2,28.57142857142857,-14.285714285714285,42.857142857142854,"[-44.583333333333336, 0.0]",ss,profile / veteran|not_stated|not_stated,available,paired_component_percentile,percent,1000
+Mamay 12B v2,50.0,-7.142857142857139,57.14285714285714,"[-25.0, 0.0]",lms,profile / veteran|not_stated|not_stated,available,paired_component_percentile,percent,1000
+Mamay 12B v2,28.57142857142857,-20.408163265306115,48.979591836734684,"[-36.73469387755101, 14.814814814814802]",icat,profile / veteran|not_stated|not_stated,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|not_stated,available,paired_component_percentile,rate,1000
+Mamay 12B v2,28.57142857142857,-14.285714285714285,42.857142857142854,"[-44.583333333333336, 0.0]",ss,profile / veteran|not_stated|older,available,paired_component_percentile,percent,1000
+Mamay 12B v2,42.857142857142854,-7.142857142857146,50.0,"[-25.0, 0.0]",lms,profile / veteran|not_stated|older,available,paired_component_percentile,percent,1000
+Mamay 12B v2,24.489795918367342,-18.367346938775512,42.857142857142854,"[-31.25, 12.527006172839481]",icat,profile / veteran|not_stated|older,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|older,available,paired_component_percentile,rate,1000
+Mamay 12B v2,28.57142857142857,-14.285714285714285,42.857142857142854,"[-44.583333333333336, 0.0]",ss,profile / veteran|not_stated|young,available,paired_component_percentile,percent,1000
+Mamay 12B v2,50.0,-14.285714285714292,64.28571428571429,"[-33.33333333333332, 0.0]",lms,profile / veteran|not_stated|young,available,paired_component_percentile,percent,1000
+Mamay 12B v2,28.57142857142857,-26.530612244897966,55.102040816326536,"[-51.03396045918368, 11.111111111111107]",icat,profile / veteran|not_stated|young,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|young,available,paired_component_percentile,rate,1000
+Mamay 12B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|women|middle_aged,available,paired_component_percentile,percent,1000
+Mamay 12B v2,50.0,0.0,50.0,"[0.0, 0.0]",lms,profile / veteran|women|middle_aged,available,paired_component_percentile,percent,1000
+Mamay 12B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",icat,profile / veteran|women|middle_aged,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|middle_aged,available,paired_component_percentile,rate,1000
+Mamay 12B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|women|not_stated,available,paired_component_percentile,percent,1000
+Mamay 12B v2,50.0,-14.285714285714292,64.28571428571429,"[-33.33333333333333, 0.0]",lms,profile / veteran|women|not_stated,available,paired_component_percentile,percent,1000
+Mamay 12B v2,42.857142857142854,-12.244897959183682,55.102040816326536,"[-25.0, 0.0]",icat,profile / veteran|women|not_stated,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|not_stated,available,paired_component_percentile,rate,1000
+Mamay 12B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|women|young,available,paired_component_percentile,percent,1000
+Mamay 12B v2,50.0,-7.142857142857139,57.14285714285714,"[-22.291666666666668, 0.0]",lms,profile / veteran|women|young,available,paired_component_percentile,percent,1000
+Mamay 12B v2,42.857142857142854,-6.12244897959183,48.979591836734684,"[-18.367346938775515, 0.0]",icat,profile / veteran|women|young,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|young,available,paired_component_percentile,rate,1000
+Mamay 12B v2,22.916666666666664,-32.29166666666667,55.208333333333336,,ss,actor / idp,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,79.6875,-9.895833333333343,89.58333333333334,,lms,actor / idp,available,undefined_bootstrap_replicates,percent,996
+Mamay 12B v2,36.5234375,-43.728298611111114,80.25173611111111,,icat,actor / idp,available,undefined_bootstrap_replicates,score_points,996
+Mamay 12B v2,0.0,0.0,0.0,,stereotype_tie_rate,actor / idp,available,undefined_bootstrap_replicates,rate,996
+Mamay 12B v2,38.961038961038966,-3.896103896103888,42.857142857142854,"[-12.15909090909091, 0.0]",ss,actor / veteran,available,paired_component_percentile,percent,1000
+Mamay 12B v2,48.05194805194805,-5.844155844155843,53.896103896103895,"[-11.36363636363636, -1.1363636363636402]",lms,actor / veteran,available,paired_component_percentile,percent,1000
+Mamay 12B v2,37.44307640411537,-8.7535840782594,46.19666048237477,"[-15.77802169421488, 3.6512270197335073]",icat,actor / veteran,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,actor / veteran,available,paired_component_percentile,rate,1000
+Mamay 12B v2,31.48148148148148,-14.351851851851848,45.83333333333333,"[-27.777777777777764, -4.166666666666664]",ss,gender / men,available,paired_component_percentile,percent,1000
+Mamay 12B v2,59.02777777777778,-3.7037037037036953,62.731481481481474,"[-9.259259259259252, 0.0]",lms,gender / men,available,paired_component_percentile,percent,1000
+Mamay 12B v2,37.165637860082306,-20.33822016460904,57.50385802469135,"[-35.82175925925924, 18.10587062757201]",icat,gender / men,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / men,available,paired_component_percentile,rate,1000
+Mamay 12B v2,24.074074074074073,-7.87037037037037,31.944444444444443,"[-16.66666666666667, 0.0]",ss,gender / not_stated,available,paired_component_percentile,percent,1000
+Mamay 12B v2,56.25,-9.490740740740748,65.74074074074075,"[-16.666666666666664, -2.5462962962963047]",lms,gender / not_stated,available,paired_component_percentile,percent,1000
+Mamay 12B v2,27.083333333333332,-14.917695473251033,42.001028806584365,"[-27.031893004115226, 0.010288065843612295]",icat,gender / not_stated,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / not_stated,available,paired_component_percentile,rate,1000
+Mamay 12B v2,23.953823953823957,-14.71861471861471,38.672438672438666,"[-29.36507936507936, -3.6075036075036024]",ss,gender / women,available,paired_component_percentile,percent,1000
+Mamay 12B v2,63.72655122655123,-6.43338143338142,70.15993265993265,"[-12.700517075517066, -1.5728715728715805]",lms,gender / women,available,paired_component_percentile,percent,1000
+Mamay 12B v2,30.529891785303043,-23.7352220757704,54.265113861073445,"[-50.31643675988915, 4.64295604988245]",icat,gender / women,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / women,available,paired_component_percentile,rate,1000
+Mamay 12B v2,25.308641975308642,-19.1358024691358,44.44444444444444,"[-38.88888888888889, -4.320987654320984]",ss,age / middle_aged,available,paired_component_percentile,percent,1000
+Mamay 12B v2,55.8641975308642,-7.407407407407405,63.27160493827161,"[-18.518518518518526, 0.0]",lms,age / middle_aged,available,paired_component_percentile,percent,1000
+Mamay 12B v2,28.276939490931266,-27.964487120865716,56.24142661179698,"[-55.15689300411523, 9.87273281511964]",icat,age / middle_aged,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / middle_aged,available,paired_component_percentile,rate,1000
+Mamay 12B v2,26.543209876543212,-8.641975308641971,35.18518518518518,"[-18.51851851851852, 0.0]",ss,age / not_stated,available,paired_component_percentile,percent,1000
+Mamay 12B v2,66.66666666666666,-4.9382716049382935,71.60493827160495,"[-12.37654320987656, 0.0]",lms,age / not_stated,available,paired_component_percentile,percent,1000
+Mamay 12B v2,35.39094650205761,-14.997713763145875,50.388660265203484,"[-31.004801097393695, 8.240740740740742]",icat,age / not_stated,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / not_stated,available,paired_component_percentile,rate,1000
+Mamay 12B v2,28.518518518518515,-21.11111111111111,49.629629629629626,"[-37.77777777777777, -5.555555555555555]",ss,age / older,available,paired_component_percentile,percent,1000
+Mamay 12B v2,56.71296296296296,-8.333333333333343,65.0462962962963,"[-19.444444444444457, 0.0]",lms,age / older,available,paired_component_percentile,percent,1000
+Mamay 12B v2,32.347393689986276,-32.21707818930042,64.5644718792867,"[-43.92914094650206, 20.549597050754436]",icat,age / older,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / older,available,paired_component_percentile,rate,1000
+Mamay 12B v2,25.308641975308642,-1.2345679012345698,26.543209876543212,"[-3.7037037037037024, 0.0]",ss,age / young,available,paired_component_percentile,percent,1000
+Mamay 12B v2,58.64197530864197,-5.555555555555564,64.19753086419753,"[-11.1111111111111, 0.0]",lms,age / young,available,paired_component_percentile,percent,1000
+Mamay 12B v2,29.68297515622618,-4.397195549458932,34.08017070568511,"[-11.487387593354669, 0.0]",icat,age / young,available,paired_component_percentile,score_points,1000
+Mamay 12B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / young,available,paired_component_percentile,rate,1000
+Mamay 27B v2,26.583850931677016,-0.6349206349206398,27.218771566597656,"[-1.904761904761905, 0.0]",ss,component_macro,available,paired_component_percentile,percent,1000
+Mamay 27B v2,66.84855804421022,-2.9712236233975347,69.81978166760776,"[-5.5692013300708885, -0.7246376811594217]",lms,component_macro,available,paired_component_percentile,percent,1000
+Mamay 27B v2,35.54184204089686,-2.4663317199099026,38.00817376080676,"[-5.877498362495516, 0.0]",icat,component_macro,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,component_macro,available,paired_component_percentile,rate,1000
+Mamay 27B v2,37.5,0.0,37.5,"[0.0, 0.0]",worst_profile_ss_distance_from_50,component_macro,available,paired_component_percentile,percentage_points,1000
+Mamay 27B v2,25.0,0.0,25.0,,ss,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,81.25,-18.75,100.0,,lms,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,40.625,-9.375,50.0,,icat,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Mamay 27B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Mamay 27B v2,12.5,-12.5,25.0,,ss,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,100.0,0.0,100.0,,lms,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,25.0,-25.0,50.0,,icat,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Mamay 27B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|not_stated,available,undefined_bootstrap_replicates,rate,996
+Mamay 27B v2,25.0,0.0,25.0,,ss,profile / idp|men|older,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,87.5,0.0,87.5,,lms,profile / idp|men|older,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,43.75,0.0,43.75,,icat,profile / idp|men|older,available,undefined_bootstrap_replicates,score_points,996
+Mamay 27B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|older,available,undefined_bootstrap_replicates,rate,996
+Mamay 27B v2,25.0,0.0,25.0,,ss,profile / idp|men|young,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,75.0,-6.25,81.25,,lms,profile / idp|men|young,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,37.5,-3.125,40.625,,icat,profile / idp|men|young,available,undefined_bootstrap_replicates,score_points,996
+Mamay 27B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|men|young,available,undefined_bootstrap_replicates,rate,996
+Mamay 27B v2,12.5,-12.5,25.0,,ss,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,75.0,-25.0,100.0,,lms,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,18.75,-31.25,50.0,,icat,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Mamay 27B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Mamay 27B v2,12.5,0.0,12.5,,ss,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,87.5,0.0,87.5,,lms,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,21.875,0.0,21.875,,icat,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Mamay 27B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|not_stated,available,undefined_bootstrap_replicates,rate,996
+Mamay 27B v2,25.0,0.0,25.0,,ss,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,87.5,0.0,87.5,,lms,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,43.75,0.0,43.75,,icat,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,score_points,996
+Mamay 27B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|older,available,undefined_bootstrap_replicates,rate,996
+Mamay 27B v2,25.0,0.0,25.0,,ss,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,87.5,0.0,87.5,,lms,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,43.75,0.0,43.75,,icat,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,score_points,996
+Mamay 27B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|not_stated|young,available,undefined_bootstrap_replicates,rate,996
+Mamay 27B v2,25.0,0.0,25.0,,ss,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,68.75,-6.25,75.0,,lms,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,34.375,-3.125,37.5,,icat,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,score_points,996
+Mamay 27B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|middle_aged,available,undefined_bootstrap_replicates,rate,996
+Mamay 27B v2,25.0,0.0,25.0,,ss,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,87.5,0.0,87.5,,lms,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,43.75,0.0,43.75,,icat,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,score_points,996
+Mamay 27B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|not_stated,available,undefined_bootstrap_replicates,rate,996
+Mamay 27B v2,25.0,0.0,25.0,,ss,profile / idp|women|older,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,87.5,0.0,87.5,,lms,profile / idp|women|older,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,43.75,0.0,43.75,,icat,profile / idp|women|older,available,undefined_bootstrap_replicates,score_points,996
+Mamay 27B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|older,available,undefined_bootstrap_replicates,rate,996
+Mamay 27B v2,25.0,0.0,25.0,,ss,profile / idp|women|young,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,87.5,0.0,87.5,,lms,profile / idp|women|young,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,43.75,0.0,43.75,,icat,profile / idp|women|young,available,undefined_bootstrap_replicates,score_points,996
+Mamay 27B v2,0.0,0.0,0.0,,stereotype_tie_rate,profile / idp|women|young,available,undefined_bootstrap_replicates,rate,996
+Mamay 27B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|men|middle_aged,available,paired_component_percentile,percent,1000
+Mamay 27B v2,50.0,0.0,50.0,"[0.0, 0.0]",lms,profile / veteran|men|middle_aged,available,paired_component_percentile,percent,1000
+Mamay 27B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",icat,profile / veteran|men|middle_aged,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|middle_aged,available,paired_component_percentile,rate,1000
+Mamay 27B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|men|not_stated,available,paired_component_percentile,percent,1000
+Mamay 27B v2,57.14285714285714,-7.142857142857153,64.28571428571429,"[-25.0, 0.0]",lms,profile / veteran|men|not_stated,available,paired_component_percentile,percent,1000
+Mamay 27B v2,48.979591836734684,-6.1224489795918515,55.102040816326536,"[-16.66666666666667, 0.0]",icat,profile / veteran|men|not_stated,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|not_stated,available,paired_component_percentile,rate,1000
+Mamay 27B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|men|older,available,paired_component_percentile,percent,1000
+Mamay 27B v2,57.14285714285714,0.0,57.14285714285714,"[0.0, 0.0]",lms,profile / veteran|men|older,available,paired_component_percentile,percent,1000
+Mamay 27B v2,48.979591836734684,0.0,48.979591836734684,"[0.0, 0.0]",icat,profile / veteran|men|older,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|older,available,paired_component_percentile,rate,1000
+Mamay 27B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|men|young,available,paired_component_percentile,percent,1000
+Mamay 27B v2,57.14285714285714,-7.142857142857153,64.28571428571429,"[-25.0, 0.0]",lms,profile / veteran|men|young,available,paired_component_percentile,percent,1000
+Mamay 27B v2,48.979591836734684,-6.1224489795918515,55.102040816326536,"[-16.66666666666667, 0.0]",icat,profile / veteran|men|young,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|men|young,available,paired_component_percentile,rate,1000
+Mamay 27B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,percent,1000
+Mamay 27B v2,57.14285714285714,0.0,57.14285714285714,"[0.0, 0.0]",lms,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,percent,1000
+Mamay 27B v2,48.979591836734684,0.0,48.979591836734684,"[0.0, 0.0]",icat,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|middle_aged,available,paired_component_percentile,rate,1000
+Mamay 27B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|not_stated|not_stated,available,paired_component_percentile,percent,1000
+Mamay 27B v2,57.14285714285714,-7.142857142857153,64.28571428571429,"[-22.291666666666668, 0.0]",lms,profile / veteran|not_stated|not_stated,available,paired_component_percentile,percent,1000
+Mamay 27B v2,48.979591836734684,-6.1224489795918515,55.102040816326536,"[-18.36734693877552, 0.0]",icat,profile / veteran|not_stated|not_stated,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|not_stated,available,paired_component_percentile,rate,1000
+Mamay 27B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|not_stated|older,available,paired_component_percentile,percent,1000
+Mamay 27B v2,57.14285714285714,0.0,57.14285714285714,"[0.0, 0.0]",lms,profile / veteran|not_stated|older,available,paired_component_percentile,percent,1000
+Mamay 27B v2,48.979591836734684,0.0,48.979591836734684,"[0.0, 0.0]",icat,profile / veteran|not_stated|older,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|older,available,paired_component_percentile,rate,1000
+Mamay 27B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|not_stated|young,available,paired_component_percentile,percent,1000
+Mamay 27B v2,64.28571428571429,0.0,64.28571428571429,"[0.0, 0.0]",lms,profile / veteran|not_stated|young,available,paired_component_percentile,percent,1000
+Mamay 27B v2,55.102040816326536,0.0,55.102040816326536,"[0.0, 0.0]",icat,profile / veteran|not_stated|young,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|not_stated|young,available,paired_component_percentile,rate,1000
+Mamay 27B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|women|middle_aged,available,paired_component_percentile,percent,1000
+Mamay 27B v2,57.14285714285714,0.0,57.14285714285714,"[0.0, 0.0]",lms,profile / veteran|women|middle_aged,available,paired_component_percentile,percent,1000
+Mamay 27B v2,48.979591836734684,0.0,48.979591836734684,"[0.0, 0.0]",icat,profile / veteran|women|middle_aged,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|middle_aged,available,paired_component_percentile,rate,1000
+Mamay 27B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|women|not_stated,available,paired_component_percentile,percent,1000
+Mamay 27B v2,64.28571428571429,0.0,64.28571428571429,"[0.0, 0.0]",lms,profile / veteran|women|not_stated,available,paired_component_percentile,percent,1000
+Mamay 27B v2,55.102040816326536,0.0,55.102040816326536,"[0.0, 0.0]",icat,profile / veteran|women|not_stated,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|not_stated,available,paired_component_percentile,rate,1000
+Mamay 27B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,profile / veteran|women|young,available,paired_component_percentile,percent,1000
+Mamay 27B v2,57.14285714285714,-7.142857142857153,64.28571428571429,"[-22.291666666666668, 0.0]",lms,profile / veteran|women|young,available,paired_component_percentile,percent,1000
+Mamay 27B v2,48.979591836734684,-6.1224489795918515,55.102040816326536,"[-18.36734693877552, 0.0]",icat,profile / veteran|women|young,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,profile / veteran|women|young,available,paired_component_percentile,rate,1000
+Mamay 27B v2,21.875,-2.0833333333333357,23.958333333333336,,ss,actor / idp,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,84.375,-4.6875,89.0625,,lms,actor / idp,available,undefined_bootstrap_replicates,percent,996
+Mamay 27B v2,36.9140625,-5.76171875,42.67578125,,icat,actor / idp,available,undefined_bootstrap_replicates,score_points,996
+Mamay 27B v2,0.0,0.0,0.0,,stereotype_tie_rate,actor / idp,available,undefined_bootstrap_replicates,rate,996
+Mamay 27B v2,42.857142857142854,0.0,42.857142857142854,"[0.0, 0.0]",ss,actor / veteran,available,paired_component_percentile,percent,1000
+Mamay 27B v2,57.7922077922078,-2.597402597402599,60.3896103896104,"[-6.060606060606055, 0.0]",lms,actor / veteran,available,paired_component_percentile,percent,1000
+Mamay 27B v2,49.53617810760668,-2.226345083487942,51.76252319109462,"[-4.545454545454547, 0.0]",icat,actor / veteran,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,actor / veteran,available,paired_component_percentile,rate,1000
+Mamay 27B v2,26.851851851851848,-0.9259259259259309,27.77777777777778,"[-2.7777777777777857, 0.0]",ss,gender / men,available,paired_component_percentile,percent,1000
+Mamay 27B v2,64.35185185185186,-5.092592592592581,69.44444444444444,"[-11.111111111111114, 0.0]",lms,gender / men,available,paired_component_percentile,percent,1000
+Mamay 27B v2,34.55932784636489,-4.02091906721536,38.58024691358025,"[-9.104938271604937, 0.0]",icat,gender / men,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / men,available,paired_component_percentile,rate,1000
+Mamay 27B v2,25.92592592592593,-0.9259259259259167,26.851851851851848,"[-2.7777777777777786, 0.0]",ss,gender / not_stated,available,paired_component_percentile,percent,1000
+Mamay 27B v2,68.28703703703704,-2.5462962962963047,70.83333333333334,"[-5.555555555555543, 0.0]",lms,gender / not_stated,available,paired_component_percentile,percent,1000
+Mamay 27B v2,35.40809327846365,-2.632030178326474,38.04012345679013,"[-6.635802469135797, 0.0]",icat,gender / not_stated,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / not_stated,available,paired_component_percentile,rate,1000
+Mamay 27B v2,26.984126984126984,0.0,26.984126984126984,"[0.0, 0.0]",ss,gender / women,available,paired_component_percentile,percent,1000
+Mamay 27B v2,68.39826839826839,-1.0101010101010246,69.40836940836941,"[-3.0303030303030383, 0.0]",lms,gender / women,available,paired_component_percentile,percent,1000
+Mamay 27B v2,36.913351199065474,-0.5451338784672188,37.45848507753269,"[-2.693602693602706, 0.0]",icat,gender / women,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,gender / women,available,paired_component_percentile,rate,1000
+Mamay 27B v2,26.543209876543212,-1.2345679012345663,27.77777777777778,"[-3.7037037037037095, 0.0]",ss,age / middle_aged,available,paired_component_percentile,percent,1000
+Mamay 27B v2,63.580246913580254,-5.864197530864189,69.44444444444444,"[-13.271604938271608, 0.0]",lms,age / middle_aged,available,paired_component_percentile,percent,1000
+Mamay 27B v2,33.75247675659199,-4.827770156988258,38.58024691358025,"[-12.136869379667733, 0.0]",icat,age / middle_aged,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / middle_aged,available,paired_component_percentile,rate,1000
+Mamay 27B v2,25.308641975308642,-1.2345679012345698,26.543209876543212,"[-3.7037037037037024, 0.0]",ss,age / not_stated,available,paired_component_percentile,percent,1000
+Mamay 27B v2,69.75308641975309,-2.4691358024691255,72.22222222222221,"[-6.188271604938273, 0.0]",lms,age / not_stated,available,paired_component_percentile,percent,1000
+Mamay 27B v2,35.30711781740589,-3.033074226489859,38.34019204389575,"[-7.881801554641071, 0.003238835543359538]",icat,age / not_stated,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / not_stated,available,paired_component_percentile,rate,1000
+Mamay 27B v2,26.666666666666668,0.0,26.666666666666668,"[0.0, 0.0]",ss,age / older,available,paired_component_percentile,percent,1000
+Mamay 27B v2,67.36111111111111,0.0,67.36111111111111,"[0.0, 0.0]",lms,age / older,available,paired_component_percentile,percent,1000
+Mamay 27B v2,35.925925925925924,0.0,35.925925925925924,"[0.0, 0.0]",icat,age / older,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / older,available,paired_component_percentile,rate,1000
+Mamay 27B v2,27.77777777777778,0.0,27.77777777777778,"[0.0, 0.0]",ss,age / young,available,paired_component_percentile,percent,1000
+Mamay 27B v2,66.66666666666666,-3.0864197530864317,69.75308641975309,"[-7.407407407407405, 0.0]",lms,age / young,available,paired_component_percentile,percent,1000
+Mamay 27B v2,37.03703703703703,-1.7146776406035755,38.75171467764061,"[-5.2812071330589845, 0.0]",icat,age / young,available,paired_component_percentile,score_points,1000
+Mamay 27B v2,0.0,0.0,0.0,"[0.0, 0.0]",stereotype_tie_rate,age / young,available,paired_component_percentile,rate,1000

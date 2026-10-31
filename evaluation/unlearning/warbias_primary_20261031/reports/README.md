@@ -1,5 +1,12 @@
 # WarBias method notebooks
 
+The [complete six-model results](completed_bundle_v1_README.md) contain three executed method notebooks, 24 CSV tables and the complete hash-bound source archive. Training-source and held-out results remain separate. All eighteen metric entries per model and method retain their actual dependency status.
+
+## Preserved preparation snapshots
+
+The following text describes the earlier preparation snapshots. Use the complete results above for the measured series.
+
+
 These are the current readiness and saved-evidence reports for **WarBias training and WarBias measurements**.
 
 | Method | Executed report |

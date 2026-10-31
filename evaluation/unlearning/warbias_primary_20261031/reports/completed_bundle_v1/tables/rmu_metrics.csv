@@ -1,0 +1,109 @@
+model,metric,status,reason
+Qwen3 8B,forget_efficacy,available,
+Qwen3 8B,NNR,pending,Frozen model/task/language neutrality calibration and eligible baseline cohort.
+Qwen3 8B,retain_utility,partial,In-scope native outcomes only; general utility and practical tolerances are not qualified.
+Qwen3 8B,LMS,available,
+Qwen3 8B,ICAT,available,
+Qwen3 8B,M1,pending,"One quality outcome, matched common content and an explicit independent-support rule."
+Qwen3 8B,M1b,pending,Qualified M1 panel and strictly positive maximum group quality.
+Qwen3 8B,M2,pending,Qualified common quality panel and paired group losses.
+Qwen3 8B,M3a,pending,Declared actor target and matched actor cells; no target is inferred.
+Qwen3 8B,M3b,pending,Declared reviewed topic target and reviewed near/far mapping.
+Qwen3 8B,M3c,pending,Declared gender/age target and matched profile support.
+Qwen3 8B,M3d,partial,Only supported target-qualified contexts are available; every other context retains its reason.
+Qwen3 8B,RI,pending,"Declared target/harm axis, practical improvement minimum and positive paired target CI."
+Qwen3 8B,M4a,partial,Responses collected; calibrated judgment coverage must be established separately.
+Qwen3 8B,M4b,partial,QA caution is calculable; favorable/adverse factual slices require source-bound reviewed assignments.
+Qwen3 8B,BBQ,partial,Scopes without non-unknown answer mass have undefined bias changes; native zero conventions are not neutrality.
+Qwen3 8B,training_imbalance,partial,Actual stream/family/token exposure only; outcome correlation and causal imbalance remain unavailable.
+Qwen3 8B,severity,pending,Reviewed high/standard annotations bound to adapted dataset bytes; descriptive only.
+Llama 3.1 8B Instruct,forget_efficacy,available,
+Llama 3.1 8B Instruct,NNR,pending,Frozen model/task/language neutrality calibration and eligible baseline cohort.
+Llama 3.1 8B Instruct,retain_utility,partial,In-scope native outcomes only; general utility and practical tolerances are not qualified.
+Llama 3.1 8B Instruct,LMS,available,
+Llama 3.1 8B Instruct,ICAT,available,
+Llama 3.1 8B Instruct,M1,pending,"One quality outcome, matched common content and an explicit independent-support rule."
+Llama 3.1 8B Instruct,M1b,pending,Qualified M1 panel and strictly positive maximum group quality.
+Llama 3.1 8B Instruct,M2,pending,Qualified common quality panel and paired group losses.
+Llama 3.1 8B Instruct,M3a,pending,Declared actor target and matched actor cells; no target is inferred.
+Llama 3.1 8B Instruct,M3b,pending,Declared reviewed topic target and reviewed near/far mapping.
+Llama 3.1 8B Instruct,M3c,pending,Declared gender/age target and matched profile support.
+Llama 3.1 8B Instruct,M3d,partial,Only supported target-qualified contexts are available; every other context retains its reason.
+Llama 3.1 8B Instruct,RI,pending,"Declared target/harm axis, practical improvement minimum and positive paired target CI."
+Llama 3.1 8B Instruct,M4a,partial,Responses collected; calibrated judgment coverage must be established separately.
+Llama 3.1 8B Instruct,M4b,partial,QA caution is calculable; favorable/adverse factual slices require source-bound reviewed assignments.
+Llama 3.1 8B Instruct,BBQ,partial,Scopes without non-unknown answer mass have undefined bias changes; native zero conventions are not neutrality.
+Llama 3.1 8B Instruct,training_imbalance,partial,Actual stream/family/token exposure only; outcome correlation and causal imbalance remain unavailable.
+Llama 3.1 8B Instruct,severity,pending,Reviewed high/standard annotations bound to adapted dataset bytes; descriptive only.
+Gemma 3 12B IT,forget_efficacy,available,
+Gemma 3 12B IT,NNR,pending,Frozen model/task/language neutrality calibration and eligible baseline cohort.
+Gemma 3 12B IT,retain_utility,partial,In-scope native outcomes only; general utility and practical tolerances are not qualified.
+Gemma 3 12B IT,LMS,available,
+Gemma 3 12B IT,ICAT,available,
+Gemma 3 12B IT,M1,pending,"One quality outcome, matched common content and an explicit independent-support rule."
+Gemma 3 12B IT,M1b,pending,Qualified M1 panel and strictly positive maximum group quality.
+Gemma 3 12B IT,M2,pending,Qualified common quality panel and paired group losses.
+Gemma 3 12B IT,M3a,pending,Declared actor target and matched actor cells; no target is inferred.
+Gemma 3 12B IT,M3b,pending,Declared reviewed topic target and reviewed near/far mapping.
+Gemma 3 12B IT,M3c,pending,Declared gender/age target and matched profile support.
+Gemma 3 12B IT,M3d,partial,Only supported target-qualified contexts are available; every other context retains its reason.
+Gemma 3 12B IT,RI,pending,"Declared target/harm axis, practical improvement minimum and positive paired target CI."
+Gemma 3 12B IT,M4a,partial,Responses collected; calibrated judgment coverage must be established separately.
+Gemma 3 12B IT,M4b,partial,QA caution is calculable; favorable/adverse factual slices require source-bound reviewed assignments.
+Gemma 3 12B IT,BBQ,partial,Scopes without non-unknown answer mass have undefined bias changes; native zero conventions are not neutrality.
+Gemma 3 12B IT,training_imbalance,partial,Actual stream/family/token exposure only; outcome correlation and causal imbalance remain unavailable.
+Gemma 3 12B IT,severity,pending,Reviewed high/standard annotations bound to adapted dataset bytes; descriptive only.
+Lapa 12B Instruct,forget_efficacy,available,
+Lapa 12B Instruct,NNR,pending,Frozen model/task/language neutrality calibration and eligible baseline cohort.
+Lapa 12B Instruct,retain_utility,partial,In-scope native outcomes only; general utility and practical tolerances are not qualified.
+Lapa 12B Instruct,LMS,available,
+Lapa 12B Instruct,ICAT,available,
+Lapa 12B Instruct,M1,pending,"One quality outcome, matched common content and an explicit independent-support rule."
+Lapa 12B Instruct,M1b,pending,Qualified M1 panel and strictly positive maximum group quality.
+Lapa 12B Instruct,M2,pending,Qualified common quality panel and paired group losses.
+Lapa 12B Instruct,M3a,pending,Declared actor target and matched actor cells; no target is inferred.
+Lapa 12B Instruct,M3b,pending,Declared reviewed topic target and reviewed near/far mapping.
+Lapa 12B Instruct,M3c,pending,Declared gender/age target and matched profile support.
+Lapa 12B Instruct,M3d,partial,Only supported target-qualified contexts are available; every other context retains its reason.
+Lapa 12B Instruct,RI,pending,"Declared target/harm axis, practical improvement minimum and positive paired target CI."
+Lapa 12B Instruct,M4a,partial,Responses collected; calibrated judgment coverage must be established separately.
+Lapa 12B Instruct,M4b,partial,QA caution is calculable; favorable/adverse factual slices require source-bound reviewed assignments.
+Lapa 12B Instruct,BBQ,available,
+Lapa 12B Instruct,training_imbalance,partial,Actual stream/family/token exposure only; outcome correlation and causal imbalance remain unavailable.
+Lapa 12B Instruct,severity,pending,Reviewed high/standard annotations bound to adapted dataset bytes; descriptive only.
+Mamay 12B v2,forget_efficacy,available,
+Mamay 12B v2,NNR,pending,Frozen model/task/language neutrality calibration and eligible baseline cohort.
+Mamay 12B v2,retain_utility,partial,In-scope native outcomes only; general utility and practical tolerances are not qualified.
+Mamay 12B v2,LMS,available,
+Mamay 12B v2,ICAT,available,
+Mamay 12B v2,M1,pending,"One quality outcome, matched common content and an explicit independent-support rule."
+Mamay 12B v2,M1b,pending,Qualified M1 panel and strictly positive maximum group quality.
+Mamay 12B v2,M2,pending,Qualified common quality panel and paired group losses.
+Mamay 12B v2,M3a,pending,Declared actor target and matched actor cells; no target is inferred.
+Mamay 12B v2,M3b,pending,Declared reviewed topic target and reviewed near/far mapping.
+Mamay 12B v2,M3c,pending,Declared gender/age target and matched profile support.
+Mamay 12B v2,M3d,partial,Only supported target-qualified contexts are available; every other context retains its reason.
+Mamay 12B v2,RI,pending,"Declared target/harm axis, practical improvement minimum and positive paired target CI."
+Mamay 12B v2,M4a,partial,Responses collected; calibrated judgment coverage must be established separately.
+Mamay 12B v2,M4b,partial,QA caution is calculable; favorable/adverse factual slices require source-bound reviewed assignments.
+Mamay 12B v2,BBQ,partial,Scopes without non-unknown answer mass have undefined bias changes; native zero conventions are not neutrality.
+Mamay 12B v2,training_imbalance,partial,Actual stream/family/token exposure only; outcome correlation and causal imbalance remain unavailable.
+Mamay 12B v2,severity,pending,Reviewed high/standard annotations bound to adapted dataset bytes; descriptive only.
+Mamay 27B v2,forget_efficacy,available,
+Mamay 27B v2,NNR,pending,Frozen model/task/language neutrality calibration and eligible baseline cohort.
+Mamay 27B v2,retain_utility,partial,In-scope native outcomes only; general utility and practical tolerances are not qualified.
+Mamay 27B v2,LMS,available,
+Mamay 27B v2,ICAT,available,
+Mamay 27B v2,M1,pending,"One quality outcome, matched common content and an explicit independent-support rule."
+Mamay 27B v2,M1b,pending,Qualified M1 panel and strictly positive maximum group quality.
+Mamay 27B v2,M2,pending,Qualified common quality panel and paired group losses.
+Mamay 27B v2,M3a,pending,Declared actor target and matched actor cells; no target is inferred.
+Mamay 27B v2,M3b,pending,Declared reviewed topic target and reviewed near/far mapping.
+Mamay 27B v2,M3c,pending,Declared gender/age target and matched profile support.
+Mamay 27B v2,M3d,partial,Only supported target-qualified contexts are available; every other context retains its reason.
+Mamay 27B v2,RI,pending,"Declared target/harm axis, practical improvement minimum and positive paired target CI."
+Mamay 27B v2,M4a,partial,Responses collected; calibrated judgment coverage must be established separately.
+Mamay 27B v2,M4b,partial,QA caution is calculable; favorable/adverse factual slices require source-bound reviewed assignments.
+Mamay 27B v2,BBQ,partial,Scopes without non-unknown answer mass have undefined bias changes; native zero conventions are not neutrality.
+Mamay 27B v2,training_imbalance,partial,Actual stream/family/token exposure only; outcome correlation and causal imbalance remain unavailable.
+Mamay 27B v2,severity,pending,Reviewed high/standard annotations bound to adapted dataset bytes; descriptive only.
