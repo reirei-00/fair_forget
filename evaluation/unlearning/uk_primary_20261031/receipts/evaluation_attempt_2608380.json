@@ -1,0 +1,8 @@
+{
+  "job_id": "2608380",
+  "status": "cancelled_before_locked_collection",
+  "reason": "Enforce the project requirement for two independent development-only qualification runs for every actual saved checkpoint, including RMU and null TV, before any locked panel.",
+  "locked_collection_started": false,
+  "training_preserved": true,
+  "replacement_release": "uk_primary_20261031_eval_v4"
+}

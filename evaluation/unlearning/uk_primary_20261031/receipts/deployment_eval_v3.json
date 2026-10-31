@@ -1,0 +1,19 @@
+{
+  "status": "deployed_compiler_qualified_evaluation_revision",
+  "timestamp_utc": "2026-10-31T10:18:30.085077+00:00",
+  "release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v3",
+  "compiler": {
+    "CC": "/e/software/default/stages/2026/software/GCCcore/14.3.0/bin/gcc",
+    "CXX": "/e/software/default/stages/2026/software/GCCcore/14.3.0/bin/g++",
+    "version": "gcc (GCC) 14.3.0"
+  },
+  "parent_release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v2",
+  "checksum_manifest_sha256": "bd92ecbd83f2a96f2a4346c161a535c5f36a1ffcdbc6006e0239f193b3e4f97a",
+  "changed_files_sha256": {
+    "deploy/unlearning_primary/evaluate_checkpoint.sh": "6b638ddf035f2aa009c6bb29ddd57fdf66afa2b762e0b6f6bf618ac4c87f4418",
+    "evaluate_all.py": "1c709d34dc6c5a67c80c0ac50571ac74d461e06fe30ce5f3cbbb44a4699b6b5f",
+    "evaluate.sbatch": "6cbc94ac1c2996764800376c0171cf5619d53dcbc03d45d1399b827f93e75c53"
+  },
+  "training_unchanged": true,
+  "scientific_input_and_numerical_settings_unchanged": true
+}

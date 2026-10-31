@@ -31,7 +31,15 @@ remain in the external manifests rather than this repository folder.
 | [Training release deployment](receipts/deployment.json) | Checksum verification of the immutable v1 cluster release |
 | [Evaluation revision deployment](receipts/deployment_eval_v2.json) | Separate v2 evaluation release; only the two development qualification records/manifest receive explicit unpaired metadata; training and locked evaluation remain unchanged |
 | [Native input validation](receipts/evaluation_input_validation.json) | CPU schema validation of two qualification rows and six complete native views; no inference |
-| [Scheduler submissions](receipts/submissions.json) | Training job 2608191 and evaluation job 2608199 with dependency `afterany:2608191`; intended releases and output locations |
+| [Scheduler submissions](receipts/submissions.json) | Original training job 2608191 and evaluation job 2608199 with dependency `afterany:2608191`; preserved historical submission |
+| [Initial evaluation failure](receipts/evaluation_attempt_2608199.json) | Compiler unavailable during the first development-only native check; no locked collection started |
+| [Compiler-qualified v3 deployment](receipts/deployment_eval_v3.json) | Separate immutable evaluation revision with explicit compiler paths; scientific inputs and numerical settings unchanged |
+| [Saved-only analysis deployment](receipts/deployment_analysis.json) | Separate frozen CPU analysis using maintained Fair-UK `compare-native`; no network or GPU required |
+| [First retry submission](receipts/retry_pipeline_submission.json) | Historical job 2608380, later cancelled before locked collection |
+| [First retry cancellation](receipts/evaluation_attempt_2608380.json) | Deliberate cancellation to enforce repeated qualification of every actual checkpoint; training preserved |
+| [Per-checkpoint v4 deployment](receipts/deployment_eval_v4.json) | Base plus all five actual posts, each twice on two development items; all must pass before any locked panel |
+| [Replacement pipeline submission](receipts/evaluation_pipeline_v4_submission.json) | Job 2608489 at `2026-10-31T10:27:45.139074+00:00`; evaluation then saved-only analysis in the same allocation, without retraining |
+| [Tokenizer semantic comparison](receipts/tokenizer_semantics_20261031T101314Z.json) | CPU semantic identity across base and all five exports; native backend fingerprint remains a separate check |
 
 Training was queued for priority at the original preparation snapshot. That
 submission record is preserved as history. The later
@@ -55,7 +63,8 @@ The configured 128-step maximum is not the actual budget for each method.
 
 Task-vector acquisition ran for 40 steps, but the development selector chose
 scale **0.0** and recorded `null_intervention_selected=true`. The selected
-exported model has a null weight intervention. Do not describe this as a
+exported model has a null weight intervention. The other four saved method
+checkpoints record nonzero parameter updates. Do not describe this as a
 successful nonzero task-vector mitigation effect.
 
 The [training evidence receipt](receipts/training_evidence_2608191.json) binds
@@ -64,15 +73,21 @@ execution record, five method receipts, five numeric loss/history logs and the
 BiasUnlearn controller. Exposure logs and checkpoint/tokenizer files named by
 that receipt remain external. Their hashes are metadata, not their file bytes.
 
-At the latest execution update, evaluation job 2608199 is running its two-item
-development no-update qualification. Completed qualification proof and full
-native scores are pending. Completed training and numeric loss changes do not
-establish successful mitigation, general utility retention or native evaluation
-completion.
+Initial evaluation 2608199 failed before locked collection. First retry
+2608380 was deliberately cancelled before locked collection. Replacement
+pipeline 2608489 was submitted at `2026-10-31T10:27:45.139074+00:00`. The
+latest scheduler observation at 10:28 UTC placed it in `CONFIGURING` on
+`jpbo-001-23`. Allocation is not qualification: completed native qualification,
+full native scores and paired analysis are pending. Completed
+training and numeric loss changes do not establish successful mitigation,
+general utility retention or native evaluation completion.
 
-Independent repeated Fair-UK scoring on the two development items is a later
-gate, distinct from the completed zero-adapter logit check. Full locked
-collection requires that gate and an actual saved self-contained checkpoint.
+Independent repeated Fair-UK scoring on the two development items is a separate
+gate, distinct from the completed zero-adapter logit check. The base and all five
+actual saved posts, including fixed RMU and the null task-vector export, each
+need two fresh independent runs. Every checkpoint gate must pass before any
+locked panel. Up to four checkpoints may qualify in parallel; `1e-6` is an
+engineering numerical tolerance, not a scientific neutrality or utility threshold.
 The `afterany` dependency allows completed arms to be inspected after a partial
 training failure; it does not establish success of all five arms.
 
@@ -121,7 +136,7 @@ mitigation follows from input validation.
 
 ## Immutable releases and repository packaging
 
-The v1 training and v2 evaluation cluster releases identified by the receipts
+The v1 training and v2/v3/v4 evaluation releases identified by the receipts
 remain immutable. Repository orchestration is packaged separately under
 [`deploy/unlearning_primary`](../../../deploy/unlearning_primary/README.md).
 Its evaluation default is 12 hours, and its multi-task launcher clears an
@@ -146,6 +161,27 @@ The first evaluation attempt, job 2608199, failed while initializing the vLLM
 engine for the first development-only check. Triton could not find a C compiler
 after module cleanup. No locked collection started. The [failure receipt](receipts/evaluation_attempt_2608199.json)
 binds the preserved diagnostic log. Training checkpoints remain complete. A new
-evaluation revision explicitly selects GCCcore/.14.3.0 and exports verified
+evaluation revision explicitly selects GCCcore/14.3.0 and exports verified
 compiler paths before inference; scientific inputs and numerical settings are
-unchanged. Its retry needs a separate deployment and scheduler receipt.
+unchanged. The [v3 deployment](receipts/deployment_eval_v3.json) and
+[first retry submission](receipts/retry_pipeline_submission.json) bind the
+compiler repair and historical job 2608380. Its
+[cancellation](receipts/evaluation_attempt_2608380.json) preceded locked
+collection so the project per-checkpoint qualification requirement could be
+enforced. The [v4 release](receipts/deployment_eval_v4.json) changes qualification
+coverage, not scientific inputs, numerical inference settings or completed
+training. The original failed attempt and v2 metadata repair remain historical.
+
+The [replacement pipeline](receipts/evaluation_pipeline_v4_submission.json),
+job 2608489, uses the completed saved checkpoints without retraining.
+After native evaluation, it runs saved-only CPU `compare-native`
+analysis for the 30 planned method-by-task pairs (five methods times six tasks)
+within the same allocation. The separate
+[analysis release](receipts/deployment_analysis.json) requires no new GPU job or
+network access. There is no retraining. Submission is not a completed runtime
+qualification; all native and paired results remain pending.
+
+The [tokenizer-semantic receipt](receipts/tokenizer_semantics_20261031T101314Z.json)
+records identical CPU tokenizer semantics across the pinned base and all five
+exports. It does not establish native backend identity or matched effective
+evaluation inputs; the native path must verify those separately.

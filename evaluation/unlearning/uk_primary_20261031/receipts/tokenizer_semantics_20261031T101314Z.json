@@ -1,0 +1,32 @@
+{
+  "observed_at_utc": "2026-10-31T10:13:10.186326+00:00",
+  "scope": "CPU tokenizer-only semantic comparison; native backend fingerprint remains separate",
+  "base_semantic_sha256": "c41625fc5d807a7ef04f23436ed90b06ce70901af8249847887d80c593e0de1e",
+  "methods": {
+    "wga_kl": {
+      "status": "identical_semantics",
+      "semantic_sha256": "c41625fc5d807a7ef04f23436ed90b06ce70901af8249847887d80c593e0de1e",
+      "different_sections": []
+    },
+    "npo_kl": {
+      "status": "identical_semantics",
+      "semantic_sha256": "c41625fc5d807a7ef04f23436ed90b06ce70901af8249847887d80c593e0de1e",
+      "different_sections": []
+    },
+    "rmu": {
+      "status": "identical_semantics",
+      "semantic_sha256": "c41625fc5d807a7ef04f23436ed90b06ce70901af8249847887d80c593e0de1e",
+      "different_sections": []
+    },
+    "biasunlearn": {
+      "status": "identical_semantics",
+      "semantic_sha256": "c41625fc5d807a7ef04f23436ed90b06ce70901af8249847887d80c593e0de1e",
+      "different_sections": []
+    },
+    "task_vector": {
+      "status": "identical_semantics",
+      "semantic_sha256": "c41625fc5d807a7ef04f23436ed90b06ce70901af8249847887d80c593e0de1e",
+      "different_sections": []
+    }
+  }
+}

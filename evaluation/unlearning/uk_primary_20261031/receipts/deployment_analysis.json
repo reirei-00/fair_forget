@@ -1,0 +1,15 @@
+{
+  "status": "deployed_saved_only_analysis",
+  "timestamp_utc": "2026-10-31T10:18:30.152410+00:00",
+  "release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031",
+  "identity_sha256": "20bf387aca245b35aecf4e4ac87094781fdbbd9294fb79bd7b36072c7a97ba79",
+  "kind": "saved_only_native_analysis",
+  "repository_commit": "81c2ef9",
+  "source_files_sha256": {
+    "analyze_pairs.py": "e2ca47cc99b7c417171b59d4d46cc16ddfc2e892697d587b491bdaf9c501825a",
+    "analyze.sbatch": "a68679dc2d5e3bb014e798b1bdd974e2bcfc48271d3255323b7b09ce13217fc6"
+  },
+  "gpu_required": false,
+  "network_required": false,
+  "scientific_metric_implementation": "Frozen maintained Fair-UK paper compare-native CLI"
+}
