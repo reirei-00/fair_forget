@@ -1,0 +1,13 @@
+{
+  "stage": "inference_views_materialized",
+  "sidecar": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+    "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+  },
+  "original_files_byte_identical": true,
+  "original_modes_unchanged": true,
+  "weight_storage": "hardlinks_without_chmod",
+  "model_calls": 0,
+  "jobs_submitted": 0,
+  "validator_sha256": "3f7ea32922331900fbeaa3473eabc68e64b1c4fc5ffcf42e79c8dfc078b0e16c"
+}

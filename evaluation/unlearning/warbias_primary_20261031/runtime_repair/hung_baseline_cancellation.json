@@ -1,0 +1,25 @@
+{
+  "timestamp_utc": "2026-10-31T13:27:34.414883+00:00",
+  "reason": "Confirmed idle startup with inherited default-fork CPU state; spawn-only safe-dev probe exits0 and scores2/2. Fresh matched spawn qualification will be used.",
+  "requested": [
+    "2609479",
+    "2609482",
+    "2609485",
+    "2609488"
+  ],
+  "active": [
+    "2609479",
+    "2609482",
+    "2609485",
+    "2609488"
+  ],
+  "before": "2609479|RUNNING|jpbo-057-33\n2609482|RUNNING|jpbo-057-34\n2609485|RUNNING|jpbo-057-46\n2609488|RUNNING|jpbo-057-47\n",
+  "trained_weights_changed": false,
+  "completed_llama_and_qwen_baselines_preserved": true,
+  "returncode": 0,
+  "stdout": "",
+  "stderr": "",
+  "after": "2609479|COMPLETING|jpbo-057-33\n2609482|COMPLETING|jpbo-057-34\n2609485|COMPLETING|jpbo-057-46\n2609488|COMPLETING|jpbo-057-47\n",
+  "ssh_returncode": 0,
+  "ssh_stderr": ""
+}

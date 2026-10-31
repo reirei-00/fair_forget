@@ -1,0 +1,191 @@
+{
+  "stage": "materialized_views_independently_verified",
+  "counts": {
+    "original": 6,
+    "add_pinned_processor_assets": 12
+  },
+  "models": 6,
+  "arms": 18,
+  "original_file_instances_checked": 260,
+  "original_mode_counts": {
+    "0o660": 135,
+    "0o600": 125
+  },
+  "added_assets_checked": 24,
+  "all_original_hardlinks_and_modes_match": true,
+  "source_maps_previously_stream_hashed_by_verified_materializer": true,
+  "sidecar": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+    "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+  },
+  "receipt": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/materialization_receipt.json",
+    "sha256": "5a8ab73ee2779608307fd4bbe9809094e0d7109ae808322bfe4aa27766bbe931"
+  },
+  "details": {
+    "Qwen/Qwen3-8B/rmu": {
+      "kind": "original",
+      "original_files": 14,
+      "evaluation_files": 14,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/rmu/checkpoint",
+      "added_assets": []
+    },
+    "Qwen/Qwen3-8B/task_vector": {
+      "kind": "original",
+      "original_files": 15,
+      "evaluation_files": 15,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/task_vector/merged_checkpoint",
+      "added_assets": []
+    },
+    "Qwen/Qwen3-8B/wga_kl": {
+      "kind": "original",
+      "original_files": 15,
+      "evaluation_files": 15,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/wga_kl/merged_checkpoint",
+      "added_assets": []
+    },
+    "meta-llama/Llama-3.1-8B-Instruct/rmu": {
+      "kind": "original",
+      "original_files": 11,
+      "evaluation_files": 11,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint",
+      "added_assets": []
+    },
+    "meta-llama/Llama-3.1-8B-Instruct/task_vector": {
+      "kind": "original",
+      "original_files": 12,
+      "evaluation_files": 12,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint",
+      "added_assets": []
+    },
+    "meta-llama/Llama-3.1-8B-Instruct/wga_kl": {
+      "kind": "original",
+      "original_files": 12,
+      "evaluation_files": 12,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint",
+      "added_assets": []
+    },
+    "google/gemma-3-12b-it/rmu": {
+      "kind": "add_pinned_processor_assets",
+      "original_files": 12,
+      "evaluation_files": 14,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/gemma3_12b_it/rmu",
+      "added_assets": [
+        "preprocessor_config.json",
+        "processor_config.json"
+      ]
+    },
+    "google/gemma-3-12b-it/task_vector": {
+      "kind": "add_pinned_processor_assets",
+      "original_files": 14,
+      "evaluation_files": 16,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/gemma3_12b_it/task_vector",
+      "added_assets": [
+        "preprocessor_config.json",
+        "processor_config.json"
+      ]
+    },
+    "google/gemma-3-12b-it/wga_kl": {
+      "kind": "add_pinned_processor_assets",
+      "original_files": 14,
+      "evaluation_files": 16,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/gemma3_12b_it/wga_kl",
+      "added_assets": [
+        "preprocessor_config.json",
+        "processor_config.json"
+      ]
+    },
+    "lapa-llm/lapa-v0.1.2-instruct/rmu": {
+      "kind": "add_pinned_processor_assets",
+      "original_files": 12,
+      "evaluation_files": 14,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/rmu",
+      "added_assets": [
+        "preprocessor_config.json",
+        "processor_config.json"
+      ]
+    },
+    "lapa-llm/lapa-v0.1.2-instruct/task_vector": {
+      "kind": "add_pinned_processor_assets",
+      "original_files": 14,
+      "evaluation_files": 16,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/task_vector",
+      "added_assets": [
+        "preprocessor_config.json",
+        "processor_config.json"
+      ]
+    },
+    "lapa-llm/lapa-v0.1.2-instruct/wga_kl": {
+      "kind": "add_pinned_processor_assets",
+      "original_files": 14,
+      "evaluation_files": 16,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/wga_kl",
+      "added_assets": [
+        "preprocessor_config.json",
+        "processor_config.json"
+      ]
+    },
+    "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0/rmu": {
+      "kind": "add_pinned_processor_assets",
+      "original_files": 12,
+      "evaluation_files": 14,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay12b_v2/rmu",
+      "added_assets": [
+        "preprocessor_config.json",
+        "processor_config.json"
+      ]
+    },
+    "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0/task_vector": {
+      "kind": "add_pinned_processor_assets",
+      "original_files": 14,
+      "evaluation_files": 16,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay12b_v2/task_vector",
+      "added_assets": [
+        "preprocessor_config.json",
+        "processor_config.json"
+      ]
+    },
+    "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0/wga_kl": {
+      "kind": "add_pinned_processor_assets",
+      "original_files": 14,
+      "evaluation_files": 16,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay12b_v2/wga_kl",
+      "added_assets": [
+        "preprocessor_config.json",
+        "processor_config.json"
+      ]
+    },
+    "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0/rmu": {
+      "kind": "add_pinned_processor_assets",
+      "original_files": 19,
+      "evaluation_files": 21,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay27b_v2/rmu",
+      "added_assets": [
+        "preprocessor_config.json",
+        "processor_config.json"
+      ]
+    },
+    "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0/task_vector": {
+      "kind": "add_pinned_processor_assets",
+      "original_files": 21,
+      "evaluation_files": 23,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay27b_v2/task_vector",
+      "added_assets": [
+        "preprocessor_config.json",
+        "processor_config.json"
+      ]
+    },
+    "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0/wga_kl": {
+      "kind": "add_pinned_processor_assets",
+      "original_files": 21,
+      "evaluation_files": 23,
+      "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay27b_v2/wga_kl",
+      "added_assets": [
+        "preprocessor_config.json",
+        "processor_config.json"
+      ]
+    }
+  },
+  "model_calls": 0,
+  "new_scheduler_jobs": 0
+}

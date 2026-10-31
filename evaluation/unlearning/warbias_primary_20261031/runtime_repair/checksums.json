@@ -1,0 +1,18 @@
+{
+  "addon_deployment_v2.json": "f1dd4670c6d8ce7bd80b5b3c4fdfb8e26e62ffd380865afdf7a6ad3eb1bbfddc",
+  "collector_source.json": "dff0ee655a0df9dfd0c3876c88b112be95e5f7f5d4e5d4fe99688d011b577766",
+  "deployment_summary_v2.json": "b1bc60c14689da16392696440f074e03cdb7f4cf460627cb37d3fe099ecba968",
+  "gemma_spawn_probe.json": "9e745f687c07566f2f471fa599116f361d89b87d6c488d2277ae96adfd5fad4a",
+  "gemma_startup_diagnosis.json": "cd4ef7e0b682a227e043f89acf360bb75a43fd5d53099519e9516aa9a2ddd853",
+  "hung_baseline_cancellation.json": "bcf79edb9d092f667dccc021fec7d1848df7aaea7f35bb36384909bd77e38ee0",
+  "inference_view_postverification.json": "5799e7512ab4eafb6b034fedbf50284178b658f56276bffbadcf06bd34d30bd1",
+  "inference_views.json": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e",
+  "materialization_receipt.json": "5a8ab73ee2779608307fd4bbe9809094e0d7109ae808322bfe4aa27766bbe931",
+  "measurement_cancellation_v1.json": "cf42edd2d50e486edd2fd3e4d26b83e7eea86db3153dae56711a0d50b3a4ea2a",
+  "measurement_submission_v2_failed.json": "34df89f74764fe095ea34beac45b9798518b7f2c67560544debb334a2646275e",
+  "notebook_runtime_qualification.json": "885c40645ef6f1041b8d6fdfaf23aa1797ea219169c0f2c2a2fc59b76b2a1010",
+  "runner_deployment_v3.json": "8de437e8feddeb1c505656eed378c1d8d2d3bdadd87de9f089f0775269547438",
+  "runner_preflight_v3.json": "be45e72ea32593a846bd5b0037ef6ebf4cdf3a41a00a3718c6228152e1b71231",
+  "software_verification.json": "f6f5a6c75ad51cca74f836f86b06cdd4d7e7ecd97fcc8c14b20d17d211e089a4",
+  "software_verification_v2.json": "4cb4fee16ac2192903910afe96bf23b8e7f0550b6fff82c8b57ece3f3f07cd76"
+}

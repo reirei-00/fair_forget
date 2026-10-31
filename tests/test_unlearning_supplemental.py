@@ -577,6 +577,27 @@ class SupplementalTests(unittest.TestCase):
         self.assertEqual(record["status"], "failed")
         self.assertIn("missing runtime", record["error"])
 
+    def test_spawn_profile_overrides_inherited_fork_before_native_import(self):
+        config = self.prepare()
+        self.assertEqual(config["runtime_environment"], supplemental.RUNTIME_ENVIRONMENT)
+        with (
+            patch.dict(os.environ, {"VLLM_WORKER_MULTIPROC_METHOD": "fork"}),
+            patch.object(supplemental.subprocess, "Popen", side_effect=OSError("probe")) as process,
+        ):
+            supplemental.run_task(
+                self.addon, self.root / "checkpoint", self.root / "spawn-run", "warbias_triplets_uk"
+            )
+        self.assertEqual(process.call_args.kwargs["env"]["VLLM_WORKER_MULTIPROC_METHOD"], "spawn")
+        record = supplemental.read(self.root / "spawn-run/status/warbias_triplets_uk.json")
+        self.assertEqual(record["runtime_environment"], supplemental.RUNTIME_ENVIRONMENT)
+
+    def test_changed_process_start_profile_is_rejected(self):
+        config = self.prepare()
+        config["runtime_environment"] = {"VLLM_WORKER_MULTIPROC_METHOD": "fork"}
+        write(self.addon / "config.json", config)
+        with self.assertRaisesRegex(ValueError, "process-start"):
+            supplemental.validate(self.addon)
+
     def test_analysis_rejects_changed_completion_receipt_before_native_cli(self):
         self.prepare()
         evaluation = self.root / "evaluation-results"

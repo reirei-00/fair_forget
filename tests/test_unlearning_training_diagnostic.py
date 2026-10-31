@@ -176,6 +176,27 @@ class TrainingDiagnosticTests(unittest.TestCase):
             context["bindings"]["diagnostic_manifest"], diagnostic.evidence(self.manifest)
         )
 
+    def test_train_source_native_process_uses_declared_spawn_profile(self):
+        context = self.inputs()
+        with (
+            patch.dict(os.environ, {"VLLM_WORKER_MULTIPROC_METHOD": "fork"}),
+            patch.object(
+                diagnostic.subprocess, "run", return_value=SimpleNamespace(returncode=7)
+            ) as run,
+        ):
+            event = diagnostic.collect_one(
+                context,
+                "baseline",
+                context["manifest"],
+                context["entry"],
+                context["rows"],
+                self.root / "new-spawn-output",
+                "GPU-1",
+            )
+        self.assertEqual(run.call_args.kwargs["env"]["VLLM_WORKER_MULTIPROC_METHOD"], "spawn")
+        self.assertEqual(event["runtime_environment"], diagnostic.supplement.RUNTIME_ENVIRONMENT)
+        self.assertEqual(event["status"], "failed")
+
     def test_relabel_changed_text_cohort_or_pair_map_are_rejected(self):
         original = diagnostic.read(self.manifest)
         path = self.manifest.parent / original["datasets"][diagnostic.TASK]["filename"]

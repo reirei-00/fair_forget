@@ -54,7 +54,11 @@ def inputs(release, model_id, training, addon):
     profile = {key: entry[key] for key in supplement.MODEL_PROFILE_FIELDS}
     require(config.get("model_profile") == profile, "Addon and training model profiles differ")
     models = supplement.checkpoint_panel(
-        collector, training, methods=METHODS, model_profile=profile
+        collector,
+        training,
+        methods=METHODS,
+        model_profile=profile,
+        inference_views=config.get("inference_views"),
     )
     execution = read(training / "execution.json")
     require(
@@ -179,6 +183,8 @@ def inputs(release, model_id, training, addon):
     )
     return {
         "collector": collector,
+        "inference_views": config.get("inference_views"),
+        "model_profile": profile,
         "models": models,
         "manifest": manifest,
         "entry": specification,
@@ -197,6 +203,11 @@ def inputs(release, model_id, training, addon):
             "diagnostic_rows": evidence(adapted),
             "addon_config": evidence(addon / "config.json"),
             "training_execution": evidence(training / "execution.json"),
+            **(
+                {"inference_views": config["inference_views"]}
+                if config.get("inference_views")
+                else {}
+            ),
         },
         "collector_code_identity": {
             key.removeprefix("evaluator/lm_eval/"): value
@@ -214,10 +225,12 @@ def collect_one(context, name, manifest, entry, data, output, gpu):
         **os.environ,
         "CUDA_VISIBLE_DEVICES": gpu,
         "PYTHONPATH": str(context["collector"] / "evaluator"),
+        **supplement.RUNTIME_ENVIRONMENT,
     }
     record = {
         "command": command,
         "gpu": gpu,
+        "runtime_environment": supplement.RUNTIME_ENVIRONMENT,
         "output": str(output),
         "started_at_utc": native.utc_now(),
     }
@@ -275,6 +288,14 @@ def collect_one(context, name, manifest, entry, data, output, gpu):
                 identity["local_files_sha256"] == context["baseline_files"],
                 "Native baseline hashes differ from actual trainer source",
             )
+        elif context.get("inference_views"):
+            record["inference_view"] = supplement.view_for_native_checkpoint(
+                context["collector"],
+                context["inference_views"],
+                context["model_profile"],
+                checkpoint,
+                files=identity["local_files_sha256"],
+            )
         else:
             require(
                 identity["local_files_sha256"] == context["checkpoint_files"][name],
@@ -330,6 +351,7 @@ def run(release, model_id, training, addon, output):
         "pairs": {},
         "no_update_passed": False,
         "qualification_scope": "two development triplets per checkpoint, likelihood only",
+        "runtime_environment": supplement.RUNTIME_ENVIRONMENT,
         "task_vector_selection_input": False,
         "heldout_evaluation": False,
         "scientific_calibration_established": False,

@@ -1,42 +1,68 @@
 # WarBias training and measurement
 
-This is the requested fresh WarBias-trained series: six pinned models, fixed
-RMU, task-vector negation and WGA+KL. Historical StereoSet interventions cannot
-fill these cells. The [training submission](training_submission.json) records
-queued work, not completed training or measured mitigation.
+The active series trains on WarBias-UK and measures WarBias before and after.
+It covers six pinned models and three methods: fixed-target RMU, task-vector
+negation and WGA+KL. Historical StereoSet and English RMU pilots remain separate.
 
-The reviewed source has 137 training rows across 9 independent components and 96
-development rows across 9 other components. All components linked to any of the
-twelve locked WarBias views were excluded from both forgetting and preservation.
-AI eligibility review is complete; human validation remains false. All 6 tokenizers
-passed literal source-span and length checks. Freeze one full pass (137 steps),
-with the same reviewed data across methods and models.
+## Actual training
 
-The [reviewed data manifest](data/data_manifest.json) and
-[trainer binding](data/training_binding.json) retain exact source text, permitted
-IDs, mask spans and hashes. [Diagnostics](diagnostics/manifest.json) preserve
-original training-source rows; they are separate from held-out transfer results.
-The pinned model registry is in [model_registry.json](model_registry.json).
-Actual trainer receipts, token exposures and native before/after reports will
-supply results. Pending jobs and prepared commands cannot supply numerical cells.
+All eighteen primary training arms completed one full 137-step pass. Each model
+also passed three independent one-step training checks. The
+[completion audit](training_completion_v1.json) binds the six actual executions,
+eighteen original receipts and selected checkpoints. This establishes completed
+training, not measured mitigation.
 
+The reviewed source has 137 training rows from 12 cases in 9 independent
+components, and 96 development rows in 9 other components. Every component
+linked to the twelve locked evaluation views was excluded from gradients and
+development selection. All six tokenizers passed source-span and length checks.
+AI review is complete; human validation is false. See the
+[data manifest](data/data_manifest.json), [trainer binding](data/training_binding.json)
+and [model pins](model_registry.json).
 
-## Scheduled execution
+Task-vector acquisition completed on all models. Development selected scale 1
+for Gemma, 0.25 for Mamay 12B and 0 for the other four models. Scale 0 is a null
+intervention and must not be reported as successful nonzero vector mitigation.
 
-All jobs below are submitted work, not completed measurements. Training includes
-three independent one-step qualification runs before the three full 137-step
-arms. Held-out collection repeats native likelihood/generation checks before
-all 48 model/task runs. Separate training-source jobs measure the 137 actual target
-examples. The saved-analysis jobs retain all 18 metric entries with their actual
-availability and calibration status.
+## Matched measurements
 
-| Model | Three-arm training | Held-out collection | Training-source diagnostic | Saved metrics |
+The corrected submission below was accepted on 31 October at 13:44 UTC. It
+preserves the trained weights and uses fresh matched baseline/post inference.
+Each checkpoint/protocol must pass repeated clean development checks before
+locked collection. Queued or running jobs cannot fill numerical result cells.
+
+| Model | Training completed | Held-out collection | TRAIN diagnostic | Saved metrics |
 | --- | --- | --- | --- | --- |
-| qwen3_8b | 2609596 | 2609625 | 2609626 | 2609627 |
-| llama31_8b_instruct | 2609597 | 2609628 | 2609629 | 2609630 |
-| gemma3_12b_it | 2609598 | 2609631 | 2609632 | 2609633 |
-| lapa12b_instruct | 2609599 | 2609634 | 2609635 | 2609636 |
-| mamay12b_v2 | 2609600 | 2609637 | 2609638 | 2609639 |
-| mamay27b_v2 | 2609601 | 2609640 | 2609641 | 2609642 |
+| Qwen3 8B | 2609596 | 2610274 | 2610275 | 2610276 |
+| Llama 3.1 8B Instruct | 2609597 | 2610277 | 2610278 | 2610279 |
+| Gemma 3 12B IT | 2609598 | 2610280 | 2610281 | 2610282 |
+| Lapa 12B Instruct | 2609599 | 2610283 | 2610284 | 2610285 |
+| Mamay 12B v2 | 2609600 | 2610286 | 2610287 | 2610288 |
+| Mamay 27B v2 | 2609601 | 2610289 | 2610290 | 2610291 |
 
-The [measurement submission](measurement_submission.json) binds actual output paths, dependencies and source checksums. Source-derived engineering generation fixtures only qualify runtime repeatability; they never enter study rows, effects or task-vector selection. No judge, human validation or scientific threshold is supplied by those fixtures.
+The [selected submission](measurement_submission_v2_retry1.json) binds original
+training receipts, certified evaluation copies and actual scheduler commands.
+Completed training dependencies were verified by exact receipts and successful
+accounting records because those old job IDs had left Slurm's dependency memory.
+Every saved-metrics job still depends on its fresh held-out collection succeeding.
+The rejected zero-job attempt and earlier partial measurements remain preserved.
+
+Separate TRAIN diagnostics measure the exact 137 original training-source
+triplets; they are not held-out results. The full series requires 216 held-out
+native pairs and 18 TRAIN diagnostic pairs. All eighteen metric entries remain
+present per method/model, with missing source views, judge calibration, reviewed
+labels, statistical support and practical thresholds explicitly unavailable.
+No pooled benchmark number or invented judge is supplied.
+
+## Portable reports
+
+The [method notebooks](reports/README.md) read saved evidence only. The initial
+and v2 submission snapshots remain unchanged. The selected v3 snapshot records
+the corrected jobs and keeps numerical cells pending until complete receipts and
+native reports are imported. Executed replay cells alone are software evidence.
+Complete assembly verifies all eighteen training arms and every required pair,
+executes three notebooks and exports twenty-four CSV tables without model calls.
+
+The [runtime compatibility record](runtime_repair/README.md) explains strict
+processor-only evaluation copies, equivalent tokenizer metadata and spawn worker
+startup. Original checkpoint bytes and historical run identities remain unchanged.

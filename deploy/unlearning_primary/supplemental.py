@@ -10,6 +10,7 @@ import argparse
 import concurrent.futures
 import copy
 import hashlib
+import importlib.util
 import json
 import math
 import os
@@ -47,6 +48,7 @@ SERIAL_MODEL_OPTIONS = {
     "enable_chunked_prefill": False,
     "async_scheduling": False,
 }
+RUNTIME_ENVIRONMENT = {"VLLM_WORKER_MULTIPROC_METHOD": "spawn"}
 SETTINGS = {**native.SETTINGS, **SERIAL_MODEL_OPTIONS}
 REPRESENTATIVES = tuple(
     f"warbias_{view}_{language}"
@@ -205,7 +207,9 @@ def evaluator_files(release):
     return {str(path.relative_to(release)): native.digest(path) for path in paths}
 
 
-def prepare(collector, development, output, *, methods=None, model_profile=None):
+def prepare(
+    collector, development, output, *, methods=None, model_profile=None, inference_views=None
+):
     """Create new addon inputs with exact dev rows and their genuine pair maps."""
     collector, development, output = collector.resolve(), development.resolve(), output.resolve()
     panel = selected_methods(methods)
@@ -319,6 +323,7 @@ def prepare(collector, development, output, *, methods=None, model_profile=None)
         "full_rows": {task: item["rows"] for task, item in full_entries.items()},
         "required_checkpoints": ["baseline", *panel],
         "settings": SETTINGS,
+        "runtime_environment": RUNTIME_ENVIRONMENT,
         "qualification": {
             "manifest": "qualification/manifest.json",
             "representatives": list(REPRESENTATIVES),
@@ -339,6 +344,28 @@ def prepare(collector, development, output, *, methods=None, model_profile=None)
             "seed": 42,
         },
     }
+    if inference_views is not None:
+        require(
+            profile is not None and set(panel) == {"rmu", "task_vector", "wga_kl"},
+            "Inference views require the explicit three-arm model profile",
+        )
+        reference = evidence(inference_views.resolve())
+        inference_views_module(collector).load_inference_views(
+            reference["path"], reference["sha256"]
+        )
+        for method in panel:
+            descriptor = inference_views_module(collector).load_inference_views(
+                reference["path"], reference["sha256"]
+            )["models"][profile["model_id"]]["methods"][method]
+            inference_view(
+                collector,
+                reference,
+                profile,
+                method,
+                Path(descriptor["original_receipt"]["path"]),
+                descriptor["original_checkpoint"],
+            )
+        config["inference_views"] = reference
     if methods is not None:
         config["methods"] = list(panel)
     if profile is not None:
@@ -373,8 +400,17 @@ def validate(addon):
             "Model profile path is not canonical",
         )
     require(config.get("settings") == SETTINGS, "Native execution settings differ")
+    require(
+        config.get("runtime_environment", RUNTIME_ENVIRONMENT) == RUNTIME_ENVIRONMENT,
+        "Native process-start profile differs",
+    )
     verify_serial_parameters(config["settings"])
     collector = Path(config["collector_release"]).resolve()
+    if config.get("inference_views"):
+        require("model_profile" in config, "Inference views require explicit model pins")
+        inference_views_module(collector).load_inference_views(
+            config["inference_views"]["path"], config["inference_views"]["sha256"]
+        )
     for name in ("collector_checksums", "full_manifest"):
         item = config[name]
         expected = collector / (
@@ -441,7 +477,87 @@ def validate(addon):
     return config, collector, full, manifest
 
 
-def checkpoint_panel(collector, training, *, methods=None, model_profile=None):
+def inference_views_module(collector):
+    """Use the selected collector's shared stdlib lineage validator."""
+    source = Path(collector) / "evaluator/lm_eval/fair_uk/checkpoint_views.py"
+    require(source.is_file(), "Selected collector lacks inference-view validation")
+    spec = importlib.util.spec_from_file_location("fair_uk_checkpoint_views_producer", source)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def inference_view(
+    collector,
+    reference,
+    profile,
+    method,
+    receipt_path,
+    original_checkpoint,
+    *,
+    evaluation_checkpoint=None,
+    evaluation_files_sha256=None,
+):
+    module = inference_views_module(collector)
+    path = Path(reference["path"]).resolve()
+    sidecar = module.load_inference_views(path, reference["sha256"])
+    descriptor = sidecar["models"][profile["model_id"]]["methods"][method]
+    receipt = read(receipt_path)
+    records = receipt["checkpoint_identity" if method == "rmu" else "merged_checkpoint_files"]
+    original_files = {item["path"]: item["sha256"] for item in records}
+    return module.validate_inference_view(
+        path,
+        sidecar_sha256=reference["sha256"],
+        model_id=profile["model_id"],
+        method=method,
+        receipt_path=receipt_path,
+        receipt_sha256=native.digest(receipt_path),
+        original_checkpoint=str(original_checkpoint),
+        original_files_sha256=original_files,
+        evaluation_checkpoint=str(evaluation_checkpoint or descriptor["evaluation_checkpoint"]),
+        evaluation_files_sha256=evaluation_files_sha256
+        if evaluation_files_sha256 is not None
+        else descriptor["evaluation_files_sha256"],
+        model_revision=profile["model_revision"],
+        tokenizer_revision=profile["tokenizer_revision"],
+        base_path=profile["model_path"],
+        base_config_sha256=profile["config_sha256"],
+        base_files_sha256={
+            name: native.digest(Path(profile["model_path"]) / name)
+            for name in descriptor.get("added_assets", {})
+        }
+        or None,
+    )
+
+
+def view_for_native_checkpoint(collector, reference, profile, checkpoint, *, files=None):
+    """Check a measured post map against the same original receipt and sidecar."""
+    module = inference_views_module(collector)
+    sidecar = module.load_inference_views(reference["path"], reference["sha256"])
+    if str(checkpoint) == profile["model_path"]:
+        return None
+    candidates = [
+        (method, item)
+        for method, item in sidecar["models"][profile["model_id"]]["methods"].items()
+        if item["evaluation_checkpoint"] == str(checkpoint)
+    ]
+    require(len(candidates) == 1, "Checkpoint is not one uniquely certified inference view")
+    method, item = candidates[0]
+    return inference_view(
+        collector,
+        reference,
+        profile,
+        method,
+        Path(item["original_receipt"]["path"]),
+        item["original_checkpoint"],
+        evaluation_checkpoint=checkpoint,
+        evaluation_files_sha256=files,
+    )
+
+
+def checkpoint_panel(
+    collector, training, *, methods=None, model_profile=None, inference_views=None
+):
     panel = selected_methods(methods)
     if training is not None:
         receipt = read(training / "execution.json")
@@ -507,6 +623,10 @@ def checkpoint_panel(collector, training, *, methods=None, model_profile=None):
             config_hashes.get("config.json") == native.digest(checkpoint / "config.json"),
             method + ": saved checkpoint configuration hash differs",
         )
+        if inference_views is not None:
+            require(collector is not None, "Inference views require the selected collector")
+            view = inference_view(collector, inference_views, profile, method, path, checkpoint)
+            checkpoint = Path(view["evaluation_checkpoint"]).resolve()
         result[method] = checkpoint
     for checkpoint in result.values():
         require(
@@ -533,6 +653,10 @@ def run_task(addon, checkpoint, output, task, *, qualification=False):
     manifest = small if qualification else full
     entry, data, _ = source(manifest, task)
     checkpoint, output = checkpoint.resolve(), output.resolve()
+    if config.get("inference_views"):
+        view_for_native_checkpoint(
+            collector, config["inference_views"], config["model_profile"], checkpoint
+        )
     require(
         not any(output.is_relative_to(path) for path in (addon, collector, checkpoint)),
         "Output overlaps immutable inputs",
@@ -556,11 +680,16 @@ def run_task(addon, checkpoint, output, task, *, qualification=False):
         "qualification_only": qualification,
         "addon_config": evidence(addon / "config.json"),
         "started_at_utc": native.utc_now(),
+        "runtime_environment": RUNTIME_ENVIRONMENT,
     }
     native.write_json(status_path, status)
     command = command_for(checkpoint, manifest, task, task_output)
     status["command"] = command
-    environment = {**os.environ, "PYTHONPATH": str(collector / "evaluator")}
+    environment = {
+        **os.environ,
+        "PYTHONPATH": str(collector / "evaluator"),
+        **RUNTIME_ENVIRONMENT,
+    }
     process = None
     previous_handler = signal.getsignal(signal.SIGTERM)
 
@@ -587,6 +716,19 @@ def run_task(addon, checkpoint, output, task, *, qualification=False):
         require(code == 0, "Native collector failed")
         status.update(native.verify_complete(task, entry, task_output))
         status["serial_model_options"] = verify_collected_options(task_output)
+        if config.get("inference_views"):
+            run = read(task_output / "run.json")
+            require(
+                run["model_identity"]["parameters"].get("pretrained") == str(checkpoint),
+                "Native inference-view path differs",
+            )
+            status["inference_view"] = view_for_native_checkpoint(
+                collector,
+                config["inference_views"],
+                config["model_profile"],
+                checkpoint,
+                files=run["model_identity"]["local_files_sha256"],
+            )
         ids = [row["id"] for row in rows(task_output / "predictions.jsonl")]
         require(
             ids == [row["id"] for row in data], "Native predictions differ from full source order"
@@ -669,6 +811,7 @@ def collect(addon, training=None, output=None):
         training,
         methods=config.get("methods"),
         model_profile=config.get("model_profile"),
+        inference_views=config.get("inference_views"),
     )
     gpus = os.environ.get("CUDA_VISIBLE_DEVICES", "").split(",")
     require(
@@ -951,6 +1094,9 @@ def main(argv=None):
         type=Path,
         help="JSON with the five explicit pinned model identity fields",
     )
+    prep.add_argument(
+        "--inference-views", type=Path, help="Hash-bound actual checkpoint inference-view sidecar"
+    )
     check = commands.add_parser("validate", help="Verify local prepared bindings; no inference")
     check.add_argument("--addon", type=Path, required=True)
     task_parser = commands.add_parser("task", help="Internal single-task native collector")
@@ -983,6 +1129,7 @@ def main(argv=None):
                 args.output,
                 methods=args.methods,
                 model_profile=read(args.model_profile) if args.model_profile else None,
+                inference_views=args.inference_views,
             )
             print(
                 json.dumps(

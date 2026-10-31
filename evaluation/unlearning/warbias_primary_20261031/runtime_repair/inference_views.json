@@ -1,0 +1,958 @@
+{
+  "schema_version": 1,
+  "kind": "fair_uk_checkpoint_inference_views",
+  "models": {
+    "Qwen/Qwen3-8B": {
+      "base_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+      "model_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "base_config_sha256": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30",
+      "methods": {
+        "rmu": {
+          "kind": "original",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/rmu/run.json",
+            "sha256": "4a5e64fcd4901c95bfab2a3bc3bda710ac7da78f5f90347da96ace07de40cb3e"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/rmu/checkpoint",
+          "original_files_sha256": {
+            "added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+            "chat_template.jinja": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+            "config.json": "38a8a5a58ef8dfdfe121758e5ed011e66d9e46f42c4dde7b0ed4d111f0596775",
+            "generation_config.json": "64d86df2173901c58389974bde21f7d2ab9eb7d79f35a337753329d39cf265c0",
+            "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+            "model-00001-of-00004.safetensors": "012f8e6229e14879d696e0e9c62c3bd9095b506fd3d3412603e9df64593d52ba",
+            "model-00002-of-00004.safetensors": "0ddf1130f101e65ad9f813b89b1d642bf71cf007b95ecaf21c88ab46d59ecab5",
+            "model-00003-of-00004.safetensors": "02db582c0cb370f72bd246a697e7798e538774864693c5d2ce3a0c9cdc51164f",
+            "model-00004-of-00004.safetensors": "cb1bec53cc50bf978d0b7a9d89a49a1d202586c33729e11418b24459638bf4f1",
+            "model.safetensors.index.json": "1dc3d24d292a3e6a7b5ca130ad0f56ab6632b9c83a11a7d512c660fecc64bbaf",
+            "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+            "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+            "tokenizer_config.json": "443bfa629eb16387a12edbf92a76f6a6f10b2af3b53d87ba1550adfcf45f7fa0",
+            "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/rmu/checkpoint",
+          "evaluation_files_sha256": {
+            "added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+            "chat_template.jinja": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+            "config.json": "38a8a5a58ef8dfdfe121758e5ed011e66d9e46f42c4dde7b0ed4d111f0596775",
+            "generation_config.json": "64d86df2173901c58389974bde21f7d2ab9eb7d79f35a337753329d39cf265c0",
+            "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+            "model-00001-of-00004.safetensors": "012f8e6229e14879d696e0e9c62c3bd9095b506fd3d3412603e9df64593d52ba",
+            "model-00002-of-00004.safetensors": "0ddf1130f101e65ad9f813b89b1d642bf71cf007b95ecaf21c88ab46d59ecab5",
+            "model-00003-of-00004.safetensors": "02db582c0cb370f72bd246a697e7798e538774864693c5d2ce3a0c9cdc51164f",
+            "model-00004-of-00004.safetensors": "cb1bec53cc50bf978d0b7a9d89a49a1d202586c33729e11418b24459638bf4f1",
+            "model.safetensors.index.json": "1dc3d24d292a3e6a7b5ca130ad0f56ab6632b9c83a11a7d512c660fecc64bbaf",
+            "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+            "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+            "tokenizer_config.json": "443bfa629eb16387a12edbf92a76f6a6f10b2af3b53d87ba1550adfcf45f7fa0",
+            "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+          },
+          "added_assets": {}
+        },
+        "task_vector": {
+          "kind": "original",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/task_vector/intervention.json",
+            "sha256": "13410db9b1d119c894c78503aa295bb8fda56fa258756293a5f17e1adc772e1d"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/task_vector/merged_checkpoint",
+          "original_files_sha256": {
+            "added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+            "chat_template.jinja": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+            "config.json": "38a8a5a58ef8dfdfe121758e5ed011e66d9e46f42c4dde7b0ed4d111f0596775",
+            "generation_config.json": "64d86df2173901c58389974bde21f7d2ab9eb7d79f35a337753329d39cf265c0",
+            "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+            "model-00001-of-00005.safetensors": "31d6a825ae35f11fb85b195b4c42c146c051e446433125a215336abdf95cbf5f",
+            "model-00002-of-00005.safetensors": "5991236cea6fe21f3d43cab0f0e84448734fbbe0789816202989f2ddc9d18282",
+            "model-00003-of-00005.safetensors": "c5185c4794be2d8a9784d5753c9922db38df478ce11f9ed0b415b7304d896836",
+            "model-00004-of-00005.safetensors": "b5ee7de71fbf17db3d5704e0c8f2bc7d005ca9e1d7ca2aeb19827b0cfcaa917a",
+            "model-00005-of-00005.safetensors": "20c2d6366ab85c90786ccdd829cd2b9e7d30ef3b2ebbb998280e7e4014b542ff",
+            "model.safetensors.index.json": "05707b98315837a528ad0569faae1b383c0f894d19b0ce5969834e1010dbd2e5",
+            "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+            "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+            "tokenizer_config.json": "443bfa629eb16387a12edbf92a76f6a6f10b2af3b53d87ba1550adfcf45f7fa0",
+            "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/task_vector/merged_checkpoint",
+          "evaluation_files_sha256": {
+            "added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+            "chat_template.jinja": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+            "config.json": "38a8a5a58ef8dfdfe121758e5ed011e66d9e46f42c4dde7b0ed4d111f0596775",
+            "generation_config.json": "64d86df2173901c58389974bde21f7d2ab9eb7d79f35a337753329d39cf265c0",
+            "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+            "model-00001-of-00005.safetensors": "31d6a825ae35f11fb85b195b4c42c146c051e446433125a215336abdf95cbf5f",
+            "model-00002-of-00005.safetensors": "5991236cea6fe21f3d43cab0f0e84448734fbbe0789816202989f2ddc9d18282",
+            "model-00003-of-00005.safetensors": "c5185c4794be2d8a9784d5753c9922db38df478ce11f9ed0b415b7304d896836",
+            "model-00004-of-00005.safetensors": "b5ee7de71fbf17db3d5704e0c8f2bc7d005ca9e1d7ca2aeb19827b0cfcaa917a",
+            "model-00005-of-00005.safetensors": "20c2d6366ab85c90786ccdd829cd2b9e7d30ef3b2ebbb998280e7e4014b542ff",
+            "model.safetensors.index.json": "05707b98315837a528ad0569faae1b383c0f894d19b0ce5969834e1010dbd2e5",
+            "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+            "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+            "tokenizer_config.json": "443bfa629eb16387a12edbf92a76f6a6f10b2af3b53d87ba1550adfcf45f7fa0",
+            "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+          },
+          "added_assets": {}
+        },
+        "wga_kl": {
+          "kind": "original",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/wga_kl/intervention.json",
+            "sha256": "9119dd60300528099576c7af8e32d47edab3c4174bf585a4f8aaccc642db47ec"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/wga_kl/merged_checkpoint",
+          "original_files_sha256": {
+            "added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+            "chat_template.jinja": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+            "config.json": "38a8a5a58ef8dfdfe121758e5ed011e66d9e46f42c4dde7b0ed4d111f0596775",
+            "generation_config.json": "64d86df2173901c58389974bde21f7d2ab9eb7d79f35a337753329d39cf265c0",
+            "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+            "model-00001-of-00005.safetensors": "94ad9b02a7ec8d6eb64e188396937f1f01c66b4d5381dd7495614c78ee44ea39",
+            "model-00002-of-00005.safetensors": "6cbe3b48f5043d419bb610dc9972cbf84bd02ac32dd993338f52014757f0b511",
+            "model-00003-of-00005.safetensors": "77e2ad8750327d0731368d438598beb7c8446fa9a1591afbea6dbb2be900f7a4",
+            "model-00004-of-00005.safetensors": "56ff14edf4573044485caf33952bfcda7a6d054cac62b190058eb657be28571f",
+            "model-00005-of-00005.safetensors": "20c2d6366ab85c90786ccdd829cd2b9e7d30ef3b2ebbb998280e7e4014b542ff",
+            "model.safetensors.index.json": "05707b98315837a528ad0569faae1b383c0f894d19b0ce5969834e1010dbd2e5",
+            "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+            "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+            "tokenizer_config.json": "443bfa629eb16387a12edbf92a76f6a6f10b2af3b53d87ba1550adfcf45f7fa0",
+            "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/wga_kl/merged_checkpoint",
+          "evaluation_files_sha256": {
+            "added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+            "chat_template.jinja": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+            "config.json": "38a8a5a58ef8dfdfe121758e5ed011e66d9e46f42c4dde7b0ed4d111f0596775",
+            "generation_config.json": "64d86df2173901c58389974bde21f7d2ab9eb7d79f35a337753329d39cf265c0",
+            "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+            "model-00001-of-00005.safetensors": "94ad9b02a7ec8d6eb64e188396937f1f01c66b4d5381dd7495614c78ee44ea39",
+            "model-00002-of-00005.safetensors": "6cbe3b48f5043d419bb610dc9972cbf84bd02ac32dd993338f52014757f0b511",
+            "model-00003-of-00005.safetensors": "77e2ad8750327d0731368d438598beb7c8446fa9a1591afbea6dbb2be900f7a4",
+            "model-00004-of-00005.safetensors": "56ff14edf4573044485caf33952bfcda7a6d054cac62b190058eb657be28571f",
+            "model-00005-of-00005.safetensors": "20c2d6366ab85c90786ccdd829cd2b9e7d30ef3b2ebbb998280e7e4014b542ff",
+            "model.safetensors.index.json": "05707b98315837a528ad0569faae1b383c0f894d19b0ce5969834e1010dbd2e5",
+            "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+            "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+            "tokenizer_config.json": "443bfa629eb16387a12edbf92a76f6a6f10b2af3b53d87ba1550adfcf45f7fa0",
+            "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+          },
+          "added_assets": {}
+        }
+      }
+    },
+    "meta-llama/Llama-3.1-8B-Instruct": {
+      "base_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659",
+      "model_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+      "tokenizer_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+      "base_config_sha256": "29e4c210b0d6ac178b16b2a255a568bdb23b581e50ca1ef6a6d071dd85704e6e",
+      "methods": {
+        "rmu": {
+          "kind": "original",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/run.json",
+            "sha256": "17d321189b631e96f8862550b29cac54687bb312f1ab00be2133b37a2d17f249"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+            "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+            "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+            "model-00001-of-00004.safetensors": "0efcebfc48e7a47aac501485e87cf36aa69ac37f1b7a4ea168638ea9d58a0dbd",
+            "model-00002-of-00004.safetensors": "d2cf9881cc299ddf1a1b2bb49a4fa213b9805187b9cec9000497aef12c16b886",
+            "model-00003-of-00004.safetensors": "ab936aa358eb625777816bfd869c70c82fef3224e2606d6b4391cbc9ecf2742b",
+            "model-00004-of-00004.safetensors": "4a0ea61872ff6e2db1f3f04b84dacde88c922ed261949b73a043f49a032e070f",
+            "model.safetensors.index.json": "543d14a60c0a4d9ed4f0eb2f2dcc417c775e1a8de1537e32fa3c70db1fef25d5",
+            "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+            "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+            "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+            "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+            "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+            "model-00001-of-00004.safetensors": "0efcebfc48e7a47aac501485e87cf36aa69ac37f1b7a4ea168638ea9d58a0dbd",
+            "model-00002-of-00004.safetensors": "d2cf9881cc299ddf1a1b2bb49a4fa213b9805187b9cec9000497aef12c16b886",
+            "model-00003-of-00004.safetensors": "ab936aa358eb625777816bfd869c70c82fef3224e2606d6b4391cbc9ecf2742b",
+            "model-00004-of-00004.safetensors": "4a0ea61872ff6e2db1f3f04b84dacde88c922ed261949b73a043f49a032e070f",
+            "model.safetensors.index.json": "543d14a60c0a4d9ed4f0eb2f2dcc417c775e1a8de1537e32fa3c70db1fef25d5",
+            "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+            "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+            "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+          },
+          "added_assets": {}
+        },
+        "task_vector": {
+          "kind": "original",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/intervention.json",
+            "sha256": "4a0934fa99fde474a91838adcf5855123578d2c7c064168ebae57fae8304c22d"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+            "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+            "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+            "model-00001-of-00005.safetensors": "2a37f6565cd20bbeb90033635d01222b672e6216c23f2e031b9b0c7feb9bcfca",
+            "model-00002-of-00005.safetensors": "0c4d494587a3328773d6e3d9db66e2c88ea38d241db74c54c889172a45a70af4",
+            "model-00003-of-00005.safetensors": "1f0d5d2cadae6bd055b756a744311402f6bc18629c7848eccbf0d30b70b2c6fa",
+            "model-00004-of-00005.safetensors": "0aaebe8e6a1865f418cba4004c321e2260a018fc011ac7f8f158644057034a72",
+            "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+            "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+            "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+            "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+            "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+            "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+            "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+            "model-00001-of-00005.safetensors": "2a37f6565cd20bbeb90033635d01222b672e6216c23f2e031b9b0c7feb9bcfca",
+            "model-00002-of-00005.safetensors": "0c4d494587a3328773d6e3d9db66e2c88ea38d241db74c54c889172a45a70af4",
+            "model-00003-of-00005.safetensors": "1f0d5d2cadae6bd055b756a744311402f6bc18629c7848eccbf0d30b70b2c6fa",
+            "model-00004-of-00005.safetensors": "0aaebe8e6a1865f418cba4004c321e2260a018fc011ac7f8f158644057034a72",
+            "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+            "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+            "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+            "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+            "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+          },
+          "added_assets": {}
+        },
+        "wga_kl": {
+          "kind": "original",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/intervention.json",
+            "sha256": "cfa9c2f246298c0e3e662e3d091c0fcb1286e7abffde1607a589d21c975c79e9"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+            "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+            "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+            "model-00001-of-00005.safetensors": "5f9eef0a3d8736d8cf06e9dba6691d637574702ed13aaeda10cd9182cd76f4ae",
+            "model-00002-of-00005.safetensors": "5bdbd6a650189a592144f3b438315aea2054b313f063fe341752cba5f66b7969",
+            "model-00003-of-00005.safetensors": "0f3d936d2d6e4820d13dc876b10000741b790a5970d188e49e88c5b9600d2f66",
+            "model-00004-of-00005.safetensors": "fa5d13faf88247e3364cd31071236eb38b351b391e250fd938f7e6ee7cafc9f9",
+            "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+            "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+            "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+            "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+            "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "e10ca381b1ccc5cf9db52e371f3b6651576caee0a630b452e2816b2d404d4b65",
+            "config.json": "b8368ec217b45741871c9c7f6a0ce4d3847d41191abf8c8f94529df0884a5aac",
+            "generation_config.json": "b43d8b2ee6a293ff469aa6b22a06cd1cebf5aa248a3447f833f35291961367d0",
+            "model-00001-of-00005.safetensors": "5f9eef0a3d8736d8cf06e9dba6691d637574702ed13aaeda10cd9182cd76f4ae",
+            "model-00002-of-00005.safetensors": "5bdbd6a650189a592144f3b438315aea2054b313f063fe341752cba5f66b7969",
+            "model-00003-of-00005.safetensors": "0f3d936d2d6e4820d13dc876b10000741b790a5970d188e49e88c5b9600d2f66",
+            "model-00004-of-00005.safetensors": "fa5d13faf88247e3364cd31071236eb38b351b391e250fd938f7e6ee7cafc9f9",
+            "model-00005-of-00005.safetensors": "5321ca97dd0968a3e2b676b3a42728e9f5327d516bcf0addd4e9cd61c068a1ad",
+            "model.safetensors.index.json": "c567d8aa9504f9659b8c70d25fda9e2669bc1cd92211a2908bde826bc18a55c1",
+            "special_tokens_map.json": "1b1835caa5b4d70acaa210fa222b0036f1882f9525c4660fd4810fb3e1e40ff8",
+            "tokenizer.json": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+            "tokenizer_config.json": "a6c116761af9f371c68fd4a2da6e3cf6b3a4b41148f38eca4047aecfccdb6403"
+          },
+          "added_assets": {}
+        }
+      }
+    },
+    "google/gemma-3-12b-it": {
+      "base_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
+      "model_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+      "tokenizer_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+      "base_config_sha256": "39172c4124d3470341bbbb25f2926fd97edf68f0fe3a9fa4cde6acb9b7ed2cc6",
+      "methods": {
+        "rmu": {
+          "kind": "add_pinned_processor_assets",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/rmu/run.json",
+            "sha256": "11c17b353e0015268a9dbdcf2a99836cf4bc9390c4d6f02a6c8777c637cacc25"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/rmu/checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "6cdab2916a8c15e7bd21405476e63817e81069e1449e0c8a9ac84bd177aaa2ae",
+            "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+            "model-00001-of-00005.safetensors": "4847447e92599833e8dbaa3067cd201c3bb5c052efa91f11ba891e43234f7832",
+            "model-00002-of-00005.safetensors": "b4f9e4ce9ea40844ccbbd4d7071223f7948d5eca00aaa210b01033ae7e6b7e40",
+            "model-00003-of-00005.safetensors": "90f2124dad1b413aceefb40150d1e6ebb5de3b7322ea79a60bff7565a439ef39",
+            "model-00004-of-00005.safetensors": "eb6aa0bfe7245e812e5d0b5b52c09cd17400f2831abb6670c4c5793dc4be89b2",
+            "model-00005-of-00005.safetensors": "25e6a0cc77cff154a7fae3e240ee6c2a1d84a0bda7ee80dbe56629758af7b9fe",
+            "model.safetensors.index.json": "a14357220054c5baf74612fa0193d94ff9277a2d1d45aaf8f6d32ae5a379f53c",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/gemma3_12b_it/rmu",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "6cdab2916a8c15e7bd21405476e63817e81069e1449e0c8a9ac84bd177aaa2ae",
+            "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+            "model-00001-of-00005.safetensors": "4847447e92599833e8dbaa3067cd201c3bb5c052efa91f11ba891e43234f7832",
+            "model-00002-of-00005.safetensors": "b4f9e4ce9ea40844ccbbd4d7071223f7948d5eca00aaa210b01033ae7e6b7e40",
+            "model-00003-of-00005.safetensors": "90f2124dad1b413aceefb40150d1e6ebb5de3b7322ea79a60bff7565a439ef39",
+            "model-00004-of-00005.safetensors": "eb6aa0bfe7245e812e5d0b5b52c09cd17400f2831abb6670c4c5793dc4be89b2",
+            "model-00005-of-00005.safetensors": "25e6a0cc77cff154a7fae3e240ee6c2a1d84a0bda7ee80dbe56629758af7b9fe",
+            "model.safetensors.index.json": "a14357220054c5baf74612fa0193d94ff9277a2d1d45aaf8f6d32ae5a379f53c",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca",
+            "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+            "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          },
+          "added_assets": {
+            "preprocessor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80/preprocessor_config.json",
+              "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+            },
+            "processor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80/processor_config.json",
+              "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+            }
+          }
+        },
+        "task_vector": {
+          "kind": "add_pinned_processor_assets",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/task_vector/intervention.json",
+            "sha256": "0976f6a3334a693b4e08e1c3305fa23cd7afeadce25fcfc476e8e0560ec9e51b"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/task_vector/merged_checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "ba22291ab8b6c3578d25aa5d552935bf3bb0299ee297afe4a7c9c244b3fc744d",
+            "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+            "model-00001-of-00007.safetensors": "080b37e7e4c8273d10bfd9ecf34321091e33f32ce32aaf26b29c07820c0cab4b",
+            "model-00002-of-00007.safetensors": "8345713d50f485b7cd4dea57c1d7f0fecdaddee7d27f20138b08a78da6c186ac",
+            "model-00003-of-00007.safetensors": "2ae5729bc668223dd49b826d65b547305578e90c701cc127c9f1ad2f33ad89d1",
+            "model-00004-of-00007.safetensors": "3d3a5317d44e8d09aea13dc930f962faf4c5e8fae555b6752e1289848454bf67",
+            "model-00005-of-00007.safetensors": "0409768af1b4397e91466b5af68a9a4d7e4dbdfac5753988ea702a61ec37c6c1",
+            "model-00006-of-00007.safetensors": "b934e06bd01a570a1f712d368b8010a51a29a3b17f159e5176d443b0ae80938f",
+            "model-00007-of-00007.safetensors": "6e37e6c860c53a27b74b14ad8566411e4f2d3fff6ed80195358e39d2638f7a8f",
+            "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/gemma3_12b_it/task_vector",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "ba22291ab8b6c3578d25aa5d552935bf3bb0299ee297afe4a7c9c244b3fc744d",
+            "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+            "model-00001-of-00007.safetensors": "080b37e7e4c8273d10bfd9ecf34321091e33f32ce32aaf26b29c07820c0cab4b",
+            "model-00002-of-00007.safetensors": "8345713d50f485b7cd4dea57c1d7f0fecdaddee7d27f20138b08a78da6c186ac",
+            "model-00003-of-00007.safetensors": "2ae5729bc668223dd49b826d65b547305578e90c701cc127c9f1ad2f33ad89d1",
+            "model-00004-of-00007.safetensors": "3d3a5317d44e8d09aea13dc930f962faf4c5e8fae555b6752e1289848454bf67",
+            "model-00005-of-00007.safetensors": "0409768af1b4397e91466b5af68a9a4d7e4dbdfac5753988ea702a61ec37c6c1",
+            "model-00006-of-00007.safetensors": "b934e06bd01a570a1f712d368b8010a51a29a3b17f159e5176d443b0ae80938f",
+            "model-00007-of-00007.safetensors": "6e37e6c860c53a27b74b14ad8566411e4f2d3fff6ed80195358e39d2638f7a8f",
+            "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca",
+            "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+            "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          },
+          "added_assets": {
+            "preprocessor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80/preprocessor_config.json",
+              "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+            },
+            "processor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80/processor_config.json",
+              "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+            }
+          }
+        },
+        "wga_kl": {
+          "kind": "add_pinned_processor_assets",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/wga_kl/intervention.json",
+            "sha256": "a38175d9b157bc6f17d41aa13bee1641ea9a9ec7b0ed4f26ef643768b2032697"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598/wga_kl/merged_checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "ba22291ab8b6c3578d25aa5d552935bf3bb0299ee297afe4a7c9c244b3fc744d",
+            "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+            "model-00001-of-00007.safetensors": "3e2e666ca9bd7e4ab8efa836a2ed366047418b0c6ea6a4243dd3356a7aed2cf6",
+            "model-00002-of-00007.safetensors": "cc3d9c469f2a52e356a3601bf2caa1c4df78b2635dde910914dff0b3070e45be",
+            "model-00003-of-00007.safetensors": "2da82dc19494b265b27c051ee465eb6f39942163a45ab7fab2b12d848f0443f6",
+            "model-00004-of-00007.safetensors": "c6f90272e77012414b201a896848df212342eede5235ccc2f06621c6969c04e0",
+            "model-00005-of-00007.safetensors": "7835fc4f188c94b86f36a12f9b201c11e0718c31f12e2e0fb1b3b0d2b84f934a",
+            "model-00006-of-00007.safetensors": "5b6c478607013018910360fb10ebd07f858cde2132f1766bdb54d032d2c860a6",
+            "model-00007-of-00007.safetensors": "598421a58a14744875563484bfcb12ca399eee740e56c1176caa0c5a62b32878",
+            "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/gemma3_12b_it/wga_kl",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "ba22291ab8b6c3578d25aa5d552935bf3bb0299ee297afe4a7c9c244b3fc744d",
+            "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+            "model-00001-of-00007.safetensors": "3e2e666ca9bd7e4ab8efa836a2ed366047418b0c6ea6a4243dd3356a7aed2cf6",
+            "model-00002-of-00007.safetensors": "cc3d9c469f2a52e356a3601bf2caa1c4df78b2635dde910914dff0b3070e45be",
+            "model-00003-of-00007.safetensors": "2da82dc19494b265b27c051ee465eb6f39942163a45ab7fab2b12d848f0443f6",
+            "model-00004-of-00007.safetensors": "c6f90272e77012414b201a896848df212342eede5235ccc2f06621c6969c04e0",
+            "model-00005-of-00007.safetensors": "7835fc4f188c94b86f36a12f9b201c11e0718c31f12e2e0fb1b3b0d2b84f934a",
+            "model-00006-of-00007.safetensors": "5b6c478607013018910360fb10ebd07f858cde2132f1766bdb54d032d2c860a6",
+            "model-00007-of-00007.safetensors": "598421a58a14744875563484bfcb12ca399eee740e56c1176caa0c5a62b32878",
+            "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca",
+            "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+            "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          },
+          "added_assets": {
+            "preprocessor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80/preprocessor_config.json",
+              "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+            },
+            "processor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80/processor_config.json",
+              "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+            }
+          }
+        }
+      }
+    },
+    "lapa-llm/lapa-v0.1.2-instruct": {
+      "base_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037",
+      "model_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+      "tokenizer_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+      "base_config_sha256": "f02a640a945f26b004b32384e962b6820957ac363df96cd3246298b30a283451",
+      "methods": {
+        "rmu": {
+          "kind": "add_pinned_processor_assets",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/rmu/run.json",
+            "sha256": "b243bf61af6a23cf87533e7c16ab3850d657396215a3d25d95b42dcf20abbc1d"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/rmu/checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+            "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+            "model-00001-of-00005.safetensors": "beedc0137aca3c07aa92587f1f21e5850b95fdff04e29131b3b62ee519bf8937",
+            "model-00002-of-00005.safetensors": "a9802d278b246de783fde8f1f19f819fc8d57edd3aee1a595b914f2cf3654a56",
+            "model-00003-of-00005.safetensors": "5cb8eebd80f319d81b4eb24136aae9d48f80d5d238a4779eb46674fcec1155fd",
+            "model-00004-of-00005.safetensors": "e3dc5d4e000e6f98814aac2a59ba7b49b616d3e5fba3331fac71a187adaf20a6",
+            "model-00005-of-00005.safetensors": "a83ea23bc2a2b462f36924990437d83e1add8404361f26ce3a57dcd3064ef341",
+            "model.safetensors.index.json": "a14357220054c5baf74612fa0193d94ff9277a2d1d45aaf8f6d32ae5a379f53c",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+            "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/rmu",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+            "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+            "model-00001-of-00005.safetensors": "beedc0137aca3c07aa92587f1f21e5850b95fdff04e29131b3b62ee519bf8937",
+            "model-00002-of-00005.safetensors": "a9802d278b246de783fde8f1f19f819fc8d57edd3aee1a595b914f2cf3654a56",
+            "model-00003-of-00005.safetensors": "5cb8eebd80f319d81b4eb24136aae9d48f80d5d238a4779eb46674fcec1155fd",
+            "model-00004-of-00005.safetensors": "e3dc5d4e000e6f98814aac2a59ba7b49b616d3e5fba3331fac71a187adaf20a6",
+            "model-00005-of-00005.safetensors": "a83ea23bc2a2b462f36924990437d83e1add8404361f26ce3a57dcd3064ef341",
+            "model.safetensors.index.json": "a14357220054c5baf74612fa0193d94ff9277a2d1d45aaf8f6d32ae5a379f53c",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+            "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5",
+            "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+            "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          },
+          "added_assets": {
+            "preprocessor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/preprocessor_config.json",
+              "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+            },
+            "processor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/processor_config.json",
+              "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+            }
+          }
+        },
+        "task_vector": {
+          "kind": "add_pinned_processor_assets",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/task_vector/intervention.json",
+            "sha256": "53a175b9dbef84adbf1da4553ce84ba2f7a0d2859928297f86518be48c137b3f"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/task_vector/merged_checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+            "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+            "model-00001-of-00007.safetensors": "12b25f16ca4012bac8e10d5099e489c8947a728313e1652ad975d800903cd034",
+            "model-00002-of-00007.safetensors": "93f81645e429d47597e866ad5c304d9bf1e8e74b17e1bc37c51d48778b396e9a",
+            "model-00003-of-00007.safetensors": "0b91994d29d91cd704d436dc54310c482abe8d03963a260e0e3f8c2fa3935505",
+            "model-00004-of-00007.safetensors": "c575e7abc09c0f19abbfee0ada3eaf6da0eabd3a136880e26eb47dbe61433e7f",
+            "model-00005-of-00007.safetensors": "6ed506b9b1090ff508024df15ddb1942123933745fd70e5afb65cd49a8640a5f",
+            "model-00006-of-00007.safetensors": "04c44803b8870dda6d95d64ef1b31e709ed6f931c3b036aded5bfe6805cdc11a",
+            "model-00007-of-00007.safetensors": "c45f6f5ee5afe34279d76ab0590df51b1fbb3138f00cbba0e2b9708b7f65b26b",
+            "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+            "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/task_vector",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+            "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+            "model-00001-of-00007.safetensors": "12b25f16ca4012bac8e10d5099e489c8947a728313e1652ad975d800903cd034",
+            "model-00002-of-00007.safetensors": "93f81645e429d47597e866ad5c304d9bf1e8e74b17e1bc37c51d48778b396e9a",
+            "model-00003-of-00007.safetensors": "0b91994d29d91cd704d436dc54310c482abe8d03963a260e0e3f8c2fa3935505",
+            "model-00004-of-00007.safetensors": "c575e7abc09c0f19abbfee0ada3eaf6da0eabd3a136880e26eb47dbe61433e7f",
+            "model-00005-of-00007.safetensors": "6ed506b9b1090ff508024df15ddb1942123933745fd70e5afb65cd49a8640a5f",
+            "model-00006-of-00007.safetensors": "04c44803b8870dda6d95d64ef1b31e709ed6f931c3b036aded5bfe6805cdc11a",
+            "model-00007-of-00007.safetensors": "c45f6f5ee5afe34279d76ab0590df51b1fbb3138f00cbba0e2b9708b7f65b26b",
+            "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+            "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5",
+            "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+            "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          },
+          "added_assets": {
+            "preprocessor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/preprocessor_config.json",
+              "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+            },
+            "processor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/processor_config.json",
+              "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+            }
+          }
+        },
+        "wga_kl": {
+          "kind": "add_pinned_processor_assets",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/wga_kl/intervention.json",
+            "sha256": "b9d0a9ac110d67c4b7e422a5186c9e920b102fc3927202bd6e07371e4bd91913"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599/wga_kl/merged_checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+            "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+            "model-00001-of-00007.safetensors": "5e3dff212e37f742269fb905b44a95c18da0c4aaa89426a228823538cd810747",
+            "model-00002-of-00007.safetensors": "d7e38bd35eaacbed3cd49e850fff614c48228bf6d1a4030fc15601335debf559",
+            "model-00003-of-00007.safetensors": "5e23a4254a2804af3a09845371d6fe72da388a59b2337b3573fe983d65f3688f",
+            "model-00004-of-00007.safetensors": "e019402bddfa9446a7b035916b73a1d70da580b12290674f48d06871522d9346",
+            "model-00005-of-00007.safetensors": "3f7c54535b95728de61f9b895209d5da0a71dcd06615485d410bb17ec0475b22",
+            "model-00006-of-00007.safetensors": "f4613f98e78d439e4e17d8faed1b1503f29835b77bd457596d41ee1062b93393",
+            "model-00007-of-00007.safetensors": "808fcddb7bfa76fc45ab8e0f43369a7a798c4ef70505564a3486d226ebe294db",
+            "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+            "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/wga_kl",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "723f45db198aef39381ef93922c6856c21a2f5fc24b16ae48dbd38d04d34bb1f",
+            "generation_config.json": "3f6c815fb4d217ffc4690d2898e24b2cee99dab9b878203b628371af4dca1b36",
+            "model-00001-of-00007.safetensors": "5e3dff212e37f742269fb905b44a95c18da0c4aaa89426a228823538cd810747",
+            "model-00002-of-00007.safetensors": "d7e38bd35eaacbed3cd49e850fff614c48228bf6d1a4030fc15601335debf559",
+            "model-00003-of-00007.safetensors": "5e23a4254a2804af3a09845371d6fe72da388a59b2337b3573fe983d65f3688f",
+            "model-00004-of-00007.safetensors": "e019402bddfa9446a7b035916b73a1d70da580b12290674f48d06871522d9346",
+            "model-00005-of-00007.safetensors": "3f7c54535b95728de61f9b895209d5da0a71dcd06615485d410bb17ec0475b22",
+            "model-00006-of-00007.safetensors": "f4613f98e78d439e4e17d8faed1b1503f29835b77bd457596d41ee1062b93393",
+            "model-00007-of-00007.safetensors": "808fcddb7bfa76fc45ab8e0f43369a7a798c4ef70505564a3486d226ebe294db",
+            "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+            "tokenizer_config.json": "42334ac1ade744c408ac3e147243a79d6b70ec43191588019e3babbb3b7388c5",
+            "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+            "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          },
+          "added_assets": {
+            "preprocessor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/preprocessor_config.json",
+              "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+            },
+            "processor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037/processor_config.json",
+              "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+            }
+          }
+        }
+      }
+    },
+    "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0": {
+      "base_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+      "model_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+      "tokenizer_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+      "base_config_sha256": "89795290a04de188c98bded7b65fcc8366d3b4586d883dcc5751395b9cd76c78",
+      "methods": {
+        "rmu": {
+          "kind": "add_pinned_processor_assets",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/rmu/run.json",
+            "sha256": "b646feefa96f04d040130857ffeb316330bcc900c0007fd333282aefa98f128c"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/rmu/checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "6cdab2916a8c15e7bd21405476e63817e81069e1449e0c8a9ac84bd177aaa2ae",
+            "generation_config.json": "e2fd23ab3ecd8b1b3419f81239f9fca65a1c2d0cda853a34566fc5feb9b84e2c",
+            "model-00001-of-00005.safetensors": "9dd908726b867286b70a65ec81494ef08340d1abeee9b5e050386fe2702b0ff2",
+            "model-00002-of-00005.safetensors": "1741d4e6632e7d3d81659dd92b4702b050da318bd5bf905ff7b507ad74e04dc7",
+            "model-00003-of-00005.safetensors": "7561a694533fdbcf1b5c24f56424c4198c87e1bfba7b5d1aeb9963d90d05af27",
+            "model-00004-of-00005.safetensors": "ff952dbd69d2c0c338c4715c2e35f1b30cb5825e0439c5d32e434550f05c4d2c",
+            "model-00005-of-00005.safetensors": "8388185f354080f5598ef98fa9b862b01611431c1154df5ba7f092e229e1faa3",
+            "model.safetensors.index.json": "a14357220054c5baf74612fa0193d94ff9277a2d1d45aaf8f6d32ae5a379f53c",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay12b_v2/rmu",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "6cdab2916a8c15e7bd21405476e63817e81069e1449e0c8a9ac84bd177aaa2ae",
+            "generation_config.json": "e2fd23ab3ecd8b1b3419f81239f9fca65a1c2d0cda853a34566fc5feb9b84e2c",
+            "model-00001-of-00005.safetensors": "9dd908726b867286b70a65ec81494ef08340d1abeee9b5e050386fe2702b0ff2",
+            "model-00002-of-00005.safetensors": "1741d4e6632e7d3d81659dd92b4702b050da318bd5bf905ff7b507ad74e04dc7",
+            "model-00003-of-00005.safetensors": "7561a694533fdbcf1b5c24f56424c4198c87e1bfba7b5d1aeb9963d90d05af27",
+            "model-00004-of-00005.safetensors": "ff952dbd69d2c0c338c4715c2e35f1b30cb5825e0439c5d32e434550f05c4d2c",
+            "model-00005-of-00005.safetensors": "8388185f354080f5598ef98fa9b862b01611431c1154df5ba7f092e229e1faa3",
+            "model.safetensors.index.json": "a14357220054c5baf74612fa0193d94ff9277a2d1d45aaf8f6d32ae5a379f53c",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca",
+            "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+            "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          },
+          "added_assets": {
+            "preprocessor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244/preprocessor_config.json",
+              "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+            },
+            "processor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244/processor_config.json",
+              "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+            }
+          }
+        },
+        "task_vector": {
+          "kind": "add_pinned_processor_assets",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/task_vector/intervention.json",
+            "sha256": "d63d36fc1b9522df2b699463d1df20c1d04a23d96d1c28e63fabb5b2d495aeb1"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/task_vector/merged_checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "ba22291ab8b6c3578d25aa5d552935bf3bb0299ee297afe4a7c9c244b3fc744d",
+            "generation_config.json": "e2fd23ab3ecd8b1b3419f81239f9fca65a1c2d0cda853a34566fc5feb9b84e2c",
+            "model-00001-of-00007.safetensors": "c9acc3d9ebc0410e39ee83904234d6c10c037b766ba29b26be61af8a7cb52b26",
+            "model-00002-of-00007.safetensors": "1868c6431c518bbd747510c63ae6edd8fca218b27a36212917a531e00472e94d",
+            "model-00003-of-00007.safetensors": "e7a79de3c171f0aa2ccbb491ac20238a6f842e62f8f71e313527de6123ca8c35",
+            "model-00004-of-00007.safetensors": "5a632e233d727817d28d2f934a0ff2bb026d1fc53e9164b1c44df7102c80e732",
+            "model-00005-of-00007.safetensors": "c66f8767dd31339ec5400565143da9cb5b1e9d3dc20d1e4891403eb973942067",
+            "model-00006-of-00007.safetensors": "b215d1bc6f48dcf2bc98f9e0bd46bf3a6b64508eed39025efcfcc44c8e850207",
+            "model-00007-of-00007.safetensors": "5a7bf48460a46edb90df0b5721f7bc8afd086fa9045553c7f32aa77f72994c52",
+            "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay12b_v2/task_vector",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "ba22291ab8b6c3578d25aa5d552935bf3bb0299ee297afe4a7c9c244b3fc744d",
+            "generation_config.json": "e2fd23ab3ecd8b1b3419f81239f9fca65a1c2d0cda853a34566fc5feb9b84e2c",
+            "model-00001-of-00007.safetensors": "c9acc3d9ebc0410e39ee83904234d6c10c037b766ba29b26be61af8a7cb52b26",
+            "model-00002-of-00007.safetensors": "1868c6431c518bbd747510c63ae6edd8fca218b27a36212917a531e00472e94d",
+            "model-00003-of-00007.safetensors": "e7a79de3c171f0aa2ccbb491ac20238a6f842e62f8f71e313527de6123ca8c35",
+            "model-00004-of-00007.safetensors": "5a632e233d727817d28d2f934a0ff2bb026d1fc53e9164b1c44df7102c80e732",
+            "model-00005-of-00007.safetensors": "c66f8767dd31339ec5400565143da9cb5b1e9d3dc20d1e4891403eb973942067",
+            "model-00006-of-00007.safetensors": "b215d1bc6f48dcf2bc98f9e0bd46bf3a6b64508eed39025efcfcc44c8e850207",
+            "model-00007-of-00007.safetensors": "5a7bf48460a46edb90df0b5721f7bc8afd086fa9045553c7f32aa77f72994c52",
+            "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca",
+            "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+            "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          },
+          "added_assets": {
+            "preprocessor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244/preprocessor_config.json",
+              "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+            },
+            "processor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244/processor_config.json",
+              "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+            }
+          }
+        },
+        "wga_kl": {
+          "kind": "add_pinned_processor_assets",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/wga_kl/intervention.json",
+            "sha256": "45ad555d3a5c3af5f05dd85a5c9938d3cfa2f6b1f11c0e8294457cc102de6f6e"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600/wga_kl/merged_checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "ba22291ab8b6c3578d25aa5d552935bf3bb0299ee297afe4a7c9c244b3fc744d",
+            "generation_config.json": "e2fd23ab3ecd8b1b3419f81239f9fca65a1c2d0cda853a34566fc5feb9b84e2c",
+            "model-00001-of-00007.safetensors": "9ba44e93b666dc61365a04f7b05d844627995b5d5570c6ad05951a91377d7854",
+            "model-00002-of-00007.safetensors": "4d739abdf689563fcea944e00ff0d8013575b9f96dfae8cebd45adc6f854c037",
+            "model-00003-of-00007.safetensors": "d5381c7f19fa3fd73bbaf301835fe9fe2bb46d102db7807d22543bf099f89a28",
+            "model-00004-of-00007.safetensors": "7fe6f6fc090432ba9fed5ca6620eeff3a6353d3715d72ac7957ddd1d7dc52959",
+            "model-00005-of-00007.safetensors": "139392bde5ee229d3cd18e24071fddba5b03fde26c726e1acc725e5b67488ff3",
+            "model-00006-of-00007.safetensors": "5759956a78e64b7714c58f0c09b577f5da3930dea4b500f3decf827f5e34e564",
+            "model-00007-of-00007.safetensors": "beaf53b96eaaaa9ad555be8f795373cec3338842889ca07d4df7d5ab6a210d93",
+            "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay12b_v2/wga_kl",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "ba22291ab8b6c3578d25aa5d552935bf3bb0299ee297afe4a7c9c244b3fc744d",
+            "generation_config.json": "e2fd23ab3ecd8b1b3419f81239f9fca65a1c2d0cda853a34566fc5feb9b84e2c",
+            "model-00001-of-00007.safetensors": "9ba44e93b666dc61365a04f7b05d844627995b5d5570c6ad05951a91377d7854",
+            "model-00002-of-00007.safetensors": "4d739abdf689563fcea944e00ff0d8013575b9f96dfae8cebd45adc6f854c037",
+            "model-00003-of-00007.safetensors": "d5381c7f19fa3fd73bbaf301835fe9fe2bb46d102db7807d22543bf099f89a28",
+            "model-00004-of-00007.safetensors": "7fe6f6fc090432ba9fed5ca6620eeff3a6353d3715d72ac7957ddd1d7dc52959",
+            "model-00005-of-00007.safetensors": "139392bde5ee229d3cd18e24071fddba5b03fde26c726e1acc725e5b67488ff3",
+            "model-00006-of-00007.safetensors": "5759956a78e64b7714c58f0c09b577f5da3930dea4b500f3decf827f5e34e564",
+            "model-00007-of-00007.safetensors": "beaf53b96eaaaa9ad555be8f795373cec3338842889ca07d4df7d5ab6a210d93",
+            "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca",
+            "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+            "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          },
+          "added_assets": {
+            "preprocessor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244/preprocessor_config.json",
+              "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+            },
+            "processor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244/processor_config.json",
+              "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+            }
+          }
+        }
+      }
+    },
+    "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0": {
+      "base_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+      "model_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+      "tokenizer_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+      "base_config_sha256": "7b912e354dd6973e1bc397b7ee4a8ac6c9f406da95e33e5789a3468f71644d15",
+      "methods": {
+        "rmu": {
+          "kind": "add_pinned_processor_assets",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/rmu/run.json",
+            "sha256": "522cd56bbda49ef7c99d0689b3d5c8c8e8019fb6e704e0352abbb0c7e34df6dd"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/rmu/checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "376c41ee6fed34a21c2654bf707429de7cbc3b58ae4061fcf177c21d9ef5cc52",
+            "generation_config.json": "e2fd23ab3ecd8b1b3419f81239f9fca65a1c2d0cda853a34566fc5feb9b84e2c",
+            "model-00001-of-00012.safetensors": "719ce23d8aa8242ff1b8f56adf4aa239bfe6399bf85f51676822ec7f2ffc78af",
+            "model-00002-of-00012.safetensors": "142e35c60ade0cc817cb05a5a777dd1c313061105fbe45225f948d341c95ca53",
+            "model-00003-of-00012.safetensors": "b6ca1981a1203c8043fc8f1e2937f45739aa843b030b4e90d35e3489ac3f04cd",
+            "model-00004-of-00012.safetensors": "7a7f918acd388e4414a8d864096eb6079866e8ba3d62fff8e00e6fac54f0ecd8",
+            "model-00005-of-00012.safetensors": "c073eeb55d433d39bb097e38c8cd36ebb875ef594a91b62ea4e85b82409863a4",
+            "model-00006-of-00012.safetensors": "d537079668d313ad2ffe8b4cb0532491e3616e067b421baef4da460af74dd34b",
+            "model-00007-of-00012.safetensors": "38b9567b2bff29737a886b924e56f3dd2164bd9d701960e836c23596f0bc83d5",
+            "model-00008-of-00012.safetensors": "49dfdf012959cf4fb58b40de1e116680a66f7621d45359cd7727514b8ae36814",
+            "model-00009-of-00012.safetensors": "51566c3c9d0704024992be5e92074eca0d0df83fd3767f469d93ca85d06e8529",
+            "model-00010-of-00012.safetensors": "b49b2ac75b49119a2002be531175b271d624eecb06d5760cc15e259965b89d82",
+            "model-00011-of-00012.safetensors": "eed2b6d47cc8988b19856d3fb73fa1fbaaeb705896b44e942d67a86d68e0c6e6",
+            "model-00012-of-00012.safetensors": "2e008da15b7b30904de531f69b1d87b2a5d01bce641540a296baa88af5367b7c",
+            "model.safetensors.index.json": "e0d4cc8e12ad2d4cafe88cb395a9923da6c0fbaab6c1555af8a39249a6789ba7",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay27b_v2/rmu",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "376c41ee6fed34a21c2654bf707429de7cbc3b58ae4061fcf177c21d9ef5cc52",
+            "generation_config.json": "e2fd23ab3ecd8b1b3419f81239f9fca65a1c2d0cda853a34566fc5feb9b84e2c",
+            "model-00001-of-00012.safetensors": "719ce23d8aa8242ff1b8f56adf4aa239bfe6399bf85f51676822ec7f2ffc78af",
+            "model-00002-of-00012.safetensors": "142e35c60ade0cc817cb05a5a777dd1c313061105fbe45225f948d341c95ca53",
+            "model-00003-of-00012.safetensors": "b6ca1981a1203c8043fc8f1e2937f45739aa843b030b4e90d35e3489ac3f04cd",
+            "model-00004-of-00012.safetensors": "7a7f918acd388e4414a8d864096eb6079866e8ba3d62fff8e00e6fac54f0ecd8",
+            "model-00005-of-00012.safetensors": "c073eeb55d433d39bb097e38c8cd36ebb875ef594a91b62ea4e85b82409863a4",
+            "model-00006-of-00012.safetensors": "d537079668d313ad2ffe8b4cb0532491e3616e067b421baef4da460af74dd34b",
+            "model-00007-of-00012.safetensors": "38b9567b2bff29737a886b924e56f3dd2164bd9d701960e836c23596f0bc83d5",
+            "model-00008-of-00012.safetensors": "49dfdf012959cf4fb58b40de1e116680a66f7621d45359cd7727514b8ae36814",
+            "model-00009-of-00012.safetensors": "51566c3c9d0704024992be5e92074eca0d0df83fd3767f469d93ca85d06e8529",
+            "model-00010-of-00012.safetensors": "b49b2ac75b49119a2002be531175b271d624eecb06d5760cc15e259965b89d82",
+            "model-00011-of-00012.safetensors": "eed2b6d47cc8988b19856d3fb73fa1fbaaeb705896b44e942d67a86d68e0c6e6",
+            "model-00012-of-00012.safetensors": "2e008da15b7b30904de531f69b1d87b2a5d01bce641540a296baa88af5367b7c",
+            "model.safetensors.index.json": "e0d4cc8e12ad2d4cafe88cb395a9923da6c0fbaab6c1555af8a39249a6789ba7",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca",
+            "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+            "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          },
+          "added_assets": {
+            "preprocessor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7/preprocessor_config.json",
+              "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+            },
+            "processor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7/processor_config.json",
+              "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+            }
+          }
+        },
+        "task_vector": {
+          "kind": "add_pinned_processor_assets",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/task_vector/intervention.json",
+            "sha256": "74deff5468f4ded32290cee23b4056ff5a841dc5adc14de2a8bd47cf832d7c70"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/task_vector/merged_checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "6677b4e4510881e6294c1b11304e3d095ae64003c2237685de3bea51673b6fd2",
+            "generation_config.json": "e2fd23ab3ecd8b1b3419f81239f9fca65a1c2d0cda853a34566fc5feb9b84e2c",
+            "model-00001-of-00014.safetensors": "eefe5c6263b3b603a460aa6fa794c841372ba9b3053495b67319db9cd2a4bbbd",
+            "model-00002-of-00014.safetensors": "29aea2138c55bfbd2920bc7273116b72ae17aa8edfbf0b10b0fed98910a26820",
+            "model-00003-of-00014.safetensors": "594f2b17d9ecae804001c53f8ce4dbf83f8884a905c4190b8ef5101b73ef143f",
+            "model-00004-of-00014.safetensors": "22e6a4ce78f696e827cb5fd9b6f1f9fb32fe1d1bffb9c1014c07bd9c5d001a38",
+            "model-00005-of-00014.safetensors": "6e72d891376813f0905e1578ad49777f77538db3e435a19db6a59d07e0d0e615",
+            "model-00006-of-00014.safetensors": "9396f5d3d85c632c9940c36aa36931c5c6662326e1dc866470fb192d7947379f",
+            "model-00007-of-00014.safetensors": "6b574e0a7294dfca620a5ea258eeaa7a23432b174e8a9fac7807a051544b07ae",
+            "model-00008-of-00014.safetensors": "cd677904cf60a8716e6bc7eee883d356354016fc7bec8b994094fab285b8ab18",
+            "model-00009-of-00014.safetensors": "2fc4cab460dadd917781e62094567b7ce81f65fef95fa29240c48ab87e90b5d1",
+            "model-00010-of-00014.safetensors": "12fc1d69087b8a3479d2de8373114cde41e6ef5b4b31ff15bbe2c5a5eb09e5bc",
+            "model-00011-of-00014.safetensors": "a997f78d28ca260dba69a91e6b62e37ff760d472cb9faeea3041cabfc97fcd7c",
+            "model-00012-of-00014.safetensors": "e6b73111fcde9e974d66bb4667d84601d283cdd8982670d627324d6978d9bcc9",
+            "model-00013-of-00014.safetensors": "c79da27aa1166fa195ab59b13344aa891bd79afdf903c61b431ad2b9c476bedf",
+            "model-00014-of-00014.safetensors": "e97409b3b9a7fd679c08c5dc1d928cc46e800e217cac80a44457b91079f78739",
+            "model.safetensors.index.json": "322d1f90b8b1367353fd1ab180093c79264778004b8cc36842caa514af947584",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay27b_v2/task_vector",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "6677b4e4510881e6294c1b11304e3d095ae64003c2237685de3bea51673b6fd2",
+            "generation_config.json": "e2fd23ab3ecd8b1b3419f81239f9fca65a1c2d0cda853a34566fc5feb9b84e2c",
+            "model-00001-of-00014.safetensors": "eefe5c6263b3b603a460aa6fa794c841372ba9b3053495b67319db9cd2a4bbbd",
+            "model-00002-of-00014.safetensors": "29aea2138c55bfbd2920bc7273116b72ae17aa8edfbf0b10b0fed98910a26820",
+            "model-00003-of-00014.safetensors": "594f2b17d9ecae804001c53f8ce4dbf83f8884a905c4190b8ef5101b73ef143f",
+            "model-00004-of-00014.safetensors": "22e6a4ce78f696e827cb5fd9b6f1f9fb32fe1d1bffb9c1014c07bd9c5d001a38",
+            "model-00005-of-00014.safetensors": "6e72d891376813f0905e1578ad49777f77538db3e435a19db6a59d07e0d0e615",
+            "model-00006-of-00014.safetensors": "9396f5d3d85c632c9940c36aa36931c5c6662326e1dc866470fb192d7947379f",
+            "model-00007-of-00014.safetensors": "6b574e0a7294dfca620a5ea258eeaa7a23432b174e8a9fac7807a051544b07ae",
+            "model-00008-of-00014.safetensors": "cd677904cf60a8716e6bc7eee883d356354016fc7bec8b994094fab285b8ab18",
+            "model-00009-of-00014.safetensors": "2fc4cab460dadd917781e62094567b7ce81f65fef95fa29240c48ab87e90b5d1",
+            "model-00010-of-00014.safetensors": "12fc1d69087b8a3479d2de8373114cde41e6ef5b4b31ff15bbe2c5a5eb09e5bc",
+            "model-00011-of-00014.safetensors": "a997f78d28ca260dba69a91e6b62e37ff760d472cb9faeea3041cabfc97fcd7c",
+            "model-00012-of-00014.safetensors": "e6b73111fcde9e974d66bb4667d84601d283cdd8982670d627324d6978d9bcc9",
+            "model-00013-of-00014.safetensors": "c79da27aa1166fa195ab59b13344aa891bd79afdf903c61b431ad2b9c476bedf",
+            "model-00014-of-00014.safetensors": "e97409b3b9a7fd679c08c5dc1d928cc46e800e217cac80a44457b91079f78739",
+            "model.safetensors.index.json": "322d1f90b8b1367353fd1ab180093c79264778004b8cc36842caa514af947584",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca",
+            "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+            "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          },
+          "added_assets": {
+            "preprocessor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7/preprocessor_config.json",
+              "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+            },
+            "processor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7/processor_config.json",
+              "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+            }
+          }
+        },
+        "wga_kl": {
+          "kind": "add_pinned_processor_assets",
+          "original_receipt": {
+            "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/wga_kl/intervention.json",
+            "sha256": "150de2e0335e7e04fd9b489c5576cfe8290de82072e606590175e3c682f6be34"
+          },
+          "original_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601/wga_kl/merged_checkpoint",
+          "original_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "6677b4e4510881e6294c1b11304e3d095ae64003c2237685de3bea51673b6fd2",
+            "generation_config.json": "e2fd23ab3ecd8b1b3419f81239f9fca65a1c2d0cda853a34566fc5feb9b84e2c",
+            "model-00001-of-00014.safetensors": "5d6f3815008339ef2ee62b52fdfedcabdb11364f485d618988ce6e422b536f1e",
+            "model-00002-of-00014.safetensors": "2f6e6fedfb31e1461a072d291a881b8bf624d56864825f8cb0a6db8d0e8a3429",
+            "model-00003-of-00014.safetensors": "d0fab9c3a5cb80e169092543f389c2f1ada749968427d5d71a616885ddd5cd26",
+            "model-00004-of-00014.safetensors": "29b5946d2ba8718458e7e81076cd8f95948f57585bd2f11e41f6e7334d3b6b20",
+            "model-00005-of-00014.safetensors": "317867c3255acb78df0904c8ee4ceb55ac4971fbcb1b7214f12d666fc2c2e1b8",
+            "model-00006-of-00014.safetensors": "8bee8ef2581c77e2da72be04b85e490348cf9b80d382ca5e4c833bbbe21827e1",
+            "model-00007-of-00014.safetensors": "2d6e4c3e53676364b1b596c70805ef702f38f358c9dad3d0944fca1272558a0b",
+            "model-00008-of-00014.safetensors": "bd826b149beefc55326575230d0bc936a40d6daed333377d392e9835921d14e5",
+            "model-00009-of-00014.safetensors": "a462affe46ba5623c1e95f7ce156cb07dcb399619ed0f930e0ee914f5cb8ca18",
+            "model-00010-of-00014.safetensors": "14701ce8143f1aef3b4c5da39edfaab5dc7aeaee91b6a54d7160d57bf8186ccd",
+            "model-00011-of-00014.safetensors": "95daf29784f7c33ac8c29863b023649d6dece58856cc1ad1ed39f689ab86dd16",
+            "model-00012-of-00014.safetensors": "5a4593e9b5448ed54563d8f596b23b0efb777e13d2b01b394f987ede51710fd4",
+            "model-00013-of-00014.safetensors": "d5692e59ef4f4558f36c1fa1e0d2a2e59c90a31264227b3a2ecd1a6fa1f6ca52",
+            "model-00014-of-00014.safetensors": "08fd75396379fff9a0d8488a58cc2eaab04f8d3e701ddcd4ba33f3e665d7d8c4",
+            "model.safetensors.index.json": "322d1f90b8b1367353fd1ab180093c79264778004b8cc36842caa514af947584",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca"
+          },
+          "evaluation_checkpoint": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay27b_v2/wga_kl",
+          "evaluation_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "6677b4e4510881e6294c1b11304e3d095ae64003c2237685de3bea51673b6fd2",
+            "generation_config.json": "e2fd23ab3ecd8b1b3419f81239f9fca65a1c2d0cda853a34566fc5feb9b84e2c",
+            "model-00001-of-00014.safetensors": "5d6f3815008339ef2ee62b52fdfedcabdb11364f485d618988ce6e422b536f1e",
+            "model-00002-of-00014.safetensors": "2f6e6fedfb31e1461a072d291a881b8bf624d56864825f8cb0a6db8d0e8a3429",
+            "model-00003-of-00014.safetensors": "d0fab9c3a5cb80e169092543f389c2f1ada749968427d5d71a616885ddd5cd26",
+            "model-00004-of-00014.safetensors": "29b5946d2ba8718458e7e81076cd8f95948f57585bd2f11e41f6e7334d3b6b20",
+            "model-00005-of-00014.safetensors": "317867c3255acb78df0904c8ee4ceb55ac4971fbcb1b7214f12d666fc2c2e1b8",
+            "model-00006-of-00014.safetensors": "8bee8ef2581c77e2da72be04b85e490348cf9b80d382ca5e4c833bbbe21827e1",
+            "model-00007-of-00014.safetensors": "2d6e4c3e53676364b1b596c70805ef702f38f358c9dad3d0944fca1272558a0b",
+            "model-00008-of-00014.safetensors": "bd826b149beefc55326575230d0bc936a40d6daed333377d392e9835921d14e5",
+            "model-00009-of-00014.safetensors": "a462affe46ba5623c1e95f7ce156cb07dcb399619ed0f930e0ee914f5cb8ca18",
+            "model-00010-of-00014.safetensors": "14701ce8143f1aef3b4c5da39edfaab5dc7aeaee91b6a54d7160d57bf8186ccd",
+            "model-00011-of-00014.safetensors": "95daf29784f7c33ac8c29863b023649d6dece58856cc1ad1ed39f689ab86dd16",
+            "model-00012-of-00014.safetensors": "5a4593e9b5448ed54563d8f596b23b0efb777e13d2b01b394f987ede51710fd4",
+            "model-00013-of-00014.safetensors": "d5692e59ef4f4558f36c1fa1e0d2a2e59c90a31264227b3a2ecd1a6fa1f6ca52",
+            "model-00014-of-00014.safetensors": "08fd75396379fff9a0d8488a58cc2eaab04f8d3e701ddcd4ba33f3e665d7d8c4",
+            "model.safetensors.index.json": "322d1f90b8b1367353fd1ab180093c79264778004b8cc36842caa514af947584",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca",
+            "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+            "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+          },
+          "added_assets": {
+            "preprocessor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7/preprocessor_config.json",
+              "sha256": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d"
+            },
+            "processor_config.json": {
+              "source_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7/processor_config.json",
+              "sha256": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53"
+            }
+          }
+        }
+      }
+    }
+  }
+}

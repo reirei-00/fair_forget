@@ -1,0 +1,198 @@
+{
+  "kind": "six_model_corrected_measurement_deployment_cpu_preflight",
+  "created_at_utc": "2026-10-31T13:40:05.160963+00:00",
+  "status": "six_addons_deployed_and_cpu_preflight_passed_not_gpu_qualified",
+  "collector_release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_collector_v6",
+  "collector_checksums_sha256": "126a1529abbf38fb8b0b61deb1bd97ee88ab86161f38bff9201e9af56c42d9fd",
+  "runner_release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v3",
+  "runner_checksums_sha256": "64036ecd88ff1d08e0d00c826bb7f2a737441a9c1c9e7a4c3f0beae571ccd9c4",
+  "analysis_source": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_analysis_v1/evaluator",
+  "analysis_commit": "b0bdb6431e1e65eafa1a25ef6a3f5a3690202271",
+  "inference_views": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/inference_views.json",
+    "sha256": "804005a5a1a9ad32c86fc1eab22d0e4c3b11950548d9de717ac42a4d34ee3a5e"
+  },
+  "runtime_environment": {
+    "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+  },
+  "methods": [
+    "rmu",
+    "task_vector",
+    "wga_kl"
+  ],
+  "source_or_scoring_math_changes_in_deployment": false,
+  "original_checkpoint_or_result_changes": false,
+  "models": {
+    "qwen3_8b": {
+      "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_qwen3_8b_v2",
+      "addon_checksums_sha256": "4ac3f44a63fe46b2a197cee32ece2301c049b0d6d370f5934e7ceb948ad36fd3",
+      "addon_config_sha256": "9291e850d509b7c2fdab2e962e8aec430cedff641810688d109dbce2c7d26058",
+      "qualification_manifest_sha256": "36e78d44340134ff26d56af8d4e7bf20cbfa54e77ddca3ae9c0bf3c0fa6a01ad",
+      "qualification_rows": 20,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+        "model_id": "Qwen/Qwen3-8B",
+        "model_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "config_sha256": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30"
+      },
+      "checkpoints": {
+        "baseline": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+        "rmu": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/rmu/checkpoint",
+        "task_vector": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/task_vector/merged_checkpoint",
+        "wga_kl": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596/wga_kl/merged_checkpoint"
+      },
+      "local_prepared": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/addons_v2/qwen3_8b",
+      "download_verified_files": 17,
+      "prepared_archive_sha256": "f160344ce4a2b14af67e7de45a3aedbaf6c3ba1377902386d6af5efac35bbdab"
+    },
+    "llama31_8b_instruct": {
+      "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_llama31_8b_instruct_v2",
+      "addon_checksums_sha256": "2d2d4bd3bbda48c12460cbb46449e5a4c77d71046eb3ed645147203c87948e1a",
+      "addon_config_sha256": "3aa11c1973631ac38416f53682e534dd004e6de18d7e65a96fcb65ec9c23f0ef",
+      "qualification_manifest_sha256": "36e78d44340134ff26d56af8d4e7bf20cbfa54e77ddca3ae9c0bf3c0fa6a01ad",
+      "qualification_rows": 20,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659",
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "model_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "tokenizer_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "config_sha256": "29e4c210b0d6ac178b16b2a255a568bdb23b581e50ca1ef6a6d071dd85704e6e"
+      },
+      "checkpoints": {
+        "baseline": "/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659",
+        "rmu": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/rmu/checkpoint",
+        "task_vector": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/task_vector/merged_checkpoint",
+        "wga_kl": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597/wga_kl/merged_checkpoint"
+      },
+      "local_prepared": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/addons_v2/llama31_8b_instruct",
+      "download_verified_files": 17,
+      "prepared_archive_sha256": "1b8ebf821019612c63031e5fc628210287bb9d54ff6de33af37c99117875c3ec"
+    },
+    "gemma3_12b_it": {
+      "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_gemma3_12b_it_v2",
+      "addon_checksums_sha256": "d9ff5e11480467becc94032b2af4121a9a0878711402da1cf64038315e410b53",
+      "addon_config_sha256": "d047be57772caa800f6c0faefcd5b82f4d39f758afe89ec025a96f1db6569372",
+      "qualification_manifest_sha256": "36e78d44340134ff26d56af8d4e7bf20cbfa54e77ddca3ae9c0bf3c0fa6a01ad",
+      "qualification_rows": 20,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "model_id": "google/gemma-3-12b-it",
+        "model_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "tokenizer_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "config_sha256": "39172c4124d3470341bbbb25f2926fd97edf68f0fe3a9fa4cde6acb9b7ed2cc6"
+      },
+      "checkpoints": {
+        "baseline": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "rmu": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/gemma3_12b_it/rmu",
+        "task_vector": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/gemma3_12b_it/task_vector",
+        "wga_kl": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/gemma3_12b_it/wga_kl"
+      },
+      "local_prepared": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/addons_v2/gemma3_12b_it",
+      "download_verified_files": 17,
+      "prepared_archive_sha256": "8bd4b01943769436b3f52737fee0e232266b8204ad153ef3e586044586f9a7a1"
+    },
+    "lapa12b_instruct": {
+      "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_lapa12b_instruct_v2",
+      "addon_checksums_sha256": "5a8f40122c1cb4b2b3d4d1009c038e93af8ab365924d4633eb8ecdffe12d2285",
+      "addon_config_sha256": "92ac4918b2bf6f95fd2cc2757d1a26f76c6d6cf94bc95b0abcee5ceeffd34a09",
+      "qualification_manifest_sha256": "36e78d44340134ff26d56af8d4e7bf20cbfa54e77ddca3ae9c0bf3c0fa6a01ad",
+      "qualification_rows": 20,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "model_id": "lapa-llm/lapa-v0.1.2-instruct",
+        "model_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "tokenizer_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "config_sha256": "f02a640a945f26b004b32384e962b6820957ac363df96cd3246298b30a283451"
+      },
+      "checkpoints": {
+        "baseline": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "rmu": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/rmu",
+        "task_vector": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/task_vector",
+        "wga_kl": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/lapa12b_instruct/wga_kl"
+      },
+      "local_prepared": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/addons_v2/lapa12b_instruct",
+      "download_verified_files": 17,
+      "prepared_archive_sha256": "4b3e08423a212557b7de56b443695e4067a7bac4f0555feacbfc69121b81b5e5"
+    },
+    "mamay12b_v2": {
+      "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_mamay12b_v2_v2",
+      "addon_checksums_sha256": "314d0485bd2757f20c33bd60820f1accd44a2dde078210ef68a97b3f3190b430",
+      "addon_config_sha256": "22a1ce1f8474e18b75ed3b42be8b44a74c7942d0bbe5c213af2a52111905169f",
+      "qualification_manifest_sha256": "36e78d44340134ff26d56af8d4e7bf20cbfa54e77ddca3ae9c0bf3c0fa6a01ad",
+      "qualification_rows": 20,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "model_id": "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0",
+        "model_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "tokenizer_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "config_sha256": "89795290a04de188c98bded7b65fcc8366d3b4586d883dcc5751395b9cd76c78"
+      },
+      "checkpoints": {
+        "baseline": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "rmu": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay12b_v2/rmu",
+        "task_vector": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay12b_v2/task_vector",
+        "wga_kl": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay12b_v2/wga_kl"
+      },
+      "local_prepared": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/addons_v2/mamay12b_v2",
+      "download_verified_files": 17,
+      "prepared_archive_sha256": "ea700f81a5fd79da3571419f4ca3fbbdc10505e9bc206e9863860a2493735820"
+    },
+    "mamay27b_v2": {
+      "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_mamay27b_v2_v2",
+      "addon_checksums_sha256": "e89f26e29db134778f50e78ae6cf448ca89c678b3c0116728f11556618bc551f",
+      "addon_config_sha256": "4e08b3f44d2e45b2d7d27f5cd2b2ba6682a376859403d1df4205fc53dc1b366d",
+      "qualification_manifest_sha256": "36e78d44340134ff26d56af8d4e7bf20cbfa54e77ddca3ae9c0bf3c0fa6a01ad",
+      "qualification_rows": 20,
+      "model_profile": {
+        "model_path": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "model_id": "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0",
+        "model_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "tokenizer_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "config_sha256": "7b912e354dd6973e1bc397b7ee4a8ac6c9f406da95e33e5789a3468f71644d15"
+      },
+      "checkpoints": {
+        "baseline": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "rmu": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay27b_v2/rmu",
+        "task_vector": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay27b_v2/task_vector",
+        "wga_kl": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay27b_v2/wga_kl"
+      },
+      "local_prepared": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/addons_v2/mamay27b_v2",
+      "download_verified_files": 17,
+      "prepared_archive_sha256": "7dda00b3db23fb6c8cef435c878a3414b9714de37a60b1327d8da43ad0566d9b"
+    }
+  },
+  "cpu_preflight": {
+    "tests_passed": 69,
+    "addon_configs": 6,
+    "actual_receipt_certified_view_proofs": 18,
+    "shared_qualification_task_validations": 6,
+    "shared_full_task_validations": 12,
+    "analysis_files_verified": 15662,
+    "gpu_model_calls": 0,
+    "scheduler_submissions": 0
+  },
+  "required_next_stage": "Fresh matched repeated GPU qualification for every checkpoint under the explicit spawn runtime before locked collection; CPU validation is not that proof.",
+  "evidence": {
+    "addon_deployment_v2.json": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/addon_deployment_v2.json",
+      "sha256": "f1dd4670c6d8ce7bd80b5b3c4fdfb8e26e62ffd380865afdf7a6ad3eb1bbfddc"
+    },
+    "runner_preflight_v3.json": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/runner_preflight_v3.json",
+      "sha256": "be45e72ea32593a846bd5b0037ef6ebf4cdf3a41a00a3718c6228152e1b71231"
+    },
+    "runner_deployment_v3.json": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/runner_deployment_v3.json",
+      "sha256": "8de437e8feddeb1c505656eed378c1d8d2d3bdadd87de9f089f0775269547438"
+    },
+    "deploy_addons_v2.py": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/deploy_addons_v2.py",
+      "sha256": "685aee7e5e06f9e4e1cc53e6364a1daf9a3bdded059399caad0344fac1c0fb21"
+    },
+    "preflight_runners_v3.py": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/preflight_runners_v3.py",
+      "sha256": "15ab1d1c04bd34cc68bf837bb1effcbe73676b2ba294bf687e7087f35d3fc2c6"
+    }
+  }
+}

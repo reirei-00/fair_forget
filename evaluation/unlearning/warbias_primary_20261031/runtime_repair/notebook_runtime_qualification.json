@@ -1,0 +1,41 @@
+{
+  "status": "two_cell_notebook_executed_on_cpu",
+  "python": "3.12.12 (main, Feb 12 2026, 00:42:57) [Clang 21.1.4 ]",
+  "executable": "/e/project1/e-dev-2026d09-075/fairforget/envs/report-notebooks-py312-20261031-v1/bin/python",
+  "versions": {
+    "numpy": "2.2.6",
+    "pandas": "3.0.6",
+    "nbformat": "5.11.1",
+    "nbclient": "0.11.0",
+    "ipykernel": "7.4.0",
+    "matplotlib": "3.11.2",
+    "jupyter_client": "8.10.0"
+  },
+  "kernel_resource_dir": "/e/project1/e-dev-2026d09-075/fairforget/envs/report-notebooks-py312-20261031-v1/share/jupyter/kernels/fairforget-report-v1",
+  "kernel_argv": [
+    "/e/project1/e-dev-2026d09-075/fairforget/envs/report-notebooks-py312-20261031-v1/bin/python",
+    "-Xfrozen_modules=off",
+    "-m",
+    "ipykernel_launcher",
+    "-f",
+    "{connection_file}"
+  ],
+  "execution_counts": [
+    1,
+    2
+  ],
+  "stdout": "Saved-only notebook runtime qualification\n/e/project1/e-dev-2026d09-075/fairforget/envs/report-notebooks-py312-20261031-v1/bin/python\n value\n     1\n     2\n",
+  "plot_bytes": 13270,
+  "model_requests": 0,
+  "gpu_requests": 0,
+  "judging_requests": 0,
+  "scientific_metrics_computed": false,
+  "cuda_visible_devices": "",
+  "cache_directories": {
+    "MPLCONFIGDIR": "/e/scratch/e-dev-2026d09-075/fairforget/report-notebooks-py312-20261031-v1/matplotlib",
+    "IPYTHONDIR": "/e/scratch/e-dev-2026d09-075/fairforget/report-notebooks-py312-20261031-v1/ipython",
+    "JUPYTER_CONFIG_DIR": "/e/scratch/e-dev-2026d09-075/fairforget/report-notebooks-py312-20261031-v1/jupyter-config",
+    "JUPYTER_DATA_DIR": "/e/scratch/e-dev-2026d09-075/fairforget/report-notebooks-py312-20261031-v1/jupyter-data",
+    "JUPYTER_RUNTIME_DIR": "/e/scratch/e-dev-2026d09-075/fairforget/report-notebooks-py312-20261031-v1/jupyter-runtime"
+  }
+}

@@ -22,7 +22,7 @@ import supplemental
 
 METHODS = ("rmu", "task_vector", "wga_kl")
 WARBIAS_REVISION = "164f355623c2da0028821e0942cad493558a6c13"
-ANALYSIS_COMMIT = "88224db75bd80e85f5227897188904e9c470f4d1"
+ANALYSIS_COMMIT = "b0bdb6431e1e65eafa1a25ef6a3f5a3690202271"
 METRIC_IDS = frozenset(
     "forget_efficacy NNR retain_utility LMS ICAT M1 M1b M2 M3a M3b M3c M3d RI M4a M4b BBQ training_imbalance severity".split()
 )
@@ -32,6 +32,7 @@ PENDING_TASKS = frozenset(
 TASK_IDS = frozenset(supplemental.PROTOCOLS) | PENDING_TASKS | {"stereoset_en"}
 ANALYSIS_FILES = (
     "all_metrics.py",
+    "checkpoint_views.py",
     "collector_export.py",
     "intervention_metrics.py",
     "transfer_metrics.py",
@@ -309,6 +310,20 @@ def checked_collection(collection, collector, training, entry, checkpoints, rece
         ),
         "Collection model pins differ from the matrix",
     )
+    if config.get("inference_views"):
+        snapshot(
+            checked(config["inference_views"]["path"], config["inference_views"]["sha256"], inputs),
+            inputs,
+        )
+        selected = supplemental.checkpoint_panel(
+            collector,
+            training,
+            methods=METHODS,
+            model_profile={key: entry[key] for key in supplemental.MODEL_PROFILE_FIELDS},
+            inference_views=config["inference_views"],
+        )
+        checkpoints.clear()
+        checkpoints.update(selected)
     require(
         record.get("stage") == "supplemental_collection_complete"
         and record.get("no_update_passed") is True
@@ -414,10 +429,19 @@ def checked_collection(collection, collector, training, entry, checkpoints, rece
                 expected_files = receipts[name][
                     "checkpoint_identity" if name == "rmu" else "merged_checkpoint_files"
                 ]
-                require(
-                    hashes == {item["path"]: item["sha256"] for item in expected_files},
-                    "Native post checkpoint differs from the actual training receipt: " + key,
-                )
+                if config.get("inference_views"):
+                    supplemental.view_for_native_checkpoint(
+                        collector,
+                        config["inference_views"],
+                        config["model_profile"],
+                        checkpoint,
+                        files=hashes,
+                    )
+                else:
+                    require(
+                        hashes == {item["path"]: item["sha256"] for item in expected_files},
+                        "Native post checkpoint differs from the actual training receipt: " + key,
+                    )
     for method in ("wga_kl", "task_vector"):
         source = {item["path"]: item["sha256"] for item in receipts[method]["source_model_files"]}
         require(
@@ -428,7 +452,16 @@ def checked_collection(collection, collector, training, entry, checkpoints, rece
 
 
 def make_config(
-    method, model_id, collection, collector, training, recipe, manifest, binding, archive
+    method,
+    model_id,
+    collection,
+    collector,
+    training,
+    recipe,
+    manifest,
+    binding,
+    archive,
+    inference_views=None,
 ):
     return {
         "schema_version": 1,
@@ -465,6 +498,7 @@ def make_config(
             "method_directory": str(training / method),
             "recipe": str(recipe),
             "evidence_manifest": str(archive),
+            **({"inference_views": inference_views} if inference_views else {}),
         },
         "scope": "Actual reviewed Ukrainian WarBias training and twelve WarBias endpoint views. Five other native task pairs remain pending; English StereoSet is source-policy blocked. Actor target values, if explicitly frozen in the reviewed training manifest, describe data-defined training coverage; they are not inferred from outcomes or an additional hypothesis. No other target axis, judge, calibration threshold or human labels are inferred.",
     }
@@ -579,6 +613,14 @@ def main(argv=None):
             receipts,
             inputs,
         )
+        if addon.get("inference_views"):
+            require(
+                analysis_hashes["checkpoint_views.py"]
+                == native.digest(
+                    paths["collector_release"] / "evaluator/lm_eval/fair_uk/checkpoint_views.py"
+                ),
+                "Collector and analysis inference-view validators differ",
+            )
         require(
             full == paths["collector_release"] / "evaluation/manifest.json",
             "Full collector manifest differs",
@@ -612,6 +654,7 @@ def main(argv=None):
                 manifest,
                 binding,
                 archive,
+                inference_views=addon.get("inference_views"),
             ),
         )
         snapshot(config_path, inputs)
