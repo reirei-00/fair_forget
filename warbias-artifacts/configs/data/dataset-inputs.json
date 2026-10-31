@@ -5,43 +5,43 @@
   "files": {
     "taxonomy": {
       "path": "protocol/inputs/taxonomy.csv",
-      "sha256": "fe6dbac3f8834aa40fa09c91cfc0033d3a95b05be0bc18850652fe20f3aea7e1",
+      "sha256": "df0fcefe512544da1f3d425cf8c3189488823a06c444868722ab62c64872f1fc",
       "format": "csv",
-      "bytes": 26746,
-      "rows": 32,
-      "role": "full_generation_registry"
+      "bytes": 23319,
+      "rows": 28,
+      "role": "current_taxonomy_registry"
     },
     "targets": {
       "path": "protocol/inputs/targets.csv",
-      "sha256": "a90b3f04874fef4cf15fb640d21c471026ccb2aec304d7b67ccbe9ec1eb7307f",
+      "sha256": "71b5fa4ab305b63356a3a0d9310368f78b5dfa91d5b75804c581e02c1b64a7c8",
       "format": "csv",
-      "bytes": 8557,
-      "rows": 15,
-      "role": "full_generation_registry"
+      "bytes": 5601,
+      "rows": 11,
+      "role": "current_taxonomy_registry"
     },
     "taxonomy_hierarchy": {
       "path": "protocol/inputs/taxonomy_hierarchy.csv",
-      "sha256": "04de60ed269176628f7b55bd3e1bb663331492c7cd3182062a87f47a99781b49",
+      "sha256": "88cc2994d1f4fb960f9e3704f3265c07602e3ebfd4ac668ef08c75f92cefbd23",
       "format": "csv",
-      "bytes": 6946,
-      "rows": 26,
-      "role": "full_generation_registry"
+      "bytes": 5230,
+      "rows": 22,
+      "role": "current_taxonomy_registry"
     },
     "sources": {
       "path": "protocol/inputs/sources.csv",
-      "sha256": "29385ba2fe71cf583229c99fda06d64e2220f3321b75313fefcffe4971ab9380",
+      "sha256": "bba749becbe3284ec6e74becb8812910a723296390154db4e4608a4b62fe08eb",
       "format": "csv",
-      "bytes": 13948,
-      "rows": 36,
-      "role": "full_generation_registry"
+      "bytes": 12612,
+      "rows": 34,
+      "role": "current_evidence_registry"
     },
     "matrix_full": {
-      "path": "protocol/inputs/matrix_full.csv",
+      "path": "protocol/history/matrix_full.csv",
       "sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c",
       "format": "csv",
       "bytes": 847127,
       "rows": 981,
-      "role": "full_generation_inputs"
+      "role": "historical_generation_inputs"
     },
     "pilot_initial_cases": {
       "path": "protocol/inputs/pilot_initial_cases.csv",
@@ -181,11 +181,11 @@
     },
     "taxonomy_cases": {
       "path": "protocol/inputs/taxonomy_cases.jsonl",
-      "sha256": "baed9bd87f2c266d6b9cf4e780d5d767ead835e7fd811ef1b5ce24825b778fc8",
+      "sha256": "13a9bff74e639abe40d1790210bdb8ebafd6bada2bbdc0a2f57dcaa895fcfcc0",
       "format": "jsonl",
-      "bytes": 81253,
-      "rows": 129,
-      "role": "source_taxonomy_case_inventory"
+      "bytes": 74800,
+      "rows": 120,
+      "role": "scoped_source_taxonomy_case_inventory"
     }
   },
   "sampling": {
@@ -204,7 +204,7 @@
       "ratings": 96
     }
   },
-  "registry_scope": "Historical pilot and full-run inputs stay fixed. Current generation inputs come from the explicit case and profile design. Green source presence does not select generation inputs.",
+  "registry_scope": "Current taxonomy registries use the target groups in protocol/coverage_extension.json. Historical matrix and selection records stay separate and retain their original bytes. Pilot inputs and scores stay fixed.",
   "missing_historical_inputs": [
     "The complete original pilot sampling registry was not frozen beside the pilot exports.",
     "The initial pilot did not record an explicit source-claim field; its association field remains unchanged."
@@ -213,26 +213,30 @@
     {
       "artifact": "taxonomy",
       "source_sha256": "fe6dbac3f8834aa40fa09c91cfc0033d3a95b05be0bc18850652fe20f3aea7e1",
-      "portable_sha256": "fe6dbac3f8834aa40fa09c91cfc0033d3a95b05be0bc18850652fe20f3aea7e1",
-      "exact_bytes": true
+      "portable_sha256": "df0fcefe512544da1f3d425cf8c3189488823a06c444868722ab62c64872f1fc",
+      "exact_bytes": false,
+      "scope_protocol": "protocol/coverage_extension.json#/scope"
     },
     {
       "artifact": "targets",
       "source_sha256": "a90b3f04874fef4cf15fb640d21c471026ccb2aec304d7b67ccbe9ec1eb7307f",
-      "portable_sha256": "a90b3f04874fef4cf15fb640d21c471026ccb2aec304d7b67ccbe9ec1eb7307f",
-      "exact_bytes": true
+      "portable_sha256": "71b5fa4ab305b63356a3a0d9310368f78b5dfa91d5b75804c581e02c1b64a7c8",
+      "exact_bytes": false,
+      "scope_protocol": "protocol/coverage_extension.json#/scope"
     },
     {
       "artifact": "taxonomy_hierarchy",
       "source_sha256": "04de60ed269176628f7b55bd3e1bb663331492c7cd3182062a87f47a99781b49",
-      "portable_sha256": "04de60ed269176628f7b55bd3e1bb663331492c7cd3182062a87f47a99781b49",
-      "exact_bytes": true
+      "portable_sha256": "88cc2994d1f4fb960f9e3704f3265c07602e3ebfd4ac668ef08c75f92cefbd23",
+      "exact_bytes": false,
+      "scope_protocol": "protocol/coverage_extension.json#/scope"
     },
     {
       "artifact": "sources",
       "source_sha256": "29385ba2fe71cf583229c99fda06d64e2220f3321b75313fefcffe4971ab9380",
-      "portable_sha256": "29385ba2fe71cf583229c99fda06d64e2220f3321b75313fefcffe4971ab9380",
-      "exact_bytes": true
+      "portable_sha256": "bba749becbe3284ec6e74becb8812910a723296390154db4e4608a4b62fe08eb",
+      "exact_bytes": false,
+      "scope_protocol": "protocol/coverage_extension.json#/scope"
     },
     {
       "artifact": "matrix_full",
@@ -350,12 +354,15 @@
     },
     {
       "artifact": "taxonomy_cases",
-      "portable_sha256": "baed9bd87f2c266d6b9cf4e780d5d767ead835e7fd811ef1b5ce24825b778fc8",
+      "portable_sha256": "13a9bff74e639abe40d1790210bdb8ebafd6bada2bbdc0a2f57dcaa895fcfcc0",
       "source_artifact": "usage_source.json",
       "source_sha256": "7385ab5b3c45aa215f0bad13c71934404e76b4713abf538fd7d57f25a931a37a",
       "historical_matrix_sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c",
-      "source_case_count": 129,
-      "contains_generated_sentences": false
+      "source_case_count": 120,
+      "contains_generated_sentences": false,
+      "exact_bytes": false,
+      "scope_protocol": "protocol/coverage_extension.json#/scope",
+      "original_source_case_count": 129
     }
   ],
   "full_ukrainian_annotation": "in_progress",
@@ -378,7 +385,7 @@
   },
   "selection_history": {
     "path": "protocol/selection_history.json",
-    "sha256": "673bd19737e056ae5c0082829b2104b6910e6bee962a92726fba5c54d84634d0",
+    "sha256": "99d569e118d4c7245d5ad67333f09c7076b31ef36e2843bdb8b3ae253ea24920",
     "role": "selection_count_reconciliation"
   },
   "allocation_design": {

@@ -3,7 +3,7 @@
   "scope": "Recorded selection changes; historical reference exclusions do not filter the current design.",
   "sources": {
     "case_changes": {
-      "path": "protocol/inputs/case_changes.json",
+      "path": "protocol/history/case_changes.json",
       "sha256": "af6c8c74e7262a6f9bd9437774e6f5daba29ebccfbd8dd1b4bb47978fbb0497b",
       "source_artifacts": [
         {

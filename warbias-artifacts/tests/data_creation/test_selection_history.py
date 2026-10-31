@@ -274,15 +274,11 @@ def test_active_matrix_retains_the_complete_declared_design(history, fault):
 
 def test_actual_selection_history_keeps_reference_removals_separate_from_current_inputs():
     inputs = load_inputs(ROOT)
-    directory = ROOT / "protocol/inputs"
+    sources = json.loads((ROOT / "protocol/selection_history.json").read_text())["sources"]
     result = reconcile_selection(
         *[
-            json.loads((directory / name).read_text())
-            for name in (
-                "case_changes.json",
-                "profile_replacements.json",
-                "profile_exclusions.json",
-            )
+            json.loads((ROOT / sources[name]["path"]).read_text())
+            for name in ("case_changes", "profile_replacements", "profile_exclusions")
         ],
         historical_matrix=inputs["matrix_full"],
         cases=inputs["construction_cases"],
