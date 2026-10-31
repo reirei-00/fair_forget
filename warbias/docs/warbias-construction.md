@@ -13,6 +13,7 @@ full Ukrainian generation → English translation.
 | [3. Full Ukrainian generation](../notebooks/03_full_ukrainian_generation.ipynb) | Profile design, selected condition, final prompts and one triplet per matrix row |
 | [4. Sample translation and COMET](../notebooks/04_sample_translation_comet.ipynb) | Ten Ukrainian reference triplets, actual GPT-6.1 Sol translations and measured COMET scores |
 | [5. Full English translation](../notebooks/05_full_english_translation.ipynb) | Full Ukrainian input, source manifest and aligned English output |
+| [6. Coverage generation](../notebooks/06_coverage_generation.ipynb) | Current 11,997-item design, 10,938 new inputs, local Lapa generation on a GPU server, checkpoints and saved output checks |
 
 `configs/data/dataset-inputs.json` binds the taxonomy, matrix, pilot outputs and
 anonymized ratings to their file hashes. Final annotated data remain separate.
@@ -148,10 +149,14 @@ The [CSV view](../protocol/inputs/matrix_reviewed.csv) includes both the 1,200
 allocated profiles and these three additions. Notebook 3 derives the component,
 extension and group counts from the records before preparing model requests.
 
-The next [coverage extension](../protocol/coverage_extension.json) fills missing
-profiles for existing and new cases. It includes IDPs, veterans and people
-displaced abroad. It excludes people who lived under occupation, returnees from
-abroad and civilians with war-caused disabilities.
+The recorded [coverage extension](../protocol/coverage_extension.json) fills
+missing profiles for existing and new cases. Its original design included IDPs,
+veterans and people displaced abroad. The [current dataset scope](../protocol/dataset_scope.json)
+selects veterans and IDPs: 1,059 existing and 10,938 new triplets, or 11,997 in
+total. Notebook 6 rebuilds that selection and runs generation with local Lapa on
+a GPU server. People displaced abroad are deferred. The taxonomy excludes people
+who lived under occupation, returnees from abroad and civilians with war-caused
+disabilities.
 
 Check coverage for each case, target profile and reporter. A covered or green
 category does not cover its other cases or profiles. Skip only combinations
@@ -164,7 +169,7 @@ For every profile, use no reporter and each of the two allowed reporters.
 Use the 21-dimension catalog. Expand each applicable dimension separately and
 preserve the recorded gender × age panels. `coverage_dimensions.json` defines
 the values and reduced designs. `coverage_applicability.jsonl` records the case
-rules. The selected plan contains 13,011 triplets per language: 1,059 existing
+rules. The original plan contains 13,011 triplets per language: 1,059 existing
 items and 11,952 new items. New profiles for rank, recruitment route, service
 duration and time since discharge are deferred. Their 2,124 additional triplets are
 outside this generation scope. Recorded profiles remain included. New outputs retain
