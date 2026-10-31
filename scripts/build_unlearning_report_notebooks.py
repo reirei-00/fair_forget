@@ -288,17 +288,10 @@ report = loader.load_manifest(manifest, {method!r})
 assert report['study'] == 'warbias'
 ready = report['preparation']
 coverage = pd.DataFrame(report['coverage'])
-print('Mode: executed readiness and saved-evidence replay; zero new training/inference')
-print('Evidence snapshot UTC:', report['as_of_utc'])
+print('Mode: saved training and before/after results')
 print('Manifest SHA-256:', report['manifest_sha256'])
 display(coverage[['model', 'repository', 'revision', 'tokenizer_revision']])
 display(coverage[['model', 'training', 'actual_steps', 'warbias_pairs', 'expected_warbias_pairs', 'measurement_status']])
-if report['scheduled_jobs']:
-    print('Recorded submission snapshot only; completion requires separate actual evidence:')
-    display(pd.DataFrame(report['scheduled_jobs']))
-if report['measurement_jobs']:
-    print('Recorded held-out, training-source diagnostic and saved-analysis job submissions - not completed results:')
-    display(pd.DataFrame(report['measurement_jobs']))
 """
     readiness = """counts = ready['counts']
 display(pd.DataFrame([
@@ -349,7 +342,7 @@ for model, methods in ready['plans'].items():
     display(Markdown('```json' + chr(10) + json.dumps(selected, indent=2) + chr(10) + '```'))
 """
     training = f"""if report['training_parameters']:
-    display(pd.DataFrame(report['training_parameters']))
+    display(pd.DataFrame(report['training_parameters']).drop(columns=['checkpoint'], errors='ignore'))
     display(pd.DataFrame(report['training_exposure']))
     for model, history in report['training_history'].items():
         data = pd.DataFrame(history)
@@ -408,6 +401,17 @@ print('This replay reads saved local evidence only; it launches no model, GPU jo
             "markdown",
             "## Method notebooks\n\nThis notebook covers one method. Open the [method index](../README.md) for\nRMU, task-vector negation, WGA+KL, NPO+retention and BiasUnlearn. NPO and\nBiasUnlearn currently have separate Qwen integration walkthroughs. They do not\nsupply six-model WarBias training results.\n",
             "method-index",
+        ),
+        *(
+            [
+                cell(
+                    "markdown",
+                    "## Replay inputs\n\nThe saved outputs below contain the complete results. Before replay, extract the [complete source archive](../../evaluation/unlearning/warbias_primary_20261031/reports/completed_bundle_v1_README.md) into its report folder, or set `FAIRFORGET_REPORT_MANIFEST` to the manifest in an extracted copy. All source values and original provenance remain unchanged.\n",
+                    "replay-inputs",
+                )
+            ]
+            if "completed_bundle_v1" in default_manifest
+            else []
         ),
         cell("code", load, "load"),
         cell(
@@ -586,7 +590,7 @@ for model, settings in report['recipe_settings'].items():
 if not report['recipe_settings']:
     print('No verified executed recipe has been supplied for this method.')
 """
-    training = f"""display(pd.DataFrame(report['training_parameters']))
+    training = f"""display(pd.DataFrame(report['training_parameters']).drop(columns=['checkpoint'], errors='ignore'))
 display(pd.DataFrame(report['training_exposure']))
 loss_columns = {{'rmu': ['forget_mse', 'retain_mse', 'total_loss'], 'wga_kl': ['forget', 'preservation', 'total'], 'task_vector': ['positive_acquisition_ce', 'total']}}[{method!r}]
 for model, history in report['training_history'].items():

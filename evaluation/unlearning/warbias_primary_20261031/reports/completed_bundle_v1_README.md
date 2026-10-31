@@ -27,3 +27,7 @@ Use a fresh directory name if that path already exists. The archive has no outer
 Replay from the extracted root or a notebook directory beneath it. The closest ancestor containing `scripts/unlearning_report_data.py` defines the snapshot root. The default manifest is `evaluation/unlearning/warbias_primary_20261031/reports/manifest_completed.json`. The report kernel needs nbformat, nbclient, pandas and Matplotlib.
 
 Metric dependencies remain explicit. Missing calibration, reviewed labels, statistical support and source views remain unavailable or partial. Task-vector scale zero remains a null intervention. The recorded comparisons do not establish successful mitigation on every model.
+
+The maintained [RMU](../../../../notebooks/executed/warbias_rmu_results.ipynb), [task-vector](../../../../notebooks/executed/warbias_task_vector_results.ipynb) and [WGA+KL](../../../../notebooks/executed/warbias_wga_kl_results.ipynb) notebooks contain the same complete data with the current method index and simple presentation. Their [execution check](canonical_report_verification_v1.json) binds the current loader, builder and manifest.
+
+For their default manifest, extract the archive into `completed_bundle_v1` from this reports directory. To use the disposable copy above instead, set `FAIRFORGET_REPORT_MANIFEST` to `/tmp/warbias-report-replay/evaluation/unlearning/warbias_primary_20261031/reports/manifest_completed.json` before replay. Original input records remain unchanged.
