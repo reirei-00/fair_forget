@@ -791,7 +791,7 @@ def main():
         path = (
             repo
             / "notebooks"
-            / ("executed" if args.execute else "not_executed")
+            / ("executed" if args.execute else "report_drafts")
             / f"{'warbias' if args.study == 'warbias' else 'uk_primary'}_{method}_results.ipynb"
         )
         path.parent.mkdir(parents=True, exist_ok=True)

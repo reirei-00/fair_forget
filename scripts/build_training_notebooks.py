@@ -9,11 +9,12 @@ METHODS = {
     "rmu": ("Fixed-target RMU", "warbias_rmu_results", "WarBias"),
     "task_vector": ("Task-vector negation", "warbias_task_vector_results", "WarBias"),
     "wga_kl": ("WGA+KL", "warbias_wga_kl_results", "WarBias"),
-    "npo_kl": ("NPO+retention (KL)", "uk_primary_npo_kl", "Qwen primary integration"),
-    "biasunlearn": ("BiasUnlearn", "uk_primary_biasunlearn", "Qwen primary integration"),
+    "npo_kl": ("NPO+retention (KL)", "uk_primary_npo_kl", "StereoSet primary integration"),
+    "biasunlearn": ("BiasUnlearn", "uk_primary_biasunlearn", "StereoSet primary integration"),
 }
 SETUP = """import json
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -23,7 +24,7 @@ repo = next((p for p in (Path.cwd(), *Path.cwd().parents) if (p / 'src/fairforge
 if repo is None:
     raise FileNotFoundError('Open this notebook from a checked-out fair_forget repository containing src/fairforget/unlearning.')
 sys.path.insert(0, str(repo / 'src'))
-from fairforget.unlearning import objectives, rmu, trainer  # noqa: E402, F401
+from fairforget.unlearning import notebook_matrix, objectives, rmu  # noqa: E402, F401
 
 print('Algorithm source:', repo / 'src/fairforget/unlearning')
 print('PyTorch:', torch.__version__)
@@ -144,47 +145,59 @@ NOTES = {
 def build():
     for method, (title, name, study) in METHODS.items():
         setup = SETUP + f"\nMETHOD = {method!r}\nRUN_TRAINING = False\n"
-        configure = """# Select one approved frozen recipe; keep its reviewed data and model hashes.
-release_value = os.environ.get('FAIRFORGET_RELEASE')
-RELEASE = Path(release_value).expanduser().resolve() if release_value else None
-recipe_value = os.environ.get('FAIRFORGET_RECIPE')
-RECIPE = Path(recipe_value).expanduser().resolve() if recipe_value else None
+        configure = """# Every method uses all six pinned models from the maintained registry.
+# Optional roots rebase paths; original data hashes and model identities stay fixed.
+DATA_ROOT = os.environ.get('FAIRFORGET_DATA_ROOT')
+MODELS_ROOT = os.environ.get('FAIRFORGET_MODELS_ROOT')
 output_value = os.environ.get('FAIRFORGET_OUTPUT')
 OUTPUT = Path(output_value).expanduser().resolve() if output_value else None
-validated = None
-if RECIPE is not None:
-    validated, streams, provenance = trainer.validate_config(RECIPE, methods={METHOD})
-    print('Validated method:', validated['method'])
-    print('Model:', validated['model_id'], validated['model_revision'])
-    print('Reviewed stream rows:', {role: len(rows) for role, rows in streams.items()})
-else:
-    print('For full-model training, set FAIRFORGET_RECIPE to an approved frozen recipe.')
+PLAN = notebook_matrix.method_plan(repo, METHOD, data_root=DATA_ROOT, models_root=MODELS_ROOT)
+assert len(PLAN) == 6, 'This notebook must cover all six study models.'
+for item in PLAN:
+    recipe = item['recipe']
+    print(item['model_alias'], recipe['model_id'], recipe['model_revision'], 'GPUs:', item['required_gpus'])
+print('Models:', len(PLAN), '| Method:', METHOD)
+print('Protocol:', PLAN[0]['recipe']['notebook_matrix']['protocol'])
 """
-        run = """if RUN_TRAINING:
-    if validated is None or OUTPUT is None or RELEASE is None:
-        raise ValueError('Set FAIRFORGET_RELEASE, FAIRFORGET_RECIPE and FAIRFORGET_OUTPUT, then validate the recipe.')
-    if not RECIPE.is_relative_to(RELEASE):
-        raise ValueError('The selected recipe must belong to the frozen release.')
+        run = r"""if RUN_TRAINING:
+    if OUTPUT is None:
+        raise ValueError('Set FAIRFORGET_OUTPUT to a new directory for all six model runs.')
     from importlib.metadata import version
     required_versions = {'torch': '2.9.1', 'transformers': '4.57.6', 'peft': '0.17.1', 'accelerate': '1.15.0'}
     for package, expected in required_versions.items():
         if version(package).split('+')[0] != expected:
             raise RuntimeError(f'Use requirements-unlearning.txt: {package}=={expected} is required for full training.')
-    if not torch.cuda.is_available():
-        raise RuntimeError('Full-model training requires the qualified CUDA runtime.')
-    if OUTPUT == RELEASE or OUTPUT.is_relative_to(RELEASE):
-        raise ValueError('Use a new output directory outside the frozen recipe inputs.')
-    if METHOD == 'rmu':
-        receipt = rmu.run(RECIPE, OUTPUT)
-    else:
-        receipt = trainer.run(RECIPE, OUTPUT)
-    print(json.dumps(receipt, ensure_ascii=False, indent=2))
+    if not torch.cuda.is_available() or torch.cuda.device_count() < max(item['required_gpus'] for item in PLAN):
+        raise RuntimeError('Allocate the GPUs listed above; RMU for Mamay 27B needs two visible GPUs.')
+    # Preflight validates ALL models, data hashes and reviewed roles before any training.
+    recipe_paths = notebook_matrix.prepare_recipes(PLAN, OUTPUT)
+    environment = dict(os.environ)
+    environment['PYTHONPATH'] = str(repo / 'src') + os.pathsep + environment.get('PYTHONPATH', '')
+    environment.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1')
+    module = 'fairforget.unlearning.rmu' if METHOD == 'rmu' else 'fairforget.unlearning.trainer'
+    execution = {'method': METHOD, 'models': {}}
+    execution_path = OUTPUT / 'matrix_execution.json'
+    for item, recipe_path in zip(PLAN, recipe_paths, strict=True):
+        alias = item['model_alias']
+        command = [sys.executable, '-m', module, '--config', str(recipe_path), '--output', str(OUTPUT / alias)]
+        record = {'status': 'running', 'recipe': str(recipe_path), 'command': command}
+        execution['models'][alias] = record
+        execution_path.write_text(json.dumps(execution, indent=2) + '\n')
+        print('Training', alias, flush=True)
+        # Separate processes release GPU memory between complete model runs.
+        with (OUTPUT / (alias + '.log')).open('w') as log:
+            completed = subprocess.run(command, cwd=repo, env=environment, stdout=log, stderr=subprocess.STDOUT, check=False)
+        record.update(status='completed' if completed.returncode == 0 else 'failed', returncode=completed.returncode)
+        execution_path.write_text(json.dumps(execution, indent=2) + '\n')
+        completed.check_returncode()
+    assert len(execution['models']) == len(PLAN) == 6
+    print('All six model runs completed:', execution_path)
 else:
-    print('CPU algorithm example completed. Full-model training is disabled until RUN_TRAINING=True.')
+    print('All six models are configured. Full training starts only when RUN_TRAINING=True.')
 """
         cells = [
             nbformat.v4.new_markdown_cell(
-                f"# {title}: algorithm and training\n\nRun the cells in order. The CPU example calls the same objective implementation as the production trainer. The full training cell runs the actual algorithm with an approved frozen recipe, reviewed streams and a staged checkpoint. Results are optional.\n\n{NOTES[method]}"
+                f"# {title}: algorithm and training\n\nRun the cells in order. The CPU example calls the same objective implementation as the production trainer. The full training cell runs the actual algorithm separately on all six pinned study models, with reviewed streams and staged checkpoints. Results are optional.\n\n{NOTES[method]}"
             ),
             nbformat.v4.new_markdown_cell(
                 "## Environment\n\nUse `requirements-unlearning.txt` in an isolated environment. The CPU example needs PyTorch. Full training uses the qualified CUDA build and the pinned model/data recipe. Repository code lives in `src/fairforget/unlearning/`; it is not downloaded by the notebook."
@@ -205,9 +218,9 @@ else:
         cells.extend(
             [
                 nbformat.v4.new_markdown_cell(
-                    "## Approved full-model training\n\nSet `FAIRFORGET_RELEASE` to the frozen release directory, `FAIRFORGET_RECIPE` to its absolute recipe file in the frozen release and `FAIRFORGET_OUTPUT` to a new result directory. The recipe must retain its bound reviewed data, source hashes, model revision, masks and development split. Validation is local. Training starts only when you set `RUN_TRAINING=True`.\n\nThis notebook uses the **"
+                    "## Approved full-model training\n\nEvery notebook covers Qwen3 8B, Llama 3.1 8B Instruct, Gemma 3 12B IT, Lapa 12B Instruct, Mamay 12B v2 and Mamay 27B v2. Set `FAIRFORGET_DATA_ROOT` to the approved data directory for this protocol, optionally set `FAIRFORGET_MODELS_ROOT` to the staged checkpoint root, and set `FAIRFORGET_OUTPUT` to a new method output directory. All six inputs pass validation before training starts. Original source hashes, model revisions, masks and development splits remain bound. Set `RUN_TRAINING=True` to run six independent trainers in sequence. Mamay 27B RMU needs two allocated GPUs; the other runs need one. Logs, receipts and checkpoints are saved separately for every model.\n\nThis notebook uses the **"
                     + study
-                    + "** protocol. See the [deployment guide](../../deploy/unlearning_primary/README.md) for qualified releases and cluster execution. Model weights and reviewed raw streams remain external to GitHub."
+                    + "** protocol. See the [deployment guide](../../deploy/unlearning_primary/README.md) for qualified releases and cluster execution. The original NPO/BiasUnlearn primary data must be mounted externally; the reviewed WarBias data are bound by the published recipes. This model expansion changes no gradient source or objective setting."
                 ),
                 nbformat.v4.new_code_cell(configure),
                 nbformat.v4.new_code_cell(run),
@@ -227,6 +240,7 @@ else:
                     "study": study,
                     "automatic_gpu_training": False,
                     "study_results_required": False,
+                    "models": "all_six_pinned_study_models",
                 },
             },
         )
