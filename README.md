@@ -49,4 +49,8 @@ or [setup guide](notebooks/SETUP.md) for installation, checkpoint downloads and
 reviewed data paths. The [model configurations](configs/unlearning/) contain the
 complete 30-combination setup.
 
+The [shared Fair-UK evaluation notebook](notebooks/evaluate_before_after.ipynb)
+collects native measurements before and after every method and compares paired
+results across all six models.
+
 Saved unlearning reports remain under [executed notebooks](notebooks/executed/).

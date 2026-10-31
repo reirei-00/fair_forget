@@ -11,3 +11,4 @@ __pycache__/
 /configs/unlearning/local.json
 /models/
 /data/unlearning/
+/.venv-evaluation/
