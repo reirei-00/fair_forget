@@ -224,8 +224,8 @@ cannot satisfy completion. These tasks are evaluation only.
 
 The new execution recipe fixes batch size 8, chunk size 128, BF16, tensor
 parallel size 1, maximum model length 4,096, seed 42, `enable_thinking=False`,
-generation limit 512, native chat formatting for generation only, normalized
-answer policy `abc_option_text_v2`, and 1,000 bootstrap draws. The same recipe is
+`enforce_eager=True`, generation limit 512, native chat formatting for generation
+only, normalized answer policy `abc_option_text_v2`, and 1,000 bootstrap draws. The same recipe is
 used for base and every post checkpoint. It does not reuse older batch-1
 baselines as if their execution settings were identical. Raw candidate scoring
 and effective-input/tokenizer fingerprinting stay owned by Fair-UK.

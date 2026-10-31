@@ -178,8 +178,24 @@ class EvaluationWrapperTests(unittest.TestCase):
         self.assertEqual(
             command[command.index("--model-args") + 1],
             f"pretrained={self.checkpoint},dtype=bfloat16,tensor_parallel_size=1,"
-            "max_model_len=4096,seed=42,enable_thinking=False",
+            "max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True",
         )
+
+    def test_all_tasks_bind_eager_mode_to_command_and_execution_receipt(self):
+        with mock.patch.object(wrapper.subprocess, "Popen", side_effect=self.fake_popen):
+            for task in wrapper.TASKS:
+                with self.subTest(task=task):
+                    result = self.run_task(task)
+                    self.assertEqual(result["status"], "completed")
+                    self.assertIs(result["inference_settings"]["enforce_eager"], True)
+                    command = result["command"]
+                    arguments = dict(
+                        item.split("=", 1)
+                        for item in command[command.index("--model-args") + 1].split(",")
+                    )
+                    self.assertEqual(arguments["enforce_eager"], "True")
+                    receipt = json.loads((self.output / "status" / (task + ".json")).read_text())
+                    self.assertIs(receipt["inference_settings"]["enforce_eager"], True)
 
     def test_changed_source_bytes_fail_before_collector_launch(self):
         wrapper.task_source(self.manifest_path, self.manifest, "bbq_uk")

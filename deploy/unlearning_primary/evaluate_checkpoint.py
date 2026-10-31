@@ -39,6 +39,7 @@ SETTINGS = {
     "tensor_parallel_size": 1,
     "max_model_len": 4096,
     "enable_thinking": False,
+    "enforce_eager": True,
     "batch_size": 8,
     "chunk_size": 128,
     "max_output_tokens": 512,
@@ -140,7 +141,7 @@ def task_source(manifest_path: Path, manifest: dict[str, Any], task: str):
 def command_for(checkpoint: Path, manifest_path: Path, task: str, task_output: Path):
     model_args = (
         f"pretrained={checkpoint},dtype=bfloat16,tensor_parallel_size=1,"
-        "max_model_len=4096,seed=42,enable_thinking=False"
+        "max_model_len=4096,seed=42,enable_thinking=False,enforce_eager=True"
     )
     return [
         sys.executable,
