@@ -35,11 +35,9 @@ def update_index(project, change):
     "name", ["selection_history", "case_changes", "profile_replacements", "profile_exclusions"]
 )
 def test_selection_record_byte_changes_are_rejected(project, name):
-    path = (
-        project
-        / "protocol"
-        / ("selection_history.json" if name == "selection_history" else f"inputs/{name}.json")
-    )
+    index = project / "protocol/selection_history.json"
+    history = json.loads(index.read_text())
+    path = index if name == "selection_history" else project / history["sources"][name]["path"]
     path.write_bytes(path.read_bytes() + b"\n")
     with pytest.raises(ValueError, match="Selection history file differs"):
         load_selection_history(project)

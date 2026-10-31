@@ -369,7 +369,7 @@ def test_historical_green_snapshot_stays_exact():
         read_csv(directory / "sources.csv"), read_rows(directory / "source_feedback.jsonl")
     )
     rows = reviewed_matrix(
-        read_csv(directory / "matrix_full.csv"),
+        read_csv(ROOT / "protocol/history/matrix_full.csv"),
         read_csv(directory / "taxonomy_selected.csv"),
         revision,
         sources,

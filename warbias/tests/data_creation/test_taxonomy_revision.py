@@ -13,6 +13,34 @@ from fairforget.warbias.taxonomy import reviewed_matrix
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def test_current_taxonomy_excludes_groups_outside_the_selected_scope():
+    inputs = load_inputs(ROOT)
+    protocol = json.loads((ROOT / "protocol/coverage_extension.json").read_text())
+    allowed = set(protocol["scope"]["included_target_groups"])
+    excluded = set(protocol["scope"]["excluded_target_groups"])
+    assert not allowed & excluded
+    for name in ("taxonomy", "targets", "taxonomy_cases"):
+        assert {row["bias_type_code"] for row in inputs[name]} == allowed
+    assert {group for row in inputs["sources"] for group in row["bias_scope"].split(";")} <= allowed
+    for name in ("construction_cases", "matrix_reviewed"):
+        assert {
+            row.get("target_group", row.get("bias_type_code")) for row in inputs[name]
+        } <= allowed
+
+    revision = json.loads((ROOT / "protocol/taxonomy_revision.json").read_text())
+    removed = revision["registry_scope"]
+    historical = [row for row in inputs["matrix_full"] if row["bias_type_code"] in excluded]
+    assert set(removed["removed_source_case_ids"]) == {row["case_id"] for row in historical}
+    assert set(removed["removed_category_codes"]) == {row["category_code"] for row in historical}
+    assert set(removed["removed_target_codes"]) == {row["target_code"] for row in historical}
+    assert not set(removed["removed_source_case_ids"]) & {
+        row["case_id"] for row in inputs["taxonomy_cases"]
+    }
+    assert not set(removed["removed_evidence_ids"]) & {
+        row["evidence_id"] for row in inputs["sources"]
+    }
+
+
 def records():
     inputs = load_inputs(ROOT)
     revision = json.loads((ROOT / "protocol/taxonomy_revision.json").read_text())

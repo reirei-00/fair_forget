@@ -21,7 +21,7 @@
     "complete_existing_case_profiles": true,
     "skip_existing_annotation_combinations": true,
     "preserve_annotation_texts_and_reviews": true,
-    "supersessions": "protocol/inputs/case_changes.json",
+    "supersessions": "protocol/history/case_changes.json",
     "superseded_parent_coverage": "all_recorded_replacement_cases_in_annotation_cohort",
     "feedback_cases": "protocol/taxonomy_revision.json#/added_cases",
     "include_feedback_cases": true,

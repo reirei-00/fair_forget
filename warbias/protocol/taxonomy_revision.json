@@ -15,7 +15,7 @@
     "role": "source_presence_snapshot_only"
   },
   "historical_generation_matrix": {
-    "path": "protocol/inputs/matrix_full.csv",
+    "path": "protocol/history/matrix_full.csv",
     "sha256": "b67f788f66ac8c00416e513ed81e97bdad21d712df3814bb4693abc175329a5c",
     "rows": 981
   },
@@ -260,5 +260,36 @@
     "sha256": "7d067e48f0d6413676643e85c8d121145f5887a6f0fb4433527c48125864a72f",
     "rows": 428,
     "role": "source_presence_snapshot_only"
+  },
+  "registry_scope": {
+    "scope_protocol": "protocol/coverage_extension.json#/scope",
+    "removed_category_codes": [
+      "return_abroad_belonging",
+      "occupation_collective_blame",
+      "occupation_belonging_voice",
+      "civilian_disability_agency"
+    ],
+    "removed_target_codes": [
+      "returnee_from_abroad",
+      "occupation_current_resident",
+      "occupation_survivor_deoccupied",
+      "civilian_war_disability"
+    ],
+    "removed_source_case_ids": [
+      "wb2_civilian_disability_care",
+      "wb2_civilian_disability_decisions",
+      "wb2_civilian_disability_pity",
+      "wb2_deoccupied_community_voice",
+      "wb2_occupation_belonging",
+      "wb2_occupation_loyalty",
+      "wb2_occupation_trust",
+      "wb2_return_abroad_belonging",
+      "wb2_return_abroad_blame"
+    ],
+    "removed_evidence_ids": [
+      "src_civilian_disability_perception_2023",
+      "src_civilian_disability_communication_2023"
+    ],
+    "historical_records": "protocol/history"
   }
 }
