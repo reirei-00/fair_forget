@@ -122,7 +122,7 @@
     "config": "configs/data/warbias-reference.json"
   },
   "generation_prompt_bundle": {
-    "id": "warbias-case-profile-v4-uk",
+    "id": "warbias-case-profile-v5-uk",
     "base_bundle": "warbias-sequential-feedback-v2-20260908",
     "composition": "join_exact_component_text_with_two_newlines",
     "scope": "current_case_profile_design",
@@ -137,10 +137,10 @@
           },
           {
             "path": "prompts/current/profile_design.txt",
-            "sha256": "79ae3bdece1a2b35066f3b43403be00ff83a04eaf469916e25f8d0472eb03c08"
+            "sha256": "083cc77beacbc8cbedd28821c2e08bba5103c24c606e203ef98c7b51e9d843de"
           }
         ],
-        "sha256": "32dd55f0e14bd060ea2d0f0ab036d455db4c5f2287cae108727d014b22a21f77"
+        "sha256": "f8ee318650c61ac970ccece3ae574c8b82d15cc302b674490dfd81d8e6e3a601"
       },
       {
         "stage": "counter",
@@ -152,10 +152,10 @@
           },
           {
             "path": "prompts/current/profile_design.txt",
-            "sha256": "79ae3bdece1a2b35066f3b43403be00ff83a04eaf469916e25f8d0472eb03c08"
+            "sha256": "083cc77beacbc8cbedd28821c2e08bba5103c24c606e203ef98c7b51e9d843de"
           }
         ],
-        "sha256": "6930eb5bfa7860298ac57d45e7fdf7efb0a2b3fc82fde5dce4b85d6d23eeda09"
+        "sha256": "d1195ff99e6511a9a07ade71f70c29e12ac8e0e6aa60f261ccfab52fb6b3ce05"
       },
       {
         "stage": "unrelated",
@@ -167,10 +167,10 @@
           },
           {
             "path": "prompts/current/profile_design.txt",
-            "sha256": "79ae3bdece1a2b35066f3b43403be00ff83a04eaf469916e25f8d0472eb03c08"
+            "sha256": "083cc77beacbc8cbedd28821c2e08bba5103c24c606e203ef98c7b51e9d843de"
           }
         ],
-        "sha256": "ef43b6769b8e76d42ac4dc65f95cb65c711653c608e9e2aab1c0754e1af3c093"
+        "sha256": "d066c4ee72df7a85039d116c15e2001aa8f40a9c312ea584b277df1ce051ed13"
       }
     ],
     "case_instructions": {

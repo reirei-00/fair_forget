@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "active_bundle": "warbias-case-profile-v4-uk",
+  "active_bundle": "warbias-case-profile-v5-uk",
   "source_snapshots": "pilot_snapshots.json",
   "changes": [
     {
@@ -96,5 +96,16 @@
     "previous_bundle": "protocol/history/generation_prompt_bundle_v3.json",
     "profile_request_schema": "warbias_case_profile_request_uk_v1",
     "to_bundle": "warbias-case-profile-v4-uk"
+  },
+  "profile_scope_revision": {
+    "from_bundle": "warbias-case-profile-v4-uk",
+    "to_bundle": "warbias-case-profile-v5-uk",
+    "target_groups": [
+      "veteran",
+      "idp"
+    ],
+    "changes": [
+      "Remove displaced-abroad instructions from the shared profile rules."
+    ]
   }
 }
