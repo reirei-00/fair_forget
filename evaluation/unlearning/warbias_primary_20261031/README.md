@@ -47,8 +47,10 @@ accounting records because those old job IDs had left Slurm's dependency memory.
 Every saved-metrics job still depends on its fresh held-out collection succeeding.
 The rejected zero-job attempt and earlier partial measurements remain preserved.
 
-Separate TRAIN diagnostics measure the exact 137 original training-source
-triplets; they are not held-out results. The full series requires 216 held-out
+All eighteen [TRAIN comparisons](training_source_results/README.md) are now complete.
+They measure the exact 137 original training-source triplets and are not held-out
+results. Their native scores and paired intervals remain separate from the
+independent test collection. The full series requires 216 held-out
 native pairs and 18 TRAIN diagnostic pairs. All eighteen metric entries remain
 present per method/model, with missing source views, judge calibration, reviewed
 labels, statistical support and practical thresholds explicitly unavailable.

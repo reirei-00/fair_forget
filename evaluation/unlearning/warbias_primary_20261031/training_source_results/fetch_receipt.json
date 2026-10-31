@@ -1,0 +1,166 @@
+{
+  "observed_at_utc": "2026-10-31T14:03:47.083365+00:00",
+  "files": {
+    "qwen3_8b/training_diagnostic_execution.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/training_diagnostic_execution.json",
+      "sha256": "870e0c9c2baf2f935c00b0f1c4cdb99895db12ae1dc8a05ddd0f2a13c3d96969",
+      "bytes": 98730,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/qwen3_8b/training_diagnostic_execution.json"
+    },
+    "qwen3_8b/paired/rmu/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/rmu/paired.json",
+      "sha256": "f3e73a61b3523d1f72a4ea42ce7ecaf14b17d01f83f7c00fa2f8322c2869abd3",
+      "bytes": 92373,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/qwen3_8b/paired/rmu/paired.json"
+    },
+    "qwen3_8b/paired/task_vector/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/task_vector/paired.json",
+      "sha256": "234d34101fde89cb01d8e1ae69acea92f160675067dc0df2ea85a584a3d56194",
+      "bytes": 90205,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/qwen3_8b/paired/task_vector/paired.json"
+    },
+    "qwen3_8b/paired/wga_kl/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/qwen3_8b/training-diagnostic-2610275/paired/wga_kl/paired.json",
+      "sha256": "f5eea6b5729b5877a9745fe76203a4b648b5700e7ba41dea06f08317480bba21",
+      "bytes": 91128,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/qwen3_8b/paired/wga_kl/paired.json"
+    },
+    "llama31_8b_instruct/training_diagnostic_execution.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/training_diagnostic_execution.json",
+      "sha256": "a0ac96ae8119629a9712eb587c35e06eed1ddf814172c446a68bfdeb8cea4cfb",
+      "bytes": 95222,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/llama31_8b_instruct/training_diagnostic_execution.json"
+    },
+    "llama31_8b_instruct/paired/rmu/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/rmu/paired.json",
+      "sha256": "e2b60617c97fa635b06e50da30096b080f0d30d3c8349ba78511c347ebc8df09",
+      "bytes": 90895,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/llama31_8b_instruct/paired/rmu/paired.json"
+    },
+    "llama31_8b_instruct/paired/task_vector/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/task_vector/paired.json",
+      "sha256": "336ce7dad1ce9abfc6da0260fe2d65d93db830effd48ece7ba18811fd79155a3",
+      "bytes": 89984,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/llama31_8b_instruct/paired/task_vector/paired.json"
+    },
+    "llama31_8b_instruct/paired/wga_kl/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/llama31_8b_instruct/training-diagnostic-2610278/paired/wga_kl/paired.json",
+      "sha256": "41d49a3e7b80d2a05dd7a93cf8537acbea7ba3e82845cd95023578fba3ae3467",
+      "bytes": 91758,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/llama31_8b_instruct/paired/wga_kl/paired.json"
+    },
+    "gemma3_12b_it/training_diagnostic_execution.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/training_diagnostic_execution.json",
+      "sha256": "4cf17183150f0c8e1efb62452fb245a48564aab5436bc1ec223daeb71af65d3b",
+      "bytes": 105178,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/gemma3_12b_it/training_diagnostic_execution.json"
+    },
+    "gemma3_12b_it/paired/rmu/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/rmu/paired.json",
+      "sha256": "b46217b6ffb33bb50826d80a9bb43768639d57a45af41b37b573379740e66e49",
+      "bytes": 92606,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/gemma3_12b_it/paired/rmu/paired.json"
+    },
+    "gemma3_12b_it/paired/task_vector/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/task_vector/paired.json",
+      "sha256": "45e471300f302caff6f604a6caab9190aefc7dac0e1178ac2044b1e4f32d58c7",
+      "bytes": 92417,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/gemma3_12b_it/paired/task_vector/paired.json"
+    },
+    "gemma3_12b_it/paired/wga_kl/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/gemma3_12b_it/training-diagnostic-2610281/paired/wga_kl/paired.json",
+      "sha256": "ce899267412dd8c16c5c3a2ca1985f55cb794b2336b4a4f7510213c16f78228c",
+      "bytes": 92233,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/gemma3_12b_it/paired/wga_kl/paired.json"
+    },
+    "lapa12b_instruct/training_diagnostic_execution.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/training_diagnostic_execution.json",
+      "sha256": "ef9f3bc2f1de5d1bf4d98920542b4d2355eec0e2a2059af2162edcb15dc06935",
+      "bytes": 105793,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/lapa12b_instruct/training_diagnostic_execution.json"
+    },
+    "lapa12b_instruct/paired/rmu/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/rmu/paired.json",
+      "sha256": "12b8b662ccf15da932d13cb6ad88abaaa0fb96891b9b078b42ae503496515b4c",
+      "bytes": 92777,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/lapa12b_instruct/paired/rmu/paired.json"
+    },
+    "lapa12b_instruct/paired/task_vector/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/task_vector/paired.json",
+      "sha256": "ef54932e5a036b496759e17eb9adc5f591810953ad9c617533a1d3d53c5dd61d",
+      "bytes": 90557,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/lapa12b_instruct/paired/task_vector/paired.json"
+    },
+    "lapa12b_instruct/paired/wga_kl/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/lapa12b_instruct/training-diagnostic-2610284/paired/wga_kl/paired.json",
+      "sha256": "89dd3ab983e89562368dff7503aee0faf1241bcf55bfaa540a146d22fb7456cd",
+      "bytes": 92265,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/lapa12b_instruct/paired/wga_kl/paired.json"
+    },
+    "mamay12b_v2/training_diagnostic_execution.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/training_diagnostic_execution.json",
+      "sha256": "374de08d1b297a9b46fb7a059377aca1ccb4a6af3026f6fc374eb721e9fc4f6d",
+      "bytes": 105397,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/mamay12b_v2/training_diagnostic_execution.json"
+    },
+    "mamay12b_v2/paired/rmu/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/rmu/paired.json",
+      "sha256": "cffee1b1ecaaae56356514e38a7577ab6450f385b10c9a470fe57dfc038f36d2",
+      "bytes": 92555,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/mamay12b_v2/paired/rmu/paired.json"
+    },
+    "mamay12b_v2/paired/task_vector/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/task_vector/paired.json",
+      "sha256": "88f8ef2d6702a69bed0ac837455085d9831c4f712c8888c90102f9d52ef315ec",
+      "bytes": 91356,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/mamay12b_v2/paired/task_vector/paired.json"
+    },
+    "mamay12b_v2/paired/wga_kl/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay12b_v2/training-diagnostic-2610287/paired/wga_kl/paired.json",
+      "sha256": "7242abe509c3668c2406a4380903b91d2a170dd6d1e31bfcbb148e1bc0c4f236",
+      "bytes": 92163,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/mamay12b_v2/paired/wga_kl/paired.json"
+    },
+    "mamay27b_v2/training_diagnostic_execution.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/training_diagnostic_execution.json",
+      "sha256": "099cf96f277024fa82f1cae15128fa3e6fe4fc97c432ebd39ff5082aa9ccf33f",
+      "bytes": 120097,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/mamay27b_v2/training_diagnostic_execution.json"
+    },
+    "mamay27b_v2/paired/rmu/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/rmu/paired.json",
+      "sha256": "6d7613797ec8dcc28c7da62fd424f86e5c8b7493e48d861f4a8010cb03f85f10",
+      "bytes": 93088,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/mamay27b_v2/paired/rmu/paired.json"
+    },
+    "mamay27b_v2/paired/task_vector/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/task_vector/paired.json",
+      "sha256": "8f171b229b566240db7bf17dd58429c7078478ad9e719521d438a002bfcc2624",
+      "bytes": 92243,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/mamay27b_v2/paired/task_vector/paired.json"
+    },
+    "mamay27b_v2/paired/wga_kl/paired.json": {
+      "remote_path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_measurements_v2_retry1/mamay27b_v2/training-diagnostic-2610290/paired/wga_kl/paired.json",
+      "sha256": "09da6e4eaa69d667a3018ac925fcb3684e0b6dee05516206891d28ba539ba8a6",
+      "bytes": 93180,
+      "local_path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/training_diagnostics_v2_complete_snapshot/mamay27b_v2/paired/wga_kl/paired.json"
+    }
+  },
+  "kind": "all18_saved_native_training_source_pairs_no_heldout_claim",
+  "read_only_remote": true,
+  "model_calls": 0,
+  "checkpoint_weights_downloaded_or_hashed": false,
+  "jobs": {
+    "qwen3_8b": "2610275",
+    "llama31_8b_instruct": "2610278",
+    "gemma3_12b_it": "2610281",
+    "lapa12b_instruct": "2610284",
+    "mamay12b_v2": "2610287",
+    "mamay27b_v2": "2610290"
+  },
+  "submission": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/measurement_submission_v2_retry1.json",
+    "sha256": "865777387c8a60e855b7f5f6809c04449b0d523bf74d19955525c51a207bf709"
+  },
+  "json_bytes_preserved": true
+}

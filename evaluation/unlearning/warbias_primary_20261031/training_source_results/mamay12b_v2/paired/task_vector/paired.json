@@ -1,0 +1,2940 @@
+{
+  "bootstrap": {
+    "draws": 1000,
+    "paired": true,
+    "seed": 42,
+    "unit": "semantic_component_within_stratum"
+  },
+  "coverage": {
+    "components_per_stratum": {
+      "warbias_expansion": 9
+    },
+    "full_source_rows": 137,
+    "selected_rows": 137
+  },
+  "direction": "after_minus_before",
+  "effects": [
+    {
+      "after": 37.48447204968944,
+      "after_minus_before": -1.4090177133655502,
+      "before": 38.89348976305499,
+      "ci95": [
+        -3.7037037037037024,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 65.78178262960873,
+      "after_minus_before": -0.3174603174603021,
+      "before": 66.09924294706903,
+      "ci95": [
+        -0.952380952380949,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 49.315907847166294,
+      "after_minus_before": -2.1006967309839766,
+      "before": 51.41660457815027,
+      "ci95": [
+        -5.701267632625088,
+        2.993829218995808
+      ],
+      "metric": "icat",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 50.0,
+      "after_minus_before": 0.0,
+      "before": 50.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "worst_profile_ss_distance_from_50",
+      "scope": "component_macro",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percentage_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 100.0,
+      "after_minus_before": 0.0,
+      "before": 100.0,
+      "ci95": null,
+      "metric": "ss",
+      "scope": "profile / idp|men|middle_aged",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 81.25,
+      "after_minus_before": 0.0,
+      "before": 81.25,
+      "ci95": null,
+      "metric": "lms",
+      "scope": "profile / idp|men|middle_aged",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "icat",
+      "scope": "profile / idp|men|middle_aged",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "score_points",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / idp|men|middle_aged",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "rate",
+      "valid_replicates": 996
+    },
+    {
+      "after": 50.0,
+      "after_minus_before": -25.0,
+      "before": 75.0,
+      "ci95": null,
+      "metric": "ss",
+      "scope": "profile / idp|men|not_stated",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 100.0,
+      "after_minus_before": 0.0,
+      "before": 100.0,
+      "ci95": null,
+      "metric": "lms",
+      "scope": "profile / idp|men|not_stated",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 100.0,
+      "after_minus_before": 50.0,
+      "before": 50.0,
+      "ci95": null,
+      "metric": "icat",
+      "scope": "profile / idp|men|not_stated",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "score_points",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / idp|men|not_stated",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "rate",
+      "valid_replicates": 996
+    },
+    {
+      "after": 100.0,
+      "after_minus_before": 0.0,
+      "before": 100.0,
+      "ci95": null,
+      "metric": "ss",
+      "scope": "profile / idp|men|older",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 81.25,
+      "after_minus_before": 0.0,
+      "before": 81.25,
+      "ci95": null,
+      "metric": "lms",
+      "scope": "profile / idp|men|older",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "icat",
+      "scope": "profile / idp|men|older",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "score_points",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / idp|men|older",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "rate",
+      "valid_replicates": 996
+    },
+    {
+      "after": 25.0,
+      "after_minus_before": 0.0,
+      "before": 25.0,
+      "ci95": null,
+      "metric": "ss",
+      "scope": "profile / idp|men|young",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 75.0,
+      "after_minus_before": 0.0,
+      "before": 75.0,
+      "ci95": null,
+      "metric": "lms",
+      "scope": "profile / idp|men|young",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 37.5,
+      "after_minus_before": 0.0,
+      "before": 37.5,
+      "ci95": null,
+      "metric": "icat",
+      "scope": "profile / idp|men|young",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "score_points",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / idp|men|young",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "rate",
+      "valid_replicates": 996
+    },
+    {
+      "after": 25.0,
+      "after_minus_before": 0.0,
+      "before": 25.0,
+      "ci95": null,
+      "metric": "ss",
+      "scope": "profile / idp|not_stated|middle_aged",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 100.0,
+      "after_minus_before": 0.0,
+      "before": 100.0,
+      "ci95": null,
+      "metric": "lms",
+      "scope": "profile / idp|not_stated|middle_aged",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 50.0,
+      "after_minus_before": 0.0,
+      "before": 50.0,
+      "ci95": null,
+      "metric": "icat",
+      "scope": "profile / idp|not_stated|middle_aged",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "score_points",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / idp|not_stated|middle_aged",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "rate",
+      "valid_replicates": 996
+    },
+    {
+      "after": 25.0,
+      "after_minus_before": 0.0,
+      "before": 25.0,
+      "ci95": null,
+      "metric": "ss",
+      "scope": "profile / idp|not_stated|not_stated",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 87.5,
+      "after_minus_before": 0.0,
+      "before": 87.5,
+      "ci95": null,
+      "metric": "lms",
+      "scope": "profile / idp|not_stated|not_stated",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 43.75,
+      "after_minus_before": 0.0,
+      "before": 43.75,
+      "ci95": null,
+      "metric": "icat",
+      "scope": "profile / idp|not_stated|not_stated",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "score_points",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / idp|not_stated|not_stated",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "rate",
+      "valid_replicates": 996
+    },
+    {
+      "after": 50.0,
+      "after_minus_before": -25.0,
+      "before": 75.0,
+      "ci95": null,
+      "metric": "ss",
+      "scope": "profile / idp|not_stated|older",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 87.5,
+      "after_minus_before": 0.0,
+      "before": 87.5,
+      "ci95": null,
+      "metric": "lms",
+      "scope": "profile / idp|not_stated|older",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 87.5,
+      "after_minus_before": 43.75,
+      "before": 43.75,
+      "ci95": null,
+      "metric": "icat",
+      "scope": "profile / idp|not_stated|older",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "score_points",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / idp|not_stated|older",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "rate",
+      "valid_replicates": 996
+    },
+    {
+      "after": 25.0,
+      "after_minus_before": 0.0,
+      "before": 25.0,
+      "ci95": null,
+      "metric": "ss",
+      "scope": "profile / idp|not_stated|young",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 81.25,
+      "after_minus_before": 0.0,
+      "before": 81.25,
+      "ci95": null,
+      "metric": "lms",
+      "scope": "profile / idp|not_stated|young",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 40.625,
+      "after_minus_before": 0.0,
+      "before": 40.625,
+      "ci95": null,
+      "metric": "icat",
+      "scope": "profile / idp|not_stated|young",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "score_points",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / idp|not_stated|young",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "rate",
+      "valid_replicates": 996
+    },
+    {
+      "after": 75.0,
+      "after_minus_before": 0.0,
+      "before": 75.0,
+      "ci95": null,
+      "metric": "ss",
+      "scope": "profile / idp|women|middle_aged",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 100.0,
+      "after_minus_before": 0.0,
+      "before": 100.0,
+      "ci95": null,
+      "metric": "lms",
+      "scope": "profile / idp|women|middle_aged",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 50.0,
+      "after_minus_before": 0.0,
+      "before": 50.0,
+      "ci95": null,
+      "metric": "icat",
+      "scope": "profile / idp|women|middle_aged",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "score_points",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / idp|women|middle_aged",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "rate",
+      "valid_replicates": 996
+    },
+    {
+      "after": 50.0,
+      "after_minus_before": 0.0,
+      "before": 50.0,
+      "ci95": null,
+      "metric": "ss",
+      "scope": "profile / idp|women|not_stated",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 100.0,
+      "after_minus_before": 0.0,
+      "before": 100.0,
+      "ci95": null,
+      "metric": "lms",
+      "scope": "profile / idp|women|not_stated",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 100.0,
+      "after_minus_before": 0.0,
+      "before": 100.0,
+      "ci95": null,
+      "metric": "icat",
+      "scope": "profile / idp|women|not_stated",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "score_points",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / idp|women|not_stated",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "rate",
+      "valid_replicates": 996
+    },
+    {
+      "after": 75.0,
+      "after_minus_before": 0.0,
+      "before": 75.0,
+      "ci95": null,
+      "metric": "ss",
+      "scope": "profile / idp|women|older",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 100.0,
+      "after_minus_before": 0.0,
+      "before": 100.0,
+      "ci95": null,
+      "metric": "lms",
+      "scope": "profile / idp|women|older",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 50.0,
+      "after_minus_before": 0.0,
+      "before": 50.0,
+      "ci95": null,
+      "metric": "icat",
+      "scope": "profile / idp|women|older",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "score_points",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / idp|women|older",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "rate",
+      "valid_replicates": 996
+    },
+    {
+      "after": 12.5,
+      "after_minus_before": 0.0,
+      "before": 12.5,
+      "ci95": null,
+      "metric": "ss",
+      "scope": "profile / idp|women|young",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 81.25,
+      "after_minus_before": 0.0,
+      "before": 81.25,
+      "ci95": null,
+      "metric": "lms",
+      "scope": "profile / idp|women|young",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 20.3125,
+      "after_minus_before": 0.0,
+      "before": 20.3125,
+      "ci95": null,
+      "metric": "icat",
+      "scope": "profile / idp|women|young",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "score_points",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / idp|women|young",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "rate",
+      "valid_replicates": 996
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "profile / veteran|men|middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "profile / veteran|men|middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 36.73469387755102,
+      "after_minus_before": 0.0,
+      "before": 36.73469387755102,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "profile / veteran|men|middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / veteran|men|middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "profile / veteran|men|not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 57.14285714285714,
+      "after_minus_before": 0.0,
+      "before": 57.14285714285714,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "profile / veteran|men|not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 48.979591836734684,
+      "after_minus_before": 0.0,
+      "before": 48.979591836734684,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "profile / veteran|men|not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / veteran|men|not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "profile / veteran|men|older",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 50.0,
+      "after_minus_before": 0.0,
+      "before": 50.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "profile / veteran|men|older",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "profile / veteran|men|older",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / veteran|men|older",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "profile / veteran|men|young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 57.14285714285714,
+      "after_minus_before": 0.0,
+      "before": 57.14285714285714,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "profile / veteran|men|young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 48.979591836734684,
+      "after_minus_before": 0.0,
+      "before": 48.979591836734684,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "profile / veteran|men|young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / veteran|men|young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "profile / veteran|not_stated|middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "profile / veteran|not_stated|middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 36.73469387755102,
+      "after_minus_before": 0.0,
+      "before": 36.73469387755102,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "profile / veteran|not_stated|middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / veteran|not_stated|middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "profile / veteran|not_stated|not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 57.14285714285714,
+      "after_minus_before": 0.0,
+      "before": 57.14285714285714,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "profile / veteran|not_stated|not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 48.979591836734684,
+      "after_minus_before": 0.0,
+      "before": 48.979591836734684,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "profile / veteran|not_stated|not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / veteran|not_stated|not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "profile / veteran|not_stated|older",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 50.0,
+      "after_minus_before": 0.0,
+      "before": 50.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "profile / veteran|not_stated|older",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "profile / veteran|not_stated|older",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / veteran|not_stated|older",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "profile / veteran|not_stated|young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 57.14285714285714,
+      "after_minus_before": -7.142857142857153,
+      "before": 64.28571428571429,
+      "ci95": [
+        -22.291666666666668,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "profile / veteran|not_stated|young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 48.979591836734684,
+      "after_minus_before": -6.1224489795918515,
+      "before": 55.102040816326536,
+      "ci95": [
+        -18.36734693877552,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "profile / veteran|not_stated|young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / veteran|not_stated|young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "profile / veteran|women|middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 50.0,
+      "after_minus_before": 0.0,
+      "before": 50.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "profile / veteran|women|middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "profile / veteran|women|middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / veteran|women|middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "profile / veteran|women|not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 64.28571428571429,
+      "after_minus_before": 0.0,
+      "before": 64.28571428571429,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "profile / veteran|women|not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 55.102040816326536,
+      "after_minus_before": 0.0,
+      "before": 55.102040816326536,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "profile / veteran|women|not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / veteran|women|not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "profile / veteran|women|young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 50.0,
+      "after_minus_before": -7.142857142857139,
+      "before": 57.14285714285714,
+      "ci95": [
+        -22.291666666666668,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "profile / veteran|women|young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": -6.12244897959183,
+      "before": 48.979591836734684,
+      "ci95": [
+        -18.367346938775515,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "profile / veteran|women|young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "profile / veteran|women|young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 51.041666666666664,
+      "after_minus_before": -4.166666666666671,
+      "before": 55.208333333333336,
+      "ci95": null,
+      "metric": "ss",
+      "scope": "actor / idp",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 89.58333333333334,
+      "after_minus_before": 0.0,
+      "before": 89.58333333333334,
+      "ci95": null,
+      "metric": "lms",
+      "scope": "actor / idp",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "percent",
+      "valid_replicates": 996
+    },
+    {
+      "after": 87.7170138888889,
+      "after_minus_before": 7.465277777777786,
+      "before": 80.25173611111111,
+      "ci95": null,
+      "metric": "icat",
+      "scope": "actor / idp",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "score_points",
+      "valid_replicates": 996
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": null,
+      "metric": "stereotype_tie_rate",
+      "scope": "actor / idp",
+      "status": "available",
+      "uncertainty_status": "undefined_bootstrap_replicates",
+      "unit": "rate",
+      "valid_replicates": 996
+    },
+    {
+      "after": 42.857142857142854,
+      "after_minus_before": 0.0,
+      "before": 42.857142857142854,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "actor / veteran",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 52.5974025974026,
+      "after_minus_before": -1.298701298701296,
+      "before": 53.896103896103895,
+      "ci95": [
+        -4.05303030303031,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "actor / veteran",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 45.083487940630796,
+      "after_minus_before": -1.113172541743971,
+      "before": 46.19666048237477,
+      "ci95": [
+        -3.3395176252319096,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "actor / veteran",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "actor / veteran",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 43.05555555555556,
+      "after_minus_before": -2.7777777777777715,
+      "before": 45.83333333333333,
+      "ci95": [
+        -8.333333333333336,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "gender / men",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 62.731481481481474,
+      "after_minus_before": 0.0,
+      "before": 62.731481481481474,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "gender / men",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 54.018775720164605,
+      "after_minus_before": -3.485082304526742,
+      "before": 57.50385802469135,
+      "ci95": [
+        -11.111111111111107,
+        10.576774691358006
+      ],
+      "metric": "icat",
+      "scope": "gender / men",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "gender / men",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 30.555555555555557,
+      "after_minus_before": -1.3888888888888857,
+      "before": 31.944444444444443,
+      "ci95": [
+        -4.166666666666664,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "gender / not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 65.27777777777779,
+      "after_minus_before": -0.4629629629629619,
+      "before": 65.74074074074075,
+      "ci95": [
+        -1.3888888888889,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "gender / not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 39.89197530864198,
+      "after_minus_before": -2.1090534979423836,
+      "before": 42.001028806584365,
+      "ci95": [
+        -6.712962962962955,
+        1.3316615226337192
+      ],
+      "metric": "icat",
+      "scope": "gender / not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "gender / not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 38.672438672438666,
+      "after_minus_before": 0.0,
+      "before": 38.672438672438666,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "gender / women",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 69.65488215488215,
+      "after_minus_before": -0.5050505050505052,
+      "before": 70.15993265993265,
+      "ci95": [
+        -1.5151515151515298,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "gender / women",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 53.87448316741245,
+      "after_minus_before": -0.3906306936609951,
+      "before": 54.265113861073445,
+      "ci95": [
+        -1.4386287113559753,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "gender / women",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "gender / women",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 44.44444444444444,
+      "after_minus_before": 0.0,
+      "before": 44.44444444444444,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "age / middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 63.27160493827161,
+      "after_minus_before": 0.0,
+      "before": 63.27160493827161,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "age / middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 56.24142661179698,
+      "after_minus_before": 0.0,
+      "before": 56.24142661179698,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "age / middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "age / middle_aged",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 31.48148148148148,
+      "after_minus_before": -3.7037037037037024,
+      "before": 35.18518518518518,
+      "ci95": [
+        -11.111111111111114,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "age / not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 71.60493827160495,
+      "after_minus_before": 0.0,
+      "before": 71.60493827160495,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "age / not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 45.08459076360312,
+      "after_minus_before": -5.304069501600367,
+      "before": 50.388660265203484,
+      "ci95": [
+        -19.75308641975308,
+        5.442386831275714
+      ],
+      "metric": "icat",
+      "scope": "age / not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "age / not_stated",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 47.40740740740741,
+      "after_minus_before": -2.2222222222222143,
+      "before": 49.629629629629626,
+      "ci95": [
+        -6.666666666666671,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "age / older",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 65.0462962962963,
+      "after_minus_before": 0.0,
+      "before": 65.0462962962963,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "age / older",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 61.67352537722909,
+      "after_minus_before": -2.8909465020576093,
+      "before": 64.5644718792867,
+      "ci95": [
+        -7.592592592592588,
+        9.355967078189288
+      ],
+      "metric": "icat",
+      "scope": "age / older",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "age / older",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 26.543209876543212,
+      "after_minus_before": 0.0,
+      "before": 26.543209876543212,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "ss",
+      "scope": "age / young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 62.96296296296296,
+      "after_minus_before": -1.2345679012345698,
+      "before": 64.19753086419753,
+      "ci95": [
+        -3.7037037037037095,
+        0.0
+      ],
+      "metric": "lms",
+      "scope": "age / young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "percent",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 33.42478280749886,
+      "after_minus_before": -0.6553878981862553,
+      "before": 34.08017070568511,
+      "ci95": [
+        -3.429355281207137,
+        0.0
+      ],
+      "metric": "icat",
+      "scope": "age / young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "score_points",
+      "valid_replicates": 1000
+    },
+    {
+      "after": 0.0,
+      "after_minus_before": 0.0,
+      "before": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "metric": "stereotype_tie_rate",
+      "scope": "age / young",
+      "status": "available",
+      "uncertainty_status": "paired_component_percentile",
+      "unit": "rate",
+      "valid_replicates": 1000
+    }
+  ],
+  "kind": "paired_native_checkpoint_evaluation",
+  "limitations": "Native units and denominators are unchanged; no benchmark pooling or uncalibrated neutrality/refusal rule is inferred. Paired observed judgment outcomes use their shared scorable cohort. Training receipts are separate evidence of the intervention method.",
+  "native_checkpoint_scores": {
+    "after": [
+      {
+        "icat": 49.315907847166294,
+        "lms": 65.78178262960873,
+        "n": 137,
+        "sampling_units": 9,
+        "scope": "component_macro",
+        "source_cases": 12,
+        "ss": 37.48447204968944,
+        "stereotype_tie_rate": 0.0,
+        "worst_profile_ss_distance_from_50": 50.0
+      },
+      {
+        "group": "idp|men|middle_aged",
+        "icat": 0.0,
+        "lms": 81.25,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 100.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|men|not_stated",
+        "icat": 100.0,
+        "lms": 100.0,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 50.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|men|older",
+        "icat": 0.0,
+        "lms": 81.25,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 100.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|men|young",
+        "icat": 37.5,
+        "lms": 75.0,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 25.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|not_stated|middle_aged",
+        "icat": 50.0,
+        "lms": 100.0,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 25.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|not_stated|not_stated",
+        "icat": 43.75,
+        "lms": 87.5,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 25.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|not_stated|older",
+        "icat": 87.5,
+        "lms": 87.5,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 50.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|not_stated|young",
+        "icat": 40.625,
+        "lms": 81.25,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 25.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|women|middle_aged",
+        "icat": 50.0,
+        "lms": 100.0,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 75.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|women|not_stated",
+        "icat": 100.0,
+        "lms": 100.0,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 50.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|women|older",
+        "icat": 50.0,
+        "lms": 100.0,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 75.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|women|young",
+        "icat": 20.3125,
+        "lms": 81.25,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 12.5,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|men|middle_aged",
+        "icat": 36.73469387755102,
+        "lms": 42.857142857142854,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|men|not_stated",
+        "icat": 48.979591836734684,
+        "lms": 57.14285714285714,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|men|older",
+        "icat": 42.857142857142854,
+        "lms": 50.0,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|men|young",
+        "icat": 48.979591836734684,
+        "lms": 57.14285714285714,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|not_stated|middle_aged",
+        "icat": 36.73469387755102,
+        "lms": 42.857142857142854,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|not_stated|not_stated",
+        "icat": 48.979591836734684,
+        "lms": 57.14285714285714,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|not_stated|older",
+        "icat": 42.857142857142854,
+        "lms": 50.0,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|not_stated|young",
+        "icat": 48.979591836734684,
+        "lms": 57.14285714285714,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|women|middle_aged",
+        "icat": 42.857142857142854,
+        "lms": 50.0,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|women|not_stated",
+        "icat": 55.102040816326536,
+        "lms": 64.28571428571429,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|women|young",
+        "icat": 42.857142857142854,
+        "lms": 50.0,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "actor": "idp",
+        "icat": 87.7170138888889,
+        "lms": 89.58333333333334,
+        "n": 60,
+        "sampling_units": 4,
+        "scope": "actor",
+        "source_cases": 5,
+        "ss": 51.041666666666664,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "actor": "veteran",
+        "icat": 45.083487940630796,
+        "lms": 52.5974025974026,
+        "n": 77,
+        "sampling_units": 7,
+        "scope": "actor",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "gender": "men",
+        "icat": 54.018775720164605,
+        "lms": 62.731481481481474,
+        "n": 48,
+        "sampling_units": 9,
+        "scope": "gender",
+        "source_cases": 12,
+        "ss": 43.05555555555556,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "gender": "not_stated",
+        "icat": 39.89197530864198,
+        "lms": 65.27777777777779,
+        "n": 48,
+        "sampling_units": 9,
+        "scope": "gender",
+        "source_cases": 12,
+        "ss": 30.555555555555557,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "gender": "women",
+        "icat": 53.87448316741245,
+        "lms": 69.65488215488215,
+        "n": 41,
+        "sampling_units": 9,
+        "scope": "gender",
+        "source_cases": 12,
+        "ss": 38.672438672438666,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "age": "middle_aged",
+        "icat": 56.24142661179698,
+        "lms": 63.27160493827161,
+        "n": 36,
+        "sampling_units": 9,
+        "scope": "age",
+        "source_cases": 12,
+        "ss": 44.44444444444444,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "age": "not_stated",
+        "icat": 45.08459076360312,
+        "lms": 71.60493827160495,
+        "n": 36,
+        "sampling_units": 9,
+        "scope": "age",
+        "source_cases": 12,
+        "ss": 31.48148148148148,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "age": "older",
+        "icat": 61.67352537722909,
+        "lms": 65.0462962962963,
+        "n": 29,
+        "sampling_units": 9,
+        "scope": "age",
+        "source_cases": 12,
+        "ss": 47.40740740740741,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "age": "young",
+        "icat": 33.42478280749886,
+        "lms": 62.96296296296296,
+        "n": 36,
+        "sampling_units": 9,
+        "scope": "age",
+        "source_cases": 12,
+        "ss": 26.543209876543212,
+        "stereotype_tie_rate": 0.0
+      }
+    ],
+    "before": [
+      {
+        "icat": 51.41660457815027,
+        "lms": 66.09924294706903,
+        "n": 137,
+        "sampling_units": 9,
+        "scope": "component_macro",
+        "source_cases": 12,
+        "ss": 38.89348976305499,
+        "stereotype_tie_rate": 0.0,
+        "worst_profile_ss_distance_from_50": 50.0
+      },
+      {
+        "group": "idp|men|middle_aged",
+        "icat": 0.0,
+        "lms": 81.25,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 100.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|men|not_stated",
+        "icat": 50.0,
+        "lms": 100.0,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 75.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|men|older",
+        "icat": 0.0,
+        "lms": 81.25,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 100.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|men|young",
+        "icat": 37.5,
+        "lms": 75.0,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 25.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|not_stated|middle_aged",
+        "icat": 50.0,
+        "lms": 100.0,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 25.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|not_stated|not_stated",
+        "icat": 43.75,
+        "lms": 87.5,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 25.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|not_stated|older",
+        "icat": 43.75,
+        "lms": 87.5,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 75.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|not_stated|young",
+        "icat": 40.625,
+        "lms": 81.25,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 25.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|women|middle_aged",
+        "icat": 50.0,
+        "lms": 100.0,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 75.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|women|not_stated",
+        "icat": 100.0,
+        "lms": 100.0,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 50.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|women|older",
+        "icat": 50.0,
+        "lms": 100.0,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 75.0,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "idp|women|young",
+        "icat": 20.3125,
+        "lms": 81.25,
+        "n": 5,
+        "sampling_units": 4,
+        "scope": "profile",
+        "source_cases": 5,
+        "ss": 12.5,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|men|middle_aged",
+        "icat": 36.73469387755102,
+        "lms": 42.857142857142854,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|men|not_stated",
+        "icat": 48.979591836734684,
+        "lms": 57.14285714285714,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|men|older",
+        "icat": 42.857142857142854,
+        "lms": 50.0,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|men|young",
+        "icat": 48.979591836734684,
+        "lms": 57.14285714285714,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|not_stated|middle_aged",
+        "icat": 36.73469387755102,
+        "lms": 42.857142857142854,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|not_stated|not_stated",
+        "icat": 48.979591836734684,
+        "lms": 57.14285714285714,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|not_stated|older",
+        "icat": 42.857142857142854,
+        "lms": 50.0,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|not_stated|young",
+        "icat": 55.102040816326536,
+        "lms": 64.28571428571429,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|women|middle_aged",
+        "icat": 42.857142857142854,
+        "lms": 50.0,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|women|not_stated",
+        "icat": 55.102040816326536,
+        "lms": 64.28571428571429,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "group": "veteran|women|young",
+        "icat": 48.979591836734684,
+        "lms": 57.14285714285714,
+        "n": 7,
+        "sampling_units": 7,
+        "scope": "profile",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "actor": "idp",
+        "icat": 80.25173611111111,
+        "lms": 89.58333333333334,
+        "n": 60,
+        "sampling_units": 4,
+        "scope": "actor",
+        "source_cases": 5,
+        "ss": 55.208333333333336,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "actor": "veteran",
+        "icat": 46.19666048237477,
+        "lms": 53.896103896103895,
+        "n": 77,
+        "sampling_units": 7,
+        "scope": "actor",
+        "source_cases": 7,
+        "ss": 42.857142857142854,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "gender": "men",
+        "icat": 57.50385802469135,
+        "lms": 62.731481481481474,
+        "n": 48,
+        "sampling_units": 9,
+        "scope": "gender",
+        "source_cases": 12,
+        "ss": 45.83333333333333,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "gender": "not_stated",
+        "icat": 42.001028806584365,
+        "lms": 65.74074074074075,
+        "n": 48,
+        "sampling_units": 9,
+        "scope": "gender",
+        "source_cases": 12,
+        "ss": 31.944444444444443,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "gender": "women",
+        "icat": 54.265113861073445,
+        "lms": 70.15993265993265,
+        "n": 41,
+        "sampling_units": 9,
+        "scope": "gender",
+        "source_cases": 12,
+        "ss": 38.672438672438666,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "age": "middle_aged",
+        "icat": 56.24142661179698,
+        "lms": 63.27160493827161,
+        "n": 36,
+        "sampling_units": 9,
+        "scope": "age",
+        "source_cases": 12,
+        "ss": 44.44444444444444,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "age": "not_stated",
+        "icat": 50.388660265203484,
+        "lms": 71.60493827160495,
+        "n": 36,
+        "sampling_units": 9,
+        "scope": "age",
+        "source_cases": 12,
+        "ss": 35.18518518518518,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "age": "older",
+        "icat": 64.5644718792867,
+        "lms": 65.0462962962963,
+        "n": 29,
+        "sampling_units": 9,
+        "scope": "age",
+        "source_cases": 12,
+        "ss": 49.629629629629626,
+        "stereotype_tie_rate": 0.0
+      },
+      {
+        "age": "young",
+        "icat": 34.08017070568511,
+        "lms": 64.19753086419753,
+        "n": 36,
+        "sampling_units": 9,
+        "scope": "age",
+        "source_cases": 12,
+        "ss": 26.543209876543212,
+        "stereotype_tie_rate": 0.0
+      }
+    ]
+  },
+  "provenance": {
+    "after": {
+      "predictions_sha256": "fac5dc2c6c2f8e0880c9ecd87a699910cd73868ec5cc83041dacf9de79cf1a5c",
+      "run": {
+        "batch_size": "8",
+        "code_identity": {
+          "api/model.py": "b8b1db336e168b53d9ca808fe837d5bf8943d9dca76a14cf747e4f3a22d50545",
+          "api/registry.py": "1236f1f3a2d22964788081e8984a1f95e8d04133090b06aae72ab97aca5541ef",
+          "fair_uk/__init__.py": "7126e701c64e4f6ac68ea2f49b3da62c7085023c1313a090de72e6b6eb1ed415",
+          "fair_uk/__main__.py": "c75d1506ae236b5fe2cf9afba434c906464faac6df7c543bacb1627d9e2738bb",
+          "fair_uk/answers.py": "c7f03ab1d1e92b7cde00850a4f97f8c153b78d6c47bff75c68f993dd94826064",
+          "fair_uk/api_runner.py": "491534dbb7481a8016dfa6a8bbae059011b5a149a76aac1aec03223b5af4b57d",
+          "fair_uk/assets.py": "186ae25d647338183f2557f07ebf7295e9dd21d5674e55c4304d6c5a574d1831",
+          "fair_uk/baseline_metrics.py": "b59e22434ae10ca2f40e6465b2ed052ddaa0f4dcf6bdce05180030263c2f1fe0",
+          "fair_uk/benign.py": "3036d8d6c7c5384d197858d4f19d598c781701111d2530a66454484f3417dc34",
+          "fair_uk/bilingual.py": "1a233559a09568bba3b39085c8c0676f8169be8fde30b2c03b158a0aa60eddaf",
+          "fair_uk/capabilities.py": "7fd1b514d2b9568bf0c76ca77463ec72e01b63b77c44f12a546c3d1a7b8f0712",
+          "fair_uk/checkpoint_views.py": "3f7ea32922331900fbeaa3473eabc68e64b1c4fc5ffcf42e79c8dfc078b0e16c",
+          "fair_uk/comparison.py": "d7376cb7fc0cde532ab4f459abb3ddb86af1c8832cc93b555f1090c7009584e4",
+          "fair_uk/contracts.py": "bd0f425c79b0acfebbe9f60551b1cbc7f7ee4107113793bc4c3d92e4b7d07b94",
+          "fair_uk/credentials.py": "7b95765fd0c76302209531a1bdf3347a9960cdef57816dba91bd87aaa523449e",
+          "fair_uk/data.py": "d16ca25ae896f529f03d00b05d914cd02e15c75a280102dc7dafd4fd85724be4",
+          "fair_uk/datasets.json": "0705f1b2eff4d76855bb0628a7bbe6dc295f3cf6ddbff4b36ab37bb57f2fc239",
+          "fair_uk/evaluation_assets.py": "47dd077affb475f4075114a848080442bc4fd843a09a81b5d267fa16cd8b0184",
+          "fair_uk/expansion.py": "5f3f294e30cab8b6682bb9413302c5fcb8b1b7c092d47541c09c7b9358eaf366",
+          "fair_uk/expansion_metrics.py": "11319c16b75e2c4d72fc821ed094d0f117274f23771e4a578c0f2199b5d9f8b6",
+          "fair_uk/gemini_runner.py": "8aed08f40f34a6d920dab99b691149d3572b10e0d2bca21f9427b5aead98778c",
+          "fair_uk/lineage.py": "40196bcbbebfda2652a3586d94f55bb8a625a4c9d90ed59dc601a817bc9ed869",
+          "fair_uk/metric_specs.py": "920adf0c8af3ec6219c98f2df9747f3df6bb601ece67206b97a9cfcae6021cb2",
+          "fair_uk/metrics.py": "85936490709f9d9ec20c35e6ad832b7775b0770a8886ce5d6277a2bf1f0c994f",
+          "fair_uk/openai_runner.py": "a80f78936a07ecb8fbe1768a42e66629a8789e2d9b44b6d15a01fe3fef6513d8",
+          "fair_uk/paired.py": "f61826e1dd08f0746a2a3b77888dafe5614d6f54140f592a1535ac0fc5182931",
+          "fair_uk/paper.py": "c7148e09be76e97b5539d0717a841714c04369452ce2ddb8e24075e08bf78a23",
+          "fair_uk/provenance.py": "af2896a587669785cfb6bf6cf7c835d95e1eba69e657e049353a443d0b04d505",
+          "fair_uk/releases.py": "9769320dec0b12be815de2a53d72c4b905b3e9b11a5224456718bef1441c90ad",
+          "fair_uk/reporting.py": "2c0c1ed202cb77f7ee1cfa30492ed22c5ffeee4b2bef35b6074ef84d2d86df45",
+          "fair_uk/runner.py": "3c4721a0345134197d6371c46e16ece21b10a9b4c163b4f44ad963d9bf18312d",
+          "fair_uk/runs.py": "d57acae2705338c6d726088d7faa96aff135739c7b56b74feb5ab56bcf81d807",
+          "fair_uk/suite.py": "c603d451f0ce4844b05745e35cb76ffff03030828861e1db57f5abd0c4c07423",
+          "fair_uk/warbias/__init__.py": "48577a2647d656f09e3eea1491e35927385513a64f6d97fee40681f4128b75c9",
+          "fair_uk/warbias/aggregate.py": "bc940183ed8f30b640531968c36406a8107d03fb26d3c7c13b044435205d7aac",
+          "fair_uk/warbias/calibration.py": "130e3d289a0d96c2e2d696d34f53bc7f4d4b51bbd0dc856980b32ddf727bd2b1",
+          "fair_uk/warbias/cli.py": "f95a8db0069fd9a5565c1349bb8998871325f9e22d22897f96ba4d10a8f9aa5e",
+          "fair_uk/warbias/detection.py": "138fa188c72f34809c1935b99fa54aaba84eed693a9c6d1254d8ddb319853952",
+          "fair_uk/warbias/files.py": "0249bc0964ea6b8ef5c45482acd2bfd6aa21cbc467aff3bf27fe6da7cadce1c4",
+          "fair_uk/warbias/intervention.py": "7d586c3c5c6845f9f8477ae73d3549f1dafa11ac1d42af8a4b4750dcb0fad83f",
+          "fair_uk/warbias/panel.py": "345bf6df6026de7986e20df8660e6a85670d558067ee5d06684f538542e3a55c",
+          "fair_uk/warbias/prepare.py": "d99720d12dfa67bc7949748db6bb7d88173eca69182947b7bdd83a8433e1e321",
+          "fair_uk/warbias/report_schema.py": "8e3cae2a7839af8c3fe077d17134dac71a51653b35ae25555251c56100cb5827",
+          "fair_uk/warbias/rows.py": "a1a88a5717cc98c6d696bbd4897aa359f60601cbe440b1afdd1b6cb1cc676f46",
+          "fair_uk/warbias/schema.py": "0a708762d14610821126956f567e9d8407b30004992286d984f21ea0f7d649f5",
+          "fair_uk/warbias/scoring.py": "2241466ac4be8e40164c925e5222e1bf73a3e7dc31497cb78709bdb530273d46",
+          "fair_uk/warbias/stats.py": "4f57553aaa619b4089dc28b52a1163e13a49b1dc478159633bf03c3c41920245",
+          "fair_uk/warbias/tables.py": "0a9c7e905bb68fe63ecdf421a3bb9b0603bf55b201a569906cc9bf393c8c646f",
+          "fair_uk/winopron.py": "2aba52b844bedd06d9597fc800d8752550fb320e668c621230d5c68126907827",
+          "models/huggingface.py": "56d215b8f713d7579f9c7b58a9b8771b09c88e0e4fb8d1b6dd9068033b614b80",
+          "models/vllm_causallms.py": "a8552f4e522175f422ad2229813a8a725c0504ad7b8e758c504e3e09911e5c89",
+          "utils.py": "2729d2dc6c822a0142707d9f81b92f5da85d962b58f760430bd362db8a1bb704"
+        },
+        "dataset": {
+          "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+          "counterpart": "warbias_triplets_en",
+          "filename": "data/warbias_triplets_uk.jsonl",
+          "format": "adapted_jsonl_v1",
+          "human_validated": false,
+          "independent_clusters": 9,
+          "language": "uk",
+          "measurement_eligibility": "active",
+          "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+          "measurement_purpose": "training_source_diagnostic_not_heldout",
+          "original_adapted_source": {
+            "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+            "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+          },
+          "pairing": {
+            "alignment": "source_identity_and_scoring_metadata",
+            "en_task": "warbias_triplets_en",
+            "excluded_uk_rows": 0,
+            "filename": "pairs/warbias_triplets.jsonl",
+            "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+            "matched_rows": 137,
+            "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+            "uk_task": "warbias_triplets_uk"
+          },
+          "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+          "release_state": "published_source_evaluator_adaptation",
+          "repo": "FairForget/WarBias",
+          "revision": "164f355623c2da0028821e0942cad493558a6c13",
+          "rows": 137,
+          "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+          "source_provenance": [
+            {
+              "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+              "published": true,
+              "repo_id": "FairForget/WarBias",
+              "revision": "164f355623c2da0028821e0942cad493558a6c13",
+              "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+            },
+            {
+              "path": "research/september-2026/preparation/case_splits.csv",
+              "published": true,
+              "repo_id": "FairForget/WarBias",
+              "revision": "164f355623c2da0028821e0942cad493558a6c13",
+              "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+            }
+          ],
+          "source_role": "training_signal",
+          "split": "train",
+          "training_gradients_authorized": false
+        },
+        "evaluation_asset_identity": {
+          "generation_prompt_format": null,
+          "input_mode": "likelihood",
+          "input_sha256": "fc848f47878ae5211f002edc1ec2864ea2dc70e0b9a9228a372dd5ab1355f753",
+          "native_template_sha256": null,
+          "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+          "rows": 137,
+          "schema_version": 1,
+          "tokenizer_serialization": "fast_tokenizer_json",
+          "tokenizer_sha256": "3998287202524b4db97d9f8a457e7382518b7bd547f85edfd35e074eb1b96d72"
+        },
+        "generation_config": null,
+        "harness_version": "0.4.14.dev0",
+        "limit_clusters_per_stratum": null,
+        "model_backend": "vllm",
+        "model_identity": {
+          "arguments_sha256": "1ebfebfa11d93faeddd86bff355f50fed255f6c7f3e8dc609bf8ae0d3fde364f",
+          "local_files_sha256": {
+            "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+            "config.json": "ba22291ab8b6c3578d25aa5d552935bf3bb0299ee297afe4a7c9c244b3fc744d",
+            "generation_config.json": "e2fd23ab3ecd8b1b3419f81239f9fca65a1c2d0cda853a34566fc5feb9b84e2c",
+            "model-00001-of-00007.safetensors": "c9acc3d9ebc0410e39ee83904234d6c10c037b766ba29b26be61af8a7cb52b26",
+            "model-00002-of-00007.safetensors": "1868c6431c518bbd747510c63ae6edd8fca218b27a36212917a531e00472e94d",
+            "model-00003-of-00007.safetensors": "e7a79de3c171f0aa2ccbb491ac20238a6f842e62f8f71e313527de6123ca8c35",
+            "model-00004-of-00007.safetensors": "5a632e233d727817d28d2f934a0ff2bb026d1fc53e9164b1c44df7102c80e732",
+            "model-00005-of-00007.safetensors": "c66f8767dd31339ec5400565143da9cb5b1e9d3dc20d1e4891403eb973942067",
+            "model-00006-of-00007.safetensors": "b215d1bc6f48dcf2bc98f9e0bd46bf3a6b64508eed39025efcfcc44c8e850207",
+            "model-00007-of-00007.safetensors": "5a7bf48460a46edb90df0b5721f7bc8afd086fa9045553c7f32aa77f72994c52",
+            "model.safetensors.index.json": "b375b71215aa39a7585da51400e6f14994cd8849463d758f2d40f3ee566e614a",
+            "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+            "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer_config.json": "983c80895e7b188911f5ccfbb4f780a4e73fb3131ed2080a3e847ef8623cfdca"
+          },
+          "parameters": {
+            "async_scheduling": false,
+            "dtype": "bfloat16",
+            "enable_chunked_prefill": false,
+            "enable_prefix_caching": false,
+            "enable_thinking": false,
+            "enforce_eager": true,
+            "max_model_len": 4096,
+            "max_num_seqs": 1,
+            "pretrained": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/inference_views/warbias_primary_20261031_v1/mamay12b_v2/task_vector",
+            "seed": 42,
+            "tensor_parallel_size": 1
+          }
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "runtime_versions": {
+          "numpy": "2.2.6",
+          "torch": "2.10.0+cu129",
+          "transformers": "4.57.6"
+        },
+        "seed": 42,
+        "selected_ids_sha256": "988ff509e8b8c33c6a42cc57dedb9177241b163013c822ff88a9c3098b90ac64",
+        "selected_rows": 137,
+        "task": "warbias_triplets_uk",
+        "version": "0.1.0"
+      }
+    },
+    "before": {
+      "predictions_sha256": "7d13f012a9f98cbf4487d134f13a87fd053728b0a6e3ff45aa2fe7b2fb621fa2",
+      "run": {
+        "batch_size": "8",
+        "code_identity": {
+          "api/model.py": "b8b1db336e168b53d9ca808fe837d5bf8943d9dca76a14cf747e4f3a22d50545",
+          "api/registry.py": "1236f1f3a2d22964788081e8984a1f95e8d04133090b06aae72ab97aca5541ef",
+          "fair_uk/__init__.py": "7126e701c64e4f6ac68ea2f49b3da62c7085023c1313a090de72e6b6eb1ed415",
+          "fair_uk/__main__.py": "c75d1506ae236b5fe2cf9afba434c906464faac6df7c543bacb1627d9e2738bb",
+          "fair_uk/answers.py": "c7f03ab1d1e92b7cde00850a4f97f8c153b78d6c47bff75c68f993dd94826064",
+          "fair_uk/api_runner.py": "491534dbb7481a8016dfa6a8bbae059011b5a149a76aac1aec03223b5af4b57d",
+          "fair_uk/assets.py": "186ae25d647338183f2557f07ebf7295e9dd21d5674e55c4304d6c5a574d1831",
+          "fair_uk/baseline_metrics.py": "b59e22434ae10ca2f40e6465b2ed052ddaa0f4dcf6bdce05180030263c2f1fe0",
+          "fair_uk/benign.py": "3036d8d6c7c5384d197858d4f19d598c781701111d2530a66454484f3417dc34",
+          "fair_uk/bilingual.py": "1a233559a09568bba3b39085c8c0676f8169be8fde30b2c03b158a0aa60eddaf",
+          "fair_uk/capabilities.py": "7fd1b514d2b9568bf0c76ca77463ec72e01b63b77c44f12a546c3d1a7b8f0712",
+          "fair_uk/checkpoint_views.py": "3f7ea32922331900fbeaa3473eabc68e64b1c4fc5ffcf42e79c8dfc078b0e16c",
+          "fair_uk/comparison.py": "d7376cb7fc0cde532ab4f459abb3ddb86af1c8832cc93b555f1090c7009584e4",
+          "fair_uk/contracts.py": "bd0f425c79b0acfebbe9f60551b1cbc7f7ee4107113793bc4c3d92e4b7d07b94",
+          "fair_uk/credentials.py": "7b95765fd0c76302209531a1bdf3347a9960cdef57816dba91bd87aaa523449e",
+          "fair_uk/data.py": "d16ca25ae896f529f03d00b05d914cd02e15c75a280102dc7dafd4fd85724be4",
+          "fair_uk/datasets.json": "0705f1b2eff4d76855bb0628a7bbe6dc295f3cf6ddbff4b36ab37bb57f2fc239",
+          "fair_uk/evaluation_assets.py": "47dd077affb475f4075114a848080442bc4fd843a09a81b5d267fa16cd8b0184",
+          "fair_uk/expansion.py": "5f3f294e30cab8b6682bb9413302c5fcb8b1b7c092d47541c09c7b9358eaf366",
+          "fair_uk/expansion_metrics.py": "11319c16b75e2c4d72fc821ed094d0f117274f23771e4a578c0f2199b5d9f8b6",
+          "fair_uk/gemini_runner.py": "8aed08f40f34a6d920dab99b691149d3572b10e0d2bca21f9427b5aead98778c",
+          "fair_uk/lineage.py": "40196bcbbebfda2652a3586d94f55bb8a625a4c9d90ed59dc601a817bc9ed869",
+          "fair_uk/metric_specs.py": "920adf0c8af3ec6219c98f2df9747f3df6bb601ece67206b97a9cfcae6021cb2",
+          "fair_uk/metrics.py": "85936490709f9d9ec20c35e6ad832b7775b0770a8886ce5d6277a2bf1f0c994f",
+          "fair_uk/openai_runner.py": "a80f78936a07ecb8fbe1768a42e66629a8789e2d9b44b6d15a01fe3fef6513d8",
+          "fair_uk/paired.py": "f61826e1dd08f0746a2a3b77888dafe5614d6f54140f592a1535ac0fc5182931",
+          "fair_uk/paper.py": "c7148e09be76e97b5539d0717a841714c04369452ce2ddb8e24075e08bf78a23",
+          "fair_uk/provenance.py": "af2896a587669785cfb6bf6cf7c835d95e1eba69e657e049353a443d0b04d505",
+          "fair_uk/releases.py": "9769320dec0b12be815de2a53d72c4b905b3e9b11a5224456718bef1441c90ad",
+          "fair_uk/reporting.py": "2c0c1ed202cb77f7ee1cfa30492ed22c5ffeee4b2bef35b6074ef84d2d86df45",
+          "fair_uk/runner.py": "3c4721a0345134197d6371c46e16ece21b10a9b4c163b4f44ad963d9bf18312d",
+          "fair_uk/runs.py": "d57acae2705338c6d726088d7faa96aff135739c7b56b74feb5ab56bcf81d807",
+          "fair_uk/suite.py": "c603d451f0ce4844b05745e35cb76ffff03030828861e1db57f5abd0c4c07423",
+          "fair_uk/warbias/__init__.py": "48577a2647d656f09e3eea1491e35927385513a64f6d97fee40681f4128b75c9",
+          "fair_uk/warbias/aggregate.py": "bc940183ed8f30b640531968c36406a8107d03fb26d3c7c13b044435205d7aac",
+          "fair_uk/warbias/calibration.py": "130e3d289a0d96c2e2d696d34f53bc7f4d4b51bbd0dc856980b32ddf727bd2b1",
+          "fair_uk/warbias/cli.py": "f95a8db0069fd9a5565c1349bb8998871325f9e22d22897f96ba4d10a8f9aa5e",
+          "fair_uk/warbias/detection.py": "138fa188c72f34809c1935b99fa54aaba84eed693a9c6d1254d8ddb319853952",
+          "fair_uk/warbias/files.py": "0249bc0964ea6b8ef5c45482acd2bfd6aa21cbc467aff3bf27fe6da7cadce1c4",
+          "fair_uk/warbias/intervention.py": "7d586c3c5c6845f9f8477ae73d3549f1dafa11ac1d42af8a4b4750dcb0fad83f",
+          "fair_uk/warbias/panel.py": "345bf6df6026de7986e20df8660e6a85670d558067ee5d06684f538542e3a55c",
+          "fair_uk/warbias/prepare.py": "d99720d12dfa67bc7949748db6bb7d88173eca69182947b7bdd83a8433e1e321",
+          "fair_uk/warbias/report_schema.py": "8e3cae2a7839af8c3fe077d17134dac71a51653b35ae25555251c56100cb5827",
+          "fair_uk/warbias/rows.py": "a1a88a5717cc98c6d696bbd4897aa359f60601cbe440b1afdd1b6cb1cc676f46",
+          "fair_uk/warbias/schema.py": "0a708762d14610821126956f567e9d8407b30004992286d984f21ea0f7d649f5",
+          "fair_uk/warbias/scoring.py": "2241466ac4be8e40164c925e5222e1bf73a3e7dc31497cb78709bdb530273d46",
+          "fair_uk/warbias/stats.py": "4f57553aaa619b4089dc28b52a1163e13a49b1dc478159633bf03c3c41920245",
+          "fair_uk/warbias/tables.py": "0a9c7e905bb68fe63ecdf421a3bb9b0603bf55b201a569906cc9bf393c8c646f",
+          "fair_uk/winopron.py": "2aba52b844bedd06d9597fc800d8752550fb320e668c621230d5c68126907827",
+          "models/huggingface.py": "56d215b8f713d7579f9c7b58a9b8771b09c88e0e4fb8d1b6dd9068033b614b80",
+          "models/vllm_causallms.py": "a8552f4e522175f422ad2229813a8a725c0504ad7b8e758c504e3e09911e5c89",
+          "utils.py": "2729d2dc6c822a0142707d9f81b92f5da85d962b58f760430bd362db8a1bb704"
+        },
+        "dataset": {
+          "bundle_manifest_sha256": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+          "counterpart": "warbias_triplets_en",
+          "filename": "data/warbias_triplets_uk.jsonl",
+          "format": "adapted_jsonl_v1",
+          "human_validated": false,
+          "independent_clusters": 9,
+          "language": "uk",
+          "measurement_eligibility": "active",
+          "measurement_eligibility_reason": "Current approved released source at an immutable revision; content remains human-unvalidated",
+          "measurement_purpose": "training_source_diagnostic_not_heldout",
+          "original_adapted_source": {
+            "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/train_signal/data/warbias_triplets_uk.jsonl",
+            "sha256": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+          },
+          "pairing": {
+            "alignment": "source_identity_and_scoring_metadata",
+            "en_task": "warbias_triplets_en",
+            "excluded_uk_rows": 0,
+            "filename": "pairs/warbias_triplets.jsonl",
+            "interpretation": "Matched source conditions; translation validity remains human-unvalidated.",
+            "matched_rows": 137,
+            "sha256": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+            "uk_task": "warbias_triplets_uk"
+          },
+          "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+          "release_state": "published_source_evaluator_adaptation",
+          "repo": "FairForget/WarBias",
+          "revision": "164f355623c2da0028821e0942cad493558a6c13",
+          "rows": 137,
+          "sha256": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+          "source_provenance": [
+            {
+              "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+              "published": true,
+              "repo_id": "FairForget/WarBias",
+              "revision": "164f355623c2da0028821e0942cad493558a6c13",
+              "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9"
+            },
+            {
+              "path": "research/september-2026/preparation/case_splits.csv",
+              "published": true,
+              "repo_id": "FairForget/WarBias",
+              "revision": "164f355623c2da0028821e0942cad493558a6c13",
+              "sha256": "576f9c825d3d6b5e451990558af76de3b06f838552bc8aaedfcc6e84726d307f"
+            }
+          ],
+          "source_role": "training_signal",
+          "split": "train",
+          "training_gradients_authorized": false
+        },
+        "evaluation_asset_identity": {
+          "generation_prompt_format": null,
+          "input_mode": "likelihood",
+          "input_sha256": "fc848f47878ae5211f002edc1ec2864ea2dc70e0b9a9228a372dd5ab1355f753",
+          "native_template_sha256": null,
+          "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+          "rows": 137,
+          "schema_version": 1,
+          "tokenizer_serialization": "fast_tokenizer_json",
+          "tokenizer_sha256": "3998287202524b4db97d9f8a457e7382518b7bd547f85edfd35e074eb1b96d72"
+        },
+        "generation_config": null,
+        "harness_version": "0.4.14.dev0",
+        "limit_clusters_per_stratum": null,
+        "model_backend": "vllm",
+        "model_identity": {
+          "arguments_sha256": "c52cf8084da1a70ca9609af214099650e3e4ace7273d3a43858c1ac13e36e444",
+          "local_files_sha256": {
+            ".gitattributes": "c2f2202eb8ff4551d334190631165907f0d60bf435d9d07f25b0d97a20b0bd9a",
+            "README.md": "5bf4c106d59291c65e8798b346248c24c30fffc391a62b60eeefedc95ac8c973",
+            "added_tokens.json": "50b2f405ba56a26d4913fd772089992252d7f942123cc0a034d96424221ba946",
+            "chat_template.json": "ec2c77ae38d74b8009fb105a07b0ebf8c75a13281e181cc3dce670a4a5fe0001",
+            "config.json": "89795290a04de188c98bded7b65fcc8366d3b4586d883dcc5751395b9cd76c78",
+            "model-00001-of-00005.safetensors": "718626149d560a990648d6d8c3a54c4f8719739b13556964790a3efb305ee3e3",
+            "model-00002-of-00005.safetensors": "b143ef5f9a3e46fab64d883cf5df06a48a5ca5e1899238cbe352aa108a32cdb8",
+            "model-00003-of-00005.safetensors": "94de704c9825219a93c691cadc80e366e489baf5e9e2e61397fc93d8eedffacb",
+            "model-00004-of-00005.safetensors": "b65fd837df3eac872b88d8ff2872defc1c1bb6d495be6bae9468b02228678ec8",
+            "model-00005-of-00005.safetensors": "410d29ced9b68cff309bee2e8871e20758413607f64c5328bc884d7d68bae781",
+            "model.safetensors.index.json": "417499de9b05b4c1afe2bf9e4d3028b6a7ea9680d0678185587f36489619b8b7",
+            "performance.png": "a53d819f7a8adc2cd7468381937e9455b887c3beb8aac0d2bb9fe1c517ab4a5e",
+            "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+            "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+            "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+            "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+            "tokenizer.model": "1299c11d7cf632ef3b4e11937501358ada021bbdf7c47638d13c0ee982f2e79c",
+            "tokenizer_config.json": "bfe25c2735e395407beb78456ea9a6984a1f00d8c16fa04a8b75f2a614cf53e1"
+          },
+          "parameters": {
+            "async_scheduling": false,
+            "dtype": "bfloat16",
+            "enable_chunked_prefill": false,
+            "enable_prefix_caching": false,
+            "enable_thinking": false,
+            "enforce_eager": true,
+            "max_model_len": 4096,
+            "max_num_seqs": 1,
+            "pretrained": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+            "seed": 42,
+            "tensor_parallel_size": 1
+          }
+        },
+        "protocol": "warbias_full_sentence_mean_token_logprob_v1",
+        "runtime_versions": {
+          "numpy": "2.2.6",
+          "torch": "2.10.0+cu129",
+          "transformers": "4.57.6"
+        },
+        "seed": 42,
+        "selected_ids_sha256": "988ff509e8b8c33c6a42cc57dedb9177241b163013c822ff88a9c3098b90ac64",
+        "selected_rows": 137,
+        "task": "warbias_triplets_uk",
+        "version": "0.1.0"
+      }
+    }
+  },
+  "source_rows_sha256": "3ccc6c59e834e80cbbcdb81e670dc083182b1a77b8370a2e644454915f77cb10",
+  "task": "warbias_triplets_uk",
+  "version": "fair_uk_native_paired_v1"
+}
