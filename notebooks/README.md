@@ -2,7 +2,7 @@
 
 Start with [setup.ipynb](setup.ipynb) or the [setup guide](SETUP.md).
 Each method notebook configures and trains **all six models**, with separate
-logs, checkpoints and receipts for every model. Saved results are optional.
+logs, checkpoints and receipts for every model.
 
 Use [evaluate_before_after.ipynb](evaluate_before_after.ipynb) for the shared
 Fair-UK evaluation workflow: collect the six baselines, evaluate the 30 post
@@ -30,9 +30,8 @@ revisions. The [recipes](../configs/unlearning/recipes/) contain all 30
 model-method configurations. The [setup script](../scripts/setup_unlearning.py)
 configures local paths and can download every checkpoint.
 
-RMU, task vector and WGA keep the reviewed WarBias streams. NPO and BiasUnlearn
-keep the reviewed StereoSet primary streams. Model expansion preserves the
-existing source hashes, objective settings and train/development boundaries.
-These two data protocols remain separate.
+RMU, task vector and WGA train on WarBias. NPO and BiasUnlearn train on
+StereoSet. The recipes specify each method's data files, objectives and
+training/development split.
 
 Existing saved reports remain under [executed/](executed/).
