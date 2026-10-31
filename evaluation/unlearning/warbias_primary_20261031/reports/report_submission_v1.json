@@ -1,0 +1,48 @@
+{
+  "kind": "complete_saved_WarBias_report_dependency_submission",
+  "status": "scheduler_submitted_not_completed",
+  "plan": {
+    "report_release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_report_v1",
+    "report_checksums_sha256": "cf6302cb3fda950e75e59845ae13f5a536639555929710ba9015c156da6ee9d7",
+    "training_release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+    "training_checksums_sha256": "8712417bdf6a0207e2efd10e07f948305d3735d74bdbcb5a8cbfab9db1b117d8",
+    "measurement_submission_sha256": "865777387c8a60e855b7f5f6809c04449b0d523bf74d19955525c51a207bf709",
+    "dependencies_afterok": [
+      "2610276",
+      "2610275",
+      "2610279",
+      "2610278",
+      "2610282",
+      "2610281",
+      "2610285",
+      "2610284",
+      "2610288",
+      "2610287",
+      "2610291",
+      "2610290"
+    ],
+    "result_parent": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_reports_v1"
+  },
+  "submitted_at_utc": "2026-10-31T13:50:50.913804+00:00",
+  "model_calls": 0,
+  "three_notebooks_expected": true,
+  "csv_tables_expected": 24,
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--dependency=afterok:2610276:2610275:2610279:2610278:2610282:2610281:2610285:2610284:2610288:2610287:2610291:2610290",
+    "--kill-on-invalid-dep=yes",
+    "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-report-v1-%j.log",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_report_v1/deploy/unlearning_primary/report_notebooks.sbatch",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_report_v1",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_reports_v1"
+  ],
+  "returncode": 0,
+  "stdout": "2610782\n",
+  "stderr": "",
+  "job_id": "2610782",
+  "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_reports_v1/reports-2610782",
+  "ssh_returncode": 0,
+  "ssh_stderr": ""
+}
