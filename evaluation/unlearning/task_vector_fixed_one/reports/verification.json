@@ -1,0 +1,14 @@
+{
+  "kind": "portable_fixed_scale_one_report_verified",
+  "manifest": {
+    "path": "manifest.json",
+    "sha256": "dcaac641d40c05163b1ea0b736ba7f5ee89ec8a39ccb893b30489a59ddbd2645"
+  },
+  "models": 6,
+  "heldout_pairs": 72,
+  "training_source_pairs": 6,
+  "metric_inventory_entries": 108,
+  "new_metric_calculations": 0,
+  "scale_search": false,
+  "fixed_scale": 1.0
+}

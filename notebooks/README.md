@@ -35,3 +35,9 @@ Existing saved reports remain under [executed/](executed/).
 
 Task-vector applications use fixed scale 1.0 without scale search. Zero-strength
 interventions are forbidden. See the [application protocol](../docs/task_vector_nonzero.md).
+
+The [fixed scale-one results](../evaluation/unlearning/task_vector_fixed_one/README.md)
+contain fresh before/after measurements for all six models and the updated
+[executed task-vector notebook](executed/warbias_task_vector_results.ipynb).
+The source archive supports saved-result replay. Other method reports retain
+their original measurements.

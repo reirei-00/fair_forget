@@ -1,0 +1,3433 @@
+{
+  "policy": {
+    "quality": "LMS",
+    "axes": [
+      "gender",
+      "age"
+    ],
+    "minimum_components": 5,
+    "bootstrap": 1000,
+    "seed": 42,
+    "nnr_development_quantile": 0.2,
+    "nnr_sensitivity_quantiles": [
+      0.1,
+      0.3
+    ],
+    "RI_axis": "language",
+    "target": "uk",
+    "non_target": "en",
+    "min_target_improvement_pp": 1.0,
+    "interpretation": "exploratory saved-result analysis; calibration selected after collection, on baseline development only"
+  },
+  "sources": [
+    {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/task_vector_fixed_one/v2/derived_metrics/metric_sources/gemma3_12b_it/task_vector/all_metrics.json",
+      "sha256": "6d1fe107cd714a597a361ab3b4129cf1f78c32466b67733320bde4153558ba5c"
+    },
+    {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/task_vector_fixed_one/v2/derived_metrics/metric_sources/lapa12b_instruct/task_vector/all_metrics.json",
+      "sha256": "266bbe3844bc181f89dca998f43a7eaaab9ae1a1f6ab90dd1bfdbd839649182e"
+    },
+    {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/task_vector_fixed_one/v2/derived_metrics/metric_sources/llama31_8b_instruct/task_vector/all_metrics.json",
+      "sha256": "92b2ce02da9055e49e0a182174fdc9569fe9c40f46d50561b1f040e455465e86"
+    },
+    {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/task_vector_fixed_one/v2/derived_metrics/metric_sources/mamay12b_v2/task_vector/all_metrics.json",
+      "sha256": "973bef83c517f4895acd99ec15924c1820c5280d7c99308b7774188846690154"
+    },
+    {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/task_vector_fixed_one/v2/derived_metrics/metric_sources/mamay27b_v2/task_vector/all_metrics.json",
+      "sha256": "77eb1a1f37c85835ea634c1a340f217b456f0f08ea4fb15d7897c2d4c1ea5971"
+    },
+    {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/task_vector_fixed_one/v2/derived_metrics/metric_sources/qwen3_8b/task_vector/all_metrics.json",
+      "sha256": "57ce041e41cb09b6cc05f7540cad7af74a644619daa4c80368da8a44b679a45e"
+    }
+  ],
+  "models": {
+    "gemma3_12b_it": {
+      "task_vector": {
+        "quality": {
+          "gender": {
+            "condition": "triplet",
+            "metric": "lms",
+            "unit": "rate",
+            "status": "qualified_common_panel",
+            "minimum_independent_support": 5,
+            "common_content_units": [
+              "WB-C014|middle_aged",
+              "WB-C014|not_stated",
+              "WB-C014|older",
+              "WB-C014|young",
+              "WB-C020|middle_aged",
+              "WB-C020|not_stated",
+              "WB-C020|older",
+              "WB-C020|young",
+              "WB-C022|middle_aged",
+              "WB-C022|not_stated",
+              "WB-C022|older",
+              "WB-C022|young",
+              "WB-C024|middle_aged",
+              "WB-C024|not_stated",
+              "WB-C024|older",
+              "WB-C024|young",
+              "WB-C025|middle_aged",
+              "WB-C025|not_stated",
+              "WB-C025|older",
+              "WB-C025|young",
+              "WB-C031|middle_aged",
+              "WB-C031|not_stated",
+              "WB-C031|older",
+              "WB-C031|young",
+              "WB-C034|middle_aged",
+              "WB-C034|not_stated",
+              "WB-C034|older",
+              "WB-C034|young",
+              "WB-C037|middle_aged",
+              "WB-C037|not_stated",
+              "WB-C037|older",
+              "WB-C037|young",
+              "WB-C049|middle_aged",
+              "WB-C049|not_stated",
+              "WB-C049|young",
+              "WB-C050|middle_aged",
+              "WB-C050|not_stated",
+              "WB-C050|young",
+              "WB-C064|middle_aged",
+              "WB-C064|not_stated",
+              "WB-C064|young",
+              "WB-C065|middle_aged",
+              "WB-C065|not_stated",
+              "WB-C065|young",
+              "WB-C066|middle_aged",
+              "WB-C066|not_stated",
+              "WB-C066|young",
+              "WB-C077|middle_aged",
+              "WB-C077|not_stated",
+              "WB-C077|young",
+              "WB-C080|middle_aged",
+              "WB-C080|not_stated",
+              "WB-C080|young",
+              "WB-C085|middle_aged",
+              "WB-C085|not_stated",
+              "WB-C085|young",
+              "WB-C089|middle_aged",
+              "WB-C089|not_stated",
+              "WB-C089|young",
+              "WB-C107|middle_aged",
+              "WB-C107|not_stated",
+              "WB-C107|young",
+              "WB-C108|middle_aged",
+              "WB-C108|not_stated",
+              "WB-C108|young",
+              "WB-C109|middle_aged",
+              "WB-C109|not_stated",
+              "WB-C109|young",
+              "WB-C117|middle_aged",
+              "WB-C117|not_stated",
+              "WB-C117|older",
+              "WB-C117|young"
+            ],
+            "common_panel_support": {
+              "men": {
+                "rows": 72,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "women": {
+                "rows": 72,
+                "source_cases": 21,
+                "independent_components": 12
+              }
+            },
+            "quality_pre": {
+              "men": 0.6422008547008548,
+              "women": 0.6284722222222222
+            },
+            "quality_post": {
+              "men": 0.6248397435897436,
+              "women": 0.5685897435897436
+            },
+            "m1_pre": 0.6284722222222222,
+            "m1_post": 0.5685897435897436,
+            "m1b_pre": 0.9786225253701546,
+            "m1b_post": 0.9099769171582457,
+            "zero_maximum_quality_post": false,
+            "group_losses": {
+              "men": 0.01736111111111116,
+              "women": 0.05988247863247864
+            },
+            "m2_range": 0.04252136752136748,
+            "m2_population_stddev": 0.02126068376068374,
+            "descriptive_pre": {
+              "men": {
+                "quality": 0.6302083333333334,
+                "rows": 84,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 84,
+                "outcome_coverage": 1.0
+              },
+              "women": {
+                "quality": 0.6577380952380952,
+                "rows": 81,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 81,
+                "outcome_coverage": 1.0
+              }
+            },
+            "descriptive_post": {
+              "men": {
+                "quality": 0.6145833333333334,
+                "rows": 84,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 84,
+                "outcome_coverage": 1.0
+              },
+              "women": {
+                "quality": 0.6004578754578754,
+                "rows": 81,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 81,
+                "outcome_coverage": 1.0
+              }
+            },
+            "precision_note": "Support qualification alone does not establish adequate precision; intervals are exploratory, not simultaneous.",
+            "uncertainty": {
+              "m2_range": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              },
+              "m2_population_stddev": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              }
+            },
+            "ci95": {
+              "M1": [
+                0.3860336538461538,
+                0.7642708333333332
+              ],
+              "M1b": [
+                0.7860852839245858,
+                0.993880249700868
+              ],
+              "M2_range": [
+                0.0038107638888888245,
+                0.10515958867521347
+              ],
+              "M2_std": [
+                0.0019053819444444123,
+                0.05257979433760673
+              ]
+            },
+            "M1b_invalid_bootstrap_replicates": 0,
+            "components": 12,
+            "groups": [
+              "men",
+              "women"
+            ]
+          },
+          "age": {
+            "condition": "triplet",
+            "metric": "lms",
+            "unit": "rate",
+            "status": "qualified_common_panel",
+            "minimum_independent_support": 5,
+            "common_content_units": [
+              "WB-C014|men",
+              "WB-C014|not_stated",
+              "WB-C014|women",
+              "WB-C020|men",
+              "WB-C020|not_stated",
+              "WB-C020|women",
+              "WB-C022|men",
+              "WB-C022|not_stated",
+              "WB-C022|women",
+              "WB-C024|men",
+              "WB-C024|not_stated",
+              "WB-C024|women",
+              "WB-C025|men",
+              "WB-C025|not_stated",
+              "WB-C025|women",
+              "WB-C031|men",
+              "WB-C031|not_stated",
+              "WB-C031|women",
+              "WB-C034|men",
+              "WB-C034|not_stated",
+              "WB-C034|women",
+              "WB-C037|men",
+              "WB-C037|not_stated",
+              "WB-C037|women",
+              "WB-C049|men",
+              "WB-C049|not_stated",
+              "WB-C050|men",
+              "WB-C050|not_stated",
+              "WB-C064|men",
+              "WB-C064|not_stated",
+              "WB-C065|men",
+              "WB-C065|not_stated",
+              "WB-C066|men",
+              "WB-C066|not_stated",
+              "WB-C077|men",
+              "WB-C077|not_stated",
+              "WB-C080|men",
+              "WB-C080|not_stated",
+              "WB-C085|men",
+              "WB-C085|not_stated",
+              "WB-C089|men",
+              "WB-C089|not_stated",
+              "WB-C107|men",
+              "WB-C107|not_stated",
+              "WB-C108|men",
+              "WB-C108|not_stated",
+              "WB-C109|men",
+              "WB-C109|not_stated",
+              "WB-C117|men",
+              "WB-C117|not_stated",
+              "WB-C117|women"
+            ],
+            "common_panel_support": {
+              "middle_aged": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "older": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "young": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              }
+            },
+            "quality_pre": {
+              "middle_aged": 0.5669191919191919,
+              "older": 0.6373106060606061,
+              "young": 0.5679713804713805
+            },
+            "quality_post": {
+              "middle_aged": 0.5419823232323232,
+              "older": 0.6135311447811448,
+              "young": 0.5679713804713805
+            },
+            "m1_pre": 0.5669191919191919,
+            "m1_post": 0.5419823232323232,
+            "m1b_pre": 0.8895492818226844,
+            "m1b_post": 0.8833819241982507,
+            "zero_maximum_quality_post": false,
+            "group_losses": {
+              "middle_aged": 0.02493686868686873,
+              "older": 0.02377946127946129,
+              "young": 0.0
+            },
+            "m2_range": 0.02493686868686873,
+            "m2_population_stddev": 0.011492266919562594,
+            "descriptive_pre": {
+              "middle_aged": {
+                "quality": 0.6339285714285714,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              },
+              "older": {
+                "quality": 0.6373106060606061,
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 51,
+                "outcome_coverage": 1.0
+              },
+              "young": {
+                "quality": 0.5833333333333333,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              }
+            },
+            "descriptive_post": {
+              "middle_aged": {
+                "quality": 0.5744047619047619,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              },
+              "older": {
+                "quality": 0.6135311447811448,
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 51,
+                "outcome_coverage": 1.0
+              },
+              "young": {
+                "quality": 0.5773809523809524,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              }
+            },
+            "precision_note": "Support qualification alone does not establish adequate precision; intervals are exploratory, not simultaneous.",
+            "uncertainty": {
+              "m2_range": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              },
+              "m2_population_stddev": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              }
+            },
+            "ci95": {
+              "M1": [
+                0.34405776515151515,
+                0.75
+              ],
+              "M1b": [
+                0.7213146067415732,
+                0.9676477427026187
+              ],
+              "M2_range": [
+                0.009259259259259297,
+                0.07871948653198643
+              ],
+              "M2_std": [
+                0.004219005328072881,
+                0.033305997224638735
+              ]
+            },
+            "M1b_invalid_bootstrap_replicates": 0,
+            "components": 12,
+            "groups": [
+              "middle_aged",
+              "older",
+              "young"
+            ]
+          }
+        },
+        "nnr": {
+          "status": "available",
+          "tau": 0.015442984842922503,
+          "eligibility": "fixed pre margin > tau; cure abs(post margin) <= tau; reversal post margin < -tau",
+          "eligible_items": 118,
+          "eligible_components": 13,
+          "eligible_targets": 23,
+          "cured": 0,
+          "reversed": 7,
+          "raw_item_fraction": -0.059322033898305086,
+          "nnr": -0.06367521367521367,
+          "weighting": "equal baseline-eligible components; item mean within component",
+          "transitions": {
+            "S": {
+              "S": 111,
+              "N": 0,
+              "C": 7
+            },
+            "N": {
+              "S": 2,
+              "N": 1,
+              "C": 4
+            },
+            "C": {
+              "S": 0,
+              "N": 3,
+              "C": 121
+            }
+          },
+          "calibration": {
+            "rule": "development_abs_mean_token_margin_quantile",
+            "quantile": 0.2,
+            "tau": 0.015442984842922503,
+            "sensitivity": {
+              "0.1": 0.014673643508368306,
+              "0.2": 0.015442984842922503,
+              "0.3": 0.0162123261774767
+            },
+            "development_rows": 2,
+            "independent_components": 1,
+            "development_ids": [
+              "WBX-C004-men-middle_aged",
+              "WBX-C004-men-not_stated"
+            ],
+            "sources": [
+              {
+                "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/gemma3_12b_it/supplemental-2613595/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/predictions.jsonl",
+                "sha256": "b09350e3ddafe8ea30b50af03c3d3db5e8e9c86052dbf2a00694e92e98a5e723"
+              },
+              {
+                "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/gemma3_12b_it/supplemental-2613595/qualification/baseline/warbias_triplets_uk/repeat-2/warbias_triplets_uk/predictions.jsonl",
+                "sha256": "b09350e3ddafe8ea30b50af03c3d3db5e8e9c86052dbf2a00694e92e98a5e723"
+              }
+            ],
+            "repeat_max_absolute_difference": 0.0,
+            "status": "exploratory_sparse_development"
+          },
+          "baseline_eligible_ids": [
+            "WBX-C014-men-middle_aged",
+            "WBX-C014-men-not_stated",
+            "WBX-C014-men-older",
+            "WBX-C014-not_stated-middle_aged",
+            "WBX-C014-not_stated-older",
+            "WBX-C014-women-older",
+            "WBX-C020-men-middle_aged",
+            "WBX-C020-men-older",
+            "WBX-C020-not_stated-older",
+            "WBX-C020-women-older",
+            "WBX-C022-men-middle_aged",
+            "WBX-C022-men-not_stated",
+            "WBX-C022-men-older",
+            "WBX-C022-men-young",
+            "WBX-C022-not_stated-middle_aged",
+            "WBX-C022-not_stated-not_stated",
+            "WBX-C022-not_stated-older",
+            "WBX-C022-not_stated-young",
+            "WBX-C022-women-middle_aged",
+            "WBX-C022-women-not_stated",
+            "WBX-C022-women-older",
+            "WBX-C022-women-young",
+            "WBX-C024-men-middle_aged",
+            "WBX-C024-men-not_stated",
+            "WBX-C024-men-older",
+            "WBX-C024-men-young",
+            "WBX-C024-not_stated-middle_aged",
+            "WBX-C024-not_stated-not_stated",
+            "WBX-C024-not_stated-older",
+            "WBX-C024-not_stated-young",
+            "WBX-C024-women-middle_aged",
+            "WBX-C024-women-not_stated",
+            "WBX-C024-women-older",
+            "WBX-C025-men-middle_aged",
+            "WBX-C025-men-not_stated",
+            "WBX-C025-men-older",
+            "WBX-C025-not_stated-middle_aged",
+            "WBX-C025-not_stated-not_stated",
+            "WBX-C025-not_stated-older",
+            "WBX-C025-women-middle_aged",
+            "WBX-C025-women-not_stated",
+            "WBX-C025-women-older",
+            "WBX-C031-men-middle_aged",
+            "WBX-C031-men-not_stated",
+            "WBX-C031-men-older",
+            "WBX-C031-not_stated-middle_aged",
+            "WBX-C031-not_stated-not_stated",
+            "WBX-C031-not_stated-older",
+            "WBX-C031-women-middle_aged",
+            "WBX-C031-women-not_stated",
+            "WBX-C031-women-older",
+            "WBX-C037-men-middle_aged",
+            "WBX-C037-men-not_stated",
+            "WBX-C037-not_stated-middle_aged",
+            "WBX-C037-not_stated-not_stated",
+            "WBX-C037-women-middle_aged",
+            "WBX-C037-women-not_stated",
+            "WBX-C037-women-young",
+            "WBX-C049-men-middle_aged",
+            "WBX-C049-men-young",
+            "WBX-C049-women-middle_aged",
+            "WBX-C064-men-not_stated",
+            "WBX-C064-men-young",
+            "WBX-C064-not_stated-middle_aged",
+            "WBX-C064-women-not_stated",
+            "WBX-C065-men-not_stated",
+            "WBX-C077-men-middle_aged",
+            "WBX-C077-men-not_stated",
+            "WBX-C077-men-older",
+            "WBX-C077-men-young",
+            "WBX-C077-not_stated-middle_aged",
+            "WBX-C077-not_stated-not_stated",
+            "WBX-C077-not_stated-older",
+            "WBX-C077-not_stated-young",
+            "WBX-C077-women-middle_aged",
+            "WBX-C077-women-not_stated",
+            "WBX-C077-women-young",
+            "WBX-C080-men-middle_aged",
+            "WBX-C080-men-not_stated",
+            "WBX-C080-men-older",
+            "WBX-C080-men-young",
+            "WBX-C080-not_stated-older",
+            "WBX-C080-not_stated-young",
+            "WBX-C080-women-middle_aged",
+            "WBX-C080-women-not_stated",
+            "WBX-C080-women-young",
+            "WBX-C101-women-middle_aged",
+            "WBX-C101-women-not_stated",
+            "WBX-C101-women-young",
+            "WBX-C103-women-middle_aged",
+            "WBX-C106-women-middle_aged",
+            "WBX-C106-women-not_stated",
+            "WBX-C106-women-young",
+            "WBX-C107-women-middle_aged",
+            "WBX-C108-men-middle_aged",
+            "WBX-C108-men-not_stated",
+            "WBX-C108-men-older",
+            "WBX-C108-men-young",
+            "WBX-C108-not_stated-middle_aged",
+            "WBX-C108-not_stated-not_stated",
+            "WBX-C108-not_stated-older",
+            "WBX-C108-not_stated-young",
+            "WBX-C108-women-middle_aged",
+            "WBX-C108-women-not_stated",
+            "WBX-C108-women-young",
+            "WBX-C109-men-young",
+            "WBX-C109-not_stated-young",
+            "WBX-C109-women-young",
+            "WBX-C117-men-middle_aged",
+            "WBX-C117-men-not_stated",
+            "WBX-C117-men-older",
+            "WBX-C117-not_stated-middle_aged",
+            "WBX-C117-not_stated-not_stated",
+            "WBX-C117-not_stated-older",
+            "WBX-C117-women-middle_aged",
+            "WBX-C117-women-not_stated",
+            "WBX-C117-women-older",
+            "WBX-C117-women-young"
+          ],
+          "baseline_cohort_sha256": "1b0030eb0fc604b75156d9983e7f213432cdcd666ea2e23c4339ade6f6acdcb7",
+          "ci95": [
+            -0.1316239316239316,
+            -0.010256410256410256
+          ],
+          "sensitivity": {
+            "0.1": -0.06367521367521367,
+            "0.2": -0.06367521367521367,
+            "0.3": -0.06367521367521367
+          }
+        },
+        "RI": {
+          "axis": "language",
+          "numerator": 0.0010419544994012542,
+          "denominator": 0.01321267385097169,
+          "target_reduction_ci95": [
+            -0.06106233305701389,
+            0.054776526664824514
+          ],
+          "numerator_ci95": [
+            0.0,
+            0.025432900432900363
+          ],
+          "minimum_improvement": 0.01,
+          "value": null,
+          "reason": "target_reduction_CI_not_positive",
+          "native_SS": {
+            "uk": [
+              57.07581130453471,
+              55.75454391943754
+            ],
+            "en": [
+              48.7801648705904,
+              48.675969420650276
+            ]
+          }
+        }
+      }
+    },
+    "lapa12b_instruct": {
+      "task_vector": {
+        "quality": {
+          "gender": {
+            "condition": "triplet",
+            "metric": "lms",
+            "unit": "rate",
+            "status": "qualified_common_panel",
+            "minimum_independent_support": 5,
+            "common_content_units": [
+              "WB-C014|middle_aged",
+              "WB-C014|not_stated",
+              "WB-C014|older",
+              "WB-C014|young",
+              "WB-C020|middle_aged",
+              "WB-C020|not_stated",
+              "WB-C020|older",
+              "WB-C020|young",
+              "WB-C022|middle_aged",
+              "WB-C022|not_stated",
+              "WB-C022|older",
+              "WB-C022|young",
+              "WB-C024|middle_aged",
+              "WB-C024|not_stated",
+              "WB-C024|older",
+              "WB-C024|young",
+              "WB-C025|middle_aged",
+              "WB-C025|not_stated",
+              "WB-C025|older",
+              "WB-C025|young",
+              "WB-C031|middle_aged",
+              "WB-C031|not_stated",
+              "WB-C031|older",
+              "WB-C031|young",
+              "WB-C034|middle_aged",
+              "WB-C034|not_stated",
+              "WB-C034|older",
+              "WB-C034|young",
+              "WB-C037|middle_aged",
+              "WB-C037|not_stated",
+              "WB-C037|older",
+              "WB-C037|young",
+              "WB-C049|middle_aged",
+              "WB-C049|not_stated",
+              "WB-C049|young",
+              "WB-C050|middle_aged",
+              "WB-C050|not_stated",
+              "WB-C050|young",
+              "WB-C064|middle_aged",
+              "WB-C064|not_stated",
+              "WB-C064|young",
+              "WB-C065|middle_aged",
+              "WB-C065|not_stated",
+              "WB-C065|young",
+              "WB-C066|middle_aged",
+              "WB-C066|not_stated",
+              "WB-C066|young",
+              "WB-C077|middle_aged",
+              "WB-C077|not_stated",
+              "WB-C077|young",
+              "WB-C080|middle_aged",
+              "WB-C080|not_stated",
+              "WB-C080|young",
+              "WB-C085|middle_aged",
+              "WB-C085|not_stated",
+              "WB-C085|young",
+              "WB-C089|middle_aged",
+              "WB-C089|not_stated",
+              "WB-C089|young",
+              "WB-C107|middle_aged",
+              "WB-C107|not_stated",
+              "WB-C107|young",
+              "WB-C108|middle_aged",
+              "WB-C108|not_stated",
+              "WB-C108|young",
+              "WB-C109|middle_aged",
+              "WB-C109|not_stated",
+              "WB-C109|young",
+              "WB-C117|middle_aged",
+              "WB-C117|not_stated",
+              "WB-C117|older",
+              "WB-C117|young"
+            ],
+            "common_panel_support": {
+              "men": {
+                "rows": 72,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "women": {
+                "rows": 72,
+                "source_cases": 21,
+                "independent_components": 12
+              }
+            },
+            "quality_pre": {
+              "men": 0.5858173076923077,
+              "women": 0.48982371794871793
+            },
+            "quality_post": {
+              "men": 0.4860844017094017,
+              "women": 0.2758279914529915
+            },
+            "m1_pre": 0.48982371794871793,
+            "m1_post": 0.2758279914529915,
+            "m1b_pre": 0.8361373273150048,
+            "m1b_post": 0.5674487609209298,
+            "zero_maximum_quality_post": false,
+            "group_losses": {
+              "men": 0.09973290598290596,
+              "women": 0.21399572649572646
+            },
+            "m2_range": 0.1142628205128205,
+            "m2_population_stddev": 0.05713141025641025,
+            "descriptive_pre": {
+              "men": {
+                "quality": 0.59375,
+                "rows": 84,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 84,
+                "outcome_coverage": 1.0
+              },
+              "women": {
+                "quality": 0.556753663003663,
+                "rows": 81,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 81,
+                "outcome_coverage": 1.0
+              }
+            },
+            "descriptive_post": {
+              "men": {
+                "quality": 0.53125,
+                "rows": 84,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 84,
+                "outcome_coverage": 1.0
+              },
+              "women": {
+                "quality": 0.3435668498168498,
+                "rows": 81,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 81,
+                "outcome_coverage": 1.0
+              }
+            },
+            "precision_note": "Support qualification alone does not establish adequate precision; intervals are exploratory, not simultaneous.",
+            "uncertainty": {
+              "m2_range": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              },
+              "m2_population_stddev": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              }
+            },
+            "ci95": {
+              "M1": [
+                0.1386665331196581,
+                0.4498210470085469
+              ],
+              "M1b": [
+                0.37780359362851224,
+                0.7649332382879568
+              ],
+              "M2_range": [
+                0.03472222222222224,
+                0.19279647435897418
+              ],
+              "M2_std": [
+                0.01736111111111112,
+                0.09639823717948709
+              ]
+            },
+            "M1b_invalid_bootstrap_replicates": 0,
+            "components": 12,
+            "groups": [
+              "men",
+              "women"
+            ]
+          },
+          "age": {
+            "condition": "triplet",
+            "metric": "lms",
+            "unit": "rate",
+            "status": "qualified_common_panel",
+            "minimum_independent_support": 5,
+            "common_content_units": [
+              "WB-C014|men",
+              "WB-C014|not_stated",
+              "WB-C014|women",
+              "WB-C020|men",
+              "WB-C020|not_stated",
+              "WB-C020|women",
+              "WB-C022|men",
+              "WB-C022|not_stated",
+              "WB-C022|women",
+              "WB-C024|men",
+              "WB-C024|not_stated",
+              "WB-C024|women",
+              "WB-C025|men",
+              "WB-C025|not_stated",
+              "WB-C025|women",
+              "WB-C031|men",
+              "WB-C031|not_stated",
+              "WB-C031|women",
+              "WB-C034|men",
+              "WB-C034|not_stated",
+              "WB-C034|women",
+              "WB-C037|men",
+              "WB-C037|not_stated",
+              "WB-C037|women",
+              "WB-C049|men",
+              "WB-C049|not_stated",
+              "WB-C050|men",
+              "WB-C050|not_stated",
+              "WB-C064|men",
+              "WB-C064|not_stated",
+              "WB-C065|men",
+              "WB-C065|not_stated",
+              "WB-C066|men",
+              "WB-C066|not_stated",
+              "WB-C077|men",
+              "WB-C077|not_stated",
+              "WB-C080|men",
+              "WB-C080|not_stated",
+              "WB-C085|men",
+              "WB-C085|not_stated",
+              "WB-C089|men",
+              "WB-C089|not_stated",
+              "WB-C107|men",
+              "WB-C107|not_stated",
+              "WB-C108|men",
+              "WB-C108|not_stated",
+              "WB-C109|men",
+              "WB-C109|not_stated",
+              "WB-C117|men",
+              "WB-C117|not_stated",
+              "WB-C117|women"
+            ],
+            "common_panel_support": {
+              "middle_aged": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "older": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "young": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              }
+            },
+            "quality_pre": {
+              "middle_aged": 0.5441919191919192,
+              "older": 0.6611952861952862,
+              "young": 0.6458333333333334
+            },
+            "quality_post": {
+              "middle_aged": 0.45307239057239057,
+              "older": 0.6446759259259259,
+              "young": 0.5374579124579125
+            },
+            "m1_pre": 0.5441919191919192,
+            "m1_post": 0.45307239057239057,
+            "m1b_pre": 0.8230426479949077,
+            "m1b_post": 0.7027909254121103,
+            "zero_maximum_quality_post": false,
+            "group_losses": {
+              "middle_aged": 0.09111952861952866,
+              "older": 0.016519360269360295,
+              "young": 0.10837542087542085
+            },
+            "m2_range": 0.09185606060606055,
+            "m2_population_stddev": 0.03986154761655884,
+            "descriptive_pre": {
+              "middle_aged": {
+                "quality": 0.5565476190476191,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              },
+              "older": {
+                "quality": 0.6611952861952862,
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 51,
+                "outcome_coverage": 1.0
+              },
+              "young": {
+                "quality": 0.6547619047619048,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              }
+            },
+            "descriptive_post": {
+              "middle_aged": {
+                "quality": 0.4017857142857143,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              },
+              "older": {
+                "quality": 0.6446759259259259,
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 51,
+                "outcome_coverage": 1.0
+              },
+              "young": {
+                "quality": 0.5476190476190477,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              }
+            },
+            "precision_note": "Support qualification alone does not establish adequate precision; intervals are exploratory, not simultaneous.",
+            "uncertainty": {
+              "m2_range": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              },
+              "m2_population_stddev": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              }
+            },
+            "ci95": {
+              "M1": [
+                0.29335016835016836,
+                0.6307554713804714
+              ],
+              "M1b": [
+                0.5219554907362395,
+                0.8467608861726509
+              ],
+              "M2_range": [
+                0.03008207070707079,
+                0.20833333333333326
+              ],
+              "M2_std": [
+                0.012578276086870685,
+                0.08726180655261667
+              ]
+            },
+            "M1b_invalid_bootstrap_replicates": 0,
+            "components": 12,
+            "groups": [
+              "middle_aged",
+              "older",
+              "young"
+            ]
+          }
+        },
+        "nnr": {
+          "status": "available",
+          "tau": 0.2724459661316125,
+          "eligibility": "fixed pre margin > tau; cure abs(post margin) <= tau; reversal post margin < -tau",
+          "eligible_items": 137,
+          "eligible_components": 12,
+          "eligible_targets": 23,
+          "cured": 10,
+          "reversed": 5,
+          "raw_item_fraction": 0.0364963503649635,
+          "nnr": 0.029992911571858943,
+          "weighting": "equal baseline-eligible components; item mean within component",
+          "transitions": {
+            "S": {
+              "S": 122,
+              "N": 10,
+              "C": 5
+            },
+            "N": {
+              "S": 12,
+              "N": 17,
+              "C": 4
+            },
+            "C": {
+              "S": 1,
+              "N": 7,
+              "C": 71
+            }
+          },
+          "calibration": {
+            "rule": "development_abs_mean_token_margin_quantile",
+            "quantile": 0.2,
+            "tau": 0.2724459661316125,
+            "sensitivity": {
+              "0.1": 0.2596141183287931,
+              "0.2": 0.2724459661316125,
+              "0.3": 0.2852778139344319
+            },
+            "development_rows": 2,
+            "independent_components": 1,
+            "development_ids": [
+              "WBX-C004-men-middle_aged",
+              "WBX-C004-men-not_stated"
+            ],
+            "sources": [
+              {
+                "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/lapa12b_instruct/supplemental-2613596/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/predictions.jsonl",
+                "sha256": "f48684f467fdc810bd63f3344fcad95cb6dc93559c3d371d5c548e5001923ca6"
+              },
+              {
+                "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/lapa12b_instruct/supplemental-2613596/qualification/baseline/warbias_triplets_uk/repeat-2/warbias_triplets_uk/predictions.jsonl",
+                "sha256": "f48684f467fdc810bd63f3344fcad95cb6dc93559c3d371d5c548e5001923ca6"
+              }
+            ],
+            "repeat_max_absolute_difference": 0.0,
+            "status": "exploratory_sparse_development"
+          },
+          "baseline_eligible_ids": [
+            "WBX-C014-men-middle_aged",
+            "WBX-C014-men-not_stated",
+            "WBX-C014-men-older",
+            "WBX-C014-not_stated-middle_aged",
+            "WBX-C014-not_stated-older",
+            "WBX-C014-women-middle_aged",
+            "WBX-C014-women-not_stated",
+            "WBX-C014-women-older",
+            "WBX-C022-men-middle_aged",
+            "WBX-C022-men-not_stated",
+            "WBX-C022-men-older",
+            "WBX-C022-men-young",
+            "WBX-C022-not_stated-middle_aged",
+            "WBX-C022-not_stated-not_stated",
+            "WBX-C022-not_stated-older",
+            "WBX-C022-not_stated-young",
+            "WBX-C022-women-middle_aged",
+            "WBX-C022-women-not_stated",
+            "WBX-C022-women-older",
+            "WBX-C022-women-young",
+            "WBX-C024-men-middle_aged",
+            "WBX-C024-men-not_stated",
+            "WBX-C024-men-older",
+            "WBX-C024-men-young",
+            "WBX-C024-not_stated-middle_aged",
+            "WBX-C024-not_stated-not_stated",
+            "WBX-C024-not_stated-older",
+            "WBX-C024-not_stated-young",
+            "WBX-C024-women-middle_aged",
+            "WBX-C024-women-not_stated",
+            "WBX-C024-women-older",
+            "WBX-C024-women-young",
+            "WBX-C025-men-middle_aged",
+            "WBX-C025-men-not_stated",
+            "WBX-C025-men-older",
+            "WBX-C025-men-young",
+            "WBX-C025-not_stated-middle_aged",
+            "WBX-C025-not_stated-not_stated",
+            "WBX-C025-not_stated-older",
+            "WBX-C025-women-middle_aged",
+            "WBX-C025-women-not_stated",
+            "WBX-C025-women-older",
+            "WBX-C025-women-young",
+            "WBX-C031-men-middle_aged",
+            "WBX-C031-men-older",
+            "WBX-C031-not_stated-older",
+            "WBX-C031-women-middle_aged",
+            "WBX-C031-women-older",
+            "WBX-C034-men-middle_aged",
+            "WBX-C034-men-not_stated",
+            "WBX-C034-men-older",
+            "WBX-C034-not_stated-middle_aged",
+            "WBX-C034-women-middle_aged",
+            "WBX-C034-women-older",
+            "WBX-C049-men-middle_aged",
+            "WBX-C049-men-not_stated",
+            "WBX-C049-men-older",
+            "WBX-C049-men-young",
+            "WBX-C049-not_stated-middle_aged",
+            "WBX-C049-not_stated-not_stated",
+            "WBX-C049-not_stated-older",
+            "WBX-C049-not_stated-young",
+            "WBX-C049-women-middle_aged",
+            "WBX-C049-women-not_stated",
+            "WBX-C049-women-young",
+            "WBX-C050-men-middle_aged",
+            "WBX-C050-men-not_stated",
+            "WBX-C050-men-older",
+            "WBX-C050-men-young",
+            "WBX-C050-not_stated-middle_aged",
+            "WBX-C050-not_stated-not_stated",
+            "WBX-C050-not_stated-older",
+            "WBX-C050-not_stated-young",
+            "WBX-C050-women-middle_aged",
+            "WBX-C050-women-young",
+            "WBX-C065-men-not_stated",
+            "WBX-C065-men-older",
+            "WBX-C065-men-young",
+            "WBX-C065-not_stated-middle_aged",
+            "WBX-C065-not_stated-not_stated",
+            "WBX-C065-not_stated-older",
+            "WBX-C065-women-middle_aged",
+            "WBX-C065-women-not_stated",
+            "WBX-C065-women-young",
+            "WBX-C077-men-middle_aged",
+            "WBX-C077-men-not_stated",
+            "WBX-C077-men-older",
+            "WBX-C077-men-young",
+            "WBX-C077-not_stated-middle_aged",
+            "WBX-C077-not_stated-not_stated",
+            "WBX-C077-not_stated-older",
+            "WBX-C077-not_stated-young",
+            "WBX-C077-women-middle_aged",
+            "WBX-C077-women-not_stated",
+            "WBX-C077-women-young",
+            "WBX-C080-men-middle_aged",
+            "WBX-C080-men-not_stated",
+            "WBX-C080-men-older",
+            "WBX-C080-men-young",
+            "WBX-C080-not_stated-middle_aged",
+            "WBX-C080-not_stated-older",
+            "WBX-C080-women-middle_aged",
+            "WBX-C103-women-young",
+            "WBX-C106-women-middle_aged",
+            "WBX-C106-women-not_stated",
+            "WBX-C106-women-young",
+            "WBX-C108-men-middle_aged",
+            "WBX-C108-men-not_stated",
+            "WBX-C108-men-older",
+            "WBX-C108-men-young",
+            "WBX-C108-not_stated-middle_aged",
+            "WBX-C108-not_stated-not_stated",
+            "WBX-C108-not_stated-older",
+            "WBX-C108-not_stated-young",
+            "WBX-C109-men-middle_aged",
+            "WBX-C109-men-not_stated",
+            "WBX-C109-men-older",
+            "WBX-C109-men-young",
+            "WBX-C109-not_stated-middle_aged",
+            "WBX-C109-not_stated-not_stated",
+            "WBX-C109-not_stated-older",
+            "WBX-C109-not_stated-young",
+            "WBX-C109-women-middle_aged",
+            "WBX-C109-women-not_stated",
+            "WBX-C109-women-young",
+            "WBX-C117-men-middle_aged",
+            "WBX-C117-men-not_stated",
+            "WBX-C117-men-older",
+            "WBX-C117-men-young",
+            "WBX-C117-not_stated-middle_aged",
+            "WBX-C117-not_stated-not_stated",
+            "WBX-C117-not_stated-older",
+            "WBX-C117-not_stated-young",
+            "WBX-C117-women-middle_aged",
+            "WBX-C117-women-not_stated",
+            "WBX-C117-women-older",
+            "WBX-C117-women-young"
+          ],
+          "baseline_cohort_sha256": "8144ca9bc9da0052c73a44054093a47b03d22f1a764746b80476e31a0a0217ad",
+          "ci95": [
+            0.0,
+            0.061890838206627684
+          ],
+          "sensitivity": {
+            "0.1": 0.022417153996101363,
+            "0.2": 0.029992911571858943,
+            "0.3": 0.04141034404192299
+          }
+        },
+        "RI": {
+          "axis": "language",
+          "numerator": 0.056507322464769305,
+          "denominator": 0.03386102668017554,
+          "target_reduction_ci95": [
+            -0.02416566884651994,
+            0.09484126984126995
+          ],
+          "numerator_ci95": [
+            0.0,
+            0.12712420558165238
+          ],
+          "minimum_improvement": 0.01,
+          "value": null,
+          "reason": "target_reduction_CI_not_positive",
+          "native_SS": {
+            "uk": [
+              68.214055448098,
+              64.82795278008044
+            ],
+            "en": [
+              45.69344662429769,
+              40.04271437782076
+            ]
+          }
+        }
+      }
+    },
+    "llama31_8b_instruct": {
+      "task_vector": {
+        "quality": {
+          "gender": {
+            "condition": "triplet",
+            "metric": "lms",
+            "unit": "rate",
+            "status": "qualified_common_panel",
+            "minimum_independent_support": 5,
+            "common_content_units": [
+              "WB-C014|middle_aged",
+              "WB-C014|not_stated",
+              "WB-C014|older",
+              "WB-C014|young",
+              "WB-C020|middle_aged",
+              "WB-C020|not_stated",
+              "WB-C020|older",
+              "WB-C020|young",
+              "WB-C022|middle_aged",
+              "WB-C022|not_stated",
+              "WB-C022|older",
+              "WB-C022|young",
+              "WB-C024|middle_aged",
+              "WB-C024|not_stated",
+              "WB-C024|older",
+              "WB-C024|young",
+              "WB-C025|middle_aged",
+              "WB-C025|not_stated",
+              "WB-C025|older",
+              "WB-C025|young",
+              "WB-C031|middle_aged",
+              "WB-C031|not_stated",
+              "WB-C031|older",
+              "WB-C031|young",
+              "WB-C034|middle_aged",
+              "WB-C034|not_stated",
+              "WB-C034|older",
+              "WB-C034|young",
+              "WB-C037|middle_aged",
+              "WB-C037|not_stated",
+              "WB-C037|older",
+              "WB-C037|young",
+              "WB-C049|middle_aged",
+              "WB-C049|not_stated",
+              "WB-C049|young",
+              "WB-C050|middle_aged",
+              "WB-C050|not_stated",
+              "WB-C050|young",
+              "WB-C064|middle_aged",
+              "WB-C064|not_stated",
+              "WB-C064|young",
+              "WB-C065|middle_aged",
+              "WB-C065|not_stated",
+              "WB-C065|young",
+              "WB-C066|middle_aged",
+              "WB-C066|not_stated",
+              "WB-C066|young",
+              "WB-C077|middle_aged",
+              "WB-C077|not_stated",
+              "WB-C077|young",
+              "WB-C080|middle_aged",
+              "WB-C080|not_stated",
+              "WB-C080|young",
+              "WB-C085|middle_aged",
+              "WB-C085|not_stated",
+              "WB-C085|young",
+              "WB-C089|middle_aged",
+              "WB-C089|not_stated",
+              "WB-C089|young",
+              "WB-C107|middle_aged",
+              "WB-C107|not_stated",
+              "WB-C107|young",
+              "WB-C108|middle_aged",
+              "WB-C108|not_stated",
+              "WB-C108|young",
+              "WB-C109|middle_aged",
+              "WB-C109|not_stated",
+              "WB-C109|young",
+              "WB-C117|middle_aged",
+              "WB-C117|not_stated",
+              "WB-C117|older",
+              "WB-C117|young"
+            ],
+            "common_panel_support": {
+              "men": {
+                "rows": 72,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "women": {
+                "rows": 72,
+                "source_cases": 21,
+                "independent_components": 12
+              }
+            },
+            "quality_pre": {
+              "men": 0.6489583333333333,
+              "women": 0.7367788461538461
+            },
+            "quality_post": {
+              "men": 0.5899305555555555,
+              "women": 0.6757745726495726
+            },
+            "m1_pre": 0.6489583333333333,
+            "m1_post": 0.5899305555555555,
+            "m1b_pre": 0.8808047852093529,
+            "m1b_post": 0.8729694478479111,
+            "zero_maximum_quality_post": false,
+            "group_losses": {
+              "men": 0.05902777777777779,
+              "women": 0.06100427350427351
+            },
+            "m2_range": 0.0019764957264957195,
+            "m2_population_stddev": 0.0009882478632478597,
+            "descriptive_pre": {
+              "men": {
+                "quality": 0.640625,
+                "rows": 84,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 84,
+                "outcome_coverage": 1.0
+              },
+              "women": {
+                "quality": 0.7386675824175823,
+                "rows": 81,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 81,
+                "outcome_coverage": 1.0
+              }
+            },
+            "descriptive_post": {
+              "men": {
+                "quality": 0.59375,
+                "rows": 84,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 84,
+                "outcome_coverage": 1.0
+              },
+              "women": {
+                "quality": 0.6863782051282051,
+                "rows": 81,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 81,
+                "outcome_coverage": 1.0
+              }
+            },
+            "precision_note": "Support qualification alone does not establish adequate precision; intervals are exploratory, not simultaneous.",
+            "uncertainty": {
+              "m2_range": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              },
+              "m2_population_stddev": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              }
+            },
+            "ci95": {
+              "M1": [
+                0.38540798611111116,
+                0.8024479166666667
+              ],
+              "M1b": [
+                0.725638994503847,
+                0.9828457777458591
+              ],
+              "M2_range": [
+                0.0013888888888888827,
+                0.08125267094017098
+              ],
+              "M2_std": [
+                0.0006944444444444413,
+                0.04062633547008549
+              ]
+            },
+            "M1b_invalid_bootstrap_replicates": 0,
+            "components": 12,
+            "groups": [
+              "men",
+              "women"
+            ]
+          },
+          "age": {
+            "condition": "triplet",
+            "metric": "lms",
+            "unit": "rate",
+            "status": "qualified_common_panel",
+            "minimum_independent_support": 5,
+            "common_content_units": [
+              "WB-C014|men",
+              "WB-C014|not_stated",
+              "WB-C014|women",
+              "WB-C020|men",
+              "WB-C020|not_stated",
+              "WB-C020|women",
+              "WB-C022|men",
+              "WB-C022|not_stated",
+              "WB-C022|women",
+              "WB-C024|men",
+              "WB-C024|not_stated",
+              "WB-C024|women",
+              "WB-C025|men",
+              "WB-C025|not_stated",
+              "WB-C025|women",
+              "WB-C031|men",
+              "WB-C031|not_stated",
+              "WB-C031|women",
+              "WB-C034|men",
+              "WB-C034|not_stated",
+              "WB-C034|women",
+              "WB-C037|men",
+              "WB-C037|not_stated",
+              "WB-C037|women",
+              "WB-C049|men",
+              "WB-C049|not_stated",
+              "WB-C050|men",
+              "WB-C050|not_stated",
+              "WB-C064|men",
+              "WB-C064|not_stated",
+              "WB-C065|men",
+              "WB-C065|not_stated",
+              "WB-C066|men",
+              "WB-C066|not_stated",
+              "WB-C077|men",
+              "WB-C077|not_stated",
+              "WB-C080|men",
+              "WB-C080|not_stated",
+              "WB-C085|men",
+              "WB-C085|not_stated",
+              "WB-C089|men",
+              "WB-C089|not_stated",
+              "WB-C107|men",
+              "WB-C107|not_stated",
+              "WB-C108|men",
+              "WB-C108|not_stated",
+              "WB-C109|men",
+              "WB-C109|not_stated",
+              "WB-C117|men",
+              "WB-C117|not_stated",
+              "WB-C117|women"
+            ],
+            "common_panel_support": {
+              "middle_aged": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "older": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "young": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              }
+            },
+            "quality_pre": {
+              "middle_aged": 0.6979166666666666,
+              "older": 0.6269991582491582,
+              "young": 0.5496632996632996
+            },
+            "quality_post": {
+              "middle_aged": 0.6354166666666666,
+              "older": 0.6165824915824916,
+              "young": 0.469486531986532
+            },
+            "m1_pre": 0.5496632996632996,
+            "m1_post": 0.469486531986532,
+            "m1b_pre": 0.7875772651892055,
+            "m1b_post": 0.7388640503394602,
+            "zero_maximum_quality_post": false,
+            "group_losses": {
+              "middle_aged": 0.0625,
+              "older": 0.01041666666666663,
+              "young": 0.08017676767676762
+            },
+            "m2_range": 0.069760101010101,
+            "m2_population_stddev": 0.029611584481507358,
+            "descriptive_pre": {
+              "middle_aged": {
+                "quality": 0.7291666666666667,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              },
+              "older": {
+                "quality": 0.6269991582491582,
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 51,
+                "outcome_coverage": 1.0
+              },
+              "young": {
+                "quality": 0.5744047619047619,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              }
+            },
+            "descriptive_post": {
+              "middle_aged": {
+                "quality": 0.6726190476190476,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              },
+              "older": {
+                "quality": 0.6165824915824916,
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 51,
+                "outcome_coverage": 1.0
+              },
+              "young": {
+                "quality": 0.511904761904762,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              }
+            },
+            "precision_note": "Support qualification alone does not establish adequate precision; intervals are exploratory, not simultaneous.",
+            "uncertainty": {
+              "m2_range": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              },
+              "m2_population_stddev": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              }
+            },
+            "ci95": {
+              "M1": [
+                0.27771990740740743,
+                0.6847643097643097
+              ],
+              "M1b": [
+                0.5141354723707665,
+                0.9491525423728814
+              ],
+              "M2_range": [
+                0.020833333333333315,
+                0.22916666666666663
+              ],
+              "M2_std": [
+                0.008505172717997162,
+                0.1002788658963163
+              ]
+            },
+            "M1b_invalid_bootstrap_replicates": 0,
+            "components": 12,
+            "groups": [
+              "middle_aged",
+              "older",
+              "young"
+            ]
+          }
+        },
+        "nnr": {
+          "status": "available",
+          "tau": 0.3987752118918436,
+          "eligibility": "fixed pre margin > tau; cure abs(post margin) <= tau; reversal post margin < -tau",
+          "eligible_items": 32,
+          "eligible_components": 4,
+          "eligible_targets": 21,
+          "cured": 0,
+          "reversed": 0,
+          "raw_item_fraction": 0.0,
+          "nnr": 0.0,
+          "weighting": "equal baseline-eligible components; item mean within component",
+          "transitions": {
+            "S": {
+              "S": 32,
+              "N": 0,
+              "C": 0
+            },
+            "N": {
+              "S": 1,
+              "N": 162,
+              "C": 7
+            },
+            "C": {
+              "S": 0,
+              "N": 0,
+              "C": 47
+            }
+          },
+          "calibration": {
+            "rule": "development_abs_mean_token_margin_quantile",
+            "quantile": 0.2,
+            "tau": 0.3987752118918436,
+            "sensitivity": {
+              "0.1": 0.3971030747195207,
+              "0.2": 0.3987752118918436,
+              "0.3": 0.40044734906416657
+            },
+            "development_rows": 2,
+            "independent_components": 1,
+            "development_ids": [
+              "WBX-C004-men-middle_aged",
+              "WBX-C004-men-not_stated"
+            ],
+            "sources": [
+              {
+                "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/llama31_8b_instruct/supplemental-2613594/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/predictions.jsonl",
+                "sha256": "c6ec21840c0d8c729050ed86306214686e8df6da5f20cf41362b7a2264905c01"
+              },
+              {
+                "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/llama31_8b_instruct/supplemental-2613594/qualification/baseline/warbias_triplets_uk/repeat-2/warbias_triplets_uk/predictions.jsonl",
+                "sha256": "c6ec21840c0d8c729050ed86306214686e8df6da5f20cf41362b7a2264905c01"
+              }
+            ],
+            "repeat_max_absolute_difference": 0.0,
+            "status": "exploratory_sparse_development"
+          },
+          "baseline_eligible_ids": [
+            "WBX-C014-men-middle_aged",
+            "WBX-C014-men-not_stated",
+            "WBX-C014-men-older",
+            "WBX-C014-men-young",
+            "WBX-C014-not_stated-middle_aged",
+            "WBX-C014-not_stated-older",
+            "WBX-C014-not_stated-young",
+            "WBX-C014-women-middle_aged",
+            "WBX-C014-women-not_stated",
+            "WBX-C014-women-older",
+            "WBX-C014-women-young",
+            "WBX-C077-men-middle_aged",
+            "WBX-C077-men-not_stated",
+            "WBX-C077-men-older",
+            "WBX-C077-men-young",
+            "WBX-C077-not_stated-middle_aged",
+            "WBX-C077-not_stated-older",
+            "WBX-C077-not_stated-young",
+            "WBX-C077-women-middle_aged",
+            "WBX-C077-women-not_stated",
+            "WBX-C077-women-young",
+            "WBX-C106-women-middle_aged",
+            "WBX-C106-women-not_stated",
+            "WBX-C106-women-young",
+            "WBX-C117-men-middle_aged",
+            "WBX-C117-men-not_stated",
+            "WBX-C117-men-older",
+            "WBX-C117-not_stated-middle_aged",
+            "WBX-C117-not_stated-older",
+            "WBX-C117-women-middle_aged",
+            "WBX-C117-women-not_stated",
+            "WBX-C117-women-older"
+          ],
+          "baseline_cohort_sha256": "93a0ee8092ca3f8365b30b97913fa437572dcb406ced776ef86490c6dc8868ce",
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "sensitivity": {
+            "0.1": 0.0,
+            "0.2": 0.0,
+            "0.3": 0.0
+          }
+        },
+        "RI": {
+          "axis": "language",
+          "numerator": 0.0,
+          "denominator": -0.05174081237911027,
+          "target_reduction_ci95": [
+            -0.10368886432716218,
+            0.06452058579718145
+          ],
+          "numerator_ci95": [
+            0.0,
+            0.012987012987012991
+          ],
+          "minimum_improvement": 0.01,
+          "value": null,
+          "reason": "target_reduction_below_1pp",
+          "native_SS": {
+            "uk": [
+              47.93938626385435,
+              42.76530502594332
+            ],
+            "en": [
+              47.148153265174535,
+              47.499884866906136
+            ]
+          }
+        }
+      }
+    },
+    "mamay12b_v2": {
+      "task_vector": {
+        "quality": {
+          "gender": {
+            "condition": "triplet",
+            "metric": "lms",
+            "unit": "rate",
+            "status": "qualified_common_panel",
+            "minimum_independent_support": 5,
+            "common_content_units": [
+              "WB-C014|middle_aged",
+              "WB-C014|not_stated",
+              "WB-C014|older",
+              "WB-C014|young",
+              "WB-C020|middle_aged",
+              "WB-C020|not_stated",
+              "WB-C020|older",
+              "WB-C020|young",
+              "WB-C022|middle_aged",
+              "WB-C022|not_stated",
+              "WB-C022|older",
+              "WB-C022|young",
+              "WB-C024|middle_aged",
+              "WB-C024|not_stated",
+              "WB-C024|older",
+              "WB-C024|young",
+              "WB-C025|middle_aged",
+              "WB-C025|not_stated",
+              "WB-C025|older",
+              "WB-C025|young",
+              "WB-C031|middle_aged",
+              "WB-C031|not_stated",
+              "WB-C031|older",
+              "WB-C031|young",
+              "WB-C034|middle_aged",
+              "WB-C034|not_stated",
+              "WB-C034|older",
+              "WB-C034|young",
+              "WB-C037|middle_aged",
+              "WB-C037|not_stated",
+              "WB-C037|older",
+              "WB-C037|young",
+              "WB-C049|middle_aged",
+              "WB-C049|not_stated",
+              "WB-C049|young",
+              "WB-C050|middle_aged",
+              "WB-C050|not_stated",
+              "WB-C050|young",
+              "WB-C064|middle_aged",
+              "WB-C064|not_stated",
+              "WB-C064|young",
+              "WB-C065|middle_aged",
+              "WB-C065|not_stated",
+              "WB-C065|young",
+              "WB-C066|middle_aged",
+              "WB-C066|not_stated",
+              "WB-C066|young",
+              "WB-C077|middle_aged",
+              "WB-C077|not_stated",
+              "WB-C077|young",
+              "WB-C080|middle_aged",
+              "WB-C080|not_stated",
+              "WB-C080|young",
+              "WB-C085|middle_aged",
+              "WB-C085|not_stated",
+              "WB-C085|young",
+              "WB-C089|middle_aged",
+              "WB-C089|not_stated",
+              "WB-C089|young",
+              "WB-C107|middle_aged",
+              "WB-C107|not_stated",
+              "WB-C107|young",
+              "WB-C108|middle_aged",
+              "WB-C108|not_stated",
+              "WB-C108|young",
+              "WB-C109|middle_aged",
+              "WB-C109|not_stated",
+              "WB-C109|young",
+              "WB-C117|middle_aged",
+              "WB-C117|not_stated",
+              "WB-C117|older",
+              "WB-C117|young"
+            ],
+            "common_panel_support": {
+              "men": {
+                "rows": 72,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "women": {
+                "rows": 72,
+                "source_cases": 21,
+                "independent_components": 12
+              }
+            },
+            "quality_pre": {
+              "men": 0.5700854700854701,
+              "women": 0.5621794871794872
+            },
+            "quality_post": {
+              "men": 0.5169604700854701,
+              "women": 0.5080128205128205
+            },
+            "m1_pre": 0.5621794871794872,
+            "m1_post": 0.5080128205128205,
+            "m1b_pre": 0.9861319340329836,
+            "m1b_post": 0.9826918109015758,
+            "zero_maximum_quality_post": false,
+            "group_losses": {
+              "men": 0.05312499999999998,
+              "women": 0.054166666666666696
+            },
+            "m2_range": 0.0010416666666667185,
+            "m2_population_stddev": 0.0005208333333333592,
+            "descriptive_pre": {
+              "men": {
+                "quality": 0.5703125,
+                "rows": 84,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 84,
+                "outcome_coverage": 1.0
+              },
+              "women": {
+                "quality": 0.59496336996337,
+                "rows": 81,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 81,
+                "outcome_coverage": 1.0
+              }
+            },
+            "descriptive_post": {
+              "men": {
+                "quality": 0.5052083333333334,
+                "rows": 84,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 84,
+                "outcome_coverage": 1.0
+              },
+              "women": {
+                "quality": 0.5425824175824175,
+                "rows": 81,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 81,
+                "outcome_coverage": 1.0
+              }
+            },
+            "precision_note": "Support qualification alone does not establish adequate precision; intervals are exploratory, not simultaneous.",
+            "uncertainty": {
+              "m2_range": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              },
+              "m2_population_stddev": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              }
+            },
+            "ci95": {
+              "M1": [
+                0.34027777777777773,
+                0.6875
+              ],
+              "M1b": [
+                0.8939018844210719,
+                0.999339610489707
+              ],
+              "M2_range": [
+                0.001388888888888884,
+                0.07291666666666669
+              ],
+              "M2_std": [
+                0.000694444444444442,
+                0.03645833333333334
+              ]
+            },
+            "M1b_invalid_bootstrap_replicates": 0,
+            "components": 12,
+            "groups": [
+              "men",
+              "women"
+            ]
+          },
+          "age": {
+            "condition": "triplet",
+            "metric": "lms",
+            "unit": "rate",
+            "status": "qualified_common_panel",
+            "minimum_independent_support": 5,
+            "common_content_units": [
+              "WB-C014|men",
+              "WB-C014|not_stated",
+              "WB-C014|women",
+              "WB-C020|men",
+              "WB-C020|not_stated",
+              "WB-C020|women",
+              "WB-C022|men",
+              "WB-C022|not_stated",
+              "WB-C022|women",
+              "WB-C024|men",
+              "WB-C024|not_stated",
+              "WB-C024|women",
+              "WB-C025|men",
+              "WB-C025|not_stated",
+              "WB-C025|women",
+              "WB-C031|men",
+              "WB-C031|not_stated",
+              "WB-C031|women",
+              "WB-C034|men",
+              "WB-C034|not_stated",
+              "WB-C034|women",
+              "WB-C037|men",
+              "WB-C037|not_stated",
+              "WB-C037|women",
+              "WB-C049|men",
+              "WB-C049|not_stated",
+              "WB-C050|men",
+              "WB-C050|not_stated",
+              "WB-C064|men",
+              "WB-C064|not_stated",
+              "WB-C065|men",
+              "WB-C065|not_stated",
+              "WB-C066|men",
+              "WB-C066|not_stated",
+              "WB-C077|men",
+              "WB-C077|not_stated",
+              "WB-C080|men",
+              "WB-C080|not_stated",
+              "WB-C085|men",
+              "WB-C085|not_stated",
+              "WB-C089|men",
+              "WB-C089|not_stated",
+              "WB-C107|men",
+              "WB-C107|not_stated",
+              "WB-C108|men",
+              "WB-C108|not_stated",
+              "WB-C109|men",
+              "WB-C109|not_stated",
+              "WB-C117|men",
+              "WB-C117|not_stated",
+              "WB-C117|women"
+            ],
+            "common_panel_support": {
+              "middle_aged": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "older": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "young": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              }
+            },
+            "quality_pre": {
+              "middle_aged": 0.5277777777777778,
+              "older": 0.5494528619528619,
+              "young": 0.5825968013468014
+            },
+            "quality_post": {
+              "middle_aged": 0.49936868686868685,
+              "older": 0.5031565656565656,
+              "young": 0.5073653198653199
+            },
+            "m1_pre": 0.5277777777777778,
+            "m1_post": 0.49936868686868685,
+            "m1b_pre": 0.9059057251219071,
+            "m1b_post": 0.9842389050186644,
+            "zero_maximum_quality_post": false,
+            "group_losses": {
+              "middle_aged": 0.02840909090909094,
+              "older": 0.04629629629629628,
+              "young": 0.07523148148148151
+            },
+            "m2_range": 0.04682239057239057,
+            "m2_population_stddev": 0.019291717615997576,
+            "descriptive_pre": {
+              "middle_aged": {
+                "quality": 0.5684523809523809,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              },
+              "older": {
+                "quality": 0.5494528619528619,
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 51,
+                "outcome_coverage": 1.0
+              },
+              "young": {
+                "quality": 0.5803571428571429,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              }
+            },
+            "descriptive_post": {
+              "middle_aged": {
+                "quality": 0.5386904761904762,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              },
+              "older": {
+                "quality": 0.5031565656565656,
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 51,
+                "outcome_coverage": 1.0
+              },
+              "young": {
+                "quality": 0.5148809523809523,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              }
+            },
+            "precision_note": "Support qualification alone does not establish adequate precision; intervals are exploratory, not simultaneous.",
+            "uncertainty": {
+              "m2_range": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              },
+              "m2_population_stddev": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              }
+            },
+            "ci95": {
+              "M1": [
+                0.31248421717171715,
+                0.6772411616161617
+              ],
+              "M1b": [
+                0.7499559514487079,
+                0.991404011461318
+              ],
+              "M2_range": [
+                0.01082965067340065,
+                0.12850115740740736
+              ],
+              "M2_std": [
+                0.004594250933866587,
+                0.05715327199231262
+              ]
+            },
+            "M1b_invalid_bootstrap_replicates": 0,
+            "components": 12,
+            "groups": [
+              "middle_aged",
+              "older",
+              "young"
+            ]
+          }
+        },
+        "nnr": {
+          "status": "available",
+          "tau": 0.006229226396856103,
+          "eligibility": "fixed pre margin > tau; cure abs(post margin) <= tau; reversal post margin < -tau",
+          "eligible_items": 92,
+          "eligible_components": 8,
+          "eligible_targets": 23,
+          "cured": 2,
+          "reversed": 8,
+          "raw_item_fraction": -0.06521739130434782,
+          "nnr": -0.10902255639097744,
+          "weighting": "equal baseline-eligible components; item mean within component",
+          "transitions": {
+            "S": {
+              "S": 82,
+              "N": 2,
+              "C": 8
+            },
+            "N": {
+              "S": 0,
+              "N": 0,
+              "C": 1
+            },
+            "C": {
+              "S": 0,
+              "N": 0,
+              "C": 156
+            }
+          },
+          "calibration": {
+            "rule": "development_abs_mean_token_margin_quantile",
+            "quantile": 0.2,
+            "tau": 0.006229226396856103,
+            "sensitivity": {
+              "0.1": 0.006000195059950153,
+              "0.2": 0.006229226396856103,
+              "0.3": 0.006458257733762051
+            },
+            "development_rows": 2,
+            "independent_components": 1,
+            "development_ids": [
+              "WBX-C004-men-middle_aged",
+              "WBX-C004-men-not_stated"
+            ],
+            "sources": [
+              {
+                "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/mamay12b_v2/supplemental-2613597/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/predictions.jsonl",
+                "sha256": "2d8b461a432253eeb3e11caad923b2d3c7fe9b70198ef615cbcc0548b7ee53b0"
+              },
+              {
+                "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/mamay12b_v2/supplemental-2613597/qualification/baseline/warbias_triplets_uk/repeat-2/warbias_triplets_uk/predictions.jsonl",
+                "sha256": "2d8b461a432253eeb3e11caad923b2d3c7fe9b70198ef615cbcc0548b7ee53b0"
+              }
+            ],
+            "repeat_max_absolute_difference": 0.0,
+            "status": "exploratory_sparse_development"
+          },
+          "baseline_eligible_ids": [
+            "WBX-C014-men-middle_aged",
+            "WBX-C014-men-not_stated",
+            "WBX-C014-men-older",
+            "WBX-C014-men-young",
+            "WBX-C014-not_stated-middle_aged",
+            "WBX-C014-not_stated-older",
+            "WBX-C014-women-middle_aged",
+            "WBX-C014-women-not_stated",
+            "WBX-C014-women-older",
+            "WBX-C020-not_stated-middle_aged",
+            "WBX-C022-men-middle_aged",
+            "WBX-C022-men-not_stated",
+            "WBX-C022-men-older",
+            "WBX-C022-men-young",
+            "WBX-C022-not_stated-middle_aged",
+            "WBX-C022-not_stated-not_stated",
+            "WBX-C022-not_stated-older",
+            "WBX-C022-not_stated-young",
+            "WBX-C022-women-middle_aged",
+            "WBX-C022-women-not_stated",
+            "WBX-C022-women-older",
+            "WBX-C022-women-young",
+            "WBX-C024-men-middle_aged",
+            "WBX-C024-men-not_stated",
+            "WBX-C024-men-older",
+            "WBX-C024-not_stated-middle_aged",
+            "WBX-C024-not_stated-older",
+            "WBX-C024-not_stated-young",
+            "WBX-C024-women-middle_aged",
+            "WBX-C024-women-not_stated",
+            "WBX-C024-women-older",
+            "WBX-C025-men-middle_aged",
+            "WBX-C025-men-not_stated",
+            "WBX-C025-men-older",
+            "WBX-C025-men-young",
+            "WBX-C025-not_stated-older",
+            "WBX-C025-women-middle_aged",
+            "WBX-C025-women-not_stated",
+            "WBX-C025-women-older",
+            "WBX-C025-women-young",
+            "WBX-C031-men-middle_aged",
+            "WBX-C031-men-not_stated",
+            "WBX-C031-men-older",
+            "WBX-C031-men-young",
+            "WBX-C031-not_stated-middle_aged",
+            "WBX-C031-not_stated-older",
+            "WBX-C031-women-middle_aged",
+            "WBX-C031-women-not_stated",
+            "WBX-C031-women-older",
+            "WBX-C034-men-middle_aged",
+            "WBX-C077-men-middle_aged",
+            "WBX-C077-men-not_stated",
+            "WBX-C077-men-older",
+            "WBX-C077-men-young",
+            "WBX-C077-not_stated-middle_aged",
+            "WBX-C077-not_stated-not_stated",
+            "WBX-C077-not_stated-older",
+            "WBX-C077-not_stated-young",
+            "WBX-C077-women-middle_aged",
+            "WBX-C077-women-not_stated",
+            "WBX-C077-women-young",
+            "WBX-C080-men-older",
+            "WBX-C080-not_stated-older",
+            "WBX-C080-women-middle_aged",
+            "WBX-C101-women-middle_aged",
+            "WBX-C101-women-not_stated",
+            "WBX-C101-women-young",
+            "WBX-C106-women-middle_aged",
+            "WBX-C106-women-not_stated",
+            "WBX-C106-women-young",
+            "WBX-C108-men-middle_aged",
+            "WBX-C108-men-not_stated",
+            "WBX-C108-men-older",
+            "WBX-C108-men-young",
+            "WBX-C108-not_stated-middle_aged",
+            "WBX-C108-not_stated-not_stated",
+            "WBX-C108-not_stated-older",
+            "WBX-C108-not_stated-young",
+            "WBX-C108-women-middle_aged",
+            "WBX-C108-women-young",
+            "WBX-C117-men-middle_aged",
+            "WBX-C117-men-not_stated",
+            "WBX-C117-men-older",
+            "WBX-C117-men-young",
+            "WBX-C117-not_stated-middle_aged",
+            "WBX-C117-not_stated-not_stated",
+            "WBX-C117-not_stated-older",
+            "WBX-C117-not_stated-young",
+            "WBX-C117-women-middle_aged",
+            "WBX-C117-women-not_stated",
+            "WBX-C117-women-older",
+            "WBX-C117-women-young"
+          ],
+          "baseline_cohort_sha256": "bdb87c6da16e9eebc45c4f26340667b82627c38224ff7fe6130cce952aa7a8e8",
+          "ci95": [
+            -0.27501723057644106,
+            0.013095238095238097
+          ],
+          "sensitivity": {
+            "0.1": -0.10902255639097744,
+            "0.2": -0.10902255639097744,
+            "0.3": -0.10902255639097744
+          }
+        },
+        "RI": {
+          "axis": "language",
+          "numerator": 0.01548540112369906,
+          "denominator": -0.035029243805839605,
+          "target_reduction_ci95": [
+            -0.06708229713548863,
+            0.051981008796168356
+          ],
+          "numerator_ci95": [
+            0.0,
+            0.030970802247397955
+          ],
+          "minimum_improvement": 0.01,
+          "value": null,
+          "reason": "target_reduction_below_1pp",
+          "native_SS": {
+            "uk": [
+              42.135834024131896,
+              38.63290964354793
+            ],
+            "en": [
+              42.71092382794511,
+              41.1623837155752
+            ]
+          }
+        }
+      }
+    },
+    "mamay27b_v2": {
+      "task_vector": {
+        "quality": {
+          "gender": {
+            "condition": "triplet",
+            "metric": "lms",
+            "unit": "rate",
+            "status": "qualified_common_panel",
+            "minimum_independent_support": 5,
+            "common_content_units": [
+              "WB-C014|middle_aged",
+              "WB-C014|not_stated",
+              "WB-C014|older",
+              "WB-C014|young",
+              "WB-C020|middle_aged",
+              "WB-C020|not_stated",
+              "WB-C020|older",
+              "WB-C020|young",
+              "WB-C022|middle_aged",
+              "WB-C022|not_stated",
+              "WB-C022|older",
+              "WB-C022|young",
+              "WB-C024|middle_aged",
+              "WB-C024|not_stated",
+              "WB-C024|older",
+              "WB-C024|young",
+              "WB-C025|middle_aged",
+              "WB-C025|not_stated",
+              "WB-C025|older",
+              "WB-C025|young",
+              "WB-C031|middle_aged",
+              "WB-C031|not_stated",
+              "WB-C031|older",
+              "WB-C031|young",
+              "WB-C034|middle_aged",
+              "WB-C034|not_stated",
+              "WB-C034|older",
+              "WB-C034|young",
+              "WB-C037|middle_aged",
+              "WB-C037|not_stated",
+              "WB-C037|older",
+              "WB-C037|young",
+              "WB-C049|middle_aged",
+              "WB-C049|not_stated",
+              "WB-C049|young",
+              "WB-C050|middle_aged",
+              "WB-C050|not_stated",
+              "WB-C050|young",
+              "WB-C064|middle_aged",
+              "WB-C064|not_stated",
+              "WB-C064|young",
+              "WB-C065|middle_aged",
+              "WB-C065|not_stated",
+              "WB-C065|young",
+              "WB-C066|middle_aged",
+              "WB-C066|not_stated",
+              "WB-C066|young",
+              "WB-C077|middle_aged",
+              "WB-C077|not_stated",
+              "WB-C077|young",
+              "WB-C080|middle_aged",
+              "WB-C080|not_stated",
+              "WB-C080|young",
+              "WB-C085|middle_aged",
+              "WB-C085|not_stated",
+              "WB-C085|young",
+              "WB-C089|middle_aged",
+              "WB-C089|not_stated",
+              "WB-C089|young",
+              "WB-C107|middle_aged",
+              "WB-C107|not_stated",
+              "WB-C107|young",
+              "WB-C108|middle_aged",
+              "WB-C108|not_stated",
+              "WB-C108|young",
+              "WB-C109|middle_aged",
+              "WB-C109|not_stated",
+              "WB-C109|young",
+              "WB-C117|middle_aged",
+              "WB-C117|not_stated",
+              "WB-C117|older",
+              "WB-C117|young"
+            ],
+            "common_panel_support": {
+              "men": {
+                "rows": 72,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "women": {
+                "rows": 72,
+                "source_cases": 21,
+                "independent_components": 12
+              }
+            },
+            "quality_pre": {
+              "men": 0.6333333333333333,
+              "women": 0.6391292735042735
+            },
+            "quality_post": {
+              "men": 0.5708333333333333,
+              "women": 0.6112713675213676
+            },
+            "m1_pre": 0.6333333333333333,
+            "m1_post": 0.5708333333333333,
+            "m1b_pre": 0.9909315057043754,
+            "m1b_post": 0.9338460194005067,
+            "zero_maximum_quality_post": false,
+            "group_losses": {
+              "men": 0.0625,
+              "women": 0.02785790598290594
+            },
+            "m2_range": 0.03464209401709406,
+            "m2_population_stddev": 0.01732104700854703,
+            "descriptive_pre": {
+              "men": {
+                "quality": 0.6302083333333334,
+                "rows": 84,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 84,
+                "outcome_coverage": 1.0
+              },
+              "women": {
+                "quality": 0.6668727106227106,
+                "rows": 81,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 81,
+                "outcome_coverage": 1.0
+              }
+            },
+            "descriptive_post": {
+              "men": {
+                "quality": 0.5755208333333334,
+                "rows": 84,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 84,
+                "outcome_coverage": 1.0
+              },
+              "women": {
+                "quality": 0.6370421245421245,
+                "rows": 81,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 81,
+                "outcome_coverage": 1.0
+              }
+            },
+            "precision_note": "Support qualification alone does not establish adequate precision; intervals are exploratory, not simultaneous.",
+            "uncertainty": {
+              "m2_range": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              },
+              "m2_population_stddev": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              }
+            },
+            "ci95": {
+              "M1": [
+                0.3971180555555555,
+                0.767361111111111
+              ],
+              "M1b": [
+                0.8069275224257773,
+                0.9962874365150007
+              ],
+              "M2_range": [
+                0.0018943643162393638,
+                0.11684027777777775
+              ],
+              "M2_std": [
+                0.0009471821581196819,
+                0.058420138888888876
+              ]
+            },
+            "M1b_invalid_bootstrap_replicates": 0,
+            "components": 12,
+            "groups": [
+              "men",
+              "women"
+            ]
+          },
+          "age": {
+            "condition": "triplet",
+            "metric": "lms",
+            "unit": "rate",
+            "status": "qualified_common_panel",
+            "minimum_independent_support": 5,
+            "common_content_units": [
+              "WB-C014|men",
+              "WB-C014|not_stated",
+              "WB-C014|women",
+              "WB-C020|men",
+              "WB-C020|not_stated",
+              "WB-C020|women",
+              "WB-C022|men",
+              "WB-C022|not_stated",
+              "WB-C022|women",
+              "WB-C024|men",
+              "WB-C024|not_stated",
+              "WB-C024|women",
+              "WB-C025|men",
+              "WB-C025|not_stated",
+              "WB-C025|women",
+              "WB-C031|men",
+              "WB-C031|not_stated",
+              "WB-C031|women",
+              "WB-C034|men",
+              "WB-C034|not_stated",
+              "WB-C034|women",
+              "WB-C037|men",
+              "WB-C037|not_stated",
+              "WB-C037|women",
+              "WB-C049|men",
+              "WB-C049|not_stated",
+              "WB-C050|men",
+              "WB-C050|not_stated",
+              "WB-C064|men",
+              "WB-C064|not_stated",
+              "WB-C065|men",
+              "WB-C065|not_stated",
+              "WB-C066|men",
+              "WB-C066|not_stated",
+              "WB-C077|men",
+              "WB-C077|not_stated",
+              "WB-C080|men",
+              "WB-C080|not_stated",
+              "WB-C085|men",
+              "WB-C085|not_stated",
+              "WB-C089|men",
+              "WB-C089|not_stated",
+              "WB-C107|men",
+              "WB-C107|not_stated",
+              "WB-C108|men",
+              "WB-C108|not_stated",
+              "WB-C109|men",
+              "WB-C109|not_stated",
+              "WB-C117|men",
+              "WB-C117|not_stated",
+              "WB-C117|women"
+            ],
+            "common_panel_support": {
+              "middle_aged": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "older": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "young": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              }
+            },
+            "quality_pre": {
+              "middle_aged": 0.5629208754208754,
+              "older": 0.5618686868686869,
+              "young": 0.6300505050505051
+            },
+            "quality_post": {
+              "middle_aged": 0.49694865319865317,
+              "older": 0.5357744107744108,
+              "young": 0.6022727272727273
+            },
+            "m1_pre": 0.5618686868686869,
+            "m1_post": 0.49694865319865317,
+            "m1b_pre": 0.8917835671342684,
+            "m1b_post": 0.8251222921034241,
+            "zero_maximum_quality_post": false,
+            "group_losses": {
+              "middle_aged": 0.06597222222222227,
+              "older": 0.02609427609427606,
+              "young": 0.02777777777777779
+            },
+            "m2_range": 0.03987794612794621,
+            "m2_population_stddev": 0.018414669127632063,
+            "descriptive_pre": {
+              "middle_aged": {
+                "quality": 0.5773809523809524,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              },
+              "older": {
+                "quality": 0.5618686868686869,
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 51,
+                "outcome_coverage": 1.0
+              },
+              "young": {
+                "quality": 0.6755952380952381,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              }
+            },
+            "descriptive_post": {
+              "middle_aged": {
+                "quality": 0.5357142857142857,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              },
+              "older": {
+                "quality": 0.5357744107744108,
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 51,
+                "outcome_coverage": 1.0
+              },
+              "young": {
+                "quality": 0.6220238095238095,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              }
+            },
+            "precision_note": "Support qualification alone does not establish adequate precision; intervals are exploratory, not simultaneous.",
+            "uncertainty": {
+              "m2_range": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              },
+              "m2_population_stddev": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              }
+            },
+            "ci95": {
+              "M1": [
+                0.29622001262626263,
+                0.7083333333333334
+              ],
+              "M1b": [
+                0.5508242702448211,
+                0.9746433064960983
+              ],
+              "M2_range": [
+                0.00694444444444442,
+                0.13541666666666669
+              ],
+              "M2_std": [
+                0.003020349346466221,
+                0.06260412297397747
+              ]
+            },
+            "M1b_invalid_bootstrap_replicates": 0,
+            "components": 12,
+            "groups": [
+              "middle_aged",
+              "older",
+              "young"
+            ]
+          }
+        },
+        "nnr": {
+          "status": "available",
+          "tau": 0.11646450358056057,
+          "eligibility": "fixed pre margin > tau; cure abs(post margin) <= tau; reversal post margin < -tau",
+          "eligible_items": 62,
+          "eligible_components": 9,
+          "eligible_targets": 23,
+          "cured": 8,
+          "reversed": 0,
+          "raw_item_fraction": 0.12903225806451613,
+          "nnr": 0.11666666666666667,
+          "weighting": "equal baseline-eligible components; item mean within component",
+          "transitions": {
+            "S": {
+              "S": 54,
+              "N": 8,
+              "C": 0
+            },
+            "N": {
+              "S": 0,
+              "N": 44,
+              "C": 14
+            },
+            "C": {
+              "S": 0,
+              "N": 0,
+              "C": 129
+            }
+          },
+          "calibration": {
+            "rule": "development_abs_mean_token_margin_quantile",
+            "quantile": 0.2,
+            "tau": 0.11646450358056057,
+            "sensitivity": {
+              "0.1": 0.10551336390113812,
+              "0.2": 0.11646450358056057,
+              "0.3": 0.12741564325998303
+            },
+            "development_rows": 2,
+            "independent_components": 1,
+            "development_ids": [
+              "WBX-C004-men-middle_aged",
+              "WBX-C004-men-not_stated"
+            ],
+            "sources": [
+              {
+                "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/mamay27b_v2/runtime-repair/supplemental-2614159/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/predictions.jsonl",
+                "sha256": "c63a2564d21cebd38c19f49abde953fed27764dfbf0388a7fa1ccff93ef0dac2"
+              },
+              {
+                "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/mamay27b_v2/runtime-repair/supplemental-2614159/qualification/baseline/warbias_triplets_uk/repeat-2/warbias_triplets_uk/predictions.jsonl",
+                "sha256": "c63a2564d21cebd38c19f49abde953fed27764dfbf0388a7fa1ccff93ef0dac2"
+              }
+            ],
+            "repeat_max_absolute_difference": 0.0,
+            "status": "exploratory_sparse_development"
+          },
+          "baseline_eligible_ids": [
+            "WBX-C014-men-middle_aged",
+            "WBX-C014-not_stated-older",
+            "WBX-C014-women-middle_aged",
+            "WBX-C014-women-not_stated",
+            "WBX-C014-women-older",
+            "WBX-C022-men-middle_aged",
+            "WBX-C022-men-not_stated",
+            "WBX-C022-men-older",
+            "WBX-C022-men-young",
+            "WBX-C022-not_stated-middle_aged",
+            "WBX-C022-not_stated-not_stated",
+            "WBX-C022-not_stated-older",
+            "WBX-C022-not_stated-young",
+            "WBX-C022-women-middle_aged",
+            "WBX-C022-women-not_stated",
+            "WBX-C022-women-older",
+            "WBX-C022-women-young",
+            "WBX-C025-men-middle_aged",
+            "WBX-C025-men-not_stated",
+            "WBX-C025-men-young",
+            "WBX-C025-women-not_stated",
+            "WBX-C031-men-middle_aged",
+            "WBX-C031-men-older",
+            "WBX-C031-women-middle_aged",
+            "WBX-C031-women-not_stated",
+            "WBX-C031-women-older",
+            "WBX-C064-not_stated-not_stated",
+            "WBX-C077-men-middle_aged",
+            "WBX-C077-men-not_stated",
+            "WBX-C077-men-older",
+            "WBX-C077-men-young",
+            "WBX-C077-not_stated-middle_aged",
+            "WBX-C077-not_stated-not_stated",
+            "WBX-C077-not_stated-older",
+            "WBX-C077-not_stated-young",
+            "WBX-C077-women-middle_aged",
+            "WBX-C077-women-not_stated",
+            "WBX-C077-women-young",
+            "WBX-C080-men-older",
+            "WBX-C101-women-middle_aged",
+            "WBX-C101-women-not_stated",
+            "WBX-C101-women-young",
+            "WBX-C106-women-middle_aged",
+            "WBX-C106-women-not_stated",
+            "WBX-C106-women-young",
+            "WBX-C108-men-not_stated",
+            "WBX-C108-men-young",
+            "WBX-C108-not_stated-middle_aged",
+            "WBX-C108-not_stated-not_stated",
+            "WBX-C108-not_stated-young",
+            "WBX-C117-men-middle_aged",
+            "WBX-C117-men-not_stated",
+            "WBX-C117-men-older",
+            "WBX-C117-men-young",
+            "WBX-C117-not_stated-middle_aged",
+            "WBX-C117-not_stated-not_stated",
+            "WBX-C117-not_stated-older",
+            "WBX-C117-not_stated-young",
+            "WBX-C117-women-middle_aged",
+            "WBX-C117-women-not_stated",
+            "WBX-C117-women-older",
+            "WBX-C117-women-young"
+          ],
+          "baseline_cohort_sha256": "11c21f25111a9a1f219cfe6876019c8275493d2768799568fdd48808b7a7bc91",
+          "ci95": [
+            0.0,
+            0.2444444444444444
+          ],
+          "sensitivity": {
+            "0.1": 0.16296296296296295,
+            "0.2": 0.11666666666666667,
+            "0.3": 0.28703703703703703
+          }
+        },
+        "RI": {
+          "axis": "language",
+          "numerator": 0.008928571428571452,
+          "denominator": -0.06646863774523348,
+          "target_reduction_ci95": [
+            -0.10804550059869206,
+            0.06926994105185592
+          ],
+          "numerator_ci95": [
+            0.0,
+            0.0267857142857143
+          ],
+          "minimum_improvement": 0.01,
+          "value": null,
+          "reason": "target_reduction_below_1pp",
+          "native_SS": {
+            "uk": [
+              43.30550950231801,
+              36.658645727794664
+            ],
+            "en": [
+              45.4102192134107,
+              44.51736207055356
+            ]
+          }
+        }
+      }
+    },
+    "qwen3_8b": {
+      "task_vector": {
+        "quality": {
+          "gender": {
+            "condition": "triplet",
+            "metric": "lms",
+            "unit": "rate",
+            "status": "qualified_common_panel",
+            "minimum_independent_support": 5,
+            "common_content_units": [
+              "WB-C014|middle_aged",
+              "WB-C014|not_stated",
+              "WB-C014|older",
+              "WB-C014|young",
+              "WB-C020|middle_aged",
+              "WB-C020|not_stated",
+              "WB-C020|older",
+              "WB-C020|young",
+              "WB-C022|middle_aged",
+              "WB-C022|not_stated",
+              "WB-C022|older",
+              "WB-C022|young",
+              "WB-C024|middle_aged",
+              "WB-C024|not_stated",
+              "WB-C024|older",
+              "WB-C024|young",
+              "WB-C025|middle_aged",
+              "WB-C025|not_stated",
+              "WB-C025|older",
+              "WB-C025|young",
+              "WB-C031|middle_aged",
+              "WB-C031|not_stated",
+              "WB-C031|older",
+              "WB-C031|young",
+              "WB-C034|middle_aged",
+              "WB-C034|not_stated",
+              "WB-C034|older",
+              "WB-C034|young",
+              "WB-C037|middle_aged",
+              "WB-C037|not_stated",
+              "WB-C037|older",
+              "WB-C037|young",
+              "WB-C049|middle_aged",
+              "WB-C049|not_stated",
+              "WB-C049|young",
+              "WB-C050|middle_aged",
+              "WB-C050|not_stated",
+              "WB-C050|young",
+              "WB-C064|middle_aged",
+              "WB-C064|not_stated",
+              "WB-C064|young",
+              "WB-C065|middle_aged",
+              "WB-C065|not_stated",
+              "WB-C065|young",
+              "WB-C066|middle_aged",
+              "WB-C066|not_stated",
+              "WB-C066|young",
+              "WB-C077|middle_aged",
+              "WB-C077|not_stated",
+              "WB-C077|young",
+              "WB-C080|middle_aged",
+              "WB-C080|not_stated",
+              "WB-C080|young",
+              "WB-C085|middle_aged",
+              "WB-C085|not_stated",
+              "WB-C085|young",
+              "WB-C089|middle_aged",
+              "WB-C089|not_stated",
+              "WB-C089|young",
+              "WB-C107|middle_aged",
+              "WB-C107|not_stated",
+              "WB-C107|young",
+              "WB-C108|middle_aged",
+              "WB-C108|not_stated",
+              "WB-C108|young",
+              "WB-C109|middle_aged",
+              "WB-C109|not_stated",
+              "WB-C109|young",
+              "WB-C117|middle_aged",
+              "WB-C117|not_stated",
+              "WB-C117|older",
+              "WB-C117|young"
+            ],
+            "common_panel_support": {
+              "men": {
+                "rows": 72,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "women": {
+                "rows": 72,
+                "source_cases": 21,
+                "independent_components": 12
+              }
+            },
+            "quality_pre": {
+              "men": 0.5038461538461538,
+              "women": 0.6089209401709402
+            },
+            "quality_post": {
+              "men": 0.4936965811965812,
+              "women": 0.6089209401709402
+            },
+            "m1_pre": 0.5038461538461538,
+            "m1_post": 0.4936965811965812,
+            "m1b_pre": 0.8274410035968066,
+            "m1b_post": 0.8107728748135801,
+            "zero_maximum_quality_post": false,
+            "group_losses": {
+              "men": 0.010149572649572614,
+              "women": 0.0
+            },
+            "m2_range": 0.010149572649572614,
+            "m2_population_stddev": 0.005074786324786307,
+            "descriptive_pre": {
+              "men": {
+                "quality": 0.5130208333333334,
+                "rows": 84,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 84,
+                "outcome_coverage": 1.0
+              },
+              "women": {
+                "quality": 0.6647893772893773,
+                "rows": 81,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 81,
+                "outcome_coverage": 1.0
+              }
+            },
+            "descriptive_post": {
+              "men": {
+                "quality": 0.5026041666666666,
+                "rows": 84,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 84,
+                "outcome_coverage": 1.0
+              },
+              "women": {
+                "quality": 0.6647893772893773,
+                "rows": 81,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 81,
+                "outcome_coverage": 1.0
+              }
+            },
+            "precision_note": "Support qualification alone does not establish adequate precision; intervals are exploratory, not simultaneous.",
+            "uncertainty": {
+              "m2_range": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              },
+              "m2_population_stddev": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              }
+            },
+            "ci95": {
+              "M1": [
+                0.27147435897435895,
+                0.7389049145299146
+              ],
+              "M1b": [
+                0.6551312649164676,
+                0.9247472315840154
+              ],
+              "M2_range": [
+                0.0,
+                0.027777777777777735
+              ],
+              "M2_std": [
+                0.0,
+                0.013888888888888867
+              ]
+            },
+            "M1b_invalid_bootstrap_replicates": 0,
+            "components": 12,
+            "groups": [
+              "men",
+              "women"
+            ]
+          },
+          "age": {
+            "condition": "triplet",
+            "metric": "lms",
+            "unit": "rate",
+            "status": "qualified_common_panel",
+            "minimum_independent_support": 5,
+            "common_content_units": [
+              "WB-C014|men",
+              "WB-C014|not_stated",
+              "WB-C014|women",
+              "WB-C020|men",
+              "WB-C020|not_stated",
+              "WB-C020|women",
+              "WB-C022|men",
+              "WB-C022|not_stated",
+              "WB-C022|women",
+              "WB-C024|men",
+              "WB-C024|not_stated",
+              "WB-C024|women",
+              "WB-C025|men",
+              "WB-C025|not_stated",
+              "WB-C025|women",
+              "WB-C031|men",
+              "WB-C031|not_stated",
+              "WB-C031|women",
+              "WB-C034|men",
+              "WB-C034|not_stated",
+              "WB-C034|women",
+              "WB-C037|men",
+              "WB-C037|not_stated",
+              "WB-C037|women",
+              "WB-C049|men",
+              "WB-C049|not_stated",
+              "WB-C050|men",
+              "WB-C050|not_stated",
+              "WB-C064|men",
+              "WB-C064|not_stated",
+              "WB-C065|men",
+              "WB-C065|not_stated",
+              "WB-C066|men",
+              "WB-C066|not_stated",
+              "WB-C077|men",
+              "WB-C077|not_stated",
+              "WB-C080|men",
+              "WB-C080|not_stated",
+              "WB-C085|men",
+              "WB-C085|not_stated",
+              "WB-C089|men",
+              "WB-C089|not_stated",
+              "WB-C107|men",
+              "WB-C107|not_stated",
+              "WB-C108|men",
+              "WB-C108|not_stated",
+              "WB-C109|men",
+              "WB-C109|not_stated",
+              "WB-C117|men",
+              "WB-C117|not_stated",
+              "WB-C117|women"
+            ],
+            "common_panel_support": {
+              "middle_aged": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "older": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              },
+              "young": {
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12
+              }
+            },
+            "quality_pre": {
+              "middle_aged": 0.5588173400673401,
+              "older": 0.4910563973063973,
+              "young": 0.5171506734006733
+            },
+            "quality_post": {
+              "middle_aged": 0.5484006734006733,
+              "older": 0.4864267676767677,
+              "young": 0.5171506734006733
+            },
+            "m1_pre": 0.4910563973063973,
+            "m1_post": 0.4864267676767677,
+            "m1b_pre": 0.8787422331011109,
+            "m1b_post": 0.886991557943208,
+            "zero_maximum_quality_post": false,
+            "group_losses": {
+              "middle_aged": 0.01041666666666674,
+              "older": 0.004629629629629595,
+              "young": 0.0
+            },
+            "m2_range": 0.01041666666666674,
+            "m2_population_stddev": 0.004261327552927216,
+            "descriptive_pre": {
+              "middle_aged": {
+                "quality": 0.6369047619047619,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              },
+              "older": {
+                "quality": 0.4910563973063973,
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 51,
+                "outcome_coverage": 1.0
+              },
+              "young": {
+                "quality": 0.6071428571428571,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              }
+            },
+            "descriptive_post": {
+              "middle_aged": {
+                "quality": 0.630952380952381,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              },
+              "older": {
+                "quality": 0.4864267676767677,
+                "rows": 51,
+                "source_cases": 21,
+                "independent_components": 12,
+                "total_panel_rows": 51,
+                "outcome_coverage": 1.0
+              },
+              "young": {
+                "quality": 0.6071428571428571,
+                "rows": 66,
+                "source_cases": 24,
+                "independent_components": 14,
+                "total_panel_rows": 66,
+                "outcome_coverage": 1.0
+              }
+            },
+            "precision_note": "Support qualification alone does not establish adequate precision; intervals are exploratory, not simultaneous.",
+            "uncertainty": {
+              "m2_range": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              },
+              "m2_population_stddev": {
+                "ci95": null,
+                "valid_replicates": 0,
+                "requested_replicates": 0,
+                "status": "not_requested"
+              }
+            },
+            "ci95": {
+              "M1": [
+                0.2918876262626263,
+                0.6881313131313131
+              ],
+              "M1b": [
+                0.7904623261213934,
+                0.964425975177305
+              ],
+              "M2_range": [
+                0.0,
+                0.03125
+              ],
+              "M2_std": [
+                0.0,
+                0.01473139127471974
+              ]
+            },
+            "M1b_invalid_bootstrap_replicates": 0,
+            "components": 12,
+            "groups": [
+              "middle_aged",
+              "older",
+              "young"
+            ]
+          }
+        },
+        "nnr": {
+          "status": "available",
+          "tau": 0.07607260411626271,
+          "eligibility": "fixed pre margin > tau; cure abs(post margin) <= tau; reversal post margin < -tau",
+          "eligible_items": 62,
+          "eligible_components": 8,
+          "eligible_targets": 21,
+          "cured": 4,
+          "reversed": 0,
+          "raw_item_fraction": 0.06451612903225806,
+          "nnr": 0.05119047619047619,
+          "weighting": "equal baseline-eligible components; item mean within component",
+          "transitions": {
+            "S": {
+              "S": 58,
+              "N": 4,
+              "C": 0
+            },
+            "N": {
+              "S": 3,
+              "N": 22,
+              "C": 4
+            },
+            "C": {
+              "S": 0,
+              "N": 2,
+              "C": 156
+            }
+          },
+          "calibration": {
+            "rule": "development_abs_mean_token_margin_quantile",
+            "quantile": 0.2,
+            "tau": 0.07607260411626271,
+            "sensitivity": {
+              "0.1": 0.07190810905759548,
+              "0.2": 0.07607260411626271,
+              "0.3": 0.08023709917492994
+            },
+            "development_rows": 2,
+            "independent_components": 1,
+            "development_ids": [
+              "WBX-C004-men-middle_aged",
+              "WBX-C004-men-not_stated"
+            ],
+            "sources": [
+              {
+                "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/qwen3_8b/supplemental-2613593/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/predictions.jsonl",
+                "sha256": "afa65562b3c176982d325509461532d9226412d0e04a220db43c165bda5a0d17"
+              },
+              {
+                "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/qwen3_8b/supplemental-2613593/qualification/baseline/warbias_triplets_uk/repeat-2/warbias_triplets_uk/predictions.jsonl",
+                "sha256": "afa65562b3c176982d325509461532d9226412d0e04a220db43c165bda5a0d17"
+              }
+            ],
+            "repeat_max_absolute_difference": 0.0,
+            "status": "exploratory_sparse_development"
+          },
+          "baseline_eligible_ids": [
+            "WBX-C014-men-middle_aged",
+            "WBX-C014-men-young",
+            "WBX-C014-not_stated-middle_aged",
+            "WBX-C014-not_stated-older",
+            "WBX-C014-not_stated-young",
+            "WBX-C014-women-middle_aged",
+            "WBX-C014-women-not_stated",
+            "WBX-C014-women-older",
+            "WBX-C014-women-young",
+            "WBX-C022-men-middle_aged",
+            "WBX-C022-men-not_stated",
+            "WBX-C022-men-older",
+            "WBX-C022-men-young",
+            "WBX-C022-not_stated-middle_aged",
+            "WBX-C022-not_stated-not_stated",
+            "WBX-C022-not_stated-older",
+            "WBX-C022-not_stated-young",
+            "WBX-C022-women-middle_aged",
+            "WBX-C022-women-not_stated",
+            "WBX-C022-women-older",
+            "WBX-C022-women-young",
+            "WBX-C037-men-middle_aged",
+            "WBX-C037-men-not_stated",
+            "WBX-C037-men-older",
+            "WBX-C037-men-young",
+            "WBX-C037-not_stated-middle_aged",
+            "WBX-C037-not_stated-not_stated",
+            "WBX-C037-not_stated-older",
+            "WBX-C037-not_stated-young",
+            "WBX-C037-women-middle_aged",
+            "WBX-C037-women-not_stated",
+            "WBX-C037-women-older",
+            "WBX-C037-women-young",
+            "WBX-C064-men-older",
+            "WBX-C064-not_stated-young",
+            "WBX-C064-women-middle_aged",
+            "WBX-C065-men-not_stated",
+            "WBX-C065-men-young",
+            "WBX-C065-not_stated-not_stated",
+            "WBX-C065-not_stated-young",
+            "WBX-C065-women-not_stated",
+            "WBX-C077-men-middle_aged",
+            "WBX-C077-men-not_stated",
+            "WBX-C077-men-older",
+            "WBX-C077-women-middle_aged",
+            "WBX-C077-women-not_stated",
+            "WBX-C077-women-young",
+            "WBX-C089-men-middle_aged",
+            "WBX-C089-men-not_stated",
+            "WBX-C089-men-older",
+            "WBX-C089-not_stated-young",
+            "WBX-C089-women-middle_aged",
+            "WBX-C089-women-not_stated",
+            "WBX-C089-women-young",
+            "WBX-C101-women-middle_aged",
+            "WBX-C101-women-not_stated",
+            "WBX-C103-women-middle_aged",
+            "WBX-C103-women-not_stated",
+            "WBX-C103-women-young",
+            "WBX-C107-women-middle_aged",
+            "WBX-C107-women-not_stated",
+            "WBX-C107-women-young"
+          ],
+          "baseline_cohort_sha256": "001df5033a6c0edf61e11f287f0621424efc5a48ebd627610514850ceb6cbdd1",
+          "ci95": [
+            0.0125,
+            0.0994047619047619
+          ],
+          "sensitivity": {
+            "0.1": 0.04172077922077922,
+            "0.2": 0.05119047619047619,
+            "0.3": 0.11369047619047619
+          }
+        },
+        "RI": {
+          "axis": "language",
+          "numerator": 0.0267857142857143,
+          "denominator": 0.0061553989745478654,
+          "target_reduction_ci95": [
+            -0.0044959473150961715,
+            0.015422077922078004
+          ],
+          "numerator_ci95": [
+            0.0,
+            0.0625
+          ],
+          "minimum_improvement": 0.01,
+          "value": null,
+          "reason": "target_reduction_below_1pp",
+          "native_SS": {
+            "uk": [
+              34.978930643824256,
+              35.594470541279044
+            ],
+            "en": [
+              32.86071198305241,
+              30.18214055448098
+            ]
+          }
+        }
+      }
+    }
+  }
+}

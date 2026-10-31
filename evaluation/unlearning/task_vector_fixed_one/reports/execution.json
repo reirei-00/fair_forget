@@ -1,0 +1,26 @@
+{
+  "kind": "executed_fixed_scale_one_report",
+  "stage": "report_complete",
+  "models": 6,
+  "heldout_pairs": 72,
+  "training_source_pairs": 6,
+  "fixed_scale": 1.0,
+  "scale_search": false,
+  "new_model_requests": 0,
+  "archive": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/report-2614163/task_vector_fixed_one_results_v1.tar.gz",
+    "sha256": "ff088e778d2c137392e42f930ae24b85d7c4c45970dd82aeda80961769e4f7b3"
+  },
+  "native_export": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/completed_evidence_v1.tar.gz",
+    "sha256": "6de261d01da744eeb2f7ebf7136598bf7cd1d61d5d527ff8ced12828c6ea0549"
+  },
+  "manifest": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/report-2614163/report/evaluation/unlearning/task_vector_fixed_one/reports/manifest.json",
+    "sha256": "dcaac641d40c05163b1ea0b736ba7f5ee89ec8a39ccb893b30489a59ddbd2645"
+  },
+  "notebook": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/report-2614163/report/notebooks/executed/warbias_task_vector_results.ipynb",
+    "sha256": "d8498e6c2f1d0bdd29461807deabc6c26ac26e8976870c46540a62cf88f92705"
+  }
+}

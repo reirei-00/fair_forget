@@ -1,0 +1,112 @@
+{
+  "kind": "baseline_only_fixed_rule_exploratory_calibration",
+  "rule": "development_abs_mean_token_margin_quantile",
+  "quantiles": [
+    0.1,
+    0.2,
+    0.3
+  ],
+  "selection_from_post_outputs": false,
+  "models": {
+    "qwen3_8b": {
+      "thresholds": {
+        "0.1": 0.07190810905759548,
+        "0.2": 0.07607260411626271,
+        "0.3": 0.08023709917492994
+      },
+      "rows": 2,
+      "independent_components": 1,
+      "repeat_max_absolute_difference": 0.0,
+      "source_sha256": {
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/qwen3_8b/supplemental-2613593/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/predictions.jsonl": "afa65562b3c176982d325509461532d9226412d0e04a220db43c165bda5a0d17",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/qwen3_8b/supplemental-2613593/qualification/baseline/warbias_triplets_uk/repeat-2/warbias_triplets_uk/predictions.jsonl": "afa65562b3c176982d325509461532d9226412d0e04a220db43c165bda5a0d17"
+      }
+    },
+    "llama31_8b_instruct": {
+      "thresholds": {
+        "0.1": 0.3971030747195207,
+        "0.2": 0.3987752118918436,
+        "0.3": 0.40044734906416657
+      },
+      "rows": 2,
+      "independent_components": 1,
+      "repeat_max_absolute_difference": 0.0,
+      "source_sha256": {
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/llama31_8b_instruct/supplemental-2613594/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/predictions.jsonl": "c6ec21840c0d8c729050ed86306214686e8df6da5f20cf41362b7a2264905c01",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/llama31_8b_instruct/supplemental-2613594/qualification/baseline/warbias_triplets_uk/repeat-2/warbias_triplets_uk/predictions.jsonl": "c6ec21840c0d8c729050ed86306214686e8df6da5f20cf41362b7a2264905c01"
+      }
+    },
+    "gemma3_12b_it": {
+      "thresholds": {
+        "0.1": 0.014673643508368306,
+        "0.2": 0.015442984842922503,
+        "0.3": 0.0162123261774767
+      },
+      "rows": 2,
+      "independent_components": 1,
+      "repeat_max_absolute_difference": 0.0,
+      "source_sha256": {
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/gemma3_12b_it/supplemental-2613595/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/predictions.jsonl": "b09350e3ddafe8ea30b50af03c3d3db5e8e9c86052dbf2a00694e92e98a5e723",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/gemma3_12b_it/supplemental-2613595/qualification/baseline/warbias_triplets_uk/repeat-2/warbias_triplets_uk/predictions.jsonl": "b09350e3ddafe8ea30b50af03c3d3db5e8e9c86052dbf2a00694e92e98a5e723"
+      }
+    },
+    "lapa12b_instruct": {
+      "thresholds": {
+        "0.1": 0.2596141183287931,
+        "0.2": 0.2724459661316125,
+        "0.3": 0.2852778139344319
+      },
+      "rows": 2,
+      "independent_components": 1,
+      "repeat_max_absolute_difference": 0.0,
+      "source_sha256": {
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/lapa12b_instruct/supplemental-2613596/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/predictions.jsonl": "f48684f467fdc810bd63f3344fcad95cb6dc93559c3d371d5c548e5001923ca6",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/lapa12b_instruct/supplemental-2613596/qualification/baseline/warbias_triplets_uk/repeat-2/warbias_triplets_uk/predictions.jsonl": "f48684f467fdc810bd63f3344fcad95cb6dc93559c3d371d5c548e5001923ca6"
+      }
+    },
+    "mamay12b_v2": {
+      "thresholds": {
+        "0.1": 0.006000195059950153,
+        "0.2": 0.006229226396856103,
+        "0.3": 0.006458257733762051
+      },
+      "rows": 2,
+      "independent_components": 1,
+      "repeat_max_absolute_difference": 0.0,
+      "source_sha256": {
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/mamay12b_v2/supplemental-2613597/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/predictions.jsonl": "2d8b461a432253eeb3e11caad923b2d3c7fe9b70198ef615cbcc0548b7ee53b0",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/mamay12b_v2/supplemental-2613597/qualification/baseline/warbias_triplets_uk/repeat-2/warbias_triplets_uk/predictions.jsonl": "2d8b461a432253eeb3e11caad923b2d3c7fe9b70198ef615cbcc0548b7ee53b0"
+      }
+    },
+    "mamay27b_v2": {
+      "thresholds": {
+        "0.1": 0.10551336390113812,
+        "0.2": 0.11646450358056057,
+        "0.3": 0.12741564325998303
+      },
+      "rows": 2,
+      "independent_components": 1,
+      "repeat_max_absolute_difference": 0.0,
+      "source_sha256": {
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/mamay27b_v2/runtime-repair/supplemental-2614159/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/predictions.jsonl": "c63a2564d21cebd38c19f49abde953fed27764dfbf0388a7fa1ccff93ef0dac2",
+        "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/mamay27b_v2/runtime-repair/supplemental-2614159/qualification/baseline/warbias_triplets_uk/repeat-2/warbias_triplets_uk/predictions.jsonl": "c63a2564d21cebd38c19f49abde953fed27764dfbf0388a7fa1ccff93ef0dac2"
+      }
+    }
+  },
+  "data": {
+    "outputs/baseline_preintervention_20261008/data/evaluation/data/warbias_triplets_uk.jsonl": {
+      "sha256": "ee475312111acdd09fb3e54e0dce5ab4d4245bd1edc25c1d482275fce5640054",
+      "rows": 249,
+      "same_as_frozen_collector": true
+    },
+    "outputs/baseline_preintervention_20261008/data/evaluation/data/warbias_triplets_en.jsonl": {
+      "sha256": "234d908f6a778468f5c50afe3cda83ecbfabc354f8cd2ca3c659e70606de44ad",
+      "rows": 249,
+      "same_as_frozen_collector": true
+    }
+  },
+  "math_sources": {
+    "/tmp/fair-uk-bootstrap-batch-20261031/lm_eval/fair_uk/baseline_metrics.py": "b59e22434ae10ca2f40e6465b2ed052ddaa0f4dcf6bdce05180030263c2f1fe0",
+    "/tmp/fair-uk-bootstrap-batch-20261031/lm_eval/fair_uk/intervention_metrics.py": "408950c6e8a86b07cb4a58b5b292941546d0f4c6ea52462537717c651a26a5b0"
+  }
+}

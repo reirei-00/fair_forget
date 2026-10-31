@@ -1,0 +1,255 @@
+{
+  "qwen3_8b": {
+    "model_identity": {
+      "local_files_sha256": {
+        ".gitattributes": "34448b82c17d60fec9b65b1f093c115ddbaadc04beb1b0140b6bfed2e012a930",
+        "LICENSE": "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e",
+        "README.md": "0f36caaff9c2516411a7738db384606263ba653c1e63e61d72f511606164d5a6",
+        "config.json": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30",
+        "generation_config.json": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2",
+        "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+        "model-00001-of-00005.safetensors": "31d6a825ae35f11fb85b195b4c42c146c051e446433125a215336abdf95cbf5f",
+        "model-00002-of-00005.safetensors": "5991236cea6fe21f3d43cab0f0e84448734fbbe0789816202989f2ddc9d18282",
+        "model-00003-of-00005.safetensors": "c5185c4794be2d8a9784d5753c9922db38df478ce11f9ed0b415b7304d896836",
+        "model-00004-of-00005.safetensors": "b5ee7de71fbf17db3d5704e0c8f2bc7d005ca9e1d7ca2aeb19827b0cfcaa917a",
+        "model-00005-of-00005.safetensors": "20c2d6366ab85c90786ccdd829cd2b9e7d30ef3b2ebbb998280e7e4014b542ff",
+        "model.safetensors.index.json": "f9fdbcb91c23971c13ec5d5f2573d2349e8f61f2f049371ec699281748fdb1bc",
+        "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+        "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+        "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+      },
+      "parameters": {
+        "pretrained": "/e/project1/e-dev-2026d09-075/fairforget/models/Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
+        "dtype": "bfloat16",
+        "tensor_parallel_size": 1,
+        "max_model_len": 4096,
+        "seed": 42,
+        "enable_thinking": false,
+        "enforce_eager": true,
+        "max_num_seqs": 1,
+        "enable_prefix_caching": false,
+        "enable_chunked_prefill": false,
+        "async_scheduling": false
+      },
+      "arguments_sha256": "18f0ff8d9de4f4ea9a36d7e6b6c1516b934c118e449b1ef4fb5b3a9b52948522"
+    },
+    "parameters": null,
+    "run": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/qwen3_8b/supplemental-2613593/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/run.json",
+    "sha256": "7207c974d86aec4f111ba2229a96d1a30ce10b269415081cdbf1b08cf65b2a6f"
+  },
+  "llama31_8b_instruct": {
+    "model_identity": {
+      "local_files_sha256": {
+        ".gitattributes": "11ad7efa24975ee4b0c3c3a38ed18737f0658a5f75a0a96787b576a78a023361",
+        "LICENSE": "64e1b2889b7892e6bbe7a7ed5bfe6ff793c61f9d584345f8f41cf9f5cb30a369",
+        "README.md": "ed0e2e86f7a40c38b793b0a04dfd993b2c1dfb34906804f96b999f0bbd8d70e6",
+        "USE_POLICY.md": "a568f2ebc73cec3fd74ba2afd992d4e945a8c7a9d851f9b66163aac834b7b859",
+        "config.json": "29e4c210b0d6ac178b16b2a255a568bdb23b581e50ca1ef6a6d071dd85704e6e",
+        "generation_config.json": "189fb0c0d7fd8a527db217c0a60a0e013f0394cd8800f9697a666a9e75e5f7fd",
+        "model-00001-of-00004.safetensors": "2b1879f356aed350030bb40eb45ad362c89d9891096f79a3ab323d3ba5607668",
+        "model-00002-of-00004.safetensors": "09d433f650646834a83c580877bd60c6d1f88f7755305c12576b5c7058f9af15",
+        "model-00003-of-00004.safetensors": "fc1cdddd6bfa91128d6e94ee73d0ce62bfcdb7af29e978ddcab30c66ae9ea7fa",
+        "model-00004-of-00004.safetensors": "92ecfe1a2414458b4821ac8c13cf8cb70aed66b5eea8dc5ad9eeb4ff309d6d7b",
+        "model.safetensors.index.json": "146776fce3f6db1103aa6f249e65ee5544c5923ce6f971b092eee79aa6e5d37b",
+        "original/consolidated.00.pth": "ab33d910f405204e5d388bc3521503584800461dc96808e287821dd451c1edac",
+        "original/params.json": "b15b6b31b2043c0400b028ecc25c8946e21d76ac260e9ac6a357ed8727c8865f",
+        "original/tokenizer.model": "82e9d31979e92ab929cd544440f129d9ecd797b69e327f80f17e1c50d5551b55",
+        "special_tokens_map.json": "6f38c73729248f6c127296386e3cdde96e254636cc58b4169d3fd32328d9a8ec",
+        "tokenizer.json": "79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4",
+        "tokenizer_config.json": "177c7b61e616fecb84c17ce0591acb92c6c4d60e9ac5ababfb940ff23bbcd424"
+      },
+      "parameters": {
+        "pretrained": "/e/project1/e-dev-2026d09-075/fairforget/models/Llama-3.1-8B-Instruct/0e9e39f249a16976918f6564b8830bc894c89659",
+        "dtype": "bfloat16",
+        "tensor_parallel_size": 1,
+        "max_model_len": 4096,
+        "seed": 42,
+        "enable_thinking": false,
+        "enforce_eager": true,
+        "max_num_seqs": 1,
+        "enable_prefix_caching": false,
+        "enable_chunked_prefill": false,
+        "async_scheduling": false
+      },
+      "arguments_sha256": "198f33fa4dd4a767572a8fd088981c6a6b386e0d450f91d40bf007cf702f1ffb"
+    },
+    "parameters": null,
+    "run": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/llama31_8b_instruct/supplemental-2613594/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/run.json",
+    "sha256": "3dcd09cb4574c6fadc940be55f9c1732095b173bce8d8e1fdf1283ddb4dab724"
+  },
+  "gemma3_12b_it": {
+    "model_identity": {
+      "local_files_sha256": {
+        ".gitattributes": "0cc24794ebc1e2d61438bb0074a5ead251089fe51a3fd2ebc2dbcd2fd8816205",
+        "README.md": "bcd00f0d73a59772e5cac6a98519e8f5eca15f1354cd3889c916e45ba16d8c2e",
+        "added_tokens.json": "50b2f405ba56a26d4913fd772089992252d7f942123cc0a034d96424221ba946",
+        "chat_template.json": "fe16baf728db49457cde32802cd7efc0ac8a7a9877dbe22fe3322b2d9dc6ccd9",
+        "config.json": "39172c4124d3470341bbbb25f2926fd97edf68f0fe3a9fa4cde6acb9b7ed2cc6",
+        "generation_config.json": "fd9324becc53c4be610db39e13a613006f09fd6ef71a95fb6320dc33157490a3",
+        "model-00001-of-00005.safetensors": "4847447e92599833e8dbaa3067cd201c3bb5c052efa91f11ba891e43234f7832",
+        "model-00002-of-00005.safetensors": "891bd54eed03cba9ee1e705533a02a8217fcc29f356e4a1f53e5fd0d178883ad",
+        "model-00003-of-00005.safetensors": "7cee411d9d57324e50ce064a192cc5a858276d508611b12fc599e0c9767112e0",
+        "model-00004-of-00005.safetensors": "8bc75a29a730c9e743cad013feda3b0991a913fafe787c58a1c6e20afad97723",
+        "model-00005-of-00005.safetensors": "ed14bd4908c98fed9f61e8cd410167e0846de9abd78e0452ab092072e5d9252d",
+        "model.safetensors.index.json": "788cc42a1a92835df62d9a3791f47105f63504c7c404637a73288e9b11bc7b82",
+        "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+        "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+        "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+        "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+        "tokenizer.model": "1299c11d7cf632ef3b4e11937501358ada021bbdf7c47638d13c0ee982f2e79c",
+        "tokenizer_config.json": "bfe25c2735e395407beb78456ea9a6984a1f00d8c16fa04a8b75f2a614cf53e1"
+      },
+      "parameters": {
+        "pretrained": "/e/project1/e-dev-2026d09-075/fairforget/models/gemma-3-12b-it/96b6f1eccf38110c56df3a15bffe176da04bfd80",
+        "dtype": "bfloat16",
+        "tensor_parallel_size": 1,
+        "max_model_len": 4096,
+        "seed": 42,
+        "enable_thinking": false,
+        "enforce_eager": true,
+        "max_num_seqs": 1,
+        "enable_prefix_caching": false,
+        "enable_chunked_prefill": false,
+        "async_scheduling": false
+      },
+      "arguments_sha256": "21601d4fc46544dc2d5cfb4ae19796be17e79758a9978b5640b8fa8800e432db"
+    },
+    "parameters": null,
+    "run": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/gemma3_12b_it/supplemental-2613595/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/run.json",
+    "sha256": "3dced6cd5ac680967cad0f021da1c388dd6d47cf137092dfc9ec9eef48155207"
+  },
+  "lapa12b_instruct": {
+    "model_identity": {
+      "local_files_sha256": {
+        ".gitattributes": "34448b82c17d60fec9b65b1f093c115ddbaadc04beb1b0140b6bfed2e012a930",
+        "README.md": "d6548cf415d2fafa1114b341bc54c53c149fde6cab0294a107c3625c0577e1ca",
+        "chat_template.jinja": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+        "config.json": "f02a640a945f26b004b32384e962b6820957ac363df96cd3246298b30a283451",
+        "generation_config.json": "4c5c704ed7d02bd1d03478bc47605eb83a3c84048631d73065c9a2ccb1e7101a",
+        "model-00001-of-00005.safetensors": "beedc0137aca3c07aa92587f1f21e5850b95fdff04e29131b3b62ee519bf8937",
+        "model-00002-of-00005.safetensors": "d21413be3761e827b99662211868a04dd237ce9c2635f16bcafff568717368db",
+        "model-00003-of-00005.safetensors": "c54d84b1607c1fd56fb4dbb81b8593158e3d3b9891cd2a67dba596331d57ec69",
+        "model-00004-of-00005.safetensors": "52f426e6e42a69037e03e25dc782ec870c178e4bf01c9370280b774a6db36cac",
+        "model-00005-of-00005.safetensors": "f8570e9df7a0afd802664cbe6a20e9fdb33942a1e75a147c17a2b93278ddeaf9",
+        "model.safetensors.index.json": "7bde3b089ae4e63cf690f222e50fab8dce4bc1d1e8f415b8ca1cd681c873fc1d",
+        "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+        "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+        "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+        "tokenizer.json": "8332e5faa6f7b459e807033e1be87ec09697b04524bc01f5961a98ce8224d5d1",
+        "tokenizer.model": "3482d7043f783c6c692d4e16e06059ec19da018c5ac16ac77f20ae74aada4323",
+        "tokenizer_config.json": "db3a11754c0b4cfb080a08020bfe1a8b4ab83894992fe97483de44e7994f1fb9",
+        "training_args.bin": "8bee7acda79d2a28d27d8d15b45e054f33fa8016754bf69c7503a6138ad11625"
+      },
+      "parameters": {
+        "pretrained": "/e/project1/e-dev-2026d09-075/fairforget/models/lapa-v0.1.2-instruct/2969fd997f07b33727c6f10795d78ef23cc5c037",
+        "dtype": "bfloat16",
+        "tensor_parallel_size": 1,
+        "max_model_len": 4096,
+        "seed": 42,
+        "enable_thinking": false,
+        "enforce_eager": true,
+        "max_num_seqs": 1,
+        "enable_prefix_caching": false,
+        "enable_chunked_prefill": false,
+        "async_scheduling": false
+      },
+      "arguments_sha256": "c2a37a8221ad67a64a2a3f95d9576885a0819d9823ba4843a0bc38afaa75adc9"
+    },
+    "parameters": null,
+    "run": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/lapa12b_instruct/supplemental-2613596/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/run.json",
+    "sha256": "5bf8ccd702ab2e873a2b953748d05a852c429422c21244a7640295ce00387e02"
+  },
+  "mamay12b_v2": {
+    "model_identity": {
+      "local_files_sha256": {
+        ".gitattributes": "c2f2202eb8ff4551d334190631165907f0d60bf435d9d07f25b0d97a20b0bd9a",
+        "README.md": "5bf4c106d59291c65e8798b346248c24c30fffc391a62b60eeefedc95ac8c973",
+        "added_tokens.json": "50b2f405ba56a26d4913fd772089992252d7f942123cc0a034d96424221ba946",
+        "chat_template.json": "ec2c77ae38d74b8009fb105a07b0ebf8c75a13281e181cc3dce670a4a5fe0001",
+        "config.json": "89795290a04de188c98bded7b65fcc8366d3b4586d883dcc5751395b9cd76c78",
+        "model-00001-of-00005.safetensors": "718626149d560a990648d6d8c3a54c4f8719739b13556964790a3efb305ee3e3",
+        "model-00002-of-00005.safetensors": "b143ef5f9a3e46fab64d883cf5df06a48a5ca5e1899238cbe352aa108a32cdb8",
+        "model-00003-of-00005.safetensors": "94de704c9825219a93c691cadc80e366e489baf5e9e2e61397fc93d8eedffacb",
+        "model-00004-of-00005.safetensors": "b65fd837df3eac872b88d8ff2872defc1c1bb6d495be6bae9468b02228678ec8",
+        "model-00005-of-00005.safetensors": "410d29ced9b68cff309bee2e8871e20758413607f64c5328bc884d7d68bae781",
+        "model.safetensors.index.json": "417499de9b05b4c1afe2bf9e4d3028b6a7ea9680d0678185587f36489619b8b7",
+        "performance.png": "a53d819f7a8adc2cd7468381937e9455b887c3beb8aac0d2bb9fe1c517ab4a5e",
+        "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+        "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+        "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+        "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+        "tokenizer.model": "1299c11d7cf632ef3b4e11937501358ada021bbdf7c47638d13c0ee982f2e79c",
+        "tokenizer_config.json": "bfe25c2735e395407beb78456ea9a6984a1f00d8c16fa04a8b75f2a614cf53e1"
+      },
+      "parameters": {
+        "pretrained": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-12B-IT-v2.0/3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+        "dtype": "bfloat16",
+        "tensor_parallel_size": 1,
+        "max_model_len": 4096,
+        "seed": 42,
+        "enable_thinking": false,
+        "enforce_eager": true,
+        "max_num_seqs": 1,
+        "enable_prefix_caching": false,
+        "enable_chunked_prefill": false,
+        "async_scheduling": false
+      },
+      "arguments_sha256": "c52cf8084da1a70ca9609af214099650e3e4ace7273d3a43858c1ac13e36e444"
+    },
+    "parameters": null,
+    "run": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/mamay12b_v2/supplemental-2613597/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/run.json",
+    "sha256": "8ca7c7532745c31639cc938fe3a043d808b1d1f997d12a13cdb3db9443361eef"
+  },
+  "mamay27b_v2": {
+    "model_identity": {
+      "local_files_sha256": {
+        ".gitattributes": "c2f2202eb8ff4551d334190631165907f0d60bf435d9d07f25b0d97a20b0bd9a",
+        "README.md": "8556693853da676c25376332cadc2f5925a4b49a20590ad7af4242ddd2e65f4b",
+        "added_tokens.json": "50b2f405ba56a26d4913fd772089992252d7f942123cc0a034d96424221ba946",
+        "chat_template.json": "ec2c77ae38d74b8009fb105a07b0ebf8c75a13281e181cc3dce670a4a5fe0001",
+        "config.json": "7b912e354dd6973e1bc397b7ee4a8ac6c9f406da95e33e5789a3468f71644d15",
+        "model-00001-of-00012.safetensors": "3ef60f8b7d8cb2c76931fd46ed4dc0d8f870fc24b5794133d4c215ad57999872",
+        "model-00002-of-00012.safetensors": "d6a3bcb105b8f4ee9552493a8d616fb6e2da3189dce6a2901a9b5cbf94f7f5d9",
+        "model-00003-of-00012.safetensors": "37e2134ba6ac419c7ae637d32786addcdb0ea014d8ccfdaaf7821ecc3fcc5f71",
+        "model-00004-of-00012.safetensors": "0c67557c72dd243db57884364c1de0ef41f9455f0c612954e1e80d1f2e0ad501",
+        "model-00005-of-00012.safetensors": "bf0a9c7c7909a65b58c5497acdb497aa22d6a1e93df94f69eb3be27e3cdb7cf7",
+        "model-00006-of-00012.safetensors": "6ba90a179ed89d24f22e9bf865b631fd8ec575253677dc608dd18b6173966824",
+        "model-00007-of-00012.safetensors": "a5ac2f140419f474053582da28a05568e5409b899380b0369a71bf10e39870e6",
+        "model-00008-of-00012.safetensors": "b9f2c6c7283d906be7e0e9db3a71d6e0d31f0eabd804c1282e46e03def254ac2",
+        "model-00009-of-00012.safetensors": "d0d3ffbbdfd4f2ef521f2190f2c234063f2d9764142bb7b4a586124dd2805883",
+        "model-00010-of-00012.safetensors": "79f08468d9edadad6a3afc46015632746d671770cd89210033a8718f46cebfaf",
+        "model-00011-of-00012.safetensors": "e07bc7d3cea533abd8bd41a712d484be24a2359d0e3b7c970532c9903b1253f5",
+        "model-00012-of-00012.safetensors": "ee587a3d4d915e6c2f6464aa2eb845e49e59fc70690fb55e63a7c463d349586b",
+        "model.safetensors.index.json": "04e4e6ba8213dcb76b2954ec146637406617f76fb28dba277e2f9cf253f7254b",
+        "performance.png": "a53d819f7a8adc2cd7468381937e9455b887c3beb8aac0d2bb9fe1c517ab4a5e",
+        "preprocessor_config.json": "f688d6bb20c5017601c4011de7ca656da8485b540b05013efdaf986c0fcc918d",
+        "processor_config.json": "3ffd5f11778dc73e2b69b3c00535e4121e1badf7018136263cd17b5b34fbaa53",
+        "special_tokens_map.json": "2f7b0adf4fb469770bb1490e3e35df87b1dc578246c5e7e6fc76ecf33213a397",
+        "tokenizer.json": "4667f2089529e8e7657cfb6d1c19910ae71ff5f28aa7ab2ff2763330affad795",
+        "tokenizer.model": "1299c11d7cf632ef3b4e11937501358ada021bbdf7c47638d13c0ee982f2e79c",
+        "tokenizer_config.json": "bfe25c2735e395407beb78456ea9a6984a1f00d8c16fa04a8b75f2a614cf53e1"
+      },
+      "parameters": {
+        "pretrained": "/e/project1/e-dev-2026d09-075/fairforget/models/MamayLM-Gemma-3-27B-IT-v2.0/ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+        "dtype": "bfloat16",
+        "tensor_parallel_size": 1,
+        "max_model_len": 4096,
+        "seed": 42,
+        "enable_thinking": false,
+        "enforce_eager": true,
+        "max_num_seqs": 1,
+        "enable_prefix_caching": false,
+        "enable_chunked_prefill": false,
+        "async_scheduling": false,
+        "attention_backend": "TRITON_ATTN"
+      },
+      "arguments_sha256": "fe4e52f2e4c9d8e0acaab66c40543a8a80228d412c7ea751de64c8d842431978",
+      "execution_environment": {
+        "VLLM_BATCH_INVARIANT": true
+      }
+    },
+    "parameters": null,
+    "run": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/measurements/mamay27b_v2/runtime-repair/supplemental-2614159/qualification/baseline/warbias_triplets_uk/repeat-1/warbias_triplets_uk/run.json",
+    "sha256": "3c7461684b3de47f3b681db76c1693478a845e2db27443c52710f08e10634cb8"
+  }
+}

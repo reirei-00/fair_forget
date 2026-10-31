@@ -1,0 +1,43 @@
+{
+  "kind": "fixed_scale_one_results_publication",
+  "fixed_scale": 1,
+  "scale_search": false,
+  "models": 6,
+  "heldout_pairs": 72,
+  "training_source_pairs": 6,
+  "native_export_sha256": "6de261d01da744eeb2f7ebf7136598bf7cd1d61d5d527ff8ced12828c6ea0549",
+  "archive_sha256": "ff088e778d2c137392e42f930ae24b85d7c4c45970dd82aeda80961769e4f7b3",
+  "canonical_notebook_sha256": "4ff87c7c90a6987e933dd8190124d0d938a262296f22b2433c15ce6eca7ae41e",
+  "original_executed_notebook_sha256": "d8498e6c2f1d0bdd29461807deabc6c26ac26e8976870c46540a62cf88f92705",
+  "executed_code_and_outputs_sha256": "784ac25f4abe5648e13de14d85d6dbe0809dcf0f5f2f317b4e13806cf6611b45",
+  "code_cells": 9,
+  "figures": 7,
+  "canonical_edit": "Added replay instructions; executable cells, execution counts and outputs unchanged.",
+  "derived_sources": {
+    "gemma3_12b_it": {
+      "archive_path": "evaluation/unlearning/task_vector_fixed_one/evidence/gemma3_12b_it/metrics/task_vector/all_metrics.json",
+      "sha256": "6d1fe107cd714a597a361ab3b4129cf1f78c32466b67733320bde4153558ba5c"
+    },
+    "lapa12b_instruct": {
+      "archive_path": "evaluation/unlearning/task_vector_fixed_one/evidence/lapa12b_instruct/metrics/task_vector/all_metrics.json",
+      "sha256": "266bbe3844bc181f89dca998f43a7eaaab9ae1a1f6ab90dd1bfdbd839649182e"
+    },
+    "llama31_8b_instruct": {
+      "archive_path": "evaluation/unlearning/task_vector_fixed_one/evidence/llama31_8b_instruct/metrics/task_vector/all_metrics.json",
+      "sha256": "92b2ce02da9055e49e0a182174fdc9569fe9c40f46d50561b1f040e455465e86"
+    },
+    "mamay12b_v2": {
+      "archive_path": "evaluation/unlearning/task_vector_fixed_one/evidence/mamay12b_v2/metrics/task_vector/all_metrics.json",
+      "sha256": "973bef83c517f4895acd99ec15924c1820c5280d7c99308b7774188846690154"
+    },
+    "mamay27b_v2": {
+      "archive_path": "evaluation/unlearning/task_vector_fixed_one/evidence/mamay27b_v2/metrics/task_vector/all_metrics.json",
+      "sha256": "77eb1a1f37c85835ea634c1a340f217b456f0f08ea4fb15d7897c2d4c1ea5971"
+    },
+    "qwen3_8b": {
+      "archive_path": "evaluation/unlearning/task_vector_fixed_one/evidence/qwen3_8b/metrics/task_vector/all_metrics.json",
+      "sha256": "57ce041e41cb09b6cc05f7540cad7af74a644619daa4c80368da8a44b679a45e"
+    }
+  },
+  "derived_results_sha256": "32a07ab7d06b79db0b24ee83c5dcc889d5e713306429a6c8da99d4475c40594b"
+}

@@ -1,0 +1,7 @@
+model,actual_steps,seed,learning_rate,batch_size,maximum_length,selected_scale,null_intervention,checkpoint,checkpoint_files,base_training_hash_binding
+Qwen3 8B,137,42,1e-05,1,256,1.0,False,/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/application-2613592/qwen3_8b/task_vector/merged_checkpoint,15,source_model_files
+Llama 3.1 8B Instruct,137,42,1e-05,1,256,1.0,False,/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/application-2613592/llama31_8b_instruct/task_vector/merged_checkpoint,12,source_model_files
+Gemma 3 12B IT,137,42,1e-05,1,256,1.0,False,/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/application-2613592/gemma3_12b_it/task_vector/merged_checkpoint,16,source_model_files
+Lapa 12B Instruct,137,42,1e-05,1,256,1.0,False,/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/application-2613592/lapa12b_instruct/task_vector/merged_checkpoint,16,source_model_files
+Mamay 12B v2,137,42,1e-05,1,256,1.0,False,/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/application-2613592/mamay12b_v2/task_vector/merged_checkpoint,16,source_model_files
+Mamay 27B v2,137,42,1e-05,1,256,1.0,False,/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/task_vector_fixed_one_v2/application-2613592/mamay27b_v2/task_vector/merged_checkpoint,23,source_model_files
