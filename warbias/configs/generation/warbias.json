@@ -47,6 +47,12 @@
         "stereotype": "stereotype_uk",
         "counter_stereotype": "counter_stereotype_uk",
         "unrelated": "unrelated_uk"
+      },
+      "profile_request": {
+        "language": "uk",
+        "path": "protocol/inputs/case_instructions_uk.jsonl",
+        "schema": "warbias_case_profile_request_uk_v1",
+        "sha256": "e2173ce7bf6c14b3a8df8e4cf809a9315e5318ea2ee9e5c50be0cc64a5a3f54c"
       }
     }
   }

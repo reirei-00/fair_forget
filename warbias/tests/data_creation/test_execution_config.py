@@ -73,8 +73,8 @@ def test_local_full_generation_binds_actual_backend_without_rewriting_selection(
     assert rows[0]["generation"]["execution_config_sha256"] == digest(config)
     assert all(call["provider"] == "vllm" for call in calls)
     states = [json.loads(call["messages"][1]["content"]) for call in calls]
-    assert states[1]["previous"] == {"stereotype_uk": "Fixture sentence for S."}
-    assert states[2]["previous"] == {
+    assert states[1]["попередні_речення"] == {"stereotype_uk": "Fixture sentence for S."}
+    assert states[2]["попередні_речення"] == {
         "stereotype_uk": "Fixture sentence for S.",
         "counter_stereotype_uk": "Fixture sentence for C.",
     }

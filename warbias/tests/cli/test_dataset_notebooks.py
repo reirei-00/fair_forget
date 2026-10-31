@@ -13,6 +13,7 @@ NOTEBOOKS = [
     "03_full_ukrainian_generation",
     "04_sample_translation_comet",
     "05_full_english_translation",
+    "06_coverage_generation",
 ]
 
 
@@ -33,7 +34,7 @@ def execute_notebook(name, replacements=None):
 
 @pytest.mark.parametrize("name", NOTEBOOKS)
 def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
-    from fairforget import cli_support
+    from fairforget import backends, cli_support
     from fairforget.translation import quality, reference
     from fairforget.warbias import pilot, production
 
@@ -41,6 +42,7 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         raise AssertionError("Default dataset notebooks must not fetch data or run models")
 
     monkeypatch.setattr(cli_support, "load_factory", unexpected)
+    monkeypatch.setattr(backends, "vllm_provider", unexpected)
     monkeypatch.setattr(quality, "load_comet_scorer", unexpected)
     monkeypatch.setattr(reference, "load_reference", unexpected)
     monkeypatch.setattr(pilot, "run_pilot", unexpected)
@@ -74,9 +76,15 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         assert result["coverage"]["scored_segments"] == 30
         assert namespace["plan"]["alignment"]["translation_bindings_checked"] is True
         assert result["comet_recomputed"] is False
-    else:
+    elif name == "05_full_english_translation":
         assert result["status"] == "waiting_for_ukrainian_input"
         assert result["annotation_status"] == "in_progress"
+    else:
+        assert result["status"] == "prepared"
+        assert result["counts"]["total_triplets"] == 11997
+        assert result["counts"]["new_triplets"] == 10938
+        assert result["generation_execution_requested"] is False
+        assert namespace["candidate"]["provider"] == "vllm"
 
 
 def test_pilot_notebook_resolves_its_subproject_in_a_broader_repository(tmp_path, monkeypatch):

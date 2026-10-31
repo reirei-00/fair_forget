@@ -9,7 +9,7 @@ import re
 from copy import deepcopy
 from pathlib import Path
 
-from fairforget.io import digest, unique_index, write_json
+from fairforget.io import digest, file_digest, read_rows, unique_index, write_json
 from fairforget.warbias.provider import (
     prompt_record,
     request_record,
@@ -21,6 +21,7 @@ from fairforget.warbias.schema import FIELDS, STAGE_FIELD, STAGES, structural_is
 
 STRATEGIES = {"zero_shot": ("triplet",), "sequential": STAGES}
 GENERATION_CONTRACT = "warbias_triplet_generation_v1"
+UKRAINIAN_PROFILE_SCHEMA = "warbias_case_profile_request_uk_v1"
 PROFILE_STAGE_TASKS = {
     "S": "Напиши одне стереотипне речення із заданою асоціацією та заданим поданням.",
     "C": (
@@ -92,6 +93,19 @@ def resolve_prompt_paths(strategies, resolve_path):
         strategy["prompts"] = {
             stage: resolve(source) for stage, source in strategy["prompts"].items()
         }
+        context = strategy.get("profile_request")
+        if context is not None and "path" in context:
+            path = resolve_path(context["path"])
+            if file_digest(path) != context.get("sha256"):
+                raise ValueError("Ukrainian case instructions differ from their file hash")
+            instructions = read_rows(path)
+            strategy["profile_request"] = {
+                "schema": context["schema"],
+                "language": context["language"],
+                "sha256": context["sha256"],
+                "rows_sha256": digest(instructions),
+                "instructions": instructions,
+            }
     return result
 
 
@@ -122,6 +136,18 @@ def verify_strategy(name, strategy):
         raise ValueError("Declare one distinct response key for every triplet field")
     for prompt in strategy["prompts"].values():
         verify_prompt_record(prompt)
+    context = strategy.get("profile_request")
+    if context is not None:
+        if (
+            name != "sequential"
+            or context.get("schema") != UKRAINIAN_PROFILE_SCHEMA
+            or context.get("language") != "uk"
+            or not isinstance(context.get("instructions"), list)
+            or not context["instructions"]
+            or context.get("rows_sha256") != digest(context["instructions"])
+        ):
+            raise ValueError("Declare frozen Ukrainian profile instructions")
+        unique_index(context["instructions"], "case_id")
 
 
 def _json_object(pairs):
@@ -240,6 +266,10 @@ def generate_triplets(
     )
     freeze_file(output / "condition.json", definition)
     condition_hash = digest(definition)
+    profile_context = strategy.get("profile_request")
+    instructions = (
+        unique_index(profile_context["instructions"], "case_id") if profile_context else {}
+    )
     parents = {input_id(case): {} for case in cases}
     calls = {input_id(case): [] for case in cases}
     for stage in STRATEGIES[strategy_name]:
@@ -255,10 +285,31 @@ def generate_triplets(
                 },
             }
             if case.get("matrix_schema") == "case_profile" and stage in PROFILE_STAGE_TASKS:
-                state["profile_request_schema"] = "warbias_case_profile_request_v6"
-                state["current_stage"] = stage
                 field = strategy["response_fields"][STAGE_FIELD[stage]]
-                state["task_uk"] = _profile_task(case, stage, field)
+                if profile_context:
+                    from fairforget.warbias.ukrainian_request import request_state
+
+                    state = request_state(
+                        case,
+                        stage,
+                        state["previous"],
+                        response_field=field,
+                        task_uk=PROFILE_STAGE_TASKS[stage],
+                        instructions=instructions.get(case["case_id"]),
+                    )
+                    task_case = {
+                        **case,
+                        "target_uk": state["випадок"]["цільова_група"],
+                        "reporter_uk": state["випадок"]["мовець"],
+                        "framing": "attributed"
+                        if state["випадок"]["подання"] == "із мовцем"
+                        else "unattributed",
+                    }
+                    state["завдання"] = _profile_task(task_case, stage, field)
+                else:
+                    state["profile_request_schema"] = "warbias_case_profile_request_v6"
+                    state["current_stage"] = stage
+                    state["task_uk"] = _profile_task(case, stage, field)
             request = request_record(item, stage, state, candidate, strategy["prompts"][stage])
             request.update(
                 generation_contract=GENERATION_CONTRACT,

@@ -22,8 +22,9 @@ def resolve_final_strategy(selected, final_strategy=None):
     pilot_strategy = selected["strategy_config"]
     strategy = deepcopy(pilot_strategy if final_strategy is None else final_strategy)
     verify_strategy(selected["strategy"], strategy)
-    if {key: value for key, value in strategy.items() if key != "prompts"} != {
-        key: value for key, value in pilot_strategy.items() if key != "prompts"
+    prompt_fields = {"prompts", "profile_request"}
+    if {key: value for key, value in strategy.items() if key not in prompt_fields} != {
+        key: value for key, value in pilot_strategy.items() if key not in prompt_fields
     }:
         raise ValueError("Final prompts cannot change the selected response fields or settings")
     return strategy
