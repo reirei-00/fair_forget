@@ -181,6 +181,26 @@ def _json(value):
     raise ValueError(f"Unsupported raw vLLM field type: {type(value).__name__}")
 
 
+def _loaded_identity(actual, expected):
+    loaded = {key: getattr(actual, key) for key in expected}
+    for key in ("model", "tokenizer"):
+        revision_key = "revision" if key == "model" else "tokenizer_revision"
+        if loaded[revision_key] != expected[revision_key]:
+            raise ValueError("Loaded vLLM revision differs from the frozen configuration")
+        if loaded[key] == expected[key]:
+            continue
+        path = Path(loaded[key])
+        if not path.is_absolute() or not path.is_dir():
+            raise ValueError("Loaded vLLM repository differs from the frozen configuration")
+        # Offline vLLM resolves Hub IDs to their cached snapshot directories.
+        snapshot = importlib.import_module("huggingface_hub").snapshot_download(
+            repo_id=expected[key], revision=expected[revision_key], local_files_only=True
+        )
+        if path.resolve(strict=True) != Path(snapshot).resolve(strict=True):
+            raise ValueError("Loaded vLLM snapshot differs from the frozen configuration")
+    return loaded
+
+
 class VllmProvider:
     def __init__(self, config, runtime):
         self.config = validate_vllm_config(config)
@@ -204,10 +224,7 @@ class VllmProvider:
             "tokenizer": self.settings["engine"]["tokenizer"],
             "tokenizer_revision": self.settings["engine"]["tokenizer_revision"],
         }
-        if any(getattr(actual, key) != value for key, value in identity.items()):
-            raise ValueError(
-                "Loaded vLLM model/tokenizer identity differs from the frozen configuration"
-            )
+        self.loaded_identity = _loaded_identity(actual, identity)
         self.identity = identity
         self.template = None
         if self.settings["prompt_format"] == "native-chat":
@@ -293,6 +310,7 @@ class VllmProvider:
             "text": output.text,
             "model": self.config["model"],
             "model_identity": dict(self.identity),
+            "loaded_identity": dict(self.loaded_identity),
             "backend": {"name": "vllm", "version": self.version},
             "provider_config": deepcopy(self.config),
             "sampling_params_repr": repr(sampling),

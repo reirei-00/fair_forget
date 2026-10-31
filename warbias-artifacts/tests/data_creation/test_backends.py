@@ -229,6 +229,53 @@ def test_explicit_literal_template_is_forwarded_without_tokenizer_default(runtim
     assert response["input"]["chat_template"] == "An exact custom template"
 
 
+@pytest.mark.parametrize("change", [None, "model", "tokenizer", "revision"])
+def test_offline_runtime_accepts_only_the_pinned_cached_snapshots(
+    runtime, monkeypatch, tmp_path, change
+):
+    config = configuration()
+    snapshots = {}
+    for name in ("model", "tokenizer", "other"):
+        snapshots[name] = tmp_path / name
+        snapshots[name].mkdir()
+    lookups = []
+
+    def snapshot_download(**kwargs):
+        lookups.append(kwargs)
+        return str(snapshots[kwargs["repo_id"].split("/")[-1]])
+
+    monkeypatch.setitem(
+        sys.modules, "huggingface_hub", SimpleNamespace(snapshot_download=snapshot_download)
+    )
+    original = sys.modules["vllm"].LLM
+
+    class OfflineLLM(original):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            actual = self.llm_engine.model_config
+            actual.model = str(snapshots["model"])
+            actual.tokenizer = str(snapshots["tokenizer"])
+            if change in {"model", "tokenizer"}:
+                setattr(actual, change, str(snapshots["other"]))
+            elif change == "revision":
+                actual.revision = "c" * 40
+
+    monkeypatch.setattr(sys.modules["vllm"], "LLM", OfflineLLM)
+    if change:
+        with pytest.raises(ValueError, match="differs from the frozen configuration"):
+            vllm_provider(config=config)
+        assert not runtime["generate"]
+        return
+    response = vllm_provider(config=config).generate(request(config))
+    assert lookups == [
+        {"repo_id": "owner/model", "revision": "a" * 40, "local_files_only": True},
+        {"repo_id": "owner/tokenizer", "revision": "b" * 40, "local_files_only": True},
+    ]
+    assert response["model_identity"]["model"] == "owner/model"
+    assert response["loaded_identity"]["model"] == str(snapshots["model"])
+    assert response["loaded_identity"]["tokenizer"] == str(snapshots["tokenizer"])
+
+
 def test_raw_prompt_never_guesses_message_concatenation_or_special_tokens(runtime):
     config = configuration()
     config["settings"].pop("chat_template")
