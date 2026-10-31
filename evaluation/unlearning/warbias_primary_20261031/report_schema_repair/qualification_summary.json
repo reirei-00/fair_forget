@@ -1,0 +1,99 @@
+{
+  "kind": "private_saved_report_schema_repair_qualification",
+  "status": "qualified_exact_candidate_actual_all_six_and_24_tables",
+  "observed_at_utc": "2026-10-31T16:58:41.436257+00:00",
+  "candidate": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/report_schema_repair/scripts/unlearning_report_data.py",
+    "sha256": "f99c7a11008262617384ac1c8bb91a59c3aa600cd37368e10079774801af44c9"
+  },
+  "base_loader": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/report_release_v3/scripts/unlearning_report_data.py",
+    "sha256": "50b7d69eea1c03e97ca1565a545b5dd8e4f002d88da9fef250cfbf8c9af543c5"
+  },
+  "actual_qualification": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/report_schema_repair/qualification_20261031T165707Z-9e3d956d/qualification.json",
+    "sha256": "081033bc1b556abb520a4a98168e421e99a8d0293c5aa94afce5186f52aa2243"
+  },
+  "actual_dispatch": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/report_schema_repair/qualification_20261031T165707Z-9e3d956d/dispatch.json",
+    "sha256": "f403c7025b3513db377d4cd45d47ceebf7cacd5fd9553fc7f51cd0e10653a030"
+  },
+  "actual_manifest": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_reports_v3/reports-2611634/evaluation/unlearning/warbias_primary_20261031/reports/manifest_completed.json",
+    "sha256": "39f65690870b98bad27c4255905176a0798c99391ede5c9409bfb7c864da1fc6"
+  },
+  "source_heldout_native_values": 30528,
+  "source_TRAIN_effects": 2394,
+  "actual_training_arms": 18,
+  "TRAIN_pairs": 18,
+  "heldout_pairs": 216,
+  "metric_inventory_entries": 324,
+  "native_phase_references": 36,
+  "unique_native_run_files": 24,
+  "temporary_CSV_exports_qualified": 24,
+  "units": {
+    "scopes": 7992,
+    "types": {
+      "str": 7992
+    },
+    "literal_labels": {
+      "native metric scale; not a common cross-task scale": 7992
+    },
+    "all_rows_source_exact": true
+  },
+  "software_tests": {
+    "tests": 33,
+    "status": "PASS",
+    "log": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/report_schema_repair/software_tests_final.log",
+      "sha256": "1f4f049567f53f7bfab9b0d09d3e68ce0d1ccaeaca082ac82830bfb34a4ad70f"
+    }
+  },
+  "ruff_lint": {
+    "status": "PASS",
+    "log": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/report_schema_repair/ruff_check_final.log",
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    }
+  },
+  "ruff_format": {
+    "status": "PASS",
+    "log": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/report_schema_repair/ruff_format_final.log",
+      "sha256": "177f260a5645724013185e4b140c7045cc39e56c0c97b120f5cb23599f85f0de"
+    }
+  },
+  "integration_patch": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/report_schema_repair/integration.patch",
+    "sha256": "fa8fbc14a4c15910b4691ec82d4824ca473d057b9af87fe6bc1f209f9fd57110"
+  },
+  "loader_patch": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/report_schema_repair/loader.patch",
+    "sha256": "6a988e6b7b08497b31a37ffefc54dcad0fc56b523dc38d346a23fd4988a6ca1c"
+  },
+  "test_sources": {
+    "test_native_training_diagnostic_schema.py": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/report_schema_repair/tests/test_native_training_diagnostic_schema.py",
+      "sha256": "b0bf4869d3a24f402a415373712114ffaa542a07859d2a68418fd10ba789e8a4"
+    },
+    "test_saved_native_metric_schema.py": {
+      "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/report_schema_repair/tests/test_saved_native_metric_schema.py",
+      "sha256": "df82fd76670f089c6db2136aae057244d82134960dd29b7aa24269d57f1cae8c"
+    }
+  },
+  "existing_test_update": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/report_schema_repair/integration/test_warbias_report_data.py",
+    "sha256": "d863d2c524ca605281cbf5c271f4e0891a90761573fb45e2f5d3d4ab912718b8"
+  },
+  "adapters": [
+    "Native TRAIN provenance is bound to copied original run bytes and completed execution prediction/file SHA maps; no synthetic files_sha256.",
+    "Absent native availability stays null; recorded uncertainty status/CI/valid-replicate count are copied unchanged.",
+    "Native units remain source-exact; absent labels stay null, per-metric maps select only the recorded named label."
+  ],
+  "no_scorer_or_scientific_setting_changes": true,
+  "original_inputs_unchanged": true,
+  "model_calls": 0,
+  "jobs_submitted": 0,
+  "shared_repo_or_Google_changes": false,
+  "actual_qualification_runtime_note": "Only a private temporary loader and temporary CSV exports were created remotely; they were removed. Durable candidate/source/qualification evidence is local. No notebook execution occurred."
+}

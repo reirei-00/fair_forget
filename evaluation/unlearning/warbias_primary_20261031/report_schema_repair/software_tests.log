@@ -1,0 +1,38 @@
+test_completed_task_requires_zero_exit (test_native_training_diagnostic_schema.NativeTrainingDiagnosticSchemaTests) ... ok
+test_diagnostic_manifest_is_bound_separately_from_training_binding (test_native_training_diagnostic_schema.NativeTrainingDiagnosticSchemaTests) ... ok
+test_missing_copied_run_has_no_fallback_to_unbound_provenance (test_native_training_diagnostic_schema.NativeTrainingDiagnosticSchemaTests) ... ok
+test_missing_native_prediction_sha_is_rejected (test_native_training_diagnostic_schema.NativeTrainingDiagnosticSchemaTests) ... ok
+test_native_and_files_hash_maps_must_agree (test_native_training_diagnostic_schema.NativeTrainingDiagnosticSchemaTests) ... ok
+test_original_run_reference_must_match_phase_output (test_native_training_diagnostic_schema.NativeTrainingDiagnosticSchemaTests) ... ok
+test_pair_prediction_sha_must_match_original_collection (test_native_training_diagnostic_schema.NativeTrainingDiagnosticSchemaTests) ... ok
+test_post_lineage_still_rejects_a_different_checkpoint (test_native_training_diagnostic_schema.NativeTrainingDiagnosticSchemaTests) ... ok
+test_real_native_shape_without_files_sha256_preserves_values (test_native_training_diagnostic_schema.NativeTrainingDiagnosticSchemaTests) ... ok
+test_refreshed_native_hash_cannot_substitute_different_provenance (test_native_training_diagnostic_schema.NativeTrainingDiagnosticSchemaTests) ... ok
+test_source_phase_stays_train (test_native_training_diagnostic_schema.NativeTrainingDiagnosticSchemaTests) ... ok
+test_tampered_native_bytes_rejected_even_though_pair_hash_still_matches (test_native_training_diagnostic_schema.NativeTrainingDiagnosticSchemaTests) ... ok
+test_actual_native_schema_without_availability_status (test_saved_native_metric_schema.SavedNativeMetricSchemaTests) ... ok
+test_metric_unit_map_uses_only_its_named_original_label (test_saved_native_metric_schema.SavedNativeMetricSchemaTests) ... ok
+test_missing_interval_is_not_silently_replaced (test_saved_native_metric_schema.SavedNativeMetricSchemaTests) ... ok
+test_missing_named_unit_does_not_borrow_another_metric_unit (test_saved_native_metric_schema.SavedNativeMetricSchemaTests) ... ok
+test_missing_native_units_remain_null (test_saved_native_metric_schema.SavedNativeMetricSchemaTests) ... ok
+test_missing_outcomes_remain_none_not_zero_or_available (test_saved_native_metric_schema.SavedNativeMetricSchemaTests) ... ok
+test_missing_uncertainty_cannot_acquire_a_default_status (test_saved_native_metric_schema.SavedNativeMetricSchemaTests) ... ok
+test_missing_uncertainty_status_is_rejected (test_saved_native_metric_schema.SavedNativeMetricSchemaTests) ... ok
+test_saved_delta_and_interval_are_not_recalculated (test_saved_native_metric_schema.SavedNativeMetricSchemaTests) ... ok
+test_semantic_scope_and_native_units_are_preserved (test_saved_native_metric_schema.SavedNativeMetricSchemaTests) ... ok
+test_source_recorded_status_is_preserved_if_present (test_saved_native_metric_schema.SavedNativeMetricSchemaTests) ... ok
+test_all_eighteen_cells_stay_pending_despite_six_submitted_jobs (test_warbias_report_data.WarBiasReportTests) ... ok
+test_diagnostic_results_require_actual_matching_training (test_warbias_report_data.WarBiasReportTests) ... ok
+test_historical_qwen_training_cannot_fill_fresh_warbias_cells (test_warbias_report_data.WarBiasReportTests) ... ok
+test_measurement_snapshot_may_include_unrelated_jobs_without_creating_results (test_warbias_report_data.WarBiasReportTests) ... ok
+test_missing_report_hash_is_not_silently_treated_as_pending (test_warbias_report_data.WarBiasReportTests) ... ok
+test_native_training_diagnostic_keeps_its_source_phase_and_actual_lineage (test_warbias_report_data.WarBiasReportTests) ... ok
+test_old_128_step_cap_cannot_replace_the_full_pass (test_warbias_report_data.WarBiasReportTests) ... ok
+test_original_predicates_budget_and_actor_counts_are_preparation_only (test_warbias_report_data.WarBiasReportTests) ... ok
+test_replay_cells_never_launch_training_or_inference (test_warbias_report_data.WarBiasReportTests) ... ok
+test_wrong_tokenizer_boundary_proof_is_not_qualified (test_warbias_report_data.WarBiasReportTests) ... ok
+
+----------------------------------------------------------------------
+Ran 33 tests in 0.290s
+
+OK

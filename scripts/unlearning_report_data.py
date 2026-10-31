@@ -1337,6 +1337,47 @@ def _warbias_preparation(root, manifest, models, evidence):
     }
 
 
+def _training_diagnostic_native_run(execution_path, execution, arm, task_id, provenance, evidence):
+    """Bind native-schema provenance to the copied original run bytes."""
+    task = execution["tasks"][arm]
+    files = task.get("files", {})
+    names = {"run.json", "report.json", "predictions.jsonl"}
+    require(
+        task.get("status") == "completed"
+        and task.get("returncode") == 0
+        and set(files) == names
+        and task.get("native_files_sha256") == {name: files[name]["sha256"] for name in names}
+        and all(
+            isinstance(files[name]["sha256"], str)
+            and len(files[name]["sha256"]) == 64
+            and not (set(files[name]["sha256"]) - set("0123456789abcdef"))
+            and files[name]["path"] == str(Path(task["output"]) / name)
+            for name in names
+        )
+        and provenance.get("predictions_sha256") == files["predictions.jsonl"]["sha256"],
+        "Native diagnostic files or prediction provenance differ from completed collection",
+    )
+    # The assembler already copies this fixed portable layout. Original remote
+    # paths in execution/provenance remain unchanged; the bound SHA locates bytes.
+    relative = Path("native") / arm / task_id / "run.json"
+    native_path, native_run = bound_json(
+        execution_path.parent,
+        {"path": str(relative), "sha256": files["run.json"]["sha256"]},
+    )
+    require(
+        native_run == provenance["run"],
+        "Native diagnostic copied run differs from paired run provenance",
+    )
+    evidence.append(
+        {
+            "role": "training_source_diagnostic/native_run/" + arm,
+            "path": str(native_path),
+            "sha256": digest(native_path),
+        }
+    )
+    return native_run
+
+
 def _training_diagnostic(root, entry, model, method, training, preparation, evidence):
     """Read an actual native TRAIN comparison without promoting it to held-out evidence."""
     if not entry.get("training_diagnostic"):
@@ -1390,12 +1431,13 @@ def _training_diagnostic(root, entry, model, method, training, preparation, evid
             ),
             "Diagnostic effective-input evidence is missing",
         )
-        task = execution["tasks"]["baseline" if phase == "before" else method]
-        require(
-            task.get("status") == "completed"
-            and task["files"]["run.json"]["sha256"]
-            == comparison["provenance"][phase]["files_sha256"]["run.json"],
-            "Native diagnostic run differs from its completed collection",
+        _training_diagnostic_native_run(
+            execution_path,
+            execution,
+            "baseline" if phase == "before" else method,
+            expected["task"],
+            comparison["provenance"][phase],
+            evidence,
         )
     for key in (
         "dataset",
@@ -1446,14 +1488,46 @@ def _training_diagnostic(root, entry, model, method, training, preparation, evid
         "Diagnostic recipe differs from the actual intervention",
     )
     require(
-        execution["bindings"]["data_manifest"]["sha256"] == expected["binding_sha256"],
-        "Diagnostic training source binding differs",
+        execution["bindings"]["data_manifest"]["sha256"] == expected["binding_sha256"]
+        and execution["bindings"]["diagnostic_manifest"]["sha256"] == expected["manifest_sha256"],
+        "Diagnostic training source or diagnostic manifest binding differs",
     )
     evidence.extend(
         {"role": "training_source_diagnostic/" + label, "path": str(path), "sha256": digest(path)}
         for label, path in (("execution", execution_path), ("comparison", comparison_path))
     )
     return comparison["effects"]
+
+
+def _saved_native_metric_row(model, task, scope, name, value, units):
+    """Copy maintained native values and distinguish availability from uncertainty."""
+    require(
+        isinstance(value, dict)
+        and all(key in value for key in ("pre", "post", "delta", "uncertainty"))
+        and isinstance(value["uncertainty"], dict)
+        and "ci95" in value["uncertainty"]
+        and isinstance(value["uncertainty"].get("status"), str),
+        "Saved native metric values or uncertainty schema are incomplete",
+    )
+    uncertainty = value["uncertainty"]
+    units = units.get(name) if isinstance(units, dict) else units
+    require(units is None or isinstance(units, str), "Native metric unit is not a label or null")
+    return {
+        "model": model,
+        "task": task,
+        "scope": json.dumps(scope, sort_keys=True),
+        "metric": name,
+        "before": value["pre"],
+        "after": value["post"],
+        "change": value["delta"],
+        # The maintained native_changes schema supplies uncertainty.status,
+        # not an availability status. Preserve absence instead of inventing one.
+        "status": value.get("status"),
+        "ci95": uncertainty["ci95"],
+        "uncertainty_status": uncertainty["status"],
+        "valid_replicates": uncertainty.get("valid_replicates"),
+        "units": units,
+    }
 
 
 def load_manifest(path, method):
@@ -1618,18 +1692,14 @@ def load_manifest(path, method):
                     }
                     for name, value in scoped["metrics"].items():
                         metric_values.append(
-                            {
-                                "model": model["label"],
-                                "task": task,
-                                "scope": json.dumps(scope, sort_keys=True),
-                                "metric": name,
-                                "before": value["pre"],
-                                "after": value["post"],
-                                "change": value["delta"],
-                                "status": value["status"],
-                                "ci95": value.get("uncertainty", {}).get("ci95"),
-                                "units": scoped.get("units", "native benchmark scale"),
-                            }
+                            _saved_native_metric_row(
+                                model["label"],
+                                task,
+                                scope,
+                                name,
+                                value,
+                                scoped.get("units"),
+                            )
                         )
         if training:
             histories[model["label"]] = training["losses"]

@@ -1,0 +1,17 @@
+{
+  "status": "shared_report_source_verified",
+  "loader_sha256": "f99c7a11008262617384ac1c8bb91a59c3aa600cd37368e10079774801af44c9",
+  "unittest_suites": {
+    "test_warbias_report_data": 10,
+    "test_native_training_diagnostic_schema": 12,
+    "test_saved_native_metric_schema": 11,
+    "test_unlearning_report_data": 18
+  },
+  "tests_passed": 51,
+  "ruff_check": "passed",
+  "ruff_format": "passed",
+  "model_calls": 0,
+  "metrics_recalculated": false,
+  "frozen_original_inputs_changed": false,
+  "unrelated_working_changes_staged": false
+}

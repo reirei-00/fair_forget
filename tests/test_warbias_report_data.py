@@ -192,7 +192,10 @@ class WarBiasReportTests(unittest.TestCase):
         base_run = {
             "task": expected["task"],
             "protocol": expected["protocol"],
-            "evaluation_asset_identity": {"tokenizer_sha256": "7" * 64, "input_sha256": "8" * 64},
+            "evaluation_asset_identity": {
+                "tokenizer_sha256": "7" * 64,
+                "input_sha256": "8" * 64,
+            },
             "dataset": {
                 "sha256": expected["sha256"],
                 "source_role": "training_signal",
@@ -204,7 +207,10 @@ class WarBiasReportTests(unittest.TestCase):
             "selected_ids_sha256": expected["selected_ids_sha256"],
             "limit_clusters_per_stratum": None,
         }
-        before, after = json.loads(json.dumps(base_run)), json.loads(json.dumps(base_run))
+        before, after = (
+            json.loads(json.dumps(base_run)),
+            json.loads(json.dumps(base_run)),
+        )
         before["model_identity"] = {
             "parameters": {"pretrained": "/fixture/base", "dtype": "bfloat16"},
             "local_files_sha256": {"model.safetensors": "3" * 64},
@@ -219,11 +225,14 @@ class WarBiasReportTests(unittest.TestCase):
             "source_rows_sha256": expected["source_rows_sha256"],
             "effects": [{"metric": "fixture_saved_native_value", "before": 1, "after": 2}],
             "provenance": {
-                key: {"run": run, "files_sha256": {"run.json": "4" * 64}}
+                key: {"run": run, "predictions_sha256": "9" * 64}
                 for key, run in (("before", before), ("after", after))
             },
         }
-        pair_path, execution_path = self.root / "paired.json", self.root / "execution.json"
+        pair_path, execution_path = (
+            self.root / "paired.json",
+            self.root / "execution.json",
+        )
         for phase in ("train", "evaluation", "wrong_protocol", "missing_assets"):
             for recorded in pair["provenance"].values():
                 recorded["run"]["protocol"] = (
@@ -236,6 +245,27 @@ class WarBiasReportTests(unittest.TestCase):
                 "evaluation" if phase == "evaluation" else "train"
             )
             pair_path.write_text(json.dumps(pair))
+            native_tasks = {}
+            for name, phase_name in (("baseline", "before"), ("wga_kl", "after")):
+                native_path = self.root / "native" / name / expected["task"] / "run.json"
+                native_path.parent.mkdir(parents=True, exist_ok=True)
+                native_path.write_text(json.dumps(pair["provenance"][phase_name]["run"]))
+                original = "/original/native/" + name + "/" + expected["task"]
+                hashes = {
+                    "run.json": reports.digest(native_path),
+                    "report.json": "6" * 64,
+                    "predictions.jsonl": "9" * 64,
+                }
+                native_tasks[name] = {
+                    "status": "completed",
+                    "returncode": 0,
+                    "output": original,
+                    "native_files_sha256": hashes,
+                    "files": {
+                        filename: {"path": original + "/" + filename, "sha256": value}
+                        for filename, value in hashes.items()
+                    },
+                }
             execution = {
                 "kind": "training_source_diagnostic_not_heldout",
                 "stage": "training_diagnostic_complete",
@@ -249,13 +279,11 @@ class WarBiasReportTests(unittest.TestCase):
                         "report": {"sha256": reports.digest(pair_path)},
                     }
                 },
-                "tasks": {
-                    name: {"status": "completed", "files": {"run.json": {"sha256": "4" * 64}}}
-                    for name in ("baseline", "wga_kl")
-                },
+                "tasks": native_tasks,
                 "bindings": {
                     "recipes": {"wga_kl": {"sha256": training["recipe_sha256"]}},
                     "data_manifest": {"sha256": expected["binding_sha256"]},
+                    "diagnostic_manifest": {"sha256": expected["manifest_sha256"]},
                 },
             }
             execution_path.write_text(json.dumps(execution))
@@ -265,7 +293,10 @@ class WarBiasReportTests(unittest.TestCase):
                         "path": str(execution_path),
                         "sha256": reports.digest(execution_path),
                     },
-                    "comparison": {"path": str(pair_path), "sha256": reports.digest(pair_path)},
+                    "comparison": {
+                        "path": str(pair_path),
+                        "sha256": reports.digest(pair_path),
+                    },
                 }
             }
             arguments = (
