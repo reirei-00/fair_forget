@@ -117,6 +117,36 @@ judgments, paired scientific analysis and successful mitigation remain separate
 claims. Use Fair-UK's maintained paired analysis with the actual manifests; do
 not infer effects from optimizer loss or process exit alone.
 
+## Analyze saved before/after runs
+
+After the evaluation queue reaches a final state, run the separate CPU analysis
+package against those exact training and evaluation directories:
+
+```bash
+sbatch --dependency=afterany:EVALUATION_JOB_ID \
+  --output="$RESULTS/logs/analysis-%j.log" \
+  deploy/unlearning_primary/analyze.sbatch \
+  "$RELEASE" "$TRAINING" "$EVALUATION" "$RESULTS"
+```
+
+This one-hour job requests eight CPU cores and no GPUs. Four workers call only
+the frozen evaluator's `paper compare-native` command, with 1,000 bootstrap
+draws and seed 42. It loads saved predictions and the exact local bundle;
+offline flags and an empty GPU visibility setting prevent inference or network
+collection. The package can live outside the immutable release.
+
+The driver requires a completed evaluation queue and matching native completion
+receipts, source hashes and file hashes. It analyzes each of the six tasks for
+successfully trained arms, records unavailable pairs as skipped, and continues
+after individual failures. Each successful pair writes
+`analysis-JOB_ID/METHOD/TASK/paired.json`. Per-pair logs and
+`analysis_execution.json` preserve commands, return codes and input/output
+hashes. Any failed or skipped pair produces a partial status and a nonzero exit;
+use a new output directory for retries. Tokenizer/input compatibility remains
+enforced by Fair-UK. A zero-scale task vector remains a null intervention, and
+native score changes do not establish broad utility retention or calibrated
+neutrality.
+
 ## Checks without GPUs or source downloads
 
 ```bash
