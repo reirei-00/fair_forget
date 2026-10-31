@@ -301,6 +301,9 @@ def generate_triplets(
                         **case,
                         "target_uk": state["випадок"]["цільова_група"],
                         "reporter_uk": state["випадок"]["мовець"],
+                        "framing": "attributed"
+                        if state["випадок"]["подання"] == "із мовцем"
+                        else "unattributed",
                     }
                     state["завдання"] = _profile_task(task_case, stage, field)
                 else:

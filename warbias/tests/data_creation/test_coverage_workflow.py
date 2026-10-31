@@ -72,6 +72,7 @@ def generated(coverage):
     rows = [
         {
             **row,
+            "case": deepcopy(row),
             "language": "uk",
             "stereotype": "Стереотипне речення.",
             "counter_stereotype": "Речення, яке заперечує стереотип.",
@@ -98,6 +99,13 @@ def test_output_verification_keeps_flagged_rows(generated):
         ("reporter", "changed_reporter", "context differs"),
         ("additional_tags", {"gender": "changed"}, "context differs"),
         ("evidence_ids", "changed-source", "context differs"),
+        ("context", "Інша ситуація.", "context differs"),
+        ("context_uk", "Інша ситуація.", "context differs"),
+        ("counter_intent", "Different contrast instruction.", "context differs"),
+        ("forbidden_counters", [], "context differs"),
+        ("unrelated_boundary", "Different independence boundary.", "context differs"),
+        ("generalized_attributes", {"service_phase": "changed"}, "context differs"),
+        ("framing", "unattributed", "context differs"),
         ("language", "en", "must be Ukrainian"),
         ("human_validated", True, "not human validated"),
         ("counter_stereotype", "", "all three generated sentences"),
@@ -108,6 +116,49 @@ def test_output_verification_rejects_changed_context(generated, field, value, me
     rows[0][field] = value
     with pytest.raises(ValueError, match=message):
         verify_generated_rows(plan, rows)
+
+
+def test_future_source_fields_are_verified_without_an_allowlist(generated):
+    plan, rows = generated
+    context = {"instruction": "Збережи додаткову умову джерела."}
+    plan["inputs"][0]["future_source_context"] = deepcopy(context)
+    rows[0]["future_source_context"] = deepcopy(context)
+    rows[0]["case"]["future_source_context"] = deepcopy(context)
+    assert verify_generated_rows(plan, rows)["status"] == "verified"
+    rows[0]["future_source_context"]["instruction"] = "Змінена умова."
+    with pytest.raises(ValueError, match="context differs"):
+        verify_generated_rows(plan, rows)
+
+
+def test_missing_nullable_source_field_is_not_treated_as_unchanged(generated):
+    plan, rows = generated
+    assert plan["inputs"][0]["occupation_reference"] is None
+    rows[0].pop("occupation_reference")
+    with pytest.raises(ValueError, match="context differs"):
+        verify_generated_rows(plan, rows)
+
+
+@pytest.mark.parametrize(
+    "field", ["context_uk", "counter_intent", "forbidden_counters", "unrelated_boundary"]
+)
+def test_nested_source_case_must_remain_exact(generated, field):
+    plan, rows = generated
+    rows[0]["case"].pop(field)
+    with pytest.raises(ValueError, match="source case differs"):
+        verify_generated_rows(plan, rows)
+
+
+def test_output_status_changes_keep_source_snapshot_and_flags(generated):
+    plan, rows = generated
+    source_before = deepcopy(plan["inputs"])
+    rows[0]["generation_status"] = "generated"
+    rows[0]["human_annotation_status"] = "pending"
+    rows[0]["review_status"] = "accepted"
+    result = verify_generated_rows(plan, rows)
+    assert result["rows_with_mechanical_issues"] == 1
+    assert rows[0]["mechanical_issues"] == ["recorded_flag"]
+    assert plan["inputs"] == source_before
+    assert rows[0]["case"] == source_before[0]
 
 
 @pytest.mark.parametrize("fault", ["missing", "duplicate", "reordered"])

@@ -94,6 +94,34 @@ def test_translation_changes_invalidate_the_frozen_strategy():
         verify_strategy("sequential", strategy)
 
 
+@pytest.mark.parametrize("ukrainian_wording_only", [False, True])
+def test_inferred_reporter_framing_matches_the_stage_task(tmp_path, ukrainian_wording_only):
+    _, _, candidate, strategy = _full_condition(ROOT)
+    case = next(row for row in prepare_coverage(ROOT)["inputs"] if row.get("reporter"))
+    case = deepcopy(case)
+    case.pop("framing")
+    if ukrainian_wording_only:
+        case.pop("reporter")
+    before = deepcopy(case)
+    generate_triplets(
+        [case],
+        candidate,
+        "sequential",
+        strategy,
+        "uk",
+        tmp_path,
+        condition_id="fixture-framing",
+        provenance={},
+    )
+    request = json.loads((tmp_path / "S/plan.json").read_text())["requests"][0]
+    state = json.loads(request["messages"][1]["content"])
+    assert state["випадок"]["подання"] == "із мовцем"
+    assert state["випадок"]["мовець"] in state["завдання"]
+    assert "Явно назви мовця" in state["завдання"]
+    assert "Не додавай мовця або установу" not in state["завдання"]
+    assert case == before
+
+
 def test_translation_file_hash_is_checked_before_request_planning(tmp_path):
     config = json.loads((ROOT / "configs/generation/warbias.json").read_text())
     relative = config["strategies"]["sequential"]["profile_request"]["path"]

@@ -11,21 +11,13 @@ from fairforget.warbias.coverage_design import enumerate_items, select_items
 from fairforget.warbias.evidence import source_records
 from fairforget.warbias.schema import FIELDS
 
-CONTEXT_FIELDS = (
-    "case_id",
-    "target_group",
-    "target_code",
-    "profile_id",
-    "intrinsic_attributes",
-    "additional_tags",
-    "occupation_reference",
-    "reporter",
-    "target_uk",
-    "reporter_uk",
-    "claim",
-    "evidence_ids",
-    "source_type",
-)
+MUTABLE_OUTPUT_FIELDS = {
+    "generation_status",
+    "human_annotation_status",
+    "human_validated",
+    "review_status",
+    "mechanical_issues",
+}
 
 
 def prepare_coverage(project):
@@ -134,8 +126,14 @@ def _verify_context(rows, inputs):
     if actual.keys() != expected.keys():
         raise ValueError("Saved generation IDs differ from the rebuilt input IDs")
     for identity, row in actual.items():
-        if any(row.get(name) != expected[identity].get(name) for name in CONTEXT_FIELDS):
+        source = expected[identity]
+        context = {
+            name: value for name, value in source.items() if name not in MUTABLE_OUTPUT_FIELDS
+        }
+        if any(name not in row or row[name] != value for name, value in context.items()):
             raise ValueError("Saved generation context differs from its input")
+        if "case" in row and row["case"] != source:
+            raise ValueError("Saved generation source case differs from its input")
         if row.get("language") != "uk" or row.get("human_validated") is not False:
             raise ValueError("Saved coverage rows must be Ukrainian and not human validated")
         if any(not isinstance(row.get(name), str) or not row[name].strip() for name in FIELDS):
