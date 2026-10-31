@@ -1,0 +1,9 @@
+# Match the verified primary-training runtime. Install the appropriate CUDA
+# build of PyTorch on the training host; CPU builds suffice for the examples.
+torch==2.9.1
+transformers==4.57.6
+peft==0.17.1
+accelerate==1.15.0
+nbformat
+nbclient
+ipykernel
