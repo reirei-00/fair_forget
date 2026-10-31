@@ -1,0 +1,33 @@
+{
+  "kind": "independent_serial_supplemental_software_and_input_review",
+  "reviewed_at_utc": "2026-10-31T11:54:13.799741+00:00",
+  "source_sha256": {
+    "deploy/unlearning_primary/supplemental.py": "22680df2a15762bf034307c09662c94762ffc9b598eaf6917743a2b4f1fdbe54",
+    "deploy/unlearning_primary/supplemental.sbatch": "f734d549ff04d89e8118133c67ceb9a1c4aed3a9c327320c6a6d275f312668fb",
+    "deploy/unlearning_primary/supplemental_checkpoint.sh": "58e4f15c037e587799e15b7abedbb4bb17b9b50057ff76801e25ce4233f2f84d",
+    "tests/test_unlearning_supplemental.py": "80b3273b6305d850fb02bf83215712efc4534da59a44deecea027f4e1f9b2062"
+  },
+  "stdlib_tests": {
+    "count": 16,
+    "passed": true
+  },
+  "ruff_passed": true,
+  "bash_syntax_passed": true,
+  "findings": [],
+  "reviewed_gates": [
+    "All four engine options checked with exact types/values in config and parsed model identity",
+    "Seventy-two fresh qualification processes cover six saved checkpoints and six protocol/language representatives before full collection",
+    "Exact generation equality and finite three-score shape with 1e-6 tolerance retained",
+    "All twelve full protocol views bound to unchanged frozen evaluator and data receipts",
+    "Sixty native paired analyses preserve failed/skipped statuses and source hashes"
+  ],
+  "actual_native_validation_receipt": "native_input_validation_v4_20261031T115326Z.json",
+  "actual_native_input_views": 18,
+  "full_rows_per_checkpoint": 6082,
+  "qualification_rows": 20,
+  "deployment_receipt": "../deployment_supplement_v4.json",
+  "submission_receipt": "supplemental_submission_v4.json",
+  "runtime_status": "candidate_unqualified_dependency_gated",
+  "reproducibility_probe_job_id": "2609317",
+  "no_scientific_qualification_claim": true
+}

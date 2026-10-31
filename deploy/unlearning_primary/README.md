@@ -197,26 +197,40 @@ paths are refused.
 
 ## Supplemental collection for all 18 reporting entries
 
-The original six-task queue is preserved. `supplemental.py` adds the eleven
-missing active views from the **same original full manifest**, using the
-unchanged v5 Fair-UK evaluator and inference settings. Ukrainian training is
-unchanged; English views measure transfer after that training. The blocked
-English StereoSet preparation view is never collected.
+The original six-task queue is preserved. This prepared revision of
+`supplemental.py` collects all twelve WarBias views from the **same original
+full manifest**, using the unchanged v5 Fair-UK evaluator with an explicitly
+bound serial scheduling profile. Ukrainian training is unchanged; English
+views measure transfer after that training. The blocked English StereoSet
+preparation view is never collected.
+
+The profile appends exactly `max_num_seqs=1`, `enable_prefix_caching=False`,
+`enable_chunked_prefill=False` and `async_scheduling=False` to the native model
+arguments. All four values are bound in the addon configuration and verified
+against each actual native run's parsed parameters. Batch size 8, chunk size
+128, BF16, tensor parallel size 1, model length 4,096, seed 42, eager execution,
+native scoring formulas and the `1e-6` repeat tolerance remain unchanged.
+This code preparation is not a GPU qualification: a new dev-only runtime probe
+must pass before deployment, followed by the complete global gate below.
 
 | Supplemental task | Full frozen rows |
 | --- | ---: |
-| `warbias_triplets_en` | 249 |
+| `warbias_triplets_uk`, `warbias_triplets_en` | 249 each |
 | `warbias_cross_actor_uk`, `warbias_cross_actor_en` | 46 each |
 | `warbias_expanded_qa_uk`, `warbias_expanded_qa_en` | 1,116 each |
 | `warbias_benign_uk`, `warbias_benign_en` | 70 each |
 | `warbias_uk`, `warbias_en` | 240 each |
 | `warbias_intersectional_uk`, `warbias_intersectional_en` | 1,320 each |
 
-This adds 5,833 rows per checkpoint, 34,998 across the base and all five saved
-posts. Counts are verified from the frozen source. These are eleven additional
-views, not eleven independent datasets. The existing six plus these eleven
-cover seventeen active tasks; the eighteenth manifest task is blocked English
-StereoSet. Tetiana's **18 metrics** are a separate reporting inventory.
+This profile collects 6,082 rows per checkpoint, 36,492 across the base and all
+five saved posts. Counts are verified from the frozen source. Ukrainian
+triplets are recollected so both languages use the same serial runtime for
+transfer analysis. The all-metrics configuration selects that new Ukrainian
+triplet pair and retains the other five original native task pairs. Both
+Ukrainian triplet collections remain preserved; they are not counted twice.
+These five plus twelve views cover seventeen active tasks; the eighteenth
+manifest task is blocked English StereoSet. Tetiana's **18 metrics** are a
+separate reporting inventory.
 
 Prepare a new addon directory against the actual external collector release
 and the preserved development bundle. Python 3.10 or later is required. This
@@ -268,14 +282,14 @@ identities must match. Any failure prevents every full addon collection; no
 tolerance is raised automatically. Qualification rows never count as full
 evaluation completion.
 
-After every gate passes, four workers collect all 66 checkpoint-task pairs.
+After every gate passes, four workers collect all 72 checkpoint-task pairs.
 `supplemental_execution.json` records started and finished tasks, commands,
 return codes and native completion-receipt hashes. Each task retains native
 `run.json`, `report.json` and `predictions.jsonl`, full ordered IDs, source and
 checkpoint identity, and file hashes. Existing outputs are refused.
 
 In that same allocation, the wrapper then uses the qualified Python 3.12
-evaluation runtime for 55 saved native before/after comparisons. Analysis hides
+evaluation runtime for 60 saved native before/after comparisons. Analysis hides
 GPUs, fixes CPU math libraries to one thread, verifies collection receipts and
 all input hashes, and delegates every pair to `paper compare-native` with
 1,000 component bootstrap draws. It creates no additional GPU allocation.

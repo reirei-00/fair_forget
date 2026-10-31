@@ -7,6 +7,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "deploy/unlearning_primary"
@@ -47,7 +48,7 @@ class SupplementalTests(unittest.TestCase):
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text("# frozen fixture\n")
         write(self.collector / "evaluator/lm_eval/fair_uk/datasets.json", {})
-        tasks = {**supplemental.PROTOCOLS, "warbias_triplets_uk": supplemental.SENTENCE}
+        tasks = supplemental.PROTOCOLS
         for path, split in (
             (self.collector / "evaluation/manifest.json", "evaluation"),
             (self.dev, "development"),
@@ -122,7 +123,10 @@ class SupplementalTests(unittest.TestCase):
             path / "run.json",
             {
                 "evaluation_asset_identity": {"input": asset, "tokenizer": "same"},
-                "model_identity": {"checkpoint": "same"},
+                "model_identity": {
+                    "checkpoint": "same",
+                    "parameters": dict(supplemental.SERIAL_MODEL_OPTIONS),
+                },
             },
         )
 
@@ -134,11 +138,14 @@ class SupplementalTests(unittest.TestCase):
             if path.is_file()
         }
         config = self.prepare()
-        self.assertEqual(len(config["tasks"]), 11)
+        self.assertEqual(len(config["tasks"]), 12)
+        self.assertIn("warbias_triplets_uk", config["tasks"])
         self.assertNotIn("stereoset_en", config["tasks"])
         self.assertEqual(len(config["qualification"]["representatives"]), 6)
         self.assertIsNone(config["analysis_rules"]["min_independent_support"])
         self.assertFalse(config["qualification"]["calibrates_scientific_thresholds"])
+        self.assertEqual(sum(config["qualification"]["rows_by_task"].values()), 20)
+        self.assertEqual(config["settings"], supplemental.SETTINGS)
         supplemental.validate(self.addon)
         for task in supplemental.REPRESENTATIVES:
             spec, data, _ = supplemental.source(self.addon / "qualification/manifest.json", task)
@@ -262,12 +269,13 @@ class SupplementalTests(unittest.TestCase):
         self.assertFalse(receipt["no_update_passed"])
         self.assertEqual(receipt["tasks"], {})
 
-    def test_all_72_fresh_checks_precede_all_66_full_collections(self):
+    def test_all_72_fresh_checks_precede_all_72_full_collections(self):
         code, calls, receipt = self.collect_fake(True)
         self.assertEqual(code, 0)
-        self.assertEqual(calls, [True] * 72 + [False] * 66)
+        self.assertEqual(calls, [True] * 72 + [False] * 72)
         self.assertEqual(receipt["stage"], "supplemental_collection_complete")
-        self.assertEqual(len(receipt["tasks"]), 66)
+        self.assertEqual(len(receipt["tasks"]), 72)
+        self.assertEqual(receipt["expected_full_collections"], 72)
         self.assertFalse(receipt["scientific_calibration_established"])
 
     def test_incomplete_training_panel_is_rejected(self):
@@ -308,6 +316,76 @@ class SupplementalTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "receipt changed"):
                 supplemental.analyze(self.addon, evaluation, self.root / "analysis")
         run.assert_not_called()
+
+    def test_serial_command_preserves_native_batch_seed_and_appends_only_declared_options(self):
+        paths = [self.root / name for name in ("checkpoint", "manifest", "output")]
+        ordinary = supplemental.native.command_for(
+            paths[0], paths[1], "warbias_triplets_uk", paths[2]
+        )
+        serial = supplemental.command_for(paths[0], paths[1], "warbias_triplets_uk", paths[2])
+        index = serial.index("--model-args") + 1
+        expected = ",max_num_seqs=1,enable_prefix_caching=False,enable_chunked_prefill=False,async_scheduling=False"
+        self.assertEqual(serial[index], ordinary[index] + expected)
+        serial[index] = ordinary[index]
+        self.assertEqual(serial, ordinary)
+        self.assertEqual(serial[serial.index("--batch-size") + 1], "8")
+        self.assertEqual(serial[serial.index("--seed") + 1], "42")
+        self.assertNotIn("max_num_seqs", supplemental.native.SETTINGS)
+
+    def test_prepared_settings_reject_missing_or_wrong_serial_options(self):
+        config = self.prepare()
+        for key, expected in supplemental.SERIAL_MODEL_OPTIONS.items():
+            for value in (None, not expected if type(expected) is bool else 8):
+                with self.subTest(key=key, value=value):
+                    changed = json.loads(json.dumps(config))
+                    if value is None:
+                        changed["settings"].pop(key)
+                    else:
+                        changed["settings"][key] = value
+                    write(self.addon / "config.json", changed)
+                    with self.assertRaisesRegex(ValueError, "settings differ|Serial model"):
+                        supplemental.validate(self.addon)
+        write(self.addon / "config.json", config)
+        supplemental.validate(self.addon)
+
+    def test_collected_options_require_exact_values_and_types(self):
+        output = self.root / "actual-native-output"
+        correct = dict(supplemental.SERIAL_MODEL_OPTIONS)
+        write(output / "run.json", {"model_identity": {"parameters": correct}})
+        self.assertEqual(supplemental.verify_collected_options(output), correct)
+        for key, expected in correct.items():
+            for value in (None, str(expected), not expected if type(expected) is bool else True):
+                with self.subTest(key=key, value=value):
+                    altered = dict(correct)
+                    if value is None:
+                        altered.pop(key)
+                    else:
+                        altered[key] = value
+                    write(output / "run.json", {"model_identity": {"parameters": altered}})
+                    with self.assertRaisesRegex(ValueError, "Serial model"):
+                        supplemental.verify_collected_options(output)
+
+    def test_native_success_with_wrong_actual_serial_option_is_failed(self):
+        self.prepare()
+        task = "warbias_triplets_uk"
+
+        def native_process(command, **kwargs):
+            output = Path(command[command.index("--output") + 1])
+            _, original, _ = supplemental.source(self.collector / "evaluation/manifest.json", task)
+            jsonl(output / "predictions.jsonl", [{"id": row["id"]} for row in original])
+            parameters = {**supplemental.SERIAL_MODEL_OPTIONS, "max_num_seqs": 8}
+            write(output / "run.json", {"model_identity": {"parameters": parameters}})
+            return SimpleNamespace(wait=lambda: 0)
+
+        with patch.object(supplemental.subprocess, "Popen", side_effect=native_process):
+            with patch.object(supplemental.native, "verify_complete", return_value={}):
+                code = supplemental.run_task(
+                    self.addon, self.root / "checkpoint", self.root / "results", task
+                )
+        self.assertEqual(code, 1)
+        status = supplemental.read(self.root / "results/status" / f"{task}.json")
+        self.assertEqual(status["status"], "failed")
+        self.assertIn("Serial model", status["error"])
 
 
 if __name__ == "__main__":

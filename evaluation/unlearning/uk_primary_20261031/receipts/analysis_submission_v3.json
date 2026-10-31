@@ -1,0 +1,70 @@
+{
+  "release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031_all_metrics_v3",
+  "source_commit": "88224db75bd80e85f5227897188904e9c470f4d1",
+  "source_archive_sha256": "aec6855856b2795c9c045efded022e2ca78810dfcb04d4a2126a0aa1ab4101c6",
+  "checksum_manifest_sha256": "bffaa79016f1a8ccf7e79f239c4c8e31bb40afd77adbd40e4e43da485e5f3157",
+  "deployment_completion_receipt": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031_all_metrics_v3.deployment.json",
+    "sha256": "b1d1531747241d250cddd4adb0021cc33ab5b75826e892dddd4ddebe58c7ed81"
+  },
+  "local_deployment": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/uk_multimethod_20261031/all_metrics/deployment_analysis_v3_retry1.json",
+    "sha256": "8a8027578c30079f9abdaf0700d6f10dcc555699c93538ee849e18553f93b6c8"
+  },
+  "runtime_versions": {
+    "numpy": "2.2.6",
+    "scipy": "1.18.1",
+    "torch": "2.10.0+cu129",
+    "transformers": "4.57.6",
+    "python": "3.12.12"
+  },
+  "runtime_status": "development_probe_passed_checkpoint_protocol_gate_pending",
+  "development_probe_proof": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/uk_multimethod_20261031/all_metrics/dev_serial_probe_2609317_proof_20261031T115724Z.json",
+    "sha256": "22be09d861de588f524362dd84b2092a7d3ba301b9c0f5cd59f8f07ae61eb506"
+  },
+  "dependency_chain": [
+    "2609317 ->2609355",
+    "2608628 +2609355 ->this saved-only analysis"
+  ],
+  "status": "submitted",
+  "submitted_at_utc": "2026-10-31T11:59:45.608442+00:00",
+  "gpu_request": false,
+  "cuda_visibility": "empty",
+  "requested_nodes": 1,
+  "requested_cpus": 8,
+  "workers": 5,
+  "omp_threads": 1,
+  "maximum_wall_time": "12:00:00",
+  "wall_time_is_runtime_estimate": false,
+  "allocation_limitation": "Only exclusive whole-node booster partitions are available; node billing applies despite CPU-only saved analysis and no GPU request.",
+  "model_requests_planned": 0,
+  "training_repeated": false,
+  "prior_cancelled_cpu_job_ids": [
+    "2609024",
+    "2609195"
+  ],
+  "prior_failed_addon_job_ids": [
+    "2608960",
+    "2609074"
+  ],
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--dependency=afterok:2608628:2609355",
+    "--kill-on-invalid-dep=yes",
+    "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/all-metrics-%j.log",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031_all_metrics_v3/deploy/unlearning_primary/all_metrics.sbatch",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031_all_metrics_v3",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031_all_metrics_v3/package.json",
+    "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031"
+  ],
+  "sbatch_returncode": 0,
+  "sbatch_stdout": "2609430\n",
+  "sbatch_stderr": "",
+  "job_id": "2609430",
+  "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/uk_primary_20261031/all-metrics-2609430",
+  "initial_queue_status": "2609430|PENDING|(Dependency)|8|afterok:2608628(unfulfilled),afterok:2609355(unfulfilled)",
+  "ssh_returncode": 0,
+  "ssh_stderr": ""
+}

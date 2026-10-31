@@ -309,3 +309,44 @@ pairs had passed in v3. This is partial startup evidence, not the global
 collections and runs five method reports in parallel without model or judge
 requests. All 18 metric entries remain visible; missing scientific inputs stay
 pending. Its initial scheduler state is `PENDING (Dependency)`.
+
+## Selected serial WarBias profile
+
+The v3 development repeat gate later detected a baseline Ukrainian WarBias
+score difference of `0.020614096868990295` despite identical model and effective
+input identities. The [numerical failure](receipts/numerical_gate_failure_2609074_20261031T113858Z.json)
+and [cancellation record](receipts/cancelled_gate_2609074_dependent_2609195.json)
+preserve the stopped addon and cancelled dependent CPU job. No locked addon
+collection started and the `1e-6` tolerance was not raised.
+
+The new explicit engine profile keeps eager mode, batch 8, chunk 128, BF16,
+seed 42 and the native scorer. It sets `max_num_seqs=1`,
+`enable_prefix_caching=False`, `enable_chunked_prefill=False` and
+`async_scheduling=False`. Every scalar setting is captured and checked in each
+native run's model identity. Training and scientific definitions are unchanged.
+
+The [development-only probe](receipts/dev_serial_probe_2609317_proof_20261031T115724Z.json),
+job 2609317, passed six fresh native processes: three repeats for the base and
+three for WGA. All pairwise repeated-score differences are 0, with identical
+model and effective-input identities. The proof binds 53 external source,
+result and log files. It qualifies those development runs only.
+
+The [new addon submission](receipts/supplemental_submission_v4.json) records job
+2609355, dependent on successful probe 2609317. This profile collects all twelve
+WarBias views, 6,082 rows per checkpoint, including a new Ukrainian triplet
+view. The selected analysis uses this new UK view and its EN counterpart under
+the shared profile. Original v5 UK triplet outputs remain separate. The other
+five original native tasks remain selected, for seventeen unique active tasks.
+All 72 checkpoint/protocol/language qualification processes must still pass
+before 72 full collections and 60 saved native pairs. The
+[independent review](receipts/independent_review_supplement_v4.json) verifies 16
+collector tests and eighteen frozen native input views. The broader suite
+passes 105 tests.
+
+The [selected CPU submission](receipts/analysis_submission_v3.json) records
+2609430 with `afterok:2608628:2609355`. Five parallel saved-only reports retain
+1,000 bootstrap draws and all eighteen metric entries, including their missing
+calibration/review dependencies. The [dated execution snapshot](receipts/gated_dag_execution_20261031T120003Z.json)
+records the main collection running, addon queued and CPU analysis waiting at
+12:00:03 UTC. Full native scores, the remaining repeat gate and scientific
+qualification remain pending; no successful mitigation is claimed.

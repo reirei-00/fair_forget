@@ -1,0 +1,22 @@
+{
+  "kind": "preserved_failed_development_gate_and_dependent_cpu_cancellation",
+  "observed_at_utc": "2026-10-31T11:53:58.841322+00:00",
+  "addon_job_id": "2609074",
+  "addon_state": "CANCELLED by 35666",
+  "addon_exit_code": "0:0",
+  "actual_gate_passed": false,
+  "locked_supplemental_collections_started": 0,
+  "baseline_warbias_uk_max_absolute_score_difference": 0.020614096868990295,
+  "absolute_tolerance": 1e-06,
+  "evidence": "qualification_failure_2609074_20261031T114055Z.json",
+  "dependent_cpu_job_id": "2609195",
+  "dependent_cpu_state": "CANCELLED",
+  "dependent_cpu_exit_code": "0:0",
+  "primary_job_id": "2608628",
+  "primary_last_observed_state": "RUNNING",
+  "primary_untouched": true,
+  "replacement_probe_job_id": "2609317",
+  "replacement_addon_job_id": "2609355",
+  "replacement_dependency": "afterok:2609317",
+  "replacement_runtime_status": "candidate_unqualified_dependency_gated"
+}

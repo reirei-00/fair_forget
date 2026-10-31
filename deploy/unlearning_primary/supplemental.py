@@ -27,6 +27,7 @@ SENTENCE = "warbias_full_sentence_mean_token_logprob_v1"
 ABC = "strict_abc_generation_v1"
 BENIGN = "warbias_benign_generation_with_rubric_v1"
 PROTOCOLS = {
+    "warbias_triplets_uk": SENTENCE,
     "warbias_triplets_en": SENTENCE,
     "warbias_cross_actor_uk": SENTENCE,
     "warbias_cross_actor_en": SENTENCE,
@@ -39,6 +40,13 @@ PROTOCOLS = {
     "warbias_intersectional_uk": ABC,
     "warbias_intersectional_en": ABC,
 }
+SERIAL_MODEL_OPTIONS = {
+    "max_num_seqs": 1,
+    "enable_prefix_caching": False,
+    "enable_chunked_prefill": False,
+    "async_scheduling": False,
+}
+SETTINGS = {**native.SETTINGS, **SERIAL_MODEL_OPTIONS}
 REPRESENTATIVES = tuple(
     f"warbias_{view}_{language}"
     for view in ("triplets", "expanded_qa", "benign")
@@ -67,6 +75,34 @@ def evidence(path):
     return {"path": str(path), "sha256": native.digest(path)}
 
 
+def verify_serial_parameters(parameters):
+    require(isinstance(parameters, dict), "Serial model parameters are missing")
+    require(
+        all(
+            key in parameters
+            and type(parameters[key]) is type(expected)
+            and parameters[key] == expected
+            for key, expected in SERIAL_MODEL_OPTIONS.items()
+        ),
+        "Serial model parameters differ",
+    )
+    return {key: parameters[key] for key in SERIAL_MODEL_OPTIONS}
+
+
+def verify_collected_options(task_output):
+    run = read(task_output / "run.json")
+    return verify_serial_parameters(run.get("model_identity", {}).get("parameters"))
+
+
+def command_for(checkpoint, manifest, task, output):
+    command = native.command_for(checkpoint, manifest, task, output)
+    index = command.index("--model-args") + 1
+    command[index] += "," + ",".join(
+        f"{key}={value}" for key, value in SERIAL_MODEL_OPTIONS.items()
+    )
+    return command
+
+
 def inside(root, filename):
     path = (root / filename).resolve()
     require(path.is_relative_to(root.resolve()), "Manifest source escapes its bundle")
@@ -80,7 +116,7 @@ def source(manifest_path, task):
     require(entry.get("measurement_eligibility") == "active", task + ": inactive source")
     require(entry.get("format") == "adapted_jsonl_v1", task + ": unadapted source")
     require(entry.get("language") == task.rsplit("_", 1)[1], task + ": language differs")
-    expected = SENTENCE if task == "warbias_triplets_uk" else PROTOCOLS[task]
+    expected = PROTOCOLS[task]
     require(entry.get("protocol") == expected, task + ": protocol differs")
     path = inside(manifest_path.parent, entry["filename"])
     require(native.digest(path) == entry["sha256"], task + ": source hash differs")
@@ -222,7 +258,7 @@ def prepare(collector, development, output):
         "tasks": list(PROTOCOLS),
         "full_rows": {task: item["rows"] for task, item in full_entries.items()},
         "required_checkpoints": ["baseline", *METHODS],
-        "settings": native.SETTINGS,
+        "settings": SETTINGS,
         "qualification": {
             "manifest": "qualification/manifest.json",
             "representatives": list(REPRESENTATIVES),
@@ -266,7 +302,8 @@ def validate(addon):
     require(
         config.get("required_checkpoints") == ["baseline", *METHODS], "Checkpoint panel differs"
     )
-    require(config.get("settings") == native.SETTINGS, "Native execution settings differ")
+    require(config.get("settings") == SETTINGS, "Native execution settings differ")
+    verify_serial_parameters(config["settings"])
     collector = Path(config["collector_release"]).resolve()
     for name in ("collector_checksums", "full_manifest"):
         item = config[name]
@@ -397,7 +434,7 @@ def run_task(addon, checkpoint, output, task, *, qualification=False):
         "started_at_utc": native.utc_now(),
     }
     native.write_json(status_path, status)
-    command = native.command_for(checkpoint, manifest, task, task_output)
+    command = command_for(checkpoint, manifest, task, task_output)
     status["command"] = command
     environment = {**os.environ, "PYTHONPATH": str(collector / "evaluator")}
     process = None
@@ -425,6 +462,7 @@ def run_task(addon, checkpoint, output, task, *, qualification=False):
     try:
         require(code == 0, "Native collector failed")
         status.update(native.verify_complete(task, entry, task_output))
+        status["serial_model_options"] = verify_collected_options(task_output)
         ids = [row["id"] for row in rows(task_output / "predictions.jsonl")]
         require(
             ids == [row["id"] for row in data], "Native predictions differ from full source order"
@@ -444,6 +482,8 @@ def compare_repeats(first, second, expected_ids, protocol):
         "Repeat item IDs differ",
     )
     a, b = [read(path / "run.json") for path in (first, second)]
+    for run in (a, b):
+        verify_serial_parameters(run.get("model_identity", {}).get("parameters"))
     require(
         a["evaluation_asset_identity"] == b["evaluation_asset_identity"],
         "Repeat tokenizer/effective input fingerprints differ",
@@ -520,6 +560,8 @@ def collect(addon, training, output):
         "tasks": {},
         "started_at_utc": native.utc_now(),
         "scientific_calibration_established": False,
+        "serial_model_options": SERIAL_MODEL_OPTIONS,
+        "expected_full_collections": len(models) * len(PROTOCOLS),
     }
     lock = threading.Lock()
     receipt = output / "supplemental_execution.json"
@@ -578,7 +620,7 @@ def collect(addon, training, output):
 
     save()
     queue_stage(((name, task) for name in models for task in REPRESENTATIVES), qualify)
-    passed = len(status["qualification"]) == 36 and all(
+    passed = len(status["qualification"]) == len(models) * len(REPRESENTATIVES) and all(
         r["passed"] for r in status["qualification"].values()
     )
     status["no_update_passed"] = passed
@@ -620,7 +662,7 @@ def collect(addon, training, output):
             save()
 
     queue_stage(((name, task) for name in models for task in PROTOCOLS), full)
-    complete = len(status["tasks"]) == 66 and all(
+    complete = len(status["tasks"]) == len(models) * len(PROTOCOLS) and all(
         r["status"] == "collected" for r in status["tasks"].values()
     )
     status.update(
@@ -653,6 +695,7 @@ def analyze(addon, evaluation, output):
         "collection": evidence(evaluation / "supplemental_execution.json"),
         "pairs": {},
         "saved_only": True,
+        "expected_pairs": len(METHODS) * len(PROTOCOLS),
     }
     env = {
         **os.environ,
@@ -704,6 +747,7 @@ def analyze(addon, evaluation, output):
                         key + ": native file changed",
                     )
                     inputs[name + "/" + filename] = item
+                verify_collected_options(evaluation / name / task)
             command = [
                 sys.executable,
                 "-m",
@@ -749,7 +793,9 @@ def analyze(addon, evaluation, output):
                 record["report"] = evidence(output / method / task / "paired.json")
             status["pairs"][method + "/" + task] = record
             native.write_json(output / "supplemental_analysis.json", status)
-    complete = all(item["status"] == "analyzed" for item in status["pairs"].values())
+    complete = len(status["pairs"]) == len(METHODS) * len(PROTOCOLS) and all(
+        item["status"] == "analyzed" for item in status["pairs"].values()
+    )
     status["stage"] = "native_paired_complete" if complete else "native_paired_partial_failure"
     native.write_json(output / "supplemental_analysis.json", status)
     return 0 if complete else 1
@@ -771,7 +817,7 @@ def main(argv=None):
     )
     task_parser.add_argument("--qualification", action="store_true")
     collection = commands.add_parser(
-        "collect", help="Qualify all six checkpoints, then collect eleven full tasks"
+        "collect", help=f"Qualify all six checkpoints, then collect {len(PROTOCOLS)} full tasks"
     )
     for name in ("addon", "training", "output"):
         collection.add_argument("--" + name, type=Path, required=True)
