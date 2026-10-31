@@ -7,19 +7,103 @@
       "model": "Lapa 12B",
       "item_metadata_equal": true,
       "native_metrics_reproduced": true,
-      "training_steps": 129
+      "training_steps": 129,
+      "target_mapping": {
+        "before": {
+          "total": 5672,
+          "mapped": 5656,
+          "unmapped": 16,
+          "unmapped_by_condition": {
+            "ambig": 8,
+            "disambig": 8
+          },
+          "unmapped_non_unknown_by_condition": {
+            "ambig": 4,
+            "disambig": 8
+          }
+        },
+        "after": {
+          "total": 5672,
+          "mapped": 5656,
+          "unmapped": 16,
+          "unmapped_by_condition": {
+            "ambig": 8,
+            "disambig": 8
+          },
+          "unmapped_non_unknown_by_condition": {
+            "ambig": 4,
+            "disambig": 8
+          }
+        }
+      }
     },
     {
       "model": "Gemma 3 12B",
       "item_metadata_equal": true,
       "native_metrics_reproduced": true,
-      "training_steps": 129
+      "training_steps": 129,
+      "target_mapping": {
+        "before": {
+          "total": 5672,
+          "mapped": 5656,
+          "unmapped": 16,
+          "unmapped_by_condition": {
+            "ambig": 8,
+            "disambig": 8
+          },
+          "unmapped_non_unknown_by_condition": {
+            "ambig": 1,
+            "disambig": 6
+          }
+        },
+        "after": {
+          "total": 5672,
+          "mapped": 5656,
+          "unmapped": 16,
+          "unmapped_by_condition": {
+            "ambig": 8,
+            "disambig": 8
+          },
+          "unmapped_non_unknown_by_condition": {
+            "ambig": 0,
+            "disambig": 6
+          }
+        }
+      }
     },
     {
       "model": "Qwen3 8B",
       "item_metadata_equal": true,
       "native_metrics_reproduced": true,
-      "training_steps": 129
+      "training_steps": 129,
+      "target_mapping": {
+        "before": {
+          "total": 5672,
+          "mapped": 5656,
+          "unmapped": 16,
+          "unmapped_by_condition": {
+            "ambig": 8,
+            "disambig": 8
+          },
+          "unmapped_non_unknown_by_condition": {
+            "ambig": 0,
+            "disambig": 6
+          }
+        },
+        "after": {
+          "total": 5672,
+          "mapped": 5656,
+          "unmapped": 16,
+          "unmapped_by_condition": {
+            "ambig": 8,
+            "disambig": 8
+          },
+          "unmapped_non_unknown_by_condition": {
+            "ambig": 5,
+            "disambig": 8
+          }
+        }
+      }
     }
   ],
   "limitations": [
@@ -27,6 +111,7 @@
     "No general utility battery, calibrated judge, repeated seeds or confidence intervals in these original runs.",
     "Current aliases resolve pinned model directories, but immutable training-time checkpoint/tokenizer/input hashes are unavailable.",
     "Scheduler accounting returned no rows at recovery; usage log records exit=0 and full saved predictions independently support completed evaluations.",
-    "Mamay has no confirmed unlearning result in this recovered team evidence."
+    "Mamay has no confirmed unlearning result in this recovered team evidence.",
+    "Target mapping covers 5,656/5,672 items per phase. Sixteen target_loc values are null (8 per condition). The historical scorer includes their non-unknown outputs in bias-score denominators but never in the biased-answer numerator. Original scores are preserved, not corrected or treated as fully mapped."
   ]
 }

@@ -51,3 +51,10 @@ The [evidence package](evaluation/unlearning/jupiter_rmu_20261024/README.md)
 contains original metrics, compressed predictions, configurations, job receipts,
 the preserved historical scorer and a source snapshot. This is a separate
 English pilot, rather than a completed current Fair-UK intervention panel.
+
+The [JUPITER training workflow](notebooks/not_executed/jupiter_rmu_training_workflow.ipynb)
+loads the preserved trainer, checks local weights, input files and CUDA, and runs
+adaptive RMU plus full BBQ evaluation into a new timestamped directory. It was
+prepared on 30 October and has not been executed for a new training run.
+The historical replay also reports the incomplete target mapping: 5,656 of
+5,672 BBQ items; 16 unmapped items remain in the original scoring denominators.
