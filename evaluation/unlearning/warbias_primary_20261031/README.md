@@ -68,3 +68,22 @@ executes three notebooks and exports twenty-four CSV tables without model calls.
 The [runtime compatibility record](runtime_repair/README.md) explains strict
 processor-only evaluation copies, equivalent tokenizer metadata and spawn worker
 startup. Original checkpoint bytes and historical run identities remain unchanged.
+
+## TRAIN-source interpretation
+
+Five baseline SS values are already below 50 on this training panel. A lower
+SS alone is not neutralization. Read SS beside LMS, ICAT and their native paired
+intervals; [the exact values](training_source_results/summary.json) use 1,000
+component draws over nine components, not repeated training seeds.
+
+RMU lowers TRAIN LMS for five models, with those five difference intervals
+below zero. Mamay 27B has an LMS point change of +1.31, with a 95% interval
+[-0.71, 4.33] that includes zero. Llama's RMU LMS and ICAT both reach zero on
+this panel. These observations do not establish broad capability loss or a
+held-out mitigation result.
+
+Lapa WGA+KL moves SS from 59.66 to 54.62 and ICAT from 61.28 to 63.96, while
+LMS falls from 75.95 to 70.47. Its ICAT change interval [-14.10, 12.15]
+includes zero. Four selected task-vector exports are null interventions with
+unchanged native TRAIN scores. The nonzero Gemma and Mamay 12B selections are
+recorded separately; selection alone does not establish successful mitigation.
