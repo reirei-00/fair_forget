@@ -28,9 +28,14 @@ category changes in `taxonomy_revision.json`. Each row records its case, profile
 reporter, `evidence_ids` and `source_type`. Published references keep their
 original IDs in `sources.csv`; compilation and feedback records retain separate
 source types. The three feedback cases await generation and annotation. The
-981-row matrix remains a separate historical generation input.
+981-row matrix remains under `protocol/history/` for count reconciliation.
 
-Notebook 1 displays the full source-case taxonomy and the current selected cases.
+The current taxonomy includes veterans, internally displaced people and people
+displaced abroad. It excludes occupation experience, return from abroad and
+civilian war disability. The registry has 28 categories, 11 actor profiles and
+120 source cases. `taxonomy_revision.json#/registry_scope` lists the removed IDs.
+
+Notebook 1 displays the source-case taxonomy in this scope and the current selected cases.
 Green marks cases used as a source or selected for the current design, as labelled
 above each table. The source table keeps split-parent links visible. The
 [current profile view](https://docs.google.com/spreadsheets/d/1iHOX-g7Fe_TPO45fvR8bD40ffKU8rvm0kalGpF1rdIs/edit?gid=623002450#gid=623002450)
