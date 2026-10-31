@@ -1,0 +1,58 @@
+{
+  "base_bundle": "warbias-sequential-feedback-v2-20260908",
+  "composition": "join_exact_component_text_with_two_newlines",
+  "id": "warbias-case-profile-v3",
+  "instruction_languages": [
+    "uk",
+    "en"
+  ],
+  "prompts": [
+    {
+      "components": [
+        {
+          "path": "prompts/warbias_validation_sequential_stereotype.txt",
+          "sha256": "77db543e649e1b0037e9ffe0df752ed551f18561a568458b781875ad3ce1c739"
+        },
+        {
+          "path": "prompts/history/profile_design_v3.txt",
+          "sha256": "6dc148f9eaa52f4cdbf127538148038655caf529309141a7e50cedbbd0a0ed97"
+        }
+      ],
+      "response_field": "stereotype_uk",
+      "sha256": "73b6c0d7bf2c4e3120a59a854547d8b00fc88b370f251f5f60d175a8c4b7e2b4",
+      "stage": "stereotype"
+    },
+    {
+      "components": [
+        {
+          "path": "prompts/warbias_validation_sequential_counter.txt",
+          "sha256": "5c148ce341d19a38660aa5c0279145c99338d78b804a4e2c0c01699d5304e252"
+        },
+        {
+          "path": "prompts/history/profile_design_v3.txt",
+          "sha256": "6dc148f9eaa52f4cdbf127538148038655caf529309141a7e50cedbbd0a0ed97"
+        }
+      ],
+      "response_field": "counter_stereotype_uk",
+      "sha256": "05e489213263650db08c573bbcaa7736caffa26971f3320d38f6d990c289723c",
+      "stage": "counter"
+    },
+    {
+      "components": [
+        {
+          "path": "prompts/warbias_validation_sequential_unrelated.txt",
+          "sha256": "60fec27eb5756f1aa969e104f4ad81413da3b02c106596de9bd812af2a565e76"
+        },
+        {
+          "path": "prompts/history/profile_design_v3.txt",
+          "sha256": "6dc148f9eaa52f4cdbf127538148038655caf529309141a7e50cedbbd0a0ed97"
+        }
+      ],
+      "response_field": "unrelated_uk",
+      "sha256": "aac21f38df8bb7f53685e0b6a7b6fab60d60f3a0a7ab0911aaf11929cc3245a3",
+      "stage": "unrelated"
+    }
+  ],
+  "request_schema": "warbias_case_profile_request_v6",
+  "scope": "current_case_profile_design"
+}

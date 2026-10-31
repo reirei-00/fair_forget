@@ -274,6 +274,14 @@ def _full_condition(project):
     strategy = freeze_strategies(strategies)[selected["strategy"]]
     bundle = protocol.get("generation_prompt_bundle")
     if bundle is not None:
+        context = bundle.get("case_instructions")
+        if context is not None:
+            configured = config["strategies"][selected["strategy"]].get("profile_request")
+            if {key: value for key, value in context.items() if key != "rows"} != configured:
+                raise ValueError("Profile request instructions differ from the protocol")
+            frozen = strategy.get("profile_request", {})
+            if len(frozen.get("instructions", [])) != context["rows"]:
+                raise ValueError("Profile request instruction coverage differs from the protocol")
         labels = {"stereotype": "S", "counter": "C", "unrelated": "U"}
         declared = {}
         for prompt in bundle["prompts"]:

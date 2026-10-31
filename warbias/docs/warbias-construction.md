@@ -165,6 +165,10 @@ recorded split-case replacements and frozen allocations. Include the three
 feedback cases.
 
 Use the selected Lapa model and sequential prompts in `protocol/construction.json`.
+The current profile rules and case instructions are Ukrainian. The active
+bundle records their hashes and request schema. The [v3 bundle](../protocol/history/generation_prompt_bundle_v3.json)
+preserves the mixed-language prompts used for existing outputs. A prompt
+revision does not change those outputs or their original generation records.
 For every profile, use no reporter and each of the two allowed reporters.
 Use the 21-dimension catalog. Expand each applicable dimension separately and
 preserve the recorded gender × age panels. `coverage_dimensions.json` defines

@@ -206,6 +206,8 @@ def test_prepared_rows_run_through_existing_sequential_engine(tmp_path):
             strategy["prompts"][stage] = (
                 [ROOT / path for path in paths] if isinstance(paths, list) else ROOT / paths
             )
+    # This fixture covers the frozen request format; the Ukrainian revision has separate tests.
+    config["strategies"]["sequential"].pop("profile_request")
     strategy = freeze_strategies(config["strategies"])["sequential"]
     calls = []
 

@@ -122,7 +122,7 @@
     "config": "configs/data/warbias-reference.json"
   },
   "generation_prompt_bundle": {
-    "id": "warbias-case-profile-v3",
+    "id": "warbias-case-profile-v4-uk",
     "base_bundle": "warbias-sequential-feedback-v2-20260908",
     "composition": "join_exact_component_text_with_two_newlines",
     "scope": "current_case_profile_design",
@@ -137,10 +137,10 @@
           },
           {
             "path": "prompts/current/profile_design.txt",
-            "sha256": "6dc148f9eaa52f4cdbf127538148038655caf529309141a7e50cedbbd0a0ed97"
+            "sha256": "79ae3bdece1a2b35066f3b43403be00ff83a04eaf469916e25f8d0472eb03c08"
           }
         ],
-        "sha256": "73b6c0d7bf2c4e3120a59a854547d8b00fc88b370f251f5f60d175a8c4b7e2b4"
+        "sha256": "32dd55f0e14bd060ea2d0f0ab036d455db4c5f2287cae108727d014b22a21f77"
       },
       {
         "stage": "counter",
@@ -152,10 +152,10 @@
           },
           {
             "path": "prompts/current/profile_design.txt",
-            "sha256": "6dc148f9eaa52f4cdbf127538148038655caf529309141a7e50cedbbd0a0ed97"
+            "sha256": "79ae3bdece1a2b35066f3b43403be00ff83a04eaf469916e25f8d0472eb03c08"
           }
         ],
-        "sha256": "05e489213263650db08c573bbcaa7736caffa26971f3320d38f6d990c289723c"
+        "sha256": "6930eb5bfa7860298ac57d45e7fdf7efb0a2b3fc82fde5dce4b85d6d23eeda09"
       },
       {
         "stage": "unrelated",
@@ -167,11 +167,21 @@
           },
           {
             "path": "prompts/current/profile_design.txt",
-            "sha256": "6dc148f9eaa52f4cdbf127538148038655caf529309141a7e50cedbbd0a0ed97"
+            "sha256": "79ae3bdece1a2b35066f3b43403be00ff83a04eaf469916e25f8d0472eb03c08"
           }
         ],
-        "sha256": "aac21f38df8bb7f53685e0b6a7b6fab60d60f3a0a7ab0911aaf11929cc3245a3"
+        "sha256": "ef43b6769b8e76d42ac4dc65f95cb65c711653c608e9e2aab1c0754e1af3c093"
       }
-    ]
+    ],
+    "case_instructions": {
+      "language": "uk",
+      "path": "protocol/inputs/case_instructions_uk.jsonl",
+      "rows": 136,
+      "schema": "warbias_case_profile_request_uk_v1",
+      "sha256": "e2173ce7bf6c14b3a8df8e4cf809a9315e5318ea2ee9e5c50be0cc64a5a3f54c"
+    },
+    "instruction_language": "uk",
+    "previous_bundle": "protocol/history/generation_prompt_bundle_v3.json",
+    "profile_request_schema": "warbias_case_profile_request_uk_v1"
   }
 }
