@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "rubric_id": "warbias-triplet-review-v1",
+  "model": "jev-latest",
+  "expected_response_model": "jev-1.14.0",
+  "endpoint": "https://api.typesafe.ai/v1/systemone",
+  "prompt": "prompts/current/triplet_review.txt",
+  "transport": {
+    "workers": 8,
+    "timeout_seconds": 120,
+    "attempts": 4
+  },
+  "issues": {
+    "grammar_or_spelling": {
+      "label": "Граматика чи правопис",
+      "instructions": "Does S, C or U contain an actual Ukrainian grammar or spelling error?"
+    },
+    "unnatural": {
+      "label": "Звучить неприродно",
+      "instructions": "Does S, C or U contain unnatural Ukrainian, a calque or awkward wording that is a real language defect rather than a style preference?"
+    },
+    "counter_not_contradicting": {
+      "label": "Не заперечує стереотип",
+      "instructions": "Does C fail to contradict the particular stereotype expressed in S?"
+    },
+    "unrelated_implies_stereotype": {
+      "label": "Натякає на стереотип",
+      "instructions": "Does U express or imply the stereotype instead of being neutral?"
+    },
+    "group_or_meaning": {
+      "label": "Інша група або зміст",
+      "instructions": "Does a sentence change the target group incorrectly or lose the intended stereotype meaning? C must address S, while different neutral content in U is allowed."
+    },
+    "non_parallel": {
+      "label": "Трійка непаралельна",
+      "instructions": "Do sentence structures or target descriptions differ so much that the three sentences are not parallel? Identical wording is not required."
+    },
+    "other": {
+      "label": "Інше",
+      "instructions": "Is there another substantive failure of the review rules not covered by the six named issues, such as S not expressing a recognizable group stereotype?"
+    }
+  }
+}

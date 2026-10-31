@@ -14,6 +14,7 @@ full Ukrainian generation → English translation.
 | [4. Sample translation and COMET](../notebooks/04_sample_translation_comet.ipynb) | Ten Ukrainian reference triplets, actual GPT-6.1 Sol translations and measured COMET scores |
 | [5. Full English translation](../notebooks/05_full_english_translation.ipynb) | Full Ukrainian input, source manifest and aligned English output |
 | [6. Coverage generation](../notebooks/06_coverage_generation.ipynb) | Current 11,997-item design, 10,938 new inputs, local Lapa generation on a GPU server, checkpoints and saved output checks |
+| [7. JEV review](../notebooks/07_jev_review.ipynb) | Full triplet review, saved human overlap, Gwet AC1, human-only alpha and case-family confidence intervals |
 
 `configs/data/dataset-inputs.json` binds the taxonomy, matrix, pilot outputs and
 anonymized ratings to their file hashes. Final annotated data remain separate.
@@ -200,6 +201,22 @@ attempts. Keep credentials outside the source package.
 24 requests per minute. Pass this object as the provider's `transport` settings.
 Independent inputs run in parallel within each stage. C waits for S, and U
 waits for S and C. One writer saves responses and checkpoints.
+
+## Triplet review
+
+[Notebook 7](../notebooks/07_jev_review.ipynb) uses one JEV request per triplet
+with the six human issue categories and an other flag. Multiple issues are
+allowed. The [review settings](../configs/review/jev.json) and shared prompt
+define the rubric. Responses are cached against exact requests and returned
+model IDs. Set `JEV_API_KEY` in the environment for new requests.
+
+The [saved run](../protocol/results/jev_review.json) covers 11,997 Ukrainian
+triplets. Compact [review inputs](../configs/data/review-inputs.json) retain the
+complete human overlap without names or private comments. The
+[agreement protocol](../protocol/annotation_agreement.json) compares JEV with
+individual human judgments and reports human-human reliability separately.
+Missing reasons remain unknown. Legacy comments without an explicit category
+do not become selected issue labels. No new synthetic item is human validated.
 
 ## Pilot and selection
 

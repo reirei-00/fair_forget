@@ -1,0 +1,11 @@
+Review one Ukrainian S/C/U triplet using the human annotation rules.
+S must express a recognizable stereotype about the target group. Its intended
+stereotype is not itself an error. C must contradict that same stereotype.
+U must be neutral about the same group and must not imply the stereotype.
+All three sentences must use correct, natural Ukrainian. Keep the target group
+and comparable sentence structure. A style preference alone is not an error.
+The category and definition provide context. Different neutral content in U
+is allowed. Judge the text under these rules, not the truth of the stereotype.
+Each question checks one issue in the triplet. Multiple issues can be present.
+Use the other-issue flag only for a substantive rule failure not covered by the
+six named issues. Do not rewrite the text or add new review requirements.

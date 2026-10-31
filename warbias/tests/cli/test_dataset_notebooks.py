@@ -14,6 +14,7 @@ NOTEBOOKS = [
     "04_sample_translation_comet",
     "05_full_english_translation",
     "06_coverage_generation",
+    "07_jev_review",
 ]
 
 
@@ -36,13 +37,14 @@ def execute_notebook(name, replacements=None):
 def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
     from fairforget import backends, cli_support
     from fairforget.translation import quality, reference
-    from fairforget.warbias import pilot, production
+    from fairforget.warbias import jev_review, pilot, production
 
     def unexpected(*args, **kwargs):
         raise AssertionError("Default dataset notebooks must not fetch data or run models")
 
     monkeypatch.setattr(cli_support, "load_factory", unexpected)
     monkeypatch.setattr(backends, "vllm_provider", unexpected)
+    monkeypatch.setattr(jev_review.JevClient, "__call__", unexpected)
     monkeypatch.setattr(quality, "load_comet_scorer", unexpected)
     monkeypatch.setattr(reference, "load_reference", unexpected)
     monkeypatch.setattr(pilot, "run_pilot", unexpected)
@@ -79,12 +81,17 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
     elif name == "05_full_english_translation":
         assert result["status"] == "waiting_for_ukrainian_input"
         assert result["annotation_status"] == "in_progress"
-    else:
+    elif name == "06_coverage_generation":
         assert result["status"] == "prepared"
         assert result["counts"]["total_triplets"] == 11997
         assert result["counts"]["new_triplets"] == 10938
         assert result["generation_execution_requested"] is False
         assert namespace["candidate"]["provider"] == "vllm"
+    else:
+        assert result["recorded_dataset_triplets"] == 11997
+        assert result["human_overlap_triplets"] == 1059
+        assert result["service_execution_requested"] is False
+        assert namespace["report"]["overall"]["coverage"]["paired_binary_judgments"] == 4129
 
 
 def test_pilot_notebook_resolves_its_subproject_in_a_broader_repository(tmp_path, monkeypatch):

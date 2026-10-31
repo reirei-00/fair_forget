@@ -36,7 +36,7 @@ python -m pytest tests -q
 python -m ruff check src tests scripts notebooks
 ```
 
-The six notebooks in `notebooks/` use the recorded taxonomy matrix, pilot
+The seven notebooks in `notebooks/` use the recorded taxonomy matrix, pilot
 outputs, anonymized human ratings and a GPT-6.1 Sol translation sample. Start with
 [Ukrainian pilot generation](notebooks/01_ukrainian_pilot.ipynb).
 The [construction guide](docs/warbias-construction.md#notebooks) lists all
@@ -48,7 +48,11 @@ generation inputs. Occupation-qualified profiles and older women veterans remain
 included. Green cells record source-dataset presence and do not filter this
 design. Notebook 3 prepares one Ukrainian triplet per input.
 
-Run all six notebooks and save their outputs with a local Python kernel:
+The [JEV review notebook](notebooks/07_jev_review.ipynb) replays the completed
+11,997-item model review and recomputes agreement with individual human judgments.
+Install the `review` extra to load the pinned reference for a new JEV run.
+
+Run all seven notebooks and save their outputs with a local Python kernel:
 
 ```sh
 python -m pip install -e '.[notebooks]'

@@ -1,0 +1,98 @@
+{
+  "agreement_protocol_sha256": "389e63ad72589b499741657ecf82fe82e0973ae3b015862e2f4ef76436f33768",
+  "annotation_count": 11997,
+  "annotations_sha256": "32a46d11bc40b66461297933e7f4614f42c20d2f7fd430b5dd01ca95ffd45d6f",
+  "completed_at_utc": "2026-10-31T21:51:23.866934+00:00",
+  "config_sha256": "7c46119e2851ab23ee4db2bf5dc03f5c797c06093ade187983fa16a422194139",
+  "counts": [
+    {
+      "cohort": "human",
+      "flagged_triplets": 201,
+      "issue_counts": {
+        "counter_not_contradicting": 10,
+        "grammar_or_spelling": 1,
+        "non_parallel": 73,
+        "unnatural": 131
+      },
+      "target_group": "veteran",
+      "triplets": 625
+    },
+    {
+      "cohort": "human",
+      "flagged_triplets": 112,
+      "issue_counts": {
+        "non_parallel": 88,
+        "unnatural": 31
+      },
+      "target_group": "idp",
+      "triplets": 434
+    },
+    {
+      "cohort": "synthetic",
+      "flagged_triplets": 555,
+      "issue_counts": {
+        "counter_not_contradicting": 115,
+        "grammar_or_spelling": 27,
+        "group_or_meaning": 16,
+        "non_parallel": 85,
+        "other": 105,
+        "unnatural": 391,
+        "unrelated_implies_stereotype": 14
+      },
+      "target_group": "veteran",
+      "triplets": 7118
+    },
+    {
+      "cohort": "synthetic",
+      "flagged_triplets": 407,
+      "issue_counts": {
+        "counter_not_contradicting": 41,
+        "grammar_or_spelling": 31,
+        "group_or_meaning": 15,
+        "non_parallel": 53,
+        "other": 40,
+        "unnatural": 320,
+        "unrelated_implies_stereotype": 9
+      },
+      "target_group": "idp",
+      "triplets": 3820
+    }
+  ],
+  "human_import": {
+    "binary_judgments": 4129,
+    "excluded_rows": {
+      "repeat_person_item": 11,
+      "undone": 31
+    },
+    "issue_sets_known": 3830,
+    "items": 1059,
+    "review_rows": 4130,
+    "reviewer_ids": 53
+  },
+  "human_source": {
+    "app_revision": "8e529454546534eaf771ef19bf7de39235c76c5a",
+    "kind": "human_annotation_app",
+    "reference_config": "configs/data/warbias-reference.json",
+    "snapshot_sha256": "26abf7e2df266a5b785c9daf46d89fbbd4271581aede2e4d58c1a90913ee7880",
+    "text_versions_verified": 1059
+  },
+  "immutable_hosted_weights_revision": null,
+  "kind": "completed_jev_triplet_review",
+  "new_human_validated": false,
+  "prompt_sha256": "14fdfb828e6b6e1cb7204543ac9aeee9c89fcaa301339f170efe51fce5a90b04",
+  "request_bindings_verified": 11997,
+  "request_recipe_sha256": "900f4add7cc4990d7d34b30e2691b06cfe0a386dc2c1886cb4cfd5a444ee9c5a",
+  "requested_model": "jev-latest",
+  "returned_models": {
+    "jev-1.14.0": 11997
+  },
+  "review_inputs_sha256": "e267534c28f939d69aab16fd82eb1458a68e95b1616ae8d10aff6ef4d80bc10e",
+  "rubric_id": "warbias-triplet-review-v1",
+  "schema_version": 1,
+  "status": "complete",
+  "usage": {
+    "input_tokens": 20001036,
+    "output_tokens": 2817699
+  },
+  "usage_scope": "successful_typed_responses"
+}
