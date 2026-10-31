@@ -1,0 +1,135 @@
+{
+  "kind": "pending_saved_CPU_collector_python_identity_guard_cancellation",
+  "requested_at_utc": "2026-10-31T14:47:18.299788+00:00",
+  "status": "all_four_confirmed_cancelled_before_start",
+  "candidate_jobs": [
+    "2611130",
+    "2611131",
+    "2611132",
+    "2611133"
+  ],
+  "preserved_failed_cpu_jobs": [
+    "2611128",
+    "2611129"
+  ],
+  "untouched_global_report_job": "2611159",
+  "reason": "The saved-only Fair-UK exporter resolves the venv bin/python symlink to its bare UV interpreter, losing lm_eval package metadata. Native GPU files remain valid. Replace only pending saved CPU analysis after a new analysis_v2/runner_v5 fix.",
+  "new_model_calls": 0,
+  "native_GPU_jobs_changed": false,
+  "weights_or_completed_TRAIN_changed": false,
+  "before": {
+    "observed_at_utc": "2026-10-31T14:47:22.481824+00:00",
+    "command": [
+      "squeue",
+      "-j",
+      "2611130,2611131,2611132,2611133",
+      "-h",
+      "-o",
+      "%i|%T|%R|%M|%N"
+    ],
+    "returncode": 0,
+    "stdout": "2611133|PENDING|(Dependency)|0:00|\n2611132|PENDING|(Dependency)|0:00|\n2611131|PENDING|(Dependency)|0:00|\n2611130|PENDING|(Dependency)|0:00|\n",
+    "stderr": ""
+  },
+  "output_results_before": {
+    "2611130": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_metrics_v3/gemma3_12b_it/warbias-metrics-2611130",
+      "exists": false,
+      "all_metrics_reports": 0
+    },
+    "2611131": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_metrics_v3/lapa12b_instruct/warbias-metrics-2611131",
+      "exists": false,
+      "all_metrics_reports": 0
+    },
+    "2611132": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_metrics_v3/mamay12b_v2/warbias-metrics-2611132",
+      "exists": false,
+      "all_metrics_reports": 0
+    },
+    "2611133": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_metrics_v3/mamay27b_v2/warbias-metrics-2611133",
+      "exists": false,
+      "all_metrics_reports": 0
+    }
+  },
+  "pending_selected": [
+    "2611130",
+    "2611131",
+    "2611132",
+    "2611133"
+  ],
+  "nonpending_not_signalled": {},
+  "other_jobs_signalled": false,
+  "cancellation": {
+    "at_utc": "2026-10-31T14:47:22.705228+00:00",
+    "command": [
+      "scancel",
+      "--state=PENDING",
+      "2611130",
+      "2611131",
+      "2611132",
+      "2611133"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "after": {
+    "observed_at_utc": "2026-10-31T14:47:24.929879+00:00",
+    "command": [
+      "squeue",
+      "-j",
+      "2611130,2611131,2611132,2611133",
+      "-h",
+      "-o",
+      "%i|%T|%R|%M|%N"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "accounting_after": {
+    "observed_at_utc": "2026-10-31T14:47:25.158715+00:00",
+    "command": [
+      "sacct",
+      "-X",
+      "-j",
+      "2611130,2611131,2611132,2611133",
+      "-P",
+      "-n",
+      "--format=JobIDRaw,State,ExitCode,Start,End"
+    ],
+    "returncode": 0,
+    "stdout": "2611130|CANCELLED by 35666|0:0|None|2026-10-31T15:47:22\n2611131|CANCELLED by 35666|0:0|None|2026-10-31T15:47:22\n2611132|CANCELLED by 35666|0:0|None|2026-10-31T15:47:22\n2611133|CANCELLED by 35666|0:0|None|2026-10-31T15:47:22\n",
+    "stderr": ""
+  },
+  "output_results_after": {
+    "2611130": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_metrics_v3/gemma3_12b_it/warbias-metrics-2611130",
+      "exists": false,
+      "all_metrics_reports": 0
+    },
+    "2611131": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_metrics_v3/lapa12b_instruct/warbias-metrics-2611131",
+      "exists": false,
+      "all_metrics_reports": 0
+    },
+    "2611132": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_metrics_v3/mamay12b_v2/warbias-metrics-2611132",
+      "exists": false,
+      "all_metrics_reports": 0
+    },
+    "2611133": {
+      "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_metrics_v3/mamay27b_v2/warbias-metrics-2611133",
+      "exists": false,
+      "all_metrics_reports": 0
+    }
+  },
+  "ssh_returncode": 0,
+  "ssh_stderr": "",
+  "cancelled_before_start": 4,
+  "started_candidate_jobs": 0,
+  "all_metrics_results_before": 0,
+  "all_metrics_results_after": 0
+}

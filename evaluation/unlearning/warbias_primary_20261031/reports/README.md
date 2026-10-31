@@ -10,7 +10,7 @@ These are the current readiness and saved-evidence reports for **WarBias trainin
 
 Every report retains all six pinned models and all eighteen metric commitments. All eighteen training arms have completed, as recorded in the [dated completion audit](../training_completion_v1.json). The submission replay keeps training and numeric cells pending until full receipt bundles and native reports are imported. The corrected eighteen measurement jobs are shown separately with their recorded submission time. Executed notebook cells establish that the readiness/reporting code ran; they do not establish applied training steps, model performance or mitigation.
 
-The hash-bound [current manifest](manifest_v4.json), preserving the [v2 snapshot](manifest_v2.json) and [initial snapshot](manifest.json), verifies the exact reviewed inputs: 137 training rows from 12 cases in nine components, 96 development rows in nine other components, original predicate masks, the six-tokenizer span audit, model pins and eighteen planned method recipes. One full pass is **137 planned optimizer steps per arm**. Human validation is false. All 13 training components linked to locked legacy views were excluded, including their ordinary preservation text; the complete protected component union is 33.
+The hash-bound [current manifest](manifest_v5.json), preserving the earlier snapshots, verifies the exact reviewed inputs: 137 training rows from 12 cases in nine components, 96 development rows in nine other components, original predicate masks, the six-tokenizer span audit, model pins and eighteen planned method recipes. One full pass is **137 planned optimizer steps per arm**. Human validation is false. All 13 training components linked to locked legacy views were excluded, including their ordinary preservation text; the complete protected component union is 33.
 
 Three stages remain separate:
 
@@ -24,7 +24,7 @@ Reproduce only the report replay from the repository root:
 
 ```bash
 python scripts/build_unlearning_report_notebooks.py --study warbias \
-  --manifest evaluation/unlearning/warbias_primary_20261031/reports/manifest_v4.json --execute
+  --manifest evaluation/unlearning/warbias_primary_20261031/reports/manifest_v5.json --execute
 ```
 
 The kernel needs nbformat, nbclient, pandas and Matplotlib. No model weights, GPU allocation, API access or judge is used. Without `--execute`, the builder writes source notebooks under `notebooks/not_executed`.
@@ -43,9 +43,9 @@ Complete all six saved result panels in a new portable output directory:
 
 ```bash
 python scripts/assemble_warbias_report.py \
-  --base-manifest evaluation/unlearning/warbias_primary_20261031/reports/manifest_v4.json \
+  --base-manifest evaluation/unlearning/warbias_primary_20261031/reports/manifest_v5.json \
   --training-submission evaluation/unlearning/warbias_primary_20261031/training_submission.json \
-  --measurement-submission evaluation/unlearning/warbias_primary_20261031/measurement_submission_v3.json \
+  --measurement-submission evaluation/unlearning/warbias_primary_20261031/measurement_submission_v4.json \
   --training-release /absolute/path/to/frozen/warbias-training-release \
   --output /absolute/path/to/new-completed-report-bundle --execute \
   --kernel-name fairforget-report-v1
@@ -61,4 +61,11 @@ The preserved [first automatic report job](report_submission_v1.json), **2610782
 
 All eighteen native TRAIN-source pairs are also preserved in the [completed training-source snapshot](../training_source_results/README.md), with all fifty-four component-macro SS/LMS/ICAT values and their existing confidence intervals. This dated snapshot does not fill held-out panels or establish mitigation. The completed report assembly will import the full training receipts and metric evidence together.
 
-The [selected complete-report job](report_submission_v2.json), **2611159**, uses [report package v2](report_deployment_v2.json), the v4 input snapshot and six replacement CPU metric jobs. It waits on those six fresh metric jobs; all six completed TRAIN diagnostics and their eighteen paired-report hashes were verified separately before submission. Raw logs retain RMU indexes 1..137 and WGA/task-vector indexes 0..136. No model training or GPU collection was repeated for this repair.
+The preserved [second report job](report_submission_v2.json), **2611159**, was cancelled after its CPU dependency failed during saved export. The current v5 snapshot binds six new CPU analyses, the qualified interpreter repair and independently verified completed Qwen/Llama/Lapa collection inputs. Complete assembly still requires every model's actual reports. Raw logs retain RMU indexes 1..137 and WGA/task-vector indexes 0..136. The repair uses the original trained checkpoints and native collections.
+
+The selected [report job](report_submission_v3.json), **2611634**, uses the
+[verified v3 package](report_deployment_v3.json) and waits for the six new CPU
+jobs 2611593..2611598. Its submission independently verified all six completed
+TRAIN diagnostics and their eighteen original paired-report hashes. The current
+readiness notebooks each execute nine cells without errors. Full numerical
+notebooks and twenty-four CSV tables remain pending until complete assembly.

@@ -1,0 +1,18 @@
+{
+  "kind": "fulfilled_heldout_dependency_loader_verification",
+  "status": "passed",
+  "tests_run": 62,
+  "actual_bound_completion_proof_models": [
+    "qwen3_8b",
+    "llama31_8b_instruct"
+  ],
+  "audit_sha256": "896b35110f50a189aec6fa8d609500ffcf67910a85c2696d47482bc92d9d2a57",
+  "source": {
+    "scripts/unlearning_report_data.py": "50b7d69eea1c03e97ca1565a545b5dd8e4f002d88da9fef250cfbf8c9af543c5",
+    "tests/test_warbias_heldout_dependency.py": "20a73a65a9bb163de87b5ab8e6319dc697c1b514d6a36a8bd4afbc963bec34d8"
+  },
+  "raw_response_example_or_credential_named_fields": [],
+  "new_model_calls": 0,
+  "git_staged_or_committed": false,
+  "measurement_sources_or_results_changed": false
+}

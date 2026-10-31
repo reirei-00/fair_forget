@@ -27,30 +27,38 @@ intervention and must not be reported as successful nonzero vector mitigation.
 ## Matched measurements
 
 The GPU submission was accepted on 31 October at 13:44 UTC. Six replacement
-CPU analyses validate the original method-specific log index conventions. This series
+CPU analyses use the qualified saved-export runtime and the original method-specific
+log index conventions. This series
 preserves the trained weights and uses fresh matched baseline/post inference.
 Each checkpoint/protocol must pass repeated clean development checks before
 locked collection. Queued or running jobs cannot fill numerical result cells.
 
 | Model | Training completed | Held-out collection | TRAIN diagnostic | Saved metrics |
 | --- | --- | --- | --- | --- |
-| Qwen3 8B | 2609596 | 2610274 | 2610275 | 2611128 |
-| Llama 3.1 8B Instruct | 2609597 | 2610277 | 2610278 | 2611129 |
-| Gemma 3 12B IT | 2609598 | 2610280 | 2610281 | 2611130 |
-| Lapa 12B Instruct | 2609599 | 2610283 | 2610284 | 2611131 |
-| Mamay 12B v2 | 2609600 | 2610286 | 2610287 | 2611132 |
-| Mamay 27B v2 | 2609601 | 2610289 | 2610290 | 2611133 |
+| Qwen3 8B | 2609596 | 2610274 | 2610275 | 2611593 |
+| Llama 3.1 8B Instruct | 2609597 | 2610277 | 2610278 | 2611594 |
+| Gemma 3 12B IT | 2609598 | 2610280 | 2610281 | 2611595 |
+| Lapa 12B Instruct | 2609599 | 2610283 | 2610284 | 2611596 |
+| Mamay 12B v2 | 2609600 | 2610286 | 2610287 | 2611597 |
+| Mamay 27B v2 | 2609601 | 2610289 | 2610290 | 2611598 |
 
-The [selected submission](measurement_submission_v3.json) binds original
+The [selected submission](measurement_submission_v4.json) binds original
 training receipts, certified evaluation copies and actual scheduler commands.
 Completed training dependencies were verified by exact receipts and successful
 accounting records because those old job IDs had left Slurm's dependency memory.
-Every replacement saved-metrics job depends on its original held-out collection succeeding.
+Qwen, Llama and Lapa completed all 48 native collections and 36 native pairs per
+model. Their [completion audit](heldout_completion_v2.json) verifies successful
+accounting and exact source, checkpoint and file hashes before fulfilling those
+CPU dependencies. The other three CPU jobs retain their original live success
+dependencies. Completion proofs alone fill no numerical report cells.
 [The CPU-only repair record](runtime_repair/step_index_cpu_cancellation_v1.json)
 preserves the seven pending jobs cancelled before start. RMU logs steps 1..137;
 WGA and task-vector logs use 0..136. Both are complete 137-update runs.
 The original logs were not renumbered, and no GPU collection was restarted.
-The rejected zero-job attempt and earlier partial measurements remain preserved.
+The saved-export interpreter repair passed an actual twelve-task Llama RMU
+qualification with all eighteen metric entries and unchanged original inputs.
+It changes no native metric calculation. Earlier failed, cancelled and partial
+attempts remain preserved.
 
 All eighteen [TRAIN comparisons](training_source_results/README.md) are now complete.
 They measure the exact 137 original training-source triplets and are not held-out
@@ -64,7 +72,7 @@ No pooled benchmark number or invented judge is supplied.
 ## Portable reports
 
 The [method notebooks](reports/README.md) read saved evidence only. The initial
-and v2 submission snapshots remain unchanged. The selected v3 snapshot records
+and earlier submission snapshots remain unchanged. The selected v5 snapshot records
 the corrected jobs and keeps numerical cells pending until complete receipts and
 native reports are imported. Executed replay cells alone are software evidence.
 Complete assembly verifies all eighteen training arms and every required pair,

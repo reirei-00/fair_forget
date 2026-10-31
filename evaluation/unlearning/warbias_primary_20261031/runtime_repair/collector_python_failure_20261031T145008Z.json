@@ -1,0 +1,20 @@
+{
+  "kind": "actual_saved_only_export_interpreter_failure",
+  "observed_at_utc": "2026-10-31T14:50:08.063600+00:00",
+  "cpu_job_id": "2611128",
+  "config": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_metrics_v3/qwen3_8b/warbias-metrics-2611128/rmu-config.json",
+    "sha256": "0582f233eb4704d4dc6a46b36f1244466245266cfde8c2a80fd38771b3e0a8cb"
+  },
+  "configured_python": "/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python",
+  "resolved_python": "/e/project1/e-dev-2026d09-075/fairforget/runtimes/uv-python/cpython-3.12.12-linux-aarch64-gnu/bin/python3.12",
+  "configured_is_symlink": true,
+  "selected_venv_marker_exists": true,
+  "collector_export_log": {
+    "path": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031_metrics_v3/qwen3_8b/warbias-metrics-2611128/rmu/warbias_benign_en/collector_export.log",
+    "sha256": "6c970740bbdf3ff333099f1a4443f4a53bce8c2a13653778422ef728f50ea67b",
+    "trace": "Traceback (most recent call last):\n  File \"/e/project1/e-dev-2026d09-075/fairforget/runtimes/uv-python/cpython-3.12.12-linux-aarch64-gnu/lib/python3.12/importlib/metadata/__init__.py\", line 397, in from_name\n    return next(cls.discover(name=name))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nStopIteration\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_analysis_v1/evaluator/lm_eval/fair_uk/collector_export.py\", line 90, in <module>\n    main()\n  File \"/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_analysis_v1/evaluator/lm_eval/fair_uk/collector_export.py\", line 20, in main\n    from lm_eval.fair_uk import runs\n  File \"/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_collector_v6/evaluator/lm_eval/__init__.py\", line 7, in <module>\n    __version__ = importlib.metadata.version(\"lm_eval\")\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/e/project1/e-dev-2026d09-075/fairforget/runtimes/uv-python/cpython-3.12.12-linux-aarch64-gnu/lib/python3.12/importlib/metadata/__init__.py\", line 889, in version\n    return distribution(distribution_name).version\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/e/project1/e-dev-2026d09-075/fairforget/runtimes/uv-python/cpython-3.12.12-linux-aarch64-gnu/lib/python3.12/importlib/metadata/__init__.py\", line 862, in distribution\n    return Distribution.from_name(distribution_name)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/e/project1/e-dev-2026d09-075/fairforget/runtimes/uv-python/cpython-3.12.12-linux-aarch64-gnu/lib/python3.12/importlib/metadata/__init__.py\", line 399, in from_name\n    raise PackageNotFoundError(name)\nimportlib.metadata.PackageNotFoundError: No package metadata was found for lm_eval\n"
+  },
+  "model_calls": 0,
+  "environment_mutations": 0
+}

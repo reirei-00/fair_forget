@@ -32,3 +32,13 @@ GPU calls. It does not establish model results. `checksums.json` binds the dated
 records in this directory.
 
 The saved-analysis/report index repair uses the actual logger contracts: RMU records ordered integer steps 1..N; WGA and task-vector record 0..N-1. Both represent N applied updates. Runners v4 and the new report package validate those exact ranges, including order and uniqueness, without changing raw histories or exposure events. All 249 local regressions and 75 deployed runner checks pass; the deployed check also reads all eighteen actual loss histories. Only pending CPU/report jobs were replaced.
+
+The next saved-export repair preserves the configured virtual environment's
+Python executable path. Resolving its symlink had selected a bare interpreter
+without the collector's installed package metadata. Analysis release v2 and
+runners v5 preserve all dataset, model, collector and scoring bytes. An actual
+Llama RMU qualification completed all twelve native exports and analyses, retained
+all eighteen metric entries and verified 31,462 unchanged original input hashes.
+It made no model calls. The current offline suite passes 268 regressions;
+Fair-UK passes 620 tests with one optional-data skip. The dated v5 evidence index
+binds the repair, actual qualification, completed-input proofs and new CPU jobs.
