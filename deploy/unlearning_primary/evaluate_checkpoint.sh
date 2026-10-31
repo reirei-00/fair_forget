@@ -29,7 +29,16 @@ if ! type module >/dev/null 2>&1; then
     exit 2
 fi
 module purge
-module load Stages/2026 CUDA/13
+module load Stages/2026 GCCcore/.14.3.0 CUDA/13
+CC=$(command -v gcc) || {
+    echo "The evaluation runtime requires a C compiler from GCCcore/.14.3.0" >&2
+    exit 2
+}
+CXX=$(command -v g++) || {
+    echo "The evaluation runtime requires a C++ compiler from GCCcore/.14.3.0" >&2
+    exit 2
+}
+export CC CXX
 if [[ $FF_EVAL_GPU_WAS_SET == 1 ]]; then
     export CUDA_VISIBLE_DEVICES=$FF_EVAL_GPU_VALUE
 fi

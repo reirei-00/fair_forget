@@ -165,6 +165,8 @@ omitting it evaluates all six tasks sequentially. GPU allocation belongs to the
 calling Slurm job. The wrapper preserves `CUDA_VISIBLE_DEVICES` and uses a
 separate shell to purge training modules and select the already verified
 JUPITER Python 3.12 / vLLM runtime under `fairforget/envs/baseline-vllm018-py312`.
+It loads `Stages/2026`, `GCCcore/.14.3.0` and `CUDA/13`, then requires both
+compilers and exports their resolved paths as `CC` and `CXX` for Triton JIT.
 It installs no packages and makes no API/judge requests.
 
 The release must contain the current evaluator snapshot at `evaluator/lm_eval/`

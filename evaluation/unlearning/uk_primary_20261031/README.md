@@ -1,10 +1,13 @@
-# Ukrainian primary-series preparation evidence - 31 October 2026
+# Ukrainian primary-series integration evidence - 31 October 2026
 
-This folder preserves five actual preparation/submission receipts and the five
-frozen Qwen3-8B integration recipes. It contains no reviewed examples, raw
-datasets, model weights, credentials or new model scores. The recipes retain
-their original external data paths and hashes; this evidence folder is not a
-self-contained runnable cluster release.
+This folder preserves actual preparation/submission and training receipts,
+numeric training logs, the BiasUnlearn controller log and the five frozen
+Qwen3-8B integration recipes. It contains no reviewed examples, raw datasets,
+exposure logs, tokenizer configurations, model weights or credentials. It has no
+completed locked native before/after scores. Aggregate development diagnostics
+are retained in the original method receipts. The recipes retain their original
+external data paths and hashes; this folder is not a self-contained runnable
+cluster release.
 
 ## Recorded status
 
@@ -15,8 +18,8 @@ associations, with AI content review and curation.
 
 AI review retained six of 143 candidates across six families. The frozen split
 has four target-training families and two development families. Human validation
-remains false. This is a small method-integration pilot, not a completed or
-confirmatory five-arm comparison. The common preservation bank has 792 ordinary
+remains false. This is a small method-integration pilot, not a completed native
+or confirmatory five-arm comparison. The common preservation bank has 792 ordinary
 WarBias contexts from 22 training components and 257 development contexts from
 15 components. It does not qualify general reasoning or helpfulness retention.
 Reviewed source IDs, development IDs, complete review decisions and examples
@@ -30,10 +33,42 @@ remain in the external manifests rather than this repository folder.
 | [Native input validation](receipts/evaluation_input_validation.json) | CPU schema validation of two qualification rows and six complete native views; no inference |
 | [Scheduler submissions](receipts/submissions.json) | Training job 2608191 and evaluation job 2608199 with dependency `afterany:2608191`; intended releases and output locations |
 
-Training was queued for priority at the associated preparation snapshot. The
-submission receipt establishes submission, not a running optimizer or completed
-intervention. No study training or native collection completion receipt is
-included here. Queue state can change after this snapshot.
+Training was queued for priority at the original preparation snapshot. That
+submission record is preserved as history. The later
+[execution receipt](training/execution.json) confirms training completion in job
+2608191 at `2026-10-31T10:10:14.796101+00:00`, with five saved self-contained
+checkpoints and no failed method process.
+
+| Method | Actual optimizer steps | Receipt | Numeric log |
+| --- | ---: | --- | --- |
+| WGA+KL | 40 | [intervention](training/wga_kl/intervention.json) | [losses](training/wga_kl/losses.jsonl) |
+| NPO+KL | 40 | [intervention](training/npo_kl/intervention.json) | [losses](training/npo_kl/losses.jsonl) |
+| Fixed-target RMU | 40 | [run](training/rmu/run.json) | [history](training/rmu/history.jsonl) |
+| BiasUnlearn-style | 50 | [intervention](training/biasunlearn/intervention.json) | [losses](training/biasunlearn/losses.jsonl) |
+| Task-vector acquisition | 40 | [intervention](training/task_vector/intervention.json) | [losses](training/task_vector/losses.jsonl) |
+| Total | 210 | [execution](training/execution.json) | |
+
+The [BiasUnlearn controller](training/biasunlearn/controller.jsonl) records the
+adversarial subset and development-controlled direction decisions. Its realized
+five-row epoch pool gives 50 steps; the other four-row epoch pools give 40.
+The configured 128-step maximum is not the actual budget for each method.
+
+Task-vector acquisition ran for 40 steps, but the development selector chose
+scale **0.0** and recorded `null_intervention_selected=true`. The selected
+exported model has a null weight intervention. Do not describe this as a
+successful nonzero task-vector mitigation effect.
+
+The [training evidence receipt](receipts/training_evidence_2608191.json) binds
+30 original collected files by SHA-256. This repository includes only the
+execution record, five method receipts, five numeric loss/history logs and the
+BiasUnlearn controller. Exposure logs and checkpoint/tokenizer files named by
+that receipt remain external. Their hashes are metadata, not their file bytes.
+
+At the latest execution update, evaluation job 2608199 is running its two-item
+development no-update qualification. Completed qualification proof and full
+native scores are pending. Completed training and numeric loss changes do not
+establish successful mitigation, general utility retention or native evaluation
+completion.
 
 Independent repeated Fair-UK scoring on the two development items is a later
 gate, distinct from the completed zero-adapter logit check. Full locked
@@ -104,3 +139,13 @@ execution receipts.
 The remaining models, replication seeds, symmetric anti-stereotype controls and
 corrective-only SFT controls are later stages. This snapshot cannot establish a
 finished six-model primary study.
+
+## Evaluation startup repair
+
+The first evaluation attempt, job 2608199, failed while initializing the vLLM
+engine for the first development-only check. Triton could not find a C compiler
+after module cleanup. No locked collection started. The [failure receipt](receipts/evaluation_attempt_2608199.json)
+binds the preserved diagnostic log. Training checkpoints remain complete. A new
+evaluation revision explicitly selects GCCcore/.14.3.0 and exports verified
+compiler paths before inference; scientific inputs and numerical settings are
+unchanged. Its retry needs a separate deployment and scheduler receipt.
