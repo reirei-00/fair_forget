@@ -303,3 +303,72 @@ def agreement_report(annotations, human_reviews, issues, *, resamples=2000, seed
             for group in groups
         },
     }
+
+
+def compare_reviews(baseline, candidate, human_reviews, issues, *, resamples=2000, seed=0):
+    """Compare fixed prompts with paired resampling of the same case families."""
+    import numpy as np
+
+    human_reviews = list(human_reviews)
+    if not human_reviews:
+        raise ValueError("Prompt comparison needs human review judgments")
+    models = [list(baseline), list(candidate)]
+    expected = {row["id"] for row in human_reviews}
+    if any(set(unique_index(rows)) != expected for rows in models):
+        raise ValueError("Prompt comparison needs the same complete human item cohort")
+    reports = [
+        agreement_report(rows, human_reviews, issues, resamples=resamples, seed=seed)["overall"]
+        for rows in models
+    ]
+    people = sorted({row["reviewer"] for row in human_reviews})
+    families = sorted({row["case_family"] for row in human_reviews})
+    person_index = {person: index for index, person in enumerate(people)}
+    family_index = {family: index for index, family in enumerate(families)}
+    matrices = []
+    for rows in models:
+        predictions = unique_index(rows)
+        matrix = np.zeros((len(people), len(families), 4))
+        for human in human_reviews:
+            if human["has_problem"] is not None:
+                prediction = predictions[human["id"]]
+                matrix[
+                    person_index[human["reviewer"]],
+                    family_index[human["case_family"]],
+                    int(prediction["has_problem"]) * 2 + int(human["has_problem"]),
+                ] += 1
+        matrices.append(matrix)
+    weights = np.random.default_rng(seed).multinomial(
+        len(families), np.full(len(families), 1 / len(families)), size=resamples
+    )
+    draws = [_macro_draws(_bootstrap_pairs(matrix, weights)) for matrix in matrices]
+    summaries = []
+    for report in reports:
+        counts = [
+            sum(row[key] for row in report["jev_human"]["pairs"] if row["n"])
+            for key in (
+                "both_no_problem",
+                "right_only_problem",
+                "left_only_problem",
+                "both_problem",
+            )
+        ]
+        summaries.append(
+            {
+                "mean_pair_ac1": report["jev_human"]["mean_pair_ac1"],
+                "mean_pair_ac1_ci95": report["jev_human"]["mean_pair_ac1_ci95"],
+                "observed_agreement": report["jev_human"]["item_weighted_observed_agreement"],
+                "binary_pairs": binary_agreement(counts),
+                "conditional_jaccard": report["conditional_jaccard"],
+                "issues": report["issues"],
+            }
+        )
+    before, after = (summary["mean_pair_ac1"] for summary in summaries)
+    return {
+        "coverage": reports[0]["coverage"],
+        "baseline": summaries[0],
+        "candidate": summaries[1],
+        "mean_pair_ac1_change": {
+            "value": after - before if before is not None and after is not None else None,
+            "ci95": _interval(draws[1] - draws[0]),
+        },
+    }

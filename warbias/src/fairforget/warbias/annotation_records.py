@@ -15,6 +15,7 @@ from fairforget.io import (
     write_rows,
 )
 from fairforget.warbias.coverage_workflow import prepare_coverage, verify_generated_rows
+from fairforget.warbias.jev_review import load_review_prompt
 from fairforget.warbias.triplet_annotation import review_item, synthetic_review_items
 
 ITEM_FIELDS = (
@@ -127,11 +128,7 @@ def save_review_tables(project, items, human_reviews, model_reviews, issues, run
     return manifest
 
 
-def load_review_tables(project, issues):
-    project = Path(project).resolve()
-    manifest = load_json(project / "configs/data/review-inputs.json")
-    if manifest.get("schema_version") != 1 or manifest.get("issue_order") != list(issues):
-        raise ValueError("Saved review tables use a different rubric")
+def _load_tables(project, manifest):
     tables = {}
     for name, entry in manifest["files"].items():
         path = (project / entry["path"]).resolve()
@@ -144,6 +141,15 @@ def load_review_tables(project, issues):
             if path.suffix == ".jsonl"
             else load_json(path)
         )
+    return tables
+
+
+def load_review_tables(project, issues):
+    project = Path(project).resolve()
+    manifest = load_json(project / "configs/data/review-inputs.json")
+    if manifest.get("schema_version") != 1 or manifest.get("issue_order") != list(issues):
+        raise ValueError("Saved review tables use a different rubric")
+    tables = _load_tables(project, manifest)
     recipe = tables["run"].get("request_recipe_sha256")
     if recipe:
         config = load_json(project / "configs/review/jev.json")
@@ -167,10 +173,28 @@ def load_review_tables(project, issues):
     return tables["human_items"], reviews, predictions, tables["run"], tables["examples"]
 
 
-def prepare_review_inputs(project, human_rows, synthetic_rows, metadata):
-    """Restore exact human context and the selected generated corpus."""
-    plan = prepare_coverage(project)
-    verify_generated_rows(plan, synthetic_rows)
+def load_calibration_tables(project, issues):
+    project = Path(project).resolve()
+    manifest = load_json(project / "configs/data/review-calibration.json")
+    if manifest.get("schema_version") != 1 or manifest.get("issue_order") != list(issues):
+        raise ValueError("Saved calibration uses a different rubric")
+    tables = _load_tables(project, manifest)
+    config = tables["candidate_config"]
+    recipe = digest(
+        {
+            "config": {key: value for key, value in config.items() if key != "transport"},
+            "prompt": load_review_prompt(project, config),
+        }
+    )
+    if recipe != tables["run"]["candidate_request_recipe_sha256"]:
+        raise ValueError("Saved calibration decisions use a different prompt or examples")
+    predictions = [_decode(row, issues) for row in tables["model_reviews"]]
+    unique_index(predictions)
+    return tables["split"], predictions, tables["protocol"], tables["run"]
+
+
+def prepare_human_review_inputs(human_rows, metadata):
+    """Restore the exact texts and contexts used for human review."""
     by_id = unique_index(human_rows)
     restored = []
     for row in metadata:
@@ -191,6 +215,15 @@ def prepare_review_inputs(project, human_rows, synthetic_rows, metadata):
         if any(item[key] != row[key] for key in ("text_sha256", "context_sha256")):
             raise ValueError("Human source text differs from the annotated version")
         restored.append(item)
+    unique_index(restored)
+    return sorted(restored, key=lambda row: row["id"])
+
+
+def prepare_review_inputs(project, human_rows, synthetic_rows, metadata):
+    """Restore exact human context and the selected generated corpus."""
+    plan = prepare_coverage(project)
+    verify_generated_rows(plan, synthetic_rows)
+    restored = prepare_human_review_inputs(human_rows, metadata)
     if {row["id"] for row in restored} != set(plan["cohort_ids"]):
         raise ValueError("Human review context must cover the current annotation cohort")
     items = sorted(restored, key=lambda row: row["id"]) + synthetic_review_items(synthetic_rows)

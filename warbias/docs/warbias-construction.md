@@ -218,6 +218,13 @@ individual human judgments and reports human-human reliability separately.
 Missing reasons remain unknown. Legacy comments without an explicit category
 do not become selected issue labels. No new synthetic item is human validated.
 
+The [calibration protocol](../protocol/review_calibration.json) fixes development
+and test case families before example selection. Notebook 7 reproduces the
+[candidate comparison](../protocol/results/jev_calibration.json), including paired
+AC1 changes and agreement on problems and issue types. The full-cohort baseline
+results were already inspected, so this calibration is retrospective. Keep the
+baseline and candidate decisions separate.
+
 ## Pilot and selection
 
 The pilot compares each candidate model with two prompt methods:

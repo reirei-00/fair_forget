@@ -8,7 +8,14 @@ from urllib.error import HTTPError
 
 import pytest
 
-from fairforget.warbias.jev_review import JevClient, review_request, run_review, validate_response
+from fairforget.io import file_digest
+from fairforget.warbias.jev_review import (
+    JevClient,
+    load_review_prompt,
+    review_request,
+    run_review,
+    validate_response,
+)
 from fairforget.warbias.triplet_annotation import review_item
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -179,3 +186,22 @@ def test_authentication_errors_are_not_retried_or_echoed(config):
 def test_empty_corpus_cannot_be_recorded_as_complete(config, tmp_path):
     with pytest.raises(ValueError, match="nonempty"):
         run_review([], config, "rules", tmp_path)
+
+
+def test_edited_few_shot_examples_cannot_reuse_a_frozen_prompt(config, tmp_path):
+    (tmp_path / "rules.txt").write_text("Review rules.")
+    path = tmp_path / "examples.jsonl"
+    path.write_text(json.dumps({"context": {"sentences": {}}, "problem_types": []}) + "\n")
+    config.update(
+        prompt="rules.txt", examples={"path": "examples.jsonl", "sha256": file_digest(path)}
+    )
+    assert '"present_issues":[]' in load_review_prompt(tmp_path, config)
+    path.write_text("changed")
+    with pytest.raises(ValueError, match="examples differ"):
+        load_review_prompt(tmp_path, config)
+
+
+def test_per_issue_choice_definitions_are_part_of_the_request(config):
+    config["issues"]["unnatural"]["criteria"] = {"present": "A calque.", "absent": "Natural text."}
+    request = review_request(item(), config, "rules")
+    assert request["questions"]["unnatural"]["criteria"]["present"] == "A calque."

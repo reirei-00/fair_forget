@@ -11,13 +11,38 @@ from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
-from fairforget.io import canonical_json, digest, read_rows, unique_index, write_json, write_rows
+from fairforget.io import (
+    canonical_json,
+    digest,
+    file_digest,
+    read_rows,
+    unique_index,
+    write_json,
+    write_rows,
+)
 from fairforget.warbias.generation import freeze_file
 
 
 class _NoRedirect(HTTPRedirectHandler):
     def redirect_request(self, request, file, code, message, headers, new_url):
         return None
+
+
+def load_review_prompt(project, config):
+    project = Path(project)
+    prompt = (project / config["prompt"]).read_text()
+    examples = config.get("examples")
+    if examples:
+        path = project / examples["path"]
+        if file_digest(path) != examples["sha256"]:
+            raise ValueError("Review examples differ from their recorded hash")
+        rows = read_rows(path)
+        prompt += "\nПриклади застосування правил. Вони не є поточною трійкою.\n"
+        prompt += "\n".join(
+            canonical_json({"triplet": row["context"], "present_issues": row["problem_types"]})
+            for row in rows
+        )
+    return prompt
 
 
 def review_request(item, config, prompt):
@@ -37,10 +62,13 @@ def review_request(item, config, prompt):
                 + issue["label"]
                 + ": "
                 + issue["instructions"],
-                "criteria": {
-                    "present": "The specified issue is present in a relevant sentence.",
-                    "absent": "The specified issue is absent. A style preference alone does not count.",
-                },
+                "criteria": issue.get(
+                    "criteria",
+                    {
+                        "present": "The specified issue is present in a relevant sentence.",
+                        "absent": "The specified issue is absent. A style preference alone does not count.",
+                    },
+                ),
             }
             for code, issue in config["issues"].items()
         },

@@ -4,7 +4,11 @@ from copy import deepcopy
 
 import pytest
 
-from fairforget.warbias.annotation_agreement import agreement_report, binary_agreement
+from fairforget.warbias.annotation_agreement import (
+    agreement_report,
+    binary_agreement,
+    compare_reviews,
+)
 
 
 @pytest.mark.parametrize(
@@ -101,3 +105,30 @@ def test_duplicate_person_item_is_not_an_additional_vote(judgments):
     reviews.append(deepcopy(reviews[0]))
     with pytest.raises(ValueError, match="one independent judgment"):
         agreement_report(predictions, reviews, ["unnatural"], resamples=10)
+
+
+def test_paired_comparison_has_zero_change_for_identical_predictions(judgments):
+    predictions, reviews = judgments
+    result = compare_reviews(predictions, predictions, reviews, ["unnatural"], resamples=40)
+    assert result["mean_pair_ac1_change"]["value"] == 0
+    assert result["mean_pair_ac1_change"]["ci95"] == {
+        "low": 0,
+        "high": 0,
+        "valid_resamples": 40,
+    }
+    assert result["baseline"]["binary_pairs"]["positive_agreement"] == pytest.approx(2 / 3)
+
+
+def test_prompt_comparison_rejects_different_item_sets(judgments):
+    predictions, reviews = judgments
+    with pytest.raises(ValueError, match="complete human item cohort"):
+        compare_reviews(predictions, predictions[:1], reviews, ["unnatural"], resamples=10)
+
+
+def test_missing_human_labels_do_not_become_zero_prompt_change(judgments):
+    predictions, reviews = judgments
+    for row in reviews:
+        row.update(has_problem=None, problem_types=None)
+    result = compare_reviews(predictions, predictions, reviews, ["unnatural"], resamples=20)
+    assert result["mean_pair_ac1_change"]["value"] is None
+    assert result["mean_pair_ac1_change"]["ci95"]["valid_resamples"] == 0

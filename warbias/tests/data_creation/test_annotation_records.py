@@ -1,8 +1,16 @@
 """Saved review tables retain missing labels and independent text bindings."""
 
+import json
+import shutil
+from pathlib import Path
+
 import pytest
 
-from fairforget.warbias.annotation_records import load_review_tables, save_review_tables
+from fairforget.warbias.annotation_records import (
+    load_calibration_tables,
+    load_review_tables,
+    save_review_tables,
+)
 from fairforget.warbias.triplet_annotation import review_item
 
 
@@ -73,3 +81,29 @@ def test_changed_rubric_cannot_reinterpret_saved_labels(saved):
     project, _, _ = saved
     with pytest.raises(ValueError, match="different rubric"):
         load_review_tables(project, ["first", "second"])
+
+
+def test_calibration_keeps_examples_out_of_test_and_binds_candidate_prompt(tmp_path):
+    root = Path(__file__).resolve().parents[2]
+    config = json.loads((root / "configs/review/jev.json").read_text())
+    split, model, _, record = load_calibration_tables(root, config["issues"])
+    assert len(model) == 1059
+    assert record["selection"]["selected"] == "baseline"
+    families = {row["case_family"]: row["split"] for row in split["families"]}
+    examples = [
+        json.loads(line)
+        for line in (root / "protocol/inputs/review_calibration_examples.jsonl")
+        .read_text()
+        .splitlines()
+    ]
+    assert all(families[row["case_family"]] == "development" for row in examples)
+    manifest = json.loads((root / "configs/data/review-calibration.json").read_text())
+    paths = [entry["path"] for entry in manifest["files"].values()]
+    paths += ["configs/data/review-calibration.json", "prompts/current/triplet_review_uk.txt"]
+    for relative in paths:
+        target = tmp_path / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(root / relative, target)
+    (tmp_path / "prompts/current/triplet_review_uk.txt").write_text("Different review rules.")
+    with pytest.raises(ValueError, match="different prompt"):
+        load_calibration_tables(tmp_path, config["issues"])

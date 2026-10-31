@@ -51,6 +51,8 @@ design. Notebook 3 prepares one Ukrainian triplet per input.
 The [JEV review notebook](notebooks/07_jev_review.ipynb) replays the completed
 11,997-item model review and recomputes agreement with individual human judgments.
 Install the `review` extra to load the pinned reference for a new JEV run.
+The calibration section compares a fixed Ukrainian prompt with the baseline on
+separate semantic case families. It retains both sets of decisions.
 
 Run all seven notebooks and save their outputs with a local Python kernel:
 
