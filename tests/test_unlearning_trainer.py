@@ -451,6 +451,7 @@ class PipelineTests(unittest.TestCase):
             mock.patch.dict("sys.modules", {"peft": fake_peft, "transformers": fake_tf}),
             mock.patch("torch.cuda.is_available", return_value=True),
             mock.patch("torch.cuda.manual_seed_all"),
+            mock.patch("torch.cuda.is_current_stream_capturing", return_value=False),
         ):
             for method in ["wga_kl", "npo_kl", "task_vector", "biasunlearn"]:
                 with self.subTest(method=method):

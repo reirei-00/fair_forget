@@ -107,8 +107,62 @@ class SupplementalTests(unittest.TestCase):
     def tearDown(self):
         self.temporary.cleanup()
 
-    def prepare(self):
-        return supplemental.prepare(self.collector, self.dev, self.addon)
+    def prepare(self, **kwargs):
+        return supplemental.prepare(self.collector, self.dev, self.addon, **kwargs)
+
+    def model_profile(self):
+        checkpoint = self.root / "pinned-model"
+        write(checkpoint / "config.json", {"model_type": "fixture"})
+        write(checkpoint / "tokenizer_config.json", {})
+        (checkpoint / "model.safetensors").write_bytes(b"fixture only")
+        return {
+            "model_path": str(checkpoint.resolve()),
+            "model_id": "fixture/model",
+            "model_revision": "a" * 40,
+            "tokenizer_revision": "b" * 40,
+            "config_sha256": supplemental.native.digest(checkpoint / "config.json"),
+        }
+
+    def training_panel(self, profile, methods):
+        training = self.root / "training"
+        records = {}
+        for method in methods:
+            folder = training / method
+            checkpoint = folder / ("checkpoint" if method == "rmu" else "merged_checkpoint")
+            write(checkpoint / "config.json", {"method": method})
+            write(checkpoint / "tokenizer_config.json", {})
+            (checkpoint / "model.safetensors").write_bytes(b"fixture only")
+            details = {
+                "method": method,
+                "status": "trained_not_evaluated" if method == "rmu" else "trained_merged",
+                "steps": 2,
+                "checkpoint" if method == "rmu" else "merged_checkpoint": str(checkpoint),
+                "checkpoint_identity" if method == "rmu" else "merged_checkpoint_files": [
+                    {
+                        "path": "config.json",
+                        "sha256": supplemental.native.digest(checkpoint / "config.json"),
+                    }
+                ],
+            }
+            if method == "rmu":
+                details["config"] = dict(profile)
+            else:
+                details.update(
+                    {
+                        key: profile[key]
+                        for key in ("model_id", "model_revision", "tokenizer_revision")
+                    }
+                )
+            path = folder / ("run.json" if method == "rmu" else "intervention.json")
+            write(path, details)
+            records[method] = {
+                "status": "trained_checkpoint_saved",
+                "returncode": 0,
+                "checkpoint": str(checkpoint),
+                "receipt": supplemental.evidence(path),
+            }
+        write(training / "execution.json", {"stage": "training_complete", "methods": records})
+        return training
 
     def repeat(self, path, *, response=None, scores=None, asset="same"):
         data = [
@@ -146,6 +200,9 @@ class SupplementalTests(unittest.TestCase):
         self.assertFalse(config["qualification"]["calibrates_scientific_thresholds"])
         self.assertEqual(sum(config["qualification"]["rows_by_task"].values()), 20)
         self.assertEqual(config["settings"], supplemental.SETTINGS)
+        self.assertEqual(config["required_checkpoints"], ["baseline", *supplemental.METHODS])
+        self.assertNotIn("methods", config)
+        self.assertNotIn("model_profile", config)
         supplemental.validate(self.addon)
         for task in supplemental.REPRESENTATIVES:
             spec, data, _ = supplemental.source(self.addon / "qualification/manifest.json", task)
@@ -228,13 +285,12 @@ class SupplementalTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "IDs differ"):
             supplemental.compare_repeats(a, b, ["2", "1"], supplemental.BENIGN)
 
-    def collect_fake(self, pass_gate):
-        config = self.prepare()
+    def collect_fake(self, pass_gate, *, methods=None, baseline_only=False):
+        config = self.prepare(**({"methods": methods} if methods is not None else {}))
         training = self.root / "training"
         write(training / "execution.json", {})
-        models = {
-            name: self.root / f"checkpoint-{name}" for name in ["baseline", *supplemental.METHODS]
-        }
+        panel = () if baseline_only else supplemental.selected_methods(methods)
+        models = {name: self.root / f"checkpoint-{name}" for name in ["baseline", *panel]}
         calls = []
 
         def invoke(addon, checkpoint, root, task, gpu, log, qualification=False):
@@ -258,7 +314,9 @@ class SupplementalTests(unittest.TestCase):
                 "compare_repeats",
                 **({"return_value": compare} if pass_gate else {"side_effect": compare}),
             ):
-                code = supplemental.collect(self.addon, training, self.root / "results")
+                code = supplemental.collect(
+                    self.addon, None if baseline_only else training, self.root / "results"
+                )
         return code, calls, supplemental.read(self.root / "results/supplemental_execution.json")
 
     def test_any_qualification_failure_prevents_every_locked_collection(self):
@@ -277,6 +335,230 @@ class SupplementalTests(unittest.TestCase):
         self.assertEqual(len(receipt["tasks"]), 72)
         self.assertEqual(receipt["expected_full_collections"], 72)
         self.assertFalse(receipt["scientific_calibration_established"])
+
+    def test_explicit_three_methods_preserve_order_and_bound_profile(self):
+        selected = ("rmu", "task_vector", "wga_kl")
+        profile = self.model_profile()
+        config = self.prepare(methods=selected, model_profile=profile)
+        self.assertEqual(config["methods"], list(selected))
+        self.assertEqual(config["required_checkpoints"], ["baseline", *selected])
+        self.assertEqual(config["model_profile"], profile)
+        supplemental.validate(self.addon)
+        write(Path(profile["model_path"]) / "config.json", {"model_type": "changed"})
+        with self.assertRaisesRegex(ValueError, "configuration hash differs"):
+            supplemental.validate(self.addon)
+
+    def test_invalid_method_subsets_and_model_pins_are_rejected_before_writes(self):
+        for methods in ((), ("rmu", "rmu"), ("unknown",), "rmu"):
+            with self.subTest(methods=methods):
+                with self.assertRaisesRegex(ValueError, "method|Methods"):
+                    self.prepare(methods=methods)
+                self.assertFalse(self.addon.exists())
+        profile = self.model_profile()
+        for key, value in (("model_revision", "bad"), ("config_sha256", "0" * 64)):
+            with self.subTest(key=key):
+                with self.assertRaisesRegex(ValueError, "profile|configuration"):
+                    self.prepare(model_profile={**profile, key: value})
+                self.assertFalse(self.addon.exists())
+
+    def test_three_method_collection_has_48_checks_and_48_locked_collections(self):
+        code, calls, receipt = self.collect_fake(True, methods=("rmu", "task_vector", "wga_kl"))
+        self.assertEqual(code, 0)
+        self.assertEqual(calls, [True] * 48 + [False] * 48)
+        self.assertEqual(receipt["expected_full_collections"], 48)
+        self.assertEqual(set(receipt["checkpoints"]), {"baseline", "rmu", "task_vector", "wga_kl"})
+
+    def test_baseline_only_collection_requires_no_training_and_runs_12_checks_first(self):
+        code, calls, receipt = self.collect_fake(True, baseline_only=True)
+        self.assertEqual(code, 0)
+        self.assertEqual(calls, [True] * 12 + [False] * 12)
+        self.assertEqual(receipt["expected_full_collections"], 12)
+        self.assertIsNone(receipt["training"])
+        self.assertEqual(receipt["collection_mode"], "baseline_only")
+        self.assertEqual(set(receipt["checkpoints"]), {"baseline"})
+
+    def test_baseline_gate_failure_prevents_every_locked_task(self):
+        code, calls, receipt = self.collect_fake(False, baseline_only=True)
+        self.assertEqual(code, 1)
+        self.assertEqual(calls, [True] * 12)
+        self.assertEqual(receipt["tasks"], {})
+
+    def test_preparation_cannot_write_inside_pinned_model(self):
+        profile = self.model_profile()
+        output = Path(profile["model_path"]) / "addon"
+        with self.assertRaisesRegex(ValueError, "pinned model checkpoint"):
+            supplemental.prepare(self.collector, self.dev, output, model_profile=profile)
+        self.assertFalse(output.exists())
+
+    def test_selected_analysis_runs_exactly_36_declared_pairs(self):
+        methods = ("rmu", "task_vector", "wga_kl")
+        self.prepare(methods=methods)
+        evaluation = self.root / "native-results"
+        full = self.collector / "evaluation/manifest.json"
+        receipt = {
+            "stage": "supplemental_collection_complete",
+            "no_update_passed": True,
+            "addon_config": supplemental.evidence(self.addon / "config.json"),
+            "checkpoints": {},
+            "tasks": {},
+        }
+        for name in ("baseline", *methods):
+            checkpoint = str(self.root / ("checkpoint-" + name))
+            receipt["checkpoints"][name] = checkpoint
+            for task in supplemental.PROTOCOLS:
+                root = evaluation / name / task
+                write(
+                    root / "run.json",
+                    {"model_identity": {"parameters": supplemental.SERIAL_MODEL_OPTIONS}},
+                )
+                write(root / "report.json", {})
+                jsonl(root / "predictions.jsonl", [{"id": "fixture"}])
+                status = evaluation / name / "status" / f"{task}.json"
+                write(
+                    status,
+                    {
+                        "status": "completed",
+                        "exit_code": 0,
+                        "full_supplemental_evaluation_bundle": True,
+                        "manifest_sha256": supplemental.native.digest(full),
+                        "checkpoint": checkpoint,
+                        "native_files_sha256": {
+                            filename: supplemental.native.digest(root / filename)
+                            for filename in ("run.json", "report.json", "predictions.jsonl")
+                        },
+                    },
+                )
+                receipt["tasks"][name + "/" + task] = {
+                    "status": "collected",
+                    "returncode": 0,
+                    "receipt": supplemental.evidence(status),
+                }
+        write(evaluation / "supplemental_execution.json", receipt)
+        calls = []
+
+        def compare(command, **kwargs):
+            calls.append(command)
+            output = Path(command[command.index("--output") + 1])
+            write(output / "paired.json", {"software_fixture": True})
+            return SimpleNamespace(returncode=0)
+
+        output = self.root / "selected-analysis"
+        with patch.object(supplemental.subprocess, "run", side_effect=compare):
+            self.assertEqual(supplemental.analyze(self.addon, evaluation, output), 0)
+        report = supplemental.read(output / "supplemental_analysis.json")
+        self.assertEqual(report["expected_pairs"], 36)
+        self.assertEqual(len(calls), 36)
+        self.assertEqual(
+            set(report["pairs"]), {m + "/" + t for m in methods for t in supplemental.PROTOCOLS}
+        )
+        self.assertEqual(report["stage"], "native_paired_complete")
+
+    def test_baseline_only_saved_outputs_cannot_be_labeled_paired_analysis(self):
+        self.prepare()
+        evaluation = self.root / "baseline-results"
+        write(
+            evaluation / "supplemental_execution.json",
+            {
+                "stage": "supplemental_collection_complete",
+                "no_update_passed": True,
+                "collection_mode": "baseline_only",
+            },
+        )
+        with self.assertRaisesRegex(ValueError, "trained post checkpoints"):
+            supplemental.analyze(self.addon, evaluation, self.root / "analysis")
+
+    def test_checkpoint_panel_validates_real_method_receipts_and_supports_old_path_shape(self):
+        profile = self.model_profile()
+        methods = ("rmu", "task_vector", "wga_kl")
+        training = self.training_panel(profile, methods)
+        panel = supplemental.checkpoint_panel(
+            self.collector, training, methods=methods, model_profile=profile
+        )
+        self.assertEqual(list(panel), ["baseline", *methods])
+        execution = supplemental.read(training / "execution.json")
+        for record in execution["methods"].values():
+            record["receipt"] = record["receipt"]["path"]
+        write(training / "execution.json", execution)
+        self.assertEqual(
+            supplemental.checkpoint_panel(
+                self.collector, training, methods=methods, model_profile=profile
+            ),
+            panel,
+        )
+        self.assertEqual(
+            supplemental.checkpoint_panel(self.collector, None, model_profile=profile),
+            {"baseline": Path(profile["model_path"])},
+        )
+
+    def test_checkpoint_panel_rejects_wrong_method_pin_output_and_config_bytes(self):
+        profile = self.model_profile()
+        methods = ("rmu", "task_vector", "wga_kl")
+        training = self.training_panel(profile, methods)
+        path = training / "wga_kl/intervention.json"
+        original = supplemental.read(path)
+        execution = supplemental.read(training / "execution.json")
+        for change in ("method", "pin", "checkpoint", "config"):
+            with self.subTest(change=change):
+                record = dict(original)
+                if change == "method":
+                    record["method"] = "npo_kl"
+                elif change == "pin":
+                    record["model_revision"] = "c" * 40
+                elif change == "checkpoint":
+                    record["merged_checkpoint"] = str(training / "task_vector/merged_checkpoint")
+                else:
+                    record["merged_checkpoint_files"] = [
+                        {"path": "config.json", "sha256": "0" * 64}
+                    ]
+                write(path, record)
+                execution["methods"]["wga_kl"]["receipt"] = supplemental.evidence(path)
+                write(training / "execution.json", execution)
+                with self.assertRaisesRegex(
+                    ValueError, "method differs|pin differs|checkpoint differs|configuration hash"
+                ):
+                    supplemental.checkpoint_panel(
+                        self.collector, training, methods=methods, model_profile=profile
+                    )
+
+    def test_prepare_cli_and_baseline_cli_use_explicit_selection(self):
+        profile = self.model_profile()
+        path = self.root / "profile.json"
+        write(path, profile)
+        code = supplemental.main(
+            [
+                "prepare",
+                "--collector-release",
+                str(self.collector),
+                "--development-bundle",
+                str(self.dev),
+                "--output",
+                str(self.addon),
+                "--methods",
+                "rmu",
+                "task_vector",
+                "wga_kl",
+                "--model-profile",
+                str(path),
+            ]
+        )
+        self.assertEqual(code, 0)
+        self.assertEqual(supplemental.read(self.addon / "config.json")["model_profile"], profile)
+        with patch.object(supplemental, "collect", return_value=0) as collect:
+            self.assertEqual(
+                supplemental.main(
+                    [
+                        "collect-baseline",
+                        "--addon",
+                        str(self.addon),
+                        "--output",
+                        str(self.root / "new-baseline"),
+                    ]
+                ),
+                0,
+            )
+        collect.assert_called_once_with(
+            self.addon.resolve(), output=(self.root / "new-baseline").resolve()
+        )
 
     def test_incomplete_training_panel_is_rejected(self):
         training = self.root / "training"

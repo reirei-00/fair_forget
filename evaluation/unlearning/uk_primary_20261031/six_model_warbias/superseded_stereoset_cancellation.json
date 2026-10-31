@@ -1,0 +1,31 @@
+{
+  "reason": "User explicitly selected WarBias training and measurements; this queued extension trains StereoSet.",
+  "selected_new_training_source": "WarBias",
+  "job_ids": [
+    "2609476",
+    "2609478",
+    "2609480",
+    "2609481",
+    "2609483",
+    "2609484",
+    "2609486",
+    "2609487",
+    "2609489",
+    "2609490"
+  ],
+  "baseline_jobs_retained": [
+    "2609475",
+    "2609479",
+    "2609482",
+    "2609485",
+    "2609488"
+  ],
+  "timestamp_utc": "2026-10-31T12:21:55.425652+00:00",
+  "before": "2609476|PENDING|(Priority)\n2609480|PENDING|(Priority)\n2609483|PENDING|(Priority)\n2609486|PENDING|(Priority)\n2609489|PENDING|(Priority)\n2609490|PENDING|(Dependency)\n2609487|PENDING|(Dependency)\n2609484|PENDING|(Dependency)\n2609481|PENDING|(Dependency)\n2609478|PENDING|(Dependency)\n",
+  "returncode": 0,
+  "stdout": "",
+  "stderr": "",
+  "after": "",
+  "ssh_returncode": 0,
+  "ssh_stderr": ""
+}

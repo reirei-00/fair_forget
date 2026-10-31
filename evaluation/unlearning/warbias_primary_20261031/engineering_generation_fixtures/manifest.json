@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "kind": "source_derived_engineering_generation_fixtures_not_published_measurements",
+  "fixture_only": true,
+  "measurement_results_eligible": false,
+  "datasets": {
+    "warbias_benign_uk": {
+      "filename": "data/warbias_benign_uk.jsonl",
+      "format": "adapted_jsonl_v1",
+      "language": "uk",
+      "protocol": "warbias_benign_generation_with_rubric_v1",
+      "rows": 2,
+      "sha256": "394fc7c7f4188624cd8b9bd2f55e622b50ae187f10ffef2c47924c40e9d92ac7",
+      "independent_clusters": 1,
+      "measurement_eligibility": "active",
+      "measurement_eligibility_reason": "Explicit source-derived engineering fixture for exact generation repeatability only; not a published study measurement source.",
+      "measurement_purpose": "engineering_exact_generation_repeat_only",
+      "source_role": "development",
+      "split": "development",
+      "fixture_only": true,
+      "measurement_results_eligible": false,
+      "release_state": "local_source_derived_engineering_fixture_not_published",
+      "derived_prompt_published": false,
+      "human_validated": false,
+      "source_repository": "FairForget/WarBias",
+      "source_revision": "164f355623c2da0028821e0942cad493558a6c13",
+      "source_provenance": [
+        {
+          "repo_id": "FairForget/WarBias",
+          "revision": "164f355623c2da0028821e0942cad493558a6c13",
+          "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+          "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9",
+          "published": true,
+          "role": "literal ordinary-sentence ancestor only; derived prompt is local"
+        }
+      ],
+      "pairing": {
+        "filename": "pairs/warbias_benign.jsonl",
+        "sha256": "3dda26fc226237602b235b545755fada6ead6911769444b7569344600a13f680",
+        "uk_task": "warbias_benign_uk",
+        "en_task": "warbias_benign_en",
+        "matched_rows": 2,
+        "excluded_uk_rows": 0,
+        "alignment": "same literal-source bilingual pairing and fixed counterpart instructions; engineering-only",
+        "fixture_only": true
+      }
+    },
+    "warbias_benign_en": {
+      "filename": "data/warbias_benign_en.jsonl",
+      "format": "adapted_jsonl_v1",
+      "language": "en",
+      "protocol": "warbias_benign_generation_with_rubric_v1",
+      "rows": 2,
+      "sha256": "c4c16c00534c05f5ace11668d4ddb03d10312b6b03ce88d4f9cc0d15d5f731fe",
+      "independent_clusters": 1,
+      "measurement_eligibility": "active",
+      "measurement_eligibility_reason": "Explicit source-derived engineering fixture for exact generation repeatability only; not a published study measurement source.",
+      "measurement_purpose": "engineering_exact_generation_repeat_only",
+      "source_role": "development",
+      "split": "development",
+      "fixture_only": true,
+      "measurement_results_eligible": false,
+      "release_state": "local_source_derived_engineering_fixture_not_published",
+      "derived_prompt_published": false,
+      "human_validated": false,
+      "source_repository": "FairForget/WarBias",
+      "source_revision": "164f355623c2da0028821e0942cad493558a6c13",
+      "source_provenance": [
+        {
+          "repo_id": "FairForget/WarBias",
+          "revision": "164f355623c2da0028821e0942cad493558a6c13",
+          "path": "research/september-2026/expansion/data/core_triplets.jsonl",
+          "sha256": "b58349bd74ac0b06cd0e48bdf8788e39b41a16ff6054b93457e8699af378e4c9",
+          "published": true,
+          "role": "literal ordinary-sentence ancestor only; derived prompt is local"
+        }
+      ],
+      "pairing": {
+        "filename": "pairs/warbias_benign.jsonl",
+        "sha256": "3dda26fc226237602b235b545755fada6ead6911769444b7569344600a13f680",
+        "uk_task": "warbias_benign_uk",
+        "en_task": "warbias_benign_en",
+        "matched_rows": 2,
+        "excluded_uk_rows": 0,
+        "alignment": "same literal-source bilingual pairing and fixed counterpart instructions; engineering-only",
+        "fixture_only": true
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-"""Fixed-target RMU for the explicitly configured Ukrainian Qwen3 pilot."""
+"""Fixed-target RMU for pinned Qwen3, Llama and text-only Gemma3 models."""
 
 from __future__ import annotations
 
@@ -6,9 +6,11 @@ import argparse
 import json
 import math
 import random
+import re
 from collections.abc import Mapping, Sequence
 from contextlib import contextmanager
 from pathlib import Path
+from types import SimpleNamespace
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -20,12 +22,107 @@ if TYPE_CHECKING:
     from .trainer import EncodedBatch
 
 
+def model_architecture(config: Any) -> dict[str, Any]:
+    """Bind each supported architecture to its exact text decoder and config."""
+
+    def value(obj, key, default=None):
+        return obj.get(key, default) if isinstance(obj, Mapping) else getattr(obj, key, default)
+
+    kind = value(config, "model_type")
+    definitions = {
+        "qwen3": ("Qwen3ForCausalLM", "AutoModelForCausalLM", "model.layers"),
+        "llama": ("LlamaForCausalLM", "AutoModelForCausalLM", "model.layers"),
+        "gemma3": (
+            "Gemma3ForConditionalGeneration",
+            "Gemma3ForConditionalGeneration",
+            "model.language_model.layers",
+        ),
+    }
+    if kind not in definitions:
+        raise ValueError("RMU supports only pinned Qwen3, Llama and Gemma3 architectures")
+    declared, loader, path = definitions[kind]
+    architectures = value(config, "architectures")
+    if architectures is not None and architectures != [declared]:
+        raise ValueError("declared architecture differs from the registered RMU loader")
+    text = value(config, "text_config") if kind == "gemma3" else config
+    if text is None or (kind == "gemma3" and value(text, "model_type") != "gemma3_text"):
+        raise ValueError("Gemma3 requires its nested gemma3_text configuration")
+    hidden, count = value(text, "hidden_size"), value(text, "num_hidden_layers")
+    if type(hidden) is not int or hidden <= 0 or type(count) is not int or count <= 0:
+        raise ValueError("the text config must declare positive hidden size and decoder depth")
+    return {
+        "model_type": kind,
+        "loader": loader,
+        "decoder_path": path,
+        "hidden_size": hidden,
+        "num_hidden_layers": count,
+        "input_modality": "text_only",
+    }
+
+
 def decoder_layers(model: nn.Module) -> nn.ModuleList:
-    """Resolve the Qwen decoder stack without guessing another model's structure."""
-    layers = getattr(getattr(model, "model", None), "layers", None)
-    if not isinstance(layers, nn.ModuleList) or not layers:
-        raise ValueError("expected the verified Qwen model.model.layers decoder stack")
+    """Resolve only the exact registered text stack, never the vision encoder."""
+    architecture = model_architecture(model.config)
+    layers = model
+    for component in architecture["decoder_path"].split("."):
+        layers = getattr(layers, component, None)
+    if not isinstance(layers, nn.ModuleList) or len(layers) != architecture["num_hidden_layers"]:
+        raise ValueError("model does not expose the registered complete text decoder stack")
     return layers
+
+
+def resolve_devices(settings: Mapping[str, Any], *, device_count: int):
+    """CUDA indices refer to the runner's allocated CUDA_VISIBLE_DEVICES order."""
+    reference = settings.get("reference_device", "same")
+    if not isinstance(reference, str) or not re.fullmatch(r"same|cuda(?::[0-9]+)?", reference):
+        raise ValueError("reference_device must be same or an explicitly allocated CUDA device")
+    index = 0 if reference in ("same", "cuda") else int(reference.split(":")[1])
+    if device_count < 1 or index >= device_count:
+        raise ValueError("RMU training/reference device is outside the visible CUDA allocation")
+    return torch.device("cuda:0"), torch.device("cuda", index)
+
+
+def load_rmu_model(model_path, architecture, device):
+    """Stream the full pinned checkpoint directly to its selected GPU."""
+    from transformers import AutoModelForCausalLM, Gemma3ForConditionalGeneration
+
+    factory = (
+        Gemma3ForConditionalGeneration
+        if architecture["loader"] == "Gemma3ForConditionalGeneration"
+        else AutoModelForCausalLM
+    )
+    model = factory.from_pretrained(
+        model_path,
+        torch_dtype=torch.bfloat16,
+        local_files_only=True,
+        attn_implementation="sdpa",
+        device_map={"": str(device)},
+    )
+    if model_architecture(model.config) != architecture:
+        raise ValueError("loaded architecture differs from the pinned config")
+    model.config.use_cache = False
+    if architecture["model_type"] == "gemma3":
+        model.config.text_config.use_cache = False
+    return model
+
+
+def prepare_tokenizer(tokenizer):
+    """Match the common trainer's offset, right-padding and EOS fallback policy."""
+    if not tokenizer.is_fast:
+        raise ValueError("RMU completion masks require fast-tokenizer character offsets")
+    original_pad = tokenizer.pad_token_id
+    if original_pad is None:
+        if tokenizer.eos_token_id is None:
+            raise ValueError("no pad or EOS token is available")
+        tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = "right"
+    return {
+        "original_pad_token_id": original_pad,
+        "effective_pad_token_id": tokenizer.pad_token_id,
+        "eos_as_pad": original_pad is None,
+        "padding_side": tokenizer.padding_side,
+        "chat_template_applied_to_training": False,
+    }
 
 
 def selected_parameters(
@@ -54,7 +151,8 @@ def selected_parameters(
         if len(matches) != 1:
             raise ValueError(f"layer {index} does not expose exactly one {suffix}")
         name, parameter = matches[0]
-        selected[f"model.layers.{index}.{name}"] = parameter
+        prefix = model_architecture(model.config)["decoder_path"]
+        selected[f"{prefix}.{index}.{name}"] = parameter
     for parameter in model.parameters():
         parameter.requires_grad_(False)
     for parameter in selected.values():
@@ -107,6 +205,17 @@ def forward_activation(model: nn.Module, batch: EncodedBatch, module: nn.Module)
     if len(captured) != 1:
         raise RuntimeError("the selected decoder module must execute exactly once per forward")
     return captured[0]
+
+
+def reference_forward_activation(model, batch, module, *, reference_device, training_device):
+    """Transfer only retain inputs and detached reference states between GPUs."""
+    inputs = SimpleNamespace(
+        input_ids=batch.input_ids.to(reference_device),
+        attention_mask=batch.attention_mask.to(reference_device),
+    )
+    with torch.no_grad():
+        activation = forward_activation(model, inputs, module)
+    return activation.detach().to(training_device)
 
 
 def masked_activation_mse(activation: Tensor, target: Tensor, token_mask: Tensor) -> Tensor:
@@ -190,12 +299,16 @@ def _settings(config: Mapping[str, Any]) -> dict[str, Any]:
             raise ValueError(f"primary RMU {name} must be finite and positive")
     if settings["trainable_dtype"] != "float32" or settings["compute_dtype"] != "bfloat16":
         raise ValueError("this registered RMU arm requires FP32 masters and BF16 autocast compute")
+    # Validate the optional selector without requiring a real GPU during config tests.
+    reference = settings.get("reference_device", "same")
+    if not isinstance(reference, str) or not re.fullmatch(r"same|cuda(?::[0-9]+)?", reference):
+        raise ValueError("reference_device must be same or an explicitly allocated CUDA device")
     return settings
 
 
 def run(config_path: str | Path, output_dir: str | Path) -> dict[str, Any]:
     """Train only after the common source/role validator and CUDA checks succeed."""
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from transformers import AutoTokenizer
 
     from .trainer import (
         encode_batch,
@@ -211,10 +324,12 @@ def run(config_path: str | Path, output_dir: str | Path) -> dict[str, Any]:
     config, streams, provenance = validate_config(config_path, methods={"rmu"})
     settings = _settings(config)
     model_definition = json.loads((Path(config["model_path"]) / "config.json").read_text())
-    if model_definition.get("model_type") != "qwen3":
-        raise ValueError("this primary RMU integration is verified only for Qwen3")
+    architecture = model_architecture(model_definition)
     if not torch.cuda.is_available():
         raise RuntimeError("RMU requires an allocated CUDA GPU; no training was started")
+    training_device, reference_device = resolve_devices(
+        settings, device_count=torch.cuda.device_count()
+    )
     output = prepare_output(Path(output_dir))
     training = config["training"]
     seed = int(training["seed"])
@@ -223,16 +338,9 @@ def run(config_path: str | Path, output_dir: str | Path) -> dict[str, Any]:
     rng = random.Random(seed)
     model_path = config["model_path"]
     tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True, local_files_only=True)
-    if tokenizer.pad_token_id is None:
-        raise ValueError("the pinned tokenizer must declare its padding token")
-    model = AutoModelForCausalLM.from_pretrained(
-        model_path, torch_dtype=torch.bfloat16, local_files_only=True, attn_implementation="sdpa"
-    ).to("cuda")
-    if model.config.model_type != "qwen3":
-        raise ValueError("this primary RMU integration is verified only for Qwen3")
-    reference = AutoModelForCausalLM.from_pretrained(
-        model_path, torch_dtype=torch.bfloat16, local_files_only=True, attn_implementation="sdpa"
-    ).to("cuda")
+    tokenizer_policy = prepare_tokenizer(tokenizer)
+    model = load_rmu_model(model_path, architecture, training_device)
+    reference = load_rmu_model(model_path, architecture, reference_device)
     reference.requires_grad_(False).eval()
     model.config.use_cache = False
     reference.config.use_cache = False
@@ -248,10 +356,10 @@ def run(config_path: str | Path, output_dir: str | Path) -> dict[str, Any]:
         name: parameter.detach().cpu().clone() for name, parameter in parameters.items()
     }
     vector = fixed_control_vector(
-        model.config.hidden_size,
+        architecture["hidden_size"],
         coefficient=settings["steering_coefficient"],
         seed=seed,
-        device=model.device,
+        device=training_device,
     )
     torch.save(vector.detach().cpu(), output / "control_vector.pt")
     optimizer = torch.optim.AdamW(parameters.values(), lr=training["learning_rate"], weight_decay=0)
@@ -277,18 +385,29 @@ def run(config_path: str | Path, output_dir: str | Path) -> dict[str, Any]:
                     for i in range(len(forget_rows))
                 ]
                 forget = encode_batch(
-                    tokenizer, forget_rows, max_length=training["max_length"], device=model.device
+                    tokenizer,
+                    forget_rows,
+                    max_length=training["max_length"],
+                    device=training_device,
                 )
                 retain = encode_batch(
-                    tokenizer, retain_rows, max_length=training["max_length"], device=model.device
+                    tokenizer,
+                    retain_rows,
+                    max_length=training["max_length"],
+                    device=training_device,
                 )
                 optimizer.zero_grad(set_to_none=True)
                 model.train()
                 with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
                     forget_activation = forward_activation(model, forget, hook)
                     retain_activation = forward_activation(model, retain, hook)
-                    with torch.no_grad():
-                        reference_activation = forward_activation(reference, retain, reference_hook)
+                    reference_activation = reference_forward_activation(
+                        reference,
+                        retain,
+                        reference_hook,
+                        reference_device=reference_device,
+                        training_device=training_device,
+                    )
                 loss = rmu_loss(
                     forget_activation,
                     retain_activation,
@@ -355,6 +474,16 @@ def run(config_path: str | Path, output_dir: str | Path) -> dict[str, Any]:
         "status": "trained_not_evaluated",
         "steps": step,
         "settings": settings,
+        "architecture": architecture,
+        "devices": {
+            "training": str(training_device),
+            "reference": str(reference_device),
+            "reference_device_requested": settings.get("reference_device", "same"),
+            "separate_reference_device": training_device != reference_device,
+            "reference_transfer": "retain inputs to reference; detached states to training device",
+            "visible_cuda_device_count": torch.cuda.device_count(),
+        },
+        "tokenizer_policy": tokenizer_policy,
         "retain_sampler": training["retain_sampler"],
         "config": config,
         "provenance": provenance,

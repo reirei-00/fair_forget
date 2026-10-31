@@ -1,0 +1,471 @@
+{
+  "kind": "six_WarBias_models_heldout_training_source_and_18_metric_entries",
+  "status": "scheduler_submitted_not_completed",
+  "plan": {
+    "training_release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+    "training_checksums_sha256": "8712417bdf6a0207e2efd10e07f948305d3735d74bdbcb5a8cbfab9db1b117d8",
+    "runner_release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2",
+    "runner_checksums_sha256": "d968381b39c8be53a3bb6c2fc76d967c5c89f8919a9488914184352cb53ddc37",
+    "analysis_source": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031_all_metrics_v3/evaluator",
+    "collector_release": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5",
+    "runner_preflight_sha256": "88e8fb7ed3377a81e7eb66dd530afde3626651b8a61f3b4cc86984b5ce726975",
+    "models": {
+      "qwen3_8b": {
+        "training_job_id": "2609596",
+        "training": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596",
+        "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_qwen3_8b_v1",
+        "addon_checksums_sha256": "afef1419e96c75aaad764f50627469be45dbe72945d517e1fd1018a9f40ce3d5"
+      },
+      "llama31_8b_instruct": {
+        "training_job_id": "2609597",
+        "training": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597",
+        "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_llama31_8b_instruct_v1",
+        "addon_checksums_sha256": "e5680c9663e21f090a143fe92669d10a3a2e4ba81af876cfa25e76c4d0720e59"
+      },
+      "gemma3_12b_it": {
+        "training_job_id": "2609598",
+        "training": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598",
+        "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_gemma3_12b_it_v1",
+        "addon_checksums_sha256": "11f999f7ddcebdc74363c103d7aa60ad898f35c889acf82bafea1f036dd620d1"
+      },
+      "lapa12b_instruct": {
+        "training_job_id": "2609599",
+        "training": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599",
+        "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_lapa12b_instruct_v1",
+        "addon_checksums_sha256": "3ddb474c7958a646c64a5571d56cc36abe469c89e40ff2e1a51a6e51251b1eac"
+      },
+      "mamay12b_v2": {
+        "training_job_id": "2609600",
+        "training": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600",
+        "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_mamay12b_v2_v1",
+        "addon_checksums_sha256": "8dd90ab5f1511e4a55d0a707a55abbf8a8eccc6e741e5b68c890014110f29649"
+      },
+      "mamay27b_v2": {
+        "training_job_id": "2609601",
+        "training": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601",
+        "addon": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_mamay27b_v2_v1",
+        "addon_checksums_sha256": "de7eff38f74c9656612fc7e74eff7720d603478a5543bc8197949c7a5dc6e5cc"
+      }
+    }
+  },
+  "submitted_at_utc": "2026-10-31T12:41:23.398224+00:00",
+  "models": {
+    "qwen3_8b": {
+      "heldout": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-qwen3_8b-heldout-%j.log",
+          "--dependency=afterok:2609596",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_qwen3_8b_v1/deploy/unlearning_primary/supplemental.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_qwen3_8b_v1",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b"
+        ],
+        "returncode": 0,
+        "stdout": "2609625\n",
+        "stderr": "",
+        "job_id": "2609625",
+        "collection_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/supplemental-2609625",
+        "native_analysis_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/supplemental-analysis-2609625"
+      },
+      "training_diagnostic": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-qwen3_8b-training_diagnostic-%j.log",
+          "--dependency=afterok:2609596",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2/deploy/unlearning_primary/training_diagnostic.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+          "qwen3_8b",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_qwen3_8b_v1",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b"
+        ],
+        "returncode": 0,
+        "stdout": "2609626\n",
+        "stderr": "",
+        "job_id": "2609626",
+        "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-diagnostic-2609626"
+      },
+      "all_metrics": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-qwen3_8b-all_metrics-%j.log",
+          "--dependency=afterok:2609625",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2/deploy/unlearning_primary/warbias_metrics.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+          "qwen3_8b",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/training-2609596",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/supplemental-2609625",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031_all_metrics_v3/evaluator",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b"
+        ],
+        "returncode": 0,
+        "stdout": "2609627\n",
+        "stderr": "",
+        "job_id": "2609627",
+        "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/warbias-metrics-2609627"
+      }
+    },
+    "llama31_8b_instruct": {
+      "heldout": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-llama31_8b_instruct-heldout-%j.log",
+          "--dependency=afterok:2609597",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_llama31_8b_instruct_v1/deploy/unlearning_primary/supplemental.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_llama31_8b_instruct_v1",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct"
+        ],
+        "returncode": 0,
+        "stdout": "2609628\n",
+        "stderr": "",
+        "job_id": "2609628",
+        "collection_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/supplemental-2609628",
+        "native_analysis_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/supplemental-analysis-2609628"
+      },
+      "training_diagnostic": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-llama31_8b_instruct-training_diagnostic-%j.log",
+          "--dependency=afterok:2609597",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2/deploy/unlearning_primary/training_diagnostic.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+          "llama31_8b_instruct",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_llama31_8b_instruct_v1",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct"
+        ],
+        "returncode": 0,
+        "stdout": "2609629\n",
+        "stderr": "",
+        "job_id": "2609629",
+        "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-diagnostic-2609629"
+      },
+      "all_metrics": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-llama31_8b_instruct-all_metrics-%j.log",
+          "--dependency=afterok:2609628",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2/deploy/unlearning_primary/warbias_metrics.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+          "llama31_8b_instruct",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/training-2609597",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/supplemental-2609628",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031_all_metrics_v3/evaluator",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct"
+        ],
+        "returncode": 0,
+        "stdout": "2609630\n",
+        "stderr": "",
+        "job_id": "2609630",
+        "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/llama31_8b_instruct/warbias-metrics-2609630"
+      }
+    },
+    "gemma3_12b_it": {
+      "heldout": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-gemma3_12b_it-heldout-%j.log",
+          "--dependency=afterok:2609598",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_gemma3_12b_it_v1/deploy/unlearning_primary/supplemental.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_gemma3_12b_it_v1",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it"
+        ],
+        "returncode": 0,
+        "stdout": "2609631\n",
+        "stderr": "",
+        "job_id": "2609631",
+        "collection_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/supplemental-2609631",
+        "native_analysis_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/supplemental-analysis-2609631"
+      },
+      "training_diagnostic": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-gemma3_12b_it-training_diagnostic-%j.log",
+          "--dependency=afterok:2609598",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2/deploy/unlearning_primary/training_diagnostic.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+          "gemma3_12b_it",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_gemma3_12b_it_v1",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it"
+        ],
+        "returncode": 0,
+        "stdout": "2609632\n",
+        "stderr": "",
+        "job_id": "2609632",
+        "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-diagnostic-2609632"
+      },
+      "all_metrics": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-gemma3_12b_it-all_metrics-%j.log",
+          "--dependency=afterok:2609631",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2/deploy/unlearning_primary/warbias_metrics.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+          "gemma3_12b_it",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/training-2609598",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/supplemental-2609631",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031_all_metrics_v3/evaluator",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it"
+        ],
+        "returncode": 0,
+        "stdout": "2609633\n",
+        "stderr": "",
+        "job_id": "2609633",
+        "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/gemma3_12b_it/warbias-metrics-2609633"
+      }
+    },
+    "lapa12b_instruct": {
+      "heldout": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-lapa12b_instruct-heldout-%j.log",
+          "--dependency=afterok:2609599",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_lapa12b_instruct_v1/deploy/unlearning_primary/supplemental.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_lapa12b_instruct_v1",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct"
+        ],
+        "returncode": 0,
+        "stdout": "2609634\n",
+        "stderr": "",
+        "job_id": "2609634",
+        "collection_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/supplemental-2609634",
+        "native_analysis_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/supplemental-analysis-2609634"
+      },
+      "training_diagnostic": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-lapa12b_instruct-training_diagnostic-%j.log",
+          "--dependency=afterok:2609599",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2/deploy/unlearning_primary/training_diagnostic.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+          "lapa12b_instruct",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_lapa12b_instruct_v1",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct"
+        ],
+        "returncode": 0,
+        "stdout": "2609635\n",
+        "stderr": "",
+        "job_id": "2609635",
+        "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-diagnostic-2609635"
+      },
+      "all_metrics": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-lapa12b_instruct-all_metrics-%j.log",
+          "--dependency=afterok:2609634",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2/deploy/unlearning_primary/warbias_metrics.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+          "lapa12b_instruct",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/training-2609599",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/supplemental-2609634",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031_all_metrics_v3/evaluator",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct"
+        ],
+        "returncode": 0,
+        "stdout": "2609636\n",
+        "stderr": "",
+        "job_id": "2609636",
+        "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/lapa12b_instruct/warbias-metrics-2609636"
+      }
+    },
+    "mamay12b_v2": {
+      "heldout": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-mamay12b_v2-heldout-%j.log",
+          "--dependency=afterok:2609600",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_mamay12b_v2_v1/deploy/unlearning_primary/supplemental.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_mamay12b_v2_v1",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2"
+        ],
+        "returncode": 0,
+        "stdout": "2609637\n",
+        "stderr": "",
+        "job_id": "2609637",
+        "collection_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/supplemental-2609637",
+        "native_analysis_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/supplemental-analysis-2609637"
+      },
+      "training_diagnostic": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-mamay12b_v2-training_diagnostic-%j.log",
+          "--dependency=afterok:2609600",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2/deploy/unlearning_primary/training_diagnostic.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+          "mamay12b_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_mamay12b_v2_v1",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2"
+        ],
+        "returncode": 0,
+        "stdout": "2609638\n",
+        "stderr": "",
+        "job_id": "2609638",
+        "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-diagnostic-2609638"
+      },
+      "all_metrics": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-mamay12b_v2-all_metrics-%j.log",
+          "--dependency=afterok:2609637",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2/deploy/unlearning_primary/warbias_metrics.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+          "mamay12b_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/training-2609600",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/supplemental-2609637",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031_all_metrics_v3/evaluator",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2"
+        ],
+        "returncode": 0,
+        "stdout": "2609639\n",
+        "stderr": "",
+        "job_id": "2609639",
+        "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay12b_v2/warbias-metrics-2609639"
+      }
+    },
+    "mamay27b_v2": {
+      "heldout": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-mamay27b_v2-heldout-%j.log",
+          "--dependency=afterok:2609601",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_mamay27b_v2_v1/deploy/unlearning_primary/supplemental.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_mamay27b_v2_v1",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2"
+        ],
+        "returncode": 0,
+        "stdout": "2609640\n",
+        "stderr": "",
+        "job_id": "2609640",
+        "collection_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/supplemental-2609640",
+        "native_analysis_output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/supplemental-analysis-2609640"
+      },
+      "training_diagnostic": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-mamay27b_v2-training_diagnostic-%j.log",
+          "--dependency=afterok:2609601",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2/deploy/unlearning_primary/training_diagnostic.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+          "mamay27b_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_mamay27b_v2_v1",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2"
+        ],
+        "returncode": 0,
+        "stdout": "2609641\n",
+        "stderr": "",
+        "job_id": "2609641",
+        "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-diagnostic-2609641"
+      },
+      "all_metrics": {
+        "command": [
+          "sbatch",
+          "--parsable",
+          "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-mamay27b_v2-all_metrics-%j.log",
+          "--dependency=afterok:2609640",
+          "--kill-on-invalid-dep=yes",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2/deploy/unlearning_primary/warbias_metrics.sbatch",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/warbias_primary_20261031_runners_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/warbias_primary_20261031_v1",
+          "mamay27b_v2",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/training-2609601",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/supplemental-2609640",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/analysis_releases/uk_primary_20261031_all_metrics_v3/evaluator",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/releases/uk_primary_20261031_eval_v5",
+          "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2"
+        ],
+        "returncode": 0,
+        "stdout": "2609642\n",
+        "stderr": "",
+        "job_id": "2609642",
+        "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/mamay27b_v2/warbias-metrics-2609642"
+      }
+    }
+  },
+  "heldout_full_collections_expected": 288,
+  "heldout_native_pairs_expected": 216,
+  "training_source_full_collections_expected": 24,
+  "training_source_pairs_expected": 18,
+  "all_metrics_reports_expected": 18,
+  "all_metric_entries_expected": 324,
+  "all_18_metrics_qualified": false,
+  "current_completed_pairs": 0,
+  "engineering_fixtures_enter_study_metrics": false,
+  "qwen_baseline": {
+    "command": [
+      "sbatch",
+      "--parsable",
+      "--output=/e/project1/e-dev-2026d09-075/fairforget/unlearning/20261031/warbias-qwen-clean-baseline-%j.log",
+      "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_qwen3_8b_v1/deploy/unlearning_primary/baseline_warbias.sbatch",
+      "/e/project1/e-dev-2026d09-075/fairforget/unlearning/supplements/warbias_primary_20261031_qwen3_8b_v1",
+      "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b"
+    ],
+    "returncode": 0,
+    "stdout": "2609643\n",
+    "stderr": "",
+    "job_id": "2609643",
+    "output": "/e/project1/e-dev-2026d09-075/fairforget/unlearning/results/warbias_primary_20261031/qwen3_8b/baseline-2609643"
+  },
+  "scheduler_snapshot": "2609643|PENDING|(Resources)|(null)\n2609642|PENDING|(Resources)|afterok:2609640(unfulfilled)\n2609641|PENDING|(Dependency)|afterok:2609601(unfulfilled)\n2609640|PENDING|(Dependency)|afterok:2609601(unfulfilled)\n2609639|PENDING|(Dependency)|afterok:2609637(unfulfilled)\n2609638|PENDING|(Dependency)|afterok:2609600(unfulfilled)\n2609637|PENDING|(Dependency)|afterok:2609600(unfulfilled)\n2609636|PENDING|(Dependency)|afterok:2609634(unfulfilled)\n2609635|PENDING|(Dependency)|afterok:2609599(unfulfilled)\n2609634|PENDING|(Dependency)|afterok:2609599(unfulfilled)\n2609633|PENDING|(Dependency)|afterok:2609631(unfulfilled)\n2609632|PENDING|(Dependency)|afterok:2609598(unfulfilled)\n2609631|PENDING|(Dependency)|afterok:2609598(unfulfilled)\n2609630|PENDING|(Dependency)|afterok:2609628(unfulfilled)\n2609629|PENDING|(Dependency)|afterok:2609597(unfulfilled)\n2609628|PENDING|(Dependency)|afterok:2609597(unfulfilled)\n2609627|PENDING|(Dependency)|afterok:2609625(unfulfilled)\n2609626|PENDING|(Dependency)|afterok:2609596(unfulfilled)\n2609625|PENDING|(Dependency)|afterok:2609596(unfulfilled)\n",
+  "ssh_returncode": 0,
+  "ssh_stderr": ""
+}

@@ -1,0 +1,264 @@
+{
+  "kind": "actual_six_tokenizer_warbias_predicate_mask_and_length_audit",
+  "observed_at_utc": "2026-10-31T12:31:47.485673+00:00",
+  "transformers": "4.57.6",
+  "models": [
+    {
+      "model_id": "qwen3_8b",
+      "repository": "Qwen/Qwen3-8B",
+      "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "tokenizer_is_fast": true,
+      "banks": {
+        "forget_train": {
+          "rows": 137,
+          "max_tokens": 70,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "correct_train": {
+          "rows": 137,
+          "max_tokens": 78,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "retain_train": {
+          "rows": 137,
+          "max_tokens": 61,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "retain_dev": {
+          "rows": 96,
+          "max_tokens": 56,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "dev": {
+          "rows": 288,
+          "max_tokens": 78,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        }
+      },
+      "forget_lexical_prompt_overlap_count": 0,
+      "violations": []
+    },
+    {
+      "model_id": "llama31_8b_instruct",
+      "repository": "meta-llama/Llama-3.1-8B-Instruct",
+      "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+      "tokenizer_is_fast": true,
+      "banks": {
+        "forget_train": {
+          "rows": 137,
+          "max_tokens": 43,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "correct_train": {
+          "rows": 137,
+          "max_tokens": 43,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "retain_train": {
+          "rows": 137,
+          "max_tokens": 43,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "retain_dev": {
+          "rows": 96,
+          "max_tokens": 34,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "dev": {
+          "rows": 288,
+          "max_tokens": 41,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        }
+      },
+      "forget_lexical_prompt_overlap_count": 0,
+      "violations": []
+    },
+    {
+      "model_id": "gemma3_12b_it",
+      "repository": "google/gemma-3-12b-it",
+      "revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+      "tokenizer_is_fast": true,
+      "banks": {
+        "forget_train": {
+          "rows": 137,
+          "max_tokens": 43,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "correct_train": {
+          "rows": 137,
+          "max_tokens": 43,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "retain_train": {
+          "rows": 137,
+          "max_tokens": 39,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "retain_dev": {
+          "rows": 96,
+          "max_tokens": 33,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "dev": {
+          "rows": 288,
+          "max_tokens": 43,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        }
+      },
+      "forget_lexical_prompt_overlap_count": 0,
+      "violations": []
+    },
+    {
+      "model_id": "lapa12b_instruct",
+      "repository": "lapa-llm/lapa-v0.1.2-instruct",
+      "revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+      "tokenizer_is_fast": true,
+      "banks": {
+        "forget_train": {
+          "rows": 137,
+          "max_tokens": 24,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "correct_train": {
+          "rows": 137,
+          "max_tokens": 25,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "retain_train": {
+          "rows": 137,
+          "max_tokens": 23,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "retain_dev": {
+          "rows": 96,
+          "max_tokens": 21,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "dev": {
+          "rows": 288,
+          "max_tokens": 24,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        }
+      },
+      "forget_lexical_prompt_overlap_count": 0,
+      "violations": []
+    },
+    {
+      "model_id": "mamay12b_v2",
+      "repository": "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0",
+      "revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+      "tokenizer_is_fast": true,
+      "banks": {
+        "forget_train": {
+          "rows": 137,
+          "max_tokens": 43,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "correct_train": {
+          "rows": 137,
+          "max_tokens": 43,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "retain_train": {
+          "rows": 137,
+          "max_tokens": 39,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "retain_dev": {
+          "rows": 96,
+          "max_tokens": 33,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "dev": {
+          "rows": 288,
+          "max_tokens": 43,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        }
+      },
+      "forget_lexical_prompt_overlap_count": 0,
+      "violations": []
+    },
+    {
+      "model_id": "mamay27b_v2",
+      "repository": "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0",
+      "revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+      "tokenizer_is_fast": true,
+      "banks": {
+        "forget_train": {
+          "rows": 137,
+          "max_tokens": 43,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "correct_train": {
+          "rows": 137,
+          "max_tokens": 43,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "retain_train": {
+          "rows": 137,
+          "max_tokens": 39,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "retain_dev": {
+          "rows": 96,
+          "max_tokens": 33,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        },
+        "dev": {
+          "rows": 288,
+          "max_tokens": 43,
+          "over_256": 0,
+          "boundary_overlapping_tokens": 0
+        }
+      },
+      "forget_lexical_prompt_overlap_count": 0,
+      "violations": []
+    }
+  ],
+  "passed": true,
+  "gpu_model_calls": 0,
+  "model_weight_loads": 0,
+  "downloads": 0,
+  "new_jobs": 0,
+  "data_files_sha256": {
+    "case_review.jsonl": "d2289954f85c963ea8626c49694b20a0792e3df8fa7f59bc9501e27ee5029214",
+    "correct_train.jsonl": "6b4388e617824681ef3855c0f68dd8842b53769f50fae540b2301b504e1257f9",
+    "dev.jsonl": "bfc6e8be8a755f9d36d7971f174f29c9e23ae7df49dd8f8626f9db785217a520",
+    "forget_train.jsonl": "e92ed545a8bc06da26f423da858a06ac4e5e4a648fd670ed3e79d9b3ec88a0ba",
+    "retain_dev.jsonl": "a5849fec3e5c003d06701d0755db14a75ea1a9c46633b21512c1dd2107659536",
+    "retain_train.jsonl": "6d7f8524ca52fa3cf5adbb35d953f7fd4bbd46b7327252e0597d3210bcab87e2",
+    "reviewed_candidates.jsonl": "0974bac08ec2fb96d95c7326dd0ff0e8b24475fef0cbbbe8f381fbc358060b9a",
+    "reviewed_development.jsonl": "11242cccc5f19e3e4876d99ab73d613c0803ea0515dc74f21ea875f080432100"
+  },
+  "binding_sha256": "88682f9dcb475973b2cba55f13f60ba6d6086dc0697df8e1a07b55d7475ccff2",
+  "ssh_stderr": ""
+}

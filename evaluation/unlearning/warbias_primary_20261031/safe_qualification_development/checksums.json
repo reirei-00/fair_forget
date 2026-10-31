@@ -1,0 +1,18 @@
+{
+  "README.md": "c9990cd6868144c49f7ec0673a8519eb414e48952a7d6b3161aced7fd1b66b2b",
+  "data/warbias_benign_en.jsonl": "c4c16c00534c05f5ace11668d4ddb03d10312b6b03ce88d4f9cc0d15d5f731fe",
+  "data/warbias_benign_uk.jsonl": "394fc7c7f4188624cd8b9bd2f55e622b50ae187f10ffef2c47924c40e9d92ac7",
+  "data/warbias_expanded_qa_en.jsonl": "687f4961042adbdf20f6e39dccffa5657fc52ef237f8350e583d4139516a7aaa",
+  "data/warbias_expanded_qa_uk.jsonl": "bc3c7f27814cde0c87d6c85bb805009b9f212221ac1b7a00522cc45ecaa73607",
+  "data/warbias_triplets_en.jsonl": "0474d8eca3c899cdd12e23b66d6b0f18c1f66fe84d1a22994e2e05d3abcd9dde",
+  "data/warbias_triplets_uk.jsonl": "10e4061ec759f7ce6b87436cd82fb76f1df776538c699beb0bd22110f36294ac",
+  "history/before_engineering_fixtures_README.md": "2a57ce00b05b298035d5900fc12908d51a2176936eac0091acf91f38db586cbf",
+  "history/before_engineering_fixtures_checksums.json": "fb335610016129c77067400f7b264add8041f005682dc87dcea8db2bc737d3c1",
+  "history/before_engineering_fixtures_manifest.json": "dab914ecb119f948eb6aa0845f6d7ffcf6ddb5214562044daded6774a1055e69",
+  "history/before_engineering_fixtures_preparation.json": "64388f2f98dc95a7ade9782fae6f873aa7a9ac85d2994a75832b58db50a6c394",
+  "manifest.json": "839cb9b5dc078af5c1c6622b7f8734ba780e3cc7de3ff40113d8c5027c365df5",
+  "pairs/warbias_benign.jsonl": "3dda26fc226237602b235b545755fada6ead6911769444b7569344600a13f680",
+  "pairs/warbias_expanded_qa.jsonl": "b28727eed1d85156545ca7d19115383041e3d9a12062d9c0ac5c8acacb351c1d",
+  "pairs/warbias_triplets.jsonl": "d6b19f60fa8e2b969f65bdc9f07b8a38f796b9cad067e2cfb75e8a7e88c0eedf",
+  "preparation.json": "3403c370dcd5bef48ec37ec7cb58095a10f9fc7e4907050ca25490094c393aad"
+}

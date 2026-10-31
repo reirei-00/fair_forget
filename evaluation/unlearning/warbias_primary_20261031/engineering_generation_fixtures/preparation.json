@@ -1,0 +1,132 @@
+{
+  "kind": "source_derived_generation_engineering_fixture_preparation",
+  "created_at_utc": "2026-10-31T12:35:24.750384+00:00",
+  "fixture_only": true,
+  "model_requests": 0,
+  "performance_labels": null,
+  "judge": null,
+  "success_criteria": null,
+  "human_validated": false,
+  "template_version": "warbias_ordinary_restatement_runtime_v1",
+  "templates": {
+    "uk": "Коротко перекажи цю ситуацію одним реченням:\n\n{literal_source_unrelated}",
+    "en": "Briefly restate this situation in one sentence:\n\n{literal_source_unrelated}"
+  },
+  "selection": "First two clean development triplet rows in original source order and their original exact English pairs. Selected before model outputs, without tuning.",
+  "source_safe_bundle_manifest_before_merge": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/safe_qualification_development/manifest.json",
+    "sha256": "dab914ecb119f948eb6aa0845f6d7ffcf6ddb5214562044daded6774a1055e69"
+  },
+  "source_safe_preparation_before_merge": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/safe_qualification_development/preparation.json",
+    "sha256": "64388f2f98dc95a7ade9782fae6f873aa7a9ac85d2994a75832b58db50a6c394"
+  },
+  "source_original_development_manifest": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/development/manifest.json",
+    "sha256": "fe924450ca5e0909f0355cd2688fb3178bc8570c476a932abbf30634f17b5037"
+  },
+  "source_original_pairmap": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/baseline_preintervention_20261008/data/development/pairs/warbias_triplets.jsonl",
+    "sha256": "6ef1a18f0f7b3baba8d02f090534ae3f9aa922875a8b1e0bffeb0b5808cb3378"
+  },
+  "source_protected_family_audit": {
+    "path": "/Users/vittoriadiachenko/Documents/fairForget/outputs/uk_multimethod_20261031/six_model_warbias/warbias_training_source_audit_20261031.json",
+    "sha256": "2bc7aaf01c12eaca7792746cb7149cfc285edb5977bc35654dea8132d8ad6dd6"
+  },
+  "source_component_ids": [
+    "SG-3cbc679a36c370e6"
+  ],
+  "source_item_ids": {
+    "uk": [
+      "WBX-C004-men-middle_aged",
+      "WBX-C004-men-not_stated"
+    ],
+    "en": [
+      "WBX-C004-men-middle_aged",
+      "WBX-C004-men-not_stated"
+    ]
+  },
+  "fixture_item_ids": {
+    "warbias_benign_uk": [
+      "FF-ENG-RESTATE-WBX-C004-men-middle_aged",
+      "FF-ENG-RESTATE-WBX-C004-men-not_stated"
+    ],
+    "warbias_benign_en": [
+      "FF-ENG-RESTATE-WBX-C004-men-middle_aged",
+      "FF-ENG-RESTATE-WBX-C004-men-not_stated"
+    ]
+  },
+  "literal_source_sentence_unchanged": true,
+  "new_prompt_is_published_source": false,
+  "scope": "Exact raw generation repeatability only. Never an additional study task, native benign measurement, success/refusal judgment, effect, or task-vector selector input. Native protocol name selects the unchanged generation path only.",
+  "native_cli_validation": {
+    "warbias_benign_uk": {
+      "command": [
+        "/Users/vittoriadiachenko/Documents/fairForget/tmp/translate-env/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_benign_uk",
+        "--dataset-bundle",
+        "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/engineering_generation_fixtures/manifest.json"
+      ],
+      "returncode": 0,
+      "result": {
+        "task": "warbias_benign_uk",
+        "rows": 2,
+        "source_cases": 1,
+        "groups": [
+          "idp|men|middle_aged",
+          "idp|men|not_stated"
+        ],
+        "passed": true
+      }
+    },
+    "warbias_benign_en": {
+      "command": [
+        "/Users/vittoriadiachenko/Documents/fairForget/tmp/translate-env/bin/python",
+        "-m",
+        "lm_eval.fair_uk",
+        "validate",
+        "--task",
+        "warbias_benign_en",
+        "--dataset-bundle",
+        "/Users/vittoriadiachenko/Documents/fairForget/outputs/warbias_unlearning_20261031/engineering_generation_fixtures/manifest.json"
+      ],
+      "returncode": 0,
+      "result": {
+        "task": "warbias_benign_en",
+        "rows": 2,
+        "source_cases": 1,
+        "groups": [
+          "idp|men|middle_aged",
+          "idp|men|not_stated"
+        ],
+        "passed": true
+      }
+    }
+  },
+  "synthetic_report_compatibility": {
+    "warbias_benign_uk": {
+      "passed": true,
+      "model_requests": 0,
+      "responses": "synthetic software check only, not saved",
+      "task_success": null,
+      "full_refusal_rate": null,
+      "any_refusal_rate": null,
+      "judge": null,
+      "criterion_labels": null
+    },
+    "warbias_benign_en": {
+      "passed": true,
+      "model_requests": 0,
+      "responses": "synthetic software check only, not saved",
+      "task_success": null,
+      "full_refusal_rate": null,
+      "any_refusal_rate": null,
+      "judge": null,
+      "criterion_labels": null
+    }
+  }
+}

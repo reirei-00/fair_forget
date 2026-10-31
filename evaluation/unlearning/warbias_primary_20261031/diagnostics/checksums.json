@@ -1,0 +1,7 @@
+{
+  "data/warbias_triplets_en.jsonl": "0fb37d6752a9b35f65ca8e393065d21e47487ae498cf7a238b92ba54100e4148",
+  "data/warbias_triplets_uk.jsonl": "0167070ffe6511af939b8dea22b0fd7363059083f35c8f49bbe02c14d5e52cfb",
+  "manifest.json": "bf3f3abba37437930d5f1d01f469c76cf348be501a2892ca3dc56addf71c5088",
+  "pairs/warbias_triplets.jsonl": "b7328b6e33d654663760bc6e6b479816643855c764eec3d6435c245c98572d24",
+  "sources/original_train_uk.jsonl": "96b87403880da7a698e92e733bbf456f29698ff346ae032f4779c434a5659fe5"
+}

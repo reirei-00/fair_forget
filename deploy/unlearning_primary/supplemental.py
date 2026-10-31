@@ -14,6 +14,7 @@ import json
 import math
 import os
 import queue
+import re
 import signal
 import subprocess
 import sys
@@ -55,6 +56,13 @@ REPRESENTATIVES = tuple(
 QUALIFICATION_COUNTS = {task: 6 if "expanded_qa" in task else 2 for task in REPRESENTATIVES}
 ATOL = 1e-6
 SCRIPT_FILES = ("supplemental.py", "supplemental_checkpoint.sh", "evaluate_checkpoint.py")
+MODEL_PROFILE_FIELDS = (
+    "model_path",
+    "model_id",
+    "model_revision",
+    "tokenizer_revision",
+    "config_sha256",
+)
 
 
 def require(condition, message):
@@ -73,6 +81,51 @@ def rows(path):
 def evidence(path):
     path = Path(path).resolve()
     return {"path": str(path), "sha256": native.digest(path)}
+
+
+def selected_methods(methods=None):
+    if methods is None:
+        return METHODS
+    require(isinstance(methods, (list, tuple)) and bool(methods), "Select a nonempty method subset")
+    require(
+        all(isinstance(method, str) and method in METHODS for method in methods)
+        and len(set(methods)) == len(methods),
+        "Methods must be unique supported method names",
+    )
+    return tuple(methods)
+
+
+def checked_model_profile(profile):
+    require(
+        isinstance(profile, dict) and set(profile) == set(MODEL_PROFILE_FIELDS),
+        "Model profile must contain the five declared identity fields",
+    )
+    require(
+        all(isinstance(profile[key], str) and profile[key] for key in MODEL_PROFILE_FIELDS),
+        "Model profile identity fields must be nonempty strings",
+    )
+    require(
+        all(
+            re.fullmatch(r"[0-9a-f]{40}", profile[key])
+            for key in ("model_revision", "tokenizer_revision")
+        )
+        and re.fullmatch(r"[0-9a-f]{64}", profile["config_sha256"]),
+        "Model profile pins or configuration hash differ",
+    )
+    checkpoint = Path(profile["model_path"]).resolve()
+    require(
+        not any(char in str(checkpoint) for char in (",", "\n", "\r")),
+        "Checkpoint path is unsafe for native model arguments",
+    )
+    require(
+        checkpoint.is_dir() and (checkpoint / "config.json").is_file(),
+        "Model profile checkpoint is missing",
+    )
+    require(
+        native.digest(checkpoint / "config.json") == profile["config_sha256"],
+        "Model profile configuration hash differs",
+    )
+    return {**profile, "model_path": str(checkpoint)}
 
 
 def verify_serial_parameters(parameters):
@@ -152,15 +205,22 @@ def evaluator_files(release):
     return {str(path.relative_to(release)): native.digest(path) for path in paths}
 
 
-def prepare(collector, development, output):
+def prepare(collector, development, output, *, methods=None, model_profile=None):
     """Create new addon inputs with exact dev rows and their genuine pair maps."""
     collector, development, output = collector.resolve(), development.resolve(), output.resolve()
+    panel = selected_methods(methods)
+    profile = checked_model_profile(model_profile) if model_profile is not None else None
     require(not output.exists(), "Addon output already exists")
     require(not output.is_relative_to(collector), "Addon must stay outside the collector release")
     require(
         not output.is_relative_to(development.parent),
         "Addon must stay outside the development bundle",
     )
+    if profile is not None:
+        require(
+            not output.is_relative_to(Path(profile["model_path"])),
+            "Addon must stay outside the pinned model checkpoint",
+        )
     full = collector / "evaluation/manifest.json"
     full_entries = {task: source(full, task)[0] for task in PROTOCOLS}
     qualification = {"schema_version": 1, "datasets": {}}
@@ -257,7 +317,7 @@ def prepare(collector, development, output):
         "scripts_sha256": {name: native.digest(script_root / name) for name in SCRIPT_FILES},
         "tasks": list(PROTOCOLS),
         "full_rows": {task: item["rows"] for task, item in full_entries.items()},
-        "required_checkpoints": ["baseline", *METHODS],
+        "required_checkpoints": ["baseline", *panel],
         "settings": SETTINGS,
         "qualification": {
             "manifest": "qualification/manifest.json",
@@ -279,6 +339,10 @@ def prepare(collector, development, output):
             "seed": 42,
         },
     }
+    if methods is not None:
+        config["methods"] = list(panel)
+    if profile is not None:
+        config["model_profile"] = profile
     output.mkdir(parents=True)
     (output / "qualification/data").mkdir(parents=True)
     (output / "qualification/pairs").mkdir(parents=True)
@@ -299,9 +363,15 @@ def validate(addon):
     config = read(addon / "config.json")
     require(config.get("schema_version") == 1, "Unsupported addon schema")
     require(config.get("tasks") == list(PROTOCOLS), "Supplemental task list differs")
+    methods = selected_methods(config.get("methods"))
     require(
-        config.get("required_checkpoints") == ["baseline", *METHODS], "Checkpoint panel differs"
+        config.get("required_checkpoints") == ["baseline", *methods], "Checkpoint panel differs"
     )
+    if "model_profile" in config:
+        require(
+            checked_model_profile(config["model_profile"]) == config["model_profile"],
+            "Model profile path is not canonical",
+        )
     require(config.get("settings") == SETTINGS, "Native execution settings differ")
     verify_serial_parameters(config["settings"])
     collector = Path(config["collector_release"]).resolve()
@@ -371,19 +441,73 @@ def validate(addon):
     return config, collector, full, manifest
 
 
-def checkpoint_panel(collector, training):
-    receipt = read(training / "execution.json")
-    require(
-        receipt.get("stage") == "training_complete", "All five trained checkpoints are required"
+def checkpoint_panel(collector, training, *, methods=None, model_profile=None):
+    panel = selected_methods(methods)
+    if training is not None:
+        receipt = read(training / "execution.json")
+        require(
+            receipt.get("stage") == "training_complete",
+            "All five trained checkpoints are required"
+            if methods is None
+            else "All selected trained checkpoints are required",
+        )
+    else:
+        receipt = {"methods": {}}
+    profile = (
+        checked_model_profile(model_profile)
+        if model_profile is not None
+        else read(collector / "recipes/wga_kl.json")
     )
-    result = {"baseline": Path(read(collector / "recipes/wga_kl.json")["model_path"]).resolve()}
-    for method in METHODS:
+    result = {"baseline": Path(profile["model_path"]).resolve()}
+    for method in panel if training is not None else ():
         record = receipt["methods"][method]
         require(
             record.get("status") == "trained_checkpoint_saved" and record.get("returncode") == 0,
             method + ": checkpoint unavailable",
         )
-        result[method] = Path(record["checkpoint"]).resolve()
+        checkpoint = Path(record["checkpoint"]).resolve()
+        item = record.get("receipt")
+        require(isinstance(item, (str, dict)), method + ": training receipt missing")
+        path = Path(item["path"] if isinstance(item, dict) else item).resolve()
+        require(
+            path.is_relative_to(training.resolve()),
+            method + ": training receipt escapes its execution",
+        )
+        if isinstance(item, dict):
+            require(
+                native.digest(path) == item.get("sha256"),
+                method + ": training receipt hash differs",
+            )
+        details = read(path)
+        require(details.get("method") == method, method + ": trainer method differs")
+        expected_status = "trained_not_evaluated" if method == "rmu" else "trained_merged"
+        require(details.get("status") == expected_status, method + ": trainer did not finish")
+        identity = details.get("config", {}) if method == "rmu" else details
+        require(
+            all(
+                identity.get(key) == profile.get(key)
+                for key in ("model_id", "model_revision", "tokenizer_revision")
+            ),
+            method + ": model or tokenizer pin differs",
+        )
+        actual_path = details.get("checkpoint" if method == "rmu" else "merged_checkpoint")
+        require(
+            isinstance(actual_path, str) and Path(actual_path).resolve() == checkpoint,
+            method + ": trainer checkpoint differs from execution",
+        )
+        require(
+            checkpoint.is_relative_to(training.resolve()),
+            method + ": checkpoint escapes its execution",
+        )
+        file_records = details.get(
+            "checkpoint_identity" if method == "rmu" else "merged_checkpoint_files", []
+        )
+        config_hashes = {entry["path"]: entry["sha256"] for entry in file_records}
+        require(
+            config_hashes.get("config.json") == native.digest(checkpoint / "config.json"),
+            method + ": saved checkpoint configuration hash differs",
+        )
+        result[method] = checkpoint
     for checkpoint in result.values():
         require(
             not any(char in str(checkpoint) for char in (",", "\n", "\r")),
@@ -537,24 +661,31 @@ def invoke_task(addon, checkpoint, root, task, gpu, log, qualification=False):
     return {"command": command, "returncode": result.returncode, "log": evidence(log)}
 
 
-def collect(addon, training, output):
+def collect(addon, training=None, output=None):
+    require(output is not None, "A new supplemental output directory is required")
     config, collector, _, _ = validate(addon)
-    models = checkpoint_panel(collector, training)
+    models = checkpoint_panel(
+        collector,
+        training,
+        methods=config.get("methods"),
+        model_profile=config.get("model_profile"),
+    )
     gpus = os.environ.get("CUDA_VISIBLE_DEVICES", "").split(",")
     require(
         len(gpus) == 4 and len(set(gpus)) == 4 and all(gpus),
         "Exactly four distinct allocated GPU tokens are required",
     )
     require(not output.exists(), "Use a new supplemental output directory")
+    protected = (addon, collector, *models.values()) + ((training,) if training is not None else ())
     require(
-        not any(output.is_relative_to(p) for p in (addon, collector, training, *models.values())),
+        not any(output.is_relative_to(p) for p in protected),
         "Output overlaps saved inputs",
     )
     output.mkdir(parents=True)
     status = {
         "stage": "qualification",
         "addon_config": evidence(addon / "config.json"),
-        "training": evidence(training / "execution.json"),
+        "training": evidence(training / "execution.json") if training is not None else None,
         "checkpoints": {name: str(path) for name, path in models.items()},
         "qualification": {},
         "tasks": {},
@@ -563,6 +694,8 @@ def collect(addon, training, output):
         "serial_model_options": SERIAL_MODEL_OPTIONS,
         "expected_full_collections": len(models) * len(PROTOCOLS),
     }
+    if training is None:
+        status["collection_mode"] = "baseline_only"
     lock = threading.Lock()
     receipt = output / "supplemental_execution.json"
 
@@ -676,12 +809,17 @@ def collect(addon, training, output):
 
 
 def analyze(addon, evaluation, output):
-    _, collector, full, _ = validate(addon)
+    config, collector, full, _ = validate(addon)
+    methods = selected_methods(config.get("methods"))
     receipt = read(evaluation / "supplemental_execution.json")
     require(
         receipt.get("stage") == "supplemental_collection_complete"
         and receipt.get("no_update_passed") is True,
         "Complete qualified supplemental collection required",
+    )
+    require(
+        receipt.get("collection_mode") != "baseline_only",
+        "Paired analysis requires trained post checkpoints",
     )
     require(receipt["addon_config"] == evidence(addon / "config.json"), "Collection addon differs")
     require(not output.exists(), "Use a new paired analysis output directory")
@@ -695,7 +833,7 @@ def analyze(addon, evaluation, output):
         "collection": evidence(evaluation / "supplemental_execution.json"),
         "pairs": {},
         "saved_only": True,
-        "expected_pairs": len(METHODS) * len(PROTOCOLS),
+        "expected_pairs": len(methods) * len(PROTOCOLS),
     }
     env = {
         **os.environ,
@@ -717,7 +855,7 @@ def analyze(addon, evaluation, output):
             )
         }
     )
-    for method in METHODS:
+    for method in methods:
         for task in PROTOCOLS:
             inputs = {}
             for name in ("baseline", method):
@@ -793,7 +931,7 @@ def analyze(addon, evaluation, output):
                 record["report"] = evidence(output / method / task / "paired.json")
             status["pairs"][method + "/" + task] = record
             native.write_json(output / "supplemental_analysis.json", status)
-    complete = len(status["pairs"]) == len(METHODS) * len(PROTOCOLS) and all(
+    complete = len(status["pairs"]) == len(methods) * len(PROTOCOLS) and all(
         item["status"] == "analyzed" for item in status["pairs"].values()
     )
     status["stage"] = "native_paired_complete" if complete else "native_paired_partial_failure"
@@ -807,6 +945,12 @@ def main(argv=None):
     prep = commands.add_parser("prepare", help="Create new source-bound addon inputs; no inference")
     for name in ("collector-release", "development-bundle", "output"):
         prep.add_argument("--" + name, type=Path, required=True)
+    prep.add_argument("--methods", nargs="+", choices=METHODS)
+    prep.add_argument(
+        "--model-profile",
+        type=Path,
+        help="JSON with the five explicit pinned model identity fields",
+    )
     check = commands.add_parser("validate", help="Verify local prepared bindings; no inference")
     check.add_argument("--addon", type=Path, required=True)
     task_parser = commands.add_parser("task", help="Internal single-task native collector")
@@ -817,17 +961,29 @@ def main(argv=None):
     )
     task_parser.add_argument("--qualification", action="store_true")
     collection = commands.add_parser(
-        "collect", help=f"Qualify all six checkpoints, then collect {len(PROTOCOLS)} full tasks"
+        "collect",
+        help=f"Qualify the declared checkpoint panel, then collect {len(PROTOCOLS)} full tasks",
     )
     for name in ("addon", "training", "output"):
         collection.add_argument("--" + name, type=Path, required=True)
+    baseline = commands.add_parser(
+        "collect-baseline", help="Qualify and collect the declared base checkpoint without training"
+    )
+    for name in ("addon", "output"):
+        baseline.add_argument("--" + name, type=Path, required=True)
     analysis = commands.add_parser("analyze", help="Compare saved native pairs only; no inference")
     for name in ("addon", "evaluation", "output"):
         analysis.add_argument("--" + name, type=Path, required=True)
     args = parser.parse_args(argv)
     try:
         if args.command == "prepare":
-            result = prepare(args.collector_release, args.development_bundle, args.output)
+            result = prepare(
+                args.collector_release,
+                args.development_bundle,
+                args.output,
+                methods=args.methods,
+                model_profile=read(args.model_profile) if args.model_profile else None,
+            )
             print(
                 json.dumps(
                     {
@@ -851,6 +1007,8 @@ def main(argv=None):
             )
         if args.command == "collect":
             return collect(args.addon.resolve(), args.training.resolve(), args.output.resolve())
+        if args.command == "collect-baseline":
+            return collect(args.addon.resolve(), output=args.output.resolve())
         return analyze(args.addon.resolve(), args.evaluation.resolve(), args.output.resolve())
     except (OSError, ValueError, KeyError, TypeError) as error:
         print(json.dumps({"stage": "failed", "error": str(error)}), file=sys.stderr)
