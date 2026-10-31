@@ -273,5 +273,21 @@ The [software verification](receipts/all_metrics_software_verification.json)
 binds Fair-UK commit `88224db75bd80e85f5227897188904e9c470f4d1`,
 [draft PR 9](https://github.com/reirei-00/fair-uk/pull/9), 590 passing evaluator
 tests and one optional-data skip. The broader trainer/orchestration suite
-passes 92 tests. Actual saved exposure and checkpoint lineage pass for all
+passes 101 tests. Actual saved exposure and checkpoint lineage pass for all
 five arms. Native study outcomes remain pending.
+
+Supplemental job 2608960 failed before collection because Slurm executed a
+spooled shell copy and its relative driver path resolved inside the spool.
+Dependent CPU job 2609024 was cancelled by its dependency gate and performed
+no analysis. The [failure record](receipts/failure_addon_2608960_cpu_2609024.json)
+preserves both outcomes. New wrappers resolve runners from explicit frozen
+release paths, with nine spool-copy regressions and 101 passing integration
+tests in the broader trainer/orchestration suite.
+
+The new immutable v3 addon retains the same data, checkpoints, scorer and
+inference settings. Its [native input validation](receipts/native_input_validation_v3_20261031T112845Z.json)
+passed all seventeen views. The
+[retry submission](receipts/supplemental_submission_v3.json) records actual GPU
+job 2609074 at `2026-10-31T11:29:07.344394+00:00`. Earlier attempts remain
+historical. Submission alone does not establish passed runtime qualification
+or complete before/after scores.

@@ -1,0 +1,17 @@
+{
+  "kind": "preserved_failed_supplemental_launcher_and_cancelled_dependent_analysis",
+  "observed_at_utc": "2026-10-31T11:27:40.228092+00:00",
+  "failed_addon_job_id": "2608960",
+  "failed_addon_exit_code": "2:0",
+  "exact_log": "/e/project1/e-dev-2026d09-075/fairforget/envs/unlearning-primary-py313-20261031/bin/python: can't open file '/var/spool/parastation/jobs/supplemental.py': [Errno 2] No such file or directory\nsrun: error: jpbo-020-14: task 0: Exited with exit code 2\n",
+  "collection_started": false,
+  "cancelled_dependent_cpu_job_id": "2609024",
+  "cancellation_dependency": "afterok:2608628:2608960 with kill-on-invalid-dep=yes",
+  "root_cause": "Standalone sbatch runs a spool copy; BASH_SOURCE resolves its spool directory.",
+  "fix": "Resolve driver from the absolute immutable release argument and validate it before running.",
+  "corrected_worktree_supplemental_sbatch_sha256": "f734d549ff04d89e8118133c67ceb9a1c4aed3a9c327320c6a6d275f312668fb",
+  "corrected_worktree_all_metrics_sbatch_sha256": "d578d39b01f3a9491deb69ffd9c2bf0062551a6e109451746259628a7fac686a",
+  "spool_copy_regressions_passed": 4,
+  "main_pipeline_2608628_modified": false,
+  "prior_frozen_releases_and_receipts_modified": false
+}

@@ -28,6 +28,7 @@
   "commit": "88224db75bd80e85f5227897188904e9c470f4d1",
   "pull_request": "https://github.com/reirei-00/fair-uk/pull/9",
   "source_package_sha256": "aec6855856b2795c9c045efded022e2ca78810dfcb04d4a2126a0aa1ab4101c6",
-  "orchestration_tests_passed": 92,
-  "actual_saved_exposure_and_checkpoint_lineage": "Passed for all five methods; saved preflights perform no native study inference."
+  "orchestration_tests_passed": 101,
+  "actual_saved_exposure_and_checkpoint_lineage": "Passed for all five methods; saved preflights perform no native study inference.",
+  "slurm_spool_regressions_passed": 9
 }

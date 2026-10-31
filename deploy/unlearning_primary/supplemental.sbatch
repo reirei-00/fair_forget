@@ -13,11 +13,21 @@ if [[ $# -ne 3 ]]; then
     echo "Usage: $0 ADDON_RELEASE TRAINING_EXECUTION RESULT_ROOT" >&2
     exit 2
 fi
+for FF_PATH in "$@"; do
+    if [[ $FF_PATH != /* ]]; then
+        echo "All supplemental paths must be absolute" >&2
+        exit 2
+    fi
+done
+FF_SCRIPT_DIR="$1/deploy/unlearning_primary"
+if [[ ! -f "$FF_SCRIPT_DIR/supplemental.py" ]]; then
+    echo "The addon release is missing its supplemental collector" >&2
+    exit 2
+fi
 export LMOD_PAGER=cat PAGER=cat
 module load Stages/2026 GCCcore/.14.3.0 PyTorch/2.9.1
 FF_TRAIN_ENV=/e/project1/e-dev-2026d09-075/fairforget/envs/unlearning-primary-py313-20261031
 FF_EVAL_ENV=/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312
-FF_SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 export PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 OMP_NUM_THREADS=8
 umask 0007
 FF_COLLECTION="$3/supplemental-${SLURM_JOB_ID}"

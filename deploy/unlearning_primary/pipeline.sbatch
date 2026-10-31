@@ -10,7 +10,7 @@
 #SBATCH --output=ff-primary-pipeline-%j.log
 set -euo pipefail
 if [[ $# -ne 4 ]]; then
-    echo "Usage: $0 RELEASE_DIR TRAINING_EXECUTION_DIR RESULT_ROOT ANALYSIS_RELEASE_DIR" >&2
+    echo "Usage: $0 RELEASE_DIR TRAINING_EXECUTION_DIR RESULT_ROOT ANALYSIS_RUNNER_DIR" >&2
     exit 2
 fi
 for FF_PIPELINE_INPUT in "$@"; do
@@ -26,8 +26,9 @@ fi
 FF_RELEASE=$1
 FF_TRAINING=$2
 FF_RESULT_ROOT=$3
-FF_ANALYSIS_RELEASE=$4
-if [[ ! -f "$FF_RELEASE/evaluate.sbatch" || ! -f "$FF_ANALYSIS_RELEASE/analyze.sbatch" ]]; then
+FF_EVAL_RUNNERS=${FAIRFORGET_RUNNER_DIR:-"$FF_RELEASE"}
+FF_ANALYSIS_RUNNERS=$4
+if [[ $FF_EVAL_RUNNERS != /* || ! -f "$FF_EVAL_RUNNERS/evaluate.sbatch" || ! -f "$FF_ANALYSIS_RUNNERS/analyze.sbatch" ]]; then
     echo "The frozen evaluation or analysis wrapper is missing" >&2
     exit 2
 fi
@@ -49,10 +50,12 @@ if ! exec 9>"$FF_PIPELINE_RECEIPT"; then
 fi
 set +o noclobber
 FF_EVALUATION_RC=0
-bash "$FF_RELEASE/evaluate.sbatch" "$FF_RELEASE" "$FF_TRAINING" "$FF_RESULT_ROOT" \
+FAIRFORGET_RUNNER_DIR="$FF_EVAL_RUNNERS" \
+    bash "$FF_EVAL_RUNNERS/evaluate.sbatch" "$FF_RELEASE" "$FF_TRAINING" "$FF_RESULT_ROOT" \
     || FF_EVALUATION_RC=$?
 FF_ANALYSIS_RC=0
-bash "$FF_ANALYSIS_RELEASE/analyze.sbatch" "$FF_RELEASE" "$FF_TRAINING" \
+FAIRFORGET_ANALYSIS_RUNNER_DIR="$FF_ANALYSIS_RUNNERS" \
+    bash "$FF_ANALYSIS_RUNNERS/analyze.sbatch" "$FF_RELEASE" "$FF_TRAINING" \
     "$FF_RESULT_ROOT/evaluation-${SLURM_JOB_ID}" "$FF_RESULT_ROOT" || FF_ANALYSIS_RC=$?
 printf '{"evaluation_returncode":%d,"analysis_returncode":%d}\n' \
     "$FF_EVALUATION_RC" "$FF_ANALYSIS_RC" >&9

@@ -34,6 +34,7 @@ Pass an existing release directory with this layout:
 
 ```text
 RELEASE/
+  train_all.py, evaluate_all.py    bound drivers in the verified release layout
   src/fairforget/unlearning/       frozen trainer and objective source
   tests/test_unlearning_*.py       matching software checks
   recipes/{wga_kl,npo_kl,biasunlearn,task_vector,rmu}.json
@@ -73,6 +74,14 @@ Create result and scheduler-log directories outside the release and model
 snapshot. Supply absolute paths so changing to the release directory cannot
 change argument meaning. This profile requires exactly four allocated GPUs;
 it does not discover or claim GPUs from other jobs.
+
+Slurm copies submitted shell scripts to its spool. The training/evaluation
+wrappers therefore select drivers from the explicit release root, matching the
+verified 31 October layout above. A package with another frozen runner layout
+must set `FAIRFORGET_RUNNER_DIR` to the absolute directory containing its
+`train_all.py` and `evaluate_all.py` before submission. The wrappers validate
+that directory and fail before runtime setup if the required driver is missing.
+They never select a driver from the submission directory or a checkout.
 
 ```bash
 RELEASE=/absolute/path/to/frozen-release
@@ -133,6 +142,8 @@ After the evaluation queue reaches a final state, run the separate CPU analysis
 package against those exact training and evaluation directories:
 
 ```bash
+ANALYSIS_RUNNERS=/absolute/path/to/frozen-analysis-runner-directory
+export FAIRFORGET_ANALYSIS_RUNNER_DIR="$ANALYSIS_RUNNERS"
 sbatch --dependency=afterany:EVALUATION_JOB_ID \
   --output="$RESULTS/logs/analysis-%j.log" \
   deploy/unlearning_primary/analyze.sbatch \
@@ -144,6 +155,10 @@ the frozen evaluator's `paper compare-native` command, with 1,000 bootstrap
 draws and seed 42. It loads saved predictions and the exact local bundle;
 offline flags and an empty GPU visibility setting prevent inference or network
 collection. The package can live outside the immutable release.
+The selected analysis runner directory must contain `analyze_pairs.py`; the
+verified separate analysis package stores it at its top level beside
+`analyze.sbatch`. The environment variable binds that directory even when Slurm
+executes a spool copy of the wrapper. A missing driver is an explicit error.
 
 The driver requires a completed evaluation queue and matching native completion
 receipts, source hashes and file hashes. It analyzes each of the six tasks for
@@ -163,12 +178,15 @@ the pipeline wrapper instead of separate evaluation and analysis submissions:
 ```bash
 sbatch --output="$RESULTS/logs/pipeline-%j.log" \
   deploy/unlearning_primary/pipeline.sbatch \
-  "$RELEASE" "$TRAINING" "$RESULTS" "$ANALYSIS_RELEASE"
+  "$RELEASE" "$TRAINING" "$RESULTS" "$ANALYSIS_RUNNERS"
 ```
 
-All four paths must be absolute. The frozen release must contain
-`evaluate.sbatch`; the separate analysis package must contain `analyze.sbatch`
-and its driver. The parent requests four GPUs, 32 CPU cores and 12 hours for
+All four paths must be absolute. The selected evaluation runner directory
+(`FAIRFORGET_RUNNER_DIR`, defaulting to the release root) must contain
+`evaluate.sbatch` and `evaluate_all.py`. The fourth argument is the absolute
+analysis runner directory containing `analyze.sbatch` and `analyze_pairs.py`.
+The pipeline passes both explicit driver directories to its child wrappers.
+The parent requests four GPUs, 32 CPU cores and 12 hours for
 both stages together. It invokes both wrappers with `bash`, so their scheduler
 headers request no additional allocation. Analysis hides the allocated GPUs.
 Outputs use the shared job ID: `evaluation-JOB_ID`, `analysis-JOB_ID` and

@@ -12,12 +12,16 @@ if [[ $# -ne 4 ]]; then
     echo "Usage: $0 RELEASE_DIR TRAINING_EXECUTION_DIR EVALUATION_EXECUTION_DIR RESULT_ROOT" >&2
     exit 2
 fi
+FF_RELEASE="$1"
+FF_SCRIPT_DIR=${FAIRFORGET_ANALYSIS_RUNNER_DIR:-${FAIRFORGET_RUNNER_DIR:-"$FF_RELEASE"}}
+if [[ $FF_SCRIPT_DIR != /* || ! -f "$FF_SCRIPT_DIR/analyze_pairs.py" ]]; then
+    echo "Set FAIRFORGET_ANALYSIS_RUNNER_DIR to an absolute frozen directory containing analyze_pairs.py" >&2
+    exit 2
+fi
 export LMOD_PAGER=cat PAGER=cat
 module purge
-module load Stages/2026 CUDA/13
+module load Stages/2026 GCCcore/.14.3.0 CUDA/13
 FF_ANALYSIS_ENV=/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312
-FF_SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-FF_RELEASE="$1"
 FF_TRAINING="$2"
 FF_EVALUATION="$3"
 FF_RESULTS="$4/analysis-${SLURM_JOB_ID}"

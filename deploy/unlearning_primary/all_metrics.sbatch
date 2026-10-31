@@ -12,10 +12,20 @@ if [[ $# -ne 3 ]]; then
     echo "Usage: $0 ANALYSIS_RELEASE PACKAGE_JSON RESULT_PARENT" >&2
     exit 2
 fi
+for FF_PATH in "$@"; do
+    if [[ $FF_PATH != /* ]]; then
+        echo "All analysis paths must be absolute" >&2
+        exit 2
+    fi
+done
+FF_SCRIPT_DIR="$1/deploy/unlearning_primary"
+if [[ ! -f "$FF_SCRIPT_DIR/run_all_metrics.py" ]]; then
+    echo "The analysis release is missing its saved-only driver" >&2
+    exit 2
+fi
 export LMOD_PAGER=cat PAGER=cat
 module load Stages/2026 GCCcore/.14.3.0 CUDA/13
 FF_PYTHON=/e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python
-FF_SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 export CUDA_VISIBLE_DEVICES="" PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1
