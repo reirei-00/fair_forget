@@ -14,7 +14,7 @@
       "url": "https://aclanthology.org/2022.findings-acl.165/"
     },
     "selection": "Forty selected general taxonomy cases: 20 IDP and 20 veteran cases. This is not a probability sample.",
-    "source_authorship": "Assistant-authored templates: 12 Ukrainian scenarios with English translations and 28 bilingual scenarios. The source record does not specify a model version."
+    "source_authorship": "Assistant-authored Ukrainian scenario templates; the drafting model is not recorded."
   },
   "counts": {
     "actors": {
@@ -32,11 +32,11 @@
     },
     "annotation_summary": {
       "path": "protocol/results/qa_annotations.json",
-      "sha256": "5e6a0fb13c0577fae0611407ef86b2ba5eae65390c5f630a001f1add4b3d8e53"
+      "sha256": "aef083d73d0229a8d0c6aeb0ce375dbf60cbf471693eb461390efdf5392cea88"
     },
     "en": {
       "path": "data/qa_en.jsonl",
-      "sha256": "8c95690d32492a58b931d62fe2925e8772bfe5618280ccb82e43c5dbc5ad99be"
+      "sha256": "aa51422575aa9cb5a0b68c127b345b3c326ea28c05c10fdc587769f741cd5cd3"
     },
     "human_edits": {
       "path": "protocol/inputs/qa_human_edits.jsonl",
@@ -48,15 +48,15 @@
     },
     "provenance": {
       "path": "protocol/inputs/qa_provenance.jsonl",
-      "sha256": "d39e6491fc355591b73915c87c8921a4692c08c7a07e5a25fdebc1ff1bef0165"
+      "sha256": "26143f007d67dad72db711a594d2993cf57b9c41c34750256f81b0ac4c74124b"
     },
     "resolutions": {
       "path": "protocol/inputs/qa_resolutions.jsonl",
-      "sha256": "0ce3728950ca5974c854d805898ea90e09c2c6edf11cfba43a15f3b7481d9c70"
+      "sha256": "7a27cf153d08672d9c5895d06cf49e3046419af1b63c50f7d2ef8416bb853172"
     },
     "scenarios": {
       "path": "protocol/inputs/qa_scenarios.json",
-      "sha256": "826f6f8a51a589b7dc1a9febd674afb1e4cafb627857492a83431ccdb030bc4f"
+      "sha256": "b77b6557d65a135e090d19d0f4757b2224635c0717e196f310b9d31b2f55e61d"
     },
     "schema": {
       "path": "protocol/inputs/qa_schema.json",
@@ -65,6 +65,14 @@
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
       "sha256": "a97a1de753d2ac17b7f8c76e0f749ff34efcaf3e505d8c144987b114a5e33577"
+    },
+    "translation_protocol": {
+      "path": "protocol/qa_translation.json",
+      "sha256": "8ecaa5ae51e9449bb8ae983067e532f18951b7b18f779c211c2d2f8d28a96edd"
+    },
+    "translations": {
+      "path": "protocol/inputs/qa_translations.jsonl",
+      "sha256": "bd5f7d708729837cbe0f6b40c223e5662108321390849a4194531c218f1fc8ba"
     },
     "uk": {
       "path": "data/qa_uk.jsonl",
@@ -86,8 +94,7 @@
     "scope": "Human annotation covers the Ukrainian source items. Assistant resolutions and changed text do not inherit human consensus.",
     "status_counts": {
       "en": {
-        "assistant_revised_translation": 22,
-        "unreviewed_translation": 218
+        "unreviewed_translation": 240
       },
       "uk": {
         "assistant_resolved": 53,

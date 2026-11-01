@@ -240,3 +240,53 @@ def test_coherent_text_edits_cannot_drift_from_the_bound_templates(release):
     )
     with pytest.raises(ValueError, match="differs from its scenario templates"):
         qa.load_qa(release[0])
+
+
+@pytest.fixture
+def translated_release(release):
+    root, protocol = release
+    rows = {language: read_rows(root / f"data/qa_{language}.jsonl") for language in ("uk", "en")}
+    records = [
+        {
+            "id": uk["id"],
+            "model": "test-translator",
+            "source_text_sha256": qa.text_digest(uk),
+            "target_text_sha256": qa.text_digest(en),
+        }
+        for uk, en in zip(rows["uk"], rows["en"])
+    ]
+    paths = {
+        "translations": "protocol/inputs/translations.jsonl",
+        "translation_protocol": "protocol/translation.json",
+    }
+    write_rows(root / paths["translations"], records)
+    write_json(
+        root / paths["translation_protocol"],
+        {"source_language": "uk", "target_language": "en", "items": 6, "model": "test-translator"},
+    )
+    for key, path in paths.items():
+        protocol["files"][key] = {"path": path, "sha256": file_digest(root / path)}
+    write_json(root / "protocol/qa.json", protocol)
+    return release
+
+
+@pytest.mark.parametrize("field", ["source_text_sha256", "target_text_sha256", "model"])
+def test_translation_binding_rejects_stale_source_target_or_model(translated_release, field):
+    assert len(qa.load_qa(translated_release[0])["metadata"]["translations"]) == 6
+    _replace(translated_release, "translations", lambda rows: rows[0].update({field: "stale"}))
+    with pytest.raises(ValueError, match="translation source, target or model differs"):
+        qa.load_qa(translated_release[0])
+
+
+def test_translation_records_must_cover_every_item(translated_release):
+    _replace(translated_release, "translations", lambda rows: rows.pop())
+    with pytest.raises(ValueError, match="translations must cover all items"):
+        qa.load_qa(translated_release[0])
+
+
+def test_translation_records_need_a_protocol(translated_release):
+    root, protocol = translated_release
+    del protocol["files"]["translation_protocol"]
+    write_json(root / "protocol/qa.json", protocol)
+    with pytest.raises(ValueError, match="must be supplied together"):
+        qa.load_qa(root)

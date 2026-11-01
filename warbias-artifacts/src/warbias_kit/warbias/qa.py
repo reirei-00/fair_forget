@@ -13,7 +13,14 @@ TEXT_FIELDS = ("context", "question", "choices")
 CONDITIONS = ("ambiguous", "stereotype_aligned", "stereotype_conflicting")
 POLARITIES = ("negative", "positive")
 ROLE_FIELDS = ("target_index", "comparison_index", "unknown_index")
-OPTIONAL_FILES = {"resolutions", "human_edits", "annotation_summary", "agreement"}
+OPTIONAL_FILES = {
+    "resolutions",
+    "human_edits",
+    "annotation_summary",
+    "agreement",
+    "translations",
+    "translation_protocol",
+}
 QA_FIELDS = {
     "id",
     "scenario_id",
@@ -74,6 +81,34 @@ def _bound_files(project, bindings):
         )
         paths[name] = path
     return paths
+
+
+def _validate_translations(indexes, metadata):
+    records = metadata.get("translations")
+    protocol = metadata.get("translation_protocol")
+    if records is None and protocol is None:
+        return
+    _require(
+        isinstance(records, list) and isinstance(protocol, dict),
+        "QA translation records and protocol must be supplied together",
+    )
+    translations = unique_index(records)
+    _require(set(translations) == set(indexes["uk"]), "QA translations must cover all items")
+    _require(
+        protocol.get("source_language") == "uk"
+        and protocol.get("target_language") == "en"
+        and protocol.get("items") == len(translations)
+        and isinstance(protocol.get("model"), str)
+        and bool(protocol["model"]),
+        "QA translation protocol differs",
+    )
+    for identity, record in translations.items():
+        _require(
+            record.get("model") == protocol["model"]
+            and record.get("source_text_sha256") == text_digest(indexes["uk"][identity])
+            and record.get("target_text_sha256") == text_digest(indexes["en"][identity]),
+            f"{identity}: QA translation source, target or model differs",
+        )
 
 
 def _validate_item(row, language, scenario, case):
@@ -304,6 +339,7 @@ def load_qa(project, manifest_path="protocol/qa.json"):
             f"QA {language} dataset differs from its scenario templates",
         )
     _validate_reviews(indexes, metadata["provenance"], metadata["human_reviews"])
+    _validate_translations(indexes, metadata)
     summary = {
         "items_per_language": len(rows["uk"]),
         "scenarios": len(scenarios),

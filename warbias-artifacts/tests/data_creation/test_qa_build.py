@@ -23,12 +23,12 @@ def scenarios():
     ("identity", "language", "expected"),
     [
         ("WBQA-S06", "uk", "b505f9099f65fe91bfef797a2c3a89a9037ba5707db149bf8bd3ecddb3f36f6e"),
-        ("WBQA-S06", "en", "9b1a3675ddca508919833f15c1cb508b6ad4ca58540df5bbf8aa4f55b77e139a"),
+        ("WBQA-S06", "en", "00272992eb7bfbc699a3aa67706b494c1d850f6b7051d07a02d8f0d469a3ad2c"),
         ("WBQA-S10", "uk", "f8805e8d5ea07dfc5ff30fe734c4e0eb9b26c451ead69537b87dc0be7822356c"),
-        ("WBQA-S10", "en", "67a0872238f1c7293eb6c0e4f05eb568167c9984909d4aee9bea1431009be519"),
+        ("WBQA-S10", "en", "5ce244a121b60a8a97bf69ce81926ba86f43fb84102464bd5acc959f26c3a688"),
     ],
 )
-def test_frozen_source_examples_reproduce_all_text_and_answer_fields(
+def test_saved_examples_reproduce_all_text_and_answer_fields(
     scenarios, identity, language, expected
 ):
     selected = [row for row in scenarios if row["scenario_id"] == identity]
@@ -100,7 +100,7 @@ def test_clarifications_apply_to_complete_paired_blocks(scenarios, language):
     reordered = (
         "не знала, що порядок уже замінили"
         if language == "uk"
-        else "did not know that the procedure had been replaced"
+        else "did not know that the procedure had already been replaced"
     )
     assert sum(reordered in row["context"] for row in blocks["WBQA-S30"]) == 4
     for row in blocks["WBQA-S33"]:

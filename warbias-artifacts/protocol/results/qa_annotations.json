@@ -10,8 +10,7 @@
   "names_and_contact_details_included": false,
   "release_status_counts": {
     "en": {
-      "assistant_revised_translation": 22,
-      "unreviewed_translation": 218
+      "unreviewed_translation": 240
     },
     "uk": {
       "assistant_resolved": 53,
@@ -21,7 +20,6 @@
   },
   "resolutions": {
     "answer_key_changes": 0,
-    "en_text_changes": 22,
     "reviewer_kind": "assistant",
     "uk_text_changes": 28
   },

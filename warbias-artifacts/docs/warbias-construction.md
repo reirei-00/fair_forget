@@ -206,11 +206,14 @@ state both outcomes. The answer follows this evidence. Choice positions and
 actor order stay fixed within each scenario, and both questions share a context.
 All indices are zero-based.
 
-Assistant-authored [bilingual templates](../protocol/inputs/qa_scenarios.json) define the text and
-case links. They include 12 Ukrainian scenarios with English translations and
-28 scenarios drafted in both languages. The source record does not specify a
-model version. The QA set uses template expansion;
-the triplet generation and translation settings do not describe its authorship.
+Assistant-authored [bilingual templates](../protocol/inputs/qa_scenarios.json)
+define the text and case links. The Ukrainian drafting model is not recorded.
+GPT-6 Astra translated all 40 current Ukrainian templates and shared role phrases
+into English. Deterministic expansion produces all 240 English questions.
+The [QA translation protocol](../protocol/qa_translation.json) records the model
+and instructions. [Translation records](../protocol/inputs/qa_translations.jsonl)
+bind every English question to the current Ukrainian text. The triplet Lapa
+generation settings do not describe QA construction.
 [Notebook 7](../notebooks/07_qa_dataset.ipynb) rebuilds all variants and verifies
 them against the saved files and [QA protocol](../protocol/qa.json).
 
@@ -225,8 +228,8 @@ answer on the exact released text and no conflicting current-text review.
 `human_edited` marks a retained human edit without this two-review agreement.
 `assistant_resolved` marks other corrections or resolutions of flagged items.
 These decisions do not replace the human votes. English QA is marked
-`unreviewed_translation` or `assistant_revised_translation`; neither label
-means human validation. [Text provenance](../protocol/inputs/qa_provenance.jsonl)
+`unreviewed_translation`; it has no human translation review or COMET scores.
+[Text provenance](../protocol/inputs/qa_provenance.jsonl)
 and [resolutions](../protocol/inputs/qa_resolutions.jsonl) bind these decisions
 to exact text hashes. Scenarios test specific actions or fictional eligibility;
 they do not establish lasting traits, diagnoses or moral deservingness. QA

@@ -18,8 +18,8 @@ _LABELS = {
         "veteran": ("Людина з ветеранським статусом", "Людина без досвіду військової служби"),
     },
     "en": {
-        "idp": ("Person with IDP status", "Person who has never been internally displaced"),
-        "veteran": ("Person with veteran status", "Person with no military service experience"),
+        "idp": ("Person with IDP status", "Person with no experience of internal displacement"),
+        "veteran": ("Person with veteran status", "Person with no experience of military service"),
     },
 }
 _IDENTITIES = {
@@ -30,9 +30,9 @@ _IDENTITIES = {
     "en": {
         "idp": (
             "has internally displaced person (IDP) status",
-            "has never been internally displaced",
+            "has no experience of internal displacement",
         ),
-        "veteran": ("has veteran status", "has no military service experience"),
+        "veteran": ("has veteran status", "has no experience of military service"),
     },
 }
 _UNKNOWN = {"uk": "Недостатньо інформації", "en": "Not enough information"}
@@ -129,7 +129,7 @@ def _expand(scenario, language, number):
     identity = (
         f"Одна людина {facts[actors[0]]}, а інша {facts[actors[1]]}."
         if language == "uk"
-        else f"One person {facts[actors[0]]}, while the other {facts[actors[1]]}."
+        else f"One person {facts[actors[0]]}, and the other {facts[actors[1]]}."
     )
     base = [spec["setting"], identity]
     if "post_identity" in spec:
