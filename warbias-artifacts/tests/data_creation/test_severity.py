@@ -116,6 +116,64 @@ def test_bracketed_case_means_and_pending_rating_map_to_both_languages():
     assert pending["severity_bracket"] is pending["severity_bracket_label"] is None
 
 
+def test_final_consensus_label_and_mean_bracket_map_to_both_languages_separately():
+    brackets = [
+        {
+            "code": code,
+            "label": label,
+            "lower": lower,
+            "upper": upper,
+            "upper_inclusive": upper == 100,
+        }
+        for code, label, lower, upper in (
+            ("very_low", "Very low", 0, 20),
+            ("low", "Low", 20, 40),
+            ("moderate", "Moderate", 40, 60),
+            ("high", "High", 60, 80),
+            ("very_high", "Very high", 80, 100),
+        )
+    ]
+    policy = {
+        **POLICY,
+        "severity_brackets": brackets,
+        "consensus": {
+            "method": "strict_majority",
+            "minimum_support": 2,
+            "input": "individual_rating_brackets",
+        },
+    }
+    assigned = assign([rating(0.2, "R1"), rating(0.2, "R2"), rating(1, "R3")], protocol=policy)
+    case = assigned[0]
+    assert case["severity_score"] == pytest.approx(140 / 3)
+    assert case["severity_bracket"] == "moderate"
+    assert case["severity_label"] == "low"
+    assert case["severity_label_status"] == "consensus"
+    assert case["severity_label_support"] == 2 and case["severity_label_raters"] == 3
+    for language in ("uk", "en"):
+        sidecar = inherit_triplet_severity([triplet()], assigned, language)[0]
+        assert sidecar["severity_label"] == "low"
+        assert sidecar["severity_bracket"] == "moderate"
+        assert sidecar["severity_label_votes"] == case["severity_label_votes"]
+        sidecar["severity_label_votes"]["low"] = 99
+        assert case["severity_label_votes"]["low"] == 2
+    conflict = assign([rating(0.241, "R1"), rating(0.827, "R2")], protocol=policy)[0]
+    assert conflict["severity_score"] == pytest.approx(53.4)
+    assert conflict["severity_bracket"] == "moderate"
+    assert conflict["severity_label"] is None
+    assert conflict["severity_label_status"] == "disagreement"
+    assert conflict["severity_needs_review"] is True
+    pending = assign([rating(0.4, "R1")], protocol=policy)[0]
+    assert pending["severity_label"] is None
+    assert pending["severity_label_status"] == "insufficient_ratings"
+    assert pending["severity_label_support"] == pending["severity_label_raters"] == 1
+
+
+def test_mean_only_legacy_protocol_leaves_consensus_metadata_undeclared():
+    assigned = assign([rating(0.2, "R1"), rating(0.4, "R2")])
+    assert "severity_label" not in assigned[0]
+    assert "severity_label" not in inherit_triplet_severity([triplet()], assigned, "en")[0]
+
+
 @pytest.mark.parametrize("gap", [0.4, 0.7])
 def test_disagreement_flag_does_not_replace_the_mean(gap):
     row = assign([rating(0.1, "R1"), rating(0.1 + gap, "R2")])[0]
@@ -199,6 +257,7 @@ def test_inheritance_preserves_input_text_and_binds_each_language():
         lambda row: row.update(claim_en="A changed claim."),
         lambda row: row.update(severity_score=100),
         lambda row: row.update(severity_bracket="different"),
+        lambda row: row.update(severity_label="different"),
         lambda row: row.update(target_group="veteran"),
     ],
 )

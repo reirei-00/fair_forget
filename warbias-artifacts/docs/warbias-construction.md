@@ -166,16 +166,26 @@ Ukrainian source and remains separate from Ukrainian triplet review.
 from the saved human ratings, then maps each case result to its triplets.
 The severity protocol binds the current taxonomy by file hash. Its input ratings
 and annotation stimuli must resolve to case IDs in that taxonomy version.
-Compute the equal-weight mean of at least two independent ratings from the
-confirmed rubric version. Preserve all source ratings and list excluded versions
-in the calculation audit. Report scores on the original 0–100 scale, assign one
-of the five equal-width brackets in the [severity protocol](../protocol/severity.json),
-and flag rater gaps of at least 40 points. Cases with fewer than two compatible
-ratings retain a null score and bracket.
+Map each independent rating from the confirmed rubric version to one of the five
+equal-width brackets in the [severity protocol](../protocol/severity.json).
+Assign the final `severity_label` when at least two ratings support the same bracket
+and that support exceeds half of the compatible ratings. With two ratings, both
+must fall in the same bracket. Conflicting brackets enter the human adjudication
+queue; cases with fewer than two compatible ratings enter the incomplete-rating queue.
 
-The mean summarises the ratings; their range records disagreement. Severity
-sidecars bind the case, annotation examples and current triplet text. Ukrainian
-and English triplets inherit the same case mean, bracket and status.
+The continuous mean and its bracket summarise the numerical ratings. Individual
+bracket votes determine the final label. Preserve the scores, votes and excluded
+versions in the calculation audit. The rating range records disagreement.
+
+The dataset exports add `severity_label`, support and review status to each triplet
+through its taxonomy case ID. They also include the mean score and mean bracket
+under separate field names. Ukrainian and English versions carry the same case
+label. Source examples and current triplet text have separate hash bindings.
+
+Annotators supplied continuous scores; consensus is derived from their bracket
+agreement. A third independent rating can establish a two-out-of-three majority.
+Three different brackets remain pending. Human adjudication records the chosen
+label, reviewer and reason in the review queue.
 
 The notebook shows each calculation and the cumulative distribution of assigned
 scores. It reports case-weighted and triplet-weighted summaries separately, using

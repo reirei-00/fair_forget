@@ -9,6 +9,7 @@ from statistics import fmean
 from warbias_kit.io import digest, file_digest, read_csv, read_rows, unique_index
 from warbias_kit.warbias.schema import LANGUAGES, text_digest
 from warbias_kit.warbias.severity_brackets import bracket_for_score, validate_brackets
+from warbias_kit.warbias.severity_consensus import bracket_consensus, validate_consensus
 
 _RATING_FIELDS = {"rating_id", "case_id", "rater_id", "score", "scale_version"}
 _CASE_FIELDS = {"case_id", "examples_uk", "examples_sha256"}
@@ -36,6 +37,7 @@ def _policy(protocol):
             raise ValueError(f"Severity protocol has incompatible {field}")
     _score(threshold, "Severity disagreement threshold")
     validate_brackets(protocol.get("severity_brackets"))
+    validate_consensus(protocol)
     return version, minimum, threshold
 
 
@@ -202,6 +204,7 @@ def assign_taxonomy_severity(taxonomy, ratings, case_evidence, protocol):
             "severity_examples_sha256": cases.get(identity, {}).get("examples_sha256"),
             "severity_claim_sha256": _claim_hash(case),
             "severity_protocol_sha256": digest(protocol),
+            **bracket_consensus(values, protocol),
         }
         row["severity_case_sha256"] = _case_hash(row)
         result.append(row)
@@ -231,6 +234,16 @@ def inherit_triplet_severity(rows, taxonomy_with_severity, language):
         "severity_examples_sha256",
         "severity_protocol_sha256",
     )
+    label_fields = (
+        "severity_label",
+        "severity_label_name",
+        "severity_label_status",
+        "severity_label_support",
+        "severity_label_raters",
+        "severity_label_votes",
+        "severity_label_method",
+        "severity_needs_review",
+    )
     result = []
     for row in rows:
         identity = row.get("case_id")
@@ -247,6 +260,7 @@ def inherit_triplet_severity(rows, taxonomy_with_severity, language):
                 "case_id": identity,
                 "language": language,
                 **{field: case[field] for field in fields},
+                **{field: deepcopy(case[field]) for field in label_fields if field in case},
                 "severity_source": "case_annotation",
                 "text_sha256": text_digest(row),
             }

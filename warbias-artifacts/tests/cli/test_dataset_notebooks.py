@@ -111,6 +111,15 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         }
         assert result["triplets_per_language"] == {"uk": 1007, "en": 1007}
         assert result["assigned_triplets_per_language"] == {"uk": 881, "en": 881}
+        assert result["labelled_cases"] == 19
+        assert result["pending_label_cases"] == 101
+        assert result["labelled_triplets_per_language"] == {"uk": 150, "en": 150}
+        assert result["pending_label_triplets_per_language"] == {"uk": 857, "en": 857}
+        assert result["consensus"]["case_status_counts"] == {
+            "disagreement": 86,
+            "insufficient_ratings": 15,
+            "consensus": 19,
+        }
 
 
 def test_generation_notebook_preserves_dependencies_and_resumes(tmp_path, monkeypatch):
@@ -246,6 +255,10 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
     assert by_case["WB-C128"]["severity_bracket_label"] is None
     assert by_case["WB-C128"]["severity_n"] == 1
     assert by_case["WB-C128"]["severity_rating_count"] == 1
+    assert by_case["WB-C128"]["severity_label"] is None
+    assert by_case["WB-C128"]["severity_label_status"] == "insufficient_ratings"
+    assert by_case["WB-C128"]["severity_label_support"] == 1
+    assert by_case["WB-C128"]["severity_label_raters"] == 1
     assert by_case["WB-C128"]["severity_min"] == by_case["WB-C128"]["severity_max"] == 40
     assert by_case["WB-C128"]["severity_ratings"] == [
         {
@@ -283,6 +296,11 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
             for row in rows
             if row["severity_score"] is None
         )
+        assert all(
+            row["severity_label"] == by_case[row["case_id"]]["severity_label"]
+            and row["severity_label_status"] == by_case[row["case_id"]]["severity_label_status"]
+            for row in rows
+        )
     analysis = result["analysis"]
     summary = json.loads(Path(analysis["summary_json"]).read_text())
     assert summary == analysis["summary"] == namespace["summary"]
@@ -299,6 +317,14 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
     assert by_case["WB-C002"]["severity_bracket_label"] == "High"
     assert worked["WB-C001"]["severity_status"] == "high_disagreement"
     assert by_case["WB-C001"]["severity_bracket_label"] == "Moderate"
+    assert by_case["WB-C001"]["severity_label"] is None
+    assert by_case["WB-C001"]["severity_label_status"] == "disagreement"
+    assert by_case["WB-C002"]["severity_label"] is None
+    assert by_case["WB-C068"]["severity_label"] is None
+    assert by_case["WB-C011"]["severity_label"] == "low"
+    assert by_case["WB-C011"]["severity_label_status"] == "consensus"
+    assert by_case["WB-C011"]["severity_label_support"] == 2
+    assert by_case["WB-C011"]["severity_label_raters"] == 2
     assert worked["WB-C009"]["severity_score"] is None
     assert worked["WB-C128"]["rating_gap_100"] is None
     brackets = namespace["brackets"]
@@ -324,6 +350,32 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
     assert len(exported_brackets) == 5
     assert sum(int(row["case_count"]) for row in exported_brackets) == 105
     assert sum(int(row["triplet_count"]) for row in exported_brackets) == 881
+    for language, path in result["labelled_datasets"].items():
+        labelled = read_rows(path)
+        assert len(labelled) == 1007
+        assert sum(row["severity_label"] is not None for row in labelled) == 150
+        assert sum(row["severity_needs_review"] for row in labelled) == 857
+        for original, enriched, sidecar in zip(
+            namespace["dataset"]["rows"][language],
+            labelled,
+            namespace["triplet_severity"][language],
+        ):
+            assert all(enriched[key] == value for key, value in original.items())
+            assert enriched["severity_mean_score"] == sidecar["severity_score"]
+            assert enriched["severity_mean_bracket"] == sidecar["severity_bracket"]
+            assert enriched["severity_label"] == sidecar["severity_label"]
+            assert enriched["severity_text_sha256"] == sidecar["text_sha256"]
+    for queue, count in (("conflicts", 86), ("incomplete", 15)):
+        with Path(result["review_queues"][queue]).open(newline="") as source:
+            records = list(csv.DictReader(source))
+        assert len(records) == count
+        assert all(
+            record[field] == ""
+            for record in records
+            for field in ("adjudicated_label", "adjudicator_id", "adjudication_reason")
+        )
+        assert all(record["case_id"] in by_case for record in records)
+        assert all(isinstance(json.loads(record["vote_counts"]), dict) for record in records)
     assert {path: path.read_bytes() for path in source_paths} == before
 
 

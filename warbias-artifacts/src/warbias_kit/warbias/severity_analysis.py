@@ -2,6 +2,7 @@
 
 import math
 from collections import Counter
+from copy import deepcopy
 from statistics import fmean, median
 
 from warbias_kit.io import unique_index
@@ -113,6 +114,11 @@ def severity_decisions(taxonomy_with_severity, protocol):
                 "severity_bracket_label": case.get("severity_bracket_label"),
                 "rating_gap_100": max(eligible) - min(eligible) if count >= 2 else None,
                 "severity_status": case.get("severity_status"),
+                **{
+                    key: deepcopy(value)
+                    for key, value in case.items()
+                    if key.startswith("severity_label") or key == "severity_needs_review"
+                },
             }
         )
     return result
