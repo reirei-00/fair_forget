@@ -310,3 +310,62 @@ def load_cohort(project, inputs=None):
             "dimensions": dimensions,
         },
     }
+
+
+def validate_cohort_membership(rows, cohort, *, complete=True):
+    """Check item IDs and recorded case/profile metadata without changing text.
+
+    Complete inputs require every cohort item and its recorded profile metadata.
+    Partial inputs check optional profile_id, target_group and actor fields.
+    Sentence meaning and production provenance need separate checks.
+    """
+    rows = list(rows)
+    if not rows or any(not isinstance(row, dict) for row in rows):
+        raise ValueError("Cohort membership needs nonempty item records")
+    identities = _identities([row.get("id") for row in rows], "cohort item IDs")
+    expected = unique_index(cohort["matrix"], "matrix_item_id")
+    if not identities <= expected.keys():
+        raise ValueError("Cohort input contains unknown or excluded item IDs")
+    if complete and identities != expected.keys():
+        raise ValueError("Complete input must contain exactly the selected cohort item IDs")
+    cases = set()
+    for row in rows:
+        selected = expected[row["id"]]
+        if row.get("case_id") not in (selected["case_id"], selected["public_case_id"]):
+            raise ValueError(f"{row['id']}: case_id differs from the selected cohort case")
+        if complete:
+            for field in ("profile_id", "target_group"):
+                if field not in row:
+                    raise ValueError(f"{row['id']}: complete cohort input requires {field}")
+        for field, value in (
+            ("profile_id", selected["profile_id"]),
+            ("target_group", selected["bias_type_code"]),
+            ("actor", selected["bias_type_code"]),
+        ):
+            if field in row and row[field] != value:
+                raise ValueError(f"{row['id']}: {field} differs from the selected cohort profile")
+        if complete:
+            for field in (
+                "intrinsic_attributes",
+                "additional_tags",
+                "generalized_attributes",
+                "framing",
+                "reporter",
+                "occupation_reference",
+                "context_scope",
+            ):
+                if field in selected and field not in row:
+                    raise ValueError(f"{row['id']}: complete cohort input requires {field}")
+                if row.get(field) != selected.get(field):
+                    raise ValueError(
+                        f"{row['id']}: {field} differs from the selected cohort profile"
+                    )
+            profile = {
+                "target_group": selected["bias_type_code"],
+                "intrinsic_attributes": selected.get("intrinsic_attributes", {}),
+                "additional_tags": selected.get("additional_tags", {}),
+            }
+            if "profile" in row and row["profile"] != profile:
+                raise ValueError(f"{row['id']}: profile override differs from the selected cohort")
+        cases.add(selected["case_id"])
+    return {"items": len(rows), "cases": len(cases)}

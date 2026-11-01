@@ -286,6 +286,52 @@ def test_project_can_be_found_from_a_notebook_folder():
     assert dataset_workflow.find_project(ROOT / "notebooks") == ROOT
 
 
+@pytest.mark.parametrize("start", ["", "warbias-artifacts/notebooks", "warbias/notebooks"])
+def test_project_discovery_prefers_artifact_over_the_full_taxonomy_sibling(tmp_path, start):
+    artifact = tmp_path / "warbias-artifacts"
+    for directory in ("configs", "protocol", "prompts"):
+        shutil.copytree(ROOT / directory, artifact / directory)
+    (artifact / "notebooks").mkdir()
+    main = tmp_path / "warbias"
+    write_json(main / "protocol/construction.json", {"project": "full-dataset"})
+    write_json(main / "protocol/cohort_taxonomy.json", {"role": "full_taxonomy_reference"})
+    (main / "notebooks").mkdir()
+    assert dataset_workflow.find_project(tmp_path / start) == artifact
+
+
+@pytest.mark.parametrize("name", ["standalone", "warbias"])
+def test_project_discovery_accepts_portable_and_legacy_artifact_directories(tmp_path, name):
+    project = tmp_path / name
+    for directory in ("configs", "protocol", "prompts"):
+        shutil.copytree(ROOT / directory, project / directory)
+    (project / "notebooks").mkdir()
+    assert dataset_workflow.find_project(project / "notebooks") == project
+    if name == "warbias":
+        assert dataset_workflow.find_project(tmp_path) == project
+
+
+@pytest.mark.parametrize("damage", ["missing_cohort", "wrong_binding", "invalid_config", "file"])
+def test_invalid_artifact_does_not_fall_back_to_a_legacy_project(tmp_path, damage):
+    legacy = tmp_path / "warbias"
+    for directory in ("configs", "protocol", "prompts"):
+        shutil.copytree(ROOT / directory, legacy / directory)
+    artifact = tmp_path / "warbias-artifacts"
+    if damage == "file":
+        artifact.write_text("Not an artifact directory.\n")
+    else:
+        shutil.copytree(legacy, artifact)
+        if damage == "missing_cohort":
+            (artifact / "protocol/cohort.json").unlink()
+        elif damage == "wrong_binding":
+            config = json.loads((artifact / "configs/data/dataset-inputs.json").read_text())
+            config["cohort_protocol"] = "protocol/cohort_taxonomy.json"
+            write_json(artifact / "configs/data/dataset-inputs.json", config)
+        else:
+            (artifact / "configs/data/dataset-inputs.json").write_text("Not JSON.\n")
+    with pytest.raises(ValueError, match="warbias-artifacts directory needs a valid cohort"):
+        dataset_workflow.find_project(tmp_path)
+
+
 @pytest.mark.parametrize("fault", ["unknown_source", "wrong_type", "missing_type"])
 def test_current_input_matrix_rejects_unresolved_or_incorrect_evidence(tmp_path, fault):
     shutil.copytree(ROOT / "protocol", tmp_path / "protocol")

@@ -2,6 +2,7 @@
 
 import json
 import shutil
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -68,6 +69,7 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         assert result["matrix_rows"] == 1006 and result["planned_model_calls"] == 3018
         assert result["model_calls"] == 0
     elif name == "04_sample_translation_comet":
+        assert namespace["sample_membership"] == {"items": 10, "cases": 10}
         assert result["translation_model"] == "gpt-6.1-sol"
         assert namespace["identity"]["application"] == "Codex"
         assert namespace["identity"]["recorded_turn_model"] == "gpt-6.1-sol"
@@ -77,6 +79,8 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
     else:
         assert result["status"] == "waiting_for_ukrainian_input"
         assert result["annotation_status"] == "in_progress"
+        assert result["expected_items"] == 1006
+        assert result["expected_cases"] == 119
 
 
 def test_pilot_notebook_resolves_its_subproject_in_a_broader_repository(tmp_path, monkeypatch):
@@ -92,6 +96,112 @@ def test_pilot_notebook_resolves_its_subproject_in_a_broader_repository(tmp_path
     namespace = execute_notebook("01_ukrainian_pilot")
     assert namespace["project"] == project
     assert sibling.read_bytes() == before
+
+
+@pytest.mark.parametrize("name", NOTEBOOKS)
+def test_notebooks_use_general_artifact_when_started_at_repository_root(
+    name, tmp_path, monkeypatch
+):
+    repository = tmp_path / "repository"
+    artifact = repository / "warbias-artifacts"
+    for directory in ("configs", "protocol", "prompts"):
+        shutil.copytree(ROOT / directory, artifact / directory)
+    main_protocol = repository / "warbias/protocol"
+    main_protocol.mkdir(parents=True)
+    (main_protocol / "construction.json").write_text('{"scope":"full"}\n')
+    (main_protocol / "cohort_taxonomy.json").write_text('{"cases":125}\n')
+    monkeypatch.chdir(repository)
+    namespace = execute_notebook(name)
+    assert namespace["project"] == artifact
+    if "cohort" in namespace:
+        cohort = namespace["cohort"]
+        assert len(cohort["taxonomy"]) == 119
+        assert len(cohort["matrix"]) == 1006
+        assert {row["case_scope"] for row in cohort["taxonomy"]} == {"general"}
+
+
+def _translation_source(tmp_path, monkeypatch, damage=None):
+    from warbias_kit.translation.warbias import validate_production_source
+    from warbias_kit.warbias import cohort as cohort_module
+    from warbias_kit.warbias.pilot_analysis import generation_cases
+    from warbias_kit.warbias.production import write_production_result
+
+    cohort = cohort_module.load_cohort(ROOT)
+    cohort["matrix"] = cohort["matrix"][:2]
+    cohort["summary"].update(items=2, cases=2)
+    monkeypatch.setattr(cohort_module, "load_cohort", lambda *args: cohort)
+    rows = generation_cases(cohort["matrix"])
+    if damage == "extra_item":
+        rows.append({**deepcopy(rows[0]), "id": "outside", "matrix_item_id": "outside"})
+    elif damage == "wrong_case":
+        rows[0]["case_id"] = "other-case"
+    elif damage == "wrong_profile":
+        rows[0]["profile_id"] = "other-profile"
+    elif damage == "wrong_attributes":
+        rows[0]["additional_tags"] = {"gender": "other"}
+    elif damage == "profile_override":
+        rows[0]["profile"] = {"target_group": "other"}
+    for row in rows:
+        row.update(
+            language="uk",
+            stereotype="Учасник чекає біля входу.",
+            counter_stereotype="Учасник заходить до будівлі.",
+            unrelated="Учасник читає книжку.",
+            generation={
+                "input_id": row["id"],
+                "purpose": "full_generation",
+                "raw_call_sha256": {"S": "a" * 64, "C": "b" * 64, "U": "c" * 64},
+                "production_plan_sha256": "d" * 64,
+                "selection_sha256": "e" * 64,
+            },
+        )
+    plan = {
+        "plan_sha256": "d" * 64,
+        "selection_sha256": "e" * 64,
+        "cases": rows,
+        "case_ids": [row["case_id"] for row in rows],
+        "unit_ids": [row["id"] for row in rows],
+    }
+    output = tmp_path / "source"
+    manifest = write_production_result(rows, plan, output, source_language="uk")
+    translator = json.loads((ROOT / "configs/translation/codex.json").read_text())
+    validate_production_source(rows, manifest, translator)
+    return {
+        "UKRAINIAN_PATH = None": f"UKRAINIAN_PATH = {str(output / 'triplets.jsonl')!r}",
+        "PRODUCTION_MANIFEST_PATH = None": (
+            f"PRODUCTION_MANIFEST_PATH = {str(output / 'production-result.json')!r}"
+        ),
+    }
+
+
+def test_translation_notebook_previews_the_complete_selected_cohort(tmp_path, monkeypatch):
+    replacements = _translation_source(tmp_path, monkeypatch)
+    monkeypatch.chdir(ROOT / "notebooks")
+    namespace = execute_notebook("05_full_english_translation", replacements)
+    assert namespace["result"]["status"] == "preview"
+    assert namespace["result"]["items"] == 2
+    assert namespace["result"]["expected_items"] == 2
+    assert namespace["result"]["model_calls"] == 0
+
+
+@pytest.mark.parametrize(
+    "damage", ["extra_item", "wrong_case", "wrong_profile", "wrong_attributes", "profile_override"]
+)
+def test_translation_notebook_rejects_valid_production_outside_its_cohort(
+    damage, tmp_path, monkeypatch
+):
+    from warbias_kit import cli_support, dataset_workflow
+
+    replacements = _translation_source(tmp_path, monkeypatch, damage)
+
+    def unexpected(*args, **kwargs):
+        raise AssertionError("Reject the source before preparing or executing translation")
+
+    monkeypatch.setattr(dataset_workflow, "preview_translation", unexpected)
+    monkeypatch.setattr(cli_support, "load_factory", unexpected)
+    monkeypatch.chdir(ROOT / "notebooks")
+    with pytest.raises(ValueError, match="(?i)cohort|case|profile"):
+        execute_notebook("05_full_english_translation", replacements)
 
 
 def test_selection_notebook_output_feeds_full_generation_preview(monkeypatch):

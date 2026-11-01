@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from warbias_kit.io import file_digest, write_json
+from warbias_kit.io import file_digest, read_rows, write_json
 from warbias_kit.warbias import cohort
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -646,3 +646,231 @@ def test_committed_cohort_contains_only_general_cases_with_exact_release_scope()
     )
     source_ids = {row["evidence_id"] for row in result["sources"]}
     assert all(set(row["evidence_ids"]) <= source_ids for row in evidence)
+
+
+@pytest.fixture
+def membership_cohort():
+    return {
+        "matrix": [
+            {
+                "matrix_item_id": identity,
+                "case_id": case,
+                "public_case_id": public,
+                "profile_id": profile,
+                "bias_type_code": group,
+                "intrinsic_attributes": {},
+                "additional_tags": {"gender": "women"} if identity == "WB-0001" else {},
+                "generalized_attributes": {},
+                "framing": "unattributed",
+                "reporter": None,
+                "context_scope": "cross_conflict_generic",
+                **({"occupation_reference": "previous"} if identity == "WB-0001" else {}),
+            }
+            for identity, case, public, profile, group in (
+                ("WB-0001", "housing", "C1", "housing-women", "idp"),
+                ("WB-0002", "housing", "C1", "housing-men", "idp"),
+                ("WB-0003", "employment", "C2", "employment-base", "veteran"),
+            )
+        ]
+    }
+
+
+@pytest.fixture
+def membership_rows(membership_cohort):
+    return [
+        {
+            **deepcopy(row),
+            "id": row["matrix_item_id"],
+            "target_group": row["bias_type_code"],
+            "stereotype": "Saved sample text.",
+        }
+        for row in membership_cohort["matrix"]
+    ]
+
+
+def test_membership_accepts_current_complete_cohort_without_changing_rows():
+    selected = cohort.load_cohort(ROOT)
+    rows = [
+        {
+            **deepcopy(row),
+            "id": row["matrix_item_id"],
+            "target_group": row["bias_type_code"],
+        }
+        for row in selected["matrix"]
+    ]
+    before = deepcopy((rows, selected))
+    assert cohort.validate_cohort_membership(rows, selected) == {"items": 1006, "cases": 119}
+    assert (rows, selected) == before
+
+
+def test_membership_accepts_saved_public_case_aliases_without_rewriting_sample_text():
+    selected = cohort.load_cohort(ROOT)
+    rows = read_rows(ROOT / "protocol/inputs/translation_sample_uk.jsonl")
+    before = deepcopy(rows)
+    assert cohort.validate_cohort_membership(rows, selected, complete=False) == {
+        "items": 10,
+        "cases": 10,
+    }
+    assert rows == before
+
+
+def test_membership_counts_resolved_cases_and_accepts_public_aliases(
+    membership_rows, membership_cohort
+):
+    membership_rows[0]["case_id"] = "C1"
+    assert cohort.validate_cohort_membership(membership_rows, membership_cohort) == {
+        "items": 3,
+        "cases": 2,
+    }
+
+
+@pytest.mark.parametrize(
+    ("damage", "message"),
+    [
+        ("missing", "exactly the selected"),
+        ("extra", "unknown or excluded"),
+        ("duplicate", "unique nonempty"),
+        ("swapped_excluded", "unknown or excluded"),
+    ],
+)
+def test_membership_rejects_changed_item_sets(membership_rows, membership_cohort, damage, message):
+    if damage == "missing":
+        membership_rows.pop()
+    elif damage == "extra":
+        membership_rows.append({**membership_rows[0], "id": "WB-0004"})
+    elif damage == "duplicate":
+        membership_rows[-1] = deepcopy(membership_rows[0])
+    else:
+        membership_rows[-1]["id"] = "WB-0004"
+    with pytest.raises(ValueError, match=message):
+        cohort.validate_cohort_membership(membership_rows, membership_cohort)
+
+
+@pytest.mark.parametrize("identity", [None, "", "  ", 7])
+def test_membership_rejects_invalid_item_ids(membership_rows, membership_cohort, identity):
+    membership_rows[0]["id"] = identity
+    with pytest.raises(ValueError, match="unique nonempty"):
+        cohort.validate_cohort_membership(membership_rows, membership_cohort)
+
+
+@pytest.mark.parametrize("complete", [False, True])
+def test_membership_rejects_empty_inputs(membership_cohort, complete):
+    with pytest.raises(ValueError, match="nonempty item records"):
+        cohort.validate_cohort_membership([], membership_cohort, complete=complete)
+
+
+def test_partial_membership_requires_a_nonempty_selected_subset(membership_cohort):
+    row = {"id": "WB-0001", "case_id": "C1", "actor": "idp"}
+    assert cohort.validate_cohort_membership([row], membership_cohort, complete=False) == {
+        "items": 1,
+        "cases": 1,
+    }
+    row["id"] = "WB-0004"
+    with pytest.raises(ValueError, match="unknown or excluded"):
+        cohort.validate_cohort_membership([row], membership_cohort, complete=False)
+
+
+@pytest.mark.parametrize("complete", [False, True])
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("case_id", "C2"),
+        ("profile_id", "housing-men"),
+        ("target_group", "veteran"),
+        ("actor", "veteran"),
+    ],
+)
+def test_membership_rejects_case_profile_or_group_mismatches(
+    membership_rows, membership_cohort, complete, field, value
+):
+    membership_rows[0][field] = value
+    with pytest.raises(ValueError, match=field):
+        cohort.validate_cohort_membership(membership_rows, membership_cohort, complete=complete)
+
+
+@pytest.mark.parametrize("complete", [False, True])
+def test_membership_requires_case_id(membership_rows, membership_cohort, complete):
+    del membership_rows[0]["case_id"]
+    with pytest.raises(ValueError, match="case_id"):
+        cohort.validate_cohort_membership(membership_rows, membership_cohort, complete=complete)
+
+
+@pytest.mark.parametrize("field", ["profile_id", "target_group"])
+def test_complete_membership_requires_profile_and_group_metadata(
+    membership_rows, membership_cohort, field
+):
+    del membership_rows[0][field]
+    assert cohort.validate_cohort_membership(
+        membership_rows, membership_cohort, complete=False
+    ) == {"items": 3, "cases": 2}
+    with pytest.raises(ValueError, match=f"requires {field}"):
+        cohort.validate_cohort_membership(membership_rows, membership_cohort)
+
+
+@pytest.mark.parametrize(
+    ("field", "changed"),
+    [
+        ("intrinsic_attributes", {"gender": "men"}),
+        ("additional_tags", {"gender": "men"}),
+        ("generalized_attributes", {"region": "east"}),
+        ("framing", "attributed"),
+        ("reporter", "employer"),
+        ("occupation_reference", "sought"),
+        ("context_scope", "ukraine_context"),
+    ],
+)
+@pytest.mark.parametrize("damage", ["changed", "missing"])
+def test_complete_membership_preserves_declared_profile_metadata(
+    membership_rows, membership_cohort, field, changed, damage
+):
+    if damage == "missing":
+        del membership_rows[0][field]
+    else:
+        membership_rows[0][field] = changed
+    with pytest.raises(ValueError, match=field):
+        cohort.validate_cohort_membership(membership_rows, membership_cohort)
+
+
+@pytest.mark.parametrize("field", ["additional_tags", "reporter", "occupation_reference"])
+def test_complete_membership_rejects_nonmatching_extra_profile_metadata(
+    membership_rows, membership_cohort, field
+):
+    del membership_cohort["matrix"][0][field]
+    membership_rows[0][field] = "unexpected"
+    with pytest.raises(ValueError, match=field):
+        cohort.validate_cohort_membership(membership_rows, membership_cohort)
+
+
+def test_complete_membership_accepts_the_canonical_translation_profile(
+    membership_rows, membership_cohort
+):
+    row = membership_rows[0]
+    row["profile"] = {
+        field: deepcopy(row[field])
+        for field in ("target_group", "intrinsic_attributes", "additional_tags")
+    }
+    before = deepcopy((membership_rows, membership_cohort))
+    assert cohort.validate_cohort_membership(membership_rows, membership_cohort) == {
+        "items": 3,
+        "cases": 2,
+    }
+    assert (membership_rows, membership_cohort) == before
+
+
+@pytest.mark.parametrize(
+    "changed", [None, "target_group", "intrinsic_attributes", "additional_tags"]
+)
+def test_complete_membership_rejects_conflicting_translation_profile_overrides(
+    membership_rows, membership_cohort, changed
+):
+    row = membership_rows[0]
+    row["profile"] = {
+        field: deepcopy(row[field])
+        for field in ("target_group", "intrinsic_attributes", "additional_tags")
+    }
+    if changed is None:
+        row["profile"] = None
+    else:
+        row["profile"][changed] = "conflicting value"
+    with pytest.raises(ValueError, match="profile override"):
+        cohort.validate_cohort_membership(membership_rows, membership_cohort)
