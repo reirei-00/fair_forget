@@ -76,6 +76,8 @@ The taxonomy table separates case evidence from category feedback. `evidence_ids
 Their types are `published_reference` or `compilation`. `category_evidence_ids`
 links feedback used for category names, merges or splits. Feedback supplies
 classification decisions; it does not establish stereotype prevalence.
+Compilation display templates replace only group nouns with `[TARGET]`;
+generation keeps the frozen source wording.
 
 `configs/data/dataset-inputs.json` binds the frozen taxonomy, pilot samples,
 ratings and allocation records. These tables preserve the construction evidence.

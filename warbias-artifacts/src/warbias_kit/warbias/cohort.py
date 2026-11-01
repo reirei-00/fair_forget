@@ -1,6 +1,7 @@
 """Select the human cohort from frozen profile allocations and source records."""
 
 import json
+import re
 from collections import Counter
 from copy import deepcopy
 from pathlib import Path
@@ -49,6 +50,14 @@ def _listed(value, label):
     return _identities(values, label)
 
 
+def _display_claim(original):
+    claim = original["claim"]
+    if original["source_type"] != "compilation":
+        return claim
+    nouns = "ВПО" if original["bias_type_code"] == "idp" else "ветерани|ветеранів|ветеранам"
+    return re.sub(rf"\b(?:{nouns})\b", "[TARGET]", claim, flags=re.IGNORECASE)
+
+
 def _taxonomy_rows(taxonomy, matrix, sources):
     cases = unique_index(taxonomy, "case_id")
     active_cases = {row["case_id"] for row in matrix}
@@ -81,10 +90,9 @@ def _taxonomy_rows(taxonomy, matrix, sources):
             for field, source in (
                 ("target_group", "bias_type_code"),
                 ("category_code", "category_code"),
-                ("claim_uk", "claim"),
                 ("context_uk", "context_uk"),
             )
-        ):
+        ) or row["claim_uk"] != _display_claim(original):
             raise ValueError("Cohort taxonomy must preserve its source case and group")
         labels = (row["category_uk"], row["category_en"])
         if row["category_code"] in categories and categories[row["category_code"]] != labels:

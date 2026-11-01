@@ -165,9 +165,9 @@
     },
     "source_compilation": {
       "path": "protocol/inputs/source_compilation.jsonl",
-      "sha256": "6bbd7f9bc87ed7df95c669bfb3735967f6ddcc65616ea21a0a2d42d6f79eac80",
+      "sha256": "4e6fce162bd87ffb0557ff0e69cac350dd039af6be9a0bea4eec798af44c7541",
       "format": "jsonl",
-      "bytes": 310,
+      "bytes": 298,
       "rows": 1,
       "role": "taxonomy_profile_design"
     },
@@ -342,7 +342,7 @@
     },
     {
       "artifact": "source_compilation",
-      "portable_sha256": "6bbd7f9bc87ed7df95c669bfb3735967f6ddcc65616ea21a0a2d42d6f79eac80",
+      "portable_sha256": "4e6fce162bd87ffb0557ff0e69cac350dd039af6be9a0bea4eec798af44c7541",
       "records": 1,
       "role": "taxonomy_profile_design"
     },

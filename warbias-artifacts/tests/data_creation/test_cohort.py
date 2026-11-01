@@ -298,6 +298,126 @@ def test_cohort_category_evidence_must_be_declared_and_resolved(cohort_project, 
         cohort.load_cohort(cohort_project["root"])
 
 
+def _compilation_claim(fixture, group, original, display):
+    case_id = "housing" if group == "idp" else "recruitment"
+    source = {
+        "evidence_id": "compiled-source",
+        "title": "Recorded case compilation",
+        "source_type": "compilation",
+        "source_kind": "recorded_case_specifications",
+        "source_file": "protocol/source-cases.jsonl",
+        "source_sha256": "a" * 64,
+    }
+    fixture["inputs"]["source_compilation"] = [source]
+    for table in ("profile_design", "matrix_reviewed"):
+        for row in fixture["inputs"][table]:
+            if row["case_id"] == case_id:
+                row.update(
+                    claim=original, evidence_ids="compiled-source", source_type="compilation"
+                )
+    row = next(row for row in fixture["taxonomy"] if row["case_id"] == case_id)
+    row.update(
+        claim_uk=display,
+        evidence_ids="compiled-source",
+        source_types="compilation",
+        source_urls="[]",
+        source_titles='["Recorded case compilation"]',
+    )
+    _save_fixture(fixture)
+
+
+@pytest.mark.parametrize(
+    ("group", "original", "display"),
+    [
+        (
+            "idp",
+            "ВПО з дітьми є небажаними орендарями.",
+            "[TARGET] з дітьми є небажаними орендарями.",
+        ),
+        (
+            "idp",
+            "Російськомовні впо не можуть належати до громади.",
+            "Російськомовні [TARGET] не можуть належати до громади.",
+        ),
+        (
+            "veteran",
+            "Ветерани з інвалідністю самі винні у труднощах.",
+            "[TARGET] з інвалідністю самі винні у труднощах.",
+        ),
+        (
+            "veteran",
+            "Інші люди повинні вирішувати за ветеранів, чи починати власну справу.",
+            "Інші люди повинні вирішувати за [TARGET], чи починати власну справу.",
+        ),
+        (
+            "veteran",
+            "Ветеранам з інвалідністю слід нав’язувати допомогу без згоди.",
+            "[TARGET] з інвалідністю слід нав’язувати допомогу без згоди.",
+        ),
+        (
+            "veteran",
+            "Усі ВЕТЕРАНИ є природженими керівниками цивільних команд.",
+            "Усі [TARGET] є природженими керівниками цивільних команд.",
+        ),
+    ],
+)
+def test_compilation_templates_preserve_qualifiers_and_frozen_generation_claims(
+    cohort_project, group, original, display
+):
+    _compilation_claim(cohort_project, group, original, display)
+    before = deepcopy(cohort_project["inputs"])
+    result = cohort.load_cohort(cohort_project["root"])
+    taxonomy = next(row for row in result["taxonomy"] if row["source_types"] == "compilation")
+    assert taxonomy["claim_uk"] == display
+    rows = [row for row in result["matrix"] if row["source_type"] == "compilation"]
+    assert rows and all(row["claim"] == original for row in rows)
+    assert cohort_project["inputs"] == before
+
+
+@pytest.mark.parametrize(
+    "display",
+    [
+        "[TARGET] є небажаними орендарями.",
+        "[TARGET] з дітьми не є небажаними орендарями.",
+        "Усі [TARGET] з дітьми є небажаними орендарями.",
+        "ВПО з дітьми є небажаними орендарями.",
+    ],
+)
+def test_compilation_templates_reject_rewriting_beyond_the_group_noun(cohort_project, display):
+    _compilation_claim(cohort_project, "idp", "ВПО з дітьми є небажаними орендарями.", display)
+    with pytest.raises(ValueError, match="preserve its source case"):
+        cohort.load_cohort(cohort_project["root"])
+
+
+def test_compilation_normalization_uses_whole_words_and_the_declared_group():
+    assert (
+        cohort._display_claim(
+            {
+                "claim": "Ветерани читають видання «Суперветерани» про ветеранів.",
+                "source_type": "compilation",
+                "bias_type_code": "veteran",
+            }
+        )
+        == "[TARGET] читають видання «Суперветерани» про [TARGET]."
+    )
+    assert (
+        cohort._display_claim(
+            {"claim": "ВПО і ветерани.", "source_type": "compilation", "bias_type_code": "idp"}
+        )
+        == "[TARGET] і ветерани."
+    )
+
+
+def test_direct_source_claims_cannot_use_compilation_normalization(cohort_project):
+    for row in cohort_project["inputs"]["matrix_reviewed"]:
+        if row["case_id"] == "housing":
+            row["claim"] = "ВПО з дітьми є небажаними орендарями."
+    cohort_project["taxonomy"][0]["claim_uk"] = "[TARGET] з дітьми є небажаними орендарями."
+    _save_fixture(cohort_project)
+    with pytest.raises(ValueError, match="preserve its source case"):
+        cohort.load_cohort(cohort_project["root"])
+
+
 def test_committed_cohort_keeps_all_local_items_and_has_exact_release_scope():
     result = cohort.load_cohort(ROOT)
     summary = result["summary"]
