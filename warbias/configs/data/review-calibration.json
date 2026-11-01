@@ -1,0 +1,38 @@
+{
+  "files": {
+    "candidate_config": {
+      "path": "configs/review/jev-calibrated.json",
+      "sha256": "0b0467a2de2c20489a8aacf0fa7b12f40ca384ec6d0cb48574e534e080afc25b"
+    },
+    "examples": {
+      "path": "protocol/inputs/review_calibration_examples.jsonl",
+      "sha256": "267c48e1edfc69fd08ec6d42adcf7632e02ff3c3683cf6178b964ba78014bfbb"
+    },
+    "model_reviews": {
+      "path": "protocol/inputs/jev_calibration_reviews.csv",
+      "sha256": "55bc1366c2cd694e6bb578fe7fc6c787b36307b4bbafda5f9b8d88e606a981e5"
+    },
+    "protocol": {
+      "path": "protocol/review_calibration.json",
+      "sha256": "8dcf4270ebb87de4e7e43a1bb60c6574de90f211c9662cd2962348df0b2f5812"
+    },
+    "run": {
+      "path": "protocol/results/jev_calibration.json",
+      "sha256": "c18ae263e8e47c1bb950586d450e08831b86061519d08f14f785cab61c328f9f"
+    },
+    "split": {
+      "path": "protocol/inputs/review_calibration_split.json",
+      "sha256": "e02900dbff007bb7fec635e201a3e135399079ad3342f6ff19f77e0743cf2c9a"
+    }
+  },
+  "issue_order": [
+    "grammar_or_spelling",
+    "unnatural",
+    "counter_not_contradicting",
+    "unrelated_implies_stereotype",
+    "group_or_meaning",
+    "non_parallel",
+    "other"
+  ],
+  "schema_version": 1
+}

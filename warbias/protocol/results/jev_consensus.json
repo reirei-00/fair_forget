@@ -1,0 +1,528 @@
+{
+  "computed_at_utc": "2026-11-01T11:14:04.454411+00:00",
+  "consensus_csv_sha256": "008d5f9d01dfb113dc7f93ae1e5fad55aef333658ff9a6f2058a3fd5811020be",
+  "consensus_rows_sha256": "dab52325d8b0cc7a1f926ee0c1bdf6a20181e82a4049bfbba5282b94b7460b4b",
+  "human_comparison": "strict_majority_of_independent_valid_votes",
+  "input_manifests_sha256": {
+    "configs/data/binary-reviews.json": "2d2576bcd43a68b14f24de759f00d5652a550bd8892d1bfd12abd027959d76fb",
+    "configs/data/review-calibration.json": "e1edf175ee21b7d7f6076c36db3483e13dc07c2cfa55fc5875d96038c1c001c7",
+    "configs/data/review-inputs.json": "8e5da4e36273df01200f9152ea8141246c85d3a9c0699471bd4e19e37cfe9f30"
+  },
+  "items": 1059,
+  "label_counts": {
+    "no_problem": 987,
+    "problem": 27
+  },
+  "new_model_requests": false,
+  "production_selection": false,
+  "protocol_sha256": "53cf2fd66335bccf538d3bfb8fea9de08081971a4eb2f4119ab7669ff0c5bb65",
+  "schema_version": 1,
+  "scopes": {
+    "development": {
+      "atomic": {
+        "agreement": {
+          "ac1": -0.024007158459878393,
+          "both_no_problem": 324,
+          "both_problem": 12,
+          "ci95": {
+            "ac1": {
+              "high": 0.15122733828249307,
+              "low": -0.2015406873757647,
+              "valid_resamples": 2000
+            },
+            "negative_agreement": {
+              "high": 0.6474795232677282,
+              "low": 0.497565217559999,
+              "valid_resamples": 2000
+            },
+            "observed_agreement": {
+              "high": 0.4847876513577416,
+              "low": 0.3424742646001668,
+              "valid_resamples": 2000
+            },
+            "positive_agreement": {
+              "high": 0.07760312323419118,
+              "low": 0.02104932834177494,
+              "valid_resamples": 2000
+            }
+          },
+          "left_only_problem": 469,
+          "left_problem_rate": 0.5909090909090909,
+          "n": 814,
+          "negative_agreement": 0.5754884547069272,
+          "observed_agreement": 0.41277641277641275,
+          "positive_agreement": 0.04780876494023904,
+          "right_only_problem": 9,
+          "right_problem_rate": 0.025798525798525797
+        },
+        "always_no_problem_reference": {
+          "ac1": 0.9735273279156293,
+          "both_no_problem": 793,
+          "both_problem": 0,
+          "ci95": {
+            "ac1": {
+              "high": 0.9854745429772283,
+              "low": 0.9592675182622551,
+              "valid_resamples": 2000
+            },
+            "negative_agreement": {
+              "high": 0.9927888938848921,
+              "low": 0.9800246474160479,
+              "valid_resamples": 2000
+            },
+            "observed_agreement": {
+              "high": 0.9856810433003751,
+              "low": 0.9608316955317089,
+              "valid_resamples": 2000
+            },
+            "positive_agreement": {
+              "high": 0.0,
+              "low": 0.0,
+              "valid_resamples": 2000
+            }
+          },
+          "left_only_problem": 0,
+          "left_problem_rate": 0.0,
+          "n": 814,
+          "negative_agreement": 0.9869321717485999,
+          "observed_agreement": 0.9742014742014742,
+          "positive_agreement": 0.0,
+          "right_only_problem": 21,
+          "right_problem_rate": 0.025798525798525797
+        },
+        "coverage": {
+          "case_families": 101,
+          "compared_items": 814,
+          "items": 846,
+          "missing_votes": 1,
+          "status_counts": {
+            "majority": 814,
+            "tie": 32
+          }
+        }
+      },
+      "direct": {
+        "agreement": {
+          "ac1": 0.308279433085777,
+          "both_no_problem": 441,
+          "both_problem": 14,
+          "ci95": {
+            "ac1": {
+              "high": 0.4538897165474023,
+              "low": 0.13376887213248556,
+              "valid_resamples": 2000
+            },
+            "negative_agreement": {
+              "high": 0.767681277056277,
+              "low": 0.6409041797616128,
+              "valid_resamples": 2000
+            },
+            "observed_agreement": {
+              "high": 0.6294920569120911,
+              "low": 0.4815163795736729,
+              "valid_resamples": 2000
+            },
+            "positive_agreement": {
+              "high": 0.1164021164021164,
+              "low": 0.033517218841910335,
+              "valid_resamples": 2000
+            }
+          },
+          "left_only_problem": 352,
+          "left_problem_rate": 0.44963144963144963,
+          "n": 814,
+          "negative_agreement": 0.7107171635777598,
+          "observed_agreement": 0.558968058968059,
+          "positive_agreement": 0.07235142118863049,
+          "right_only_problem": 7,
+          "right_problem_rate": 0.025798525798525797
+        },
+        "always_no_problem_reference": {
+          "ac1": 0.9735273279156293,
+          "both_no_problem": 793,
+          "both_problem": 0,
+          "ci95": {
+            "ac1": {
+              "high": 0.9854745429772283,
+              "low": 0.9592675182622551,
+              "valid_resamples": 2000
+            },
+            "negative_agreement": {
+              "high": 0.9927888938848921,
+              "low": 0.9800246474160479,
+              "valid_resamples": 2000
+            },
+            "observed_agreement": {
+              "high": 0.9856810433003751,
+              "low": 0.9608316955317089,
+              "valid_resamples": 2000
+            },
+            "positive_agreement": {
+              "high": 0.0,
+              "low": 0.0,
+              "valid_resamples": 2000
+            }
+          },
+          "left_only_problem": 0,
+          "left_problem_rate": 0.0,
+          "n": 814,
+          "negative_agreement": 0.9869321717485999,
+          "observed_agreement": 0.9742014742014742,
+          "positive_agreement": 0.0,
+          "right_only_problem": 21,
+          "right_problem_rate": 0.025798525798525797
+        },
+        "coverage": {
+          "case_families": 101,
+          "compared_items": 814,
+          "items": 846,
+          "missing_votes": 1,
+          "status_counts": {
+            "majority": 814,
+            "tie": 32
+          }
+        }
+      },
+      "v1": {
+        "agreement": {
+          "ac1": 0.551162213407839,
+          "both_no_problem": 543,
+          "both_problem": 10,
+          "ci95": {
+            "ac1": {
+              "high": 0.6725551219449425,
+              "low": 0.40638332596368365,
+              "valid_resamples": 2000
+            },
+            "negative_agreement": {
+              "high": 0.855234343933535,
+              "low": 0.7490680836026378,
+              "valid_resamples": 2000
+            },
+            "observed_agreement": {
+              "high": 0.7497175550405561,
+              "low": 0.6032271966474804,
+              "valid_resamples": 2000
+            },
+            "positive_agreement": {
+              "high": 0.12355212355212356,
+              "low": 0.026663716814159293,
+              "valid_resamples": 2000
+            }
+          },
+          "left_only_problem": 250,
+          "left_problem_rate": 0.3194103194103194,
+          "n": 814,
+          "negative_agreement": 0.8062360801781737,
+          "observed_agreement": 0.6793611793611793,
+          "positive_agreement": 0.0711743772241993,
+          "right_only_problem": 11,
+          "right_problem_rate": 0.025798525798525797
+        },
+        "always_no_problem_reference": {
+          "ac1": 0.9735273279156293,
+          "both_no_problem": 793,
+          "both_problem": 0,
+          "ci95": {
+            "ac1": {
+              "high": 0.9854745429772283,
+              "low": 0.9592675182622551,
+              "valid_resamples": 2000
+            },
+            "negative_agreement": {
+              "high": 0.9927888938848921,
+              "low": 0.9800246474160479,
+              "valid_resamples": 2000
+            },
+            "observed_agreement": {
+              "high": 0.9856810433003751,
+              "low": 0.9608316955317089,
+              "valid_resamples": 2000
+            },
+            "positive_agreement": {
+              "high": 0.0,
+              "low": 0.0,
+              "valid_resamples": 2000
+            }
+          },
+          "left_only_problem": 0,
+          "left_problem_rate": 0.0,
+          "n": 814,
+          "negative_agreement": 0.9869321717485999,
+          "observed_agreement": 0.9742014742014742,
+          "positive_agreement": 0.0,
+          "right_only_problem": 21,
+          "right_problem_rate": 0.025798525798525797
+        },
+        "coverage": {
+          "case_families": 101,
+          "compared_items": 814,
+          "items": 846,
+          "missing_votes": 1,
+          "status_counts": {
+            "majority": 814,
+            "tie": 32
+          }
+        }
+      },
+      "v2": {
+        "agreement": {
+          "ac1": 0.832944698226904,
+          "both_no_problem": 691,
+          "both_problem": 7,
+          "ci95": {
+            "ac1": {
+              "high": 0.8912623260149707,
+              "low": 0.7640674636461922,
+              "valid_resamples": 2000
+            },
+            "negative_agreement": {
+              "high": 0.9484677561866364,
+              "low": 0.8928558835381826,
+              "valid_resamples": 2000
+            },
+            "observed_agreement": {
+              "high": 0.902508225707257,
+              "low": 0.808200539484285,
+              "valid_resamples": 2000
+            },
+            "positive_agreement": {
+              "high": 0.20741702741702736,
+              "low": 0.026657894736842106,
+              "valid_resamples": 2000
+            }
+          },
+          "left_only_problem": 102,
+          "left_problem_rate": 0.1339066339066339,
+          "n": 814,
+          "negative_agreement": 0.9225634178905207,
+          "observed_agreement": 0.8574938574938575,
+          "positive_agreement": 0.1076923076923077,
+          "right_only_problem": 14,
+          "right_problem_rate": 0.025798525798525797
+        },
+        "always_no_problem_reference": {
+          "ac1": 0.9735273279156293,
+          "both_no_problem": 793,
+          "both_problem": 0,
+          "ci95": {
+            "ac1": {
+              "high": 0.9854745429772283,
+              "low": 0.9592675182622551,
+              "valid_resamples": 2000
+            },
+            "negative_agreement": {
+              "high": 0.9927888938848921,
+              "low": 0.9800246474160479,
+              "valid_resamples": 2000
+            },
+            "observed_agreement": {
+              "high": 0.9856810433003751,
+              "low": 0.9608316955317089,
+              "valid_resamples": 2000
+            },
+            "positive_agreement": {
+              "high": 0.0,
+              "low": 0.0,
+              "valid_resamples": 2000
+            }
+          },
+          "left_only_problem": 0,
+          "left_problem_rate": 0.0,
+          "n": 814,
+          "negative_agreement": 0.9869321717485999,
+          "observed_agreement": 0.9742014742014742,
+          "positive_agreement": 0.0,
+          "right_only_problem": 21,
+          "right_problem_rate": 0.025798525798525797
+        },
+        "coverage": {
+          "case_families": 101,
+          "compared_items": 814,
+          "items": 846,
+          "missing_votes": 1,
+          "status_counts": {
+            "majority": 814,
+            "tie": 32
+          }
+        }
+      }
+    },
+    "full_human_cohort": {
+      "v1": {
+        "agreement": {
+          "ac1": 0.5963000809523178,
+          "both_no_problem": 703,
+          "both_problem": 11,
+          "ci95": {
+            "ac1": {
+              "high": 0.6922535538261229,
+              "low": 0.4812924541819228,
+              "valid_resamples": 2000
+            },
+            "negative_agreement": {
+              "high": 0.8630084946926291,
+              "low": 0.7783701639545961,
+              "valid_resamples": 2000
+            },
+            "observed_agreement": {
+              "high": 0.7612247803329378,
+              "low": 0.6408497630660456,
+              "valid_resamples": 2000
+            },
+            "positive_agreement": {
+              "high": 0.11188811188811189,
+              "low": 0.029150293657835804,
+              "valid_resamples": 2000
+            }
+          },
+          "left_only_problem": 284,
+          "left_problem_rate": 0.29092702169625245,
+          "n": 1014,
+          "negative_agreement": 0.8241500586166471,
+          "observed_agreement": 0.7041420118343196,
+          "positive_agreement": 0.06832298136645963,
+          "right_only_problem": 16,
+          "right_problem_rate": 0.026627218934911243
+        },
+        "always_no_problem_reference": {
+          "ac1": 0.9726543362473874,
+          "both_no_problem": 987,
+          "both_problem": 0,
+          "ci95": {
+            "ac1": {
+              "high": 0.9831877181501835,
+              "low": 0.9594515001517342,
+              "valid_resamples": 2000
+            },
+            "negative_agreement": {
+              "high": 0.9916627839443445,
+              "low": 0.9801132161108123,
+              "valid_resamples": 2000
+            },
+            "observed_agreement": {
+              "high": 0.983463436792171,
+              "low": 0.9610019774808128,
+              "valid_resamples": 2000
+            },
+            "positive_agreement": {
+              "high": 0.0,
+              "low": 0.0,
+              "valid_resamples": 2000
+            }
+          },
+          "left_only_problem": 0,
+          "left_problem_rate": 0.0,
+          "n": 1014,
+          "negative_agreement": 0.9865067466266867,
+          "observed_agreement": 0.9733727810650887,
+          "positive_agreement": 0.0,
+          "right_only_problem": 27,
+          "right_problem_rate": 0.026627218934911243
+        },
+        "coverage": {
+          "case_families": 127,
+          "compared_items": 1014,
+          "items": 1059,
+          "missing_votes": 1,
+          "status_counts": {
+            "majority": 1014,
+            "tie": 45
+          }
+        }
+      },
+      "v2": {
+        "agreement": {
+          "ac1": 0.841995438224069,
+          "both_no_problem": 869,
+          "both_problem": 7,
+          "ci95": {
+            "ac1": {
+              "high": 0.893956999981252,
+              "low": 0.7780166971460649,
+              "valid_resamples": 2000
+            },
+            "negative_agreement": {
+              "high": 0.9497238153508345,
+              "low": 0.8987255852333723,
+              "valid_resamples": 2000
+            },
+            "observed_agreement": {
+              "high": 0.9048148726273726,
+              "low": 0.8171803824316387,
+              "valid_resamples": 2000
+            },
+            "positive_agreement": {
+              "high": 0.1791096242923314,
+              "low": 0.017391304347826087,
+              "valid_resamples": 2000
+            }
+          },
+          "left_only_problem": 118,
+          "left_problem_rate": 0.1232741617357002,
+          "n": 1014,
+          "negative_agreement": 0.9264392324093816,
+          "observed_agreement": 0.863905325443787,
+          "positive_agreement": 0.09210526315789473,
+          "right_only_problem": 20,
+          "right_problem_rate": 0.026627218934911243
+        },
+        "always_no_problem_reference": {
+          "ac1": 0.9726543362473874,
+          "both_no_problem": 987,
+          "both_problem": 0,
+          "ci95": {
+            "ac1": {
+              "high": 0.9831877181501835,
+              "low": 0.9594515001517342,
+              "valid_resamples": 2000
+            },
+            "negative_agreement": {
+              "high": 0.9916627839443445,
+              "low": 0.9801132161108123,
+              "valid_resamples": 2000
+            },
+            "observed_agreement": {
+              "high": 0.983463436792171,
+              "low": 0.9610019774808128,
+              "valid_resamples": 2000
+            },
+            "positive_agreement": {
+              "high": 0.0,
+              "low": 0.0,
+              "valid_resamples": 2000
+            }
+          },
+          "left_only_problem": 0,
+          "left_problem_rate": 0.0,
+          "n": 1014,
+          "negative_agreement": 0.9865067466266867,
+          "observed_agreement": 0.9733727810650887,
+          "positive_agreement": 0.0,
+          "right_only_problem": 27,
+          "right_problem_rate": 0.026627218934911243
+        },
+        "coverage": {
+          "case_families": 127,
+          "compared_items": 1014,
+          "items": 1059,
+          "missing_votes": 1,
+          "status_counts": {
+            "majority": 1014,
+            "tie": 45
+          }
+        }
+      }
+    }
+  },
+  "status_counts": {
+    "majority": 1014,
+    "tie": 45
+  },
+  "valid_vote_counts": {
+    "3": 360,
+    "4": 483,
+    "5": 179,
+    "6": 37
+  }
+}

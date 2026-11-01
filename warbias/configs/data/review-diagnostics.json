@@ -1,0 +1,25 @@
+{
+  "files": {
+    "protocol": {
+      "path": "protocol/review_diagnostics.json",
+      "sha256": "048c7fa36e1dcda2c1105aa8de19ec1ef95d8cf63bcd8e28fa80f36bc605bb6a"
+    },
+    "regeneration_requests": {
+      "path": "protocol/inputs/human_regeneration_requests.csv",
+      "sha256": "ee6a2b4d5ec4ffe167c215cc95a77c9b4fe21460d6d74f71214e3d2c21c86fd2"
+    },
+    "run": {
+      "path": "protocol/results/review_diagnostics.json",
+      "sha256": "dd94152a7ebf3b1a99be9e2b754e7931764773c308c28bfc06b5ebee0dd2e78d"
+    },
+    "scores": {
+      "path": "protocol/inputs/jev_review_scores.csv",
+      "sha256": "e16b8ab913b2023e2b92d8f20080c3eb4ba4560fc487de912dbbc37c5ee74529"
+    },
+    "sentences": {
+      "path": "protocol/inputs/human_sentence_reviews.csv",
+      "sha256": "4633343be429f4ace5291b3b4907e9a1fec53f0eefaeabd7a8369510aeadcbea"
+    }
+  },
+  "schema_version": 1
+}

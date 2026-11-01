@@ -1,0 +1,35 @@
+{
+  "baseline_config": "configs/review/jev.json",
+  "baseline_full_cohort_results_already_inspected": true,
+  "bootstrap": {
+    "resamples": 2000,
+    "seed": 0,
+    "unit": "semantic_case_family"
+  },
+  "candidate_config": "configs/review/jev-calibrated.json",
+  "candidate_count": 1,
+  "design": "retrospective_prompt_calibration",
+  "development_example_labels_in_prompt": true,
+  "evaluated_item_human_labels_in_requests": false,
+  "examples_partition": "development",
+  "full_corpus_rerun": "only_if_candidate_meets_selection_rules",
+  "hf_publication": "separate_step",
+  "human_rules": {
+    "instructions": "docs/app.js:619-630",
+    "repository": "https://github.com/Ovkubiky/warbias-annotate",
+    "revision": "8e529454546534eaf771ef19bf7de39235c76c5a",
+    "walkthrough": "docs/onboarding.js:81-102"
+  },
+  "maximum_examples": 6,
+  "prompt_language": "uk",
+  "schema_version": 1,
+  "selection": {
+    "development_delta_must_be_positive": true,
+    "if_not_met": "retain_baseline_without_further_test_guided_prompt_changes",
+    "primary": "unweighted_mean_pairwise_gwet_ac1",
+    "test_conditional_jaccard_must_not_decrease": true,
+    "test_paired_delta_ci95_low_must_be_positive": true,
+    "test_positive_agreement_must_not_decrease": true
+  },
+  "split": "protocol/inputs/review_calibration_split.json"
+}

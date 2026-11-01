@@ -1,0 +1,649 @@
+{
+  "families": [
+    {
+      "case_family": "WB-C001",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C002",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C003",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C004",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C005",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C006",
+      "split": "test",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C007",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C008",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C009",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C010",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C011",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C012",
+      "split": "test",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C013",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C014",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C015",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C016",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C017",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C018",
+      "split": "test",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C019",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C020",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C021",
+      "split": "test",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C022",
+      "split": "test",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C023",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C024",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C025",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C026",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C027",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C028",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C029",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C030",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C031",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C032",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C033",
+      "split": "test",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C034",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C035",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C036",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C037",
+      "split": "test",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C038",
+      "split": "test",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C039",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C040",
+      "split": "test",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C041",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C042",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C043",
+      "split": "test",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C044",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C045",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C046",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C047",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C048",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C049",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C050",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C051",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C052",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C053",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C054",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C055",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C056",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C057",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C058",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C059",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C060",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C061",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C062",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C063",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C064",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C065",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C066",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C067",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C068",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C069",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C070",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C071",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C072",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C073",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C074",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C075",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C076",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C077",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C078",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C079",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C080",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C081",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C082",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C083",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C084",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C085",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C086",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C087",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C088",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C089",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C090",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C091",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C092",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C093",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C094",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C095",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C096",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C097",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C098",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C099",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C100",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C101",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C102",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C103",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C104",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C105",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C106",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C107",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C108",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C109",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C110",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C111",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C112",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C113",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C114",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C115",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C116",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C117",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C118",
+      "split": "development",
+      "target_group": "idp"
+    },
+    {
+      "case_family": "WB-C119",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C120",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C121",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C122",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C123",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C124",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C125",
+      "split": "test",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C126",
+      "split": "development",
+      "target_group": "veteran"
+    },
+    {
+      "case_family": "WB-C127",
+      "split": "development",
+      "target_group": "veteran"
+    }
+  ],
+  "item_counts": {
+    "development": 846,
+    "test": 213
+  },
+  "items_sha256": "5d28cbb4dd07cdb77ccc8a6a0b38f57af40f1688789961aafaa57efd4708815d",
+  "schema_version": 1,
+  "seed": 0,
+  "stratification": "target_group",
+  "test_fraction": 0.2,
+  "unit": "semantic_case_family"
+}

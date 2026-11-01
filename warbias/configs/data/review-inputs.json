@@ -1,0 +1,34 @@
+{
+  "files": {
+    "examples": {
+      "path": "protocol/inputs/triplet_review_examples.jsonl",
+      "sha256": "e9b5a2937b541a91597c4d2a42c856d4e26119fd17fd03f84af701f600386a81"
+    },
+    "human_items": {
+      "path": "protocol/inputs/human_review_items.csv",
+      "sha256": "4c7f488ffb5ec7ddc6afc0c24e174bae0cc9867bc6ba74810b3de94ea6eeda95"
+    },
+    "human_reviews": {
+      "path": "protocol/inputs/human_triplet_reviews.csv",
+      "sha256": "33afcecc4f07607b07192be7873fed8016f82b82850a68ee340bcf0493770548"
+    },
+    "model_reviews": {
+      "path": "protocol/inputs/jev_human_reviews.csv",
+      "sha256": "451727413ba039baaa6f0790c4d4f0b77e014ee7e2d0f9dc767f606d676844c4"
+    },
+    "run": {
+      "path": "protocol/results/jev_review.json",
+      "sha256": "562f665f0c15f9d651e4f92bd54ff3f8273935188797b677967c4efbb41fb874"
+    }
+  },
+  "issue_order": [
+    "grammar_or_spelling",
+    "unnatural",
+    "counter_not_contradicting",
+    "unrelated_implies_stereotype",
+    "group_or_meaning",
+    "non_parallel",
+    "other"
+  ],
+  "schema_version": 1
+}

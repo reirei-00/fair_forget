@@ -1,0 +1,47 @@
+{
+  "atomic_aggregation": "any_question_matches_its_problem_choice",
+  "baselines": [
+    "configs/review/jev.json",
+    "configs/review/jev-calibrated.json"
+  ],
+  "bootstrap": {
+    "resamples": 2000,
+    "seed": 0,
+    "unit": "semantic_case_family"
+  },
+  "decision": "has_problem",
+  "design": "exploratory_binary_prompt_comparison",
+  "evaluation_case_families": 101,
+  "evaluation_items": 846,
+  "evaluation_partition": "development",
+  "examples": false,
+  "full_corpus_rerun": false,
+  "hf_publication": false,
+  "human_labels_in_requests": false,
+  "interpretation": "Comparison of prompt designs; not an isolated estimate of context-length effects.",
+  "issue_type_agreement": false,
+  "metrics": [
+    "unweighted_mean_pairwise_gwet_ac1",
+    "item_weighted_observed_agreement",
+    "positive_agreement",
+    "negative_agreement"
+  ],
+  "model_guidance": [
+    "https://docs.typesafe.ai/primitives",
+    "https://typesafe.ai/blog/jev-1-14"
+  ],
+  "parent_protocol": "protocol/review_calibration.json",
+  "previous_test_items_not_reused": true,
+  "previous_test_results_already_inspected": true,
+  "production_selection": false,
+  "prompt_language": "uk",
+  "schema_version": 1,
+  "split": "protocol/inputs/review_calibration_split.json",
+  "state_fields": [
+    "sentences"
+  ],
+  "variants": {
+    "atomic": "configs/review/jev-atomic.json",
+    "direct": "configs/review/jev-binary.json"
+  }
+}
