@@ -3,7 +3,6 @@
 import csv
 import json
 import shutil
-from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -89,9 +88,16 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
     elif name == "05_full_english_translation":
         assert result["status"] == "verified_saved_translations"
         assert result["human_translation_review"] is False
-        assert result["expected_items"] == result["pairs"] == 1007
-        assert result["expected_cases"] == 120
+        assert result["pairs"] == 1007
+        assert result["cases"] == 120
         assert result["translation_model"] == "gpt-6-astra"
+        assert result["translation_provider"] == "assistant_runtime"
+        assert result["translation_capture"] == "assistant_translation"
+        assert result["immutable_model_revision"] is None
+        assert result["aligned_sentence_pairs"] == 3021
+        assert {row["model"] for row in namespace["dataset"]["metadata"]["translations"]} == {
+            "gpt-6-astra"
+        }
     elif name == "06_severity":
         assert result["status"] == "assigned_from_case_annotations"
         assert result["source_ratings"] == result["current_case_ratings"] == 239
@@ -181,91 +187,17 @@ def test_notebooks_use_general_artifact_when_started_at_repository_root(
         assert {row["case_scope"] for row in cohort["taxonomy"]} == {"general"}
 
 
-def _translation_source(tmp_path, monkeypatch, damage=None):
-    from warbias_kit.translation.warbias import validate_production_source
-    from warbias_kit.warbias import cohort as cohort_module
-    from warbias_kit.warbias.pilot_analysis import generation_cases
-    from warbias_kit.warbias.production import write_production_result
-
-    cohort = cohort_module.load_cohort(ROOT)
-    cohort["matrix"] = cohort["matrix"][:2]
-    cohort["summary"].update(items=2, cases=2)
-    monkeypatch.setattr(cohort_module, "load_cohort", lambda *args: cohort)
-    rows = generation_cases(cohort["matrix"])
-    if damage == "extra_item":
-        rows.append({**deepcopy(rows[0]), "id": "outside", "matrix_item_id": "outside"})
-    elif damage == "wrong_case":
-        rows[0]["case_id"] = "other-case"
-    elif damage == "wrong_profile":
-        rows[0]["profile_id"] = "other-profile"
-    elif damage == "wrong_attributes":
-        rows[0]["additional_tags"] = {"gender": "other"}
-    elif damage == "profile_override":
-        rows[0]["profile"] = {"target_group": "other"}
-    for row in rows:
-        row.update(
-            language="uk",
-            stereotype="Учасник чекає біля входу.",
-            counter_stereotype="Учасник заходить до будівлі.",
-            unrelated="Учасник читає книжку.",
-            generation={
-                "input_id": row["id"],
-                "purpose": "full_generation",
-                "raw_call_sha256": {"S": "a" * 64, "C": "b" * 64, "U": "c" * 64},
-                "production_plan_sha256": "d" * 64,
-                "selection_sha256": "e" * 64,
-            },
-        )
-    plan = {
-        "plan_sha256": "d" * 64,
-        "selection_sha256": "e" * 64,
-        "cases": rows,
-        "case_ids": [row["case_id"] for row in rows],
-        "unit_ids": [row["id"] for row in rows],
-    }
-    output = tmp_path / "source"
-    manifest = write_production_result(rows, plan, output, source_language="uk")
-    translator = json.loads((ROOT / "configs/translation/codex.json").read_text())
-    validate_production_source(rows, manifest, translator)
-    return {
-        "UKRAINIAN_PATH = None": f"UKRAINIAN_PATH = {str(output / 'triplets.jsonl')!r}",
-        "PRODUCTION_MANIFEST_PATH = None": (
-            f"PRODUCTION_MANIFEST_PATH = {str(output / 'production-result.json')!r}"
-        ),
-    }
-
-
-def test_translation_notebook_previews_the_complete_selected_cohort(tmp_path, monkeypatch):
-    replacements = _translation_source(tmp_path, monkeypatch)
-    monkeypatch.chdir(ROOT / "notebooks")
-    namespace = execute_notebook("05_full_english_translation", replacements)
-    assert namespace["result"]["status"] == "preview"
-    assert namespace["result"]["items"] == 2
-    assert namespace["result"]["expected_items"] == 2
-    assert namespace["result"]["model_calls"] == 0
-    plan = json.loads((namespace["work"] / "translation-preview/plan.json").read_text())
-    prompt = (ROOT / "prompts/current/translation_astra.txt").read_text()
-    assert all(request["messages"][0]["content"] == prompt for request in plan["requests"])
-
-
-@pytest.mark.parametrize(
-    "damage", ["extra_item", "wrong_case", "wrong_profile", "wrong_attributes", "profile_override"]
-)
-def test_translation_notebook_rejects_valid_production_outside_its_cohort(
-    damage, tmp_path, monkeypatch
-):
-    from warbias_kit import cli_support, dataset_workflow
-
-    replacements = _translation_source(tmp_path, monkeypatch, damage)
-
-    def unexpected(*args, **kwargs):
-        raise AssertionError("Reject the source before preparing or executing translation")
-
-    monkeypatch.setattr(dataset_workflow, "preview_translation", unexpected)
-    monkeypatch.setattr(cli_support, "load_factory", unexpected)
-    monkeypatch.chdir(ROOT / "notebooks")
-    with pytest.raises(ValueError, match="(?i)cohort|case|profile"):
-        execute_notebook("05_full_english_translation", replacements)
+def test_translation_notebook_rejects_stale_dataset_text(tmp_path, monkeypatch):
+    project = tmp_path / "warbias-artifacts"
+    for directory in ("configs", "protocol", "prompts", "data"):
+        shutil.copytree(ROOT / directory, project / directory)
+    path = project / "data/en.jsonl"
+    rows = [json.loads(line) for line in path.read_text().splitlines()]
+    rows[0]["stereotype"] = "A different English sentence."
+    path.write_text("\n".join(json.dumps(row, ensure_ascii=False) for row in rows) + "\n")
+    monkeypatch.chdir(project)
+    with pytest.raises(ValueError, match="en input differs from its SHA256"):
+        execute_notebook("05_full_english_translation")
 
 
 def test_selection_notebook_output_feeds_full_generation_preview(monkeypatch):

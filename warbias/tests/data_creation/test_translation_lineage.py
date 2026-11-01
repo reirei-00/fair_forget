@@ -83,6 +83,47 @@ def test_duplicate_translation_fields_are_rejected():
         )
 
 
+def test_provider_translation_accepts_the_matching_source_id(tmp_path):
+    source = ukrainian()
+    response = {"id": source["id"], **json.loads(translation_text())}
+    target = translate(
+        [source],
+        CONFIG,
+        ROOT / "prompts/current/translation_astra.txt",
+        tmp_path,
+        provider=Provider([json.dumps(response)]),
+        execute=True,
+    )[0]
+    assert target["id"] == source["id"]
+    assert text_payload(target) == json.loads(translation_text())
+    assert align_languages([source], [target]) == [(source, target)]
+
+
+def test_provider_translation_rejects_a_different_response_id(tmp_path):
+    response = {"id": "other-item", **json.loads(translation_text())}
+    with pytest.raises(ValueError, match="response ID differs"):
+        translate(
+            [ukrainian()],
+            CONFIG,
+            ROOT / "prompts/current/translation_astra.txt",
+            tmp_path,
+            provider=Provider([json.dumps(response)]),
+            execute=True,
+        )
+
+
+def test_translation_response_id_requires_an_expected_id():
+    response = {"id": "item-1", **json.loads(translation_text())}
+    with pytest.raises(ValueError, match="exactly the declared"):
+        parse_translation(json.dumps(response))
+
+
+def test_translation_with_id_still_rejects_duplicate_fields():
+    response = '{"id":"item-1","id":"item-1",' + translation_text()[1:]
+    with pytest.raises(ValueError, match="duplicate"):
+        parse_translation(response, expected_id="item-1")
+
+
 @pytest.mark.parametrize(
     "patch",
     [

@@ -134,7 +134,7 @@ the original text; they do not become independent reviews of changed sentences.
 
 ## Translation and review
 
-The full dataset translates all 1,007 current Ukrainian triplets with GPT-6 Astra.
+GPT-6 Astra translated all 1,007 Ukrainian triplets into English.
 Both languages retain matching IDs, case metadata, context labels and S/C/U
 roles. The [translation instructions](../prompts/current/translation_astra.txt)
 require faithful meaning, attribution and profile attributes. The runtime did

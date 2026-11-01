@@ -78,7 +78,7 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         assert result["comet_recomputed"] is False
     elif name == "05_full_english_translation":
         assert result["status"] == "waiting_for_ukrainian_input"
-        assert result["annotation_status"] == "in_progress"
+        assert result["translation_model"] == "gpt-6-astra"
     else:
         assert result["status"] == "prepared"
         assert result["counts"]["total_triplets"] == 11997

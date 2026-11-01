@@ -7,7 +7,8 @@
     "warbias_validation_sequential_counter.txt": "5c148ce341d19a38660aa5c0279145c99338d78b804a4e2c0c01699d5304e252",
     "warbias_validation_sequential_stereotype.txt": "77db543e649e1b0037e9ffe0df752ed551f18561a568458b781875ad3ce1c739",
     "warbias_validation_sequential_unrelated.txt": "60fec27eb5756f1aa969e104f4ad81413da3b02c106596de9bd812af2a565e76",
-    "warbias_validation_zero_shot.txt": "0d3a2838e8909e734614a30801b73bb8b8c70ba2b7d497393157447973ae84f8"
+    "warbias_validation_zero_shot.txt": "0d3a2838e8909e734614a30801b73bb8b8c70ba2b7d497393157447973ae84f8",
+    "current/translation_astra.txt": "af918ee92e9d86e370d45a4d18f8a0c12cd5bf506cadb3d40af9c18e6e863f92"
   },
   "historical_files": {
     "history/profile_design_v3.txt": "6dc148f9eaa52f4cdbf127538148038655caf529309141a7e50cedbbd0a0ed97"

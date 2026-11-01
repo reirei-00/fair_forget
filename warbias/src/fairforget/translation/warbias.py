@@ -22,10 +22,18 @@ def language_pair(config):
     return source, target
 
 
-def parse_translation(text):
+def parse_translation(text, *, expected_id=None):
     from fairforget.warbias.generation import parse_response
 
-    return parse_response(text, dict(zip(FIELDS, FIELDS)))
+    fields = dict(zip(FIELDS, FIELDS))
+    if expected_id is not None:
+        payload = json.loads(text)
+        if isinstance(payload, dict) and "id" in payload:
+            parsed = parse_response(text, {**fields, "id": "id"}, (*FIELDS, "id"))
+            if parsed.pop("id") != expected_id:
+                raise ValueError("Translation response ID differs from its source")
+            return parsed
+    return parse_response(text, fields)
 
 
 def translate_production(
@@ -133,7 +141,7 @@ def ingest_translations(source_rows, calls):
             or state.get("source") != text_payload(row)
         ):
             raise ValueError("Translation is bound to stale or different source text")
-        translated = parse_translation(response_text(call))
+        translated = parse_translation(response_text(call), expected_id=item)
         result = {
             **row,
             **translated,
