@@ -8,6 +8,7 @@ from pathlib import Path
 
 from warbias_kit.dataset_workflow import load_inputs, load_selection_history
 from warbias_kit.io import file_digest, read_csv, unique_index
+from warbias_kit.warbias.cohort_evidence import validate_cohort_evidence
 from warbias_kit.warbias.evidence import source_records
 
 
@@ -176,6 +177,9 @@ def load_cohort(project, inputs=None):
     attributes = json.loads(
         _bound_file(project, bindings.get("attributes"), "attributes").read_text()
     )
+    evidence_document = json.loads(
+        _bound_file(project, bindings.get("evidence"), "evidence").read_text()
+    )
     saved = load_inputs(project)
     if inputs is not None and any(inputs.get(name) != value for name, value in saved.items()):
         raise ValueError("Cohort inputs differ from the frozen design")
@@ -215,6 +219,7 @@ def load_cohort(project, inputs=None):
         inputs["sources"], inputs["source_feedback"], inputs.get("source_compilation", ())
     )
     cases, categories = _taxonomy_rows(taxonomy, matrix, sources)
+    evidence_rows = validate_cohort_evidence(evidence_document, taxonomy, matrix, sources)
     dimensions = _attribute_counts(attributes, list(allocations.values()), matrix)
     for row in matrix:
         case = cases[row["case_id"]]
@@ -245,10 +250,12 @@ def load_cohort(project, inputs=None):
         for case in taxonomy
         for identity in _listed(case["category_evidence_ids"], "category evidence IDs")
     )
+    evidence.update(identity for row in evidence_rows for identity in row["evidence_ids"])
     return {
         "matrix": matrix,
         "taxonomy": taxonomy,
         "attributes": attributes,
+        "evidence": evidence_rows,
         "sources": [source for source in sources if source["evidence_id"] in evidence],
         "summary": {
             **counts,

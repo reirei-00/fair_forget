@@ -81,6 +81,9 @@ def cohort_project(tmp_path, monkeypatch):
                 "source_types": "published_reference",
                 "source_urls": '["https://example.org/study"]',
                 "source_titles": '["Source title"]',
+                "supporting_evidence_ids": "",
+                "supporting_source_urls": "",
+                "supporting_source_titles": "",
                 "human_triplets": str(count),
             }
         )
@@ -109,8 +112,11 @@ def cohort_project(tmp_path, monkeypatch):
     directory.mkdir()
     taxonomy_path = directory / "taxonomy.csv"
     attributes_path = directory / "attributes.json"
+    evidence_path = directory / "evidence.json"
+    evidence = {"schema_version": 1, "records": []}
     _write_table(taxonomy_path, taxonomy)
     write_json(attributes_path, attributes)
+    write_json(evidence_path, evidence)
     protocol = {
         "schema_version": 1,
         "inputs": {
@@ -119,6 +125,7 @@ def cohort_project(tmp_path, monkeypatch):
                 "path": "protocol/attributes.json",
                 "sha256": file_digest(attributes_path),
             },
+            "evidence": {"path": "protocol/evidence.json", "sha256": file_digest(evidence_path)},
         },
         "exclude_category_codes": ["vet_legitimacy"],
         "excluded_item_ids": ["WB-0004"],
@@ -142,12 +149,14 @@ def cohort_project(tmp_path, monkeypatch):
         "protocol": protocol,
         "taxonomy": taxonomy,
         "attributes": attributes,
+        "evidence": evidence,
     }
 
 
 def _save_fixture(fixture):
     root, protocol = fixture["root"], fixture["protocol"]
-    for key, rows in (("taxonomy", fixture["taxonomy"]), ("attributes", fixture["attributes"])):
+    for key in ("taxonomy", "attributes", "evidence"):
+        rows = fixture[key]
         binding = protocol["inputs"][key]
         path = root / binding["path"]
         if key == "taxonomy":
@@ -215,12 +224,14 @@ def test_cohort_rejects_changed_inputs_and_summary_counts(cohort_project):
         cohort.load_cohort(cohort_project["root"])
 
 
-def test_cohort_rejects_input_hash_changes_and_paths_outside_project(cohort_project):
-    (cohort_project["root"] / "protocol/taxonomy.csv").write_text("changed")
+@pytest.mark.parametrize("name", ["taxonomy", "evidence"])
+def test_cohort_rejects_input_hash_changes_and_paths_outside_project(cohort_project, name):
+    binding = cohort_project["protocol"]["inputs"][name]
+    (cohort_project["root"] / binding["path"]).write_text("changed")
     with pytest.raises(ValueError, match="SHA256"):
         cohort.load_cohort(cohort_project["root"])
     protocol = cohort_project["protocol"]
-    protocol["inputs"]["taxonomy"]["path"] = "../taxonomy.csv"
+    binding["path"] = "../input.csv"
     write_json(cohort_project["root"] / "protocol/cohort.json", protocol)
     with pytest.raises(ValueError, match="portable project"):
         cohort.load_cohort(cohort_project["root"])
@@ -322,7 +333,23 @@ def _compilation_claim(fixture, group, original, display):
         source_types="compilation",
         source_urls="[]",
         source_titles='["Recorded case compilation"]',
+        supporting_evidence_ids="source",
+        supporting_source_urls='["https://example.org/study"]',
+        supporting_source_titles='["Source title"]',
     )
+    fixture["evidence"]["records"] = [
+        {
+            "case_id": case_id,
+            "public_case_id": row["public_case_id"],
+            "evidence_basis": "compilation_adaptation",
+            "anchor_status": "section_reference",
+            "scope": "case",
+            "item_ids": [],
+            "evidence_ids": ["source"],
+            "source_locator": "Source compilation, housing section.",
+            "note": "The section supports the topic, not the exact claim wording.",
+        }
+    ]
     _save_fixture(fixture)
 
 
@@ -432,3 +459,16 @@ def test_committed_cohort_keeps_all_local_items_and_has_exact_release_scope():
         if row["case_id"] == "ssuk_vet_political_identity_radicalism_tcc_case_006"
     ]
     assert len(recruitment) == 5
+    evidence = result["evidence"]
+    assert len(evidence) == 18
+    subgroup_items = {
+        identity for row in evidence if row["scope"] == "items" for identity in row["item_ids"]
+    }
+    assert subgroup_items == {"WB-0387", "WB-0438", "WB-0995", "WB-0741", "WB-0778", "WB-0411"}
+    assert all(
+        row["additional_tags"]["displacement_origin"] == "occupied_territories"
+        for row in result["matrix"]
+        if row["matrix_item_id"] in subgroup_items
+    )
+    source_ids = {row["evidence_id"] for row in result["sources"]}
+    assert all(set(row["evidence_ids"]) <= source_ids for row in evidence)

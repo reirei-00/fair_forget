@@ -10,6 +10,8 @@ categories: 611 veterans and 434 internally displaced people (IDPs)**.
 [The bilingual taxonomy](protocol/inputs/cohort_taxonomy.csv) lists every case,
 category, claim and source. [The attribute catalog](protocol/inputs/cohort_attributes.json)
 records all 21 added dimensions and their original and retained counts.
+[The evidence mapping](protocol/inputs/cohort_evidence.json) records compilation
+references and pending source checks, including their case or profile scope.
 
 The recorded design selected 1,000 base inputs and 200 profile extensions.
 Excluding 136 occupation profiles and five older women veteran profiles left
