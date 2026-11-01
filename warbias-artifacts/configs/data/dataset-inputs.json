@@ -385,7 +385,7 @@
   },
   "selection_history": {
     "path": "protocol/selection_history.json",
-    "sha256": "4e5efc0474df1d42a0eb5c147001488abdd1e6998f440ebfd640ebc9f4cc1483",
+    "sha256": "99d569e118d4c7245d5ad67333f09c7076b31ef36e2843bdb8b3ae253ea24920",
     "role": "selection_count_reconciliation"
   },
   "allocation_design": {

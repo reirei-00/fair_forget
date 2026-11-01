@@ -27,19 +27,19 @@
       "path": "protocol/inputs/profile_exclusions.json",
       "sha256": "b0099f2df352e108c834967fdc3bc289e585195febe968211c1193bfa1987cb2",
       "exact_bytes": true,
-      "repository": "FairForget/WarBias",
+      "repository": "the-project/WarBias",
       "revision": "164f355623c2da0028821e0942cad493558a6c13",
       "source_path": "metadata/profile_exclusions.json",
-      "source_url": "https://huggingface.co/datasets/FairForget/WarBias/blob/164f355623c2da0028821e0942cad493558a6c13/metadata/profile_exclusions.json",
+      "source_url": "https://huggingface.co/datasets/the-project/WarBias/blob/164f355623c2da0028821e0942cad493558a6c13/metadata/profile_exclusions.json",
       "changes": [
         {
           "criterion": "Occupation-qualified actor profiles",
-          "url": "https://huggingface.co/datasets/FairForget/WarBias/discussions/18",
+          "url": "https://huggingface.co/datasets/the-project/WarBias/discussions/18",
           "revision": "4f696b82f91731caa1b0122c183a23bae8e0abce"
         },
         {
           "criterion": "Older women veterans",
-          "url": "https://huggingface.co/datasets/FairForget/WarBias/discussions/19",
+          "url": "https://huggingface.co/datasets/the-project/WarBias/discussions/19",
           "revision": "c71e3b65f2b720e67d0705d337d0e7ec3f896316"
         }
       ]

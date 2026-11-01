@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "role": "reference",
-  "repository": "FairForget/WarBias",
+  "repository": "the-project/WarBias",
   "revision": "164f355623c2da0028821e0942cad493558a6c13",
   "license": "cc-by-sa-4.0",
   "files": {

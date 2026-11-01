@@ -47,7 +47,7 @@
       "size": 10
     },
     "source_reference": {
-      "repository": "FairForget/WarBias",
+      "repository": "the-project/WarBias",
       "revision": "164f355623c2da0028821e0942cad493558a6c13",
       "role": "reference",
       "source_file": "data/uk/unassigned.jsonl",
@@ -88,7 +88,7 @@
     "snapshot_revision_verified": true,
     "strict_state_dict": false
   },
-  "plan_sha256": "839e7ce5d1c78c1338a0df5e0403c965b2dc25f3d4c9fb423cb5e9d36c8aa259",
+  "plan_sha256": "89dfd2b67aea4e5a3ecbe386bc256c7563726d6e894c57811ddc076859345b55",
   "prediction_options": {
     "accelerator": "mps",
     "batch_size": 8,
@@ -96,7 +96,7 @@
     "num_workers": 1
   },
   "reference_free": true,
-  "result_sha256": "dc0e7c0beff907a56c4c3abda8a1efd6e182af1f2b998e33f468d725b951a482",
+  "result_sha256": "e77b94385438fee683b569b6bcf62c7584fbc37f1b42fdf1a70d71748c9d5c5d",
   "schema_version": 1,
   "segments": [
     {

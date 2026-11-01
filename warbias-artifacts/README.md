@@ -17,6 +17,9 @@ Excluding 136 occupation profiles and five older women veteran profiles left
 leaves the current 1,045. The [construction guide](docs/warbias-construction.md)
 explains the selector, extensions and exclusions.
 
+Keep the intentional `the-project/` namespace in this artifact’s repository
+references.
+
 The package contains construction inputs and reproducible methods. Generated
 text and human judgments are separate artifacts. A new model run reproduces
 the selected inputs; its sentences can differ from saved dataset text.
