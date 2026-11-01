@@ -2,10 +2,42 @@
 
 from collections import Counter, defaultdict
 
-from warbias_kit.warbias.qa import text_digest
+from warbias_kit.warbias.qa import item_digest, text_digest
 
 
-def review_status(row, reviews, source_row=None):
+def validate_author_review(review, row):
+    """Bind an author's approval of a revision to its exact text and item."""
+    fields = {
+        "review_id",
+        "item_id",
+        "language",
+        "reviewer_id",
+        "reviewer_kind",
+        "decision",
+        "review_scope",
+        "text_sha256",
+        "item_sha256",
+    }
+    if (
+        not isinstance(review, dict)
+        or set(review) != fields
+        or not all(isinstance(value, str) and value.strip() for value in review.values())
+    ):
+        raise ValueError("QA author review fields differ")
+    if (
+        review["language"] != "uk"
+        or row["language"] != "uk"
+        or review["item_id"] != row["id"]
+        or review["reviewer_kind"] != "author"
+        or review["decision"] != "approved"
+        or review["review_scope"] != "text_revision"
+    ):
+        raise ValueError("QA author review scope or decision differs")
+    if review["text_sha256"] != text_digest(row) or review["item_sha256"] != item_digest(row):
+        raise ValueError("QA author review differs from the current text or item")
+
+
+def review_status(row, reviews, source_row=None, *, author_reviews=()):
     """Keep current human acceptance separate from edits and translation checks."""
     if row["language"] == "en":
         return (
@@ -15,6 +47,15 @@ def review_status(row, reviews, source_row=None):
         )
     if row["language"] != "uk":
         raise ValueError("QA review supports Ukrainian and English")
+    approvals = [
+        review
+        for review in author_reviews
+        if (review.get("language"), review.get("item_id")) == (row["language"], row["id"])
+    ]
+    if len(approvals) > 1:
+        raise ValueError("Duplicate QA author approval for an item")
+    for review in approvals:
+        validate_author_review(review, row)
     current = []
     for review in reviews:
         if (review["language"], review["item_id"]) != (row["language"], row["id"]):
@@ -37,6 +78,8 @@ def review_status(row, reviews, source_row=None):
     )
     if len(accepted) >= 2 and not flagged:
         return "human_validated"
+    if approvals:
+        return "author_approved"
     if any(review["verdict"] == "manually_corrected" for review in current):
         return "human_edited"
     return "assistant_resolved"

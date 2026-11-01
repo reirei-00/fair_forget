@@ -1,5 +1,10 @@
 {
   "annotators": 16,
+  "author_review": {
+    "items": 28,
+    "reviewers": 1,
+    "scope": "Approval of text revisions; not a new independent answer-choice annotation round."
+  },
   "hash_definition": "sha256(UTF-8 JSON of {context,question,choices}, ensure_ascii=false, sort_keys=true, separators=(comma,colon))",
   "items": 240,
   "items_requiring_resolution": 35,
@@ -13,8 +18,8 @@
       "unreviewed_translation": 240
     },
     "uk": {
-      "assistant_resolved": 53,
-      "human_edited": 2,
+      "assistant_resolved": 27,
+      "author_approved": 28,
       "human_validated": 185
     }
   },

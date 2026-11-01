@@ -1,4 +1,24 @@
 {
+  "columns": [
+    "id",
+    "context",
+    "question",
+    "choices",
+    "answer_index",
+    "language",
+    "scenario_id",
+    "source_case_id",
+    "target_group",
+    "topic",
+    "evidence_condition",
+    "question_polarity",
+    "target_index",
+    "comparison_index",
+    "unknown_index",
+    "stereotype_consistent_index",
+    "actor_introduction_order",
+    "review_status"
+  ],
   "construction": {
     "adaptation": "Two informative conditions distinguish stereotype-aligned and stereotype-conflicting evidence.",
     "answer_positions": "Fixed per scenario and preserved across all six variants.",
@@ -32,7 +52,11 @@
     },
     "annotation_summary": {
       "path": "protocol/results/qa_annotations.json",
-      "sha256": "aef083d73d0229a8d0c6aeb0ce375dbf60cbf471693eb461390efdf5392cea88"
+      "sha256": "b933e859686a81799f2c2c5048f2837a8a3f80601ebcf2ff245e546acfd65613"
+    },
+    "author_reviews": {
+      "path": "protocol/inputs/qa_author_reviews.jsonl",
+      "sha256": "06290a4891aa61fe82ed879f138d8939d05393a8b880963f6f9f64a2b6838249"
     },
     "en": {
       "path": "data/qa_en.jsonl",
@@ -48,7 +72,7 @@
     },
     "provenance": {
       "path": "protocol/inputs/qa_provenance.jsonl",
-      "sha256": "26143f007d67dad72db711a594d2993cf57b9c41c34750256f81b0ac4c74124b"
+      "sha256": "1c61d8e977ebadaef1db0ab861d3b937a1485559d20abdb0c937a5fb02478e5d"
     },
     "resolutions": {
       "path": "protocol/inputs/qa_resolutions.jsonl",
@@ -60,7 +84,7 @@
     },
     "schema": {
       "path": "protocol/inputs/qa_schema.json",
-      "sha256": "cd93da61539e9ffbc246e61f98e8cc03b7671ea7eac0ca8d4670adb588ef3c76"
+      "sha256": "4e72023bed1f5fb142c11dd6c653e1143a517edcd0fd59adc3d186f12d03c1ce"
     },
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
@@ -76,7 +100,7 @@
     },
     "uk": {
       "path": "data/qa_uk.jsonl",
-      "sha256": "5645f1813a76fb738a36a5cd898f10fd29b6c26df95b6d029fcbfc804e46e0a2"
+      "sha256": "f7c85372d89c1ced05ff4419bef67f1012fe6214d8d3e089bb3917542dfc620b"
     }
   },
   "languages": [
@@ -85,43 +109,24 @@
   ],
   "review": {
     "annotators": 16,
+    "author_approval_rule": "Author approval of the exact text revision, recorded separately from independent answer-choice annotations.",
     "english_human_review": "not_performed",
     "human_reviews_apply_to": "The exact context, question and choices in each review record.",
     "human_validation_rule": "At least two independent accepted or manually corrected reviews of the exact released text with the correct answer, and no current-text rewrite request or wrong answer.",
     "language": "uk",
     "resolution_kind": "assistant",
     "reviews_per_original_item": 2,
-    "scope": "Human annotation covers the Ukrainian source items. Assistant resolutions and changed text do not inherit human consensus.",
+    "scope": "Human annotation covers the Ukrainian source items. Author approvals and assistant resolutions remain separate from independent human consensus.",
     "status_counts": {
       "en": {
         "unreviewed_translation": 240
       },
       "uk": {
-        "assistant_resolved": 53,
-        "human_edited": 2,
+        "assistant_resolved": 27,
+        "author_approved": 28,
         "human_validated": 185
       }
     }
   },
-  "schema_version": 1,
-  "columns": [
-    "id",
-    "context",
-    "question",
-    "choices",
-    "answer_index",
-    "language",
-    "scenario_id",
-    "source_case_id",
-    "target_group",
-    "topic",
-    "evidence_condition",
-    "question_polarity",
-    "target_index",
-    "comparison_index",
-    "unknown_index",
-    "stereotype_consistent_index",
-    "actor_introduction_order",
-    "review_status"
-  ]
+  "schema_version": 1
 }

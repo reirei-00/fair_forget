@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from warbias_kit.warbias.qa import TEXT_FIELDS, load_qa, text_digest
+from warbias_kit.warbias.qa import TEXT_FIELDS, item_digest, load_qa, text_digest
 from warbias_kit.warbias.qa_review import annotation_agreement, review_status
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -80,6 +80,66 @@ def test_review_hashes_are_verified(reviewed_item):
     reviews[0]["reviewed_text"]["context"] = "Edited after recording the review."
     with pytest.raises(ValueError, match="differs from its SHA256"):
         review_status(row, reviews)
+
+
+def _author_review(row):
+    return {
+        "review_id": "author-review-1",
+        "item_id": row["id"],
+        "language": "uk",
+        "reviewer_id": "author_01",
+        "reviewer_kind": "author",
+        "decision": "approved",
+        "review_scope": "text_revision",
+        "text_sha256": text_digest(row),
+        "item_sha256": item_digest(row),
+    }
+
+
+def test_author_approval_does_not_count_as_an_independent_human_vote(reviewed_item):
+    row, reviews = reviewed_item
+    approvals = [_author_review(row)]
+    original = deepcopy(reviews)
+    assert review_status(row, [], author_reviews=approvals) == "author_approved"
+    assert review_status(row, reviews[:1], author_reviews=approvals) == "author_approved"
+    assert review_status(row, reviews, author_reviews=approvals) == "human_validated"
+    assert reviews == original
+    assert (
+        review_status({**row, "language": "en"}, reviews, author_reviews=approvals)
+        == "unreviewed_translation"
+    )
+
+
+@pytest.mark.parametrize("change", [{"question": "Revised?"}, {"answer_index": 1}])
+def test_author_approval_is_bound_to_current_text_and_answer(reviewed_item, change):
+    row, reviews = reviewed_item
+    approval = _author_review(row)
+    with pytest.raises(ValueError, match="current text or item"):
+        review_status({**row, **change}, reviews, author_reviews=[approval])
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        {"reviewer_id": ""},
+        {"reviewer_kind": "assistant"},
+        {"decision": "rejected"},
+        {"review_scope": "answer_choice"},
+        {"text_sha256": "stale"},
+        {"item_sha256": "stale"},
+    ],
+)
+def test_author_approval_requires_valid_scope_and_bindings(reviewed_item, change):
+    row, reviews = reviewed_item
+    with pytest.raises(ValueError, match="QA author review"):
+        review_status(row, reviews, author_reviews=[{**_author_review(row), **change}])
+
+
+def test_duplicate_author_approvals_are_rejected(reviewed_item):
+    row, reviews = reviewed_item
+    approval = _author_review(row)
+    with pytest.raises(ValueError, match="Duplicate QA author approval"):
+        review_status(row, reviews, author_reviews=[approval, approval])
 
 
 def _ratings(pairs):

@@ -20,6 +20,7 @@ OPTIONAL_FILES = {
     "agreement",
     "translations",
     "translation_protocol",
+    "author_reviews",
 }
 QA_FIELDS = {
     "id",
@@ -217,7 +218,9 @@ def _validate_scenarios(rows):
             )
 
 
-def _validate_reviews(indexes, provenance, human_reviews):
+def _validate_reviews(indexes, provenance, human_reviews, author_reviews=()):
+    from warbias_kit.warbias.qa_review import review_status, validate_author_review
+
     bound = {}
     for record in provenance:
         key = (record["language"], record["id"])
@@ -225,6 +228,16 @@ def _validate_reviews(indexes, provenance, human_reviews):
         bound[key] = record
     expected = {(language, identity) for language, rows in indexes.items() for identity in rows}
     _require(set(bound) == expected, "QA provenance must cover exactly both languages")
+    _require(isinstance(author_reviews, (list, tuple)), "QA author reviews must be a record list")
+    for review in author_reviews:
+        identity = review.get("item_id") if isinstance(review, dict) else None
+        _require(
+            isinstance(identity, str) and identity in indexes["uk"],
+            "QA author review refers to an unknown item",
+        )
+        validate_author_review(review, indexes["uk"][identity])
+    unique_index(author_reviews, "review_id")
+    approvals = unique_index(author_reviews, "item_id")
     reviews = defaultdict(list)
     unique_index(human_reviews, "review_id")
     for review in human_reviews:
@@ -259,11 +272,17 @@ def _validate_reviews(indexes, provenance, human_reviews):
             f"{identity}: QA human label differs from its qualification",
         )
         if record["human_validated"]:
-            from warbias_kit.warbias.qa_review import review_status
-
             _require(
                 review_status(row, reviews[language, identity]) == "human_validated",
                 f"{identity}: QA human acceptance lacks current independent evidence",
+            )
+        if row["review_status"] == "author_approved" or (
+            language == "uk" and identity in approvals
+        ):
+            _require(
+                review_status(row, reviews[language, identity], author_reviews=author_reviews)
+                == row["review_status"],
+                f"{identity}: QA author approval lacks current evidence or its status differs",
             )
 
 
@@ -338,7 +357,12 @@ def load_qa(project, manifest_path="protocol/qa.json"):
             [item_digest(row) for row in items] == [item_digest(row) for row in rebuilt],
             f"QA {language} dataset differs from its scenario templates",
         )
-    _validate_reviews(indexes, metadata["provenance"], metadata["human_reviews"])
+    _validate_reviews(
+        indexes,
+        metadata["provenance"],
+        metadata["human_reviews"],
+        metadata.get("author_reviews", ()),
+    )
     _validate_translations(indexes, metadata)
     summary = {
         "items_per_language": len(rows["uk"]),
