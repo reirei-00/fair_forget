@@ -4,8 +4,8 @@
 lists all 24 baseline cells and metric definitions, then analyzes verified saved
 runs. It uses `lm_eval.fair_uk.warbias.baseline` for every calculation.
 
-Install Fair-UK in the same Python environment as the notebook kernel. Until
-Fair-UK PR #12 is merged, use this pinned library revision:
+Install this pinned Fair-UK library revision in the same Python environment
+as the notebook kernel:
 
 ```sh
 python -m pip install "lm_eval @ git+https://github.com/reirei-00/fair-uk.git@694ce2b822c3aa7131d5e527ed4a6ebcd8a59310"
