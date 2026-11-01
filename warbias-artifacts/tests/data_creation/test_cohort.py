@@ -309,7 +309,7 @@ def test_cohort_category_evidence_must_be_declared_and_resolved(cohort_project, 
         cohort.load_cohort(cohort_project["root"])
 
 
-def _compilation_claim(fixture, group, original, display):
+def _adapted_claim(fixture, group, original, display):
     case_id = "housing" if group == "idp" else "recruitment"
     source = {
         "evidence_id": "compiled-source",
@@ -330,9 +330,9 @@ def _compilation_claim(fixture, group, original, display):
     row.update(
         claim_uk=display,
         evidence_ids="compiled-source",
-        source_types="compilation",
+        source_types="source_adaptation",
         source_urls="[]",
-        source_titles='["Recorded case compilation"]',
+        source_titles='["Source-based stereotype cases"]',
         supporting_evidence_ids="source",
         supporting_source_urls='["https://example.org/study"]',
         supporting_source_titles='["Source title"]',
@@ -341,12 +341,12 @@ def _compilation_claim(fixture, group, original, display):
         {
             "case_id": case_id,
             "public_case_id": row["public_case_id"],
-            "evidence_basis": "compilation_adaptation",
+            "evidence_basis": "source_adaptation",
             "anchor_status": "section_reference",
             "scope": "case",
             "item_ids": [],
             "evidence_ids": ["source"],
-            "source_locator": "Source compilation, housing section.",
+            "source_locator": "Source summary, housing section.",
             "note": "The section supports the topic, not the exact claim wording.",
         }
     ]
@@ -388,14 +388,17 @@ def _compilation_claim(fixture, group, original, display):
         ),
     ],
 )
-def test_compilation_templates_preserve_qualifiers_and_frozen_generation_claims(
+def test_adapted_templates_preserve_qualifiers_and_frozen_generation_claims(
     cohort_project, group, original, display
 ):
-    _compilation_claim(cohort_project, group, original, display)
+    _adapted_claim(cohort_project, group, original, display)
     before = deepcopy(cohort_project["inputs"])
     result = cohort.load_cohort(cohort_project["root"])
-    taxonomy = next(row for row in result["taxonomy"] if row["source_types"] == "compilation")
+    taxonomy = next(row for row in result["taxonomy"] if row["source_types"] == "source_adaptation")
     assert taxonomy["claim_uk"] == display
+    source = next(row for row in result["sources"] if row["evidence_id"] == "compiled-source")
+    assert source["source_type"] == "source_adaptation"
+    assert source["title"] == "Source-based stereotype cases"
     rows = [row for row in result["matrix"] if row["source_type"] == "compilation"]
     assert rows and all(row["claim"] == original for row in rows)
     assert cohort_project["inputs"] == before
@@ -410,13 +413,13 @@ def test_compilation_templates_preserve_qualifiers_and_frozen_generation_claims(
         "ВПО з дітьми є небажаними орендарями.",
     ],
 )
-def test_compilation_templates_reject_rewriting_beyond_the_group_noun(cohort_project, display):
-    _compilation_claim(cohort_project, "idp", "ВПО з дітьми є небажаними орендарями.", display)
+def test_adapted_templates_reject_rewriting_beyond_the_group_noun(cohort_project, display):
+    _adapted_claim(cohort_project, "idp", "ВПО з дітьми є небажаними орендарями.", display)
     with pytest.raises(ValueError, match="preserve its source case"):
         cohort.load_cohort(cohort_project["root"])
 
 
-def test_compilation_normalization_uses_whole_words_and_the_declared_group():
+def test_adapted_templates_use_whole_words_and_the_declared_group():
     assert (
         cohort._display_claim(
             {
@@ -435,7 +438,7 @@ def test_compilation_normalization_uses_whole_words_and_the_declared_group():
     )
 
 
-def test_direct_source_claims_cannot_use_compilation_normalization(cohort_project):
+def test_reference_claims_cannot_use_adaptation_normalization(cohort_project):
     for row in cohort_project["inputs"]["matrix_reviewed"]:
         if row["case_id"] == "housing":
             row["claim"] = "ВПО з дітьми є небажаними орендарями."

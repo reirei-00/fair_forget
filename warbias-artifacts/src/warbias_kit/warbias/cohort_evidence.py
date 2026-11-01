@@ -5,7 +5,7 @@ import json
 from warbias_kit.io import unique_index
 
 STATUSES = {
-    "compilation_adaptation": "section_reference",
+    "source_adaptation": "section_reference",
     "adapted_hypothesis": "pending_anchor_review",
     "subgroup_transfer": "new_target_pending_review",
 }
@@ -69,12 +69,12 @@ def validate_cohort_evidence(document, taxonomy, matrix, sources):
     references = unique_index(sources, "evidence_id")
     if {row["case_id"] for row in matrix} != cases.keys():
         raise ValueError("Evidence taxonomy must cover exactly the retained cases")
-    compilation_cases = {
+    adapted_cases = {
         identity
         for identity, case in cases.items()
-        if "compilation" in _cell(case.get("source_types"), "source types")
+        if "source_adaptation" in _cell(case.get("source_types"), "source types")
     }
-    compiled, seen, result = {}, set(), []
+    adaptations, seen, result = {}, set(), []
     for record in document["records"]:
         if not isinstance(record, dict):
             raise ValueError("Each cohort evidence record must be an object")
@@ -106,10 +106,10 @@ def validate_cohort_evidence(document, taxonomy, matrix, sources):
             raise ValueError("Evidence item IDs must belong to the named retained case")
         evidence = _identities(record.get("evidence_ids"), "supporting evidence IDs")
         resolved = _references(evidence, references)
-        if basis == "compilation_adaptation":
-            if identity not in compilation_cases:
-                raise ValueError("Compilation support must refer to a compilation case")
-            compiled[identity] = (evidence, resolved)
+        if basis == "source_adaptation":
+            if identity not in adapted_cases:
+                raise ValueError("Adaptation support must refer to a source-adapted case")
+            adaptations[identity] = (evidence, resolved)
         elif evidence != _cell(case.get("evidence_ids"), "case evidence IDs"):
             raise ValueError("Evidence mapping must match the existing case references")
         result.append(
@@ -126,10 +126,10 @@ def validate_cohort_evidence(document, taxonomy, matrix, sources):
                 **resolved,
             }
         )
-    if compiled.keys() != compilation_cases:
-        raise ValueError("Evidence mapping must cover exactly all compilation cases")
+    if adaptations.keys() != adapted_cases:
+        raise ValueError("Evidence mapping must cover exactly all source-adapted cases")
     for identity, case in cases.items():
-        evidence, resolved = compiled.get(identity, (set(), {}))
+        evidence, resolved = adaptations.get(identity, (set(), {}))
         expected = {
             "supporting_evidence_ids": evidence,
             "supporting_source_urls": set(resolved.get("source_urls", [])),
