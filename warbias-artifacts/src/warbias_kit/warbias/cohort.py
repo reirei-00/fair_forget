@@ -59,6 +59,16 @@ def _display_claim(original):
     return re.sub(rf"\b(?:{nouns})\b", "[TARGET]", claim, flags=re.IGNORECASE)
 
 
+def _cohort_sources(sources):
+    """Apply readable labels without rewriting the frozen source registry."""
+    return [
+        {**source, "source_type": "source_adaptation", "title": "Source-based stereotype cases"}
+        if source["source_type"] == "compilation"
+        else dict(source)
+        for source in sources
+    ]
+
+
 def _taxonomy_rows(taxonomy, matrix, sources):
     cases = unique_index(taxonomy, "case_id")
     active_cases = {row["case_id"] for row in matrix}
@@ -217,8 +227,10 @@ def load_cohort(project, inputs=None):
     matrix = [deepcopy(frozen[identity]) for identity in sorted(active_ids)]
     if {row["bias_type_code"] for row in matrix} != {"idp", "veteran"}:
         raise ValueError("The annotation cohort must contain veterans and IDPs only")
-    sources = source_records(
-        inputs["sources"], inputs["source_feedback"], inputs.get("source_compilation", ())
+    sources = _cohort_sources(
+        source_records(
+            inputs["sources"], inputs["source_feedback"], inputs.get("source_compilation", ())
+        )
     )
     cases, categories = _taxonomy_rows(taxonomy, matrix, sources)
     evidence_rows = validate_cohort_evidence(evidence_document, taxonomy, matrix, sources)

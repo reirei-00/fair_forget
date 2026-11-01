@@ -10,7 +10,11 @@ from warbias_kit.warbias.cohort_evidence import validate_cohort_evidence
 @pytest.fixture
 def evidence_inputs():
     sources = [
-        {"evidence_id": "compiled", "source_type": "compilation", "title": "Compilation"},
+        {
+            "evidence_id": "adapted-source",
+            "source_type": "source_adaptation",
+            "title": "Source-based stereotype cases",
+        },
         {
             "evidence_id": "study-one",
             "source_type": "published_reference",
@@ -26,7 +30,7 @@ def evidence_inputs():
     ]
     taxonomy = []
     for identity, public, evidence, kind in (
-        ("compiled-case", "C1", "compiled", "compilation"),
+        ("adapted-case", "C1", "adapted-source", "source_adaptation"),
         ("hypothesis", "C2", "study-one", "published_reference"),
         ("transfer", "C3", "study-two", "published_reference"),
     ):
@@ -36,17 +40,19 @@ def evidence_inputs():
                 "public_case_id": public,
                 "evidence_ids": evidence,
                 "source_types": kind,
-                "supporting_evidence_ids": "study-one;study-two" if kind == "compilation" else "",
+                "supporting_evidence_ids": "study-one;study-two"
+                if kind == "source_adaptation"
+                else "",
                 "supporting_source_urls": '["https://example.org/two", "https://example.org/one"]'
-                if kind == "compilation"
+                if kind == "source_adaptation"
                 else "",
                 "supporting_source_titles": '["Second study", "First study"]'
-                if kind == "compilation"
+                if kind == "source_adaptation"
                 else "",
             }
         )
     matrix = [
-        {"matrix_item_id": "item1", "case_id": "compiled-case", "source_type": "compilation"},
+        {"matrix_item_id": "item1", "case_id": "adapted-case", "source_type": "source_adaptation"},
         {"matrix_item_id": "item2", "case_id": "hypothesis", "source_type": "published_reference"},
         {"matrix_item_id": "item3", "case_id": "transfer", "source_type": "published_reference"},
         {"matrix_item_id": "item4", "case_id": "transfer", "source_type": "published_reference"},
@@ -54,9 +60,9 @@ def evidence_inputs():
     records = []
     for identity, public, basis, status, scope, items, evidence in (
         (
-            "compiled-case",
+            "adapted-case",
             "C1",
-            "compilation_adaptation",
+            "source_adaptation",
             "section_reference",
             "case",
             [],
@@ -109,13 +115,13 @@ def test_resolves_support_without_changing_frozen_inputs_or_source_type(evidence
     assert rows[0]["source_titles"] == ["First study", "Second study"]
     assert rows[2]["item_ids"] == ["item3"]
     assert evidence_inputs == before
-    assert evidence_inputs["taxonomy"][0]["source_types"] == "compilation"
-    assert evidence_inputs["matrix"][0]["source_type"] == "compilation"
+    assert evidence_inputs["taxonomy"][0]["source_types"] == "source_adaptation"
+    assert evidence_inputs["matrix"][0]["source_type"] == "source_adaptation"
     rows[0]["evidence_ids"].append("not-an-input")
     assert evidence_inputs == before
 
 
-@pytest.mark.parametrize("source", ["unknown", "compiled"])
+@pytest.mark.parametrize("source", ["unknown", "adapted-source"])
 def test_support_requires_known_published_references(evidence_inputs, source):
     evidence_inputs["document"]["records"][0]["evidence_ids"] = [source]
     with pytest.raises(ValueError, match="published"):
@@ -144,9 +150,16 @@ def test_basis_requires_the_correct_case_or_item_scope(evidence_inputs, record, 
         validate_cohort_evidence(**evidence_inputs)
 
 
-def test_compilation_mapping_must_cover_every_compilation_case(evidence_inputs):
+def test_adaptation_mapping_must_cover_every_source_adapted_case(evidence_inputs):
     evidence_inputs["document"]["records"].pop(0)
-    with pytest.raises(ValueError, match="exactly all compilation cases"):
+    with pytest.raises(ValueError, match="exactly all source-adapted cases"):
+        validate_cohort_evidence(**evidence_inputs)
+
+
+@pytest.mark.parametrize("source_type", ["compilation", "published_reference"])
+def test_adaptation_mapping_requires_the_active_source_classification(evidence_inputs, source_type):
+    evidence_inputs["taxonomy"][0]["source_types"] = source_type
+    with pytest.raises(ValueError, match="source-adapted case"):
         validate_cohort_evidence(**evidence_inputs)
 
 
@@ -168,13 +181,13 @@ def test_duplicate_mapping_cannot_repeat_a_case_and_basis(evidence_inputs):
 @pytest.mark.parametrize(
     "field", ["supporting_evidence_ids", "supporting_source_urls", "supporting_source_titles"]
 )
-def test_compilation_support_columns_match_the_mapping_and_source_registry(evidence_inputs, field):
+def test_adaptation_support_columns_match_the_mapping_and_source_registry(evidence_inputs, field):
     evidence_inputs["taxonomy"][0][field] = '["incorrect"]'
     with pytest.raises(ValueError, match="Taxonomy supporting"):
         validate_cohort_evidence(**evidence_inputs)
 
 
-def test_noncompilation_cases_cannot_gain_compilation_support_columns(evidence_inputs):
+def test_nonadapted_cases_cannot_gain_adaptation_support_columns(evidence_inputs):
     evidence_inputs["taxonomy"][1]["supporting_source_urls"] = '["https://example.org/one"]'
     with pytest.raises(ValueError, match="Taxonomy supporting"):
         validate_cohort_evidence(**evidence_inputs)

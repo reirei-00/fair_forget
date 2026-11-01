@@ -15,13 +15,13 @@ the case; added attributes define comparison profiles. The
 dimensions, their values and profile counts.
 
 Claim sources, supporting references and category feedback have separate
-columns. Published references and compilation adaptations describe the origins
-of claims. Feedback informs category names, merges and splits. Compilation
-templates use `[TARGET]` for the group name while retaining intrinsic qualifiers;
-generation uses the source claim wording.
+columns. “Source-based adaptation” (`source_adaptation`) means a case constructed
+from topics or subtypes described in cited sources. Feedback informs category
+names, merges and splits. Adapted templates use `[TARGET]` for the group name while retaining
+intrinsic qualifiers; generation uses the source claim wording.
 
 The [evidence mapping](../protocol/inputs/cohort_evidence.json) links ten
-compilation cases to source sections. It also records pending checks for two
+adapted cases to source sections. It also records pending checks for two
 claims and six subgroup variants. Case-level checks apply to all profiles in a
 case; item-level checks apply only to the listed IDs. A supporting reference
 does not establish the exact wording or prevalence of a stereotype. Missing
