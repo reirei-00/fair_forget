@@ -2,10 +2,63 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "properties": {
+    "id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "stereotype": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "counter_stereotype": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "unrelated": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "case_id": {
+      "minLength": 1,
+      "type": "string"
+    },
     "actor": {
       "enum": [
         "veteran",
         "idp"
+      ],
+      "type": "string"
+    },
+    "reporter": {
+      "enum": [
+        "another veteran",
+        "business adviser",
+        "career adviser",
+        "caseworker",
+        "colleague",
+        "community organiser",
+        "hiring manager",
+        "journalist",
+        "landlord",
+        "letting agent",
+        "local resident",
+        "neighbour",
+        "news editor",
+        "recruiter",
+        "rehabilitation professional",
+        "service clerk",
+        "supervisor",
+        null
+      ],
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "context_scope": {
+      "enum": [
+        "cross_conflict_generic",
+        "ukraine_context"
       ],
       "type": "string"
     },
@@ -156,17 +209,6 @@
       "type": "array",
       "uniqueItems": true
     },
-    "case_id": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "context_scope": {
-      "enum": [
-        "cross_conflict_generic",
-        "ukraine_context"
-      ],
-      "type": "string"
-    },
     "context_tags": {
       "items": {
         "enum": [
@@ -220,62 +262,62 @@
       "type": "array",
       "uniqueItems": true
     },
-    "counter_stereotype": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "id": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "reporter": {
-      "enum": [
-        "another veteran",
-        "business adviser",
-        "career adviser",
-        "caseworker",
-        "colleague",
-        "community organiser",
-        "hiring manager",
-        "journalist",
-        "landlord",
-        "letting agent",
-        "local resident",
-        "neighbour",
-        "news editor",
-        "recruiter",
-        "rehabilitation professional",
-        "service clerk",
-        "supervisor",
-        null
-      ],
+    "severity_mean_score": {
       "type": [
-        "string",
+        "number",
         "null"
-      ]
+      ],
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Equal-weight mean of at least two independent ratings with confirmed rubric version 2, on the 0–100 scale. Null when compatible ratings are insufficient."
     },
-    "stereotype": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "unrelated": {
-      "minLength": 1,
-      "type": "string"
+    "severity_level": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Level of the case mean: 1=[0,20), 2=[20,40), 3=[40,60), 4=[60,80), 5=[80,100]. Null when the mean is null."
     }
   },
   "required": [
     "id",
-    "case_id",
     "stereotype",
     "counter_stereotype",
     "unrelated",
+    "case_id",
     "actor",
     "reporter",
     "context_scope",
-    "bias_tags",
     "bias_dimensions",
-    "context_tags"
+    "bias_tags",
+    "context_tags",
+    "severity_mean_score",
+    "severity_level"
   ],
   "title": "WarBias triplet",
-  "type": "object"
+  "type": "object",
+  "oneOf": [
+    {
+      "properties": {
+        "severity_mean_score": {
+          "type": "null"
+        },
+        "severity_level": {
+          "type": "null"
+        }
+      }
+    },
+    {
+      "properties": {
+        "severity_mean_score": {
+          "type": "number"
+        },
+        "severity_level": {
+          "type": "integer"
+        }
+      }
+    }
+  ]
 }

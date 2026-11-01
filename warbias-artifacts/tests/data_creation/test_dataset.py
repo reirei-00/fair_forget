@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from warbias_kit.io import file_digest, read_rows, write_json, write_rows
+from warbias_kit.io import file_digest, read_csv, read_rows, write_json, write_rows
 from warbias_kit.warbias import dataset
 from warbias_kit.warbias.cohort import load_cohort
 
@@ -25,6 +25,17 @@ def test_current_dataset_is_complete_and_aligned():
     assert result["rows"]["uk"][-1]["id"] == "WB-1201"
     assert result["metadata"]["text_provenance"][-1]["text_status"] == "author_edited_generation"
     assert result["protocol"]["review"]["unchanged_annotated_texts"] == 721
+    assert result["severity"] == {
+        "scored_cases": 106,
+        "pending_cases": 14,
+        "scored_triplets_per_language": {"uk": 882, "en": 882},
+        "pending_triplets_per_language": {"uk": 125, "en": 125},
+    }
+    for rows in result["rows"].values():
+        assert all(len(row) == 13 for row in rows)
+        assert all(list(row) == result["protocol"]["columns"] for row in rows)
+        assert rows[-1]["severity_mean_score"] == 75.0
+        assert rows[-1]["severity_level"] == 4
 
 
 @pytest.fixture
@@ -33,13 +44,21 @@ def release(tmp_path, monkeypatch):
     paths = [binding["path"] for binding in manifest["files"].values()]
     translation = json.loads((ROOT / manifest["files"]["translation_protocol"]["path"]).read_text())
     paths += [translation[name]["path"] for name in ("configuration", "instructions")]
+    severity = json.loads((ROOT / manifest["files"]["severity_protocol"]["path"]).read_text())
+    paths += [binding["path"] for binding in severity["inputs"].values()]
     paths.append("protocol/dataset.json")
     for relative in paths:
         target = tmp_path / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(ROOT / relative, target)
     cohort = load_cohort(ROOT)
-    monkeypatch.setattr(dataset, "load_cohort", lambda project: deepcopy(cohort))
+
+    def fixture_cohort(project):
+        result = deepcopy(cohort)
+        result["taxonomy_catalog"] = read_csv(project / manifest["files"]["taxonomy"]["path"])
+        return result
+
+    monkeypatch.setattr(dataset, "load_cohort", fixture_cohort)
     return tmp_path, manifest
 
 
@@ -139,4 +158,109 @@ def test_rejects_review_summary_that_claims_model_review(release):
     manifest["review"]["model_review"] = "completed"
     write_json(project / "protocol/dataset.json", manifest)
     with pytest.raises(ValueError, match="review summary differs"):
+        dataset.load_dataset(project)
+
+
+@pytest.mark.parametrize(
+    "fields",
+    [
+        {"severity_mean_score": None, "severity_level": 2},
+        {"severity_mean_score": 30.0, "severity_level": None},
+        {"severity_mean_score": -1.0, "severity_level": 1},
+        {"severity_mean_score": 101.0, "severity_level": 5},
+        {"severity_mean_score": True, "severity_level": 1},
+        {"severity_mean_score": 30.0, "severity_level": True},
+        {"severity_mean_score": 30.0, "severity_level": 2.5},
+        {"severity_mean_score": 30.0, "severity_level": 0},
+        {"severity_mean_score": 30.0, "severity_level": 6},
+    ],
+)
+def test_rejects_invalid_public_severity_fields(release, fields):
+    _replace_rows(release, "uk", lambda rows: rows[0].update(fields))
+    with pytest.raises(ValueError, match="dataset schema"):
+        dataset.load_dataset(release[0])
+
+
+def test_rejects_missing_public_severity_field(release):
+    _replace_rows(release, "uk", lambda rows: rows[0].pop("severity_level"))
+    with pytest.raises(ValueError, match="dataset schema"):
+        dataset.load_dataset(release[0])
+
+
+@pytest.mark.parametrize(
+    ("fields", "message"),
+    [
+        (
+            {"severity_mean_score": 5.0, "severity_level": 1},
+            "severity differs from its taxonomy ratings",
+        ),
+        (
+            {"severity_mean_score": None, "severity_level": None},
+            "severity differs from its taxonomy ratings",
+        ),
+        (
+            {"severity_mean_score": 75.0, "severity_level": 4.0},
+            "severity level must be an integer or null",
+        ),
+    ],
+)
+def test_recomputes_severity_when_both_languages_and_hashes_agree(release, fields, message):
+    for language in ("uk", "en"):
+        _replace_rows(release, language, lambda rows: rows[-1].update(fields))
+    with pytest.raises(ValueError, match=message):
+        dataset.load_dataset(release[0])
+
+
+@pytest.mark.parametrize("field", ["severity_mean_score", "severity_level"])
+def test_recomputes_cached_taxonomy_values_from_raw_annotations(release, field):
+    import csv
+
+    project, manifest = release
+    taxonomy_path = project / manifest["files"]["taxonomy"]["path"]
+    cases = read_csv(taxonomy_path)
+    cases[-1][field] = "1"
+    with taxonomy_path.open("w", encoding="utf-8", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=list(cases[0]), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(cases)
+    taxonomy_hash = file_digest(taxonomy_path)
+    manifest["files"]["taxonomy"]["sha256"] = taxonomy_hash
+    severity_path = project / manifest["files"]["severity_protocol"]["path"]
+    severity = json.loads(severity_path.read_text())
+    severity["inputs"]["taxonomy"]["sha256"] = taxonomy_hash
+    write_json(severity_path, severity)
+    manifest["files"]["severity_protocol"]["sha256"] = file_digest(severity_path)
+    write_json(project / "protocol/dataset.json", manifest)
+    with pytest.raises(ValueError, match="Cached taxonomy severity must match the raw ratings"):
+        dataset.load_dataset(project)
+
+
+def test_rejects_changed_raw_annotations_without_binding(release):
+    project, manifest = release
+    severity = json.loads((project / manifest["files"]["severity_protocol"]["path"]).read_text())
+    path = project / severity["inputs"]["ratings"]["path"]
+    path.write_text(path.read_text() + "\n")
+    with pytest.raises(ValueError, match="Severity ratings input differs from its SHA256"):
+        dataset.load_dataset(project)
+
+
+def test_rejects_false_severity_coverage(release):
+    project, manifest = release
+    manifest["severity"]["scored_cases"] = 120
+    write_json(project / "protocol/dataset.json", manifest)
+    with pytest.raises(ValueError, match="Dataset severity coverage differs"):
+        dataset.load_dataset(project)
+
+
+def test_rejects_rebound_rows_in_a_different_column_order(release):
+    _replace_rows(release, "uk", lambda rows: None)
+    with pytest.raises(ValueError, match="rows must follow their declared column order"):
+        dataset.load_dataset(release[0])
+
+
+def test_rejects_declared_columns_that_differ_from_the_schema(release):
+    project, manifest = release
+    manifest["columns"] = list(reversed(manifest["columns"]))
+    write_json(project / "protocol/dataset.json", manifest)
+    with pytest.raises(ValueError, match="columns must match the schema"):
         dataset.load_dataset(project)

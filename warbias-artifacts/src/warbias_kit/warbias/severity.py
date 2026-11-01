@@ -3,12 +3,16 @@
 import json
 import math
 from copy import deepcopy
+from decimal import Decimal
 from pathlib import Path
-from statistics import fmean
 
 from warbias_kit.io import digest, file_digest, read_csv, read_rows, unique_index
 from warbias_kit.warbias.schema import LANGUAGES, text_digest
-from warbias_kit.warbias.severity_brackets import bracket_for_score, validate_brackets
+from warbias_kit.warbias.severity_brackets import (
+    bracket_for_score,
+    level_for_score,
+    validate_brackets,
+)
 
 _RATING_FIELDS = {"rating_id", "case_id", "rater_id", "score", "scale_version"}
 _CASE_FIELDS = {"case_id", "examples_uk", "examples_sha256"}
@@ -20,6 +24,8 @@ def _policy(protocol):
     threshold = protocol.get("disagreement_threshold")
     if protocol.get("schema_version") != 1 or protocol.get("aggregation") != "mean":
         raise ValueError("Severity protocol needs schema version one and mean aggregation")
+    if protocol.get("assignment", "mean_bracket") != "mean_bracket":
+        raise ValueError("Severity assignment must use the case mean bracket")
     if not isinstance(version, int) or isinstance(version, bool) or version < 1:
         raise ValueError("Severity protocol needs a confirmed target scale version")
     if not isinstance(minimum, int) or isinstance(minimum, bool) or minimum < 2:
@@ -159,6 +165,35 @@ def _case_hash(case):
     )
 
 
+def _check_cached_severity(case, mean, level):
+    for field, expected in (("severity_mean_score", mean), ("severity_level", level)):
+        if field not in case:
+            continue
+        value = case[field]
+        if value is None or value == "":
+            value = None
+        elif field == "severity_mean_score":
+            if isinstance(value, bool):
+                raise ValueError("Cached taxonomy severity must match the raw ratings")
+            try:
+                value = float(value)
+            except (TypeError, ValueError) as error:
+                raise ValueError("Cached taxonomy severity must match the raw ratings") from error
+        elif isinstance(value, str) and value in {"1", "2", "3", "4", "5"}:
+            value = int(value)
+        elif isinstance(value, bool) or not isinstance(value, int):
+            raise ValueError("Cached taxonomy severity must match the raw ratings")
+        if (
+            (value is None) != (expected is None)
+            or value is not None
+            and (
+                not math.isfinite(value)
+                or not math.isclose(value, expected, rel_tol=1e-12, abs_tol=1e-10)
+            )
+        ):
+            raise ValueError("Cached taxonomy severity must match the raw ratings")
+
+
 def assign_taxonomy_severity(taxonomy, ratings, case_evidence, protocol):
     """Add case means from compatible independent ratings; preserve pending cases."""
     version, minimum, threshold = _policy(protocol)
@@ -167,7 +202,12 @@ def assign_taxonomy_severity(taxonomy, ratings, case_evidence, protocol):
     groups = _ratings(ratings, cases)
     result = []
     for case in taxonomy:
-        if any(key.startswith("severity_") for key in case):
+        source = {
+            key: value
+            for key, value in case.items()
+            if key not in {"severity_mean_score", "severity_level"}
+        }
+        if any(key.startswith("severity_") for key in source):
             raise ValueError("Assign severity to the source taxonomy without derived fields")
         identity = case["public_case_id"]
         values = groups.get(identity, [])
@@ -182,10 +222,18 @@ def assign_taxonomy_severity(taxonomy, ratings, case_evidence, protocol):
             status = "high_disagreement"
         else:
             status = "aggregated"
-        assigned_score = fmean(eligible) * 100 if complete else None
+        assigned_score = (
+            float(sum(Decimal(str(value)) for value in eligible) * 100 / len(eligible))
+            if complete
+            else None
+        )
         bracket = bracket_for_score(assigned_score, protocol.get("severity_brackets"))
+        level = level_for_score(assigned_score, protocol.get("severity_brackets"))
+        _check_cached_severity(case, assigned_score, level)
         row = {
-            **deepcopy(case),
+            **deepcopy(source),
+            "severity_mean_score": assigned_score,
+            "severity_level": level,
             "severity_score": assigned_score,
             "severity_bracket": bracket["code"] if bracket else None,
             "severity_bracket_label": bracket["label"] if bracket else None,
@@ -218,6 +266,8 @@ def inherit_triplet_severity(rows, taxonomy_with_severity, language):
         if case.get("severity_case_sha256") != _case_hash(case):
             raise ValueError("Taxonomy claim or severity fields differ from their binding")
     fields = (
+        "severity_mean_score",
+        "severity_level",
         "severity_score",
         "severity_bracket",
         "severity_bracket_label",

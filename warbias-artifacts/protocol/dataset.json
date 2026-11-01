@@ -7,19 +7,19 @@
   "files": {
     "uk": {
       "path": "data/uk.jsonl",
-      "sha256": "7682c7a60a0d6a03ec4a0b94f04fa7578d9ae35e9a0fdd3c629507022eafa1af"
+      "sha256": "3035fa3b10c06bb361d5e4ec8f062603a36ae022b6cdf9b588024766e5d18cf9"
     },
     "en": {
       "path": "data/en.jsonl",
-      "sha256": "e40f1ffb9f31fbda43456b5232b9774c977b3ce9a2bf7ccd5bbed9583f3e4cf0"
+      "sha256": "20f9c751b2cefee209dfdcc564a7d1f977111bb5a4b053a8adbbb698a648b084"
     },
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
-      "sha256": "a97a1de753d2ac17b7f8c76e0f749ff34efcaf3e505d8c144987b114a5e33577"
+      "sha256": "480243eaa64178ab5c5950a98775330123888216bec973ed12d640aa0ecfbfb8"
     },
     "schema": {
       "path": "protocol/inputs/dataset_schema.json",
-      "sha256": "3d3a5619048c5b7d2e10b3fc50e550b4cdb517483b92d312dc66178d8df3d205"
+      "sha256": "c4eb7f6d93360959e9714acfe24b6fc67bbc3c3dd877613bd1a71755ec3f2b42"
     },
     "item_sources": {
       "path": "protocol/inputs/dataset_item_sources.jsonl",
@@ -40,6 +40,10 @@
     "translation_protocol": {
       "path": "protocol/translation.json",
       "sha256": "f4c874692a978196ee37fd738d8d90a36b51ccc9026ed8cdd6d7642504c47063"
+    },
+    "severity_protocol": {
+      "path": "protocol/severity.json",
+      "sha256": "a806f333c220353096fb628afd4ef9235d63d8a7e58f0f43b0bc9d32e4ffaa0b"
     }
   },
   "counts": {
@@ -63,5 +67,32 @@
     "stereotype",
     "counter_stereotype",
     "unrelated"
+  ],
+  "severity": {
+    "scored_cases": 106,
+    "pending_cases": 14,
+    "scored_triplets_per_language": {
+      "uk": 882,
+      "en": 882
+    },
+    "pending_triplets_per_language": {
+      "uk": 125,
+      "en": 125
+    }
+  },
+  "columns": [
+    "id",
+    "stereotype",
+    "counter_stereotype",
+    "unrelated",
+    "case_id",
+    "actor",
+    "reporter",
+    "context_scope",
+    "bias_dimensions",
+    "bias_tags",
+    "context_tags",
+    "severity_mean_score",
+    "severity_level"
   ]
 }

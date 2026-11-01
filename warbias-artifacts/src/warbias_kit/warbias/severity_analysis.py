@@ -109,6 +109,8 @@ def severity_decisions(taxonomy_with_severity, protocol):
                 "eligible_sum_100": total,
                 "eligible_mean_100": expected,
                 "severity_score": actual,
+                "severity_mean_score": case["severity_mean_score"],
+                "severity_level": case["severity_level"],
                 "severity_bracket": case.get("severity_bracket"),
                 "severity_bracket_label": case.get("severity_bracket_label"),
                 "rating_gap_100": max(eligible) - min(eligible) if count >= 2 else None,

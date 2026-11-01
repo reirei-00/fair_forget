@@ -3,6 +3,16 @@
 import math
 
 _FIELDS = {"code", "label", "lower", "upper", "upper_inclusive"}
+_DEFAULT_BRACKETS = [
+    {
+        "code": str(index + 1),
+        "label": str(index + 1),
+        "lower": 20 * index,
+        "upper": 20 * (index + 1),
+        "upper_inclusive": index == 4,
+    }
+    for index in range(5)
+]
 
 
 def _number(value):
@@ -18,8 +28,18 @@ def validate_brackets(brackets):
     codes, labels = set(), set()
     previous = 0
     for index, bracket in enumerate(brackets):
-        if not isinstance(bracket, dict) or set(bracket) != _FIELDS:
+        if (
+            not isinstance(bracket, dict)
+            or not _FIELDS <= bracket.keys()
+            or bracket.keys() - _FIELDS - {"level"}
+        ):
             raise ValueError("Severity brackets need code, label, bounds and upper inclusion")
+        if "level" in bracket and (
+            isinstance(bracket["level"], bool)
+            or not isinstance(bracket["level"], int)
+            or bracket["level"] != index + 1
+        ):
+            raise ValueError("Severity bracket levels must follow the ordered integers one to five")
         code, label = bracket["code"], bracket["label"]
         if (
             not isinstance(code, str)
@@ -69,3 +89,14 @@ def bracket_for_score(score, brackets):
         ):
             return dict(bracket)
     raise ValueError("The severity score does not resolve to a configured bracket")
+
+
+def level_for_score(score, brackets=None):
+    """Return the 1–5 interval index for a mean score, or null for a pending mean."""
+    intervals = _DEFAULT_BRACKETS if brackets is None else brackets
+    bracket = bracket_for_score(score, intervals)
+    if bracket is None:
+        return None
+    return bracket.get("level") or next(
+        index for index, row in enumerate(intervals, 1) if row["code"] == bracket["code"]
+    )

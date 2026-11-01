@@ -116,6 +116,67 @@ def test_bracketed_case_means_and_pending_rating_map_to_both_languages():
     assert pending["severity_bracket"] is pending["severity_bracket_label"] is None
 
 
+def test_primary_mean_and_level_map_to_both_languages():
+    assigned = assign([rating(0.7, "R1"), rating(0.8, "R2")])
+    row = assigned[0]
+    assert row["severity_mean_score"] == 75
+    assert row["severity_level"] == 4
+    assert not any(key.startswith("severity_label") for key in row)
+    for language in ("uk", "en"):
+        sidecar = inherit_triplet_severity([triplet()], assigned, language)[0]
+        assert sidecar["severity_mean_score"] == 75
+        assert sidecar["severity_level"] == 4
+        assert "severity_label" not in sidecar
+    pending = assign([rating(0.4, "R1")])[0]
+    assert pending["severity_mean_score"] is pending["severity_level"] is None
+
+
+def test_decimal_mean_retains_the_stored_score_precision():
+    row = assign([rating(0.651, "R1"), rating(0.503, "R2")])[0]
+    assert row["severity_mean_score"] == row["severity_score"] == 57.7
+    assert row["severity_level"] == 3
+
+
+@pytest.mark.parametrize(("mean", "level"), [(0, 1), (20, 2), (40, 3), (60, 4), (80, 5), (100, 5)])
+def test_mean_levels_use_inclusive_lower_boundaries(mean, level):
+    row = assign([rating(mean / 100, "R1"), rating(mean / 100, "R2")])[0]
+    assert row["severity_mean_score"] == mean
+    assert row["severity_level"] == level
+
+
+def test_cached_taxonomy_summaries_are_verified_without_entering_source_claims():
+    ratings = [rating(0.7, "R1"), rating(0.8, "R2")]
+    original = assign(ratings)[0]
+    cached = {**case(), "severity_mean_score": "75.0", "severity_level": "4"}
+    before = deepcopy(cached)
+    checked = assign(ratings, taxonomy=[cached])[0]
+    assert cached == before
+    assert checked == original
+    pending = {**case(), "severity_mean_score": "", "severity_level": ""}
+    assert assign([rating(0.4, "R1")], taxonomy=[pending])[0]["severity_level"] is None
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        {"severity_mean_score": "74.99", "severity_level": "4"},
+        {"severity_mean_score": "75", "severity_level": "5"},
+        {"severity_mean_score": "75", "severity_level": 4.0},
+        {"severity_mean_score": "75", "severity_level": True},
+        {"severity_mean_score": "NaN", "severity_level": "4"},
+        {"severity_mean_score": "", "severity_level": ""},
+    ],
+)
+def test_cached_taxonomy_cannot_replace_raw_rating_results(change):
+    with pytest.raises(ValueError, match="Cached taxonomy severity"):
+        assign([rating(0.7, "R1"), rating(0.8, "R2")], taxonomy=[{**case(), **change}])
+
+
+def test_extra_derived_taxonomy_fields_are_rejected():
+    with pytest.raises(ValueError, match="without derived fields"):
+        assign([], taxonomy=[{**case(), "severity_case_sha256": "stale"}])
+
+
 @pytest.mark.parametrize("gap", [0.4, 0.7])
 def test_disagreement_flag_does_not_replace_the_mean(gap):
     row = assign([rating(0.1, "R1"), rating(0.1 + gap, "R2")])[0]
@@ -199,6 +260,7 @@ def test_inheritance_preserves_input_text_and_binds_each_language():
         lambda row: row.update(claim_en="A changed claim."),
         lambda row: row.update(severity_score=100),
         lambda row: row.update(severity_bracket="different"),
+        lambda row: row.update(severity_label="different"),
         lambda row: row.update(target_group="veteran"),
     ],
 )

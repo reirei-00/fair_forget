@@ -236,4 +236,5 @@
 {"case_id":"WB-C126","rater_id":"SEV-R06","rating_id":"SEV-WB-C126-SEV-R06","scale_version":2,"score":0.363}
 {"case_id":"WB-C127","rater_id":"SEV-R05","rating_id":"SEV-WB-C127-SEV-R05","scale_version":2,"score":0.558}
 {"case_id":"WB-C127","rater_id":"SEV-R06","rating_id":"SEV-WB-C127-SEV-R06","scale_version":2,"score":0.413}
-{"case_id":"WB-C128","rater_id":"SEV-R01","rating_id":"SEV-WB-C128-SEV-R01","scale_version":2,"score":0.4}
+{"case_id":"WB-C128","rater_id":"SEV-R01","rating_id":"SEV-WB-C128-SEV-R01","scale_version":2,"score":0.7}
+{"case_id":"WB-C128","rater_id":"SEV-R07","rating_id":"SEV-WB-C128-SEV-R07","scale_version":2,"score":0.8}

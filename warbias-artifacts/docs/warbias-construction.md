@@ -162,27 +162,29 @@ Ukrainian source and remains separate from Ukrainian triplet review.
 
 ## Case severity
 
-[Notebook 6](../notebooks/06_severity.ipynb) assigns severity to taxonomy cases
-from the saved human ratings, then maps each case result to its triplets.
-The severity protocol binds the current taxonomy by file hash. Its input ratings
-and annotation stimuli must resolve to case IDs in that taxonomy version.
-Compute the equal-weight mean of at least two independent ratings from the
-confirmed rubric version. Preserve all source ratings and list excluded versions
-in the calculation audit. Report scores on the original 0–100 scale, assign one
-of the five equal-width brackets in the [severity protocol](../protocol/severity.json),
-and flag rater gaps of at least 40 points. Cases with fewer than two compatible
-ratings retain a null score and bracket.
+[Notebook 6](../notebooks/06_severity.ipynb) computes the equal-weight mean of at
+least two independent ratings from confirmed rubric version 2. Source scores use
+0–1; `severity_mean_score` uses 0–100. The mean determines `severity_level`:
 
-The mean summarises the ratings; their range records disagreement. Severity
-sidecars bind the case, annotation examples and current triplet text. Ukrainian
-and English triplets inherit the same case mean, bracket and status.
+| Level | Name | Mean score |
+| --- | --- | --- |
+| 1 | Very low | [0, 20) |
+| 2 | Low | [20, 40) |
+| 3 | Moderate | [40, 60) |
+| 4 | High | [60, 80) |
+| 5 | Very high | [80, 100] |
 
-The notebook shows each calculation and the cumulative distribution of assigned
-scores. It reports case-weighted and triplet-weighted summaries separately, using
-one language for triplet counts. Pending cases stay outside score distributions.
-The observed means and medians describe this dataset. The bracket boundaries
-divide the scale at 20, 40, 60 and 80; the annotation rubric retains its original
-endpoint meanings.
+The taxonomy and both language datasets store the same mean and level for each
+case. For example, ratings 70 and 80 give mean 75 and level 4. These are case-level
+annotations inherited through `case_id`.
 
-The [notebook guide](../README.md#walkthroughs) provides the six executable
-walkthroughs and run instructions.
+The audit preserves individual scores, rubric versions, compatible rating counts
+and ranges. A gap of at least 40 points flags a case for review while preserving
+its assigned mean and level. Fewer than two compatible ratings leave both fields
+null. Unknown rubric versions remain in the source records.
+
+The [severity protocol](../protocol/severity.json) binds the current taxonomy,
+ratings and annotation examples. The notebook checks the published values against
+fresh calculations, shows case-weighted and triplet-weighted distributions, and
+exports pending cases and large-gap review lists. Source annotation examples and
+current triplet text retain separate bindings.

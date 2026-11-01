@@ -99,18 +99,27 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
             "gpt-6-astra"
         }
     elif name == "06_severity":
-        assert result["status"] == "assigned_from_case_annotations"
-        assert result["source_ratings"] == result["current_case_ratings"] == 239
+        assert result["status"] == "verified_saved_severity"
+        assert result["primary_fields"] == ["severity_mean_score", "severity_level"]
+        assert result["source_ratings"] == result["current_case_ratings"] == 240
         assert result["taxonomy_cases"] == 120
-        assert result["assigned_cases"] == 105
-        assert result["pending_cases"] == 15
+        assert result["assigned_cases"] == 106
+        assert result["pending_cases"] == 14
         assert result["case_status_counts"] == {
-            "aggregated": 86,
+            "aggregated": 87,
             "high_disagreement": 19,
-            "insufficient_ratings": 15,
+            "insufficient_ratings": 14,
         }
         assert result["triplets_per_language"] == {"uk": 1007, "en": 1007}
-        assert result["assigned_triplets_per_language"] == {"uk": 881, "en": 881}
+        assert result["assigned_triplets_per_language"] == {"uk": 882, "en": 882}
+        assert result["pending_triplets_per_language"] == {"uk": 125, "en": 125}
+        assert result["readiness"] == {
+            "complete": False,
+            "assigned_cases": 106,
+            "pending_cases": 14,
+            "large_gap_cases": 19,
+        }
+        assert result["review_case_counts"] == {"pending": 14, "large_gaps": 19}
 
 
 def test_generation_notebook_preserves_dependencies_and_resumes(tmp_path, monkeypatch):
@@ -214,7 +223,9 @@ def test_selection_notebook_output_feeds_full_generation_preview(monkeypatch):
     assert full["result"]["model_calls"] == 0
 
 
-def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data(monkeypatch):
+def test_severity_notebook_verifies_published_means_and_levels_without_changing_sources(
+    monkeypatch,
+):
     from warbias_kit.io import read_rows
 
     source_paths = [
@@ -230,7 +241,7 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
     assert namespace["annotation"]["taxonomy"] == namespace["dataset"]["taxonomy"]
     assert result["scope"] == {
         "taxonomy_cases": 120,
-        "ratings": 239,
+        "ratings": 240,
         "rating_cases_matched": 120,
         "rating_cases_unmatched": 0,
         "evidence_cases_matched": 120,
@@ -240,91 +251,136 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
     }
     taxonomy = read_rows(result["taxonomy_jsonl"])
     by_case = {row["public_case_id"]: row for row in taxonomy}
-    assert by_case["WB-C128"]["severity_score"] is None
-    assert by_case["WB-C128"]["severity_status"] == "insufficient_ratings"
-    assert by_case["WB-C128"]["severity_bracket"] is None
-    assert by_case["WB-C128"]["severity_bracket_label"] is None
-    assert by_case["WB-C128"]["severity_n"] == 1
-    assert by_case["WB-C128"]["severity_rating_count"] == 1
-    assert by_case["WB-C128"]["severity_min"] == by_case["WB-C128"]["severity_max"] == 40
+    assert all(row["severity_rating_count"] == 2 for row in taxonomy)
+    assert by_case["WB-C128"]["severity_mean_score"] == pytest.approx(75)
+    assert by_case["WB-C128"]["severity_level"] == 4
+    assert by_case["WB-C128"]["severity_bracket_label"] == "High"
+    assert by_case["WB-C128"]["severity_n"] == 2
+    assert by_case["WB-C128"]["severity_min"] == pytest.approx(70)
+    assert by_case["WB-C128"]["severity_max"] == pytest.approx(80)
     assert by_case["WB-C128"]["severity_ratings"] == [
         {
             "case_id": "WB-C128",
             "rater_id": "SEV-R01",
             "rating_id": "SEV-WB-C128-SEV-R01",
             "scale_version": 2,
-            "score": 0.4,
-        }
+            "score": 0.7,
+        },
+        {
+            "case_id": "WB-C128",
+            "rater_id": "SEV-R07",
+            "rating_id": "SEV-WB-C128-SEV-R07",
+            "scale_version": 2,
+            "score": 0.8,
+        },
     ]
     assert namespace["direct_case_ids"] == {"WB-C128"}
-    direct_source = namespace["protocol"]["additional_sources"][0]
-    assert direct_source["claim_uk"] == by_case["WB-C128"]["claim_uk"]
-    assert direct_source["reported_score"] == 40
     assert len(namespace["changed_examples"]) == 9
+    assert by_case["WB-C001"]["severity_status"] == "high_disagreement"
+    assert by_case["WB-C001"]["severity_mean_score"] == pytest.approx(53.4)
+    assert by_case["WB-C001"]["severity_level"] == 3
+    assert by_case["WB-C009"]["severity_mean_score"] is None
+    assert by_case["WB-C009"]["severity_level"] is None
     for language, path in result["triplet_sidecars"].items():
         rows = read_rows(path)
         assert rows == namespace["triplet_severity"][language]
         assert [row["id"] for row in rows] == [
             row["id"] for row in namespace["dataset"]["rows"][language]
         ]
-        assert sum(row["severity_score"] is None for row in rows) == 126
+        assert sum(row["severity_mean_score"] is None for row in rows) == 125
         assert all(row["language"] == language for row in rows)
         assert all(row["severity_source"] == "case_annotation" for row in rows)
         assert all(
-            row["severity_score"] == by_case[row["case_id"]]["severity_score"] for row in rows
-        )
-        assert all(
-            row["severity_bracket"] == by_case[row["case_id"]]["severity_bracket"]
-            and row["severity_bracket_label"] == by_case[row["case_id"]]["severity_bracket_label"]
+            row["severity_mean_score"] == by_case[row["case_id"]]["severity_mean_score"]
+            and row["severity_level"] == by_case[row["case_id"]]["severity_level"]
             for row in rows
         )
-        assert all(
-            row["severity_bracket"] is None and row["severity_bracket_label"] is None
-            for row in rows
-            if row["severity_score"] is None
-        )
+    for language, path in result["datasets"].items():
+        rows = read_rows(path)
+        assert Path(path).read_bytes() == (ROOT / f"data/{language}.jsonl").read_bytes()
+        assert rows == namespace["dataset"]["rows"][language]
+        assert len(rows) == 1007
+        assert all(len(row) == 13 for row in rows)
+        assert sum(row["severity_mean_score"] is not None for row in rows) == 882
+        assert sum(row["severity_level"] is None for row in rows) == 125
+        direct_triplet = next(row for row in rows if row["id"] == "WB-1201")
+        assert direct_triplet["severity_mean_score"] == pytest.approx(75)
+        assert direct_triplet["severity_level"] == 4
     analysis = result["analysis"]
     summary = json.loads(Path(analysis["summary_json"]).read_text())
     assert summary == analysis["summary"] == namespace["summary"]
-    assert summary["assigned_cases"] == 105
-    assert summary["assigned_triplets"] == 881
-    assert summary["pending_cases"] == 15
-    assert summary["pending_triplets"] == 126
+    assert summary["assigned_cases"] == 106
+    assert summary["assigned_triplets"] == 882
+    assert summary["pending_cases"] == 14
+    assert summary["pending_triplets"] == 125
     decisions = read_rows(analysis["case_decisions_jsonl"])
     assert len(decisions) == 120
     assert decisions == namespace["case_decision_rows"]
     worked = {row["case_id"]: row for row in namespace["worked_decisions"]}
     assert worked["WB-C002"]["eligible_sum_100"] == pytest.approx(148)
-    assert worked["WB-C002"]["severity_score"] == pytest.approx(74)
-    assert by_case["WB-C002"]["severity_bracket_label"] == "High"
-    assert worked["WB-C001"]["severity_status"] == "high_disagreement"
-    assert by_case["WB-C001"]["severity_bracket_label"] == "Moderate"
-    assert worked["WB-C009"]["severity_score"] is None
-    assert worked["WB-C128"]["rating_gap_100"] is None
+    assert worked["WB-C002"]["severity_mean_score"] == pytest.approx(74)
+    assert worked["WB-C002"]["severity_level"] == 4
+    assert worked["WB-C128"]["rating_gap_100"] == pytest.approx(10)
     brackets = namespace["brackets"]
     assert [row["lower"] for row in brackets] == [0, 20, 40, 60, 80]
     assert [row["upper"] for row in brackets] == [20, 40, 60, 80, 100]
-    assert namespace["bracket_for_score"](40, brackets)["label"] == "Moderate"
-    bracket_summary = namespace["bracket_summary"]
-    assert len(bracket_summary) == 5
-    assert sum(row["case_count"] for row in bracket_summary) == 105
-    assert sum(row["triplet_count"] for row in bracket_summary) == 881
-    assert bracket_summary[-1]["cumulative_cases"] == 105
-    assert bracket_summary[-1]["cumulative_triplets"] == 881
-    assert bracket_summary[-1]["cumulative_case_fraction"] == pytest.approx(1)
-    assert bracket_summary[-1]["cumulative_triplet_fraction"] == pytest.approx(1)
+    level_summary = namespace["bracket_summary"]
+    assert len(level_summary) == 5
+    assert [row["level"] for row in level_summary] == [1, 2, 3, 4, 5]
+    assert sum(row["case_count"] for row in level_summary) == 106
+    assert sum(row["triplet_count"] for row in level_summary) == 882
+    assert level_summary[-1]["cumulative_case_fraction"] == pytest.approx(1)
+    assert level_summary[-1]["cumulative_triplet_fraction"] == pytest.approx(1)
     assert Path(analysis["figure_png"]).read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
     from xml.etree import ElementTree
 
     assert ElementTree.parse(analysis["figure_svg"]).getroot().tag.endswith("svg")
-    for key in ("case_decisions_csv", "cdf_csv", "bracket_summary_csv"):
+    for key in ("case_decisions_csv", "cdf_csv", "level_summary_csv"):
         assert Path(analysis[key]).is_file()
-    with Path(analysis["bracket_summary_csv"]).open(newline="") as source:
-        exported_brackets = list(csv.DictReader(source))
-    assert len(exported_brackets) == 5
-    assert sum(int(row["case_count"]) for row in exported_brackets) == 105
-    assert sum(int(row["triplet_count"]) for row in exported_brackets) == 881
+    for queue, count in (("pending", 14), ("large_gaps", 19)):
+        with Path(result["review_queues"][queue]).open(newline="") as source:
+            records = list(csv.DictReader(source))
+        assert len(records) == count
+        assert all(record["case_id"] in by_case for record in records)
+        assert all(isinstance(json.loads(record["rating_records"]), list) for record in records)
+        assert all(
+            (by_case[record["case_id"]]["severity_mean_score"] is None) == (queue == "pending")
+            for record in records
+        )
     assert {path: path.read_bytes() for path in source_paths} == before
+
+
+@pytest.mark.parametrize("field,value", [("severity_mean_score", 65.0), ("severity_level", 1)])
+def test_severity_notebook_rejects_stale_published_values(monkeypatch, field, value):
+    from copy import deepcopy
+
+    from warbias_kit.warbias import dataset
+
+    published = deepcopy(dataset.load_dataset(ROOT))
+    row = next(row for row in published["rows"]["uk"] if row["id"] == "WB-1201")
+    row[field] = value
+    monkeypatch.setattr(dataset, "load_dataset", lambda project: published)
+    monkeypatch.chdir(ROOT / "notebooks")
+    with pytest.raises((AssertionError, ValueError), match="(?i)severity"):
+        execute_notebook("06_severity")
+
+
+def test_severity_notebook_exports_review_queues_before_complete_coverage_gate(
+    tmp_path, monkeypatch
+):
+    from warbias_kit import dataset_workflow
+
+    work = tmp_path / "workspace"
+    work.mkdir()
+    monkeypatch.setattr(dataset_workflow, "create_workspace", lambda name: work)
+    monkeypatch.chdir(ROOT / "notebooks")
+    with pytest.raises(ValueError, match="(?i)pending"):
+        execute_notebook("06_severity", {"REQUIRE_COMPLETE = False": "REQUIRE_COMPLETE = True"})
+    for name, count in (("pending", 14), ("large_gaps", 19)):
+        with (work / f"severity-review-{name}.csv").open(newline="") as stream:
+            assert len(list(csv.DictReader(stream))) == count
+    assert not (work / "dataset-with-severity-uk.jsonl").exists()
+    assert not (work / "dataset-with-severity-en.jsonl").exists()
 
 
 @pytest.mark.parametrize("changed_input", ["ratings", "case_evidence", "taxonomy"])
