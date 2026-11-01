@@ -42,14 +42,32 @@ def create_workspace(stage):
     return Path(os.path.relpath(tempfile.mkdtemp(prefix=f"{stage}-", dir=directory)))
 
 
+def _is_artifact_project(directory):
+    if not all(
+        (directory / relative).is_file()
+        for relative in ("protocol/construction.json", "protocol/cohort.json")
+    ):
+        return False
+    try:
+        manifest = load_json(directory / "configs/data/dataset-inputs.json")
+    except (OSError, ValueError):
+        return False
+    return isinstance(manifest, dict) and manifest.get("cohort_protocol") == "protocol/cohort.json"
+
+
 def find_project(start=None):
-    """Find the WarBias project from a notebook folder or the imported source tree."""
-    start = Path.cwd() if start is None else Path(start)
+    """Find the artifact package without selecting the broader dataset project."""
+    start = (Path.cwd() if start is None else Path(start)).resolve()
     for base in (start, *start.parents, Path(__file__).resolve().parents[2]):
-        for candidate in (base / "warbias", base):
-            if (candidate / "protocol/construction.json").is_file():
+        artifact = base / "warbias-artifacts"
+        if artifact.exists() or artifact.is_symlink():
+            if artifact.is_symlink() or not _is_artifact_project(artifact):
+                raise ValueError("The warbias-artifacts directory needs a valid cohort project")
+            return artifact.resolve()
+        for candidate in (base, base / "warbias"):
+            if _is_artifact_project(candidate):
                 return candidate.resolve()
-    raise ValueError("Select the WarBias project or a standalone WarBias export")
+    raise ValueError("Select the WarBias artifact project or a standalone export")
 
 
 def _project_file(project, relative):
