@@ -1,5 +1,6 @@
 """Dataset notebooks inspect real study inputs without making model calls by default."""
 
+import csv
 import json
 import shutil
 from copy import deepcopy
@@ -86,15 +87,14 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         assert result["translation_model"] == "gpt-6-astra"
     elif name == "06_severity":
         assert result["status"] == "assigned_from_case_annotations"
-        assert result["source_ratings"] == result["current_case_ratings"] == 238
+        assert result["source_ratings"] == result["current_case_ratings"] == 239
         assert result["taxonomy_cases"] == 120
         assert result["assigned_cases"] == 105
         assert result["pending_cases"] == 15
         assert result["case_status_counts"] == {
             "aggregated": 86,
             "high_disagreement": 19,
-            "insufficient_ratings": 14,
-            "not_annotated": 1,
+            "insufficient_ratings": 15,
         }
         assert result["triplets_per_language"] == {"uk": 1007, "en": 1007}
         assert result["assigned_triplets_per_language"] == {"uk": 881, "en": 881}
@@ -251,10 +251,40 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
     monkeypatch.chdir(ROOT / "notebooks")
     namespace = execute_notebook("06_severity")
     result = namespace["result"]
+    assert result["taxonomy_binding"] == namespace["dataset"]["protocol"]["files"]["taxonomy"]
+    assert namespace["annotation"]["taxonomy"] == namespace["dataset"]["taxonomy"]
+    assert result["scope"] == {
+        "taxonomy_cases": 120,
+        "ratings": 239,
+        "rating_cases_matched": 120,
+        "rating_cases_unmatched": 0,
+        "evidence_cases_matched": 120,
+        "evidence_cases_unmatched": 0,
+        "taxonomy_cases_without_ratings": 0,
+        "taxonomy_cases_without_evidence": 0,
+    }
     taxonomy = read_rows(result["taxonomy_jsonl"])
     by_case = {row["public_case_id"]: row for row in taxonomy}
     assert by_case["WB-C128"]["severity_score"] is None
-    assert by_case["WB-C128"]["severity_status"] == "not_annotated"
+    assert by_case["WB-C128"]["severity_status"] == "insufficient_ratings"
+    assert by_case["WB-C128"]["severity_bracket"] is None
+    assert by_case["WB-C128"]["severity_bracket_label"] is None
+    assert by_case["WB-C128"]["severity_n"] == 1
+    assert by_case["WB-C128"]["severity_rating_count"] == 1
+    assert by_case["WB-C128"]["severity_min"] == by_case["WB-C128"]["severity_max"] == 40
+    assert by_case["WB-C128"]["severity_ratings"] == [
+        {
+            "case_id": "WB-C128",
+            "rater_id": "SEV-R01",
+            "rating_id": "SEV-WB-C128-SEV-R01",
+            "scale_version": 2,
+            "score": 0.4,
+        }
+    ]
+    assert namespace["direct_case_ids"] == {"WB-C128"}
+    direct_source = namespace["protocol"]["additional_sources"][0]
+    assert direct_source["claim_uk"] == by_case["WB-C128"]["claim_uk"]
+    assert direct_source["reported_score"] == 40
     assert len(namespace["changed_examples"]) == 9
     for language, path in result["triplet_sidecars"].items():
         rows = read_rows(path)
@@ -268,4 +298,70 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
         assert all(
             row["severity_score"] == by_case[row["case_id"]]["severity_score"] for row in rows
         )
+        assert all(
+            row["severity_bracket"] == by_case[row["case_id"]]["severity_bracket"]
+            and row["severity_bracket_label"] == by_case[row["case_id"]]["severity_bracket_label"]
+            for row in rows
+        )
+        assert all(
+            row["severity_bracket"] is None and row["severity_bracket_label"] is None
+            for row in rows
+            if row["severity_score"] is None
+        )
+    analysis = result["analysis"]
+    summary = json.loads(Path(analysis["summary_json"]).read_text())
+    assert summary == analysis["summary"] == namespace["summary"]
+    assert summary["assigned_cases"] == 105
+    assert summary["assigned_triplets"] == 881
+    assert summary["pending_cases"] == 15
+    assert summary["pending_triplets"] == 126
+    decisions = read_rows(analysis["case_decisions_jsonl"])
+    assert len(decisions) == 120
+    assert decisions == namespace["case_decision_rows"]
+    worked = {row["case_id"]: row for row in namespace["worked_decisions"]}
+    assert worked["WB-C002"]["eligible_sum_100"] == pytest.approx(148)
+    assert worked["WB-C002"]["severity_score"] == pytest.approx(74)
+    assert by_case["WB-C002"]["severity_bracket_label"] == "High"
+    assert worked["WB-C001"]["severity_status"] == "high_disagreement"
+    assert by_case["WB-C001"]["severity_bracket_label"] == "Moderate"
+    assert worked["WB-C009"]["severity_score"] is None
+    assert worked["WB-C128"]["rating_gap_100"] is None
+    brackets = namespace["brackets"]
+    assert [row["lower"] for row in brackets] == [0, 20, 40, 60, 80]
+    assert [row["upper"] for row in brackets] == [20, 40, 60, 80, 100]
+    assert namespace["bracket_for_score"](40, brackets)["label"] == "Moderate"
+    bracket_summary = namespace["bracket_summary"]
+    assert len(bracket_summary) == 5
+    assert sum(row["case_count"] for row in bracket_summary) == 105
+    assert sum(row["triplet_count"] for row in bracket_summary) == 881
+    assert bracket_summary[-1]["cumulative_cases"] == 105
+    assert bracket_summary[-1]["cumulative_triplets"] == 881
+    assert bracket_summary[-1]["cumulative_case_fraction"] == pytest.approx(1)
+    assert bracket_summary[-1]["cumulative_triplet_fraction"] == pytest.approx(1)
+    assert Path(analysis["figure_png"]).read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+    from xml.etree import ElementTree
+
+    assert ElementTree.parse(analysis["figure_svg"]).getroot().tag.endswith("svg")
+    for key in ("case_decisions_csv", "cdf_csv", "bracket_summary_csv"):
+        assert Path(analysis[key]).is_file()
+    with Path(analysis["bracket_summary_csv"]).open(newline="") as source:
+        exported_brackets = list(csv.DictReader(source))
+    assert len(exported_brackets) == 5
+    assert sum(int(row["case_count"]) for row in exported_brackets) == 105
+    assert sum(int(row["triplet_count"]) for row in exported_brackets) == 881
     assert {path: path.read_bytes() for path in source_paths} == before
+
+
+@pytest.mark.parametrize("changed_input", ["ratings", "case_evidence", "taxonomy"])
+def test_severity_notebook_rejects_annotation_scope_mismatch(monkeypatch, changed_input):
+    from warbias_kit.warbias import severity
+
+    annotation = severity.load_severity(ROOT)
+    if changed_input == "taxonomy":
+        annotation["taxonomy"][0]["claim_en"] = "A different taxonomy claim."
+    else:
+        annotation[changed_input][0]["case_id"] = "WB-C999"
+    monkeypatch.setattr(severity, "load_severity", lambda project: annotation)
+    monkeypatch.chdir(ROOT / "notebooks")
+    with pytest.raises(AssertionError, match="current taxonomy"):
+        execute_notebook("06_severity")

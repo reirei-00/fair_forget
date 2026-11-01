@@ -6,8 +6,9 @@ from copy import deepcopy
 from pathlib import Path
 from statistics import fmean
 
-from warbias_kit.io import digest, file_digest, read_rows, unique_index
+from warbias_kit.io import digest, file_digest, read_csv, read_rows, unique_index
 from warbias_kit.warbias.schema import LANGUAGES, text_digest
+from warbias_kit.warbias.severity_brackets import bracket_for_score, validate_brackets
 
 _RATING_FIELDS = {"rating_id", "case_id", "rater_id", "score", "scale_version"}
 _CASE_FIELDS = {"case_id", "examples_uk", "examples_sha256"}
@@ -34,6 +35,7 @@ def _policy(protocol):
         if field in protocol and protocol[field] != expected:
             raise ValueError(f"Severity protocol has incompatible {field}")
     _score(threshold, "Severity disagreement threshold")
+    validate_brackets(protocol.get("severity_brackets"))
     return version, minimum, threshold
 
 
@@ -99,13 +101,13 @@ def _ratings(rows, cases):
 
 
 def load_severity(project):
-    """Load the anonymized ratings and the examples shown during annotation."""
+    """Load anonymized ratings and annotation examples against the current taxonomy."""
     project = Path(project).resolve()
     protocol = json.loads((project / "protocol/severity.json").read_text(encoding="utf-8"))
     _policy(protocol)
     inputs = protocol.get("inputs")
-    if not isinstance(inputs, dict) or set(inputs) != {"ratings", "cases"}:
-        raise ValueError("Severity protocol must bind ratings and case evidence")
+    if not isinstance(inputs, dict) or set(inputs) != {"ratings", "cases", "taxonomy"}:
+        raise ValueError("Severity protocol must bind ratings, case evidence and current taxonomy")
     data = {}
     for name, binding in inputs.items():
         relative = binding.get("path") if isinstance(binding, dict) else None
@@ -116,10 +118,23 @@ def load_severity(project):
             raise ValueError("Severity inputs must stay within the portable project")
         if not path.is_file() or file_digest(path) != binding.get("sha256"):
             raise ValueError(f"Severity {name} input differs from its SHA256")
-        data[name] = read_rows(path)
+        data[name] = read_csv(path) if name == "taxonomy" else read_rows(path)
+    if not data["taxonomy"] or any(
+        not isinstance(row.get("public_case_id"), str) or not row["public_case_id"].strip()
+        for row in data["taxonomy"]
+    ):
+        raise ValueError("Severity taxonomy needs nonempty public case IDs")
+    taxonomy = unique_index(data["taxonomy"], "public_case_id")
     cases = _case_evidence(data["cases"])
-    _ratings(data["ratings"], cases)
-    return {"protocol": protocol, "ratings": data["ratings"], "case_evidence": data["cases"]}
+    ratings = _ratings(data["ratings"], cases)
+    if cases.keys() - taxonomy.keys() or ratings.keys() - taxonomy.keys():
+        raise ValueError("Severity ratings and case evidence must belong to the current taxonomy")
+    return {
+        "protocol": protocol,
+        "ratings": data["ratings"],
+        "case_evidence": data["cases"],
+        "taxonomy": data["taxonomy"],
+    }
 
 
 def _claim_hash(case):
@@ -167,9 +182,13 @@ def assign_taxonomy_severity(taxonomy, ratings, case_evidence, protocol):
             status = "high_disagreement"
         else:
             status = "aggregated"
+        assigned_score = fmean(eligible) * 100 if complete else None
+        bracket = bracket_for_score(assigned_score, protocol.get("severity_brackets"))
         row = {
             **deepcopy(case),
-            "severity_score": fmean(eligible) * 100 if complete else None,
+            "severity_score": assigned_score,
+            "severity_bracket": bracket["code"] if bracket else None,
+            "severity_bracket_label": bracket["label"] if bracket else None,
             "severity_n": len(eligible),
             "severity_rating_count": len(values),
             "severity_min": min(eligible) * 100 if eligible else None,
@@ -200,6 +219,8 @@ def inherit_triplet_severity(rows, taxonomy_with_severity, language):
             raise ValueError("Taxonomy claim or severity fields differ from their binding")
     fields = (
         "severity_score",
+        "severity_bracket",
+        "severity_bracket_label",
         "severity_unit",
         "severity_n",
         "severity_status",
