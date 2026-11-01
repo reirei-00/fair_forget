@@ -4,7 +4,7 @@
   "inputs": {
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
-      "sha256": "238fca6919d362107bd0bfe03641f8a7b837b9cbf8a0a2baecb35d60d95c20ee"
+      "sha256": "0a7cd35c7fc48716ce9c765c41b40b946ec03e59a983a85f7e2a019f7a24457a"
     },
     "attributes": {
       "path": "protocol/inputs/cohort_attributes.json",
@@ -139,5 +139,6 @@
   "allowed_case_scopes": [
     "general",
     "local"
-  ]
+  ],
+  "taxonomy_membership_field": "in_original_annotation_cohort"
 }

@@ -25,6 +25,7 @@ RUNTIME = {
 }
 TREES = {
     "src": {".py"},
+    "data": {".jsonl", ".md"},
     "prompts": {".txt", ".md", ".json", ".yaml", ".yml"},
     "configs": {".json"},
     "protocol": {".json", ".jsonl", ".csv"},

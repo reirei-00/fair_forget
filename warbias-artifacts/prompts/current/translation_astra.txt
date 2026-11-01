@@ -1,0 +1,5 @@
+Translate each Ukrainian triplet into fluent English. Return the same ID and the fields stereotype, counter_stereotype and unrelated. Keep the input order.
+
+Preserve each sentence's meaning, polarity and modal force. Preserve the speaker and all group attributes, including gender, age, language, origin, disability and service history. Keep an unrelated statement independent when it is independent in the source. Do not repair a weak counterstatement or add legal facts, praise, caveats or explanations.
+
+Translate ВПО as internally displaced people and ветеранки as women veterans. Use free public transport or transportation for безкоштовний проїзд. Use natural singular or plural agreement while preserving the source profile. Flag ambiguous source grammar separately. Do not reuse earlier English translations.

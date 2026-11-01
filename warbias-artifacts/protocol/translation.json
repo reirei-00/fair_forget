@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "source_language": "uk",
+  "target_language": "en",
+  "model": "gpt-6-astra",
+  "provider": "assistant_runtime",
+  "revision": null,
+  "immutable_model_version": "not_exposed",
+  "settings": {},
+  "configuration": {
+    "path": "configs/translation/astra.json",
+    "sha256": "d6e1c311f8a35cabf8bb1246ad748a91545d9cfbb25631b283c36ca8e34168d0"
+  },
+  "instructions": {
+    "path": "prompts/current/translation_astra.txt",
+    "sha256": "af918ee92e9d86e370d45a4d18f8a0c12cd5bf506cadb3d40af9c18e6e863f92"
+  },
+  "triplets": 1007,
+  "method": "Translate all current Ukrainian triplets directly. Preserve item IDs and metadata. Bind each translation to both sentence hashes.",
+  "human_review": "not_performed",
+  "quality_scores": "not_collected_for_this_translation",
+  "saved_sample_scores": "The separate ten-item COMET sample uses GPT-6.1 Sol and does not score these translations."
+}

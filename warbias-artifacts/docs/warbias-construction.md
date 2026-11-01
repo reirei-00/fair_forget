@@ -12,7 +12,9 @@ The [bilingual taxonomy](../protocol/inputs/cohort_taxonomy.csv) defines each
 case, target group, category, claim and context. Intrinsic attributes belong to
 the case; added attributes define comparison profiles. The
 [attribute catalog](../protocol/inputs/cohort_attributes.json) lists all 21 added
-dimensions, their values and profile counts.
+dimensions, their values and profile counts. The taxonomy has 120 cases in
+27 categories. `in_original_annotation_cohort` marks the 119 cases used in the
+original selected cohort; one case was added from feedback.
 
 The active taxonomy includes only cases marked `case_scope = general`. Cases
 tied to a named country, institution, legal status, language or source-specific
@@ -24,7 +26,9 @@ The taxonomy combines claim and supporting references in `source_urls` and
 `supporting_evidence_ids`; category feedback has its own field.
 “Source-based adaptation” (`source_adaptation`) means a case constructed
 from topics or subtypes described in cited sources. Feedback informs category
-names, merges and splits. All claim templates use `[TARGET]` for the group name
+names, merges and splits, and supplies the additional case about military-service
+priority for displaced men. Its source type is `feedback`; no published source
+is claimed. All claim templates use `[TARGET]` for the group name
 while retaining intrinsic qualifiers; generation uses the source claim wording.
 
 The [evidence mapping](../protocol/inputs/cohort_evidence.json) links eight
@@ -118,12 +122,29 @@ allocation, applies the exclusions and prepares the model requests. Input
 selection is deterministic; a new model run can produce different sentences.
 The generation record does not specify an immutable historical model revision.
 
+The current Ukrainian data contain the retained 1,006 cohort items after review
+and one author-edited feedback triplet, **WB-1201 / WB-C128**. This gives
+**1,007 items: 598 veterans and 409 IDPs**. The
+[additional generation protocol](../protocol/feedback_generation.json) records
+the Lapa model, sequential prompts and fixed male profile for that case.
+The [text provenance](../protocol/inputs/dataset_text_provenance.jsonl) records
+715 unchanged original items, six author-confirmed unchanged items, 285 edited
+items and the one edited addition. Original annotation labels remain bound to
+the original text; they do not become independent reviews of changed sentences.
+
 ## Translation and review
 
-Translation takes Ukrainian triplets as input and produces English triplets
-with matching item IDs and context labels. Both language versions are retained.
-The [translation prompt](../prompts/current/translation.txt) defines how to
-preserve the meaning and S/C/U roles.
+The full dataset translates all 1,007 current Ukrainian triplets with GPT-6 Astra.
+Both languages retain matching IDs, case metadata, context labels and S/C/U
+roles. The [translation instructions](../prompts/current/translation_astra.txt)
+require faithful meaning, attribution and profile attributes. The runtime did
+not expose an immutable model revision or inference settings.
+
+The [translation protocol](../protocol/translation.json) records the model and
+method. The [dataset manifest](../protocol/dataset.json) binds both language
+files, taxonomy and provenance. Per-item source and target hashes prevent stale
+translations from being paired with revised Ukrainian text. English translations
+have not undergone human translation review or full-corpus COMET scoring.
 
 The translation sample contains ten triplets translated with GPT-6.1 Sol.
 [Notebook 4](../notebooks/04_sample_translation_comet.ipynb) scores the 30 sentence
@@ -131,13 +152,13 @@ pairs with the reference-free quality-estimation model
 `Unbabel/wmt20-comet-qe-da`; its revision and settings are in the
 [COMET configuration](../configs/translation/quality.json). Scores are reported
 without an acceptance cutoff. They do not establish human validation of the
-translations or quality across the full corpus.
+translations or quality of the current Astra translations. The saved sample
+uses its own earlier Ukrainian and English text versions.
 
 Human review applies to the exact text version. Cohort membership identifies
-items sent for annotation, not accepted items. A changed sentence requires a
-new review. Translation review checks fidelity to the Ukrainian source. Dataset
-release requires aligned language versions, accepted text reviews, source
-bindings and family-based splits.
+items sent for annotation; text provenance identifies subsequent author edits.
+No model-review labels are included. Translation review checks fidelity to the
+Ukrainian source and remains separate from Ukrainian triplet review.
 
 The [notebook guide](../README.md#walkthroughs) provides the five executable
 walkthroughs and run instructions.

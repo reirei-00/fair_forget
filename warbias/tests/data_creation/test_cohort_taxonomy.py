@@ -27,8 +27,14 @@ def test_full_cohort_taxonomy_matches_its_bindings_and_recorded_profiles():
         config["files"]["cohort_taxonomy"][key] == value for key, value in taxonomy_binding.items()
     )
     with (ROOT / taxonomy_binding["path"]).open(newline="", encoding="utf-8") as stream:
-        taxonomy = list(csv.DictReader(stream))
-    assert len(taxonomy) == config["files"]["cohort_taxonomy"]["rows"] == 125
+        catalog = list(csv.DictReader(stream))
+    assert len(catalog) == config["files"]["cohort_taxonomy"]["rows"] == 126
+    assert {row["in_original_annotation_cohort"] for row in catalog} == {"true", "false"}
+    taxonomy = [row for row in catalog if row["in_original_annotation_cohort"] == "true"]
+    assert len(taxonomy) == 125
+    additions = [row for row in catalog if row["in_original_annotation_cohort"] == "false"]
+    assert len(additions) == 1 and additions[0]["public_case_id"] == "WB-C128"
+    assert additions[0]["triplet_count"] == "1" and additions[0]["source_types"] == "feedback"
     assert Counter(row["case_scope"] for row in taxonomy) == {"general": 119, "local": 6}
     assert all("[TARGET]" in row[field] for row in taxonomy for field in ("claim_uk", "claim_en"))
     assert all(row["case_scope_reason"] for row in taxonomy if row["case_scope"] == "local")

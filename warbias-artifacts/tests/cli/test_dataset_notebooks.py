@@ -68,6 +68,7 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
     elif name == "03_full_ukrainian_generation":
         assert result["matrix_rows"] == 1006 and result["planned_model_calls"] == 3018
         assert result["model_calls"] == 0
+        assert namespace["current_dataset"]["summary"]["triplets"] == 1007
     elif name == "04_sample_translation_comet":
         assert namespace["sample_membership"] == {"items": 10, "cases": 10}
         assert result["translation_model"] == "gpt-6.1-sol"
@@ -77,16 +78,17 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         assert namespace["plan"]["alignment"]["translation_bindings_checked"] is True
         assert result["comet_recomputed"] is False
     else:
-        assert result["status"] == "waiting_for_ukrainian_input"
-        assert result["annotation_status"] == "in_progress"
-        assert result["expected_items"] == 1006
-        assert result["expected_cases"] == 119
+        assert result["status"] == "verified_saved_translations"
+        assert result["human_translation_review"] is False
+        assert result["expected_items"] == result["pairs"] == 1007
+        assert result["expected_cases"] == 120
+        assert result["translation_model"] == "gpt-6-astra"
 
 
 def test_pilot_notebook_resolves_its_subproject_in_a_broader_repository(tmp_path, monkeypatch):
     repository = tmp_path / "warbias_kit"
     project = repository / "warbias"
-    for directory in ("configs", "protocol", "prompts"):
+    for directory in ("configs", "protocol", "prompts", "data"):
         shutil.copytree(ROOT / directory, project / directory)
     sibling = repository / "protocol/construction.json"
     sibling.parent.mkdir()
@@ -104,7 +106,7 @@ def test_notebooks_use_general_artifact_when_started_at_repository_root(
 ):
     repository = tmp_path / "repository"
     artifact = repository / "warbias-artifacts"
-    for directory in ("configs", "protocol", "prompts"):
+    for directory in ("configs", "protocol", "prompts", "data"):
         shutil.copytree(ROOT / directory, artifact / directory)
     main_protocol = repository / "warbias/protocol"
     main_protocol.mkdir(parents=True)
@@ -116,6 +118,7 @@ def test_notebooks_use_general_artifact_when_started_at_repository_root(
     if "cohort" in namespace:
         cohort = namespace["cohort"]
         assert len(cohort["taxonomy"]) == 119
+        assert len(cohort["taxonomy_catalog"]) == 120
         assert len(cohort["matrix"]) == 1006
         assert {row["case_scope"] for row in cohort["taxonomy"]} == {"general"}
 
@@ -182,6 +185,9 @@ def test_translation_notebook_previews_the_complete_selected_cohort(tmp_path, mo
     assert namespace["result"]["items"] == 2
     assert namespace["result"]["expected_items"] == 2
     assert namespace["result"]["model_calls"] == 0
+    plan = json.loads((namespace["work"] / "translation-preview/plan.json").read_text())
+    prompt = (ROOT / "prompts/current/translation_astra.txt").read_text()
+    assert all(request["messages"][0]["content"] == prompt for request in plan["requests"])
 
 
 @pytest.mark.parametrize(

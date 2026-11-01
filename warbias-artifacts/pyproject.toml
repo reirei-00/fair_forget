@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "WarBias dataset generation, translation and review pipelines"
 requires-python = ">=3.10"
 readme = "README.md"
-dependencies = []
+dependencies = ["jsonschema>=4,<5"]
 
 [project.optional-dependencies]
 generation = ["vllm>=0.18,<0.19"]

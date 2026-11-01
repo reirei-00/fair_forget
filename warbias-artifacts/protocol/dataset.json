@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "languages": [
+    "uk",
+    "en"
+  ],
+  "files": {
+    "uk": {
+      "path": "data/uk.jsonl",
+      "sha256": "7682c7a60a0d6a03ec4a0b94f04fa7578d9ae35e9a0fdd3c629507022eafa1af"
+    },
+    "en": {
+      "path": "data/en.jsonl",
+      "sha256": "e40f1ffb9f31fbda43456b5232b9774c977b3ce9a2bf7ccd5bbed9583f3e4cf0"
+    },
+    "taxonomy": {
+      "path": "protocol/inputs/cohort_taxonomy.csv",
+      "sha256": "a80f3b8ba0f8975a517c7e9330538d8cf19dd124ae555f41ba1d2bada7147805"
+    },
+    "schema": {
+      "path": "protocol/inputs/dataset_schema.json",
+      "sha256": "3d3a5619048c5b7d2e10b3fc50e550b4cdb517483b92d312dc66178d8df3d205"
+    },
+    "item_sources": {
+      "path": "protocol/inputs/dataset_item_sources.jsonl",
+      "sha256": "ded636f093a0f1f33827a5d1c1319eb464622f37f6cfd8913a009982e85ecc16"
+    },
+    "text_provenance": {
+      "path": "protocol/inputs/dataset_text_provenance.jsonl",
+      "sha256": "eff4a46dec2db0cc49db9ee9380be4dbe783354ae9fdbccc023a0b5c9f5431ba"
+    },
+    "translations": {
+      "path": "protocol/inputs/dataset_translations.jsonl",
+      "sha256": "2de072cd873c6bbcd6e849ef4cabca3142ef5d3bd113469565e57de5816b68c2"
+    },
+    "additions": {
+      "path": "protocol/dataset_additions.json",
+      "sha256": "e1419e88ab0d9b4a44fad3f9d8423655dc9df667464d316e9f1df9ed077d0901"
+    },
+    "translation_protocol": {
+      "path": "protocol/translation.json",
+      "sha256": "f4c874692a978196ee37fd738d8d90a36b51ccc9026ed8cdd6d7642504c47063"
+    }
+  },
+  "counts": {
+    "triplets": 1007,
+    "cases": 120,
+    "categories": 27,
+    "actors": {
+      "veteran": 598,
+      "idp": 409
+    }
+  },
+  "review": {
+    "original_annotation_cohort_items": 1006,
+    "unchanged_annotated_texts": 721,
+    "author_edited_annotated_texts": 285,
+    "author_edited_new_items": 1,
+    "model_review": "not_performed",
+    "english_human_review": "not_performed"
+  },
+  "text_fields": [
+    "stereotype",
+    "counter_stereotype",
+    "unrelated"
+  ]
+}

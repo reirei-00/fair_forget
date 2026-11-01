@@ -7,6 +7,10 @@
     "warbias_validation_sequential_counter.txt": "5c148ce341d19a38660aa5c0279145c99338d78b804a4e2c0c01699d5304e252",
     "warbias_validation_sequential_stereotype.txt": "77db543e649e1b0037e9ffe0df752ed551f18561a568458b781875ad3ce1c739",
     "warbias_validation_sequential_unrelated.txt": "60fec27eb5756f1aa969e104f4ad81413da3b02c106596de9bd812af2a565e76",
-    "warbias_validation_zero_shot.txt": "0d3a2838e8909e734614a30801b73bb8b8c70ba2b7d497393157447973ae84f8"
+    "warbias_validation_zero_shot.txt": "0d3a2838e8909e734614a30801b73bb8b8c70ba2b7d497393157447973ae84f8",
+    "current/feedback_s.txt": "f8ee318650c61ac970ccece3ae574c8b82d15cc302b674490dfd81d8e6e3a601",
+    "current/feedback_c.txt": "4868d5f46cdce61b8f0b79d2e5c79a183ea6b26a7deab24c01bb4edd849b4c56",
+    "current/feedback_u.txt": "265012f2abc0540271714fc30133ce6ef3ac7ae032576bc137f94a9972b8834a",
+    "current/translation_astra.txt": "af918ee92e9d86e370d45a4d18f8a0c12cd5bf506cadb3d40af9c18e6e863f92"
   }
 }
