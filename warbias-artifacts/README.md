@@ -8,7 +8,8 @@ The current annotation cohort contains **1,045 triplets in 125 semantic cases an
 categories: 611 veterans and 434 internally displaced people (IDPs)**.
 [The cohort protocol](protocol/cohort.json) defines its membership.
 [The bilingual taxonomy](protocol/inputs/cohort_taxonomy.csv) lists every case,
-category, claim and source. [The attribute catalog](protocol/inputs/cohort_attributes.json)
+category, claim, source and general/local scope.
+[The attribute catalog](protocol/inputs/cohort_attributes.json)
 records all 21 added dimensions and their original and retained counts.
 [The evidence mapping](protocol/inputs/cohort_evidence.json) records supporting
 references and pending source checks, including their case or profile scope.

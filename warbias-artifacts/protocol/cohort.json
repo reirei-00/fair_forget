@@ -4,7 +4,7 @@
   "inputs": {
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
-      "sha256": "816931617f53bbb2f2ca4213e7230f47ef46af8f5742331a1af3d99cbf827207"
+      "sha256": "5c970e828f6662a57ad5918e7a4b1b3200ae0ca20934be705c74af4b0451ff25"
     },
     "attributes": {
       "path": "protocol/inputs/cohort_attributes.json",
@@ -129,5 +129,10 @@
     "english_sha256": "0b3c34a90e51f2c0827f4f0e2f8d5ce7b19ec1cab50bc4c5a5a12adb998c425a",
     "use": "Item-ID and language alignment reference; generated text is not included in this input package."
   },
-  "review_status": "Submission for annotation does not imply acceptance. This input package includes no model review."
+  "review_status": "Submission for annotation does not imply acceptance. This input package includes no model review.",
+  "case_scope": {
+    "general": "The claim and intrinsic qualifiers do not depend on a specific national or regional context.",
+    "local": "The claim or intrinsic qualifiers depend on a named country, institution, legal status, language or source-specific regional identity.",
+    "basis": "Classify the case using its claim, intrinsic qualifiers and source context. This label is separate from item-level context_scope and does not filter cases or establish stereotype prevalence."
+  }
 }

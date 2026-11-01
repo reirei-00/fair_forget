@@ -14,6 +14,11 @@ the case; added attributes define comparison profiles. The
 [attribute catalog](../protocol/inputs/cohort_attributes.json) lists all 21 added
 dimensions, their values and profile counts.
 
+Each case has a `case_scope` label. `local` marks cases tied to a country,
+institution, legal status, language or regional identity in the claim and its
+source context. `general` marks cases without this dependency. Each local case has a reason.
+The label does not filter cases or establish stereotype prevalence.
+
 Claim sources, supporting references and category feedback have separate
 columns. “Source-based adaptation” (`source_adaptation`) means a case constructed
 from topics or subtypes described in cited sources. Feedback informs category
@@ -76,9 +81,12 @@ This gives **1,045 triplets in 125 cases and 28 categories: 611 veterans and
 quality-review decisions.
 
 The [cohort protocol](../protocol/cohort.json) lists the exact excluded and
-local-context IDs. The 32 local-context items retain `ukraine_context` in both
-languages; other items use `cross_conflict_generic`. The five TCC-responsibility
-items remain under “Political identity and radicalism.”
+local-context IDs. Item-level `context_scope` describes the saved text and added
+profiles, separately from taxonomy `case_scope`. The 32 local-context items retain
+`ukraine_context` in both languages; other items use `cross_conflict_generic`.
+A general case can have local language profiles, and generated text can omit a
+local case reference. The five TCC-responsibility items remain under “Political
+identity and radicalism.”
 
 ## Pilot and model selection
 
