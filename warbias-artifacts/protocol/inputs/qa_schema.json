@@ -2,17 +2,17 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "properties": {
-    "actor_introduction_order": {
-      "enum": [
-        "target_first",
-        "comparison_first"
-      ],
+    "id": {
+      "pattern": "^WBQA-[0-9]{4}$",
       "type": "string"
     },
-    "answer_index": {
-      "maximum": 2,
-      "minimum": 0,
-      "type": "integer"
+    "context": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "question": {
+      "minLength": 1,
+      "type": "string"
     },
     "choices": {
       "items": {
@@ -24,12 +24,34 @@
       "type": "array",
       "uniqueItems": true
     },
-    "comparison_index": {
+    "answer_index": {
       "maximum": 2,
       "minimum": 0,
       "type": "integer"
     },
-    "context": {
+    "language": {
+      "enum": [
+        "uk",
+        "en"
+      ],
+      "type": "string"
+    },
+    "scenario_id": {
+      "pattern": "^WBQA-S[0-9]{2}$",
+      "type": "string"
+    },
+    "source_case_id": {
+      "pattern": "^WB-C[0-9]{3}$",
+      "type": "string"
+    },
+    "target_group": {
+      "enum": [
+        "idp",
+        "veteran"
+      ],
+      "type": "string"
+    },
+    "topic": {
       "minLength": 1,
       "type": "string"
     },
@@ -41,25 +63,37 @@
       ],
       "type": "string"
     },
-    "id": {
-      "pattern": "^WBQA-[0-9]{4}$",
-      "type": "string"
-    },
-    "language": {
-      "enum": [
-        "uk",
-        "en"
-      ],
-      "type": "string"
-    },
-    "question": {
-      "minLength": 1,
-      "type": "string"
-    },
     "question_polarity": {
       "enum": [
         "negative",
         "positive"
+      ],
+      "type": "string"
+    },
+    "target_index": {
+      "maximum": 2,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "comparison_index": {
+      "maximum": 2,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "unknown_index": {
+      "maximum": 2,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "stereotype_consistent_index": {
+      "maximum": 2,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "actor_introduction_order": {
+      "enum": [
+        "target_first",
+        "comparison_first"
       ],
       "type": "string"
     },
@@ -72,61 +106,27 @@
         "assistant_revised_translation"
       ],
       "type": "string"
-    },
-    "scenario_id": {
-      "pattern": "^WBQA-S[0-9]{2}$",
-      "type": "string"
-    },
-    "source_case_id": {
-      "pattern": "^WB-C[0-9]{3}$",
-      "type": "string"
-    },
-    "stereotype_consistent_index": {
-      "maximum": 2,
-      "minimum": 0,
-      "type": "integer"
-    },
-    "target_group": {
-      "enum": [
-        "idp",
-        "veteran"
-      ],
-      "type": "string"
-    },
-    "target_index": {
-      "maximum": 2,
-      "minimum": 0,
-      "type": "integer"
-    },
-    "topic": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "unknown_index": {
-      "maximum": 2,
-      "minimum": 0,
-      "type": "integer"
     }
   },
   "required": [
-    "actor_introduction_order",
-    "answer_index",
-    "choices",
-    "comparison_index",
-    "context",
-    "evidence_condition",
     "id",
-    "language",
+    "context",
     "question",
-    "question_polarity",
-    "review_status",
+    "choices",
+    "answer_index",
+    "language",
     "scenario_id",
     "source_case_id",
-    "stereotype_consistent_index",
     "target_group",
-    "target_index",
     "topic",
-    "unknown_index"
+    "evidence_condition",
+    "question_polarity",
+    "target_index",
+    "comparison_index",
+    "unknown_index",
+    "stereotype_consistent_index",
+    "actor_introduction_order",
+    "review_status"
   ],
   "title": "WarBias QA item",
   "type": "object"

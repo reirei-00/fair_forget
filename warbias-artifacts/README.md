@@ -25,6 +25,10 @@ Ukrainian human reviews remain bound to the exact text each person saw.
 Assistant resolutions are marked separately. GPT-6 Astra translated all English
 QA text; it has no human translation review.
 
+Both languages use the same column order for each dataset type: ID and text
+first, followed by answers and metadata. The dataset manifests declare the order
+used in JSONL and Parquet.
+
 The recorded design selected 1,000 base inputs and 200 profile extensions.
 Excluding 136 occupation profiles and five older women veteran profiles left
 1,059 items for human annotation. Excluding 14 legitimacy-category items and

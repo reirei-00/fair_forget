@@ -36,7 +36,7 @@
     },
     "en": {
       "path": "data/qa_en.jsonl",
-      "sha256": "aa51422575aa9cb5a0b68c127b345b3c326ea28c05c10fdc587769f741cd5cd3"
+      "sha256": "6436190d503cfe97859ec9c3183901d292f0de01358887f18675f8f87f07a7f5"
     },
     "human_edits": {
       "path": "protocol/inputs/qa_human_edits.jsonl",
@@ -60,7 +60,7 @@
     },
     "schema": {
       "path": "protocol/inputs/qa_schema.json",
-      "sha256": "17367f86c9294744e52789254383e1507c3ccc32473ebb3460c4691ad00ebbda"
+      "sha256": "cd93da61539e9ffbc246e61f98e8cc03b7671ea7eac0ca8d4670adb588ef3c76"
     },
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
@@ -76,7 +76,7 @@
     },
     "uk": {
       "path": "data/qa_uk.jsonl",
-      "sha256": "8ff9441792dfda33e375990d84ac445bda683faf7f70d56eb8fccab5834031a9"
+      "sha256": "5645f1813a76fb738a36a5cd898f10fd29b6c26df95b6d029fcbfc804e46e0a2"
     }
   },
   "languages": [
@@ -103,5 +103,25 @@
       }
     }
   },
-  "schema_version": 1
+  "schema_version": 1,
+  "columns": [
+    "id",
+    "context",
+    "question",
+    "choices",
+    "answer_index",
+    "language",
+    "scenario_id",
+    "source_case_id",
+    "target_group",
+    "topic",
+    "evidence_condition",
+    "question_polarity",
+    "target_index",
+    "comparison_index",
+    "unknown_index",
+    "stereotype_consistent_index",
+    "actor_introduction_order",
+    "review_status"
+  ]
 }
