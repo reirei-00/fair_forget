@@ -164,20 +164,23 @@ Ukrainian source and remains separate from Ukrainian triplet review.
 
 [Notebook 6](../notebooks/06_severity.ipynb) assigns severity to taxonomy cases
 from the saved human ratings, then maps each case result to its triplets.
-Use the equal-weight mean of at least two independent ratings from the confirmed
-rubric version. Preserve all source ratings; unknown versions do not enter the
-mean. Report scores on the original 0–100 scale and flag gaps of at least
-40 points. Insufficient or missing compatible ratings leave the score null.
+Compute the equal-weight mean of at least two independent ratings from the
+confirmed rubric version. Preserve all source ratings and list excluded versions
+in the calculation audit. Report scores on the original 0–100 scale, assign one
+of the five equal-width brackets in the [severity protocol](../protocol/severity.json),
+and flag rater gaps of at least 40 points. Cases with fewer than two compatible
+ratings retain a null score and bracket.
 
-The mean is descriptive, not consensus. Severity sidecars bind the case, annotation
-examples and current triplet text. They record inherited case severity rather
-than direct annotation of each Ukrainian or English sentence.
+The mean summarises the ratings; their range records disagreement. Severity
+sidecars bind the case, annotation examples and current triplet text. Ukrainian
+and English triplets inherit the same case mean, bracket and status.
 
 The notebook shows each calculation and the cumulative distribution of assigned
 scores. It reports case-weighted and triplet-weighted summaries separately, using
 one language for triplet counts. Pending cases stay outside score distributions.
-The observed means and medians describe this dataset; the rubric keeps its
-original continuous 0–100 scale and endpoint meanings.
+The observed means and medians describe this dataset. The bracket boundaries
+divide the scale at 20, 40, 60 and 80; the annotation rubric retains its original
+endpoint meanings.
 
 The [notebook guide](../README.md#walkthroughs) provides the six executable
 walkthroughs and run instructions.

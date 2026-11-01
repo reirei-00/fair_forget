@@ -8,6 +8,7 @@ from statistics import fmean
 
 from warbias_kit.io import digest, file_digest, read_rows, unique_index
 from warbias_kit.warbias.schema import LANGUAGES, text_digest
+from warbias_kit.warbias.severity_brackets import bracket_for_score, validate_brackets
 
 _RATING_FIELDS = {"rating_id", "case_id", "rater_id", "score", "scale_version"}
 _CASE_FIELDS = {"case_id", "examples_uk", "examples_sha256"}
@@ -34,6 +35,7 @@ def _policy(protocol):
         if field in protocol and protocol[field] != expected:
             raise ValueError(f"Severity protocol has incompatible {field}")
     _score(threshold, "Severity disagreement threshold")
+    validate_brackets(protocol.get("severity_brackets"))
     return version, minimum, threshold
 
 
@@ -167,9 +169,13 @@ def assign_taxonomy_severity(taxonomy, ratings, case_evidence, protocol):
             status = "high_disagreement"
         else:
             status = "aggregated"
+        assigned_score = fmean(eligible) * 100 if complete else None
+        bracket = bracket_for_score(assigned_score, protocol.get("severity_brackets"))
         row = {
             **deepcopy(case),
-            "severity_score": fmean(eligible) * 100 if complete else None,
+            "severity_score": assigned_score,
+            "severity_bracket": bracket["code"] if bracket else None,
+            "severity_bracket_label": bracket["label"] if bracket else None,
             "severity_n": len(eligible),
             "severity_rating_count": len(values),
             "severity_min": min(eligible) * 100 if eligible else None,
@@ -200,6 +206,8 @@ def inherit_triplet_severity(rows, taxonomy_with_severity, language):
             raise ValueError("Taxonomy claim or severity fields differ from their binding")
     fields = (
         "severity_score",
+        "severity_bracket",
+        "severity_bracket_label",
         "severity_unit",
         "severity_n",
         "severity_status",

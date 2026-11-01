@@ -80,6 +80,39 @@ def test_two_zero_scores_are_an_annotated_zero_not_missing():
     row = assign([rating(0, "R1"), rating(0, "R2")])[0]
     assert row["severity_score"] == 0
     assert row["severity_status"] == "aggregated"
+    assert row["severity_bracket"] is None
+    assert row["severity_bracket_label"] is None
+
+
+def test_bracketed_case_means_and_pending_rating_map_to_both_languages():
+    brackets = [
+        {
+            "code": code,
+            "label": label,
+            "lower": lower,
+            "upper": upper,
+            "upper_inclusive": upper == 100,
+        }
+        for code, label, lower, upper in (
+            ("very_low", "Very low", 0, 20),
+            ("low", "Low", 20, 40),
+            ("moderate", "Moderate", 40, 60),
+            ("high", "High", 60, 80),
+            ("very_high", "Very high", 80, 100),
+        )
+    ]
+    policy = {**POLICY, "severity_brackets": brackets}
+    assigned = assign([rating(0.4, "R1"), rating(0.4, "R2")], protocol=policy)
+    assert assigned[0]["severity_score"] == 40
+    assert assigned[0]["severity_bracket"] == "moderate"
+    assert assigned[0]["severity_bracket_label"] == "Moderate"
+    for language in ("uk", "en"):
+        sidecar = inherit_triplet_severity([triplet()], assigned, language)[0]
+        assert sidecar["severity_bracket"] == "moderate"
+        assert sidecar["severity_bracket_label"] == "Moderate"
+    pending = assign([rating(0.4, "R1")], protocol=policy)[0]
+    assert pending["severity_score"] is None and pending["severity_n"] == 1
+    assert pending["severity_bracket"] is pending["severity_bracket_label"] is None
 
 
 @pytest.mark.parametrize("gap", [0.4, 0.7])
@@ -164,6 +197,7 @@ def test_inheritance_preserves_input_text_and_binds_each_language():
     [
         lambda row: row.update(claim_en="A changed claim."),
         lambda row: row.update(severity_score=100),
+        lambda row: row.update(severity_bracket="different"),
         lambda row: row.update(target_group="veteran"),
     ],
 )

@@ -52,10 +52,11 @@
     "stimulus": "Workbook cards show up to three Ukrainian stereotype examples. Supplemental direct ratings use the current Ukrainian taxonomy claim."
   },
   "interpretation": {
-    "score": "An equal-weight descriptive mean of independent ratings with the selected confirmed rubric version. It is not consensus.",
-    "pending": "Fewer than two compatible ratings leave severity_score null. Unknown-version ratings remain in the record but are not pooled.",
-    "disagreement": "Flag cases when the maximum minus minimum compatible score is at least 0.4. Keep the descriptive mean and individual ratings.",
-    "inheritance": "Triplets inherit case-level severity by case_id. Source examples and current text have separate hash bindings. This does not create direct human severity ratings of each triplet or its English translation."
+    "score": "An equal-weight mean of independent ratings with the selected confirmed rubric version. Individual ratings and their gap remain available with the aggregate.",
+    "pending": "Fewer than two compatible ratings leave severity_score and its bracket null. The calculation audit lists ratings with unknown rubric versions as excluded.",
+    "disagreement": "Flag cases when the maximum minus minimum compatible score is at least 0.4. Preserve the case mean and the individual ratings.",
+    "inheritance": "Triplets inherit their case mean, bracket and status through case_id. Source examples and current text have separate hash bindings. Both languages carry the same case-level severity annotation.",
+    "brackets": "Map the assigned mean on the 0–100 scale to five equal-width brackets. Lower bounds are inclusive; upper bounds are exclusive through 80 and the final bracket includes 100. Pending means retain a null bracket."
   },
   "output_unit": "severity_points_0_100",
   "additional_sources": [
@@ -76,6 +77,43 @@
         "max": 100
       },
       "scale_version": 2
+    }
+  ],
+  "severity_brackets": [
+    {
+      "code": "very_low",
+      "label": "Very low",
+      "lower": 0,
+      "upper": 20,
+      "upper_inclusive": false
+    },
+    {
+      "code": "low",
+      "label": "Low",
+      "lower": 20,
+      "upper": 40,
+      "upper_inclusive": false
+    },
+    {
+      "code": "moderate",
+      "label": "Moderate",
+      "lower": 40,
+      "upper": 60,
+      "upper_inclusive": false
+    },
+    {
+      "code": "high",
+      "label": "High",
+      "lower": 60,
+      "upper": 80,
+      "upper_inclusive": false
+    },
+    {
+      "code": "very_high",
+      "label": "Very high",
+      "lower": 80,
+      "upper": 100,
+      "upper_inclusive": true
     }
   ]
 }

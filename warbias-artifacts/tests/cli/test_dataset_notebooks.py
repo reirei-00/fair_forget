@@ -1,5 +1,6 @@
 """Dataset notebooks inspect real study inputs without making model calls by default."""
 
+import csv
 import json
 import shutil
 from copy import deepcopy
@@ -254,6 +255,8 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
     by_case = {row["public_case_id"]: row for row in taxonomy}
     assert by_case["WB-C128"]["severity_score"] is None
     assert by_case["WB-C128"]["severity_status"] == "insufficient_ratings"
+    assert by_case["WB-C128"]["severity_bracket"] is None
+    assert by_case["WB-C128"]["severity_bracket_label"] is None
     assert by_case["WB-C128"]["severity_n"] == 1
     assert by_case["WB-C128"]["severity_rating_count"] == 1
     assert by_case["WB-C128"]["severity_min"] == by_case["WB-C128"]["severity_max"] == 40
@@ -283,6 +286,16 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
         assert all(
             row["severity_score"] == by_case[row["case_id"]]["severity_score"] for row in rows
         )
+        assert all(
+            row["severity_bracket"] == by_case[row["case_id"]]["severity_bracket"]
+            and row["severity_bracket_label"] == by_case[row["case_id"]]["severity_bracket_label"]
+            for row in rows
+        )
+        assert all(
+            row["severity_bracket"] is None and row["severity_bracket_label"] is None
+            for row in rows
+            if row["severity_score"] is None
+        )
     analysis = result["analysis"]
     summary = json.loads(Path(analysis["summary_json"]).read_text())
     assert summary == analysis["summary"] == namespace["summary"]
@@ -296,13 +309,32 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
     worked = {row["case_id"]: row for row in namespace["worked_decisions"]}
     assert worked["WB-C002"]["eligible_sum_100"] == pytest.approx(148)
     assert worked["WB-C002"]["severity_score"] == pytest.approx(74)
+    assert by_case["WB-C002"]["severity_bracket_label"] == "High"
     assert worked["WB-C001"]["severity_status"] == "high_disagreement"
+    assert by_case["WB-C001"]["severity_bracket_label"] == "Moderate"
     assert worked["WB-C009"]["severity_score"] is None
     assert worked["WB-C128"]["rating_gap_100"] is None
+    brackets = namespace["brackets"]
+    assert [row["lower"] for row in brackets] == [0, 20, 40, 60, 80]
+    assert [row["upper"] for row in brackets] == [20, 40, 60, 80, 100]
+    assert namespace["bracket_for_score"](40, brackets)["label"] == "Moderate"
+    bracket_summary = namespace["bracket_summary"]
+    assert len(bracket_summary) == 5
+    assert sum(row["case_count"] for row in bracket_summary) == 105
+    assert sum(row["triplet_count"] for row in bracket_summary) == 881
+    assert bracket_summary[-1]["cumulative_cases"] == 105
+    assert bracket_summary[-1]["cumulative_triplets"] == 881
+    assert bracket_summary[-1]["cumulative_case_fraction"] == pytest.approx(1)
+    assert bracket_summary[-1]["cumulative_triplet_fraction"] == pytest.approx(1)
     assert Path(analysis["figure_png"]).read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
     from xml.etree import ElementTree
 
     assert ElementTree.parse(analysis["figure_svg"]).getroot().tag.endswith("svg")
-    for key in ("case_decisions_csv", "cdf_csv"):
+    for key in ("case_decisions_csv", "cdf_csv", "bracket_summary_csv"):
         assert Path(analysis[key]).is_file()
+    with Path(analysis["bracket_summary_csv"]).open(newline="") as source:
+        exported_brackets = list(csv.DictReader(source))
+    assert len(exported_brackets) == 5
+    assert sum(int(row["case_count"]) for row in exported_brackets) == 105
+    assert sum(int(row["triplet_count"]) for row in exported_brackets) == 881
     assert {path: path.read_bytes() for path in source_paths} == before
