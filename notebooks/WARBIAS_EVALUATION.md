@@ -8,16 +8,29 @@ Install this pinned Fair-UK library revision in the same Python environment
 as the notebook kernel:
 
 ```sh
-python -m pip install "lm_eval @ git+https://github.com/reirei-00/fair-uk.git@694ce2b822c3aa7131d5e527ed4a6ebcd8a59310"
+python -m pip install "lm_eval @ git+https://github.com/reirei-00/fair-uk.git@c777fe03021b03590fd482444005d3ae3902c5da"
 ```
 
-Set the release and result locations:
+From the FairForget repository root, prepare the versioned inputs from the
+published Hugging Face release:
 
 ```sh
-export WARBIAS_BASELINE_RELEASE=/path/to/frozen-release
-export WARBIAS_BASELINE_RESULTS=/path/to/results
+python scripts/prepare_warbias_evaluation.py \
+  --output ./outputs/warbias-baseline-release \
+  --model-root /path/to/models
+export WARBIAS_BASELINE_RELEASE="$PWD/outputs/warbias-baseline-release"
+export WARBIAS_BASELINE_RESULTS="$PWD/outputs/warbias-baseline-results"
 jupyter lab notebooks/warbias_baseline.ipynb
 ```
+
+The preparation script verifies the pinned source files and writes the bundle,
+model profiles, severity bindings and collection runner. It does not download
+weights. The model root uses the directory/revision layout in
+[the model registry](../configs/unlearning/models.json). Add
+`--source-dir /path/to/hf-snapshot` to use a local copy of the pinned files.
+
+For GPU collection, use the [evaluation environment](EVALUATION.md#evaluation-environment).
+See [setup](SETUP.md) for model downloads.
 
 Model collection runs separately through the frozen release's `run_model.py`.
 The notebook never starts inference. Missing results remain pending. Re-run it
@@ -31,6 +44,18 @@ fair-uk-eval warbias baseline \
   --results "$WARBIAS_BASELINE_RESULTS" \
   --output ./baseline-summary
 ```
+
+For saved runs, use their original release directory. If the analysis library
+has changed since collection, set
+`WARBIAS_BASELINE_INFERENCE_RELEASE` to that frozen collector release. The
+library checks its inference, parser and native scorer code before reanalysis;
+original run manifests stay unchanged. The CLI accepts the same snapshot with
+`--inference-release /path/to/collector-release`.
+
+The library exports `scores.csv`, `evidence_gaps.csv`, `language_contrasts.csv`,
+`group_diagnostics.csv` and `availability.csv`. The notebook displays every table.
+Exports retain units, support, missing values and uncertainty; `summary.json`
+contains the complete report.
 
 The library reports the recorded severity levels as slices. Prior-normalised
 triplet preference needs current-text neutral controls. Before/after outcomes
