@@ -30,14 +30,13 @@ Use Python 3.10+ and a separate environment. Run from `warbias-artifacts/` or an
 exported package:
 
 ```sh
-python -m pip install -e /path/to/paired-fair-uk
 python -m pip install -e '.[dev,notebooks]'
 warbias_kit doctor
 ```
 
 The package is `warbias_kit-warbias`; its Python namespace and command are
 `warbias_kit`. Add `generation` for local vLLM inference or `quality` for COMET.
-Fair-UK provides the shared data-release contract.
+The package includes its data-release validator.
 
 ## Walkthroughs
 
@@ -72,3 +71,5 @@ python scripts/export_dataset.py verify --directory /path/to/new-warbias-package
 The source export contains settings, prompts, study inputs, notebooks and tests.
 Keep credentials, model weights, raw annotation exports and service responses in
 local storage. Prompt hashes are in `prompts/manifest.json`.
+Use the exported files in a fresh anonymous repository. The source repository,
+pull requests and Git history are not part of the anonymous export.

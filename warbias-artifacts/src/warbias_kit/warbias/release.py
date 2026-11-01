@@ -2,8 +2,7 @@
 
 import re
 
-from lm_eval.fair_uk.contracts import validate_data_release
-
+from warbias_kit.contracts import validate_data_release
 from warbias_kit.io import (
     digest,
     empty_directory,
@@ -44,7 +43,7 @@ def build_release(
     if any(row.get("language") != "en" for row in english) or any(
         row.get("language") != "uk" for row in ukrainian
     ):
-        raise ValueError("The paired Fair-UK release expects English and Ukrainian inputs")
+        raise ValueError("The paired release expects English and Ukrainian inputs")
     pairs = align_languages(english, ukrainian)
     if not pairs:
         raise ValueError("Cannot release an empty panel")

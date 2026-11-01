@@ -97,6 +97,47 @@ def test_standalone_export_can_be_exported_again(exported, tmp_path):
     assert (copied / exporter.MANIFEST).read_bytes() == (exported / exporter.MANIFEST).read_bytes()
 
 
+@pytest.mark.parametrize("relative", [".git", "nested/.git"])
+def test_verifier_rejects_git_metadata_outside_the_file_manifest(exported, relative):
+    path = exported / relative
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("gitdir: private-checkout\n")
+    with pytest.raises(ValueError, match="Git metadata"):
+        exporter.verify(exported)
+
+
+@pytest.mark.parametrize("location", ["notebook", "cell", "output"])
+def test_export_rejects_authorship_metadata(exported, tmp_path, location):
+    path = exported / "notebooks/01_ukrainian_pilot.ipynb"
+    notebook = json.loads(path.read_text())
+    cell = next(cell for cell in notebook["cells"] if cell["cell_type"] == "code")
+    if location == "notebook":
+        metadata = notebook["metadata"]
+    elif location == "cell":
+        metadata = cell["metadata"]
+    else:
+        cell["outputs"] = [{"output_type": "display_data", "data": {}, "metadata": {}}]
+        metadata = cell["outputs"][0]["metadata"]
+    metadata["authors"] = [{"name": "Example Author"}]
+    path.write_text(json.dumps(notebook))
+    with pytest.raises(ValueError, match="author and machine identities"):
+        exporter.export(exported, tmp_path / "rejected")
+
+
+@pytest.mark.parametrize("style", ["windows", "windows_lowercase", "mac_temporary", "mac_alias"])
+def test_export_rejects_additional_machine_paths(exported, tmp_path, style):
+    if style.startswith("windows"):
+        users = "users" if style == "windows_lowercase" else "Users"
+        personal = "C:" + "\\" + users + "\\example\\model"
+    elif style == "mac_alias":
+        personal = "/var" + "/folders/example/model"
+    else:
+        personal = "/private" + "/var" + "/folders/example/model"
+    (exported / "configs/private.json").write_text(json.dumps({"model_path": personal}))
+    with pytest.raises(ValueError, match="Machine-specific path"):
+        exporter.export(exported, tmp_path / "rejected")
+
+
 @pytest.mark.parametrize("linked_child", [False, True])
 def test_source_boundary_rejects_symlinked_root_or_warbias_child(exported, tmp_path, linked_child):
     source = tmp_path / "source"
