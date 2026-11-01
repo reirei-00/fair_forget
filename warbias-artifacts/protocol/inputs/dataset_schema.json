@@ -2,10 +2,63 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "properties": {
+    "id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "stereotype": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "counter_stereotype": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "unrelated": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "case_id": {
+      "minLength": 1,
+      "type": "string"
+    },
     "actor": {
       "enum": [
         "veteran",
         "idp"
+      ],
+      "type": "string"
+    },
+    "reporter": {
+      "enum": [
+        "another veteran",
+        "business adviser",
+        "career adviser",
+        "caseworker",
+        "colleague",
+        "community organiser",
+        "hiring manager",
+        "journalist",
+        "landlord",
+        "letting agent",
+        "local resident",
+        "neighbour",
+        "news editor",
+        "recruiter",
+        "rehabilitation professional",
+        "service clerk",
+        "supervisor",
+        null
+      ],
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "context_scope": {
+      "enum": [
+        "cross_conflict_generic",
+        "ukraine_context"
       ],
       "type": "string"
     },
@@ -156,17 +209,6 @@
       "type": "array",
       "uniqueItems": true
     },
-    "case_id": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "context_scope": {
-      "enum": [
-        "cross_conflict_generic",
-        "ukraine_context"
-      ],
-      "type": "string"
-    },
     "context_tags": {
       "items": {
         "enum": [
@@ -220,48 +262,6 @@
       "type": "array",
       "uniqueItems": true
     },
-    "counter_stereotype": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "id": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "reporter": {
-      "enum": [
-        "another veteran",
-        "business adviser",
-        "career adviser",
-        "caseworker",
-        "colleague",
-        "community organiser",
-        "hiring manager",
-        "journalist",
-        "landlord",
-        "letting agent",
-        "local resident",
-        "neighbour",
-        "news editor",
-        "recruiter",
-        "rehabilitation professional",
-        "service clerk",
-        "supervisor",
-        null
-      ],
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "stereotype": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "unrelated": {
-      "minLength": 1,
-      "type": "string"
-    },
     "severity_mean_score": {
       "type": [
         "number",
@@ -283,15 +283,15 @@
   },
   "required": [
     "id",
-    "case_id",
     "stereotype",
     "counter_stereotype",
     "unrelated",
+    "case_id",
     "actor",
     "reporter",
     "context_scope",
-    "bias_tags",
     "bias_dimensions",
+    "bias_tags",
     "context_tags",
     "severity_mean_score",
     "severity_level"

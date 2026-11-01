@@ -7,11 +7,11 @@
   "files": {
     "uk": {
       "path": "data/uk.jsonl",
-      "sha256": "355b4a19ac529b6df0ff7b896fc4da2a42425f3e046eb8ba89977f41581ee281"
+      "sha256": "3035fa3b10c06bb361d5e4ec8f062603a36ae022b6cdf9b588024766e5d18cf9"
     },
     "en": {
       "path": "data/en.jsonl",
-      "sha256": "0d69a0e581647f596f10b04e48ac20f413cff315b1d3021384de7b1f224655fe"
+      "sha256": "20f9c751b2cefee209dfdcc564a7d1f977111bb5a4b053a8adbbb698a648b084"
     },
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
@@ -19,7 +19,7 @@
     },
     "schema": {
       "path": "protocol/inputs/dataset_schema.json",
-      "sha256": "8aa302b5e38fbe329e6cd563c667b8b68471a3ae87d80a33305e327a3b95a6d3"
+      "sha256": "c4eb7f6d93360959e9714acfe24b6fc67bbc3c3dd877613bd1a71755ec3f2b42"
     },
     "item_sources": {
       "path": "protocol/inputs/dataset_item_sources.jsonl",
@@ -79,5 +79,20 @@
       "uk": 125,
       "en": 125
     }
-  }
+  },
+  "columns": [
+    "id",
+    "stereotype",
+    "counter_stereotype",
+    "unrelated",
+    "case_id",
+    "actor",
+    "reporter",
+    "context_scope",
+    "bias_dimensions",
+    "bias_tags",
+    "context_tags",
+    "severity_mean_score",
+    "severity_level"
+  ]
 }

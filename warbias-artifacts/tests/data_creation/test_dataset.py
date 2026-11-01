@@ -33,6 +33,7 @@ def test_current_dataset_is_complete_and_aligned():
     }
     for rows in result["rows"].values():
         assert all(len(row) == 13 for row in rows)
+        assert all(list(row) == result["protocol"]["columns"] for row in rows)
         assert rows[-1]["severity_mean_score"] == 75.0
         assert rows[-1]["severity_level"] == 4
 
@@ -248,4 +249,18 @@ def test_rejects_false_severity_coverage(release):
     manifest["severity"]["scored_cases"] = 120
     write_json(project / "protocol/dataset.json", manifest)
     with pytest.raises(ValueError, match="Dataset severity coverage differs"):
+        dataset.load_dataset(project)
+
+
+def test_rejects_rebound_rows_in_a_different_column_order(release):
+    _replace_rows(release, "uk", lambda rows: None)
+    with pytest.raises(ValueError, match="rows must follow their declared column order"):
+        dataset.load_dataset(release[0])
+
+
+def test_rejects_declared_columns_that_differ_from_the_schema(release):
+    project, manifest = release
+    manifest["columns"] = list(reversed(manifest["columns"]))
+    write_json(project / "protocol/dataset.json", manifest)
+    with pytest.raises(ValueError, match="columns must match the schema"):
         dataset.load_dataset(project)

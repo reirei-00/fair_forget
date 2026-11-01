@@ -276,6 +276,19 @@ def _validate_severity(project, indexes, taxonomy, protocol_path):
     }
 
 
+def _validate_columns(rows, schema, protocol):
+    columns = protocol.get("columns")
+    if (
+        not isinstance(columns, list)
+        or columns[:4] != ["id", *FIELDS]
+        or columns != list(schema["properties"])
+        or columns != schema["required"]
+    ):
+        raise ValueError("Dataset columns must match the schema with ID and text first")
+    if any(list(row) != columns for records in rows.values() for row in records):
+        raise ValueError("Dataset rows must follow their declared column order")
+
+
 def load_dataset(project):
     """Return aligned texts and metadata after checking every declared input."""
     project = Path(project).resolve()
@@ -329,6 +342,7 @@ def load_dataset(project):
         raise ValueError("Dataset counts differ from the selected protocol")
     if severity != protocol.get("severity"):
         raise ValueError("Dataset severity coverage differs from its annotations")
+    _validate_columns(rows, schema, protocol)
     return {
         "rows": rows,
         "summary": summary,
