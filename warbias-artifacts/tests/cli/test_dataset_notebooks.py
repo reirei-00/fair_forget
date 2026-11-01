@@ -14,6 +14,7 @@ NOTEBOOKS = [
     "03_full_ukrainian_generation",
     "04_sample_translation_comet",
     "05_full_english_translation",
+    "06_severity",
 ]
 
 
@@ -77,12 +78,26 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         assert result["coverage"]["scored_segments"] == 30
         assert namespace["plan"]["alignment"]["translation_bindings_checked"] is True
         assert result["comet_recomputed"] is False
-    else:
+    elif name == "05_full_english_translation":
         assert result["status"] == "verified_saved_translations"
         assert result["human_translation_review"] is False
         assert result["expected_items"] == result["pairs"] == 1007
         assert result["expected_cases"] == 120
         assert result["translation_model"] == "gpt-6-astra"
+    elif name == "06_severity":
+        assert result["status"] == "assigned_from_case_annotations"
+        assert result["source_ratings"] == result["current_case_ratings"] == 238
+        assert result["taxonomy_cases"] == 120
+        assert result["assigned_cases"] == 105
+        assert result["pending_cases"] == 15
+        assert result["case_status_counts"] == {
+            "aggregated": 86,
+            "high_disagreement": 19,
+            "insufficient_ratings": 14,
+            "not_annotated": 1,
+        }
+        assert result["triplets_per_language"] == {"uk": 1007, "en": 1007}
+        assert result["assigned_triplets_per_language"] == {"uk": 881, "en": 881}
 
 
 def test_pilot_notebook_resolves_its_subproject_in_a_broader_repository(tmp_path, monkeypatch):
@@ -222,3 +237,35 @@ def test_selection_notebook_output_feeds_full_generation_preview(monkeypatch):
     assert plan["selection_record"] == json.loads(Path(path).read_text())
     assert full["result"]["recorded_selection_verified"] is True
     assert full["result"]["model_calls"] == 0
+
+
+def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data(monkeypatch):
+    from warbias_kit.io import read_rows
+
+    source_paths = [
+        ROOT / "data/uk.jsonl",
+        ROOT / "data/en.jsonl",
+        ROOT / "protocol/inputs/cohort_taxonomy.csv",
+    ]
+    before = {path: path.read_bytes() for path in source_paths}
+    monkeypatch.chdir(ROOT / "notebooks")
+    namespace = execute_notebook("06_severity")
+    result = namespace["result"]
+    taxonomy = read_rows(result["taxonomy_jsonl"])
+    by_case = {row["public_case_id"]: row for row in taxonomy}
+    assert by_case["WB-C128"]["severity_score"] is None
+    assert by_case["WB-C128"]["severity_status"] == "not_annotated"
+    assert len(namespace["changed_examples"]) == 9
+    for language, path in result["triplet_sidecars"].items():
+        rows = read_rows(path)
+        assert rows == namespace["triplet_severity"][language]
+        assert [row["id"] for row in rows] == [
+            row["id"] for row in namespace["dataset"]["rows"][language]
+        ]
+        assert sum(row["severity_score"] is None for row in rows) == 126
+        assert all(row["language"] == language for row in rows)
+        assert all(row["severity_source"] == "case_annotation" for row in rows)
+        assert all(
+            row["severity_score"] == by_case[row["case_id"]]["severity_score"] for row in rows
+        )
+    assert {path: path.read_bytes() for path in source_paths} == before
