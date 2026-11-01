@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "unit": "ukrainian_triplet",
+  "decision": "has_problem",
+  "human_comparison": "strict_majority_of_independent_valid_votes",
+  "minimum_valid_votes": 2,
+  "vote_weighting": "one_vote_per_reviewer_and_item",
+  "missing_votes": "excluded_from_vote_totals_and_reported",
+  "ties": "no_consensus_label_keep_row_exclude_from_agreement",
+  "insufficient_votes": "no_consensus_label_keep_row_exclude_from_agreement",
+  "primary_metric": "two_rater_gwet_ac1_model_vs_consensus",
+  "observed_agreement_weighting": "equal_weight_per_compared_triplet",
+  "additional_metrics": ["observed_agreement", "positive_agreement", "negative_agreement"],
+  "reference": "always_no_problem",
+  "human_truth_assumed": false,
+  "issue_type_agreement": false,
+  "bootstrap": {
+    "unit": "semantic_case_family",
+    "resamples": 2000,
+    "seed": 0,
+    "human_votes": "fixed"
+  },
+  "comparison_scopes": {
+    "full_human_cohort": ["v1", "v2"],
+    "development": ["v1", "v2", "direct", "atomic"]
+  },
+  "new_model_requests": false,
+  "production_selection": false
+}

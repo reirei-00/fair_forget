@@ -230,6 +230,12 @@ one direct question and 12 atomic questions on the development cohort. Both
 produce one yes/no problem decision. Notebook 7 reproduces the binary comparison
 with v1 and v2. These development results do not select a production prompt.
 
+The [consensus protocol](../protocol/consensus_agreement.json) assigns one label
+per triplet by strict human majority. Keep ties and insufficient votes unlabeled.
+Notebook 7 reports agreement with consensus and the always-no-problem reference.
+The [consensus table](../protocol/inputs/human_consensus.csv) retains vote counts
+for every item. Original individual judgments remain unchanged.
+
 ## Pilot and selection
 
 The pilot compares each candidate model with two prompt methods:

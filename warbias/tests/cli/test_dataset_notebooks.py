@@ -98,6 +98,10 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         assert namespace["RUN_BINARY_REVIEW"] is False
         assert namespace["report"]["overall"]["issues"] is None
         assert set(namespace["binary_comparisons"]) == {"direct", "atomic"}
+        assert len(namespace["consensus_labels"]) == 1059
+        consensus = namespace["consensus_reports"]
+        assert consensus["full_human_cohort"]["v1"]["agreement"]["n"] == 1014
+        assert consensus["development"]["direct"]["agreement"]["n"] == 814
 
 
 def test_pilot_notebook_resolves_its_subproject_in_a_broader_repository(tmp_path, monkeypatch):

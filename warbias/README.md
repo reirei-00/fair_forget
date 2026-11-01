@@ -55,6 +55,8 @@ The calibration section compares a fixed Ukrainian prompt with the baseline on
 separate semantic case families. It retains both sets of decisions.
 Agreement uses one yes/no problem decision. The minimal-prompt section compares
 direct and atomic questions on the development cohort.
+The consensus section uses strict human majorities and reports tied votes
+separately. Individual judgments remain available.
 
 Run all seven notebooks and save their outputs with a local Python kernel:
 
