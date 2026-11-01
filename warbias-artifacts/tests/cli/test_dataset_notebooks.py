@@ -15,6 +15,7 @@ NOTEBOOKS = [
     "04_sample_translation_comet",
     "05_full_english_translation",
     "06_severity",
+    "07_qa_dataset",
 ]
 
 
@@ -120,6 +121,47 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
             "large_gap_cases": 19,
         }
         assert result["review_case_counts"] == {"pending": 14, "large_gaps": 19}
+    elif name == "07_qa_dataset":
+        assert result["status"] == "verified_saved_qa_release"
+        assert result["scenarios"] == 40
+        assert result["items_per_language"] == {"uk": 240, "en": 240}
+        assert result["human_review_rows"] == 480
+        assert result["reviewed_items"] == 240
+        assert result["template_expansion_matches_release"] is True
+        assert result["model_calls"] == 0
+        assert len(namespace["six_variants"]) == 6
+        assert result["sample_scenarios"] == 4
+        assert result["sample_items_per_language"] == {"uk": 24, "en": 24}
+        assert result["sample_files_verified"] is True
+
+
+def test_qa_notebook_exports_complete_aligned_sample(tmp_path, monkeypatch):
+    from collections import Counter
+
+    from warbias_kit.io import file_digest, read_rows
+
+    paths = {language: ROOT / f"data/qa_{language}.jsonl" for language in ("uk", "en")}
+    before = {language: path.read_bytes() for language, path in paths.items()}
+    monkeypatch.chdir(tmp_path)
+    namespace = execute_notebook("07_qa_dataset")
+    work, qa = namespace["work"], namespace["qa"]
+    manifest = json.loads((work / "selection.json").read_text())
+    assert manifest["source"]["sha256"] == file_digest(ROOT / "protocol/qa.json")
+    assert manifest["selection"]["scenario_counts"] == {"idp": 2, "veteran": 2}
+    ids = {}
+    for language, path in paths.items():
+        binding = manifest["files"][language]
+        output = work / binding["path"]
+        rows = read_rows(output)
+        saved = {row["id"]: row for row in read_rows(path)}
+        assert len(rows) == binding["rows"] == 24
+        assert file_digest(output) == binding["sha256"]
+        assert all(row == saved[row["id"]] for row in rows)
+        assert all(list(row) == qa["protocol"]["columns"] for row in rows)
+        assert set(Counter(row["scenario_id"] for row in rows).values()) == {6}
+        ids[language] = [row["id"] for row in rows]
+        assert path.read_bytes() == before[language]
+    assert ids["uk"] == ids["en"]
 
 
 def test_generation_notebook_preserves_dependencies_and_resumes(tmp_path, monkeypatch):

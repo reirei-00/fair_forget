@@ -188,3 +188,61 @@ ratings and annotation examples. The notebook checks the published values agains
 fresh calculations, shows case-weighted and triplet-weighted distributions, and
 exports pending cases and large-gap review lists. Source annotation examples and
 current triplet text retain separate bindings.
+
+## Question answering
+
+The QA set follows the context-and-question design of
+[BBQ](https://aclanthology.org/2022.findings-acl.165/). Forty selected general
+taxonomy cases define 40 scenarios: 20 for veterans and 20 for IDPs. This is a
+selected set of comparisons, not a probability sample. Each scenario combines
+three evidence conditions (ambiguous, stereotype-aligned and
+stereotype-conflicting) with two question polarities (negative and positive).
+This gives 240 questions in each language.
+
+The three choices identify the target person, the comparison person and
+insufficient information. Ambiguous contexts do not identify either person's
+outcome, so the correct answer is insufficient information. Informative contexts
+state both outcomes. The answer follows this evidence. Choice positions and
+actor order stay fixed within each scenario, and both questions share a context.
+All indices are zero-based.
+
+Assistant-authored [bilingual templates](../protocol/inputs/qa_scenarios.json)
+define the text and case links. The Ukrainian drafting model is not recorded.
+GPT-6 Astra translated all 40 current Ukrainian templates and shared role phrases
+into English. Deterministic expansion produces all 240 English questions.
+The [QA translation protocol](../protocol/qa_translation.json) records the model
+and instructions. [Translation records](../protocol/inputs/qa_translations.jsonl)
+bind every English question to the current Ukrainian text. The triplet Lapa
+generation settings do not describe QA construction.
+[Notebook 7](../notebooks/07_qa_dataset.ipynb) rebuilds all variants and verifies
+them against the saved files and [QA protocol](../protocol/qa.json).
+
+The notebook also samples the 40 saved scenarios. Set the count per target group
+and a seed. The sampler ranks scenario IDs by seeded SHA256, takes the requested
+count per group and keeps all six variants in both languages. Two scenarios per
+group give 24 questions per language; 20 give the full 240. Exports preserve IDs,
+column order and review status after checking that rebuilt items match the
+saved release. The selection manifest records the seed, selected IDs and source
+and output hashes. Full-dataset annotation statistics remain separate from the
+sample counts.
+
+Sixteen annotators provided two reviews per Ukrainian question: a quality
+decision and an answer choice. The saved records preserve their votes, comments
+and three text edits. Nominal Krippendorff's alpha is calculated separately for
+quality decisions and answer choices. Missing ratings are excluded per measure.
+Agreement with the answer key is a separate statistic.
+
+`human_validated` requires two independent positive reviews with the correct
+answer on the exact released text and no conflicting current-text review.
+`human_edited` marks a retained human edit without this two-review agreement.
+`assistant_resolved` marks other corrections or resolutions of flagged items.
+These decisions do not replace the human votes. English QA is marked
+`unreviewed_translation`; it has no human translation review or COMET scores.
+[Text provenance](../protocol/inputs/qa_provenance.jsonl)
+and [resolutions](../protocol/inputs/qa_resolutions.jsonl) bind these decisions
+to exact text hashes. Scenarios test specific actions or fictional eligibility;
+they do not establish lasting traits, diagnoses or moral deservingness. QA
+shares stereotype associations with the triplets.
+
+The [notebook guide](../README.md#walkthroughs) provides the seven executable
+walkthroughs and run instructions.

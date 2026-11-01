@@ -1,0 +1,127 @@
+{
+  "construction": {
+    "adaptation": "Two informative conditions distinguish stereotype-aligned and stereotype-conflicting evidence.",
+    "answer_positions": "Fixed per scenario and preserved across all six variants.",
+    "answer_rule": "Unknown in ambiguous contexts; the explicitly supported actor in informative contexts.",
+    "choices": [
+      "target",
+      "comparison",
+      "unknown"
+    ],
+    "method": "Expand bilingual scenario templates into three evidence conditions and two question polarities.",
+    "reference": {
+      "title": "BBQ: A Hand-Built Bias Benchmark for Question Answering",
+      "url": "https://aclanthology.org/2022.findings-acl.165/"
+    },
+    "selection": "Forty selected general taxonomy cases: 20 IDP and 20 veteran cases. This is not a probability sample.",
+    "source_authorship": "Assistant-authored Ukrainian scenario templates; the drafting model is not recorded."
+  },
+  "counts": {
+    "actors": {
+      "idp": 120,
+      "veteran": 120
+    },
+    "cases": 40,
+    "items_per_language": 240,
+    "scenarios": 40
+  },
+  "files": {
+    "agreement": {
+      "path": "protocol/results/qa_agreement.json",
+      "sha256": "944d1c82facc8eddad4f58363df9e4d707789fff36778ac0d6087a29f45adfec"
+    },
+    "annotation_summary": {
+      "path": "protocol/results/qa_annotations.json",
+      "sha256": "aef083d73d0229a8d0c6aeb0ce375dbf60cbf471693eb461390efdf5392cea88"
+    },
+    "en": {
+      "path": "data/qa_en.jsonl",
+      "sha256": "6436190d503cfe97859ec9c3183901d292f0de01358887f18675f8f87f07a7f5"
+    },
+    "human_edits": {
+      "path": "protocol/inputs/qa_human_edits.jsonl",
+      "sha256": "7700a2685e55c44a267d26e96961da2417ef1fd175d46f788b34dd0d5bd03c5d"
+    },
+    "human_reviews": {
+      "path": "protocol/inputs/qa_human_reviews.jsonl",
+      "sha256": "f455e9d40ba76fbd702c38787734836b22d19286752fba6497e78c63b5605d47"
+    },
+    "provenance": {
+      "path": "protocol/inputs/qa_provenance.jsonl",
+      "sha256": "26143f007d67dad72db711a594d2993cf57b9c41c34750256f81b0ac4c74124b"
+    },
+    "resolutions": {
+      "path": "protocol/inputs/qa_resolutions.jsonl",
+      "sha256": "7a27cf153d08672d9c5895d06cf49e3046419af1b63c50f7d2ef8416bb853172"
+    },
+    "scenarios": {
+      "path": "protocol/inputs/qa_scenarios.json",
+      "sha256": "b77b6557d65a135e090d19d0f4757b2224635c0717e196f310b9d31b2f55e61d"
+    },
+    "schema": {
+      "path": "protocol/inputs/qa_schema.json",
+      "sha256": "cd93da61539e9ffbc246e61f98e8cc03b7671ea7eac0ca8d4670adb588ef3c76"
+    },
+    "taxonomy": {
+      "path": "protocol/inputs/cohort_taxonomy.csv",
+      "sha256": "480243eaa64178ab5c5950a98775330123888216bec973ed12d640aa0ecfbfb8"
+    },
+    "translation_protocol": {
+      "path": "protocol/qa_translation.json",
+      "sha256": "8ecaa5ae51e9449bb8ae983067e532f18951b7b18f779c211c2d2f8d28a96edd"
+    },
+    "translations": {
+      "path": "protocol/inputs/qa_translations.jsonl",
+      "sha256": "bd5f7d708729837cbe0f6b40c223e5662108321390849a4194531c218f1fc8ba"
+    },
+    "uk": {
+      "path": "data/qa_uk.jsonl",
+      "sha256": "5645f1813a76fb738a36a5cd898f10fd29b6c26df95b6d029fcbfc804e46e0a2"
+    }
+  },
+  "languages": [
+    "uk",
+    "en"
+  ],
+  "review": {
+    "annotators": 16,
+    "english_human_review": "not_performed",
+    "human_reviews_apply_to": "The exact context, question and choices in each review record.",
+    "human_validation_rule": "At least two independent accepted or manually corrected reviews of the exact released text with the correct answer, and no current-text rewrite request or wrong answer.",
+    "language": "uk",
+    "resolution_kind": "assistant",
+    "reviews_per_original_item": 2,
+    "scope": "Human annotation covers the Ukrainian source items. Assistant resolutions and changed text do not inherit human consensus.",
+    "status_counts": {
+      "en": {
+        "unreviewed_translation": 240
+      },
+      "uk": {
+        "assistant_resolved": 53,
+        "human_edited": 2,
+        "human_validated": 185
+      }
+    }
+  },
+  "schema_version": 1,
+  "columns": [
+    "id",
+    "context",
+    "question",
+    "choices",
+    "answer_index",
+    "language",
+    "scenario_id",
+    "source_case_id",
+    "target_group",
+    "topic",
+    "evidence_condition",
+    "question_polarity",
+    "target_index",
+    "comparison_index",
+    "unknown_index",
+    "stereotype_consistent_index",
+    "actor_introduction_order",
+    "review_status"
+  ]
+}

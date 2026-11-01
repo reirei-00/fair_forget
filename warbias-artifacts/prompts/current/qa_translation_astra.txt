@@ -1,0 +1,8 @@
+Translate the Ukrainian QA templates into natural English.
+Translate every setting, evidence sentence, question, optional identity fact and answer label.
+Keep the {actor} placeholder exactly once in each evidence sentence.
+Preserve numbers, negation, uncertainty, identity attributes and the contrast between outcomes.
+Do not add facts or resolve ambiguous contexts.
+Keep target, comparison and unknown answer roles in the supplied order.
+Return each scenario ID with its English text fields. Do not change metadata or answer keys.
+Use consistent English role labels and shared identity phrases across scenarios.

@@ -84,7 +84,11 @@ def test_prompt_assets_match_preserved_byte_hashes():
         "current/feedback_c.txt",
         "current/feedback_u.txt",
         "current/translation_astra.txt",
+        "current/qa_translation_astra.txt",
     }
+    assert manifest["files"]["current/qa_translation_astra.txt"] == (
+        "15a3600351a329c31f24b4f26f5897eb33971fa3df02a99a838724d91acab23d"
+    )
     for relative, expected in manifest["files"].items():
         assert file_digest(ROOT / "prompts" / relative) == expected
 

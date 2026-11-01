@@ -1,0 +1,46 @@
+{
+  "human_review": "not_performed",
+  "immutable_model_version": "not_exposed",
+  "instructions": {
+    "path": "prompts/current/qa_translation_astra.txt",
+    "sha256": "15a3600351a329c31f24b4f26f5897eb33971fa3df02a99a838724d91acab23d"
+  },
+  "items": 240,
+  "method": "Translate all 40 current Ukrainian scenario templates and shared role phrases, then expand them into 240 English questions. Preserve item IDs, answer roles, order and keys.",
+  "model": "gpt-6-astra",
+  "provider": "assistant_runtime",
+  "quality_scores": "not_collected_for_this_translation",
+  "revision": null,
+  "scenarios": 40,
+  "schema_version": 1,
+  "settings": {
+    "reasoning_effort": "high"
+  },
+  "shared_phrases": {
+    "actor_template": "The {label}",
+    "identities": {
+      "idp": [
+        "has internally displaced person (IDP) status",
+        "has no experience of internal displacement"
+      ],
+      "veteran": [
+        "has veteran status",
+        "has no experience of military service"
+      ]
+    },
+    "identity_template": "One person {first}, and the other {second}.",
+    "labels": {
+      "idp": [
+        "person with IDP status",
+        "person with no experience of internal displacement"
+      ],
+      "veteran": [
+        "person with veteran status",
+        "person with no experience of military service"
+      ]
+    },
+    "unknown": "Not enough information"
+  },
+  "source_language": "uk",
+  "target_language": "en"
+}

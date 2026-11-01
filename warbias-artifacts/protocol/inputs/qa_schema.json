@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "pattern": "^WBQA-[0-9]{4}$",
+      "type": "string"
+    },
+    "context": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "question": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "choices": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "answer_index": {
+      "maximum": 2,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "language": {
+      "enum": [
+        "uk",
+        "en"
+      ],
+      "type": "string"
+    },
+    "scenario_id": {
+      "pattern": "^WBQA-S[0-9]{2}$",
+      "type": "string"
+    },
+    "source_case_id": {
+      "pattern": "^WB-C[0-9]{3}$",
+      "type": "string"
+    },
+    "target_group": {
+      "enum": [
+        "idp",
+        "veteran"
+      ],
+      "type": "string"
+    },
+    "topic": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "evidence_condition": {
+      "enum": [
+        "ambiguous",
+        "stereotype_aligned",
+        "stereotype_conflicting"
+      ],
+      "type": "string"
+    },
+    "question_polarity": {
+      "enum": [
+        "negative",
+        "positive"
+      ],
+      "type": "string"
+    },
+    "target_index": {
+      "maximum": 2,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "comparison_index": {
+      "maximum": 2,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "unknown_index": {
+      "maximum": 2,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "stereotype_consistent_index": {
+      "maximum": 2,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "actor_introduction_order": {
+      "enum": [
+        "target_first",
+        "comparison_first"
+      ],
+      "type": "string"
+    },
+    "review_status": {
+      "enum": [
+        "human_validated",
+        "human_edited",
+        "assistant_resolved",
+        "unreviewed_translation",
+        "assistant_revised_translation"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "context",
+    "question",
+    "choices",
+    "answer_index",
+    "language",
+    "scenario_id",
+    "source_case_id",
+    "target_group",
+    "topic",
+    "evidence_condition",
+    "question_polarity",
+    "target_index",
+    "comparison_index",
+    "unknown_index",
+    "stereotype_consistent_index",
+    "actor_introduction_order",
+    "review_status"
+  ],
+  "title": "WarBias QA item",
+  "type": "object"
+}
