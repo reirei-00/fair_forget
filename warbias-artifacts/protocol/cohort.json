@@ -4,7 +4,7 @@
   "inputs": {
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
-      "sha256": "26af5c6250f6f2ec130f4e74a454500c25567872574b847881403041a21a1f32"
+      "sha256": "a80f3b8ba0f8975a517c7e9330538d8cf19dd124ae555f41ba1d2bada7147805"
     },
     "attributes": {
       "path": "protocol/inputs/cohort_attributes.json",
@@ -145,9 +145,9 @@
     "revision": "164f355623c2da0028821e0942cad493558a6c13",
     "ukrainian_sha256": "c253c3bc90b544ebed42901f1bf3c9eed63565191a278c64562e23bdc32c8c48",
     "english_sha256": "0b3c34a90e51f2c0827f4f0e2f8d5ce7b19ec1cab50bc4c5a5a12adb998c425a",
-    "use": "Item-ID and language alignment reference; generated text is not included in this input package."
+    "use": "Pinned reference for original item IDs and metadata. Current reviewed text is bound by protocol/dataset.json."
   },
-  "review_status": "Submission for annotation does not imply acceptance. This input package includes no model review.",
+  "review_status": "The original cohort was submitted for human annotation. Current text versions and review applicability are recorded in the dataset protocol. No model review is included.",
   "case_scope": {
     "general": "The claim and intrinsic qualifiers do not depend on a specific national or regional context.",
     "local": "The claim or intrinsic qualifiers depend on a named country, institution, legal status, language or source-specific regional identity.",
@@ -163,5 +163,6 @@
   ],
   "allowed_case_scopes": [
     "general"
-  ]
+  ],
+  "taxonomy_membership_field": "in_original_annotation_cohort"
 }

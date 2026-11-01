@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "item_id": "WB-1201",
+  "case_id": "warbias_idp_service_priority_001",
+  "source_language": "uk",
+  "model": "LapaLLM-Gemma-3-12B-instruct",
+  "provider": "Lapathoniia OpenAI-compatible API",
+  "revision": null,
+  "strategy": "sequential",
+  "stage_order": [
+    "S",
+    "C",
+    "U"
+  ],
+  "settings": {
+    "temperature": 0.3,
+    "max_tokens": 1200
+  },
+  "prompts": {
+    "S": {
+      "path": "prompts/current/feedback_s.txt",
+      "sha256": "f8ee318650c61ac970ccece3ae574c8b82d15cc302b674490dfd81d8e6e3a601"
+    },
+    "C": {
+      "path": "prompts/current/feedback_c.txt",
+      "sha256": "4868d5f46cdce61b8f0b79d2e5c79a183ea6b26a7deab24c01bb4edd849b4c56"
+    },
+    "U": {
+      "path": "prompts/current/feedback_u.txt",
+      "sha256": "265012f2abc0540271714fc30133ce6ef3ac7ae032576bc137f94a9972b8834a"
+    }
+  },
+  "profile": {
+    "gender": "men"
+  },
+  "framing": "unattributed",
+  "source_type": "feedback",
+  "evidence_id": "src_feedback_displacement_service_and_voting",
+  "text_status": "author_edited_generation",
+  "method": "Generate S from the feedback case, generate C using S, then generate U using S and C. The authors edit the resulting triplet before inclusion."
+}

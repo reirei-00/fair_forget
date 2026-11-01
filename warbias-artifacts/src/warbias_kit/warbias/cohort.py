@@ -207,7 +207,18 @@ def load_cohort(project, inputs=None):
     if not allowed_scopes or not allowed_scopes <= {"general", "local"}:
         raise ValueError("Allowed case scopes must select general or local")
     bindings = protocol.get("inputs", {})
-    taxonomy = read_csv(_bound_file(project, bindings.get("taxonomy"), "taxonomy"))
+    catalog = read_csv(_bound_file(project, bindings.get("taxonomy"), "taxonomy"))
+    membership = protocol.get("taxonomy_membership_field")
+    if membership is not None:
+        if membership != "in_original_annotation_cohort" or any(
+            row.get(membership) not in {"true", "false"} for row in catalog
+        ):
+            raise ValueError("Taxonomy must declare original-cohort membership for every case")
+        unique_index(catalog, "case_id")
+        unique_index(catalog, "public_case_id")
+        taxonomy = [row for row in catalog if row[membership] == "true"]
+    else:
+        taxonomy = catalog
     attributes = json.loads(
         _bound_file(project, bindings.get("attributes"), "attributes").read_text()
     )
@@ -289,13 +300,17 @@ def load_cohort(project, inputs=None):
     evidence = {identity.strip() for row in matrix for identity in row["evidence_ids"].split(";")}
     evidence.update(
         identity
-        for case in taxonomy
+        for case in catalog
         for identity in _listed(case["category_evidence_ids"], "category evidence IDs")
+    )
+    evidence.update(
+        identity for case in catalog for identity in _listed(case["evidence_ids"], "evidence IDs")
     )
     evidence.update(identity for row in evidence_rows for identity in row["evidence_ids"])
     return {
         "matrix": matrix,
         "taxonomy": taxonomy,
+        "taxonomy_catalog": catalog,
         "attributes": attributes,
         "evidence": evidence_rows,
         "sources": [source for source in sources if source["evidence_id"] in evidence],
