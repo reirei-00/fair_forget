@@ -34,8 +34,9 @@ references.
 
 The package contains dataset text, construction inputs and reproducible methods.
 Per-item provenance separates original annotated text from author revisions.
-Triplet-quality ratings apply only to unchanged text. Case severity follows the
-taxonomy mapping in notebook 6. A new model run reproduces the
+Triplet-quality ratings apply only to unchanged text. The taxonomy and triplets
+store `severity_mean_score` (0–100) and `severity_level` (1–5). Notebook 6 derives
+both from case-level human ratings; insufficient compatible ratings leave nulls. A new model run reproduces the
 selected inputs; its sentences can differ from saved dataset text.
 
 ## Install
@@ -61,7 +62,7 @@ The package includes its data-release validator.
 | [3. Ukrainian generation](notebooks/03_full_ukrainian_generation.ipynb) | Reproduce the original allocation and inspect the current 1,007 items |
 | [4. Sample translation and COMET](notebooks/04_sample_translation_comet.ipynb) | Recorded Ukrainian-to-English translations and quality scores |
 | [5. English translation](notebooks/05_full_english_translation.ipynb) | Verify all 1,007 Astra translations and their source hashes |
-| [6. Case severity](notebooks/06_severity.ipynb) | Assign case categories, apply human decisions and label both languages |
+| [6. Case severity](notebooks/06_severity.ipynb) | Calculate case means and severity levels for both languages |
 
 Run the notebooks with a local Python kernel:
 

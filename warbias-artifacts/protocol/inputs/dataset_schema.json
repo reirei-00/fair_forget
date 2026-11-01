@@ -261,6 +261,24 @@
     "unrelated": {
       "minLength": 1,
       "type": "string"
+    },
+    "severity_mean_score": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Equal-weight mean of at least two independent ratings with confirmed rubric version 2, on the 0–100 scale. Null when compatible ratings are insufficient."
+    },
+    "severity_level": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Level of the case mean: 1=[0,20), 2=[20,40), 3=[40,60), 4=[60,80), 5=[80,100]. Null when the mean is null."
     }
   },
   "required": [
@@ -274,8 +292,32 @@
     "context_scope",
     "bias_tags",
     "bias_dimensions",
-    "context_tags"
+    "context_tags",
+    "severity_mean_score",
+    "severity_level"
   ],
   "title": "WarBias triplet",
-  "type": "object"
+  "type": "object",
+  "oneOf": [
+    {
+      "properties": {
+        "severity_mean_score": {
+          "type": "null"
+        },
+        "severity_level": {
+          "type": "null"
+        }
+      }
+    },
+    {
+      "properties": {
+        "severity_mean_score": {
+          "type": "number"
+        },
+        "severity_level": {
+          "type": "integer"
+        }
+      }
+    }
+  ]
 }

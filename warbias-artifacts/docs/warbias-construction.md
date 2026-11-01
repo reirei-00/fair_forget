@@ -162,46 +162,29 @@ Ukrainian source and remains separate from Ukrainian triplet review.
 
 ## Case severity
 
-[Notebook 6](../notebooks/06_severity.ipynb) assigns severity to taxonomy cases
-from the saved human ratings, then maps each case result to its triplets.
-The severity protocol binds the current taxonomy by file hash. Its input ratings
-and annotation stimuli must resolve to case IDs in that taxonomy version.
-Map each independent rating from the confirmed rubric version to one of the five
-equal-width brackets in the [severity protocol](../protocol/severity.json).
-Assign the final `severity_label` when at least two ratings support the same bracket
-and that support exceeds half of the compatible ratings. With two ratings, both
-must fall in the same bracket. Conflicting brackets enter the human adjudication
-queue; cases with fewer than two compatible ratings enter the incomplete-rating queue.
+[Notebook 6](../notebooks/06_severity.ipynb) computes the equal-weight mean of at
+least two independent ratings from confirmed rubric version 2. Source scores use
+0–1; `severity_mean_score` uses 0–100. The mean determines `severity_level`:
 
-The continuous mean and its bracket summarise the numerical ratings. Individual
-bracket votes determine the final label. Preserve the scores, votes and excluded
-versions in the calculation audit. The rating range records disagreement.
+| Level | Name | Mean score |
+| --- | --- | --- |
+| 1 | Very low | [0, 20) |
+| 2 | Low | [20, 40) |
+| 3 | Moderate | [40, 60) |
+| 4 | High | [60, 80) |
+| 5 | Very high | [80, 100] |
 
-The dataset exports add `severity_label`, support and review status to each triplet
-through its taxonomy case ID. They also include the mean score and mean bracket
-under separate field names. Ukrainian and English versions carry the same case
-label. Source examples and current triplet text have separate hash bindings.
+The taxonomy and both language datasets store the same mean and level for each
+case. For example, ratings 70 and 80 give mean 75 and level 4. These are case-level
+annotations inherited through `case_id`.
 
-Annotators supplied continuous scores; consensus is derived from their bracket
-agreement. A third independent rating can establish a two-out-of-three majority.
-Three different brackets remain pending. Human adjudication records the chosen
-label, anonymous reviewer and reason in the review CSV. Each decision binds to the
-case hash, including its claims, ratings, annotation examples and scoring protocol.
-The notebook reads completed CSVs through `REVIEW_FILES`, applies decisions to the
-taxonomy, and passes each final label and its decision source to both languages.
-Cases with insufficient compatible ratings need rubric confirmation or additional
-independent ratings before final assignment.
+The audit preserves individual scores, rubric versions, compatible rating counts
+and ranges. A gap of at least 40 points flags a case for review while preserving
+its assigned mean and level. Fewer than two compatible ratings leave both fields
+null. Unknown rubric versions remain in the source records.
 
-Set `REQUIRE_COMPLETE = True` for a complete release. The notebook checks that every
-current taxonomy case has a final category before writing the labelled datasets.
-Working exports preserve pending cases and the remaining human review queues.
-
-The notebook shows each calculation and the cumulative distribution of assigned
-scores. It reports case-weighted and triplet-weighted summaries separately, using
-one language for triplet counts. Pending cases stay outside score distributions.
-The observed means and medians describe this dataset. The bracket boundaries
-divide the scale at 20, 40, 60 and 80; the annotation rubric retains its original
-endpoint meanings.
-
-The [notebook guide](../README.md#walkthroughs) provides the six executable
-walkthroughs and run instructions.
+The [severity protocol](../protocol/severity.json) binds the current taxonomy,
+ratings and annotation examples. The notebook checks the published values against
+fresh calculations, shows case-weighted and triplet-weighted distributions, and
+exports pending cases and large-gap review lists. Source annotation examples and
+current triplet text retain separate bindings.

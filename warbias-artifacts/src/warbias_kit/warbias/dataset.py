@@ -9,6 +9,7 @@ from jsonschema import Draft202012Validator
 from warbias_kit.io import file_digest, read_csv, read_rows, unique_index
 from warbias_kit.warbias.cohort import load_cohort
 from warbias_kit.warbias.schema import FIELDS, structural_issues, text_digest
+from warbias_kit.warbias.severity import assign_taxonomy_severity, load_severity
 
 _FILE_KEYS = {
     "uk",
@@ -20,7 +21,10 @@ _FILE_KEYS = {
     "translations",
     "additions",
     "translation_protocol",
+    "severity_protocol",
 }
+
+_SEVERITY_FIELDS = ("severity_mean_score", "severity_level")
 
 
 def _bound_files(project, bindings, required=_FILE_KEYS):
@@ -231,6 +235,47 @@ def _validate_text_bindings(project, indexes, metadata, original):
                 raise ValueError(f"{identity}: translation {field} differs")
 
 
+def _validate_severity(project, indexes, taxonomy, protocol_path):
+    annotation = load_severity(project)
+    bound_protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
+    if annotation["protocol"] != bound_protocol:
+        raise ValueError("Dataset severity protocol differs from its bound input")
+    if annotation["taxonomy"] != taxonomy:
+        raise ValueError("Dataset and severity taxonomy inputs differ")
+    if any(field not in case for case in taxonomy for field in _SEVERITY_FIELDS):
+        raise ValueError("Dataset taxonomy requires mean severity and level columns")
+    assigned = assign_taxonomy_severity(
+        taxonomy,
+        annotation["ratings"],
+        annotation["case_evidence"],
+        annotation["protocol"],
+    )
+    cases = unique_index(assigned, "public_case_id")
+    for language, rows in indexes.items():
+        for identity, row in rows.items():
+            expected = cases[row["case_id"]]
+            if row["severity_level"] is not None and type(row["severity_level"]) is not int:
+                raise ValueError(
+                    f"{language}/{identity}: severity level must be an integer or null"
+                )
+            if any(row[field] != expected[field] for field in _SEVERITY_FIELDS):
+                raise ValueError(
+                    f"{language}/{identity}: severity differs from its taxonomy ratings"
+                )
+    return {
+        "scored_cases": sum(case["severity_mean_score"] is not None for case in assigned),
+        "pending_cases": sum(case["severity_mean_score"] is None for case in assigned),
+        "scored_triplets_per_language": {
+            language: sum(row["severity_mean_score"] is not None for row in rows.values())
+            for language, rows in indexes.items()
+        },
+        "pending_triplets_per_language": {
+            language: sum(row["severity_mean_score"] is None for row in rows.values())
+            for language, rows in indexes.items()
+        },
+    }
+
+
 def load_dataset(project):
     """Return aligned texts and metadata after checking every declared input."""
     project = Path(project).resolve()
@@ -256,6 +301,7 @@ def load_dataset(project):
         json.loads(paths["additions"].read_text(encoding="utf-8")),
     )
     _validate_text_bindings(project, indexes, metadata, original)
+    severity = _validate_severity(project, indexes, taxonomy, paths["severity_protocol"])
     summary = {
         "triplets": len(rows["uk"]),
         "cases": len(taxonomy),
@@ -281,10 +327,13 @@ def load_dataset(project):
         raise ValueError("Dataset review summary differs from its text provenance")
     if summary != protocol.get("counts"):
         raise ValueError("Dataset counts differ from the selected protocol")
+    if severity != protocol.get("severity"):
+        raise ValueError("Dataset severity coverage differs from its annotations")
     return {
         "rows": rows,
         "summary": summary,
         "taxonomy": taxonomy,
         "metadata": metadata,
         "protocol": protocol,
+        "severity": severity,
     }

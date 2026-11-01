@@ -99,7 +99,8 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
             "gpt-6-astra"
         }
     elif name == "06_severity":
-        assert result["status"] == "assigned_from_case_annotations"
+        assert result["status"] == "verified_saved_severity"
+        assert result["primary_fields"] == ["severity_mean_score", "severity_level"]
         assert result["source_ratings"] == result["current_case_ratings"] == 240
         assert result["taxonomy_cases"] == 120
         assert result["assigned_cases"] == 106
@@ -111,23 +112,14 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         }
         assert result["triplets_per_language"] == {"uk": 1007, "en": 1007}
         assert result["assigned_triplets_per_language"] == {"uk": 882, "en": 882}
-        assert result["labelled_cases"] == 19
-        assert result["pending_label_cases"] == 101
-        assert result["labelled_triplets_per_language"] == {"uk": 150, "en": 150}
-        assert result["pending_label_triplets_per_language"] == {"uk": 857, "en": 857}
-        assert result["consensus"]["case_status_counts"] == {
-            "disagreement": 87,
-            "insufficient_ratings": 14,
-            "consensus": 19,
-        }
+        assert result["pending_triplets_per_language"] == {"uk": 125, "en": 125}
         assert result["readiness"] == {
             "complete": False,
-            "consensus_cases": 19,
-            "adjudicated_cases": 0,
-            "unresolved_cases": 101,
-            "unresolved_triplets": 857,
+            "assigned_cases": 106,
+            "pending_cases": 14,
+            "large_gap_cases": 19,
         }
-        assert result["export_mode"] == "working"
+        assert result["review_case_counts"] == {"pending": 14, "large_gaps": 19}
 
 
 def test_generation_notebook_preserves_dependencies_and_resumes(tmp_path, monkeypatch):
@@ -231,7 +223,9 @@ def test_selection_notebook_output_feeds_full_generation_preview(monkeypatch):
     assert full["result"]["model_calls"] == 0
 
 
-def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data(monkeypatch):
+def test_severity_notebook_verifies_published_means_and_levels_without_changing_sources(
+    monkeypatch,
+):
     from warbias_kit.io import read_rows
 
     source_paths = [
@@ -258,23 +252,10 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
     taxonomy = read_rows(result["taxonomy_jsonl"])
     by_case = {row["public_case_id"]: row for row in taxonomy}
     assert all(row["severity_rating_count"] == 2 for row in taxonomy)
-    assert by_case["WB-C128"]["severity_score"] == pytest.approx(75)
-    assert by_case["WB-C128"]["severity_status"] == "aggregated"
-    assert by_case["WB-C128"]["severity_bracket"] == "high"
+    assert by_case["WB-C128"]["severity_mean_score"] == pytest.approx(75)
+    assert by_case["WB-C128"]["severity_level"] == 4
     assert by_case["WB-C128"]["severity_bracket_label"] == "High"
     assert by_case["WB-C128"]["severity_n"] == 2
-    assert by_case["WB-C128"]["severity_rating_count"] == 2
-    assert by_case["WB-C128"]["severity_label"] is None
-    assert by_case["WB-C128"]["severity_label_status"] == "disagreement"
-    assert by_case["WB-C128"]["severity_label_support"] == 1
-    assert by_case["WB-C128"]["severity_label_raters"] == 2
-    assert by_case["WB-C128"]["severity_label_votes"] == {
-        "very_low": 0,
-        "low": 0,
-        "moderate": 0,
-        "high": 1,
-        "very_high": 1,
-    }
     assert by_case["WB-C128"]["severity_min"] == pytest.approx(70)
     assert by_case["WB-C128"]["severity_max"] == pytest.approx(80)
     assert by_case["WB-C128"]["severity_ratings"] == [
@@ -294,41 +275,36 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
         },
     ]
     assert namespace["direct_case_ids"] == {"WB-C128"}
-    direct_source = namespace["protocol"]["additional_sources"][0]
-    assert direct_source["claim_uk"] == by_case["WB-C128"]["claim_uk"]
-    assert direct_source["reported_score"] == 70
-    reported_source = namespace["protocol"]["additional_sources"][1]
-    assert reported_source["claim_uk"] == by_case["WB-C128"]["claim_uk"]
-    assert reported_source["reported_score"] == 80
-    assert reported_source["scale_version"] == 2
     assert len(namespace["changed_examples"]) == 9
+    assert by_case["WB-C001"]["severity_status"] == "high_disagreement"
+    assert by_case["WB-C001"]["severity_mean_score"] == pytest.approx(53.4)
+    assert by_case["WB-C001"]["severity_level"] == 3
+    assert by_case["WB-C009"]["severity_mean_score"] is None
+    assert by_case["WB-C009"]["severity_level"] is None
     for language, path in result["triplet_sidecars"].items():
         rows = read_rows(path)
         assert rows == namespace["triplet_severity"][language]
         assert [row["id"] for row in rows] == [
             row["id"] for row in namespace["dataset"]["rows"][language]
         ]
-        assert sum(row["severity_score"] is None for row in rows) == 125
+        assert sum(row["severity_mean_score"] is None for row in rows) == 125
         assert all(row["language"] == language for row in rows)
         assert all(row["severity_source"] == "case_annotation" for row in rows)
         assert all(
-            row["severity_score"] == by_case[row["case_id"]]["severity_score"] for row in rows
-        )
-        assert all(
-            row["severity_bracket"] == by_case[row["case_id"]]["severity_bracket"]
-            and row["severity_bracket_label"] == by_case[row["case_id"]]["severity_bracket_label"]
+            row["severity_mean_score"] == by_case[row["case_id"]]["severity_mean_score"]
+            and row["severity_level"] == by_case[row["case_id"]]["severity_level"]
             for row in rows
         )
-        assert all(
-            row["severity_bracket"] is None and row["severity_bracket_label"] is None
-            for row in rows
-            if row["severity_score"] is None
-        )
-        assert all(
-            row["severity_label"] == by_case[row["case_id"]]["severity_label"]
-            and row["severity_label_status"] == by_case[row["case_id"]]["severity_label_status"]
-            for row in rows
-        )
+    for language, path in result["datasets"].items():
+        rows = read_rows(path)
+        assert rows == namespace["dataset"]["rows"][language]
+        assert len(rows) == 1007
+        assert all(len(row) == 13 for row in rows)
+        assert sum(row["severity_mean_score"] is not None for row in rows) == 882
+        assert sum(row["severity_level"] is None for row in rows) == 125
+        direct_triplet = next(row for row in rows if row["id"] == "WB-1201")
+        assert direct_triplet["severity_mean_score"] == pytest.approx(75)
+        assert direct_triplet["severity_level"] == 4
     analysis = result["analysis"]
     summary = json.loads(Path(analysis["summary_json"]).read_text())
     assert summary == analysis["summary"] == namespace["summary"]
@@ -341,168 +317,69 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
     assert decisions == namespace["case_decision_rows"]
     worked = {row["case_id"]: row for row in namespace["worked_decisions"]}
     assert worked["WB-C002"]["eligible_sum_100"] == pytest.approx(148)
-    assert worked["WB-C002"]["severity_score"] == pytest.approx(74)
-    assert by_case["WB-C002"]["severity_bracket_label"] == "High"
-    assert worked["WB-C001"]["severity_status"] == "high_disagreement"
-    assert by_case["WB-C001"]["severity_bracket_label"] == "Moderate"
-    assert by_case["WB-C001"]["severity_label"] is None
-    assert by_case["WB-C001"]["severity_label_status"] == "disagreement"
-    assert by_case["WB-C002"]["severity_label"] is None
-    assert by_case["WB-C068"]["severity_label"] is None
-    assert by_case["WB-C011"]["severity_label"] == "low"
-    assert by_case["WB-C011"]["severity_label_status"] == "consensus"
-    assert by_case["WB-C011"]["severity_label_support"] == 2
-    assert by_case["WB-C011"]["severity_label_raters"] == 2
-    assert worked["WB-C009"]["severity_score"] is None
+    assert worked["WB-C002"]["severity_mean_score"] == pytest.approx(74)
+    assert worked["WB-C002"]["severity_level"] == 4
     assert worked["WB-C128"]["rating_gap_100"] == pytest.approx(10)
     brackets = namespace["brackets"]
     assert [row["lower"] for row in brackets] == [0, 20, 40, 60, 80]
     assert [row["upper"] for row in brackets] == [20, 40, 60, 80, 100]
-    assert namespace["bracket_for_score"](40, brackets)["label"] == "Moderate"
-    bracket_summary = namespace["bracket_summary"]
-    assert len(bracket_summary) == 5
-    assert sum(row["case_count"] for row in bracket_summary) == 106
-    assert sum(row["triplet_count"] for row in bracket_summary) == 882
-    assert bracket_summary[-1]["cumulative_cases"] == 106
-    assert bracket_summary[-1]["cumulative_triplets"] == 882
-    assert bracket_summary[-1]["cumulative_case_fraction"] == pytest.approx(1)
-    assert bracket_summary[-1]["cumulative_triplet_fraction"] == pytest.approx(1)
+    level_summary = namespace["bracket_summary"]
+    assert len(level_summary) == 5
+    assert [row["level"] for row in level_summary] == [1, 2, 3, 4, 5]
+    assert sum(row["case_count"] for row in level_summary) == 106
+    assert sum(row["triplet_count"] for row in level_summary) == 882
+    assert level_summary[-1]["cumulative_case_fraction"] == pytest.approx(1)
+    assert level_summary[-1]["cumulative_triplet_fraction"] == pytest.approx(1)
     assert Path(analysis["figure_png"]).read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
     from xml.etree import ElementTree
 
     assert ElementTree.parse(analysis["figure_svg"]).getroot().tag.endswith("svg")
-    for key in ("case_decisions_csv", "cdf_csv", "bracket_summary_csv"):
+    for key in ("case_decisions_csv", "cdf_csv", "level_summary_csv"):
         assert Path(analysis[key]).is_file()
-    with Path(analysis["bracket_summary_csv"]).open(newline="") as source:
-        exported_brackets = list(csv.DictReader(source))
-    assert len(exported_brackets) == 5
-    assert sum(int(row["case_count"]) for row in exported_brackets) == 106
-    assert sum(int(row["triplet_count"]) for row in exported_brackets) == 882
-    for language, path in result["labelled_datasets"].items():
-        labelled = read_rows(path)
-        assert len(labelled) == 1007
-        assert sum(row["severity_label"] is not None for row in labelled) == 150
-        assert sum(row["severity_needs_review"] for row in labelled) == 857
-        for original, enriched, sidecar in zip(
-            namespace["dataset"]["rows"][language],
-            labelled,
-            namespace["triplet_severity"][language],
-        ):
-            assert all(enriched[key] == value for key, value in original.items())
-            assert enriched["severity_mean_score"] == sidecar["severity_score"]
-            assert enriched["severity_mean_bracket"] == sidecar["severity_bracket"]
-            assert enriched["severity_label"] == sidecar["severity_label"]
-            assert enriched["severity_text_sha256"] == sidecar["text_sha256"]
-    for queue, count in (("conflicts", 87), ("incomplete", 14)):
+    for queue, count in (("pending", 14), ("large_gaps", 19)):
         with Path(result["review_queues"][queue]).open(newline="") as source:
             records = list(csv.DictReader(source))
         assert len(records) == count
-        assert all(
-            record[field] == ""
-            for record in records
-            for field in ("adjudicated_label", "adjudicator_id", "adjudication_reason")
-        )
         assert all(record["case_id"] in by_case for record in records)
+        assert all(isinstance(json.loads(record["rating_records"]), list) for record in records)
         assert all(
-            record["severity_case_sha256"] == by_case[record["case_id"]]["severity_case_sha256"]
+            (by_case[record["case_id"]]["severity_mean_score"] is None) == (queue == "pending")
             for record in records
         )
-        assert all(isinstance(json.loads(record["vote_counts"]), dict) for record in records)
     assert {path: path.read_bytes() for path in source_paths} == before
 
 
-def test_severity_notebook_applies_completed_review_to_both_languages(tmp_path, monkeypatch):
-    from warbias_kit import dataset_workflow
-    from warbias_kit.io import canonical_json, read_rows
-    from warbias_kit.warbias.severity import assign_taxonomy_severity, load_severity
-    from warbias_kit.warbias.severity_release import build_review_queues
+@pytest.mark.parametrize("field,value", [("severity_mean_score", 65.0), ("severity_level", 1)])
+def test_severity_notebook_rejects_stale_published_values(monkeypatch, field, value):
+    from copy import deepcopy
 
-    source = load_severity(ROOT)
-    cases = assign_taxonomy_severity(
-        source["taxonomy"], source["ratings"], source["case_evidence"], source["protocol"]
-    )
-    original = next(case for case in cases if case["public_case_id"] == "WB-C128")
-    queue = build_review_queues(cases, source["case_evidence"], protocol=source["protocol"])
-    decision = next(row for row in queue["conflicts"] if row["case_id"] == "WB-C128")
-    decision.update(
-        adjudicated_label="high",
-        adjudicator_id="SEV-R99",
-        adjudication_reason="Synthetic fixture for workflow verification.",
-    )
-    review_file = tmp_path / "completed-review.csv"
-    with review_file.open("w", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(decision))
-        writer.writeheader()
-        writer.writerow(
-            {
-                key: canonical_json(value) if isinstance(value, (dict, list)) else value
-                for key, value in decision.items()
-            }
-        )
-    work = tmp_path / "workspace"
-    work.mkdir()
-    monkeypatch.setattr(dataset_workflow, "create_workspace", lambda name: work)
+    from warbias_kit.warbias import dataset
+
+    published = deepcopy(dataset.load_dataset(ROOT))
+    row = next(row for row in published["rows"]["uk"] if row["id"] == "WB-1201")
+    row[field] = value
+    monkeypatch.setattr(dataset, "load_dataset", lambda project: published)
     monkeypatch.chdir(ROOT / "notebooks")
-    namespace = execute_notebook(
-        "06_severity", {"REVIEW_FILES = []": f"REVIEW_FILES = [{str(review_file)!r}]"}
-    )
-    result = namespace["result"]
-    resolved = namespace["taxonomy_by_case"]["WB-C128"]
-    assert result["consensus"]["labelled_cases"] == 19
-    assert result["labelled_cases"] == 20
-    assert result["pending_label_cases"] == 100
-    assert result["labelled_triplets_per_language"] == {"uk": 151, "en": 151}
-    assert result["readiness"]["adjudicated_cases"] == 1
-    assert result["readiness"]["unresolved_cases"] == 100
-    assert resolved["severity_label"] == "high"
-    assert resolved["severity_label_status"] == "adjudicated"
-    assert resolved["severity_label_method"] == "human_adjudication"
-    assert resolved["severity_adjudication"]["adjudicator_id"] == "SEV-R99"
-    assert (
-        resolved["severity_adjudication"]["source_case_sha256"] == original["severity_case_sha256"]
-    )
-    assert resolved["severity_score"] == original["severity_score"] == 75
-    assert resolved["severity_ratings"] == original["severity_ratings"]
-    assert resolved["severity_label_votes"] == original["severity_label_votes"]
-    assert namespace["consensus_by_case"]["WB-C128"]["severity_label"] is None
-    for language, path in result["labelled_datasets"].items():
-        rows = [row for row in read_rows(path) if row["case_id"] == "WB-C128"]
-        assert len(rows) == 1
-        assert rows[0]["id"] == "WB-1201"
-        assert rows[0]["severity_mean_score"] == 75
-        assert rows[0]["severity_label"] == "high"
-        assert rows[0]["severity_label_status"] == "adjudicated"
-        assert rows[0]["severity_label_method"] == "human_adjudication"
-        assert rows[0]["severity_adjudication"] == resolved["severity_adjudication"]
-        assert rows[0]["severity_label_votes"] == original["severity_label_votes"]
-    assert len(namespace["review_queues"]["conflicts"]) == 86
-    assert all(row["case_id"] != "WB-C128" for row in namespace["review_queues"]["conflicts"])
-    with Path(result["taxonomy_csv"]).open(newline="") as stream:
-        records = list(csv.DictReader(stream))
-    assert all(
-        json.loads(row["severity_adjudication"]) is None
-        for row in records
-        if row["public_case_id"] != "WB-C128"
-    )
-    adjudicated = next(row for row in records if row["public_case_id"] == "WB-C128")
-    assert json.loads(adjudicated["severity_adjudication"]) == resolved["severity_adjudication"]
+    with pytest.raises((AssertionError, ValueError), match="(?i)severity"):
+        execute_notebook("06_severity")
 
 
-def test_severity_notebook_exports_review_forms_before_complete_release_gate(tmp_path, monkeypatch):
+def test_severity_notebook_exports_review_queues_before_complete_coverage_gate(
+    tmp_path, monkeypatch
+):
     from warbias_kit import dataset_workflow
 
     work = tmp_path / "workspace"
     work.mkdir()
     monkeypatch.setattr(dataset_workflow, "create_workspace", lambda name: work)
     monkeypatch.chdir(ROOT / "notebooks")
-    with pytest.raises(ValueError, match="Final severity labels are pending for 101 cases"):
+    with pytest.raises(ValueError, match="(?i)pending"):
         execute_notebook("06_severity", {"REQUIRE_COMPLETE = False": "REQUIRE_COMPLETE = True"})
-    for name, count in (("conflicts", 87), ("incomplete", 14)):
+    for name, count in (("pending", 14), ("large_gaps", 19)):
         with (work / f"severity-review-{name}.csv").open(newline="") as stream:
             assert len(list(csv.DictReader(stream))) == count
     assert not (work / "dataset-with-severity-uk.jsonl").exists()
     assert not (work / "dataset-with-severity-en.jsonl").exists()
-    assert not (work / "taxonomy-severity.jsonl").exists()
 
 
 @pytest.mark.parametrize("changed_input", ["ratings", "case_evidence", "taxonomy"])

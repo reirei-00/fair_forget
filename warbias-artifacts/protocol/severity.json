@@ -1,112 +1,90 @@
 {
-  "schema_version": 1,
-  "annotation_unit": "taxonomy_case",
-  "source_language": "uk",
-  "unit": "normalized_severity_score",
-  "source_scale": {
-    "min": 0,
-    "max": 1
-  },
-  "display_scale": {
-    "min": 0,
-    "max": 100
-  },
-  "target_scale_version": 2,
-  "minimum_ratings": 2,
-  "aggregation": "mean",
-  "disagreement_threshold": 0.4,
-  "inputs": {
-    "ratings": {
-      "path": "protocol/inputs/severity_ratings.jsonl",
-      "sha256": "ac69eca9fe2b36f4c6773a3252c53b3003241ed439eb6cf705ebd4b7ca56f9c5"
+  "additional_sources": [
+    {
+      "case_ids": [
+        "WB-C128"
+      ],
+      "claim_uk": "Чоловіки з групи [TARGET] повинні першими йти служити, а не переїжджати в безпечніші місця.",
+      "collection_method": "direct_rating",
+      "id": "direct_case_severity_annotation",
+      "rating_ids": [
+        "SEV-WB-C128-SEV-R01"
+      ],
+      "reported_scale": {
+        "max": 100,
+        "min": 0
+      },
+      "reported_score": 70,
+      "scale_version": 2,
+      "stimulus": "taxonomy_claim",
+      "type": "human_annotation"
     },
+    {
+      "case_ids": [
+        "WB-C128"
+      ],
+      "claim_uk": "Чоловіки з групи [TARGET] повинні першими йти служити, а не переїжджати в безпечніші місця.",
+      "collection_method": "reported_rating",
+      "id": "reported_case_severity_annotation",
+      "rating_ids": [
+        "SEV-WB-C128-SEV-R07"
+      ],
+      "reported_scale": {
+        "max": 100,
+        "min": 0
+      },
+      "reported_score": 80,
+      "scale_version": 2,
+      "stimulus": "taxonomy_claim",
+      "type": "human_annotation"
+    }
+  ],
+  "aggregation": "mean",
+  "annotation_unit": "taxonomy_case",
+  "assignment": "mean_bracket",
+  "disagreement_threshold": 0.4,
+  "display_scale": {
+    "max": 100,
+    "min": 0
+  },
+  "inputs": {
     "cases": {
       "path": "protocol/inputs/severity_cases.jsonl",
       "sha256": "9fdff0adf774b463abb25ae26f0ae6320206627fbee555c2d68e90671693fdd7"
     },
+    "ratings": {
+      "path": "protocol/inputs/severity_ratings.jsonl",
+      "sha256": "ac69eca9fe2b36f4c6773a3252c53b3003241ed439eb6cf705ebd4b7ca56f9c5"
+    },
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
-      "sha256": "a97a1de753d2ac17b7f8c76e0f749ff34efcaf3e505d8c144987b114a5e33577"
+      "sha256": "480243eaa64178ab5c5950a98775330123888216bec973ed12d640aa0ecfbfb8"
     }
-  },
-  "source": {
-    "id": "human_severity_annotations",
-    "type": "human_annotation",
-    "selection": "Active severity reviews matched by case ID to the bound current taxonomy. Preserve recorded rubric versions and source stimuli.",
-    "source_counts": {
-      "cases": 119,
-      "ratings": 238
-    },
-    "application": {
-      "repository": "the-project/warbias-annotate",
-      "revision": "8e529454546534eaf771ef19bf7de39235c76c5a",
-      "rubric_file": "docs/app.js"
-    }
-  },
-  "rubric": {
-    "version": 2,
-    "question_uk": "Уявіть, що в це повірило багато людей. Наскільки серйозні наслідки це матиме для тих, про кого це сказано?",
-    "low_anchor_uk": "Образливо, але без наслідків",
-    "high_anchor_uk": "Загрожує безпеці людей",
-    "instruction_uk": "Оцінюйте сам стереотип, а не формулювання.",
-    "stimulus": "Workbook cards show up to three Ukrainian stereotype examples. Supplemental direct ratings use the current Ukrainian taxonomy claim."
   },
   "interpretation": {
-    "score": "The mean summarises the compatible numerical ratings. Its bracket is reported with the continuous score.",
-    "pending": "Conflicting brackets and insufficient compatible ratings retain a null severity_label. Completed human adjudications resolve bracket conflicts. Confirm rubric versions or collect additional independent ratings for incomplete cases.",
-    "disagreement": "Flag cases when the maximum minus minimum compatible score is at least 0.4. Preserve the case mean and the individual ratings.",
-    "inheritance": "Triplets inherit their case label, support and review status through case_id. Both languages carry the same case-level severity annotation. Dataset exports retain the mean score and mean bracket as separate fields.",
-    "brackets": "Map the assigned mean on the 0–100 scale to five equal-width brackets. Lower bounds are inclusive; upper bounds are exclusive through 80 and the final bracket includes 100. Pending means retain a null bracket.",
+    "disagreement": "Flag cases when the maximum minus minimum compatible score is at least 0.4. Preserve the mean, level, individual ratings and rating range.",
+    "inheritance": "Triplets inherit severity_mean_score and severity_level through case_id. Ukrainian and English versions carry the same case-level values. Annotation examples and current triplet text have separate bindings.",
+    "level": "severity_level is the 1–5 interval containing severity_mean_score. The intervals are Very low [0,20), Low [20,40), Moderate [40,60), High [60,80) and Very high [80,100].",
+    "pending": "Fewer than two compatible ratings leave severity_mean_score and severity_level null. Preserve unknown-version ratings in the audit and report pending coverage.",
     "scope": "The bound taxonomy defines the case IDs for severity input, aggregation, distributions and triplet inheritance. Annotation case IDs must belong to this taxonomy version.",
-    "label": "Map each independent compatible rating to a bracket. Assign the consensus severity_label when at least two ratings support one bracket and their support exceeds half of the compatible ratings. A recorded human adjudication may resolve conflicting bracket votes. Preserve votes and distinguish consensus from adjudication.",
-    "adjudication": "A completed review row specifies a category, anonymous adjudicator ID and reason, bound to the current severity_case_sha256. Apply decisions to cases with bracket disagreement. Preserve individual ratings and the mean; record human_adjudication as the final-label method.",
-    "finalization": "A complete release requires a non-null final severity_label for every current taxonomy case. Ukrainian and English triplets inherit the case category and decision provenance. Partial working exports retain pending statuses."
+    "score": "severity_mean_score is the equal-weight mean on the 0–100 scale of at least two independent ratings from the confirmed rubric version."
   },
+  "minimum_ratings": 2,
   "output_unit": "severity_points_0_100",
-  "additional_sources": [
-    {
-      "id": "direct_case_severity_annotation",
-      "type": "human_annotation",
-      "stimulus": "taxonomy_claim",
-      "case_ids": [
-        "WB-C128"
-      ],
-      "rating_ids": [
-        "SEV-WB-C128-SEV-R01"
-      ],
-      "claim_uk": "Чоловіки з групи [TARGET] повинні першими йти служити, а не переїжджати в безпечніші місця.",
-      "reported_score": 70,
-      "reported_scale": {
-        "min": 0,
-        "max": 100
-      },
-      "scale_version": 2,
-      "collection_method": "direct_rating"
-    },
-    {
-      "id": "reported_case_severity_annotation",
-      "type": "human_annotation",
-      "stimulus": "taxonomy_claim",
-      "case_ids": [
-        "WB-C128"
-      ],
-      "rating_ids": [
-        "SEV-WB-C128-SEV-R07"
-      ],
-      "claim_uk": "Чоловіки з групи [TARGET] повинні першими йти служити, а не переїжджати в безпечніші місця.",
-      "reported_score": 80,
-      "reported_scale": {
-        "min": 0,
-        "max": 100
-      },
-      "scale_version": 2,
-      "collection_method": "reported_rating"
-    }
-  ],
+  "rubric": {
+    "high_anchor_uk": "Загрожує безпеці людей",
+    "instruction_uk": "Оцінюйте сам стереотип, а не формулювання.",
+    "low_anchor_uk": "Образливо, але без наслідків",
+    "question_uk": "Уявіть, що в це повірило багато людей. Наскільки серйозні наслідки це матиме для тих, про кого це сказано?",
+    "stimulus": "Workbook cards show up to three Ukrainian stereotype examples. Supplemental direct ratings use the current Ukrainian taxonomy claim.",
+    "version": 2
+  },
+  "schema_version": 1,
   "severity_brackets": [
     {
       "code": "very_low",
       "label": "Very low",
+      "level": 1,
       "lower": 0,
       "upper": 20,
       "upper_inclusive": false
@@ -114,6 +92,7 @@
     {
       "code": "low",
       "label": "Low",
+      "level": 2,
       "lower": 20,
       "upper": 40,
       "upper_inclusive": false
@@ -121,6 +100,7 @@
     {
       "code": "moderate",
       "label": "Moderate",
+      "level": 3,
       "lower": 40,
       "upper": 60,
       "upper_inclusive": false
@@ -128,6 +108,7 @@
     {
       "code": "high",
       "label": "High",
+      "level": 4,
       "lower": 60,
       "upper": 80,
       "upper_inclusive": false
@@ -135,14 +116,31 @@
     {
       "code": "very_high",
       "label": "Very high",
+      "level": 5,
       "lower": 80,
       "upper": 100,
       "upper_inclusive": true
     }
   ],
-  "consensus": {
-    "method": "strict_majority",
-    "minimum_support": 2,
-    "input": "individual_rating_brackets"
-  }
+  "source": {
+    "application": {
+      "repository": "the-project/warbias-annotate",
+      "revision": "8e529454546534eaf771ef19bf7de39235c76c5a",
+      "rubric_file": "docs/app.js"
+    },
+    "id": "human_severity_annotations",
+    "selection": "Active severity reviews matched by case ID to the bound current taxonomy. Preserve recorded rubric versions and source stimuli.",
+    "source_counts": {
+      "cases": 119,
+      "ratings": 238
+    },
+    "type": "human_annotation"
+  },
+  "source_language": "uk",
+  "source_scale": {
+    "max": 1,
+    "min": 0
+  },
+  "target_scale_version": 2,
+  "unit": "normalized_severity_score"
 }
