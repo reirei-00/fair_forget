@@ -10,6 +10,7 @@ from warbias_kit.warbias.severity import (
     assign_taxonomy_severity,
     inherit_triplet_severity,
     load_severity,
+    rating_is_eligible,
 )
 
 POLICY = {
@@ -192,6 +193,61 @@ def test_unknown_and_older_versions_do_not_supply_a_second_rating():
     assert row["severity_status"] == "insufficient_ratings"
     assert row["severity_min"] == row["severity_max"] == 90
     assert row["severity_ratings"] == ratings
+
+
+def test_including_unversioned_ratings_keeps_raw_versions_and_excludes_other_versions():
+    ratings = [rating(0.9, "R1"), rating(0.1, "R2", version=None), rating(0.3, "R3", version=1)]
+    before = deepcopy(ratings)
+    policy = {**POLICY, "include_unversioned_ratings": True}
+    row = assign(ratings, protocol=policy)[0]
+    assert row["severity_mean_score"] == 50 and row["severity_level"] == 3
+    assert row["severity_n"] == 2 and row["severity_rating_count"] == 3
+    assert row["severity_unversioned_n"] == 1
+    assert row["severity_include_unversioned_ratings"] is True
+    assert row["severity_status"] == "high_disagreement"
+    assert row["severity_ratings"] == ratings == before
+    for language in ("uk", "en"):
+        sidecar = inherit_triplet_severity([triplet()], [row], language)[0]
+        assert sidecar["severity_unversioned_n"] == 1
+        assert sidecar["severity_include_unversioned_ratings"] is True
+
+
+def test_unversioned_ratings_still_need_two_independent_reviewers():
+    policy = {**POLICY, "include_unversioned_ratings": True}
+    pending = assign([rating(0.7, "R1", version=None)], protocol=policy)[0]
+    assert pending["severity_mean_score"] is pending["severity_level"] is None
+    assert pending["severity_n"] == pending["severity_unversioned_n"] == 1
+    complete = assign(
+        [rating(0.7, "R1", version=None), rating(0.8, "R2", version=None)], protocol=policy
+    )[0]
+    assert complete["severity_mean_score"] == 75 and complete["severity_level"] == 4
+    assert complete["severity_unversioned_n"] == 2
+    assert all(row["scale_version"] is None for row in complete["severity_ratings"])
+
+
+@pytest.mark.parametrize("value", [None, "true", 1, 0, [], {}])
+def test_unversioned_policy_requires_a_boolean(value):
+    with pytest.raises(ValueError, match="include_unversioned_ratings must be a boolean"):
+        assign([], protocol={**POLICY, "include_unversioned_ratings": value})
+
+
+@pytest.mark.parametrize("version", [1, 3])
+def test_shared_eligibility_does_not_accept_explicit_other_versions(version):
+    policy = {**POLICY, "include_unversioned_ratings": True}
+    assert rating_is_eligible(2, policy) is True
+    assert rating_is_eligible(None, policy) is True
+    assert rating_is_eligible(version, policy) is False
+    assert rating_is_eligible(None, POLICY) is False
+
+
+def test_changed_eligibility_rejects_old_pending_taxonomy_cache():
+    cached = {**case(), "severity_mean_score": "", "severity_level": ""}
+    with pytest.raises(ValueError, match="Cached taxonomy severity"):
+        assign(
+            [rating(0.7, "R1"), rating(0.8, "R2", version=None)],
+            taxonomy=[cached],
+            protocol={**POLICY, "include_unversioned_ratings": True},
+        )
 
 
 def test_missing_annotations_stay_null_and_scope_does_not_leak():

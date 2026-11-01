@@ -269,7 +269,7 @@
       ],
       "minimum": 0,
       "maximum": 100,
-      "description": "Equal-weight mean of at least two independent ratings with confirmed rubric version 2, on the 0–100 scale. Null when compatible ratings are insufficient."
+      "description": "Equal-weight mean of at least two eligible independent human ratings under the severity protocol, on the 0–100 scale. Null when eligible ratings are insufficient."
     },
     "severity_level": {
       "type": [

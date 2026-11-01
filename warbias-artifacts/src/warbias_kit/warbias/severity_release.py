@@ -6,6 +6,7 @@ from copy import deepcopy
 
 from warbias_kit.io import digest, unique_index
 from warbias_kit.warbias.schema import LANGUAGES, text_digest
+from warbias_kit.warbias.severity import _rating_policy, rating_is_eligible
 from warbias_kit.warbias.severity_brackets import (
     bracket_for_score,
     level_for_score,
@@ -81,10 +82,17 @@ def label_triplets(rows, sidecars, language):
             raise ValueError("Severity sidecars need their taxonomy case hash")
         score, level = _values(sidecar)
         count = sidecar.get("severity_n")
+        unversioned = sidecar.get("severity_unversioned_n", 0)
+        include_unversioned = sidecar.get("severity_include_unversioned_ratings", False)
         if (
             isinstance(count, bool)
             or not isinstance(count, int)
             or count < 0
+            or type(unversioned) is not int
+            or not 0 <= unversioned <= count
+            or type(include_unversioned) is not bool
+            or unversioned > 0
+            and not include_unversioned
             or (count >= 2) != (score is not None)
             or not _same_score(sidecar.get("severity_score"), score)
         ):
@@ -129,15 +137,19 @@ def build_review_queues(taxonomy, case_evidence, *, protocol=None):
     result = {"pending": [], "large_gaps": []}
     for identity, case in cases.items():
         score, level = _values(case)
-        if protocol and case.get("severity_scale_version") != protocol.get("target_scale_version"):
-            raise ValueError("Review rubric version differs from the taxonomy case")
+        case_policy = {
+            "target_scale_version": case.get("severity_scale_version"),
+            "include_unversioned_ratings": case.get("severity_include_unversioned_ratings", False),
+        }
+        if protocol and _rating_policy(case_policy) != _rating_policy(protocol):
+            raise ValueError("Review rating policy differs from the taxonomy case")
         if score is not None and case.get("severity_status") != "high_disagreement":
             continue
         records = []
         for rating in case.get("severity_ratings", []):
             if rating.get("case_id") != identity:
                 raise ValueError("Review ratings must belong to their taxonomy case")
-            eligible = rating["scale_version"] == case["severity_scale_version"]
+            eligible = rating_is_eligible(rating["scale_version"], case_policy)
             points = 100 * rating["score"]
             bracket = bracket_for_score(points, brackets) if eligible else None
             records.append(
@@ -155,7 +167,7 @@ def build_review_queues(taxonomy, case_evidence, *, protocol=None):
             if score is not None
             else (
                 "confirm_rubric_version_or_collect_rating"
-                if any(row["scale_version"] is None for row in records)
+                if any(row["scale_version"] is None and not row["eligible"] for row in records)
                 else "collect_independent_rating"
             )
         )
@@ -173,6 +185,7 @@ def build_review_queues(taxonomy, case_evidence, *, protocol=None):
                 "severity_mean_score": score,
                 "severity_level": level,
                 "severity_n": case["severity_n"],
+                "severity_unversioned_n": case.get("severity_unversioned_n", 0),
                 "severity_gap": case["severity_gap"],
                 "severity_status": case["severity_status"],
                 "followup": followup,

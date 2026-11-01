@@ -44,7 +44,7 @@ POLICY = {
 }
 
 
-def source(specifications):
+def source(specifications, *, protocol=POLICY):
     taxonomy, ratings, evidence, triplets = [], [], [], []
     for identity, values in specifications.items():
         taxonomy.append(
@@ -85,7 +85,7 @@ def source(specifications):
                 "unrelated": "Several IDPs are making dinner.",
             }
         )
-    return assign_taxonomy_severity(taxonomy, ratings, evidence, POLICY), evidence, triplets
+    return assign_taxonomy_severity(taxonomy, ratings, evidence, protocol), evidence, triplets
 
 
 def test_public_export_adds_two_fields_and_uses_the_mean_instead_of_a_vote():
@@ -109,6 +109,30 @@ def test_join_keeps_source_order_zero_and_pending_values():
     assert result[0]["severity_mean_score"] == 0 and result[0]["severity_level"] == 1
     assert result[1]["severity_mean_score"] is result[1]["severity_level"] is None
     assert label_triplets(result, sidecars, "en") == result
+
+
+def test_exports_and_review_queues_share_the_unversioned_rating_policy():
+    policy = {**POLICY, "include_unversioned_ratings": True}
+    taxonomy, evidence, rows = source(
+        {"assigned": [(0.1, None), (0.9, 2), (1, 1)], "single": [(0.5, None)]}, protocol=policy
+    )
+    sidecars = inherit_triplet_severity(rows, taxonomy, "uk")
+    labelled = label_triplets(rows, sidecars, "uk")
+    assert labelled[0]["severity_mean_score"] == 50 and labelled[0]["severity_level"] == 3
+    assert labelled[1]["severity_mean_score"] is None
+    assert sidecars[0]["severity_unversioned_n"] == 1
+    queues = build_review_queues(taxonomy, evidence, protocol=policy)
+    fallback = build_review_queues(taxonomy, evidence)
+    assert fallback["large_gaps"][0]["severity_unversioned_n"] == 1
+    assert fallback["large_gaps"][0]["rating_records"][0]["eligible"] is True
+    assigned = queues["large_gaps"][0]
+    assert assigned["severity_unversioned_n"] == 1
+    assert [row["eligible"] for row in assigned["rating_records"]] == [True, True, False]
+    assert assigned["rating_records"][0]["scale_version"] is None
+    assert queues["pending"][0]["followup"] == "collect_independent_rating"
+    assert queues["pending"][0]["rating_records"][0]["eligible"] is True
+    with pytest.raises(ValueError, match="Review rating policy differs"):
+        build_review_queues(taxonomy, evidence, protocol=POLICY)
 
 
 def test_each_language_keeps_its_own_text_binding():
@@ -135,6 +159,12 @@ def test_each_language_keeps_its_own_text_binding():
         (lambda rows: rows[0].update(severity_level=4.0), "level must match"),
         (lambda rows: rows[0].update(severity_n=1), "compatible rating count"),
         (lambda rows: rows[0].update(severity_score=10), "compatible rating count"),
+        (lambda rows: rows[0].update(severity_unversioned_n=3), "compatible rating count"),
+        (lambda rows: rows[0].update(severity_unversioned_n=True), "compatible rating count"),
+        (
+            lambda rows: rows[0].update(severity_include_unversioned_ratings="true"),
+            "compatible rating count",
+        ),
     ],
 )
 def test_join_rejects_incompatible_sidecars(change, message):
@@ -195,7 +225,7 @@ def test_review_views_reject_retired_changed_or_wrong_version_evidence():
     changed[0]["examples_uk"] = ["Інший текст."]
     with pytest.raises(ValueError, match="exact hash-bound"):
         build_review_queues(taxonomy, changed)
-    with pytest.raises(ValueError, match="version differs"):
+    with pytest.raises(ValueError, match="rating policy differs"):
         build_review_queues(taxonomy, evidence, protocol={**POLICY, "target_scale_version": 1})
 
 

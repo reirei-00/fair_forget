@@ -162,9 +162,11 @@ Ukrainian source and remains separate from Ukrainian triplet review.
 
 ## Case severity
 
-[Notebook 6](../notebooks/06_severity.ipynb) computes the equal-weight mean of at
-least two independent ratings from confirmed rubric version 2. Source scores use
-0–1; `severity_mean_score` uses 0–100. The mean determines `severity_level`:
+[Notebook 6](../notebooks/06_severity.ipynb) computes the equal-weight mean of the
+two active independent ratings for each case. It includes version-2 ratings and
+14 ratings with unrecorded versions. Their versions remain null in the audit.
+Ratings with another recorded version are excluded. Source scores use 0–1;
+`severity_mean_score` uses 0–100. The mean determines `severity_level`:
 
 | Level | Name | Mean score |
 | --- | --- | --- |
@@ -178,16 +180,16 @@ The taxonomy and both language datasets store the same mean and level for each
 case. For example, ratings 70 and 80 give mean 75 and level 4. These are case-level
 annotations inherited through `case_id`.
 
-The audit preserves individual scores, rubric versions, compatible rating counts
-and ranges. A gap of at least 40 points flags a case for review while preserving
-its assigned mean and level. Fewer than two compatible ratings leave both fields
-null. Unknown rubric versions remain in the source records.
+All 120 taxonomy cases and 1,007 triplets per language have severity values from
+240 ratings. The audit preserves individual scores, recorded rubric versions,
+included rating counts and ranges. A gap of at least 40 points flags a case for
+review while preserving its mean and level.
 
 The [severity protocol](../protocol/severity.json) binds the current taxonomy,
 ratings and annotation examples. The notebook checks the published values against
 fresh calculations, shows case-weighted and triplet-weighted distributions, and
-exports pending cases and large-gap review lists. Source annotation examples and
-current triplet text retain separate bindings.
+exports the calculation audit and large-gap review list. Source annotation examples
+and current triplet text retain separate bindings.
 
 ## Question answering
 
