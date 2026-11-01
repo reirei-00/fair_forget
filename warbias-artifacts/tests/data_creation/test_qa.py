@@ -200,6 +200,76 @@ def test_human_review_does_not_transfer_to_an_incompatible_item(release, problem
         qa.load_qa(release[0])
 
 
+def _declare_author_approval(release):
+    root, protocol = release
+    row = read_rows(root / "data/qa_uk.jsonl")[0]
+    record = {
+        "review_id": "author-review-1",
+        "item_id": row["id"],
+        "language": "uk",
+        "reviewer_id": "author_01",
+        "reviewer_kind": "author",
+        "decision": "approved",
+        "review_scope": "text_revision",
+        "text_sha256": qa.text_digest(row),
+        "item_sha256": qa.item_digest(row),
+    }
+    path = "protocol/inputs/author_reviews.jsonl"
+    write_rows(root / path, [record])
+    protocol["files"]["author_reviews"] = {"path": path, "sha256": file_digest(root / path)}
+    _replace(release, "uk", lambda rows: rows[0].update(review_status="author_approved"))
+    _replace(release, "provenance", lambda rows: rows[0].update(review_status="author_approved"))
+
+
+def test_author_approval_loads_without_changing_human_validation_or_english(release):
+    _declare_author_approval(release)
+    result = qa.load_qa(release[0])
+    assert result["rows"]["uk"][0]["review_status"] == "author_approved"
+    assert not result["metadata"]["provenance"][0]["human_validated"]
+    assert result["metadata"]["human_reviews"] == []
+    assert result["rows"]["en"][0]["review_status"] == "unreviewed_translation"
+
+
+@pytest.mark.parametrize(
+    ("change", "message"),
+    [
+        (lambda rows: rows[0].update(item_id="unknown"), "unknown item"),
+        (lambda rows: rows[0].update(language="en"), "scope or decision"),
+        (lambda rows: rows[0].update(text_sha256="stale"), "current text or item"),
+        (lambda rows: rows[0].update(item_sha256="stale"), "current text or item"),
+        (lambda rows: rows[0].update(decision="rejected"), "scope or decision"),
+        (lambda rows: rows[0].pop("review_id"), "fields differ"),
+        (lambda rows: rows.append(dict(rows[0])), "Duplicate review_id"),
+        (
+            lambda rows: rows.append({**rows[0], "review_id": "another-review"}),
+            "Duplicate item_id",
+        ),
+    ],
+)
+def test_loader_rejects_invalid_author_approvals(release, change, message):
+    _declare_author_approval(release)
+    _replace(release, "author_reviews", change)
+    with pytest.raises(ValueError, match=message):
+        qa.load_qa(release[0])
+
+
+def test_author_status_cannot_be_claimed_without_a_bound_record(release):
+    _declare_author_approval(release)
+    root, protocol = release
+    del protocol["files"]["author_reviews"]
+    write_json(root / "protocol/qa.json", protocol)
+    with pytest.raises(ValueError, match="author approval lacks current evidence"):
+        qa.load_qa(root)
+
+
+def test_bound_author_approval_must_match_the_released_status(release):
+    _declare_author_approval(release)
+    _replace(release, "uk", lambda rows: rows[0].update(review_status="assistant_resolved"))
+    _replace(release, "provenance", lambda rows: rows[0].update(review_status="assistant_resolved"))
+    with pytest.raises(ValueError, match="author approval lacks current evidence"):
+        qa.load_qa(release[0])
+
+
 def test_rejects_unbound_bytes_and_escaping_paths(release):
     root, protocol = release
     (root / "data/qa_uk.jsonl").write_text("[]\n")

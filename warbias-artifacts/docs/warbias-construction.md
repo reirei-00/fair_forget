@@ -237,6 +237,9 @@ Agreement with the answer key is a separate statistic.
 `human_validated` requires two independent positive reviews with the correct
 answer on the exact released text and no conflicting current-text review.
 `human_edited` marks a retained human edit without this two-review agreement.
+`author_approved` marks an exact text revision approved by an author. These
+[approvals](../protocol/inputs/qa_author_reviews.jsonl) do not count as independent
+answer-choice annotations or enter the agreement calculation.
 `assistant_resolved` marks other corrections or resolutions of flagged items.
 These decisions do not replace the human votes. English QA is marked
 `unreviewed_translation`; it has no human translation review or COMET scores.

@@ -22,7 +22,10 @@ The separate BBQ-style QA set contains **240 questions per language** from
 [Ukrainian QA](data/qa_uk.jsonl), [English QA](data/qa_en.jsonl) and their
 [protocol](protocol/qa.json) include answer keys and review status. The 480
 Ukrainian human reviews remain bound to the exact text each person saw.
-Assistant resolutions are marked separately. GPT-6 Astra translated all English
+The current items include 185 with independent human acceptance, 28 with
+[author-approved revisions](protocol/inputs/qa_author_reviews.jsonl), and 27
+with assistant resolutions. Author approval is separate from independent
+annotation. GPT-6 Astra translated all English
 QA text; it has no human translation review.
 
 Both languages use the same column order for each dataset type: ID and text

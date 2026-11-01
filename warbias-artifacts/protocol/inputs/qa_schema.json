@@ -101,6 +101,7 @@
       "enum": [
         "human_validated",
         "human_edited",
+        "author_approved",
         "assistant_resolved",
         "unreviewed_translation",
         "assistant_revised_translation"
