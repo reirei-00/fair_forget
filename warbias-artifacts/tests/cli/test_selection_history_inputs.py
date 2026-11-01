@@ -83,7 +83,7 @@ def test_selection_history_uses_the_saved_input_design():
 def test_selection_history_preserves_source_hashes_and_reference_links():
     result = load_selection_history(ROOT)
     source = result["sources"]["profile_exclusions"]
-    assert source["repository"] == "the-project/WarBias"
+    assert source["repository"] == "FairForget/WarBias"
     assert source["source_path"] == "metadata/profile_exclusions.json"
     assert source["exact_bytes"] is True
     assert file_digest(ROOT / source["path"]) == source["sha256"]

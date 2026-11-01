@@ -5,7 +5,7 @@
   "target_language": "en",
   "translator_config": "configs/translation/codex.json",
   "source_origin": {
-    "repository": "the-project/WarBias",
+    "repository": "FairForget/WarBias",
     "revision": "164f355623c2da0028821e0942cad493558a6c13",
     "role": "reference",
     "sampling": {
@@ -31,7 +31,7 @@
       "size": 10
     },
     "source_reference": {
-      "repository": "the-project/WarBias",
+      "repository": "FairForget/WarBias",
       "revision": "164f355623c2da0028821e0942cad493558a6c13",
       "role": "reference",
       "source_file": "data/uk/unassigned.jsonl",

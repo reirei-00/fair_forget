@@ -9,7 +9,7 @@
       "format": "csv",
       "bytes": 23319,
       "rows": 28,
-      "role": "current_taxonomy_registry"
+      "role": "recorded_taxonomy_registry"
     },
     "targets": {
       "path": "protocol/inputs/targets.csv",
@@ -17,7 +17,7 @@
       "format": "csv",
       "bytes": 5601,
       "rows": 11,
-      "role": "current_taxonomy_registry"
+      "role": "recorded_taxonomy_registry"
     },
     "taxonomy_hierarchy": {
       "path": "protocol/inputs/taxonomy_hierarchy.csv",
@@ -25,7 +25,7 @@
       "format": "csv",
       "bytes": 5230,
       "rows": 22,
-      "role": "current_taxonomy_registry"
+      "role": "recorded_taxonomy_registry"
     },
     "sources": {
       "path": "protocol/inputs/sources.csv",
@@ -385,12 +385,13 @@
   },
   "selection_history": {
     "path": "protocol/selection_history.json",
-    "sha256": "99d569e118d4c7245d5ad67333f09c7076b31ef36e2843bdb8b3ae253ea24920",
+    "sha256": "4e5efc0474df1d42a0eb5c147001488abdd1e6998f440ebfd640ebc9f4cc1483",
     "role": "selection_count_reconciliation"
   },
   "allocation_design": {
     "path": "protocol/allocation_design.json",
     "sha256": "864dda3a56b974ba70baf9c43a1eeccfaa6b6ffffe7656c53582882a048999c0",
     "role": "recorded_allocation_design"
-  }
+  },
+  "cohort_protocol": "protocol/cohort.json"
 }
