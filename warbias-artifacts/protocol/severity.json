@@ -18,7 +18,7 @@
   "inputs": {
     "ratings": {
       "path": "protocol/inputs/severity_ratings.jsonl",
-      "sha256": "7eb9786dec8100817f855cff45b2ad0d1065df21a8c18da257761f46ad054f89"
+      "sha256": "ac69eca9fe2b36f4c6773a3252c53b3003241ed439eb6cf705ebd4b7ca56f9c5"
     },
     "cases": {
       "path": "protocol/inputs/severity_cases.jsonl",
@@ -73,12 +73,32 @@
         "SEV-WB-C128-SEV-R01"
       ],
       "claim_uk": "Чоловіки з групи [TARGET] повинні першими йти служити, а не переїжджати в безпечніші місця.",
-      "reported_score": 40,
+      "reported_score": 70,
       "reported_scale": {
         "min": 0,
         "max": 100
       },
-      "scale_version": 2
+      "scale_version": 2,
+      "collection_method": "direct_rating"
+    },
+    {
+      "id": "reported_case_severity_annotation",
+      "type": "human_annotation",
+      "stimulus": "taxonomy_claim",
+      "case_ids": [
+        "WB-C128"
+      ],
+      "rating_ids": [
+        "SEV-WB-C128-SEV-R07"
+      ],
+      "claim_uk": "Чоловіки з групи [TARGET] повинні першими йти служити, а не переїжджати в безпечніші місця.",
+      "reported_score": 80,
+      "reported_scale": {
+        "min": 0,
+        "max": 100
+      },
+      "scale_version": 2,
+      "collection_method": "reported_rating"
     }
   ],
   "severity_brackets": [
