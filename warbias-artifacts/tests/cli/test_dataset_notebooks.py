@@ -297,6 +297,7 @@ def test_severity_notebook_verifies_published_means_and_levels_without_changing_
         )
     for language, path in result["datasets"].items():
         rows = read_rows(path)
+        assert Path(path).read_bytes() == (ROOT / f"data/{language}.jsonl").read_bytes()
         assert rows == namespace["dataset"]["rows"][language]
         assert len(rows) == 1007
         assert all(len(row) == 13 for row in rows)
