@@ -217,6 +217,15 @@ generation settings do not describe QA construction.
 [Notebook 7](../notebooks/07_qa_dataset.ipynb) rebuilds all variants and verifies
 them against the saved files and [QA protocol](../protocol/qa.json).
 
+The notebook also samples the 40 saved scenarios. Set the count per target group
+and a seed. The sampler ranks scenario IDs by seeded SHA256, takes the requested
+count per group and keeps all six variants in both languages. Two scenarios per
+group give 24 questions per language; 20 give the full 240. Exports preserve IDs,
+column order and review status after checking that rebuilt items match the
+saved release. The selection manifest records the seed, selected IDs and source
+and output hashes. Full-dataset annotation statistics remain separate from the
+sample counts.
+
 Sixteen annotators provided two reviews per Ukrainian question: a quality
 decision and an answer choice. The saved records preserve their votes, comments
 and three text edits. Nominal Krippendorff's alpha is calculated separately for

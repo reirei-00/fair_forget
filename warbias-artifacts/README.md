@@ -75,7 +75,7 @@ The package includes its data-release validator.
 | [4. Sample translation and COMET](notebooks/04_sample_translation_comet.ipynb) | Recorded Ukrainian-to-English translations and quality scores |
 | [5. English translation](notebooks/05_full_english_translation.ipynb) | Verify all 1,007 Astra translations and their source hashes |
 | [6. Case severity](notebooks/06_severity.ipynb) | Calculate case means and severity levels for both languages |
-| [7. QA dataset](notebooks/07_qa_dataset.ipynb) | Build six variants per scenario, check human annotations and inspect the bilingual release |
+| [7. QA sampling and reproduction](notebooks/07_qa_dataset.ipynb) | Rebuild all QA items, sample complete scenarios and export aligned language files |
 
 Run the notebooks with a local Python kernel:
 
