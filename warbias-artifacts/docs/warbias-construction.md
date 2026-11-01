@@ -155,10 +155,23 @@ without an acceptance cutoff. They do not establish human validation of the
 translations or quality of the current Astra translations. The saved sample
 uses its own earlier Ukrainian and English text versions.
 
-Human review applies to the exact text version. Cohort membership identifies
+Triplet-quality review applies to the exact text version. Cohort membership identifies
 items sent for annotation; text provenance identifies subsequent author edits.
 No model-review labels are included. Translation review checks fidelity to the
 Ukrainian source and remains separate from Ukrainian triplet review.
 
-The [notebook guide](../README.md#walkthroughs) provides the five executable
+## Case severity
+
+[Notebook 6](../notebooks/06_severity.ipynb) assigns severity to taxonomy cases
+from the saved human ratings, then maps each case result to its triplets.
+Use the equal-weight mean of at least two independent ratings from the confirmed
+rubric version. Preserve all source ratings; unknown versions do not enter the
+mean. Report scores on the original 0–100 scale and flag gaps of at least
+40 points. Insufficient or missing compatible ratings leave the score null.
+
+The mean is descriptive, not consensus. Severity sidecars bind the case, annotation
+examples and current triplet text. They record inherited case severity rather
+than direct annotation of each Ukrainian or English sentence.
+
+The [notebook guide](../README.md#walkthroughs) provides the six executable
 walkthroughs and run instructions.
