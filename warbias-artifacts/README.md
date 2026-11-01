@@ -48,8 +48,10 @@ The package contains dataset text, construction inputs and reproducible methods.
 Per-item provenance separates original annotated text from author revisions.
 Triplet-quality ratings apply only to unchanged text. The taxonomy and triplets
 store `severity_mean_score` (0–100) and `severity_level` (1–5). Notebook 6 derives
-both from case-level human ratings; insufficient compatible ratings leave nulls. A new model run reproduces the
-selected inputs; its sentences can differ from saved dataset text.
+both from two active human ratings per case, including ratings with an unrecorded
+rubric version. All 120 cases and 1,007 triplets per language have severity values.
+A new model run reproduces the selected inputs; its sentences can differ from saved
+dataset text.
 
 ## Install
 

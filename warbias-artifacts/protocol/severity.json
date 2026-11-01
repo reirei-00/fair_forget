@@ -58,16 +58,17 @@
     },
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
-      "sha256": "480243eaa64178ab5c5950a98775330123888216bec973ed12d640aa0ecfbfb8"
+      "sha256": "117b39a77c2ea333bc6625908bf47a40f43e2b88c5cc1ba3465cc75957f514b8"
     }
   },
   "interpretation": {
     "disagreement": "Flag cases when the maximum minus minimum compatible score is at least 0.4. Preserve the mean, level, individual ratings and rating range.",
     "inheritance": "Triplets inherit severity_mean_score and severity_level through case_id. Ukrainian and English versions carry the same case-level values. Annotation examples and current triplet text have separate bindings.",
     "level": "severity_level is the 1–5 interval containing severity_mean_score. The intervals are Very low [0,20), Low [20,40), Moderate [40,60), High [60,80) and Very high [80,100].",
-    "pending": "Fewer than two compatible ratings leave severity_mean_score and severity_level null. Preserve unknown-version ratings in the audit and report pending coverage.",
+    "pending": "Fewer than two eligible ratings leave severity_mean_score and severity_level null.",
     "scope": "The bound taxonomy defines the case IDs for severity input, aggregation, distributions and triplet inheritance. Annotation case IDs must belong to this taxonomy version.",
-    "score": "severity_mean_score is the equal-weight mean on the 0–100 scale of at least two independent ratings from the confirmed rubric version."
+    "score": "severity_mean_score is the equal-weight mean on the 0–100 scale of at least two active independent ratings. Include recorded version 2 and unversioned ratings; exclude other recorded versions.",
+    "rubric_versions": "Keep each recorded scale_version unchanged. Unversioned ratings are included without assigning a rubric version."
   },
   "minimum_ratings": 2,
   "output_unit": "severity_points_0_100",
@@ -142,5 +143,6 @@
     "min": 0
   },
   "target_scale_version": 2,
-  "unit": "normalized_severity_score"
+  "unit": "normalized_severity_score",
+  "include_unversioned_ratings": true
 }

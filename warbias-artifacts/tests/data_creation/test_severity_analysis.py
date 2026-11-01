@@ -18,7 +18,7 @@ POLICY = {
 }
 
 
-def assigned_cases(specifications):
+def assigned_cases(specifications, *, protocol=POLICY):
     taxonomy, ratings, evidence = [], [], []
     for identity, values in specifications.items():
         taxonomy.append(
@@ -43,7 +43,7 @@ def assigned_cases(specifications):
                     "scale_version": version,
                 }
             )
-    return assign_taxonomy_severity(taxonomy, ratings, evidence, POLICY)
+    return assign_taxonomy_severity(taxonomy, ratings, evidence, protocol)
 
 
 def triplets(counts):
@@ -80,6 +80,28 @@ def test_pending_case_shows_eligible_arithmetic_and_excluded_version():
     assert first["rating_gap_100"] is None
     assert direct["eligible_sum_100"] == 40
     assert direct["eligible_mean_100"] is direct["rating_gap_100"] is None
+
+
+def test_decisions_include_authorized_unversioned_scores_without_relabeling():
+    policy = {**POLICY, "include_unversioned_ratings": True}
+    taxonomy = assigned_cases({"C1": [(0.5, None), (0.7, 2), (1, 1)]}, protocol=policy)
+    before = deepcopy(taxonomy)
+    row = severity_decisions(taxonomy, policy)[0]
+    assert row["eligible_scores_100"] == [50, 70]
+    assert row["eligible_n"] == 2 and row["eligible_unversioned_n"] == 1
+    assert row["eligible_mean_100"] == row["severity_mean_score"] == 60
+    assert row["severity_level"] == 4
+    assert [rating["scale_version"] for rating in row["excluded_ratings"]] == [1]
+    assert taxonomy == before
+    taxonomy[0]["severity_unversioned_n"] = 0
+    with pytest.raises(ValueError, match="eligible rating arithmetic"):
+        severity_decisions(taxonomy, policy)
+
+
+def test_decisions_require_the_assignment_eligibility_policy():
+    taxonomy = assigned_cases({"C1": [(0.2, 2), (0.4, 2)]})
+    with pytest.raises(ValueError, match="rating policy differs"):
+        severity_decisions(taxonomy, {**POLICY, "include_unversioned_ratings": True})
 
 
 def test_zero_is_a_scored_decision_and_missing_annotations_are_empty():

@@ -7,19 +7,19 @@
   "files": {
     "uk": {
       "path": "data/uk.jsonl",
-      "sha256": "3035fa3b10c06bb361d5e4ec8f062603a36ae022b6cdf9b588024766e5d18cf9"
+      "sha256": "61692dee0036584e7b27014a7e509f751dd372e046903c394c3cd686a1069cdb"
     },
     "en": {
       "path": "data/en.jsonl",
-      "sha256": "20f9c751b2cefee209dfdcc564a7d1f977111bb5a4b053a8adbbb698a648b084"
+      "sha256": "6611322c7102161a8170bb8e6811b0244e0d6c1a8b5234f6dee0328ffaebc218"
     },
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
-      "sha256": "480243eaa64178ab5c5950a98775330123888216bec973ed12d640aa0ecfbfb8"
+      "sha256": "117b39a77c2ea333bc6625908bf47a40f43e2b88c5cc1ba3465cc75957f514b8"
     },
     "schema": {
       "path": "protocol/inputs/dataset_schema.json",
-      "sha256": "c4eb7f6d93360959e9714acfe24b6fc67bbc3c3dd877613bd1a71755ec3f2b42"
+      "sha256": "853bd64d4d5d832dcffe99f1c23c2bfc004c1466f61f3da37cd194efd094442c"
     },
     "item_sources": {
       "path": "protocol/inputs/dataset_item_sources.jsonl",
@@ -43,7 +43,7 @@
     },
     "severity_protocol": {
       "path": "protocol/severity.json",
-      "sha256": "a806f333c220353096fb628afd4ef9235d63d8a7e58f0f43b0bc9d32e4ffaa0b"
+      "sha256": "7655828b3327c4801c2263d6b16ff22cf1f44dbfdba201dfa3b94109333d2779"
     }
   },
   "counts": {
@@ -69,15 +69,15 @@
     "unrelated"
   ],
   "severity": {
-    "scored_cases": 106,
-    "pending_cases": 14,
+    "scored_cases": 120,
+    "pending_cases": 0,
     "scored_triplets_per_language": {
-      "uk": 882,
-      "en": 882
+      "uk": 1007,
+      "en": 1007
     },
     "pending_triplets_per_language": {
-      "uk": 125,
-      "en": 125
+      "uk": 0,
+      "en": 0
     }
   },
   "columns": [

@@ -104,23 +104,22 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         assert result["primary_fields"] == ["severity_mean_score", "severity_level"]
         assert result["source_ratings"] == result["current_case_ratings"] == 240
         assert result["taxonomy_cases"] == 120
-        assert result["assigned_cases"] == 106
-        assert result["pending_cases"] == 14
+        assert result["assigned_cases"] == 120
+        assert result["pending_cases"] == 0
         assert result["case_status_counts"] == {
-            "aggregated": 87,
+            "aggregated": 101,
             "high_disagreement": 19,
-            "insufficient_ratings": 14,
         }
         assert result["triplets_per_language"] == {"uk": 1007, "en": 1007}
-        assert result["assigned_triplets_per_language"] == {"uk": 882, "en": 882}
-        assert result["pending_triplets_per_language"] == {"uk": 125, "en": 125}
+        assert result["assigned_triplets_per_language"] == {"uk": 1007, "en": 1007}
+        assert result["pending_triplets_per_language"] == {"uk": 0, "en": 0}
         assert result["readiness"] == {
-            "complete": False,
-            "assigned_cases": 106,
-            "pending_cases": 14,
+            "complete": True,
+            "assigned_cases": 120,
+            "pending_cases": 0,
             "large_gap_cases": 19,
         }
-        assert result["review_case_counts"] == {"pending": 14, "large_gaps": 19}
+        assert result["review_case_counts"] == {"pending": 0, "large_gaps": 19}
     elif name == "07_qa_dataset":
         assert result["status"] == "verified_saved_qa_release"
         assert result["scenarios"] == 40
@@ -274,6 +273,7 @@ def test_severity_notebook_verifies_published_means_and_levels_without_changing_
         ROOT / "data/uk.jsonl",
         ROOT / "data/en.jsonl",
         ROOT / "protocol/inputs/cohort_taxonomy.csv",
+        ROOT / "protocol/inputs/severity_ratings.jsonl",
     ]
     before = {path: path.read_bytes() for path in source_paths}
     monkeypatch.chdir(ROOT / "notebooks")
@@ -293,7 +293,9 @@ def test_severity_notebook_verifies_published_means_and_levels_without_changing_
     }
     taxonomy = read_rows(result["taxonomy_jsonl"])
     by_case = {row["public_case_id"]: row for row in taxonomy}
-    assert all(row["severity_rating_count"] == 2 for row in taxonomy)
+    assert all(row["severity_rating_count"] == row["severity_n"] == 2 for row in taxonomy)
+    assert sum(row["severity_unversioned_n"] for row in taxonomy) == 14
+    assert sum(row["scale_version"] is None for row in namespace["ratings"]) == 14
     assert by_case["WB-C128"]["severity_mean_score"] == pytest.approx(75)
     assert by_case["WB-C128"]["severity_level"] == 4
     assert by_case["WB-C128"]["severity_bracket_label"] == "High"
@@ -321,15 +323,17 @@ def test_severity_notebook_verifies_published_means_and_levels_without_changing_
     assert by_case["WB-C001"]["severity_status"] == "high_disagreement"
     assert by_case["WB-C001"]["severity_mean_score"] == pytest.approx(53.4)
     assert by_case["WB-C001"]["severity_level"] == 3
-    assert by_case["WB-C009"]["severity_mean_score"] is None
-    assert by_case["WB-C009"]["severity_level"] is None
+    assert by_case["WB-C009"]["severity_mean_score"] == pytest.approx(56.85)
+    assert by_case["WB-C009"]["severity_level"] == 3
+    assert by_case["WB-C009"]["severity_unversioned_n"] == 1
+    assert all(row["Eligible"] for row in namespace["individual_rating_rows"])
     for language, path in result["triplet_sidecars"].items():
         rows = read_rows(path)
         assert rows == namespace["triplet_severity"][language]
         assert [row["id"] for row in rows] == [
             row["id"] for row in namespace["dataset"]["rows"][language]
         ]
-        assert sum(row["severity_mean_score"] is None for row in rows) == 125
+        assert sum(row["severity_mean_score"] is None for row in rows) == 0
         assert all(row["language"] == language for row in rows)
         assert all(row["severity_source"] == "case_annotation" for row in rows)
         assert all(
@@ -343,18 +347,18 @@ def test_severity_notebook_verifies_published_means_and_levels_without_changing_
         assert rows == namespace["dataset"]["rows"][language]
         assert len(rows) == 1007
         assert all(len(row) == 13 for row in rows)
-        assert sum(row["severity_mean_score"] is not None for row in rows) == 882
-        assert sum(row["severity_level"] is None for row in rows) == 125
+        assert sum(row["severity_mean_score"] is not None for row in rows) == 1007
+        assert sum(row["severity_level"] is None for row in rows) == 0
         direct_triplet = next(row for row in rows if row["id"] == "WB-1201")
         assert direct_triplet["severity_mean_score"] == pytest.approx(75)
         assert direct_triplet["severity_level"] == 4
     analysis = result["analysis"]
     summary = json.loads(Path(analysis["summary_json"]).read_text())
     assert summary == analysis["summary"] == namespace["summary"]
-    assert summary["assigned_cases"] == 106
-    assert summary["assigned_triplets"] == 882
-    assert summary["pending_cases"] == 14
-    assert summary["pending_triplets"] == 125
+    assert summary["assigned_cases"] == 120
+    assert summary["assigned_triplets"] == 1007
+    assert summary["pending_cases"] == 0
+    assert summary["pending_triplets"] == 0
     decisions = read_rows(analysis["case_decisions_jsonl"])
     assert len(decisions) == 120
     assert decisions == namespace["case_decision_rows"]
@@ -369,8 +373,8 @@ def test_severity_notebook_verifies_published_means_and_levels_without_changing_
     level_summary = namespace["bracket_summary"]
     assert len(level_summary) == 5
     assert [row["level"] for row in level_summary] == [1, 2, 3, 4, 5]
-    assert sum(row["case_count"] for row in level_summary) == 106
-    assert sum(row["triplet_count"] for row in level_summary) == 882
+    assert sum(row["case_count"] for row in level_summary) == 120
+    assert sum(row["triplet_count"] for row in level_summary) == 1007
     assert level_summary[-1]["cumulative_case_fraction"] == pytest.approx(1)
     assert level_summary[-1]["cumulative_triplet_fraction"] == pytest.approx(1)
     assert Path(analysis["figure_png"]).read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
@@ -379,7 +383,7 @@ def test_severity_notebook_verifies_published_means_and_levels_without_changing_
     assert ElementTree.parse(analysis["figure_svg"]).getroot().tag.endswith("svg")
     for key in ("case_decisions_csv", "cdf_csv", "level_summary_csv"):
         assert Path(analysis[key]).is_file()
-    for queue, count in (("pending", 14), ("large_gaps", 19)):
+    for queue, count in (("pending", 0), ("large_gaps", 19)):
         with Path(result["review_queues"][queue]).open(newline="") as source:
             records = list(csv.DictReader(source))
         assert len(records) == count
@@ -407,22 +411,31 @@ def test_severity_notebook_rejects_stale_published_values(monkeypatch, field, va
         execute_notebook("06_severity")
 
 
-def test_severity_notebook_exports_review_queues_before_complete_coverage_gate(
-    tmp_path, monkeypatch
-):
+def test_severity_notebook_checks_complete_coverage_before_export(tmp_path, monkeypatch):
     from warbias_kit import dataset_workflow
+    from warbias_kit.warbias import severity_release
 
     work = tmp_path / "workspace"
     work.mkdir()
+    checked = []
+    require_final_labels = severity_release.require_final_labels
+
+    def check_coverage(taxonomy):
+        checked.append(len(taxonomy))
+        return require_final_labels(taxonomy)
+
     monkeypatch.setattr(dataset_workflow, "create_workspace", lambda name: work)
+    monkeypatch.setattr(severity_release, "require_final_labels", check_coverage)
     monkeypatch.chdir(ROOT / "notebooks")
-    with pytest.raises(ValueError, match="(?i)pending"):
-        execute_notebook("06_severity", {"REQUIRE_COMPLETE = False": "REQUIRE_COMPLETE = True"})
-    for name, count in (("pending", 14), ("large_gaps", 19)):
+    namespace = execute_notebook("06_severity")
+    assert namespace["REQUIRE_COMPLETE"] is True
+    assert checked == [120]
+    assert namespace["result"]["readiness"]["complete"] is True
+    for name, count in (("pending", 0), ("large_gaps", 19)):
         with (work / f"severity-review-{name}.csv").open(newline="") as stream:
             assert len(list(csv.DictReader(stream))) == count
-    assert not (work / "dataset-with-severity-uk.jsonl").exists()
-    assert not (work / "dataset-with-severity-en.jsonl").exists()
+    assert (work / "dataset-with-severity-uk.jsonl").is_file()
+    assert (work / "dataset-with-severity-en.jsonl").is_file()
 
 
 @pytest.mark.parametrize("changed_input", ["ratings", "case_evidence", "taxonomy"])

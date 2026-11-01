@@ -26,10 +26,10 @@ def test_current_dataset_is_complete_and_aligned():
     assert result["metadata"]["text_provenance"][-1]["text_status"] == "author_edited_generation"
     assert result["protocol"]["review"]["unchanged_annotated_texts"] == 721
     assert result["severity"] == {
-        "scored_cases": 106,
-        "pending_cases": 14,
-        "scored_triplets_per_language": {"uk": 882, "en": 882},
-        "pending_triplets_per_language": {"uk": 125, "en": 125},
+        "scored_cases": 120,
+        "pending_cases": 0,
+        "scored_triplets_per_language": {"uk": 1007, "en": 1007},
+        "pending_triplets_per_language": {"uk": 0, "en": 0},
     }
     for rows in result["rows"].values():
         assert all(len(row) == 13 for row in rows)
@@ -246,7 +246,7 @@ def test_rejects_changed_raw_annotations_without_binding(release):
 
 def test_rejects_false_severity_coverage(release):
     project, manifest = release
-    manifest["severity"]["scored_cases"] = 120
+    manifest["severity"]["scored_cases"] = 121
     write_json(project / "protocol/dataset.json", manifest)
     with pytest.raises(ValueError, match="Dataset severity coverage differs"):
         dataset.load_dataset(project)

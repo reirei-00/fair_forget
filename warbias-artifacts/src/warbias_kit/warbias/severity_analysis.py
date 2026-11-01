@@ -5,6 +5,7 @@ from collections import Counter
 from statistics import fmean, median
 
 from warbias_kit.io import unique_index
+from warbias_kit.warbias.severity import _rating_policy, rating_is_eligible
 
 
 def _score(value, maximum):
@@ -42,13 +43,10 @@ def _cases(taxonomy):
 
 def severity_decisions(taxonomy_with_severity, protocol):
     """Expose each existing decision's eligible scores, arithmetic and exclusions."""
-    version = protocol.get("target_scale_version")
+    _, include_unversioned = _rating_policy(protocol)
     minimum = protocol.get("minimum_ratings")
     if (
         protocol.get("aggregation") != "mean"
-        or isinstance(version, bool)
-        or not isinstance(version, int)
-        or version < 1
         or isinstance(minimum, bool)
         or not isinstance(minimum, int)
         or minimum < 2
@@ -58,7 +56,10 @@ def severity_decisions(taxonomy_with_severity, protocol):
     result = []
     review_ids = set()
     for identity, case in cases.items():
+        if case.get("severity_include_unversioned_ratings", False) != include_unversioned:
+            raise ValueError("Decision rating policy differs from its severity assignment")
         eligible, excluded, raters = [], [], set()
+        unversioned = 0
         for rating in case.get("severity_ratings", []):
             if rating.get("case_id") != identity:
                 raise ValueError("Decision ratings must belong to their taxonomy case")
@@ -77,8 +78,9 @@ def severity_decisions(taxonomy_with_severity, protocol):
                 or rating_version < 1
             ):
                 raise ValueError("Decision rating scale versions must be integers or null")
-            if rating_version == version:
+            if rating_is_eligible(rating_version, protocol):
                 eligible.append(points)
+                unversioned += rating_version is None
             else:
                 excluded.append(
                     {
@@ -94,6 +96,7 @@ def severity_decisions(taxonomy_with_severity, protocol):
         actual = case["severity_score"]
         if (
             case.get("severity_n") != count
+            or case.get("severity_unversioned_n", 0) != unversioned
             or (expected is None) != (actual is None)
             or expected is not None
             and not math.isclose(expected, actual, rel_tol=1e-12, abs_tol=1e-10)
@@ -106,6 +109,7 @@ def severity_decisions(taxonomy_with_severity, protocol):
                 "eligible_scores_100": eligible,
                 "excluded_ratings": excluded,
                 "eligible_n": count,
+                "eligible_unversioned_n": unversioned,
                 "eligible_sum_100": total,
                 "eligible_mean_100": expected,
                 "severity_score": actual,

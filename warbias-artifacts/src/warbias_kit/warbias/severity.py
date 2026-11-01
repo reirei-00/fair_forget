@@ -18,16 +18,32 @@ _RATING_FIELDS = {"rating_id", "case_id", "rater_id", "score", "scale_version"}
 _CASE_FIELDS = {"case_id", "examples_uk", "examples_sha256"}
 
 
-def _policy(protocol):
+def _rating_policy(protocol):
     version = protocol.get("target_scale_version")
+    include_unversioned = protocol.get("include_unversioned_ratings", False)
+    if type(version) is not int or version < 1:
+        raise ValueError("Severity protocol needs a confirmed target scale version")
+    if type(include_unversioned) is not bool:
+        raise ValueError("include_unversioned_ratings must be a boolean")
+    return version, include_unversioned
+
+
+def rating_is_eligible(scale_version, protocol):
+    """Apply the rating policy without changing the recorded rubric version."""
+    version, include_unversioned = _rating_policy(protocol)
+    if scale_version is not None and (type(scale_version) is not int or scale_version < 1):
+        raise ValueError("Severity scale versions must be integers or null")
+    return scale_version == version or (scale_version is None and include_unversioned)
+
+
+def _policy(protocol):
+    version, _ = _rating_policy(protocol)
     minimum = protocol.get("minimum_ratings")
     threshold = protocol.get("disagreement_threshold")
     if protocol.get("schema_version") != 1 or protocol.get("aggregation") != "mean":
         raise ValueError("Severity protocol needs schema version one and mean aggregation")
     if protocol.get("assignment", "mean_bracket") != "mean_bracket":
         raise ValueError("Severity assignment must use the case mean bracket")
-    if not isinstance(version, int) or isinstance(version, bool) or version < 1:
-        raise ValueError("Severity protocol needs a confirmed target scale version")
     if not isinstance(minimum, int) or isinstance(minimum, bool) or minimum < 2:
         raise ValueError("Severity aggregation needs at least two independent ratings")
     for field, expected in (
@@ -197,6 +213,7 @@ def _check_cached_severity(case, mean, level):
 def assign_taxonomy_severity(taxonomy, ratings, case_evidence, protocol):
     """Add case means from compatible independent ratings; preserve pending cases."""
     version, minimum, threshold = _policy(protocol)
+    include_unversioned = protocol.get("include_unversioned_ratings", False)
     unique_index(taxonomy, "public_case_id")
     cases = _case_evidence(case_evidence)
     groups = _ratings(ratings, cases)
@@ -211,7 +228,8 @@ def assign_taxonomy_severity(taxonomy, ratings, case_evidence, protocol):
             raise ValueError("Assign severity to the source taxonomy without derived fields")
         identity = case["public_case_id"]
         values = groups.get(identity, [])
-        eligible = [row["score"] for row in values if row["scale_version"] == version]
+        included = [row for row in values if rating_is_eligible(row["scale_version"], protocol)]
+        eligible = [row["score"] for row in included]
         gap = max(eligible) - min(eligible) if eligible else None
         complete = len(eligible) >= minimum
         if not values:
@@ -238,6 +256,8 @@ def assign_taxonomy_severity(taxonomy, ratings, case_evidence, protocol):
             "severity_bracket": bracket["code"] if bracket else None,
             "severity_bracket_label": bracket["label"] if bracket else None,
             "severity_n": len(eligible),
+            "severity_unversioned_n": sum(row["scale_version"] is None for row in included),
+            "severity_include_unversioned_ratings": include_unversioned,
             "severity_rating_count": len(values),
             "severity_min": min(eligible) * 100 if eligible else None,
             "severity_max": max(eligible) * 100 if eligible else None,
@@ -273,6 +293,8 @@ def inherit_triplet_severity(rows, taxonomy_with_severity, language):
         "severity_bracket_label",
         "severity_unit",
         "severity_n",
+        "severity_unversioned_n",
+        "severity_include_unversioned_ratings",
         "severity_status",
         "severity_gap",
         "severity_scale_version",
