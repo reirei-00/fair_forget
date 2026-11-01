@@ -1,4 +1,4 @@
-"""Select the human cohort from frozen profile allocations and source records."""
+"""Select the annotation cohort from frozen profile allocations and source records."""
 
 import json
 import re
@@ -99,7 +99,7 @@ def _taxonomy_rows(taxonomy, matrix, sources):
         if row["category_code"] in categories and categories[row["category_code"]] != labels:
             raise ValueError("Each cohort category needs one pair of language labels")
         categories[row["category_code"]] = labels
-        if row.get("human_triplets") != str(counts[case_id]):
+        if row.get("triplet_count") != str(counts[case_id]):
             raise ValueError("Cohort taxonomy item counts differ from the selected profiles")
         evidence = _listed(row.get("evidence_ids"), "evidence IDs")
         if evidence != _listed(original["evidence_ids"], "source evidence IDs"):
@@ -195,26 +195,28 @@ def load_cohort(project, inputs=None):
     )
     if not removed <= allocations.keys():
         raise ValueError("Historical exclusions contain an unknown item ID")
-    human_ids = allocations.keys() - removed
+    annotation_ids = allocations.keys() - removed
     excluded = _identities(protocol.get("excluded_item_ids"), "scope-excluded item IDs")
     excluded_categories = _identities(
         protocol.get("exclude_category_codes"), "scope-excluded categories"
     )
-    if not excluded_categories <= {frozen[identity]["category_code"] for identity in human_ids}:
+    if not excluded_categories <= {
+        frozen[identity]["category_code"] for identity in annotation_ids
+    }:
         raise ValueError("Cohort exclusions contain an unknown category")
-    if not excluded <= human_ids or excluded != {
+    if not excluded <= annotation_ids or excluded != {
         identity
-        for identity in human_ids
+        for identity in annotation_ids
         if frozen[identity]["category_code"] in excluded_categories
     }:
         raise ValueError("Scope-excluded IDs must cover exactly the excluded categories")
-    active_ids = human_ids - excluded
+    active_ids = annotation_ids - excluded
     local_ids = _identities(protocol.get("local_context_item_ids"), "local-context item IDs")
     if not local_ids <= active_ids:
         raise ValueError("Local-context labels contain an unknown or excluded item ID")
     matrix = [deepcopy(frozen[identity]) for identity in sorted(active_ids)]
     if {row["bias_type_code"] for row in matrix} != {"idp", "veteran"}:
-        raise ValueError("The human cohort must contain veterans and IDPs only")
+        raise ValueError("The annotation cohort must contain veterans and IDPs only")
     sources = source_records(
         inputs["sources"], inputs["source_feedback"], inputs.get("source_compilation", ())
     )
@@ -234,7 +236,7 @@ def load_cohort(project, inputs=None):
     counts = {
         "original_allocations": len(allocations),
         "historical_exclusions": len(removed),
-        "original_human_items": len(human_ids),
+        "original_annotation_items": len(annotation_ids),
         "scope_exclusions": len(excluded),
         "items": len(matrix),
         "cases": len(cases),

@@ -4,7 +4,7 @@ WarBias uses blinded human ratings of Ukrainian samples to inform model and
 prompt selection. It then generates Ukrainian triplets with Lapa and sequential
 prompts and translates them into English. Both languages keep matching item IDs.
 
-The current human cohort contains **1,045 triplets in 125 semantic cases and 28
+The current annotation cohort contains **1,045 triplets in 125 semantic cases and 28
 categories: 611 veterans and 434 internally displaced people (IDPs)**.
 [The cohort protocol](protocol/cohort.json) defines its membership.
 [The bilingual taxonomy](protocol/inputs/cohort_taxonomy.csv) lists every case,

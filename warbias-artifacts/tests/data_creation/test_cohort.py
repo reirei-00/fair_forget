@@ -1,4 +1,4 @@
-"""The active human cohort preserves frozen inputs and explicit scope decisions."""
+"""The active annotation cohort preserves frozen inputs and explicit scope decisions."""
 
 import csv
 import hashlib
@@ -84,7 +84,7 @@ def cohort_project(tmp_path, monkeypatch):
                 "supporting_evidence_ids": "",
                 "supporting_source_urls": "",
                 "supporting_source_titles": "",
-                "human_triplets": str(count),
+                "triplet_count": str(count),
             }
         )
     attributes = {
@@ -133,7 +133,7 @@ def cohort_project(tmp_path, monkeypatch):
         "expected": {
             "original_allocations": 5,
             "historical_exclusions": 1,
-            "original_human_items": 4,
+            "original_annotation_items": 4,
             "scope_exclusions": 1,
             "items": 3,
             "cases": 2,
@@ -245,7 +245,7 @@ def test_cohort_rejects_input_hash_changes_and_paths_outside_project(cohort_proj
         ("target_group", "displaced_abroad", "preserve its source case"),
         ("claim_uk", "Rewritten claim", "preserve its source case"),
         ("category_code", "unknown", "preserve its source case"),
-        ("human_triplets", "9", "item counts"),
+        ("triplet_count", "9", "item counts"),
         ("evidence_ids", "unknown", "evidence IDs differ"),
         ("source_urls", '["https://example.org/unrelated"]', "source_urls differ"),
         ("source_types", "feedback", "source_types differ"),

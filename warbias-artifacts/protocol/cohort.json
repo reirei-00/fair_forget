@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "role": "human_cohort_generation_inputs",
+  "role": "annotation_cohort_generation_inputs",
   "inputs": {
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
-      "sha256": "7976dce7fd3377915f5cb647dda9e8d02644a8d59ec696dd1b48fff3b84086bc"
+      "sha256": "6adfa46d5ad3993289f7e40abdae8d07d7450fc23f0960c990102aacffafb37b"
     },
     "attributes": {
       "path": "protocol/inputs/cohort_attributes.json",
@@ -83,7 +83,7 @@
   "expected": {
     "original_allocations": 1200,
     "historical_exclusions": 141,
-    "original_human_items": 1059,
+    "original_annotation_items": 1059,
     "scope_exclusions": 14,
     "items": 1045,
     "cases": 125,
@@ -129,5 +129,5 @@
     "english_sha256": "0b3c34a90e51f2c0827f4f0e2f8d5ce7b19ec1cab50bc4c5a5a12adb998c425a",
     "use": "Item-ID and language alignment reference; generated text is not included in this input package."
   },
-  "review_status": "Human-review membership does not imply acceptance. This input package includes no model review."
+  "review_status": "Submission for annotation does not imply acceptance. This input package includes no model review."
 }
