@@ -193,6 +193,28 @@ def load_calibration_tables(project, issues):
     return tables["split"], predictions, tables["protocol"], tables["run"]
 
 
+def load_binary_review_tables(project):
+    project = Path(project).resolve()
+    manifest = load_json(project / "configs/data/binary-reviews.json")
+    if manifest.get("schema_version") != 1 or manifest.get("decision") != "has_problem":
+        raise ValueError("Saved binary reviews need the has_problem decision")
+    tables = _load_tables(project, manifest)
+    models = {}
+    for name in tables["protocol"]["variants"]:
+        config = tables[name + "_config"]
+        recipe = digest(
+            {
+                "config": {key: value for key, value in config.items() if key != "transport"},
+                "prompt": load_review_prompt(project, config),
+            }
+        )
+        if recipe != tables["run"]["variants"][name]["request_recipe_sha256"]:
+            raise ValueError("Saved binary reviews use different questions")
+        models[name] = [_decode(row, []) for row in tables[name + "_reviews"]]
+        unique_index(models[name])
+    return models, tables["protocol"], tables["run"]
+
+
 def prepare_human_review_inputs(human_rows, metadata):
     """Restore the exact texts and contexts used for human review."""
     by_id = unique_index(human_rows)

@@ -1,0 +1,34 @@
+{
+  "decision": "has_problem",
+  "files": {
+    "agreement_protocol": {
+      "path": "protocol/binary_annotation_agreement.json",
+      "sha256": "64091fd2a8046625ee69b9fc332ea70f83075ca2d5c045ef9acc5d236cfbe120"
+    },
+    "atomic_config": {
+      "path": "configs/review/jev-atomic.json",
+      "sha256": "0e599f5b13b95c18ad7f65a9586d7fbc023fd0edcc2cc49314ab3b669743594e"
+    },
+    "atomic_reviews": {
+      "path": "protocol/inputs/jev_atomic_reviews.csv",
+      "sha256": "953daa4f4f76e87b9d913cf328f86e63dd922e7f0acc9a6f5c1419b2218fd2bf"
+    },
+    "direct_config": {
+      "path": "configs/review/jev-binary.json",
+      "sha256": "1db07c43e37294211b02139d2e886e323427dcda2a32b96a50a744b99456ffe5"
+    },
+    "direct_reviews": {
+      "path": "protocol/inputs/jev_direct_reviews.csv",
+      "sha256": "78828f4770f40212c66edaa0a6596354953e807d08b571c64039e54170be43fc"
+    },
+    "protocol": {
+      "path": "protocol/review_simplification.json",
+      "sha256": "d6c3d1397db1b047d99b6a7c031344b7fcce51ef2a664b7175ec570c4edc2b29"
+    },
+    "run": {
+      "path": "protocol/results/jev_binary_review.json",
+      "sha256": "23351d31e64d3c8c8deb77001bb7a6f838e27a2c7098e38125d43f44ed319ff5"
+    }
+  },
+  "schema_version": 1
+}

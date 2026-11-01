@@ -132,3 +132,14 @@ def test_missing_human_labels_do_not_become_zero_prompt_change(judgments):
     result = compare_reviews(predictions, predictions, reviews, ["unnatural"], resamples=20)
     assert result["mean_pair_ac1_change"]["value"] is None
     assert result["mean_pair_ac1_change"]["ci95"]["valid_resamples"] == 0
+
+
+def test_binary_agreement_does_not_require_or_infer_problem_types(judgments):
+    predictions, reviews = judgments
+    for row in predictions + reviews:
+        row.pop("problem_types")
+    result = compare_reviews(predictions, predictions, reviews, None, resamples=20)
+    assert result["baseline"]["mean_pair_ac1"] == pytest.approx(0.6)
+    assert result["baseline"]["issues"] is None
+    assert result["baseline"]["conditional_jaccard"] is None
+    assert result["mean_pair_ac1_change"]["value"] == 0

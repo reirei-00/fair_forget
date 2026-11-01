@@ -53,6 +53,8 @@ The [JEV review notebook](notebooks/07_jev_review.ipynb) replays the completed
 Install the `review` extra to load the pinned reference for a new JEV run.
 The calibration section compares a fixed Ukrainian prompt with the baseline on
 separate semantic case families. It retains both sets of decisions.
+Agreement uses one yes/no problem decision. The minimal-prompt section compares
+direct and atomic questions on the development cohort.
 
 Run all seven notebooks and save their outputs with a local Python kernel:
 

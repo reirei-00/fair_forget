@@ -30,7 +30,7 @@ class _NoRedirect(HTTPRedirectHandler):
 
 def load_review_prompt(project, config):
     project = Path(project)
-    prompt = (project / config["prompt"]).read_text()
+    prompt = (project / config["prompt"]).read_text() if config.get("prompt") else ""
     examples = config.get("examples")
     if examples:
         path = project / examples["path"]
@@ -52,6 +52,19 @@ def review_request(item, config, prompt):
         or digest(context["sentences"]) != item["text_sha256"]
     ):
         raise ValueError("Triplet review context differs from its recorded hash")
+    if "questions" in config:
+        return {
+            "model": config["model"],
+            "state": {"sentences": context["sentences"]},
+            "questions": {
+                name: {
+                    "type": "choice",
+                    "instructions": row["instructions"],
+                    "criteria": row["criteria"],
+                }
+                for name, row in config["questions"].items()
+            },
+        }
     return {
         "model": config["model"],
         "state": {"review_rules": prompt, **context},
@@ -79,15 +92,19 @@ def validate_response(response, config):
     if not isinstance(response, dict) or response.get("model") != config["expected_response_model"]:
         raise ValueError("JEV response model differs from the recorded model")
     answers = response.get("answers", {})
-    if set(answers) != set(config["issues"]):
+    questions = config.get("questions", config.get("issues"))
+    if set(answers) != set(questions):
         raise ValueError("JEV must answer every issue question")
-    for answer in answers.values():
+    for name, answer in answers.items():
+        options = (
+            set(questions[name]["criteria"]) if "questions" in config else {"present", "absent"}
+        )
         probabilities = answer.get("probabilities", {})
         values = [*probabilities.values(), answer.get("confidence")]
         if (
             answer.get("type") != "choice"
-            or answer.get("choice") not in {"present", "absent"}
-            or set(probabilities) != {"present", "absent"}
+            or answer.get("choice") not in options
+            or set(probabilities) != options
             or any(
                 type(value) not in (int, float) or not math.isfinite(value) or not 0 <= value <= 1
                 for value in values
@@ -186,9 +203,17 @@ def _writer(output):
 
 def _annotation(item, request, response, config):
     validate_response(response, config)
-    issues = sorted(
-        code for code, answer in response["answers"].items() if answer["choice"] == "present"
-    )
+    if "questions" in config:
+        has_problem = any(
+            answer["choice"] == config["questions"][name]["problem_choice"]
+            for name, answer in response["answers"].items()
+        )
+        issues = None
+    else:
+        issues = sorted(
+            code for code, answer in response["answers"].items() if answer["choice"] == "present"
+        )
+        has_problem = bool(issues)
     return {
         "id": item["id"],
         "case_family": item["case_family"],
@@ -201,7 +226,7 @@ def _annotation(item, request, response, config):
         "reviewer_kind": "model",
         "model": response["model"],
         "rubric_id": config["rubric_id"],
-        "has_problem": bool(issues),
+        "has_problem": has_problem,
         "problem_types": issues,
         "human_validated": False,
     }

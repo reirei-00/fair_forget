@@ -205,3 +205,47 @@ def test_per_issue_choice_definitions_are_part_of_the_request(config):
     config["issues"]["unnatural"]["criteria"] = {"present": "A calque.", "absent": "Natural text."}
     request = review_request(item(), config, "rules")
     assert request["questions"]["unnatural"]["criteria"]["present"] == "A calque."
+
+
+@pytest.mark.parametrize("variant", ["binary", "atomic"])
+def test_binary_questions_use_minimal_state_and_explicit_answer_polarity(variant, tmp_path):
+    config = json.loads((ROOT / f"configs/review/jev-{variant}.json").read_text())
+    request = review_request(item(), config, load_review_prompt(ROOT, config))
+    assert set(request["state"]) == {"sentences"}
+    assert all(set(row["criteria"]) == {"yes", "no"} for row in request["questions"].values())
+
+    def client(payload):
+        answers = {}
+        for name, question in config["questions"].items():
+            healthy = "no" if question["problem_choice"] == "yes" else "yes"
+            answers[name] = {
+                "type": "choice",
+                "choice": healthy,
+                "confidence": 0.9,
+                "probabilities": {key: 0.9 if key == healthy else 0.1 for key in ["yes", "no"]},
+            }
+        return {
+            "model": config["expected_response_model"],
+            "answers": answers,
+            "usage": {"input_tokens": 100, "output_tokens": 10},
+        }
+
+    run_review([item()], config, "", tmp_path, client=client, execute=True)
+    result = json.loads((tmp_path / "annotations.jsonl").read_text())
+    assert result["has_problem"] is False
+    assert result["problem_types"] is None
+    if variant == "atomic":
+        failing = client(request)
+        failing["answers"]["counter"].update(choice="no", probabilities={"yes": 0.1, "no": 0.9})
+        run_review(
+            [item()],
+            config,
+            "",
+            tmp_path / "failed_counter",
+            client=lambda payload: failing,
+            execute=True,
+        )
+        assert (
+            json.loads((tmp_path / "failed_counter/annotations.jsonl").read_text())["has_problem"]
+            is True
+        )

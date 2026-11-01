@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 from fairforget.warbias.annotation_records import (
+    load_binary_review_tables,
     load_calibration_tables,
     load_review_tables,
     save_review_tables,
@@ -107,3 +108,17 @@ def test_calibration_keeps_examples_out_of_test_and_binds_candidate_prompt(tmp_p
     (tmp_path / "prompts/current/triplet_review_uk.txt").write_text("Different review rules.")
     with pytest.raises(ValueError, match="different prompt"):
         load_calibration_tables(tmp_path, config["issues"])
+
+
+def test_minimal_reviews_have_binary_labels_and_only_development_items():
+    root = Path(__file__).resolve().parents[2]
+    models, protocol, run = load_binary_review_tables(root)
+    split = json.loads((root / protocol["split"]).read_text())
+    families = {row["case_family"]: row["split"] for row in split["families"]}
+    assert set(models) == {"direct", "atomic"}
+    for rows in models.values():
+        assert len(rows) == 846
+        assert all(type(row["has_problem"]) is bool for row in rows)
+        assert all(row["problem_types"] is None for row in rows)
+        assert all(families[row["case_family"]] == "development" for row in rows)
+    assert run["production_selection"] is False

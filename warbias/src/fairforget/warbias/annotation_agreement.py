@@ -162,7 +162,7 @@ def _stratum(annotations, human_reviews, issues, *, resamples, seed):
     person_index = {name: index for index, name in enumerate(people)}
     family_index = {name: index for index, name in enumerate(families)}
     matrix = np.zeros((len(people), len(families), 4), dtype=float)
-    issue_matrix = np.zeros((len(issues) * len(people), len(families), 4), dtype=float)
+    issue_matrix = np.zeros((len(issues or []) * len(people), len(families), 4), dtype=float)
     by_item, seen = defaultdict(list), set()
     jaccard = defaultdict(list)
     both_empty, unknown_sets, paired = 0, 0, 0
@@ -193,6 +193,8 @@ def _stratum(annotations, human_reviews, issues, *, resamples, seed):
                 person, family, int(prediction["has_problem"]) * 2 + int(human["has_problem"])
             ] += 1
             paired += 1
+        if issues is None:
+            continue
         if human["problem_types"] is None:
             unknown_sets += 1
             continue
@@ -243,7 +245,9 @@ def _stratum(annotations, human_reviews, issues, *, resamples, seed):
     ]
     alpha_draws = [_alpha(totals) for totals in weights @ alpha_families]
 
-    reason_table = _reason_summary(issue_matrix, issues, people, weights)
+    reason_table = (
+        _reason_summary(issue_matrix, issues, people, weights) if issues is not None else None
+    )
     return {
         "coverage": {
             "human_items": len({row["id"] for row in human_reviews}),
@@ -252,8 +256,8 @@ def _stratum(annotations, human_reviews, issues, *, resamples, seed):
             "case_families": len(families),
             "paired_binary_judgments": paired,
             "missing_prediction_ids": sorted(missing_ids),
-            "unknown_issue_sets": unknown_sets,
-            "both_empty_issue_pairs": both_empty,
+            "unknown_issue_sets": unknown_sets if issues is not None else None,
+            "both_empty_issue_pairs": both_empty if issues is not None else None,
         },
         "jev_human": {
             "mean_pair_ac1": _mean(row["ac1"] for row in jh_table),
@@ -271,12 +275,14 @@ def _stratum(annotations, human_reviews, issues, *, resamples, seed):
             "pairs": hh_table,
         },
         "issues": reason_table,
-        "conditional_jaccard": _average_family_stat(jaccard_families, weights),
+        "conditional_jaccard": _average_family_stat(jaccard_families, weights)
+        if issues is not None
+        else None,
     }
 
 
 def agreement_report(annotations, human_reviews, issues, *, resamples=2000, seed=0):
-    """Use all eligible judgments; resample whole semantic case families."""
+    """Use individual judgments; issues=None requests binary agreement only."""
     if type(resamples) is not int or resamples < 1:
         raise ValueError("Use a positive number of case-family resamples")
     annotations, human_reviews = list(annotations), list(human_reviews)

@@ -213,7 +213,7 @@ model IDs. Set `JEV_API_KEY` in the environment for new requests.
 The [saved run](../protocol/results/jev_review.json) covers 11,997 Ukrainian
 triplets. Compact [review inputs](../configs/data/review-inputs.json) retain the
 complete human overlap without names or private comments. The
-[agreement protocol](../protocol/annotation_agreement.json) compares JEV with
+[agreement protocol](../protocol/binary_annotation_agreement.json) compares JEV with
 individual human judgments and reports human-human reliability separately.
 Missing reasons remain unknown. Legacy comments without an explicit category
 do not become selected issue labels. No new synthetic item is human validated.
@@ -221,9 +221,14 @@ do not become selected issue labels. No new synthetic item is human validated.
 The [calibration protocol](../protocol/review_calibration.json) fixes development
 and test case families before example selection. Notebook 7 reproduces the
 [candidate comparison](../protocol/results/jev_calibration.json), including paired
-AC1 changes and agreement on problems and issue types. The full-cohort baseline
+AC1 changes and agreement on problems. The full-cohort baseline
 results were already inspected, so this calibration is retrospective. Keep the
 baseline and candidate decisions separate.
+
+The [minimal prompt comparison](../protocol/review_simplification.json) evaluates
+one direct question and 12 atomic questions on the development cohort. Both
+produce one yes/no problem decision. Notebook 7 reproduces the binary comparison
+with v1 and v2. These development results do not select a production prompt.
 
 ## Pilot and selection
 

@@ -95,6 +95,9 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         assert namespace["RUN_CALIBRATION"] is False
         assert namespace["selection"]["selected"] == "baseline"
         assert namespace["split"]["item_counts"] == {"development": 846, "test": 213}
+        assert namespace["RUN_BINARY_REVIEW"] is False
+        assert namespace["report"]["overall"]["issues"] is None
+        assert set(namespace["binary_comparisons"]) == {"direct", "atomic"}
 
 
 def test_pilot_notebook_resolves_its_subproject_in_a_broader_repository(tmp_path, monkeypatch):

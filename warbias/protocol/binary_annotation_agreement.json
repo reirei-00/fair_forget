@@ -1,0 +1,32 @@
+{
+  "bootstrap": {
+    "confidence": 0.95,
+    "resamples": 2000,
+    "seed": 0,
+    "unit": "semantic_case_family"
+  },
+  "decision": "has_problem",
+  "human_comparison": "individual_judgments_including_disagreements",
+  "human_normalization": {
+    "no_or_edit": "problem",
+    "partial_round1_no_problem": "missing_triplet_judgment",
+    "repeated_person_item": "first_independent_active_judgment",
+    "undone": "excluded",
+    "yes": "no_problem"
+  },
+  "human_reference": [
+    "pairwise_gwet_ac1",
+    "krippendorff_nominal_alpha"
+  ],
+  "human_truth_assumed": false,
+  "issue_type_agreement": false,
+  "kappa_interpretation_bands_for_ac1": false,
+  "observed_agreement_weighting": "equal_weight_per_triplet",
+  "primary_metric": "unweighted_mean_pairwise_gwet_ac1",
+  "schema_version": 1,
+  "target_groups": [
+    "veteran",
+    "idp"
+  ],
+  "unit": "ukrainian_triplet"
+}
