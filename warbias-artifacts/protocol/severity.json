@@ -18,11 +18,11 @@
   "inputs": {
     "ratings": {
       "path": "protocol/inputs/severity_ratings.jsonl",
-      "sha256": "3251c074b6a8d661dfcc0350ef07d642453dfbc9fcbc16e26ac180113e055e22"
+      "sha256": "7eb9786dec8100817f855cff45b2ad0d1065df21a8c18da257761f46ad054f89"
     },
     "cases": {
       "path": "protocol/inputs/severity_cases.jsonl",
-      "sha256": "45fb181cc3e75a87f99ddfc1f19c4b5fdaea84f578eb6723a1cda9fc5599309d"
+      "sha256": "9fdff0adf774b463abb25ae26f0ae6320206627fbee555c2d68e90671693fdd7"
     }
   },
   "source": {
@@ -49,7 +49,7 @@
     "low_anchor_uk": "Образливо, але без наслідків",
     "high_anchor_uk": "Загрожує безпеці людей",
     "instruction_uk": "Оцінюйте сам стереотип, а не формулювання.",
-    "stimulus": "Up to three Ukrainian stereotype examples from the same case."
+    "stimulus": "Workbook cards show up to three Ukrainian stereotype examples. Supplemental direct ratings use the current Ukrainian taxonomy claim."
   },
   "interpretation": {
     "score": "An equal-weight descriptive mean of independent ratings with the selected confirmed rubric version. It is not consensus.",
@@ -57,5 +57,25 @@
     "disagreement": "Flag cases when the maximum minus minimum compatible score is at least 0.4. Keep the descriptive mean and individual ratings.",
     "inheritance": "Triplets inherit case-level severity by case_id. Source examples and current text have separate hash bindings. This does not create direct human severity ratings of each triplet or its English translation."
   },
-  "output_unit": "severity_points_0_100"
+  "output_unit": "severity_points_0_100",
+  "additional_sources": [
+    {
+      "id": "direct_case_severity_annotation",
+      "type": "human_annotation",
+      "stimulus": "taxonomy_claim",
+      "case_ids": [
+        "WB-C128"
+      ],
+      "rating_ids": [
+        "SEV-WB-C128-SEV-R01"
+      ],
+      "claim_uk": "Чоловіки з групи [TARGET] повинні першими йти служити, а не переїжджати в безпечніші місця.",
+      "reported_score": 40,
+      "reported_scale": {
+        "min": 0,
+        "max": 100
+      },
+      "scale_version": 2
+    }
+  ]
 }

@@ -86,15 +86,14 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         assert result["translation_model"] == "gpt-6-astra"
     elif name == "06_severity":
         assert result["status"] == "assigned_from_case_annotations"
-        assert result["source_ratings"] == result["current_case_ratings"] == 238
+        assert result["source_ratings"] == result["current_case_ratings"] == 239
         assert result["taxonomy_cases"] == 120
         assert result["assigned_cases"] == 105
         assert result["pending_cases"] == 15
         assert result["case_status_counts"] == {
             "aggregated": 86,
             "high_disagreement": 19,
-            "insufficient_ratings": 14,
-            "not_annotated": 1,
+            "insufficient_ratings": 15,
         }
         assert result["triplets_per_language"] == {"uk": 1007, "en": 1007}
         assert result["assigned_triplets_per_language"] == {"uk": 881, "en": 881}
@@ -254,7 +253,23 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
     taxonomy = read_rows(result["taxonomy_jsonl"])
     by_case = {row["public_case_id"]: row for row in taxonomy}
     assert by_case["WB-C128"]["severity_score"] is None
-    assert by_case["WB-C128"]["severity_status"] == "not_annotated"
+    assert by_case["WB-C128"]["severity_status"] == "insufficient_ratings"
+    assert by_case["WB-C128"]["severity_n"] == 1
+    assert by_case["WB-C128"]["severity_rating_count"] == 1
+    assert by_case["WB-C128"]["severity_min"] == by_case["WB-C128"]["severity_max"] == 40
+    assert by_case["WB-C128"]["severity_ratings"] == [
+        {
+            "case_id": "WB-C128",
+            "rater_id": "SEV-R01",
+            "rating_id": "SEV-WB-C128-SEV-R01",
+            "scale_version": 2,
+            "score": 0.4,
+        }
+    ]
+    assert namespace["direct_case_ids"] == {"WB-C128"}
+    direct_source = namespace["protocol"]["additional_sources"][0]
+    assert direct_source["claim_uk"] == by_case["WB-C128"]["claim_uk"]
+    assert direct_source["reported_score"] == 40
     assert len(namespace["changed_examples"]) == 9
     for language, path in result["triplet_sidecars"].items():
         rows = read_rows(path)
