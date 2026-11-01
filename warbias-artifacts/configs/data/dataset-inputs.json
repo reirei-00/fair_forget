@@ -204,7 +204,7 @@
       "ratings": 96
     }
   },
-  "registry_scope": "Current taxonomy registries use the target groups in protocol/coverage_extension.json. Historical matrix and selection records stay separate and retain their original bytes. Pilot inputs and scores stay fixed.",
+  "registry_scope": "protocol/cohort.json selects the active general-case taxonomy and generation inputs. The broader source registries, frozen allocations and coverage design support method reproduction. Pilot inputs and scores retain their original scope.",
   "missing_historical_inputs": [
     "The complete original pilot sampling registry was not frozen beside the pilot exports.",
     "The initial pilot did not record an explicit source-claim field; its association field remains unchanged."

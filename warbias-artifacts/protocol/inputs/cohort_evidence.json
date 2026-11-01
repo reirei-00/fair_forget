@@ -146,34 +146,6 @@
       "note": "The section supports the agency theme. Other people choosing where IDPs live is a housing-specific adaptation; the exact claim anchor is not established."
     },
     {
-      "case_id": "wb3_idp_language_belonging",
-      "public_case_id": "WB-C115",
-      "evidence_basis": "source_adaptation",
-      "anchor_status": "section_reference",
-      "scope": "case",
-      "item_ids": [],
-      "evidence_ids": [
-        "src_idp_life_pause",
-        "src_idp_protection_2025"
-      ],
-      "source_locator": "Source summary, section \"Regional, cultural and language prejudice\", paragraphs 28–33.",
-      "note": "Language and belonging are listed themes. The categorical exclusion from a community is an adapted template, not a verified report quotation."
-    },
-    {
-      "case_id": "wb3_idp_origin_manners",
-      "public_case_id": "WB-C116",
-      "evidence_basis": "source_adaptation",
-      "anchor_status": "section_reference",
-      "scope": "case",
-      "item_ids": [],
-      "evidence_ids": [
-        "src_idp_life_pause",
-        "src_idp_protection_2025"
-      ],
-      "source_locator": "Source summary, section \"Regional, cultural and language prejudice\", paragraphs 28–33.",
-      "note": "Region of origin and manners are listed subtypes. The eastern-origin and bad-manners combination is an adapted template, not a verified report quotation."
-    },
-    {
       "case_id": "wb3_idp_pets_rental",
       "public_case_id": "WB-C117",
       "evidence_basis": "source_adaptation",

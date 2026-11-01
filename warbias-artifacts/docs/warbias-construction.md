@@ -14,10 +14,10 @@ the case; added attributes define comparison profiles. The
 [attribute catalog](../protocol/inputs/cohort_attributes.json) lists all 21 added
 dimensions, their values and profile counts.
 
-Each case has a `case_scope` label. `local` marks cases tied to a country,
-institution, legal status, language or regional identity in the claim and its
-source context. `general` marks cases without this dependency. Each local case has a reason.
-The label does not filter cases or establish stereotype prevalence.
+The active taxonomy includes only cases marked `case_scope = general`. Cases
+tied to a named country, institution, legal status, language or source-specific
+regional identity are excluded. This case-level selection retains language
+profiles within general cases. It does not establish stereotype prevalence.
 
 Claim sources, supporting references and category feedback have separate
 columns. “Source-based adaptation” (`source_adaptation`) means a case constructed
@@ -25,7 +25,7 @@ from topics or subtypes described in cited sources. Feedback informs category
 names, merges and splits. All claim templates use `[TARGET]` for the group name
 while retaining intrinsic qualifiers; generation uses the source claim wording.
 
-The [evidence mapping](../protocol/inputs/cohort_evidence.json) links ten
+The [evidence mapping](../protocol/inputs/cohort_evidence.json) links eight
 adapted cases to source sections. It also records pending checks for two
 claims and six subgroup variants. Case-level checks apply to all profiles in a
 case; item-level checks apply only to the listed IDs. A supporting reference
@@ -34,13 +34,13 @@ entries do not imply verified support.
 
 ## Case and profile selection
 
-The candidate pool contains 127 cases: 78 veteran and 49 internally displaced
+The frozen candidate pool contains 127 cases: 78 veteran and 49 internally displaced
 person (IDP) cases. Each case has one profile without an added attribute. A
 further 1,384 profiles add one attribute, giving 1,511 profiles. Each allows three
 framings: no speaker, or either of two case-specific speakers. The pool therefore
 contains **1,511 × 3 = 4,533 candidate inputs**.
 
-The base allocation selects 1,000 inputs:
+The original base allocation selects 1,000 inputs:
 
 | Component | Inputs |
 | --- | ---: |
@@ -75,18 +75,18 @@ comparisons, not a population sample or a full crossing of all attributes.
 
 Excluding 136 occupation profiles and five older women veteran profiles from
 the 1,200 inputs leaves **1,059 triplets for human annotation**. The dataset scope
-also excludes 14 triplets in two ATO/OOS and full-scale-war legitimacy cases.
-This gives **1,045 triplets in 125 cases and 28 categories: 611 veterans and
-434 IDPs**. These exclusions define profile coverage and scope; they are not
-quality-review decisions.
+also excludes 14 triplets in two ATO/OOS and full-scale-war legitimacy cases
+and 39 triplets in six local cases. This gives **1,006 triplets in 119 general
+cases and 27 categories: 598 veterans and 408 IDPs**. These exclusions define
+profile coverage and scope; they are not quality-review decisions. The frozen
+allocation records and pilot examples retain their original scope.
 
 The [cohort protocol](../protocol/cohort.json) lists the exact excluded and
 local-context IDs. Item-level `context_scope` describes the saved text and added
-profiles, separately from taxonomy `case_scope`. The 32 local-context items retain
-`ukraine_context` in both languages; other items use `cross_conflict_generic`.
-A general case can have local language profiles, and generated text can omit a
-local case reference. The five TCC-responsibility items remain under “Political
-identity and radicalism.”
+profiles, separately from taxonomy `case_scope`. Twelve retained inputs have
+named Ukrainian/Russian language profiles and keep `ukraine_context` in both
+languages; the other 994 use `cross_conflict_generic`. A general case can have
+local language profiles. Item labels must be checked again if text changes.
 
 ## Pilot and model selection
 

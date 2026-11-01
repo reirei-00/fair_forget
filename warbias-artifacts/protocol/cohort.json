@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
-  "role": "annotation_cohort_generation_inputs",
+  "role": "general_case_generation_inputs",
   "inputs": {
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
-      "sha256": "5c970e828f6662a57ad5918e7a4b1b3200ae0ca20934be705c74af4b0451ff25"
+      "sha256": "60520f8335b602ae041f46c03aeb0608a154ba4ad56703f833226e55eaef7571"
     },
     "attributes": {
       "path": "protocol/inputs/cohort_attributes.json",
-      "sha256": "8044bf89c4c6cc74a4958c62e4036c7282833b424114776dea59c47afa60be72"
+      "sha256": "da1239531515b8387f22d82ce6a7a39d3aa2264349caeeaf3934266eb638390e"
     },
     "evidence": {
       "path": "protocol/inputs/cohort_evidence.json",
-      "sha256": "b5d357bfa9fd227228a5e6e2622acdeea73a0711963824f251740e553914e50c"
+      "sha256": "77a287720a9b5182607ba24d57b5189a6a3c2b6e7cafffd10f3644a87b3badb6"
     }
   },
   "method": {
@@ -32,67 +32,86 @@
   ],
   "excluded_item_ids": [
     "WB-0072",
+    "WB-0100",
+    "WB-0171",
     "WB-0303",
+    "WB-0334",
+    "WB-0343",
     "WB-0347",
     "WB-0353",
     "WB-0362",
+    "WB-0365",
+    "WB-0377",
+    "WB-0384",
+    "WB-0385",
+    "WB-0386",
     "WB-0426",
     "WB-0436",
+    "WB-0459",
+    "WB-0477",
+    "WB-0487",
     "WB-0488",
+    "WB-0515",
     "WB-0552",
+    "WB-0573",
+    "WB-0583",
+    "WB-0591",
+    "WB-0613",
     "WB-0648",
     "WB-0661",
+    "WB-0667",
+    "WB-0674",
+    "WB-0700",
+    "WB-0701",
+    "WB-0723",
+    "WB-0733",
+    "WB-0734",
+    "WB-0737",
+    "WB-0738",
     "WB-0752",
+    "WB-0767",
     "WB-0779",
-    "WB-0804"
+    "WB-0782",
+    "WB-0797",
+    "WB-0801",
+    "WB-0804",
+    "WB-0812",
+    "WB-0818",
+    "WB-0829",
+    "WB-0831",
+    "WB-0845",
+    "WB-0850",
+    "WB-0942",
+    "WB-0978",
+    "WB-0997"
   ],
   "local_context_item_ids": [
     "WB-0078",
     "WB-0095",
-    "WB-0100",
     "WB-0154",
-    "WB-0171",
     "WB-0202",
     "WB-0308",
-    "WB-0334",
-    "WB-0343",
-    "WB-0365",
-    "WB-0386",
     "WB-0444",
-    "WB-0477",
-    "WB-0573",
-    "WB-0591",
     "WB-0636",
     "WB-0666",
-    "WB-0667",
-    "WB-0674",
-    "WB-0701",
-    "WB-0733",
-    "WB-0767",
     "WB-0781",
-    "WB-0782",
-    "WB-0797",
-    "WB-0812",
-    "WB-0818",
     "WB-0837",
-    "WB-0845",
     "WB-0886",
-    "WB-0973",
-    "WB-0997"
+    "WB-0973"
   ],
   "expected": {
     "original_allocations": 1200,
     "historical_exclusions": 141,
     "original_annotation_items": 1059,
-    "scope_exclusions": 14,
-    "items": 1045,
-    "cases": 125,
-    "categories": 28,
+    "scope_exclusions": 53,
+    "items": 1006,
+    "cases": 119,
+    "categories": 27,
     "by_target_group": {
-      "veteran": 611,
-      "idp": 434
+      "idp": 408,
+      "veteran": 598
     },
-    "local_context": 32
+    "local_context": 12
   },
   "selection": {
     "base_inputs": 1000,
@@ -101,15 +120,14 @@
       "occupation_profiles": 136,
       "older_women_veterans": 5
     },
-    "scope_exclusion": "ATO/OOS and full-scale-war legitimacy category",
-    "retained_base_inputs": 899,
+    "scope_exclusion": "ATO/OOS and full-scale-war legitimacy category; local taxonomy cases",
+    "retained_base_inputs": 860,
     "retained_profile_extensions": 146,
     "retained_framings": {
-      "unattributed": 920,
-      "attributed": 125
+      "unattributed": 887,
+      "attributed": 119
     },
     "feedback_additions_in_cohort": 0,
-    "tcc_responsibility_case": "retained; the displayed category title is Political identity and radicalism",
     "occupation_reference_by_case": {
       "ssuk_idp_mental_health_universal_trauma_case_003": "previous",
       "ssuk_vet_disability_work_capacity_case_005": "sought",
@@ -118,7 +136,7 @@
     }
   },
   "context_scope": {
-    "ukraine_context": "Retained local-context triplets: country references or named Ukrainian/Russian language profiles.",
+    "ukraine_context": "Named Ukrainian/Russian language profiles in retained general cases.",
     "cross_conflict_generic": "Other retained triplets use the existing cross-conflict context label.",
     "alignment": "Keep the same context label for each aligned Ukrainian and English item ID."
   },
@@ -133,6 +151,17 @@
   "case_scope": {
     "general": "The claim and intrinsic qualifiers do not depend on a specific national or regional context.",
     "local": "The claim or intrinsic qualifiers depend on a named country, institution, legal status, language or source-specific regional identity.",
-    "basis": "Classify the case using its claim, intrinsic qualifiers and source context. This label is separate from item-level context_scope and does not filter cases or establish stereotype prevalence."
-  }
+    "basis": "Classify the case using its claim, intrinsic qualifiers and source context. allowed_case_scopes selects the artifact cases. Item-level context_scope remains separate; neither label establishes stereotype prevalence."
+  },
+  "exclude_case_ids": [
+    "ssuk_idp_loyalty_security_collective_blame_case_002",
+    "ssuk_idp_return_integration_choice_case_002",
+    "ssuk_vet_political_identity_radicalism_tcc_case_006",
+    "ssuk_vet_women_combat_legitimacy_gender_roles_case_003",
+    "wb3_idp_language_belonging",
+    "wb3_idp_origin_manners"
+  ],
+  "allowed_case_scopes": [
+    "general"
+  ]
 }

@@ -25,6 +25,12 @@ Add `quality` for COMET translation checks.
 Use the [construction guide](docs/warbias-construction.md) for inputs and stage
 commands. Run `fairforget COMMAND --help` for all arguments.
 
+The [full cohort taxonomy](protocol/inputs/cohort_taxonomy.csv) preserves
+125 cases and 1,045 inputs, including six local cases. Its
+[reference manifest](protocol/cohort_taxonomy.json) binds the taxonomy, attribute
+catalog and evidence mapping. This reference does not replace the broader
+generation and coverage inputs below.
+
 Set the provider, fixed model and tokenizer versions, and settings in `configs/`.
 Model commands preview plans by default. Execution requires `--execute`.
 Specify a factory as `module:callable`. Provider factories receive `config=...`.

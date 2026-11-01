@@ -11,6 +11,7 @@ from pathlib import Path
 import pytest
 
 from warbias_kit.dataset_workflow import load_inputs
+from warbias_kit.warbias.cohort import load_cohort
 
 ROOT = Path(__file__).resolve().parents[2]
 SPEC = importlib.util.spec_from_file_location("export_dataset", ROOT / "scripts/export_dataset.py")
@@ -90,6 +91,53 @@ def test_broader_repository_exports_only_its_warbias_child_without_changes(expor
         assert not (result / relative).exists() or (result / relative).read_bytes() != content
     assert not (result / "warbias").exists()
     assert exporter.verify(result) > 50
+
+
+@pytest.mark.parametrize("main_namespace", ["fairforget", "warbias_kit"])
+def test_repository_prefers_general_artifacts_over_full_taxonomy_sibling(
+    exported, tmp_path, main_namespace
+):
+    repository = tmp_path / "repository"
+    artifact = repository / "warbias-artifacts"
+    shutil.copytree(exported, artifact)
+    main = repository / "warbias"
+    provider = main / "src" / main_namespace / "warbias/provider.py"
+    provider.parent.mkdir(parents=True)
+    provider.write_text("# Full dataset generation provider.\n")
+    (main / "pyproject.toml").write_text('[project]\nname = "full-dataset"\n')
+    taxonomy = main / "protocol/inputs/cohort_taxonomy.csv"
+    taxonomy.parent.mkdir(parents=True)
+    taxonomy.write_text(
+        "case_id,case_scope\n"
+        + "".join(f"full-{index:03d},general\n" for index in range(119))
+        + "".join(f"local-{index:03d},local\n" for index in range(6))
+    )
+    assert exporter.source_root(repository) == artifact.resolve()
+    result = exporter.export(repository, tmp_path / "general-export")
+    assert (result / exporter.MANIFEST).read_bytes() == (exported / exporter.MANIFEST).read_bytes()
+    assert (result / "protocol/inputs/cohort_taxonomy.csv").read_bytes() != taxonomy.read_bytes()
+    cohort = load_cohort(result)
+    assert (cohort["summary"]["cases"], cohort["summary"]["items"]) == (119, 1006)
+    assert {row["case_scope"] for row in cohort["taxonomy"]} == {"general"}
+
+
+@pytest.mark.parametrize("invalid_artifact", ["directory", "file", "symlink"])
+def test_invalid_dedicated_artifact_does_not_fall_back_to_legacy_sibling(
+    exported, tmp_path, invalid_artifact
+):
+    repository = tmp_path / "repository"
+    shutil.copytree(exported, repository / "warbias")
+    artifact = repository / "warbias-artifacts"
+    if invalid_artifact == "directory":
+        artifact.mkdir()
+        (artifact / "pyproject.toml").write_text('[project]\nname = "incomplete"\n')
+    elif invalid_artifact == "file":
+        artifact.write_text("Not a package directory.\n")
+    else:
+        artifact.symlink_to(exported, target_is_directory=True)
+    with pytest.raises(ValueError, match="symlink|Select the project repository"):
+        exporter.export(repository, tmp_path / "rejected")
+    assert not (tmp_path / "rejected").exists()
 
 
 def test_standalone_export_can_be_exported_again(exported, tmp_path):
