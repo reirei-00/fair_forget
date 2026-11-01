@@ -8,6 +8,10 @@ Use [evaluate_before_after.ipynb](evaluate_before_after.ipynb) for the shared
 Fair-UK evaluation workflow: collect the six baselines, evaluate the 30 post
 checkpoints and compare matched results. See the [evaluation setup](EVALUATION.md).
 
+Use [warbias_baseline.ipynb](warbias_baseline.ipynb) for the final bilingual
+WarBias triplet and QA baselines, including severity slices. It imports the
+Fair-UK library. See the [WarBias evaluation guide](WARBIAS_EVALUATION.md).
+
 | Method | Notebook |
 | --- | --- |
 | Fixed-target RMU | [rmu.ipynb](rmu.ipynb) |
