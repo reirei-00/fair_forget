@@ -4,11 +4,15 @@
   "inputs": {
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
-      "sha256": "055070b85d17ca360a1a53892b74c1b391c531dcf4d095f99200291a43ad9524"
+      "sha256": "7976dce7fd3377915f5cb647dda9e8d02644a8d59ec696dd1b48fff3b84086bc"
     },
     "attributes": {
       "path": "protocol/inputs/cohort_attributes.json",
-      "sha256": "d8e8228a74e98261a6d2e81fb47086058f01c33341e19923c0b5d3ab2215fc78"
+      "sha256": "8044bf89c4c6cc74a4958c62e4036c7282833b424114776dea59c47afa60be72"
+    },
+    "evidence": {
+      "path": "protocol/inputs/cohort_evidence.json",
+      "sha256": "0c06465f9f723f887be5adf254dffc6e2e3fd65f0c16c7b8469f81a6713e65fe"
     }
   },
   "method": {

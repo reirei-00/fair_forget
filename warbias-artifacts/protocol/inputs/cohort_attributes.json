@@ -72,7 +72,7 @@
         },
         {
           "value": "war_caused",
-          "label_en": "War-related disability"
+          "label_en": "Disability caused by war"
         }
       ],
       "selected_1200": 77,
@@ -290,15 +290,15 @@
       "values": [
         {
           "value": "enlisted",
-          "label_en": "Enlisted"
+          "label_en": "Rank-and-file personnel"
         },
         {
           "value": "officer",
-          "label_en": "Officer"
+          "label_en": "Officer ranks"
         },
         {
           "value": "sergeant",
-          "label_en": "Sergeant"
+          "label_en": "Sergeant ranks"
         }
       ],
       "selected_1200": 15,
@@ -311,7 +311,7 @@
       "values": [
         {
           "value": "contract",
-          "label_en": "Contract"
+          "label_en": "Contract military service"
         },
         {
           "value": "mobilized",
@@ -379,7 +379,7 @@
       "values": [
         {
           "value": "ato_oos",
-          "label_en": "ATO/OOS period"
+          "label_en": "Anti-Terrorist Operation / Joint Forces Operation period"
         },
         {
           "value": "both",

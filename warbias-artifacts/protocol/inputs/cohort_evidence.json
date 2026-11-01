@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "records": [
+    {
+      "case_id": "ssuk_idp_civic_political_participation_case_001",
+      "public_case_id": "WB-C006",
+      "evidence_basis": "subgroup_transfer",
+      "anchor_status": "new_target_pending_review",
+      "scope": "items",
+      "item_ids": [
+        "WB-0778"
+      ],
+      "evidence_ids": [
+        "src_idp_protection_2025"
+      ],
+      "source_locator": "Evidence register, row 8.",
+      "note": "This check applies only to the listed profiles with displacement_origin=occupied_territories. The cited sources concern IDPs more broadly; support for this specific subgroup remains unverified."
+    },
+    {
+      "case_id": "ssuk_idp_community_belonging_case_006",
+      "public_case_id": "WB-C012",
+      "evidence_basis": "subgroup_transfer",
+      "anchor_status": "new_target_pending_review",
+      "scope": "items",
+      "item_ids": [
+        "WB-0995"
+      ],
+      "evidence_ids": [
+        "src_idp_protection_2025"
+      ],
+      "source_locator": "Evidence register, row 6.",
+      "note": "This check applies only to the listed profiles with displacement_origin=occupied_territories. The cited sources concern IDPs more broadly; support for this specific subgroup remains unverified."
+    },
+    {
+      "case_id": "ssuk_idp_employment_competence_reliability_case_002",
+      "public_case_id": "WB-C019",
+      "evidence_basis": "subgroup_transfer",
+      "anchor_status": "new_target_pending_review",
+      "scope": "items",
+      "item_ids": [
+        "WB-0438"
+      ],
+      "evidence_ids": [
+        "src_idp_protection_2025"
+      ],
+      "source_locator": "Evidence register, row 5.",
+      "note": "This check applies only to the listed profiles with displacement_origin=occupied_territories. The cited sources concern IDPs more broadly; support for this specific subgroup remains unverified."
+    },
+    {
+      "case_id": "ssuk_idp_housing_tenant_reliability_case_007",
+      "public_case_id": "WB-C027",
+      "evidence_basis": "subgroup_transfer",
+      "anchor_status": "new_target_pending_review",
+      "scope": "items",
+      "item_ids": [
+        "WB-0387"
+      ],
+      "evidence_ids": [
+        "src_idp_housing"
+      ],
+      "source_locator": "Evidence register, row 4.",
+      "note": "This check applies only to the listed profiles with displacement_origin=occupied_territories. The cited sources concern IDPs more broadly; support for this specific subgroup remains unverified."
+    },
+    {
+      "case_id": "ssuk_idp_passivity_victimhood_agency_case_003",
+      "public_case_id": "WB-C040",
+      "evidence_basis": "subgroup_transfer",
+      "anchor_status": "new_target_pending_review",
+      "scope": "items",
+      "item_ids": [
+        "WB-0741"
+      ],
+      "evidence_ids": [
+        "src_idp_media_agency"
+      ],
+      "source_locator": "Evidence register, row 7.",
+      "note": "This check applies only to the listed profiles with displacement_origin=occupied_territories. The cited sources concern IDPs more broadly; support for this specific subgroup remains unverified."
+    },
+    {
+      "case_id": "ssuk_idp_return_integration_choice_case_003",
+      "public_case_id": "WB-C043",
+      "evidence_basis": "subgroup_transfer",
+      "anchor_status": "new_target_pending_review",
+      "scope": "items",
+      "item_ids": [
+        "WB-0411"
+      ],
+      "evidence_ids": [
+        "src_idp_action_agenda",
+        "src_idp_intentions"
+      ],
+      "source_locator": "Evidence register, row 9.",
+      "note": "This check applies only to the listed profiles with displacement_origin=occupied_territories. The cited sources concern IDPs more broadly; support for this specific subgroup remains unverified."
+    },
+    {
+      "case_id": "wb2_vet_help_seeking_weakness",
+      "public_case_id": "WB-C111",
+      "evidence_basis": "adapted_hypothesis",
+      "anchor_status": "pending_anchor_review",
+      "scope": "case",
+      "item_ids": [],
+      "evidence_ids": [
+        "src_vet_help_stigma",
+        "src_vet_stigma_2025"
+      ],
+      "source_locator": "Evidence register, row 3.",
+      "note": "The sources concern stigma around psychological help. The exact help-seeking-as-weakness claim remains an adapted hypothesis with its anchor pending review."
+    },
+    {
+      "case_id": "wb2_vet_social_pressure_serve_again",
+      "public_case_id": "WB-C112",
+      "evidence_basis": "adapted_hypothesis",
+      "anchor_status": "pending_anchor_review",
+      "scope": "case",
+      "item_ids": [],
+      "evidence_ids": [
+        "src_vet_stigma_2025"
+      ],
+      "source_locator": "Evidence register, row 2.",
+      "note": "The source concerns expectations about veterans. The exact pressure-to-serve-again claim remains an adapted hypothesis with its anchor pending review."
+    },
+    {
+      "case_id": "wb3_idp_children_rental",
+      "public_case_id": "WB-C113",
+      "evidence_basis": "compilation_adaptation",
+      "anchor_status": "section_reference",
+      "scope": "case",
+      "item_ids": [],
+      "evidence_ids": [
+        "src_idp_housing"
+      ],
+      "source_locator": "Source compilation, section \"Housing discrimination and tenant reliability\", paragraphs 8–12.",
+      "note": "Families with children are a listed housing subtype. The exact undesirable-tenant claim is an adapted template, not a verified report quotation."
+    },
+    {
+      "case_id": "wb3_idp_housing_decisions",
+      "public_case_id": "WB-C114",
+      "evidence_basis": "compilation_adaptation",
+      "anchor_status": "section_reference",
+      "scope": "case",
+      "item_ids": [],
+      "evidence_ids": [
+        "src_idp_media_agency"
+      ],
+      "source_locator": "Source compilation, section \"Passivity, victimization and personal agency\", paragraphs 44–48.",
+      "note": "The section supports the agency theme. Other people choosing where IDPs live is a housing-specific adaptation; the exact claim anchor is not established."
+    },
+    {
+      "case_id": "wb3_idp_language_belonging",
+      "public_case_id": "WB-C115",
+      "evidence_basis": "compilation_adaptation",
+      "anchor_status": "section_reference",
+      "scope": "case",
+      "item_ids": [],
+      "evidence_ids": [
+        "src_idp_life_pause",
+        "src_idp_protection_2025"
+      ],
+      "source_locator": "Source compilation, section \"Regional, cultural and language prejudice\", paragraphs 28–33.",
+      "note": "Language and belonging are listed themes. The categorical exclusion from a community is an adapted template, not a verified report quotation."
+    },
+    {
+      "case_id": "wb3_idp_origin_manners",
+      "public_case_id": "WB-C116",
+      "evidence_basis": "compilation_adaptation",
+      "anchor_status": "section_reference",
+      "scope": "case",
+      "item_ids": [],
+      "evidence_ids": [
+        "src_idp_life_pause",
+        "src_idp_protection_2025"
+      ],
+      "source_locator": "Source compilation, section \"Regional, cultural and language prejudice\", paragraphs 28–33.",
+      "note": "Region of origin and manners are listed subtypes. The eastern-origin and bad-manners combination is an adapted template, not a verified report quotation."
+    },
+    {
+      "case_id": "wb3_idp_pets_rental",
+      "public_case_id": "WB-C117",
+      "evidence_basis": "compilation_adaptation",
+      "anchor_status": "section_reference",
+      "scope": "case",
+      "item_ids": [],
+      "evidence_ids": [
+        "src_idp_housing"
+      ],
+      "source_locator": "Source compilation, section \"Housing discrimination and tenant reliability\", paragraphs 8–12.",
+      "note": "Pets and property damage are listed subtypes. Combining them with inevitable damage is an adapted template, not an established empirical finding."
+    },
+    {
+      "case_id": "wb3_idp_settlement_choice",
+      "public_case_id": "WB-C118",
+      "evidence_basis": "compilation_adaptation",
+      "anchor_status": "section_reference",
+      "scope": "case",
+      "item_ids": [],
+      "evidence_ids": [
+        "src_idp_action_agenda",
+        "src_idp_intentions"
+      ],
+      "source_locator": "Source compilation, section \"Return, local integration and freedom of choice\", paragraphs 59–64.",
+      "note": "The references support settlement choice and voluntary return. They do not establish prevalence of the contrary origin-only settlement claim."
+    },
+    {
+      "case_id": "wb3_vet_accommodation_blame",
+      "public_case_id": "WB-C119",
+      "evidence_basis": "compilation_adaptation",
+      "anchor_status": "section_reference",
+      "scope": "case",
+      "item_ids": [],
+      "evidence_ids": [
+        "src_vet_rehabilitation",
+        "src_vet_injury_return"
+      ],
+      "source_locator": "Source compilation, section \"Rehabilitation, accessibility and autonomy\", paragraphs 151–156.",
+      "note": "Structural barriers and personal blame are explicit themes. The inaccessible-workplace claim is a specific adaptation; its exact empirical anchor is not established."
+    },
+    {
+      "case_id": "wb3_vet_enterprise_choice",
+      "public_case_id": "WB-C123",
+      "evidence_basis": "compilation_adaptation",
+      "anchor_status": "section_reference",
+      "scope": "case",
+      "item_ids": [],
+      "evidence_ids": [
+        "src_vet_stigma_2025",
+        "src_vet_needs_2024"
+      ],
+      "source_locator": "Source compilation, section \"Helplessness, self-reliance and entrepreneurship\", paragraphs 163–168.",
+      "note": "The section supports agency and business aspirations. Other people deciding whether veterans start a business is an adapted paternalistic claim."
+    },
+    {
+      "case_id": "wb3_vet_intrusive_help",
+      "public_case_id": "WB-C124",
+      "evidence_basis": "compilation_adaptation",
+      "anchor_status": "section_reference",
+      "scope": "case",
+      "item_ids": [],
+      "evidence_ids": [
+        "src_vet_rehabilitation",
+        "src_vet_injury_return"
+      ],
+      "source_locator": "Source compilation, section \"Rehabilitation, accessibility and autonomy\", paragraphs 151–156.",
+      "note": "Intrusive help and loss of autonomy are explicit themes. Imposing help without consent is an adapted template, not a verified report quotation."
+    },
+    {
+      "case_id": "wb3_vet_universal_leadership",
+      "public_case_id": "WB-C125",
+      "evidence_basis": "compilation_adaptation",
+      "anchor_status": "section_reference",
+      "scope": "case",
+      "item_ids": [],
+      "evidence_ids": [
+        "src_vet_job_retention",
+        "src_vet_path"
+      ],
+      "source_locator": "Source compilation, section \"Military skills, deskilling and career hierarchy\", paragraphs 114–119.",
+      "note": "The section describes universal leadership idealization. The all-veterans, born-leaders formulation is an adapted template, not a verified survey statement."
+    }
+  ]
+}

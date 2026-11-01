@@ -76,11 +76,25 @@ The taxonomy table separates case evidence from category feedback. `evidence_ids
 Their types are `published_reference` or `compilation`. `category_evidence_ids`
 links feedback used for category names, merges or splits. Feedback supplies
 classification decisions; it does not establish stereotype prevalence.
+Compilation display templates replace only group nouns with `[TARGET]`;
+generation keeps the frozen source wording.
+
+`supporting_evidence_ids`, `supporting_source_urls` and `supporting_source_titles`
+link the ten compilation cases to the references in their source sections.
+They remain compilation adaptations. A section reference does not verify the
+exact claim wording or its prevalence.
+
+[The evidence mapping](../protocol/inputs/cohort_evidence.json) records these
+section locators and the pending source checks for two claims and six subgroup
+variants. `scope = case` applies to the whole case; `scope = items` applies only
+to the listed item IDs. These are source-support checks, separate from review
+of generated text. An absent entry does not mean that a claim was verified.
+The loader returns these records and their source links as `cohort["evidence"]`.
 
 `configs/data/dataset-inputs.json` binds the frozen taxonomy, pilot samples,
 ratings and allocation records. These tables preserve the construction evidence.
 The active case names and membership come from `protocol/cohort.json` and its
-two input files. Keep the frozen tables unchanged when updating a display name.
+three input files. Keep the frozen tables unchanged when updating a display name.
 
 `construction_cases.jsonl` contains the original source claims, target groups,
 intrinsic attributes and contrast constraints. `candidate_profiles.jsonl`
