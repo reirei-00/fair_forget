@@ -117,7 +117,8 @@ def severity_decisions(taxonomy_with_severity, protocol):
                 **{
                     key: deepcopy(value)
                     for key, value in case.items()
-                    if key.startswith("severity_label") or key == "severity_needs_review"
+                    if key.startswith("severity_label")
+                    or key in {"severity_needs_review", "severity_adjudication"}
                 },
             }
         )

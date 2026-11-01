@@ -185,7 +185,16 @@ label. Source examples and current triplet text have separate hash bindings.
 Annotators supplied continuous scores; consensus is derived from their bracket
 agreement. A third independent rating can establish a two-out-of-three majority.
 Three different brackets remain pending. Human adjudication records the chosen
-label, reviewer and reason in the review queue.
+label, anonymous reviewer and reason in the review CSV. Each decision binds to the
+case hash, including its claims, ratings, annotation examples and scoring protocol.
+The notebook reads completed CSVs through `REVIEW_FILES`, applies decisions to the
+taxonomy, and passes each final label and its decision source to both languages.
+Cases with insufficient compatible ratings need rubric confirmation or additional
+independent ratings before final assignment.
+
+Set `REQUIRE_COMPLETE = True` for a complete release. The notebook checks that every
+current taxonomy case has a final category before writing the labelled datasets.
+Working exports preserve pending cases and the remaining human review queues.
 
 The notebook shows each calculation and the cumulative distribution of assigned
 scores. It reports case-weighted and triplet-weighted summaries separately, using

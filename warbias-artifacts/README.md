@@ -61,7 +61,7 @@ The package includes its data-release validator.
 | [3. Ukrainian generation](notebooks/03_full_ukrainian_generation.ipynb) | Reproduce the original allocation and inspect the current 1,007 items |
 | [4. Sample translation and COMET](notebooks/04_sample_translation_comet.ipynb) | Recorded Ukrainian-to-English translations and quality scores |
 | [5. English translation](notebooks/05_full_english_translation.ipynb) | Verify all 1,007 Astra translations and their source hashes |
-| [6. Case severity](notebooks/06_severity.ipynb) | Derive bracket consensus, label both languages and export human review queues |
+| [6. Case severity](notebooks/06_severity.ipynb) | Assign case categories, apply human decisions and label both languages |
 
 Run the notebooks with a local Python kernel:
 

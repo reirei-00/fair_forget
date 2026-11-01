@@ -120,6 +120,14 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
             "insufficient_ratings": 14,
             "consensus": 19,
         }
+        assert result["readiness"] == {
+            "complete": False,
+            "consensus_cases": 19,
+            "adjudicated_cases": 0,
+            "unresolved_cases": 101,
+            "unresolved_triplets": 857,
+        }
+        assert result["export_mode"] == "working"
 
 
 def test_generation_notebook_preserves_dependencies_and_resumes(tmp_path, monkeypatch):
@@ -395,8 +403,106 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
             for field in ("adjudicated_label", "adjudicator_id", "adjudication_reason")
         )
         assert all(record["case_id"] in by_case for record in records)
+        assert all(
+            record["severity_case_sha256"] == by_case[record["case_id"]]["severity_case_sha256"]
+            for record in records
+        )
         assert all(isinstance(json.loads(record["vote_counts"]), dict) for record in records)
     assert {path: path.read_bytes() for path in source_paths} == before
+
+
+def test_severity_notebook_applies_completed_review_to_both_languages(tmp_path, monkeypatch):
+    from warbias_kit import dataset_workflow
+    from warbias_kit.io import canonical_json, read_rows
+    from warbias_kit.warbias.severity import assign_taxonomy_severity, load_severity
+    from warbias_kit.warbias.severity_release import build_review_queues
+
+    source = load_severity(ROOT)
+    cases = assign_taxonomy_severity(
+        source["taxonomy"], source["ratings"], source["case_evidence"], source["protocol"]
+    )
+    original = next(case for case in cases if case["public_case_id"] == "WB-C128")
+    queue = build_review_queues(cases, source["case_evidence"], protocol=source["protocol"])
+    decision = next(row for row in queue["conflicts"] if row["case_id"] == "WB-C128")
+    decision.update(
+        adjudicated_label="high",
+        adjudicator_id="SEV-R99",
+        adjudication_reason="Synthetic fixture for workflow verification.",
+    )
+    review_file = tmp_path / "completed-review.csv"
+    with review_file.open("w", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=list(decision))
+        writer.writeheader()
+        writer.writerow(
+            {
+                key: canonical_json(value) if isinstance(value, (dict, list)) else value
+                for key, value in decision.items()
+            }
+        )
+    work = tmp_path / "workspace"
+    work.mkdir()
+    monkeypatch.setattr(dataset_workflow, "create_workspace", lambda name: work)
+    monkeypatch.chdir(ROOT / "notebooks")
+    namespace = execute_notebook(
+        "06_severity", {"REVIEW_FILES = []": f"REVIEW_FILES = [{str(review_file)!r}]"}
+    )
+    result = namespace["result"]
+    resolved = namespace["taxonomy_by_case"]["WB-C128"]
+    assert result["consensus"]["labelled_cases"] == 19
+    assert result["labelled_cases"] == 20
+    assert result["pending_label_cases"] == 100
+    assert result["labelled_triplets_per_language"] == {"uk": 151, "en": 151}
+    assert result["readiness"]["adjudicated_cases"] == 1
+    assert result["readiness"]["unresolved_cases"] == 100
+    assert resolved["severity_label"] == "high"
+    assert resolved["severity_label_status"] == "adjudicated"
+    assert resolved["severity_label_method"] == "human_adjudication"
+    assert resolved["severity_adjudication"]["adjudicator_id"] == "SEV-R99"
+    assert (
+        resolved["severity_adjudication"]["source_case_sha256"] == original["severity_case_sha256"]
+    )
+    assert resolved["severity_score"] == original["severity_score"] == 75
+    assert resolved["severity_ratings"] == original["severity_ratings"]
+    assert resolved["severity_label_votes"] == original["severity_label_votes"]
+    assert namespace["consensus_by_case"]["WB-C128"]["severity_label"] is None
+    for language, path in result["labelled_datasets"].items():
+        rows = [row for row in read_rows(path) if row["case_id"] == "WB-C128"]
+        assert len(rows) == 1
+        assert rows[0]["id"] == "WB-1201"
+        assert rows[0]["severity_mean_score"] == 75
+        assert rows[0]["severity_label"] == "high"
+        assert rows[0]["severity_label_status"] == "adjudicated"
+        assert rows[0]["severity_label_method"] == "human_adjudication"
+        assert rows[0]["severity_adjudication"] == resolved["severity_adjudication"]
+        assert rows[0]["severity_label_votes"] == original["severity_label_votes"]
+    assert len(namespace["review_queues"]["conflicts"]) == 86
+    assert all(row["case_id"] != "WB-C128" for row in namespace["review_queues"]["conflicts"])
+    with Path(result["taxonomy_csv"]).open(newline="") as stream:
+        records = list(csv.DictReader(stream))
+    assert all(
+        json.loads(row["severity_adjudication"]) is None
+        for row in records
+        if row["public_case_id"] != "WB-C128"
+    )
+    adjudicated = next(row for row in records if row["public_case_id"] == "WB-C128")
+    assert json.loads(adjudicated["severity_adjudication"]) == resolved["severity_adjudication"]
+
+
+def test_severity_notebook_exports_review_forms_before_complete_release_gate(tmp_path, monkeypatch):
+    from warbias_kit import dataset_workflow
+
+    work = tmp_path / "workspace"
+    work.mkdir()
+    monkeypatch.setattr(dataset_workflow, "create_workspace", lambda name: work)
+    monkeypatch.chdir(ROOT / "notebooks")
+    with pytest.raises(ValueError, match="Final severity labels are pending for 101 cases"):
+        execute_notebook("06_severity", {"REQUIRE_COMPLETE = False": "REQUIRE_COMPLETE = True"})
+    for name, count in (("conflicts", 87), ("incomplete", 14)):
+        with (work / f"severity-review-{name}.csv").open(newline="") as stream:
+            assert len(list(csv.DictReader(stream))) == count
+    assert not (work / "dataset-with-severity-uk.jsonl").exists()
+    assert not (work / "dataset-with-severity-en.jsonl").exists()
+    assert not (work / "taxonomy-severity.jsonl").exists()
 
 
 @pytest.mark.parametrize("changed_input", ["ratings", "case_evidence", "taxonomy"])

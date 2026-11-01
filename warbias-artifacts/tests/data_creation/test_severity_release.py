@@ -6,7 +6,12 @@ import pytest
 
 from warbias_kit.io import digest
 from warbias_kit.warbias.severity import assign_taxonomy_severity, inherit_triplet_severity
-from warbias_kit.warbias.severity_release import build_review_queues, label_triplets
+from warbias_kit.warbias.severity_adjudication import apply_adjudications
+from warbias_kit.warbias.severity_release import (
+    build_review_queues,
+    label_triplets,
+    require_final_labels,
+)
 
 POLICY = {
     "schema_version": 1,
@@ -97,6 +102,7 @@ def test_final_label_preserves_a_majority_that_differs_from_the_mean_bracket():
     assert record["severity_label_support"] == 2 and record["severity_label_raters"] == 3
     assert record["severity_label_status"] == "consensus"
     assert record["severity_needs_review"] is False
+    assert record["severity_adjudication"] is None
     record["severity_label_votes"]["low"] = 99
     assert rows == before_rows and sidecars == before_sidecars
 
@@ -238,6 +244,7 @@ def test_review_queues_preserve_source_evidence_and_leave_human_decisions_blank(
     assert len(queues["conflicts"]) == 1 and len(queues["incomplete"]) == 3
     conflict = queues["conflicts"][0]
     assert conflict["case_id"] == "conflict"
+    assert conflict["severity_case_sha256"] == taxonomy[1]["severity_case_sha256"]
     assert conflict["mean_score"] == pytest.approx(53.4)
     assert conflict["mean_bracket"] == "moderate"
     assert conflict["vote_counts"]["low"] == conflict["vote_counts"]["very_high"] == 1
@@ -285,3 +292,118 @@ def test_empty_exports_and_missing_consensus_policy():
     sidecars[0].pop("severity_label")
     with pytest.raises(ValueError, match="Configure bracket-consensus"):
         label_triplets(rows, sidecars, "en")
+
+
+def adjudicated_source():
+    taxonomy, evidence, rows = source(
+        {
+            "conflict": [(0.2, 2), (0.9, 2)],
+            "agreed": [(0.4, 2), (0.5, 2)],
+            "version": [(0.5, None), (0.6, 2)],
+        }
+    )
+    decision = {
+        "case_id": "conflict",
+        "severity_case_sha256": taxonomy[0]["severity_case_sha256"],
+        "adjudicated_label": "high",
+        "adjudicator_id": "SEV-R03",
+        "adjudication_reason": "The claim supports the high severity bracket.",
+    }
+    return taxonomy, evidence, rows, apply_adjudications(taxonomy, [decision], POLICY)
+
+
+def test_human_adjudication_preserves_original_votes_and_is_inherited_by_triplets():
+    original, evidence, rows, taxonomy = adjudicated_source()
+    case = taxonomy[0]
+    assert case["severity_label"] == "high"
+    assert case["severity_label_status"] == "adjudicated"
+    assert case["severity_label_method"] == "human_adjudication"
+    assert case["severity_label_support"] == 0
+    assert case["severity_label_raters"] == case["severity_n"] == 2
+    assert case["severity_label_votes"] == original[0]["severity_label_votes"]
+    assert case["severity_ratings"] == original[0]["severity_ratings"]
+    assert case["severity_score"] == original[0]["severity_score"]
+    assert case["severity_score"] == pytest.approx(55)
+    assert (
+        case["severity_adjudication"]["source_case_sha256"] == original[0]["severity_case_sha256"]
+    )
+    assert case["severity_case_sha256"] != original[0]["severity_case_sha256"]
+    sidecars = inherit_triplet_severity(rows, taxonomy, "en")
+    labelled = label_triplets(rows, sidecars, "en")
+    assert labelled[0]["severity_label"] == "high"
+    assert labelled[0]["severity_mean_bracket"] == "moderate"
+    assert labelled[0]["severity_adjudication"] == case["severity_adjudication"]
+    assert labelled[1]["severity_adjudication"] is None
+    assert labelled[2]["severity_label"] is None
+    assert all({field: item[field] for field in row} == row for item, row in zip(labelled, rows))
+    labelled[0]["severity_adjudication"]["reason"] = "Changed display text."
+    sidecars[0]["severity_adjudication"]["reason"] = "Changed sidecar text."
+    assert taxonomy[0]["severity_adjudication"]["reason"] != "Changed sidecar text."
+    assert original[0]["severity_label"] is None
+    queues = build_review_queues(taxonomy, evidence, protocol=POLICY)
+    assert queues["conflicts"] == []
+    assert [item["case_id"] for item in queues["incomplete"]] == ["version"]
+
+
+@pytest.mark.parametrize(
+    ("change", "message"),
+    [
+        (
+            lambda row: row.pop("severity_adjudication"),
+            "anonymous reviewer, reason and source hash",
+        ),
+        (
+            lambda row: row["severity_adjudication"].update(adjudicator_id="named-reviewer"),
+            "anonymous reviewer, reason and source hash",
+        ),
+        (
+            lambda row: row["severity_adjudication"].update(reason=""),
+            "anonymous reviewer, reason and source hash",
+        ),
+        (
+            lambda row: row["severity_adjudication"].update(source_case_sha256="stale"),
+            "anonymous reviewer, reason and source hash",
+        ),
+        (lambda row: row.update(severity_label_status="consensus"), "resolved bracket conflict"),
+        (lambda row: row.update(severity_label_support=1), "resolved bracket conflict"),
+        (lambda row: row.update(severity_label_method="model_review"), "or human adjudication"),
+        (
+            lambda row: row["severity_label_votes"].update(low=2, very_high=0),
+            "resolved bracket conflict",
+        ),
+    ],
+)
+def test_adjudicated_exports_require_bound_human_metadata_and_original_conflict(change, message):
+    _, _, rows, taxonomy = adjudicated_source()
+    sidecars = inherit_triplet_severity(rows, taxonomy, "en")
+    change(sidecars[0])
+    with pytest.raises(ValueError, match=message):
+        label_triplets(rows, sidecars, "en")
+
+
+def test_human_adjudication_cannot_resolve_an_incomplete_rating_record():
+    _, _, rows, taxonomy = adjudicated_source()
+    sidecars = inherit_triplet_severity(rows, taxonomy, "en")
+    sidecars[2].update(
+        severity_label="high",
+        severity_label_name="High",
+        severity_label_status="adjudicated",
+        severity_label_method="human_adjudication",
+        severity_needs_review=False,
+        severity_adjudication=sidecars[0]["severity_adjudication"],
+    )
+    with pytest.raises(ValueError, match="resolved bracket conflict"):
+        label_triplets(rows, sidecars, "en")
+
+
+def test_final_release_gate_requires_valid_labels_for_every_case():
+    _, _, _, taxonomy = adjudicated_source()
+    with pytest.raises(ValueError, match="pending for 1 cases: version"):
+        require_final_labels(taxonomy)
+    assert require_final_labels(taxonomy[:2]) is None
+    assert require_final_labels(taxonomy[1:2]) is None
+    with pytest.raises(ValueError, match="nonempty taxonomy"):
+        require_final_labels([])
+    taxonomy[0]["severity_label_support"] = 1
+    with pytest.raises(ValueError, match="resolved bracket conflict"):
+        require_final_labels(taxonomy[:2])

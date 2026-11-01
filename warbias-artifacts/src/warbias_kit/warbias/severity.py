@@ -243,6 +243,7 @@ def inherit_triplet_severity(rows, taxonomy_with_severity, language):
         "severity_label_votes",
         "severity_label_method",
         "severity_needs_review",
+        "severity_adjudication",
     )
     result = []
     for row in rows:

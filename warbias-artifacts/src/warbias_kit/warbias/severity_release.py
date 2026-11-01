@@ -1,6 +1,7 @@
 """Join case-consensus labels to triplets and prepare human review queues."""
 
 import math
+import re
 from copy import deepcopy
 
 from warbias_kit.io import digest, unique_index
@@ -23,6 +24,7 @@ _OUTPUT_FIELDS = {
     "severity_mean_bracket",
     "severity_text_sha256",
     "severity_case_sha256",
+    "severity_adjudication",
 }
 _PENDING = {"disagreement", "insufficient_ratings", "not_annotated"}
 
@@ -40,11 +42,45 @@ def _count(value):
     return isinstance(value, int) and not isinstance(value, bool) and value >= 0
 
 
+def _sha256(value):
+    return isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value) is not None
+
+
+def _adjudicated_record(record):
+    votes = record["severity_label_votes"]
+    count, support = record["severity_label_raters"], record["severity_label_support"]
+    label = record["severity_label"]
+    metadata = record.get("severity_adjudication")
+    if (
+        record["severity_label_status"] != "adjudicated"
+        or label not in votes
+        or not isinstance(record["severity_label_name"], str)
+        or not record["severity_label_name"].strip()
+        or record["severity_needs_review"] is not False
+        or count < 2
+        or support != votes[label]
+        or max(votes.values()) >= 2
+        and 2 * max(votes.values()) > count
+    ):
+        raise ValueError("Human adjudication needs a resolved bracket conflict and original votes")
+    if (
+        not isinstance(metadata, dict)
+        or set(metadata) != {"adjudicator_id", "reason", "source_case_sha256"}
+        or not isinstance(metadata["adjudicator_id"], str)
+        or re.fullmatch(r"SEV-R[0-9]{2,}", metadata["adjudicator_id"]) is None
+        or not isinstance(metadata["reason"], str)
+        or not metadata["reason"].strip()
+        or not _sha256(metadata["source_case_sha256"])
+    ):
+        raise ValueError("Human adjudication needs an anonymous reviewer, reason and source hash")
+
+
 def _label_record(record):
     if any(field not in record for field in _LABEL_FIELDS):
         raise ValueError("Configure bracket-consensus labels before exporting severity")
-    if record["severity_label_method"] != "bracket_consensus":
-        raise ValueError("Severity export needs the bracket-consensus label method")
+    method = record["severity_label_method"]
+    if method not in {"bracket_consensus", "human_adjudication"}:
+        raise ValueError("Severity export needs bracket consensus or human adjudication")
     votes = record["severity_label_votes"]
     count, support = record["severity_label_raters"], record["severity_label_support"]
     if (
@@ -55,7 +91,6 @@ def _label_record(record):
         or not _count(count)
         or not _count(support)
         or sum(votes.values()) != count
-        or max(votes.values()) != support
     ):
         raise ValueError("Severity label support must match the independent bracket votes")
     if not _count(record.get("severity_n")) or count != record["severity_n"]:
@@ -65,7 +100,13 @@ def _label_record(record):
         raise ValueError("Severity rating count must include all eligible raters")
     status, label = record["severity_label_status"], record["severity_label"]
     name, needs_review = record["severity_label_name"], record["severity_needs_review"]
-    if status == "consensus":
+    if method == "human_adjudication":
+        _adjudicated_record(record)
+    elif max(votes.values()) != support:
+        raise ValueError("Severity label support must match the independent bracket votes")
+    elif record.get("severity_adjudication") is not None:
+        raise ValueError("Bracket consensus must keep human adjudication metadata null")
+    elif status == "consensus":
         if (
             label not in votes
             or votes[label] != support
@@ -85,7 +126,9 @@ def _label_record(record):
             raise ValueError("Bracket disagreement requires at least two compatible ratings")
     else:
         raise ValueError("Declare a consensus or pending severity label status")
-    if count >= 2:
+    if method == "human_adjudication":
+        expected = "adjudicated"
+    elif count >= 2:
         expected = "consensus" if support >= 2 and 2 * support > count else "disagreement"
     elif count or rating_count:
         expected = "insufficient_ratings"
@@ -108,7 +151,7 @@ def _label_record(record):
 
 
 def label_triplets(rows, sidecars, language):
-    """Join final consensus labels by item ID while preserving every source field."""
+    """Join final case labels by item ID while preserving every source field."""
     if language not in LANGUAGES:
         raise ValueError("Labelled triplets need Ukrainian or English")
     source = _index(rows, "id")
@@ -131,11 +174,7 @@ def label_triplets(rows, sidecars, language):
         if sidecar.get("text_sha256") != text_digest(row):
             raise ValueError("Severity labels are bound to stale or different triplet text")
         binding = sidecar.get("severity_case_sha256")
-        if (
-            not isinstance(binding, str)
-            or len(binding) != 64
-            or any(character not in "0123456789abcdef" for character in binding)
-        ):
+        if not _sha256(binding):
             raise ValueError("Severity labels need their taxonomy case hash")
         _label_record(sidecar)
         result.append(
@@ -146,9 +185,26 @@ def label_triplets(rows, sidecars, language):
                 **{field: deepcopy(sidecar[field]) for field in _LABEL_FIELDS},
                 "severity_text_sha256": sidecar["text_sha256"],
                 "severity_case_sha256": binding,
+                "severity_adjudication": deepcopy(sidecar.get("severity_adjudication")),
             }
         )
     return result
+
+
+def require_final_labels(taxonomy):
+    """Require a valid consensus or human-adjudicated label for every taxonomy case."""
+    cases = _index(taxonomy, "public_case_id")
+    if not cases:
+        raise ValueError("Final severity release needs a nonempty taxonomy")
+    pending = []
+    for identity, case in cases.items():
+        _label_record(case)
+        if case["severity_label"] is None:
+            pending.append(identity)
+    if pending:
+        raise ValueError(
+            f"Final severity labels are pending for {len(pending)} cases: {', '.join(pending)}"
+        )
 
 
 def build_review_queues(taxonomy, case_evidence, *, protocol=None):
@@ -181,7 +237,7 @@ def build_review_queues(taxonomy, case_evidence, *, protocol=None):
         if protocol is not None and case.get("severity_scale_version") != version:
             raise ValueError("Review rubric version differs from the taxonomy case")
         status = case["severity_label_status"]
-        if status == "consensus":
+        if status in {"consensus", "adjudicated"}:
             continue
         records = []
         for rating in case.get("severity_ratings", []):
@@ -210,6 +266,7 @@ def build_review_queues(taxonomy, case_evidence, *, protocol=None):
         result["conflicts" if conflict else "incomplete"].append(
             {
                 "case_id": identity,
+                "severity_case_sha256": case["severity_case_sha256"],
                 "target_group": case.get("target_group"),
                 "category_uk": case.get("category_uk"),
                 "claim_uk": case["claim_uk"],
