@@ -80,6 +80,7 @@ def test_prompt_assets_match_preserved_byte_hashes():
         "warbias_validation_sequential_unrelated.txt",
         "current/profile_design.txt",
         "current/translation.txt",
+        "current/translation_astra.txt",
     }
     for relative, expected in manifest["files"].items():
         assert file_digest(ROOT / "prompts" / relative) == expected

@@ -83,6 +83,13 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         assert result["expected_items"] == result["pairs"] == 1007
         assert result["expected_cases"] == 120
         assert result["translation_model"] == "gpt-6-astra"
+        assert result["translation_provider"] == "assistant_runtime"
+        assert result["translation_capture"] == "assistant_translation"
+        assert result["immutable_model_revision"] is None
+        assert result["aligned_sentence_pairs"] == 3021
+        assert {row["model"] for row in namespace["dataset"]["metadata"]["translations"]} == {
+            "gpt-6-astra"
+        }
 
 
 def test_pilot_notebook_resolves_its_subproject_in_a_broader_repository(tmp_path, monkeypatch):

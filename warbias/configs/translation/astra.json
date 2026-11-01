@@ -1,0 +1,11 @@
+{
+  "provider": "assistant_runtime",
+  "model": "gpt-6-astra",
+  "revision": null,
+  "immutable_model_version": "not_exposed",
+  "source_language": "uk",
+  "target_language": "en",
+  "settings": {},
+  "invocation": "assistant_translation",
+  "prompt": "prompts/current/translation_astra.txt"
+}
