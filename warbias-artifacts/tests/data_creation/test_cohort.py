@@ -38,7 +38,7 @@ def cohort_project(tmp_path, monkeypatch):
                 "bias_type_code": group,
                 "category_code": category,
                 "category_uk": "Original " + category,
-                "claim": "Claim " + case,
+                "claim": "[TARGET] claim " + case,
                 "context_uk": "Context " + case,
                 "evidence_ids": "source",
                 "source_type": "published_reference",
@@ -438,14 +438,51 @@ def test_adapted_templates_use_whole_words_and_the_declared_group():
     )
 
 
-def test_reference_claims_cannot_use_adaptation_normalization(cohort_project):
-    for row in cohort_project["inputs"]["matrix_reviewed"]:
-        if row["case_id"] == "housing":
-            row["claim"] = "ВПО з дітьми є небажаними орендарями."
+def test_reference_claims_use_target_templates_without_changing_generation(cohort_project):
+    original = "ВПО з дітьми є небажаними орендарями."
+    for table in ("matrix_reviewed", "profile_design"):
+        for row in cohort_project["inputs"][table]:
+            if row["case_id"] == "housing":
+                row["claim"] = original
     cohort_project["taxonomy"][0]["claim_uk"] = "[TARGET] з дітьми є небажаними орендарями."
     _save_fixture(cohort_project)
-    with pytest.raises(ValueError, match="preserve its source case"):
+    before = deepcopy(cohort_project["inputs"])
+    result = cohort.load_cohort(cohort_project["root"])
+    assert all(row["claim"] == original for row in result["matrix"] if row["case_id"] == "housing")
+    assert cohort_project["inputs"] == before
+
+
+@pytest.mark.parametrize("field", ["claim_uk", "claim_en"])
+def test_cohort_requires_target_in_each_language(cohort_project, field):
+    claim = "No explicit group name."
+    cohort_project["taxonomy"][0][field] = claim
+    if field == "claim_uk":
+        for row in cohort_project["inputs"]["matrix_reviewed"]:
+            if row["case_id"] == "housing":
+                row["claim"] = claim
+    _save_fixture(cohort_project)
+    with pytest.raises(ValueError, match=r"needs \[TARGET\] in both languages"):
         cohort.load_cohort(cohort_project["root"])
+
+
+@pytest.mark.parametrize(
+    ("original", "expected"),
+    [
+        ("Ветеранки не можуть керувати.", "Жінки з групи [TARGET] не можуть керувати."),
+        (
+            "Рішення за ветеранок ухвалюють інші.",
+            "Рішення за жінок з групи [TARGET] ухвалюють інші.",
+        ),
+        ("Ветеранкам не довіряють.", "Жінкам з групи [TARGET] не довіряють."),
+    ],
+)
+def test_target_templates_preserve_female_qualifiers(original, expected):
+    assert cohort._display_claim({"claim": original, "bias_type_code": "veteran"}) == expected
+
+
+def test_existing_template_keeps_other_group_mentions():
+    original = "[TARGET] не повинні наймати ветеранів."
+    assert cohort._display_claim({"claim": original, "bias_type_code": "veteran"}) == original
 
 
 def test_committed_cohort_keeps_all_local_items_and_has_exact_release_scope():
@@ -454,6 +491,9 @@ def test_committed_cohort_keeps_all_local_items_and_has_exact_release_scope():
     assert (summary["items"], summary["cases"], summary["categories"]) == (1045, 125, 28)
     assert summary["by_target_group"] == {"veteran": 611, "idp": 434}
     assert summary["local_context"] == 32
+    assert all(
+        "[TARGET]" in row[field] for row in result["taxonomy"] for field in ("claim_uk", "claim_en")
+    )
     assert sum(row["context_scope"] == "ukraine_context" for row in result["matrix"]) == 32
     assert not any(row["category_code"] == "vet_legitimacy" for row in result["matrix"])
     recruitment = [

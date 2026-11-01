@@ -17,8 +17,8 @@ dimensions, their values and profile counts.
 Claim sources, supporting references and category feedback have separate
 columns. “Source-based adaptation” (`source_adaptation`) means a case constructed
 from topics or subtypes described in cited sources. Feedback informs category
-names, merges and splits. Adapted templates use `[TARGET]` for the group name while retaining
-intrinsic qualifiers; generation uses the source claim wording.
+names, merges and splits. All claim templates use `[TARGET]` for the group name
+while retaining intrinsic qualifiers; generation uses the source claim wording.
 
 The [evidence mapping](../protocol/inputs/cohort_evidence.json) links ten
 adapted cases to source sections. It also records pending checks for two

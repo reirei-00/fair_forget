@@ -53,10 +53,25 @@ def _listed(value, label):
 
 def _display_claim(original):
     claim = original["claim"]
-    if original["source_type"] != "compilation":
+    if "[TARGET]" in claim:
         return claim
-    nouns = "ВПО" if original["bias_type_code"] == "idp" else "ветерани|ветеранів|ветеранам"
-    return re.sub(rf"\b(?:{nouns})\b", "[TARGET]", claim, flags=re.IGNORECASE)
+    female_forms = {
+        "ветеранки": "жінки з групи [TARGET]",
+        "ветеранок": "жінок з групи [TARGET]",
+        "ветеранкам": "жінкам з групи [TARGET]",
+    }
+    nouns = (
+        "ВПО"
+        if original["bias_type_code"] == "idp"
+        else "ветерани|ветеранів|ветеранам|" + "|".join(female_forms)
+    )
+
+    def replacement(match):
+        word = match.group()
+        value = female_forms.get(word.casefold(), "[TARGET]")
+        return value[0].upper() + value[1:] if word[0].isupper() else value
+
+    return re.sub(rf"\b(?:{nouns})\b", replacement, claim, flags=re.IGNORECASE)
 
 
 def _cohort_sources(sources):
@@ -105,6 +120,8 @@ def _taxonomy_rows(taxonomy, matrix, sources):
             )
         ) or row["claim_uk"] != _display_claim(original):
             raise ValueError("Cohort taxonomy must preserve its source case and group")
+        if any("[TARGET]" not in row[field] for field in ("claim_uk", "claim_en")):
+            raise ValueError("Every cohort claim needs [TARGET] in both languages")
         labels = (row["category_uk"], row["category_en"])
         if row["category_code"] in categories and categories[row["category_code"]] != labels:
             raise ValueError("Each cohort category needs one pair of language labels")
