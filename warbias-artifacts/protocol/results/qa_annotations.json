@@ -1,0 +1,40 @@
+{
+  "annotators": 16,
+  "hash_definition": "sha256(UTF-8 JSON of {context,question,choices}, ensure_ascii=false, sort_keys=true, separators=(comma,colon))",
+  "items": 240,
+  "items_requiring_resolution": 35,
+  "items_with_answer_disagreement": 17,
+  "items_with_human_text_edits": 3,
+  "items_with_same_reviewed_text": 237,
+  "missing_answer_rows": 1,
+  "names_and_contact_details_included": false,
+  "release_status_counts": {
+    "en": {
+      "assistant_revised_translation": 22,
+      "unreviewed_translation": 218
+    },
+    "uk": {
+      "assistant_resolved": 53,
+      "human_edited": 2,
+      "human_validated": 185
+    }
+  },
+  "resolutions": {
+    "answer_key_changes": 0,
+    "en_text_changes": 22,
+    "reviewer_kind": "assistant",
+    "uk_text_changes": 28
+  },
+  "review_scope": "Original or manually edited Ukrainian QA text as shown in each annotation row. Reviews do not automatically validate later edits or English translation.",
+  "reviews": 480,
+  "reviews_per_item": {
+    "2": 240
+  },
+  "source_kind": "volunteer_annotation_workbook",
+  "verdict_counts": {
+    "accepted": 459,
+    "manually_corrected": 3,
+    "missing": 1,
+    "rewrite_requested": 17
+  }
+}

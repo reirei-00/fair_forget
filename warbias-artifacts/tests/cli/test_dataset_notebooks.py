@@ -15,6 +15,7 @@ NOTEBOOKS = [
     "04_sample_translation_comet",
     "05_full_english_translation",
     "06_severity",
+    "07_qa_dataset",
 ]
 
 
@@ -120,6 +121,15 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
             "large_gap_cases": 19,
         }
         assert result["review_case_counts"] == {"pending": 14, "large_gaps": 19}
+    elif name == "07_qa_dataset":
+        assert result["status"] == "verified_saved_qa_release"
+        assert result["scenarios"] == 40
+        assert result["items_per_language"] == {"uk": 240, "en": 240}
+        assert result["human_review_rows"] == 480
+        assert result["reviewed_items"] == 240
+        assert result["template_expansion_matches_release"] is True
+        assert result["model_calls"] == 0
+        assert len(namespace["six_variants"]) == 6
 
 
 def test_generation_notebook_preserves_dependencies_and_resumes(tmp_path, monkeypatch):

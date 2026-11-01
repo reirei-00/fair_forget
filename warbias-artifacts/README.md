@@ -8,7 +8,7 @@ The dataset contains **1,007 aligned triplets per language in 120 semantic cases
 and 27 categories: 598 veterans and 409 internally displaced people (IDPs)**.
 The [Ukrainian](data/uk.jsonl) and [English](data/en.jsonl) files share IDs and
 metadata. The [dataset manifest](protocol/dataset.json) binds all release files.
-English translations use GPT-6 Astra; they have not undergone human translation
+English triplet translations use GPT-6 Astra; they have not undergone human translation
 review. Dataset text is licensed under [CC BY-SA 4.0](data/LICENSE.md).
 [The bilingual taxonomy](protocol/inputs/cohort_taxonomy.csv) lists every case,
 category, claim and source. It includes only cases with `case_scope = general`.
@@ -16,6 +16,13 @@ category, claim and source. It includes only cases with `case_scope = general`.
 records all 21 added dimensions and their original and retained counts.
 [The evidence mapping](protocol/inputs/cohort_evidence.json) records supporting
 references and pending source checks, including their case or profile scope.
+
+The separate BBQ-style QA set contains **240 questions per language** from
+40 cases: 120 veteran and 120 IDP questions. Each scenario has six variants.
+[Ukrainian QA](data/qa_uk.jsonl), [English QA](data/qa_en.jsonl) and their
+[protocol](protocol/qa.json) include answer keys and review status. The 480
+Ukrainian human reviews remain bound to the exact text each person saw.
+Assistant resolutions are marked separately. English QA has no human review.
 
 The recorded design selected 1,000 base inputs and 200 profile extensions.
 Excluding 136 occupation profiles and five older women veteran profiles left
@@ -63,6 +70,7 @@ The package includes its data-release validator.
 | [4. Sample translation and COMET](notebooks/04_sample_translation_comet.ipynb) | Recorded Ukrainian-to-English translations and quality scores |
 | [5. English translation](notebooks/05_full_english_translation.ipynb) | Verify all 1,007 Astra translations and their source hashes |
 | [6. Case severity](notebooks/06_severity.ipynb) | Calculate case means and severity levels for both languages |
+| [7. QA dataset](notebooks/07_qa_dataset.ipynb) | Build six variants per scenario, check human annotations and inspect the bilingual release |
 
 Run the notebooks with a local Python kernel:
 

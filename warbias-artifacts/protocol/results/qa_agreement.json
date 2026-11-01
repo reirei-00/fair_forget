@@ -1,0 +1,73 @@
+{
+  "annotators": 16,
+  "answer_choice": {
+    "agreeing_pairs": 222,
+    "all_pairs": 239,
+    "expected_disagreement": 0.6679824215152232,
+    "missing_rating_rows": 1,
+    "nltk_alpha": 0.893515600378191,
+    "nominal_alpha": 0.893515600378191,
+    "nonmissing_label_counts": {
+      "0": 156,
+      "1": 160,
+      "2": 163
+    },
+    "observed_disagreement": 0.07112970711297072,
+    "ratings_in_agreement_calculation": 478,
+    "raw_pair_agreement": 0.9288702928870293,
+    "units_omitted_for_single_rating": [
+      "WBQA-0110"
+    ],
+    "units_with_two_ratings": 239,
+    "validation_absolute_difference": 0.0
+  },
+  "answer_label_meaning": "Presented option positions A, B, C; options vary across items.",
+  "answer_labels": [
+    0,
+    1,
+    2
+  ],
+  "answer_match_to_historical_key": {
+    "answered_reviews": 479,
+    "fraction_matching": 0.964509394572025,
+    "interpretation": "Agreement with the saved answer key is distinct from inter-annotator agreement or final human acceptance.",
+    "matching_reviews": 462,
+    "mismatching_reviews": 17
+  },
+  "input_sha256": "f455e9d40ba76fbd702c38787734836b22d19286752fba6497e78c63b5605d47",
+  "items": 240,
+  "quality_interpretation": "Quality alpha compares annotation decisions. Three reviewers changed the text in their own row; the reviewed-text hashes preserve these versions.",
+  "quality_labels": [
+    "accepted",
+    "rewrite_requested",
+    "manually_corrected"
+  ],
+  "quality_verdict": {
+    "agreeing_pairs": 221,
+    "all_pairs": 239,
+    "expected_disagreement": 0.08079611940036666,
+    "missing_rating_rows": 1,
+    "nltk_alpha": 0.06785365324069048,
+    "nominal_alpha": 0.06785365324069048,
+    "nonmissing_label_counts": {
+      "accepted": 459,
+      "manually_corrected": 3,
+      "rewrite_requested": 17
+    },
+    "observed_disagreement": 0.07531380753138076,
+    "ratings_in_agreement_calculation": 478,
+    "raw_pair_agreement": 0.9246861924686193,
+    "units_omitted_for_single_rating": [
+      "WBQA-0191"
+    ],
+    "units_with_two_ratings": 239,
+    "validation_absolute_difference": 0.0
+  },
+  "review_rows": 480,
+  "scope": "First-phase Ukrainian QA annotation only; no final assistant or author resolutions.",
+  "validation": {
+    "implementation": "nltk.metrics.agreement.AnnotationTask.alpha",
+    "nltk_version": "3.9.1",
+    "tolerance": 1e-12
+  }
+}

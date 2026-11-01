@@ -1,0 +1,100 @@
+{
+  "construction": {
+    "adaptation": "Two informative conditions distinguish stereotype-aligned and stereotype-conflicting evidence.",
+    "answer_positions": "Fixed per scenario and preserved across all six variants.",
+    "answer_rule": "Unknown in ambiguous contexts; the explicitly supported actor in informative contexts.",
+    "choices": [
+      "target",
+      "comparison",
+      "unknown"
+    ],
+    "method": "Expand bilingual scenario templates into three evidence conditions and two question polarities.",
+    "reference": {
+      "title": "BBQ: A Hand-Built Bias Benchmark for Question Answering",
+      "url": "https://aclanthology.org/2022.findings-acl.165/"
+    },
+    "selection": "Forty selected general taxonomy cases: 20 IDP and 20 veteran cases. This is not a probability sample.",
+    "source_authorship": "Assistant-authored templates: 12 Ukrainian scenarios with English translations and 28 bilingual scenarios. The source record does not specify a model version."
+  },
+  "counts": {
+    "actors": {
+      "idp": 120,
+      "veteran": 120
+    },
+    "cases": 40,
+    "items_per_language": 240,
+    "scenarios": 40
+  },
+  "files": {
+    "agreement": {
+      "path": "protocol/results/qa_agreement.json",
+      "sha256": "944d1c82facc8eddad4f58363df9e4d707789fff36778ac0d6087a29f45adfec"
+    },
+    "annotation_summary": {
+      "path": "protocol/results/qa_annotations.json",
+      "sha256": "5e6a0fb13c0577fae0611407ef86b2ba5eae65390c5f630a001f1add4b3d8e53"
+    },
+    "en": {
+      "path": "data/qa_en.jsonl",
+      "sha256": "8c95690d32492a58b931d62fe2925e8772bfe5618280ccb82e43c5dbc5ad99be"
+    },
+    "human_edits": {
+      "path": "protocol/inputs/qa_human_edits.jsonl",
+      "sha256": "7700a2685e55c44a267d26e96961da2417ef1fd175d46f788b34dd0d5bd03c5d"
+    },
+    "human_reviews": {
+      "path": "protocol/inputs/qa_human_reviews.jsonl",
+      "sha256": "f455e9d40ba76fbd702c38787734836b22d19286752fba6497e78c63b5605d47"
+    },
+    "provenance": {
+      "path": "protocol/inputs/qa_provenance.jsonl",
+      "sha256": "d39e6491fc355591b73915c87c8921a4692c08c7a07e5a25fdebc1ff1bef0165"
+    },
+    "resolutions": {
+      "path": "protocol/inputs/qa_resolutions.jsonl",
+      "sha256": "0ce3728950ca5974c854d805898ea90e09c2c6edf11cfba43a15f3b7481d9c70"
+    },
+    "scenarios": {
+      "path": "protocol/inputs/qa_scenarios.json",
+      "sha256": "826f6f8a51a589b7dc1a9febd674afb1e4cafb627857492a83431ccdb030bc4f"
+    },
+    "schema": {
+      "path": "protocol/inputs/qa_schema.json",
+      "sha256": "17367f86c9294744e52789254383e1507c3ccc32473ebb3460c4691ad00ebbda"
+    },
+    "taxonomy": {
+      "path": "protocol/inputs/cohort_taxonomy.csv",
+      "sha256": "a97a1de753d2ac17b7f8c76e0f749ff34efcaf3e505d8c144987b114a5e33577"
+    },
+    "uk": {
+      "path": "data/qa_uk.jsonl",
+      "sha256": "8ff9441792dfda33e375990d84ac445bda683faf7f70d56eb8fccab5834031a9"
+    }
+  },
+  "languages": [
+    "uk",
+    "en"
+  ],
+  "review": {
+    "annotators": 16,
+    "english_human_review": "not_performed",
+    "human_reviews_apply_to": "The exact context, question and choices in each review record.",
+    "human_validation_rule": "At least two independent accepted or manually corrected reviews of the exact released text with the correct answer, and no current-text rewrite request or wrong answer.",
+    "language": "uk",
+    "resolution_kind": "assistant",
+    "reviews_per_original_item": 2,
+    "scope": "Human annotation covers the Ukrainian source items. Assistant resolutions and changed text do not inherit human consensus.",
+    "status_counts": {
+      "en": {
+        "assistant_revised_translation": 22,
+        "unreviewed_translation": 218
+      },
+      "uk": {
+        "assistant_resolved": 53,
+        "human_edited": 2,
+        "human_validated": 185
+      }
+    }
+  },
+  "schema_version": 1
+}
