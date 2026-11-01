@@ -76,6 +76,10 @@ def cohort_project(tmp_path, monkeypatch):
                 "claim_en": "English " + original["claim"],
                 "context_uk": original["context_uk"],
                 "context_en": "English " + original["context_uk"],
+                "case_scope": "local" if case == "recruitment" else "general",
+                "case_scope_reason": "Names a national institution."
+                if case == "recruitment"
+                else "",
                 "evidence_ids": "source",
                 "category_evidence_ids": "",
                 "source_types": "published_reference",
@@ -187,6 +191,23 @@ def test_cohort_selects_exact_profiles_keeps_local_and_recruitment_items(cohort_
         assert all(row[key] == value for key, value in source.items() if key != "category_uk")
 
 
+def test_case_scope_is_independent_of_profile_context_scope(cohort_project):
+    result = cohort.load_cohort(cohort_project["root"])
+    scopes = {row["case_id"]: row["case_scope"] for row in result["taxonomy"]}
+    assert scopes == {"housing": "general", "recruitment": "local"}
+    assert {row["context_scope"] for row in result["matrix"] if row["case_id"] == "housing"} == {
+        "ukraine_context"
+    }
+    assert result["matrix"][-1]["context_scope"] == "cross_conflict_generic"
+    assert all("case_scope" not in row for row in result["matrix"])
+    cohort_project["taxonomy"][0].update(
+        case_scope="local", case_scope_reason="Local housing rule."
+    )
+    cohort_project["taxonomy"][1].update(case_scope="general", case_scope_reason="")
+    _save_fixture(cohort_project)
+    assert cohort.load_cohort(cohort_project["root"])["matrix"] == result["matrix"]
+
+
 @pytest.mark.parametrize("field", ["excluded_item_ids", "local_context_item_ids"])
 def test_cohort_rejects_unknown_or_duplicate_item_ids(cohort_project, field):
     cohort_project["protocol"][field].append("unknown")
@@ -250,12 +271,31 @@ def test_cohort_rejects_input_hash_changes_and_paths_outside_project(cohort_proj
         ("source_urls", '["https://example.org/unrelated"]', "source_urls differ"),
         ("source_types", "feedback", "source_types differ"),
         ("claim_en", "", "nonempty claim_en"),
+        ("case_scope", "unknown", "case_scope must be general or local"),
+        ("case_scope", "", "case_scope must be general or local"),
     ],
 )
 def test_cohort_rejects_broken_taxonomy_links(cohort_project, field, value, message):
     cohort_project["taxonomy"][0][field] = value
     _save_fixture(cohort_project)
     with pytest.raises(ValueError, match=message):
+        cohort.load_cohort(cohort_project["root"])
+
+
+@pytest.mark.parametrize("reason", ["", " \t "])
+def test_local_cases_require_a_nonblank_scope_reason(cohort_project, reason):
+    cohort_project["taxonomy"][1]["case_scope_reason"] = reason
+    _save_fixture(cohort_project)
+    with pytest.raises(ValueError, match="nonempty case_scope_reason"):
+        cohort.load_cohort(cohort_project["root"])
+
+
+@pytest.mark.parametrize("field", ["case_scope", "case_scope_reason"])
+def test_cohort_requires_case_scope_fields(cohort_project, field):
+    for row in cohort_project["taxonomy"]:
+        row.pop(field)
+    _save_fixture(cohort_project)
+    with pytest.raises(ValueError, match=field):
         cohort.load_cohort(cohort_project["root"])
 
 
@@ -495,6 +535,17 @@ def test_committed_cohort_keeps_all_local_items_and_has_exact_release_scope():
         "[TARGET]" in row[field] for row in result["taxonomy"] for field in ("claim_uk", "claim_en")
     )
     assert sum(row["context_scope"] == "ukraine_context" for row in result["matrix"]) == 32
+    local_cases = [row for row in result["taxonomy"] if row["case_scope"] == "local"]
+    assert {row["public_case_id"] for row in local_cases} == {
+        "WB-C029",
+        "WB-C042",
+        "WB-C081",
+        "WB-C102",
+        "WB-C115",
+        "WB-C116",
+    }
+    assert sum(row["case_scope"] == "general" for row in result["taxonomy"]) == 119
+    assert sum(int(row["triplet_count"]) for row in local_cases) == 39
     assert not any(row["category_code"] == "vet_legitimacy" for row in result["matrix"])
     recruitment = [
         row

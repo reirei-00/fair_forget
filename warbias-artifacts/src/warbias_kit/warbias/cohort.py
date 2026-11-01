@@ -107,6 +107,13 @@ def _taxonomy_rows(taxonomy, matrix, sources):
         ):
             if not isinstance(row.get(field), str) or not row[field].strip():
                 raise ValueError(f"Cohort taxonomy needs nonempty {field}")
+        if row.get("case_scope") not in ("general", "local"):
+            raise ValueError("Cohort case_scope must be general or local")
+        reason = row.get("case_scope_reason")
+        if not isinstance(reason, str):
+            raise ValueError("Cohort case_scope_reason must be text")
+        if row["case_scope"] == "local" and not reason.strip():
+            raise ValueError("Local cohort cases need nonempty case_scope_reason")
         if row["public_case_id"] in public_ids:
             raise ValueError("Cohort public case IDs must be unique")
         public_ids.add(row["public_case_id"])
