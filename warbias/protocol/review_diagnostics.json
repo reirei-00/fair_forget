@@ -1,0 +1,30 @@
+{
+  "C_reference": "any_independent_C_redo_request",
+  "bootstrap": {
+    "resamples": 2000,
+    "seed": 0,
+    "unit": "semantic_case_family"
+  },
+  "confidence_field_used": false,
+  "consensus_is_a_separate_agreement_view": true,
+  "majority_required": false,
+  "metric_reference": "https://scikit-learn.org/stable/modules/generated/sklearn.metrics.average_precision_score.html",
+  "negative_reference_meaning": "no_recorded_human_redo_request_not_proof_of_correct_text",
+  "new_model_requests": false,
+  "operating_points": "descriptive_fit_on_the_same_development_labels_not_validation",
+  "primary_reference": "any_independent_human_redo_request",
+  "regeneration_executed": false,
+  "release_threshold_selected": false,
+  "schema_version": 1,
+  "scope": "development_only",
+  "score": "maximum_probability_of_the_problem_option",
+  "score_is_calibrated_triplet_probability": false,
+  "secondary_reference": "any_independent_human_problem_including_local_edits",
+  "sources": {
+    "app_revision": "8e529454546534eaf771ef19bf7de39235c76c5a",
+    "raw_human_snapshot_sha256": "26abf7e2df266a5b785c9daf46d89fbbd4271581aede2e4d58c1a90913ee7880"
+  },
+  "split": "protocol/inputs/review_calibration_split.json",
+  "threshold_rule": "score_greater_than_or_equal_to_threshold",
+  "ties": "all_equal_scores_enter_together"
+}

@@ -15,6 +15,7 @@ full Ukrainian generation → English translation.
 | [5. Full English translation](../notebooks/05_full_english_translation.ipynb) | Full Ukrainian input, source manifest and aligned English output |
 | [6. Coverage generation](../notebooks/06_coverage_generation.ipynb) | Current 11,997-item design, 10,938 new inputs, local Lapa generation on a GPU server, checkpoints and saved output checks |
 | [7. JEV review](../notebooks/07_jev_review.ipynb) | Full triplet review, saved human overlap, Gwet AC1, human-only alpha and case-family confidence intervals |
+| [8. Review diagnostics](../notebooks/08_review_diagnostics.ipynb) | Human redo requests, sentence roles, saved probability rankings and precision–recall |
 
 `configs/data/dataset-inputs.json` binds the taxonomy, matrix, pilot outputs and
 anonymized ratings to their file hashes. Final annotated data remain separate.
@@ -235,6 +236,12 @@ per triplet by strict human majority. Keep ties and insufficient votes unlabeled
 Notebook 7 reports agreement with consensus and the always-no-problem reference.
 The [consensus table](../protocol/inputs/human_consensus.csv) retains vote counts
 for every item. Original individual judgments remain unchanged.
+
+[Notebook 8](../notebooks/08_review_diagnostics.ipynb) uses any human `redo` as a
+regeneration request, without requiring a majority. It counts local edits
+separately. The [request list](../protocol/inputs/human_regeneration_requests.csv)
+and [diagnostic protocol](../protocol/review_diagnostics.json) bind this target
+to the saved annotations. Descriptive thresholds do not qualify automatic repair.
 
 ## Pilot and selection
 

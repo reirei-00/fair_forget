@@ -32,7 +32,8 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
     assert (exported / "notebooks/04_sample_translation_comet.ipynb").is_file()
     assert (exported / "notebooks/06_coverage_generation.ipynb").is_file()
     assert (exported / "notebooks/07_jev_review.ipynb").is_file()
-    assert len(list((exported / "notebooks").glob("*.ipynb"))) == 7
+    assert (exported / "notebooks/08_review_diagnostics.ipynb").is_file()
+    assert len(list((exported / "notebooks").glob("*.ipynb"))) == 8
     assert (exported / "protocol/history/matrix_full.csv").is_file()
     assert not (exported / "protocol/inputs/matrix_full.csv").exists()
     assert (exported / "protocol/inputs/source_feedback.jsonl").is_file()

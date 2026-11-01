@@ -15,6 +15,7 @@ NOTEBOOKS = [
     "05_full_english_translation",
     "06_coverage_generation",
     "07_jev_review",
+    "08_review_diagnostics",
 ]
 
 
@@ -87,7 +88,7 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         assert result["counts"]["new_triplets"] == 10938
         assert result["generation_execution_requested"] is False
         assert namespace["candidate"]["provider"] == "vllm"
-    else:
+    elif name == "07_jev_review":
         assert result["recorded_dataset_triplets"] == 11997
         assert result["human_overlap_triplets"] == 1059
         assert result["service_execution_requested"] is False
@@ -102,6 +103,13 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         consensus = namespace["consensus_reports"]
         assert consensus["full_human_cohort"]["v1"]["agreement"]["n"] == 1014
         assert consensus["development"]["direct"]["agreement"]["n"] == 814
+    else:
+        assert result["human_counts"]["regeneration_requests"] == 310
+        assert result["human_counts"]["any_problem"] == 351
+        assert result["human_counts"]["C_regeneration"] == 290
+        assert result["development_items"] == 846
+        assert result["new_model_requests"] is False
+        assert namespace["rankings"]["redo"]["v2"]["positives"] == 236
 
 
 def test_pilot_notebook_resolves_its_subproject_in_a_broader_repository(tmp_path, monkeypatch):

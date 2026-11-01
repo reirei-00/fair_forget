@@ -1,0 +1,311 @@
+id,case_family,target_group,regeneration_roles,redo_votes,has_local_edit
+WB-0001,WB-C050,veteran,"[""S""]",1,0
+WB-0004,WB-C121,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0010,WB-C048,veteran,"[""C""]",1,0
+WB-0011,WB-C086,veteran,"[""C""]",2,0
+WB-0012,WB-C061,veteran,"[""S"", ""C"", ""U""]",4,0
+WB-0017,WB-C069,veteran,"[""S"", ""C"", ""U""]",3,0
+WB-0020,WB-C118,idp,"[""C""]",2,0
+WB-0021,WB-C118,idp,"[""C""]",1,0
+WB-0022,WB-C057,veteran,"[""S"", ""C""]",1,1
+WB-0031,WB-C082,veteran,"[""S"", ""C"", ""U""]",3,1
+WB-0032,WB-C101,veteran,"[""C""]",1,0
+WB-0033,WB-C062,veteran,"[""C""]",1,0
+WB-0036,WB-C104,veteran,"[""S"", ""C"", ""U""]",3,0
+WB-0038,WB-C124,veteran,"[""S"", ""C""]",1,0
+WB-0040,WB-C056,veteran,"[""S"", ""C""]",4,0
+WB-0042,WB-C059,veteran,"[""C""]",1,0
+WB-0044,WB-C119,veteran,"[""C""]",2,0
+WB-0045,WB-C003,idp,"[""C""]",1,0
+WB-0057,WB-C124,veteran,"[""C""]",1,0
+WB-0060,WB-C022,idp,"[""S"", ""C"", ""U""]",3,0
+WB-0066,WB-C035,idp,"[""S"", ""C"", ""U""]",1,0
+WB-0069,WB-C100,veteran,"[""C"", ""U""]",2,0
+WB-0072,WB-C073,veteran,"[""C""]",1,0
+WB-0073,WB-C086,veteran,"[""C""]",3,0
+WB-0074,WB-C096,veteran,"[""S"", ""C""]",2,1
+WB-0076,WB-C045,veteran,"[""S"", ""C"", ""U""]",2,0
+WB-0082,WB-C015,idp,"[""C"", ""U""]",2,0
+WB-0083,WB-C070,veteran,"[""S""]",1,0
+WB-0088,WB-C105,veteran,"[""S"", ""C"", ""U""]",3,0
+WB-0095,WB-C012,idp,"[""C""]",1,1
+WB-0096,WB-C057,veteran,"[""C""]",1,0
+WB-0097,WB-C012,idp,"[""C""]",1,1
+WB-0098,WB-C062,veteran,"[""C""]",2,0
+WB-0099,WB-C063,veteran,"[""S"", ""C""]",3,1
+WB-0102,WB-C063,veteran,"[""C""]",1,0
+WB-0104,WB-C038,idp,"[""S"", ""C"", ""U""]",2,1
+WB-0105,WB-C011,idp,"[""S"", ""C"", ""U""]",2,0
+WB-0119,WB-C100,veteran,"[""C""]",1,0
+WB-0125,WB-C007,idp,"[""C""]",1,0
+WB-0131,WB-C007,idp,"[""S"", ""C"", ""U""]",1,1
+WB-0133,WB-C108,veteran,"[""C""]",1,0
+WB-0134,WB-C094,veteran,"[""C""]",2,0
+WB-0138,WB-C091,veteran,"[""C""]",1,1
+WB-0146,WB-C069,veteran,"[""C""]",1,0
+WB-0148,WB-C037,idp,"[""S"", ""C""]",1,0
+WB-0150,WB-C043,idp,"[""C""]",1,0
+WB-0151,WB-C053,veteran,"[""C""]",1,0
+WB-0153,WB-C127,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0155,WB-C052,veteran,"[""C""]",1,0
+WB-0157,WB-C056,veteran,"[""C""]",2,0
+WB-0162,WB-C044,veteran,"[""C""]",1,0
+WB-0164,WB-C069,veteran,"[""S"", ""C"", ""U""]",2,0
+WB-0175,WB-C034,idp,"[""S"", ""C"", ""U""]",1,0
+WB-0181,WB-C039,idp,"[""C""]",1,0
+WB-0182,WB-C074,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0183,WB-C057,veteran,"[""S"", ""C"", ""U""]",2,0
+WB-0189,WB-C072,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0192,WB-C043,idp,"[""S""]",1,0
+WB-0197,WB-C063,veteran,"[""C""]",1,0
+WB-0199,WB-C032,idp,"[""C""]",2,0
+WB-0207,WB-C021,idp,"[""C""]",1,0
+WB-0213,WB-C045,veteran,"[""C""]",1,0
+WB-0214,WB-C103,veteran,"[""S"", ""C""]",1,0
+WB-0215,WB-C006,idp,"[""S"", ""C""]",1,0
+WB-0218,WB-C077,veteran,"[""C""]",1,0
+WB-0225,WB-C067,veteran,"[""C""]",1,1
+WB-0226,WB-C056,veteran,"[""C""]",2,0
+WB-0227,WB-C022,idp,"[""C""]",1,0
+WB-0229,WB-C093,veteran,"[""C""]",1,0
+WB-0232,WB-C027,idp,"[""C""]",2,0
+WB-0239,WB-C096,veteran,"[""S"", ""C"", ""U""]",1,1
+WB-0241,WB-C056,veteran,"[""C""]",3,0
+WB-0245,WB-C052,veteran,"[""S"", ""C"", ""U""]",3,0
+WB-0248,WB-C007,idp,"[""C""]",1,0
+WB-0249,WB-C005,idp,"[""S"", ""C""]",3,0
+WB-0252,WB-C046,veteran,"[""C""]",1,0
+WB-0267,WB-C004,idp,"[""C""]",1,0
+WB-0268,WB-C058,veteran,"[""C""]",1,0
+WB-0269,WB-C057,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0270,WB-C103,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0272,WB-C120,veteran,"[""S"", ""C"", ""U""]",1,1
+WB-0276,WB-C032,idp,"[""S"", ""C""]",2,1
+WB-0277,WB-C090,veteran,"[""C""]",2,0
+WB-0286,WB-C084,veteran,"[""S"", ""C"", ""U""]",1,1
+WB-0287,WB-C119,veteran,"[""S"", ""C""]",1,0
+WB-0290,WB-C061,veteran,"[""C""]",2,0
+WB-0293,WB-C120,veteran,"[""C""]",1,0
+WB-0296,WB-C090,veteran,"[""S"", ""C""]",1,0
+WB-0303,WB-C073,veteran,"[""S"", ""C"", ""U""]",2,0
+WB-0304,WB-C091,veteran,"[""C""]",1,0
+WB-0305,WB-C051,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0313,WB-C074,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0317,WB-C108,veteran,"[""C""]",1,0
+WB-0320,WB-C079,veteran,"[""C""]",1,0
+WB-0321,WB-C041,idp,"[""C"", ""U""]",1,0
+WB-0324,WB-C012,idp,"[""C""]",1,1
+WB-0330,WB-C106,veteran,"[""C"", ""U""]",3,1
+WB-0337,WB-C059,veteran,"[""S"", ""C"", ""U""]",1,1
+WB-0341,WB-C105,veteran,"[""C""]",1,0
+WB-0345,WB-C050,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0348,WB-C124,veteran,"[""C""]",1,0
+WB-0352,WB-C031,idp,"[""S""]",1,0
+WB-0360,WB-C034,idp,"[""S"", ""C"", ""U""]",2,0
+WB-0363,WB-C092,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0386,WB-C115,idp,"[""C""]",1,1
+WB-0388,WB-C063,veteran,"[""S"", ""C"", ""U""]",3,0
+WB-0394,WB-C055,veteran,"[""C""]",1,0
+WB-0405,WB-C002,idp,"[""C""]",1,1
+WB-0408,WB-C057,veteran,"[""S"", ""C""]",2,1
+WB-0413,WB-C064,veteran,"[""S"", ""C""]",1,0
+WB-0415,WB-C058,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0421,WB-C094,veteran,"[""C""]",1,0
+WB-0423,WB-C092,veteran,"[""S"", ""C""]",2,0
+WB-0424,WB-C045,veteran,"[""C""]",2,0
+WB-0436,WB-C122,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0438,WB-C019,idp,"[""U""]",1,0
+WB-0439,WB-C097,veteran,"[""C""]",1,0
+WB-0441,WB-C118,idp,"[""C"", ""U""]",2,1
+WB-0442,WB-C064,veteran,"[""C""]",1,0
+WB-0443,WB-C016,idp,"[""C"", ""U""]",1,0
+WB-0448,WB-C002,idp,"[""U""]",1,0
+WB-0449,WB-C061,veteran,"[""C""]",4,1
+WB-0454,WB-C062,veteran,"[""S"", ""C""]",3,0
+WB-0457,WB-C058,veteran,"[""C"", ""U""]",2,1
+WB-0458,WB-C022,idp,"[""S""]",1,0
+WB-0466,WB-C052,veteran,"[""S""]",1,0
+WB-0469,WB-C044,veteran,"[""C""]",1,0
+WB-0476,WB-C071,veteran,"[""S"", ""C""]",1,0
+WB-0477,WB-C115,idp,"[""C""]",1,0
+WB-0495,WB-C049,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0502,WB-C110,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0508,WB-C080,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0516,WB-C110,veteran,"[""S"", ""C""]",1,1
+WB-0519,WB-C113,idp,"[""C""]",1,0
+WB-0521,WB-C014,idp,"[""S"", ""C"", ""U""]",1,0
+WB-0527,WB-C108,veteran,"[""S"", ""C"", ""U""]",3,0
+WB-0529,WB-C117,idp,"[""C""]",1,0
+WB-0532,WB-C071,veteran,"[""C""]",1,1
+WB-0537,WB-C106,veteran,"[""S"", ""C"", ""U""]",3,0
+WB-0539,WB-C057,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0543,WB-C100,veteran,"[""C""]",1,0
+WB-0566,WB-C079,veteran,"[""S"", ""C"", ""U""]",2,0
+WB-0567,WB-C022,idp,"[""S"", ""C"", ""U""]",2,0
+WB-0571,WB-C119,veteran,"[""C""]",1,0
+WB-0577,WB-C016,idp,"[""S""]",1,0
+WB-0588,WB-C086,veteran,"[""C""]",1,0
+WB-0591,WB-C029,idp,"[""C""]",1,0
+WB-0592,WB-C009,idp,"[""C""]",1,0
+WB-0594,WB-C093,veteran,"[""S""]",1,0
+WB-0595,WB-C094,veteran,"[""C""]",1,0
+WB-0600,WB-C005,idp,"[""C""]",2,0
+WB-0601,WB-C043,idp,"[""C""]",1,0
+WB-0603,WB-C053,veteran,"[""C""]",2,0
+WB-0605,WB-C065,veteran,"[""C""]",1,0
+WB-0606,WB-C108,veteran,"[""S"", ""C""]",1,0
+WB-0608,WB-C125,veteran,"[""S"", ""C"", ""U""]",3,0
+WB-0612,WB-C003,idp,"[""U""]",1,0
+WB-0613,WB-C116,idp,"[""C""]",1,0
+WB-0614,WB-C039,idp,"[""C""]",1,1
+WB-0620,WB-C013,idp,"[""S"", ""C"", ""U""]",1,0
+WB-0621,WB-C067,veteran,"[""C""]",1,0
+WB-0624,WB-C071,veteran,"[""S"", ""C""]",1,0
+WB-0625,WB-C057,veteran,"[""S"", ""C"", ""U""]",4,0
+WB-0626,WB-C005,idp,"[""C""]",1,0
+WB-0628,WB-C055,veteran,"[""C""]",1,0
+WB-0630,WB-C016,idp,"[""S""]",1,0
+WB-0634,WB-C086,veteran,"[""C""]",1,0
+WB-0638,WB-C043,idp,"[""S"", ""C"", ""U""]",1,0
+WB-0650,WB-C108,veteran,"[""C""]",2,0
+WB-0651,WB-C015,idp,"[""S"", ""C"", ""U""]",1,1
+WB-0659,WB-C059,veteran,"[""S"", ""C"", ""U""]",1,1
+WB-0661,WB-C122,veteran,"[""C""]",1,1
+WB-0663,WB-C119,veteran,"[""C""]",2,0
+WB-0664,WB-C023,idp,"[""C"", ""U""]",2,0
+WB-0665,WB-C060,veteran,"[""C""]",2,1
+WB-0666,WB-C040,idp,"[""C""]",1,1
+WB-0668,WB-C063,veteran,"[""C""]",1,0
+WB-0669,WB-C062,veteran,"[""C""]",1,0
+WB-0677,WB-C063,veteran,"[""S""]",1,0
+WB-0678,WB-C007,idp,"[""C""]",1,0
+WB-0681,WB-C091,veteran,"[""C""]",1,0
+WB-0682,WB-C078,veteran,"[""C""]",2,0
+WB-0684,WB-C094,veteran,"[""C""]",1,0
+WB-0685,WB-C087,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0691,WB-C021,idp,"[""S"", ""C"", ""U""]",2,0
+WB-0692,WB-C009,idp,"[""C""]",1,0
+WB-0693,WB-C067,veteran,"[""S"", ""C"", ""U""]",2,0
+WB-0696,WB-C120,veteran,"[""C""]",1,0
+WB-0699,WB-C007,idp,"[""S"", ""C""]",2,0
+WB-0700,WB-C116,idp,"[""C""]",1,0
+WB-0704,WB-C086,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0710,WB-C053,veteran,"[""C""]",1,1
+WB-0711,WB-C016,idp,"[""C""]",1,0
+WB-0713,WB-C030,idp,"[""C""]",1,0
+WB-0714,WB-C021,idp,"[""S"", ""C"", ""U""]",1,0
+WB-0715,WB-C036,idp,"[""S"", ""C"", ""U""]",1,0
+WB-0717,WB-C124,veteran,"[""S"", ""C"", ""U""]",2,0
+WB-0718,WB-C107,veteran,"[""S"", ""C"", ""U""]",2,0
+WB-0720,WB-C057,veteran,"[""S"", ""C"", ""U""]",2,0
+WB-0724,WB-C065,veteran,"[""C""]",1,0
+WB-0727,WB-C052,veteran,"[""C""]",1,0
+WB-0731,WB-C075,veteran,"[""C""]",2,1
+WB-0734,WB-C102,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0736,WB-C060,veteran,"[""C""]",1,1
+WB-0740,WB-C089,veteran,"[""U""]",1,0
+WB-0741,WB-C040,idp,"[""C""]",2,0
+WB-0742,WB-C054,veteran,"[""C""]",1,0
+WB-0749,WB-C098,veteran,"[""C""]",1,0
+WB-0752,WB-C122,veteran,"[""C""]",2,1
+WB-0754,WB-C053,veteran,"[""C""]",1,0
+WB-0757,WB-C124,veteran,"[""C""]",1,0
+WB-0759,WB-C082,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0764,WB-C127,veteran,"[""C""]",2,0
+WB-0770,WB-C098,veteran,"[""C""]",1,0
+WB-0771,WB-C111,veteran,"[""C""]",2,0
+WB-0772,WB-C031,idp,"[""C""]",1,0
+WB-0773,WB-C037,idp,"[""S"", ""C""]",1,0
+WB-0774,WB-C079,veteran,"[""C""]",1,0
+WB-0775,WB-C090,veteran,"[""S"", ""C"", ""U""]",3,0
+WB-0776,WB-C094,veteran,"[""C""]",1,1
+WB-0779,WB-C073,veteran,"[""S"", ""C"", ""U""]",1,1
+WB-0783,WB-C024,idp,"[""C""]",1,0
+WB-0785,WB-C089,veteran,"[""S"", ""C"", ""U""]",1,1
+WB-0788,WB-C069,veteran,"[""C""]",1,0
+WB-0789,WB-C084,veteran,"[""C""]",1,0
+WB-0790,WB-C111,veteran,"[""U""]",1,0
+WB-0796,WB-C066,veteran,"[""S"", ""C""]",3,0
+WB-0800,WB-C001,idp,"[""S"", ""C"", ""U""]",1,0
+WB-0801,WB-C102,veteran,"[""C""]",1,0
+WB-0802,WB-C037,idp,"[""U""]",1,0
+WB-0804,WB-C122,veteran,"[""C""]",3,0
+WB-0806,WB-C056,veteran,"[""C""]",1,0
+WB-0816,WB-C096,veteran,"[""C""]",1,0
+WB-0818,WB-C042,idp,"[""S"", ""C""]",1,0
+WB-0828,WB-C056,veteran,"[""S"", ""C""]",2,0
+WB-0829,WB-C116,idp,"[""S"", ""C"", ""U""]",1,1
+WB-0830,WB-C070,veteran,"[""S""]",1,0
+WB-0831,WB-C116,idp,"[""C""]",1,0
+WB-0845,WB-C042,idp,"[""C"", ""U""]",2,0
+WB-0847,WB-C032,idp,"[""C""]",1,0
+WB-0855,WB-C119,veteran,"[""C""]",2,0
+WB-0856,WB-C027,idp,"[""C""]",1,0
+WB-0858,WB-C070,veteran,"[""C""]",1,0
+WB-0865,WB-C053,veteran,"[""C"", ""U""]",2,0
+WB-0870,WB-C048,veteran,"[""C""]",1,0
+WB-0871,WB-C093,veteran,"[""C""]",2,0
+WB-0873,WB-C111,veteran,"[""S"", ""C""]",1,0
+WB-0874,WB-C026,idp,"[""S"", ""C"", ""U""]",1,1
+WB-0875,WB-C106,veteran,"[""C""]",1,1
+WB-0876,WB-C082,veteran,"[""C""]",1,0
+WB-0878,WB-C075,veteran,"[""C""]",1,0
+WB-0884,WB-C037,idp,"[""S"", ""C""]",2,0
+WB-0892,WB-C118,idp,"[""C""]",1,0
+WB-0896,WB-C083,veteran,"[""U""]",1,0
+WB-0902,WB-C047,veteran,"[""S"", ""C""]",1,0
+WB-0903,WB-C090,veteran,"[""C""]",1,0
+WB-0905,WB-C113,idp,"[""C""]",3,1
+WB-0909,WB-C071,veteran,"[""S""]",1,0
+WB-0913,WB-C078,veteran,"[""S"", ""C"", ""U""]",2,0
+WB-0914,WB-C024,idp,"[""C""]",1,1
+WB-0916,WB-C123,veteran,"[""C""]",1,1
+WB-0917,WB-C109,veteran,"[""C"", ""U""]",1,0
+WB-0926,WB-C082,veteran,"[""S"", ""C"", ""U""]",1,0
+WB-0928,WB-C058,veteran,"[""S""]",1,0
+WB-0931,WB-C093,veteran,"[""C""]",1,0
+WB-0932,WB-C109,veteran,"[""S"", ""C"", ""U""]",2,0
+WB-0939,WB-C075,veteran,"[""C"", ""U""]",3,0
+WB-0942,WB-C081,veteran,"[""S"", ""C"", ""U""]",2,1
+WB-0944,WB-C060,veteran,"[""S"", ""C"", ""U""]",2,1
+WB-0947,WB-C087,veteran,"[""S"", ""C"", ""U""]",2,1
+WB-0951,WB-C071,veteran,"[""C""]",1,0
+WB-0953,WB-C119,veteran,"[""S"", ""C"", ""U""]",3,0
+WB-0958,WB-C046,veteran,"[""S"", ""C"", ""U""]",3,1
+WB-0964,WB-C044,veteran,"[""S"", ""C""]",1,0
+WB-0972,WB-C030,idp,"[""C""]",2,0
+WB-0977,WB-C023,idp,"[""S"", ""C"", ""U""]",1,0
+WB-0980,WB-C064,veteran,"[""C""]",1,0
+WB-0986,WB-C088,veteran,"[""S"", ""C""]",1,0
+WB-0990,WB-C039,idp,"[""S"", ""C""]",2,0
+WB-0995,WB-C012,idp,"[""C""]",2,1
+WB-1002,WB-C004,idp,"[""C""]",1,0
+WB-1003,WB-C005,idp,"[""S"", ""C"", ""U""]",3,0
+WB-1006,WB-C006,idp,"[""S"", ""C""]",1,0
+WB-1008,WB-C007,idp,"[""C""]",1,0
+WB-1027,WB-C022,idp,"[""C""]",2,0
+WB-1028,WB-C022,idp,"[""S"", ""C"", ""U""]",1,0
+WB-1035,WB-C026,idp,"[""C""]",1,0
+WB-1036,WB-C026,idp,"[""C""]",1,0
+WB-1043,WB-C040,idp,"[""C""]",1,0
+WB-1046,WB-C041,idp,"[""C""]",1,0
+WB-1049,WB-C118,idp,"[""S"", ""C"", ""U""]",3,0
+WB-1051,WB-C069,veteran,"[""S"", ""C"", ""U""]",3,0
+WB-1052,WB-C069,veteran,"[""C""]",1,0
+WB-1062,WB-C008,idp,"[""C""]",1,0
+WB-1067,WB-C012,idp,"[""C""]",1,0
+WB-1069,WB-C018,idp,"[""C""]",1,0
+WB-1084,WB-C024,idp,"[""S"", ""C"", ""U""]",2,0
+WB-1088,WB-C027,idp,"[""C""]",1,0
+WB-1091,WB-C035,idp,"[""C""]",1,0
+WB-1092,WB-C035,idp,"[""C""]",1,0
+WB-1096,WB-C040,idp,"[""C""]",1,0
+WB-1098,WB-C040,idp,"[""S"", ""C""]",1,0
+WB-1105,WB-C118,idp,"[""S"", ""C"", ""U""]",2,0
+WB-1161,WB-C023,idp,"[""C""]",1,0
+WB-1162,WB-C023,idp,"[""S"", ""C"", ""U""]",2,0
+WB-1183,WB-C069,veteran,"[""C""]",3,0
+WB-1184,WB-C069,veteran,"[""C""]",1,0
+WB-1186,WB-C069,veteran,"[""C""]",1,0
+WB-1190,WB-C072,veteran,"[""S"", ""C""]",2,0
+WB-1194,WB-C072,veteran,"[""S"", ""C""]",1,0

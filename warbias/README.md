@@ -36,7 +36,7 @@ python -m pytest tests -q
 python -m ruff check src tests scripts notebooks
 ```
 
-The seven notebooks in `notebooks/` use the recorded taxonomy matrix, pilot
+The eight notebooks in `notebooks/` use the recorded taxonomy matrix, pilot
 outputs, anonymized human ratings and a GPT-6.1 Sol translation sample. Start with
 [Ukrainian pilot generation](notebooks/01_ukrainian_pilot.ipynb).
 The [construction guide](docs/warbias-construction.md#notebooks) lists all
@@ -58,7 +58,11 @@ direct and atomic questions on the development cohort.
 The consensus section uses strict human majorities and reports tied votes
 separately. Individual judgments remain available.
 
-Run all seven notebooks and save their outputs with a local Python kernel:
+The [review diagnostics notebook](notebooks/08_review_diagnostics.ipynb) separates
+human redo requests, local edits and consensus. It replays precision–recall and
+checks which sentence roles need repair.
+
+Run all eight notebooks and save their outputs with a local Python kernel:
 
 ```sh
 python -m pip install -e '.[notebooks]'

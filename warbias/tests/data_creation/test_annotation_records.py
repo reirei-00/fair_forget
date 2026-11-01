@@ -9,6 +9,7 @@ import pytest
 from fairforget.warbias.annotation_records import (
     load_binary_review_tables,
     load_calibration_tables,
+    load_review_diagnostics,
     load_review_tables,
     save_review_tables,
 )
@@ -122,3 +123,18 @@ def test_minimal_reviews_have_binary_labels_and_only_development_items():
         assert all(row["problem_types"] is None for row in rows)
         assert all(families[row["case_family"]] == "development" for row in rows)
     assert run["production_selection"] is False
+
+
+def test_repair_queue_uses_any_redo_not_majority_consensus():
+    from fairforget.io import read_csv
+    from fairforget.warbias.triplet_annotation import repair_targets
+
+    root = Path(__file__).resolve().parents[2]
+    scores, sentences, _, record = load_review_diagnostics(root)
+    targets = repair_targets(sentences)
+    queued = {row["id"] for row in targets if row["needs_regeneration"]}
+    exported = read_csv(root / "protocol/inputs/human_regeneration_requests.csv")
+    assert len(queued) == 310
+    assert queued == {row["id"] for row in exported}
+    assert sum(row["has_problem"] for row in targets) == 351
+    assert len(scores) == record["rankings"]["redo"]["v2"]["compared_items"] == 846

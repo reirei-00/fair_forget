@@ -61,10 +61,14 @@ def _encode(row, issues):
     }
 
 
-def _decode(row, issues):
-    binary, reasons = row["has_problem"], row["problem_types"]
-    if binary not in {"", "0", "1"}:
+def _binary_value(value):
+    if value not in {"", "0", "1"}:
         raise ValueError("Saved binary review value must be 0, 1 or missing")
+    return None if value == "" else value == "1"
+
+
+def _decode(row, issues):
+    binary, reasons = _binary_value(row["has_problem"]), row["problem_types"]
     selected = None if reasons == "" else json.loads(reasons)
     if selected is not None and (
         not isinstance(selected, list)
@@ -73,7 +77,7 @@ def _decode(row, issues):
         raise ValueError("Saved issue labels are outside the rubric")
     return {
         **row,
-        "has_problem": None if binary == "" else binary == "1",
+        "has_problem": binary,
         "problem_types": None if selected is None else sorted(selected),
     }
 
@@ -213,6 +217,53 @@ def load_binary_review_tables(project):
         models[name] = [_decode(row, []) for row in tables[name + "_reviews"]]
         unique_index(models[name])
     return models, tables["protocol"], tables["run"]
+
+
+def load_review_diagnostics(project):
+    project = Path(project).resolve()
+    manifest = load_json(project / "configs/data/review-diagnostics.json")
+    if manifest.get("schema_version") != 1:
+        raise ValueError("Saved review diagnostics need schema version one")
+    tables = _load_tables(project, manifest)
+    issues = load_json(project / "configs/review/jev.json")["issues"]
+    metadata, humans, _, _, _ = load_review_tables(project, issues)
+    items = unique_index(metadata)
+    people = {(row["id"], row["reviewer"]): row for row in humans}
+    sentences = []
+    for row in tables["sentences"]:
+        original = people[(row["id"], row["reviewer"])]
+        reasons = row["counter_problem_types"]
+        typed = _decode({"has_problem": row["C_problem"], "problem_types": reasons}, issues)
+        sentences.append(
+            {
+                **original,
+                "sentence_problems": {
+                    role: _binary_value(row[role + "_problem"]) for role in "SCU"
+                },
+                "counter_problem_types": typed["problem_types"],
+                "sentence_actions": {role: row[role + "_action"] for role in "SCU"},
+                "needs_regeneration": _binary_value(row["needs_regeneration"]),
+                "has_local_edit": _binary_value(row["has_local_edit"]),
+            }
+        )
+    if {(row["id"], row["reviewer"]) for row in sentences} != people.keys() or len(
+        sentences
+    ) != len(humans):
+        raise ValueError("Sentence labels must cover the original independent human reviews")
+    scores = []
+    for row in tables["scores"]:
+        scores.append(
+            {
+                **items[row["id"]],
+                **{
+                    key: _binary_value(value) if key.endswith("_flag") else float(value)
+                    for key, value in row.items()
+                    if key != "id"
+                },
+            }
+        )
+    unique_index(scores)
+    return scores, sentences, tables["protocol"], tables["run"]
 
 
 def prepare_human_review_inputs(human_rows, metadata):

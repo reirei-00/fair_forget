@@ -69,6 +69,19 @@ def test_import_preserves_disagreement_edits_partial_reviews_and_deidentifies():
     assert next(row for row in reviews if row["has_problem"] is True)["problem_types"] is None
     assert "private-person" not in json.dumps(reviews)
     assert receipt["excluded_rows"] == {"undone": 1, "repeat_person_item": 1}
+    _, localized, _ = import_human_reviews(
+        snapshot,
+        ["x"],
+        {"unnatural": {"label": "Звучить неприродно"}},
+        reviewer_salt="fixture-salt",
+        include_sentences=True,
+    )
+    assert [
+        {key: row[key] for key in original} for row, original in zip(localized, reviews)
+    ] == reviews
+    edited = next(row for row in localized if row["has_local_edit"])
+    assert edited["needs_regeneration"] is False
+    assert edited["sentence_actions"]["C"] == "edit"
 
 
 def test_legacy_comments_are_not_invented_other_votes():
