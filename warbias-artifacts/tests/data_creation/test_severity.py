@@ -1,5 +1,6 @@
 """Severity aggregation keeps incompatible ratings and missing cases explicit."""
 
+import csv
 from copy import deepcopy
 
 import pytest
@@ -224,11 +225,18 @@ def test_mapping_rejects_incompatible_triplet_metadata(change, message):
         inherit_triplet_severity([row], taxonomy, "en")
 
 
-def test_loading_checks_portable_paths_and_exact_input_hashes(tmp_path):
+def severity_project(tmp_path, *, taxonomy=None, ratings=None, cases=None):
     ratings_path = tmp_path / "protocol/inputs/ratings.jsonl"
     cases_path = tmp_path / "protocol/inputs/cases.jsonl"
-    write_rows(ratings_path, [rating(0.2, "R1"), rating(0.4, "R2")])
-    write_rows(cases_path, [evidence()])
+    taxonomy_path = tmp_path / "protocol/inputs/taxonomy.csv"
+    write_rows(
+        ratings_path, ratings if ratings is not None else [rating(0.2, "R1"), rating(0.4, "R2")]
+    )
+    write_rows(cases_path, cases if cases is not None else [evidence()])
+    with taxonomy_path.open("w", encoding="utf-8", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=["public_case_id"], lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(taxonomy if taxonomy is not None else [{"public_case_id": "C1"}])
     protocol = {
         **POLICY,
         "inputs": {
@@ -237,18 +245,70 @@ def test_loading_checks_portable_paths_and_exact_input_hashes(tmp_path):
                 "sha256": file_digest(ratings_path),
             },
             "cases": {"path": "protocol/inputs/cases.jsonl", "sha256": file_digest(cases_path)},
+            "taxonomy": {
+                "path": "protocol/inputs/taxonomy.csv",
+                "sha256": file_digest(taxonomy_path),
+            },
         },
     }
     path = tmp_path / "protocol/severity.json"
     write_json(path, protocol)
+    return protocol
+
+
+def test_loading_checks_portable_paths_and_exact_input_hashes(tmp_path):
+    protocol = severity_project(tmp_path)
+    ratings_path = tmp_path / protocol["inputs"]["ratings"]["path"]
+    path = tmp_path / "protocol/severity.json"
     result = load_severity(tmp_path)
     assert len(result["ratings"]) == 2 and len(result["case_evidence"]) == 1
+    assert result["taxonomy"] == [{"public_case_id": "C1"}]
     ratings_path.write_text(ratings_path.read_text() + "\n")
     with pytest.raises(ValueError, match="ratings input differs"):
         load_severity(tmp_path)
     protocol["inputs"]["ratings"]["path"] = "../outside.jsonl"
     write_json(path, protocol)
     with pytest.raises(ValueError, match="stay within the portable project"):
+        load_severity(tmp_path)
+
+
+def test_loading_rejects_stale_taxonomy_binding(tmp_path):
+    protocol = severity_project(tmp_path)
+    taxonomy_path = tmp_path / protocol["inputs"]["taxonomy"]["path"]
+    taxonomy_path.write_text("public_case_id\nC2\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="taxonomy input differs"):
+        load_severity(tmp_path)
+
+
+@pytest.mark.parametrize("with_rating", [False, True])
+def test_loading_rejects_retired_case_evidence_and_ratings(tmp_path, with_rating):
+    severity_project(
+        tmp_path,
+        ratings=[rating(0.2, "R1", "retired")] if with_rating else [],
+        cases=[evidence("retired")],
+    )
+    with pytest.raises(ValueError, match="belong to the current taxonomy"):
+        load_severity(tmp_path)
+
+
+def test_loading_keeps_unrated_current_taxonomy_cases_available(tmp_path):
+    severity_project(tmp_path, taxonomy=[{"public_case_id": "C1"}, {"public_case_id": "new"}])
+    result = load_severity(tmp_path)
+    assert [row["public_case_id"] for row in result["taxonomy"]] == ["C1", "new"]
+    assert {row["case_id"] for row in result["ratings"]} == {"C1"}
+
+
+@pytest.mark.parametrize(
+    ("taxonomy", "message"),
+    [
+        ([], "nonempty public case IDs"),
+        ([{"public_case_id": ""}], "nonempty public case IDs"),
+        ([{"public_case_id": "C1"}, {"public_case_id": "C1"}], "Duplicate public_case_id"),
+    ],
+)
+def test_loading_requires_unique_nonempty_taxonomy_case_ids(tmp_path, taxonomy, message):
+    severity_project(tmp_path, taxonomy=taxonomy)
+    with pytest.raises(ValueError, match=message):
         load_severity(tmp_path)
 
 

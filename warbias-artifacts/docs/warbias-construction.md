@@ -164,6 +164,8 @@ Ukrainian source and remains separate from Ukrainian triplet review.
 
 [Notebook 6](../notebooks/06_severity.ipynb) assigns severity to taxonomy cases
 from the saved human ratings, then maps each case result to its triplets.
+The severity protocol binds the current taxonomy by file hash. Its input ratings
+and annotation stimuli must resolve to case IDs in that taxonomy version.
 Compute the equal-weight mean of at least two independent ratings from the
 confirmed rubric version. Preserve all source ratings and list excluded versions
 in the calculation audit. Report scores on the original 0–100 scale, assign one

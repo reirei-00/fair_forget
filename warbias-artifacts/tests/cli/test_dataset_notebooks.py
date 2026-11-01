@@ -251,6 +251,18 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
     monkeypatch.chdir(ROOT / "notebooks")
     namespace = execute_notebook("06_severity")
     result = namespace["result"]
+    assert result["taxonomy_binding"] == namespace["dataset"]["protocol"]["files"]["taxonomy"]
+    assert namespace["annotation"]["taxonomy"] == namespace["dataset"]["taxonomy"]
+    assert result["scope"] == {
+        "taxonomy_cases": 120,
+        "ratings": 239,
+        "rating_cases_matched": 120,
+        "rating_cases_unmatched": 0,
+        "evidence_cases_matched": 120,
+        "evidence_cases_unmatched": 0,
+        "taxonomy_cases_without_ratings": 0,
+        "taxonomy_cases_without_evidence": 0,
+    }
     taxonomy = read_rows(result["taxonomy_jsonl"])
     by_case = {row["public_case_id"]: row for row in taxonomy}
     assert by_case["WB-C128"]["severity_score"] is None
@@ -338,3 +350,18 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
     assert sum(int(row["case_count"]) for row in exported_brackets) == 105
     assert sum(int(row["triplet_count"]) for row in exported_brackets) == 881
     assert {path: path.read_bytes() for path in source_paths} == before
+
+
+@pytest.mark.parametrize("changed_input", ["ratings", "case_evidence", "taxonomy"])
+def test_severity_notebook_rejects_annotation_scope_mismatch(monkeypatch, changed_input):
+    from warbias_kit.warbias import severity
+
+    annotation = severity.load_severity(ROOT)
+    if changed_input == "taxonomy":
+        annotation["taxonomy"][0]["claim_en"] = "A different taxonomy claim."
+    else:
+        annotation[changed_input][0]["case_id"] = "WB-C999"
+    monkeypatch.setattr(severity, "load_severity", lambda project: annotation)
+    monkeypatch.chdir(ROOT / "notebooks")
+    with pytest.raises(AssertionError, match="current taxonomy"):
+        execute_notebook("06_severity")

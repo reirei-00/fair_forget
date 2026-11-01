@@ -23,19 +23,19 @@
     "cases": {
       "path": "protocol/inputs/severity_cases.jsonl",
       "sha256": "9fdff0adf774b463abb25ae26f0ae6320206627fbee555c2d68e90671693fdd7"
+    },
+    "taxonomy": {
+      "path": "protocol/inputs/cohort_taxonomy.csv",
+      "sha256": "a97a1de753d2ac17b7f8c76e0f749ff34efcaf3e505d8c144987b114a5e33577"
     }
   },
   "source": {
     "id": "human_severity_annotations",
     "type": "human_annotation",
-    "selection": "Active severity reviews for cases in the current taxonomy. Exclude undone submissions and retain unknown rubric versions without inferring a version.",
+    "selection": "Active severity reviews matched by case ID to the bound current taxonomy. Preserve recorded rubric versions and source stimuli.",
     "source_counts": {
-      "active_cases": 127,
-      "active_ratings": 254,
-      "selected_cases": 119,
-      "selected_ratings": 238,
-      "excluded_cases": 8,
-      "excluded_ratings": 16
+      "cases": 119,
+      "ratings": 238
     },
     "application": {
       "repository": "the-project/warbias-annotate",
@@ -56,7 +56,8 @@
     "pending": "Fewer than two compatible ratings leave severity_score and its bracket null. The calculation audit lists ratings with unknown rubric versions as excluded.",
     "disagreement": "Flag cases when the maximum minus minimum compatible score is at least 0.4. Preserve the case mean and the individual ratings.",
     "inheritance": "Triplets inherit their case mean, bracket and status through case_id. Source examples and current text have separate hash bindings. Both languages carry the same case-level severity annotation.",
-    "brackets": "Map the assigned mean on the 0–100 scale to five equal-width brackets. Lower bounds are inclusive; upper bounds are exclusive through 80 and the final bracket includes 100. Pending means retain a null bracket."
+    "brackets": "Map the assigned mean on the 0–100 scale to five equal-width brackets. Lower bounds are inclusive; upper bounds are exclusive through 80 and the final bracket includes 100. Pending means retain a null bracket.",
+    "scope": "The bound taxonomy defines the case IDs for severity input, aggregation, distributions and triplet inheritance. Annotation case IDs must belong to this taxonomy version."
   },
   "output_unit": "severity_points_0_100",
   "additional_sources": [
