@@ -283,4 +283,26 @@ def test_severity_notebook_exports_aligned_sidecars_without_changing_source_data
         assert all(
             row["severity_score"] == by_case[row["case_id"]]["severity_score"] for row in rows
         )
+    analysis = result["analysis"]
+    summary = json.loads(Path(analysis["summary_json"]).read_text())
+    assert summary == analysis["summary"] == namespace["summary"]
+    assert summary["assigned_cases"] == 105
+    assert summary["assigned_triplets"] == 881
+    assert summary["pending_cases"] == 15
+    assert summary["pending_triplets"] == 126
+    decisions = read_rows(analysis["case_decisions_jsonl"])
+    assert len(decisions) == 120
+    assert decisions == namespace["case_decision_rows"]
+    worked = {row["case_id"]: row for row in namespace["worked_decisions"]}
+    assert worked["WB-C002"]["eligible_sum_100"] == pytest.approx(148)
+    assert worked["WB-C002"]["severity_score"] == pytest.approx(74)
+    assert worked["WB-C001"]["severity_status"] == "high_disagreement"
+    assert worked["WB-C009"]["severity_score"] is None
+    assert worked["WB-C128"]["rating_gap_100"] is None
+    assert Path(analysis["figure_png"]).read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+    from xml.etree import ElementTree
+
+    assert ElementTree.parse(analysis["figure_svg"]).getroot().tag.endswith("svg")
+    for key in ("case_decisions_csv", "cdf_csv"):
+        assert Path(analysis[key]).is_file()
     assert {path: path.read_bytes() for path in source_paths} == before

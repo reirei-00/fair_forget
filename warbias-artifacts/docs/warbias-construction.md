@@ -173,5 +173,11 @@ The mean is descriptive, not consensus. Severity sidecars bind the case, annotat
 examples and current triplet text. They record inherited case severity rather
 than direct annotation of each Ukrainian or English sentence.
 
+The notebook shows each calculation and the cumulative distribution of assigned
+scores. It reports case-weighted and triplet-weighted summaries separately, using
+one language for triplet counts. Pending cases stay outside score distributions.
+The observed means and medians describe this dataset; the rubric keeps its
+original continuous 0–100 scale and endpoint meanings.
+
 The [notebook guide](../README.md#walkthroughs) provides the six executable
 walkthroughs and run instructions.
