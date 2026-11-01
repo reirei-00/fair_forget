@@ -146,14 +146,9 @@ def _taxonomy_rows(taxonomy, matrix, sources, allowed_scopes):
         if not category_evidence <= source_index.keys():
             raise ValueError("Every cohort category evidence ID must resolve to a recorded source")
         linked = [source_index[identity] for identity in evidence]
-        for field, source_field in (
-            ("source_types", "source_type"),
-            ("source_urls", "url"),
-            ("source_titles", "title"),
-        ):
-            expected = {source[source_field] for source in linked if source.get(source_field)}
-            if _listed(row.get(field), field) != expected:
-                raise ValueError(f"Cohort {field} differ from the recorded evidence")
+        expected = {source["source_type"] for source in linked if source.get("source_type")}
+        if _listed(row.get("source_types"), "source_types") != expected:
+            raise ValueError("Cohort source_types differ from the recorded evidence")
     return cases, categories
 
 

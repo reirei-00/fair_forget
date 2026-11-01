@@ -32,6 +32,12 @@ def test_full_cohort_taxonomy_matches_its_bindings_and_recorded_profiles():
     assert Counter(row["case_scope"] for row in taxonomy) == {"general": 119, "local": 6}
     assert all("[TARGET]" in row[field] for row in taxonomy for field in ("claim_uk", "claim_en"))
     assert all(row["case_scope_reason"] for row in taxonomy if row["case_scope"] == "local")
+    for row in taxonomy:
+        assert "supporting_source_urls" not in row
+        assert "supporting_source_titles" not in row
+        for field in ("source_urls", "source_titles"):
+            references = json.loads(row[field])
+            assert len(references) == len(set(references))
 
     profiles = [
         json.loads(line)

@@ -1,5 +1,6 @@
 """Evidence caveats preserve case provenance and identify their exact profile scope."""
 
+import json
 from copy import deepcopy
 
 import pytest
@@ -34,21 +35,19 @@ def evidence_inputs():
         ("hypothesis", "C2", "study-one", "published_reference"),
         ("transfer", "C3", "study-two", "published_reference"),
     ):
+        supporting = ["study-one", "study-two"] if kind == "source_adaptation" else []
+        linked = [source for source in sources if source["evidence_id"] in {evidence, *supporting}]
         taxonomy.append(
             {
                 "case_id": identity,
                 "public_case_id": public,
                 "evidence_ids": evidence,
                 "source_types": kind,
-                "supporting_evidence_ids": "study-one;study-two"
-                if kind == "source_adaptation"
-                else "",
-                "supporting_source_urls": '["https://example.org/two", "https://example.org/one"]'
-                if kind == "source_adaptation"
-                else "",
-                "supporting_source_titles": '["Second study", "First study"]'
-                if kind == "source_adaptation"
-                else "",
+                "supporting_evidence_ids": ";".join(supporting),
+                "source_urls": json.dumps(
+                    [source["url"] for source in linked if source.get("url")]
+                ),
+                "source_titles": json.dumps([source["title"] for source in linked]),
             }
         )
     matrix = [
@@ -178,18 +177,64 @@ def test_duplicate_mapping_cannot_repeat_a_case_and_basis(evidence_inputs):
         validate_cohort_evidence(**evidence_inputs)
 
 
-@pytest.mark.parametrize(
-    "field", ["supporting_evidence_ids", "supporting_source_urls", "supporting_source_titles"]
-)
-def test_adaptation_support_columns_match_the_mapping_and_source_registry(evidence_inputs, field):
-    evidence_inputs["taxonomy"][0][field] = '["incorrect"]'
+def test_adaptation_support_ids_match_the_mapping(evidence_inputs):
+    evidence_inputs["taxonomy"][0]["supporting_evidence_ids"] = '["incorrect"]'
     with pytest.raises(ValueError, match="Taxonomy supporting"):
         validate_cohort_evidence(**evidence_inputs)
 
 
-def test_nonadapted_cases_cannot_gain_adaptation_support_columns(evidence_inputs):
-    evidence_inputs["taxonomy"][1]["supporting_source_urls"] = '["https://example.org/one"]'
+def test_nonadapted_cases_cannot_gain_adaptation_support_ids(evidence_inputs):
+    evidence_inputs["taxonomy"][1]["supporting_evidence_ids"] = "study-one"
     with pytest.raises(ValueError, match="Taxonomy supporting"):
+        validate_cohort_evidence(**evidence_inputs)
+
+
+@pytest.mark.parametrize("field", ["source_urls", "source_titles"])
+@pytest.mark.parametrize("case", [0, 1])
+@pytest.mark.parametrize("damage", ["missing", "extra", "duplicate", "wrong"])
+def test_combined_citations_match_original_and_supporting_references(
+    evidence_inputs, field, case, damage
+):
+    row = evidence_inputs["taxonomy"][case]
+    values = json.loads(row[field])
+    if damage == "missing":
+        values.pop()
+    elif damage == "extra":
+        values.append("not-a-recorded-reference")
+    elif damage == "duplicate":
+        values.append(values[0])
+    else:
+        values[0] = "not-a-recorded-reference"
+    row[field] = json.dumps(values)
+    with pytest.raises(ValueError, match=field):
+        validate_cohort_evidence(**evidence_inputs)
+
+
+def test_citation_union_preserves_original_links_and_scoped_evidence_rows(evidence_inputs):
+    source = evidence_inputs["sources"][0]
+    source["url"] = "https://example.org/original"
+    row = evidence_inputs["taxonomy"][0]
+    row["source_urls"] = json.dumps([source["url"], *json.loads(row["source_urls"])])
+    before = deepcopy(evidence_inputs)
+    resolved = validate_cohort_evidence(**evidence_inputs)
+    assert resolved[0]["source_urls"] == ["https://example.org/one", "https://example.org/two"]
+    assert resolved[0]["source_titles"] == ["First study", "Second study"]
+    assert source["title"] in json.loads(row["source_titles"])
+    assert evidence_inputs == before
+
+
+def test_citation_union_lists_a_shared_original_and_supporting_link_once(evidence_inputs):
+    evidence_inputs["sources"][0]["url"] = "https://example.org/one"
+    assert validate_cohort_evidence(**evidence_inputs)
+    assert (
+        json.loads(evidence_inputs["taxonomy"][0]["source_urls"]).count("https://example.org/one")
+        == 1
+    )
+
+
+def test_citation_union_rejects_unknown_original_evidence_ids(evidence_inputs):
+    evidence_inputs["taxonomy"][0]["evidence_ids"] = "missing"
+    with pytest.raises(ValueError, match="known evidence IDs"):
         validate_cohort_evidence(**evidence_inputs)
 
 

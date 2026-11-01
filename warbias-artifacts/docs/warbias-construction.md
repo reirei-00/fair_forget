@@ -19,8 +19,10 @@ tied to a named country, institution, legal status, language or source-specific
 regional identity are excluded. This case-level selection retains language
 profiles within general cases. It does not establish stereotype prevalence.
 
-Claim sources, supporting references and category feedback have separate
-columns. “Source-based adaptation” (`source_adaptation`) means a case constructed
+The taxonomy combines claim and supporting references in `source_urls` and
+`source_titles`. Their roles remain distinct in `evidence_ids` and
+`supporting_evidence_ids`; category feedback has its own field.
+“Source-based adaptation” (`source_adaptation`) means a case constructed
 from topics or subtypes described in cited sources. Feedback informs category
 names, merges and splits. All claim templates use `[TARGET]` for the group name
 while retaining intrinsic qualifiers; generation uses the source claim wording.
