@@ -75,8 +75,8 @@
   "metadata_correction": {
     "kind": "translator_model_identity",
     "original_file": "translation_sample_quality.json",
-    "original_file_sha256": "037a280a415f3b108dcc9f29a7ebcd5db0e2c79ea4bc79cd5db70a948f02a3dc",
-    "original_result_sha256": "dc0e7c0beff907a56c4c3abda8a1efd6e182af1f2b998e33f468d725b951a482",
+    "original_file_sha256": "c0f0b138a7a8e473045d46a7d367d3f0fd69b9aabf743900b6576841baf7a7b9",
+    "original_result_sha256": "e77b94385438fee683b569b6bcf62c7584fbc37f1b42fdf1a70d71748c9d5c5d",
     "scores_reused_without_inference": true
   },
   "metric": "COMET",
@@ -97,7 +97,7 @@
     "snapshot_revision_verified": true,
     "strict_state_dict": false
   },
-  "plan_sha256": "f80b8dc0ca08b227a11bad667bc4dc1d49a6ac6dade6739e91e1a04d41fec6a4",
+  "plan_sha256": "0eca36edc01c7fb104a404b66f1b4d37d1ab5d3844b341590facb89240a11a71",
   "prediction_options": {
     "accelerator": "mps",
     "batch_size": 8,
@@ -105,7 +105,7 @@
     "num_workers": 1
   },
   "reference_free": true,
-  "result_sha256": "b6ea1a3c1c50401878f7e07905b7ea3c5162956a7008070b27989a83ecc5a055",
+  "result_sha256": "5c9e9c6a1eea003fb305c388523eafa10d5d44fade10df09079fe080c41be83c",
   "schema_version": 1,
   "segments": [
     {

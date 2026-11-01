@@ -16,7 +16,7 @@ def _parser():
     from warbias_kit import construction_cli
 
     construction_cli.add_commands(commands)
-    commands.add_parser("doctor", help="Check the paired public Fair-UK API")
+    commands.add_parser("doctor", help="Check the local data-release contract")
     sources = commands.add_parser("sources", help="Bind selected cases to immutable sources")
     sources.add_argument("--cases", type=Path, required=True)
     sources.add_argument("--sources", type=Path, required=True)
@@ -64,12 +64,10 @@ def dispatch(args):
     if args.command in construction_cli.COMMANDS:
         return construction_cli.dispatch(args)
     if args.command == "doctor":
-        from lm_eval.fair_uk import contracts
+        from warbias_kit import contracts
 
         if not callable(getattr(contracts, "validate_data_release", None)):
-            raise ValueError(
-                "The installed lm_eval distribution lacks the public Fair-UK data-release contract"
-            )
+            raise ValueError("The installed package lacks the data-release contract")
         return {"status": "public_api_available", "network_requests": 0}
     if args.command == "sources":
         from warbias_kit.warbias.source import prepare_cases

@@ -151,7 +151,7 @@ def test_release_is_review_bound_and_never_promotes_machine_review(tmp_path):
     manifest = build_release(
         [en], [uk], reviews, SOURCES, {"family1": "development"}, output, release_id="fixture-v1"
     )
-    from lm_eval.fair_uk.contracts import validate_data_release
+    from warbias_kit.contracts import validate_data_release
 
     validate_data_release(manifest, root=output)
     assert manifest["qualification"]["human_validated"] is False

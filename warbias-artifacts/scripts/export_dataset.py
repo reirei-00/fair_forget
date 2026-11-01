@@ -42,7 +42,24 @@ FILES = (
     "scripts/run_notebooks.py",
     "scripts/run_coverage.py",
 )
-MACHINE_PATH = re.compile(r"/(?:Users|home|scratch)/[^\s\"']+|/p/(?:project|scratch)/[^\s\"']+")
+MACHINE_PATH = re.compile(
+    r"/(?:Users|home|scratch)/[^\s\"']+|/p/(?:project|scratch)/[^\s\"']+"
+    r"|/(?:(?:private)/)?(?:var)/folders/[^\s\"']+"
+    r"|[A-Za-z]:(?:\\+|/)(?i:Users)(?:\\+|/)[^\s\"']+"
+)
+AUTHOR_METADATA = {
+    "author",
+    "authors",
+    "affiliation",
+    "contact",
+    "created_by",
+    "creator",
+    "email",
+    "hostname",
+    "organization",
+    "owner",
+    "username",
+}
 PRIVATE_CONFIG_KEYS = {
     "keychain",
     "api_key",
@@ -89,6 +106,21 @@ def _validate_text(path, relative):
 
 
 def _validate_notebook(notebook):
+    def check_metadata(value):
+        if isinstance(value, dict):
+            if {str(key).casefold() for key in value} & AUTHOR_METADATA:
+                raise ValueError("Notebook metadata must omit author and machine identities")
+            for child in value.values():
+                check_metadata(child)
+        elif isinstance(value, list):
+            for child in value:
+                check_metadata(child)
+
+    check_metadata(notebook.get("metadata", {}))
+    for cell in notebook.get("cells", []):
+        check_metadata(cell.get("metadata", {}))
+        for output in cell.get("outputs", []):
+            check_metadata(output.get("metadata", {}))
     cells = [
         cell
         for cell in notebook.get("cells", [])
@@ -188,6 +220,8 @@ def source_root(source):
 def verify(directory, *, check_imports=False):
     """Check every exported byte and optional editable-package import origin."""
     directory = Path(directory).resolve()
+    if any(directory.rglob(".git")):
+        raise ValueError("Anonymous exports must not contain Git metadata")
     manifest = json.loads((directory / MANIFEST).read_text(encoding="utf-8"))
     if (
         manifest.get("schema_version") != 1
@@ -204,6 +238,8 @@ def verify(directory, *, check_imports=False):
         raise ValueError(
             f"Source manifest mismatch: missing={missing}, added={added}, changed={changed}"
         )
+    for relative in actual:
+        _validate_text(directory / relative, Path(relative))
     if check_imports:
         spec = importlib.util.find_spec("warbias_kit")
         actual_origin = Path(spec.origin).resolve() if spec and spec.origin else None

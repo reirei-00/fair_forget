@@ -39,18 +39,16 @@ def pilot_inputs(tmp_path):
 
 
 def test_doctor_requires_only_the_public_data_release_contract(monkeypatch):
-    contracts = ModuleType("lm_eval.fair_uk.contracts")
-    contracts.validate_data_release = lambda *args, **kwargs: None
-    module = ModuleType("lm_eval.fair_uk")
-    module.contracts = contracts
-    monkeypatch.setitem(sys.modules, module.__name__, module)
+    from warbias_kit import contracts
+
+    monkeypatch.setattr(contracts, "validate_data_release", lambda *args, **kwargs: None)
     assert main(["doctor"])["network_requests"] == 0
 
 
 def test_unavailable_data_release_contract_fails_doctor(monkeypatch, capsys):
-    module = ModuleType("lm_eval.fair_uk")
-    module.contracts = ModuleType("lm_eval.fair_uk.contracts")
-    monkeypatch.setitem(sys.modules, module.__name__, module)
+    from warbias_kit import contracts
+
+    monkeypatch.delattr(contracts, "validate_data_release")
     with pytest.raises(SystemExit) as error:
         main(["doctor"])
     assert error.value.code == 1

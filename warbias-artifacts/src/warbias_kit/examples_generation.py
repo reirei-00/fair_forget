@@ -95,7 +95,11 @@ def prepare_fixture(*, prompt_root):
 
 def run_generation_example(output, *, prompt_root):
     """Exercise pilot → blinded fixture scores/choice → selected full generation."""
-    from warbias_kit.warbias.blind_review import bind_reviews, build_blind_package, decision_template
+    from warbias_kit.warbias.blind_review import (
+        bind_reviews,
+        build_blind_package,
+        decision_template,
+    )
     from warbias_kit.warbias.pilot import run_pilot
     from warbias_kit.warbias.production import generate_full
     from warbias_kit.warbias.selection import select_condition

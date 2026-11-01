@@ -53,7 +53,7 @@
   },
   "quality_config": "configs/translation/quality.json",
   "quality_result": "protocol/translation_sample_quality_identified.json",
-  "quality_result_sha256": "d7c7b6852731455b973cf2b63902ee747defdb1ef4eb250e3a5aa73047f74c6f",
+  "quality_result_sha256": "fbd9a7d25e6095395680ec0e5e17d5dccca698e6ea7ef6f35a8eff57bb47a080",
   "sample_size": 10,
   "sentence_pairs": 30,
   "human_validated": false,
