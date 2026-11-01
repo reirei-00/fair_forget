@@ -129,13 +129,15 @@ def validate_cohort_evidence(document, taxonomy, matrix, sources):
     if adaptations.keys() != adapted_cases:
         raise ValueError("Evidence mapping must cover exactly all source-adapted cases")
     for identity, case in cases.items():
-        evidence, resolved = adaptations.get(identity, (set(), {}))
-        expected = {
-            "supporting_evidence_ids": evidence,
-            "supporting_source_urls": set(resolved.get("source_urls", [])),
-            "supporting_source_titles": set(resolved.get("source_titles", [])),
-        }
-        for field, values in expected.items():
+        support, _ = adaptations.get(identity, (set(), {}))
+        if _cell(case.get("supporting_evidence_ids"), "supporting evidence IDs") != support:
+            raise ValueError("Taxonomy supporting_evidence_ids differ from the evidence mapping")
+        citations = _cell(case.get("evidence_ids"), "case evidence IDs") | support
+        if not citations <= references.keys():
+            raise ValueError("Taxonomy citations need known evidence IDs")
+        linked = [references[source] for source in citations]
+        for field, source_field in (("source_urls", "url"), ("source_titles", "title")):
+            values = {source[source_field] for source in linked if source.get(source_field)}
             if _cell(case.get(field), field) != values:
-                raise ValueError(f"Taxonomy {field} differ from the evidence mapping")
+                raise ValueError(f"Taxonomy {field} differ from the recorded references")
     return result

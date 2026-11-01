@@ -4,7 +4,7 @@
   "inputs": {
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
-      "sha256": "5c970e828f6662a57ad5918e7a4b1b3200ae0ca20934be705c74af4b0451ff25"
+      "sha256": "238fca6919d362107bd0bfe03641f8a7b837b9cbf8a0a2baecb35d60d95c20ee"
     },
     "attributes": {
       "path": "protocol/inputs/cohort_attributes.json",

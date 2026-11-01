@@ -86,8 +86,6 @@ def cohort_project(tmp_path, monkeypatch):
                 "source_urls": '["https://example.org/study"]',
                 "source_titles": '["Source title"]',
                 "supporting_evidence_ids": "",
-                "supporting_source_urls": "",
-                "supporting_source_titles": "",
                 "triplet_count": str(count),
             }
         )
@@ -445,11 +443,9 @@ def _adapted_claim(fixture, group, original, display):
         claim_uk=display,
         evidence_ids="compiled-source",
         source_types="source_adaptation",
-        source_urls="[]",
-        source_titles='["Source-based stereotype cases"]',
+        source_urls='["https://example.org/study"]',
+        source_titles='["Source-based stereotype cases", "Source title"]',
         supporting_evidence_ids="source",
-        supporting_source_urls='["https://example.org/study"]',
-        supporting_source_titles='["Source title"]',
     )
     fixture["evidence"]["records"] = [
         {
