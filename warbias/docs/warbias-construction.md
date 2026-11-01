@@ -36,6 +36,12 @@ displaced abroad. It excludes occupation experience, return from abroad and
 civilian war disability. The registry has 28 categories, 11 actor profiles and
 120 source cases. `taxonomy_revision.json#/registry_scope` lists the removed IDs.
 
+The separate [full cohort taxonomy](../protocol/inputs/cohort_taxonomy.csv)
+preserves 125 cases and 1,045 inputs, including six local cases and 119 general
+cases. The [reference manifest](../protocol/cohort_taxonomy.json) binds its
+taxonomy, attribute catalog and evidence mapping. It is a reference table, not
+a replacement for the generation and coverage inputs described here.
+
 Notebook 1 displays the source-case taxonomy in this scope and the current selected cases.
 Green marks cases used as a source or selected for the current design, as labelled
 above each table. The source table keeps split-parent links visible. The

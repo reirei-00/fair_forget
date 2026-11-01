@@ -84,7 +84,7 @@ def _cohort_sources(sources):
     ]
 
 
-def _taxonomy_rows(taxonomy, matrix, sources):
+def _taxonomy_rows(taxonomy, matrix, sources, allowed_scopes):
     cases = unique_index(taxonomy, "case_id")
     active_cases = {row["case_id"] for row in matrix}
     if cases.keys() != active_cases:
@@ -109,6 +109,8 @@ def _taxonomy_rows(taxonomy, matrix, sources):
                 raise ValueError(f"Cohort taxonomy needs nonempty {field}")
         if row.get("case_scope") not in ("general", "local"):
             raise ValueError("Cohort case_scope must be general or local")
+        if row["case_scope"] not in allowed_scopes:
+            raise ValueError("Cohort case_scope is outside the allowed case scopes")
         reason = row.get("case_scope_reason")
         if not isinstance(reason, str):
             raise ValueError("Cohort case_scope_reason must be text")
@@ -185,8 +187,8 @@ def _attribute_counts(attributes, allocations, matrix):
         ):
             raise ValueError("Cohort attribute values need English labels")
         actual = {
-            "selected_1200": sum(name in row["additional_tags"] for row in allocations),
-            "retained_1045": sum(name in row["additional_tags"] for row in matrix),
+            "allocated_items": sum(name in row["additional_tags"] for row in allocations),
+            "retained_items": sum(name in row["additional_tags"] for row in matrix),
         }
         if any(
             type(dimension.get(key)) is not int or dimension[key] != value
@@ -206,6 +208,9 @@ def load_cohort(project, inputs=None):
         raise ValueError("Read a valid cohort protocol from the portable project") from None
     if protocol.get("schema_version") != 1:
         raise ValueError("Cohort protocol needs schema version one")
+    allowed_scopes = _identities(protocol.get("allowed_case_scopes"), "allowed case scopes")
+    if not allowed_scopes or not allowed_scopes <= {"general", "local"}:
+        raise ValueError("Allowed case scopes must select general or local")
     bindings = protocol.get("inputs", {})
     taxonomy = read_csv(_bound_file(project, bindings.get("taxonomy"), "taxonomy"))
     attributes = json.loads(
@@ -234,16 +239,20 @@ def load_cohort(project, inputs=None):
     excluded_categories = _identities(
         protocol.get("exclude_category_codes"), "scope-excluded categories"
     )
+    excluded_cases = _identities(protocol.get("exclude_case_ids"), "scope-excluded case IDs")
     if not excluded_categories <= {
         frozen[identity]["category_code"] for identity in annotation_ids
     }:
         raise ValueError("Cohort exclusions contain an unknown category")
+    if not excluded_cases <= {frozen[identity]["case_id"] for identity in annotation_ids}:
+        raise ValueError("Cohort exclusions contain an unknown case ID")
     if not excluded <= annotation_ids or excluded != {
         identity
         for identity in annotation_ids
         if frozen[identity]["category_code"] in excluded_categories
+        or frozen[identity]["case_id"] in excluded_cases
     }:
-        raise ValueError("Scope-excluded IDs must cover exactly the excluded categories")
+        raise ValueError("Scope-excluded IDs must cover exactly the excluded categories and cases")
     active_ids = annotation_ids - excluded
     local_ids = _identities(protocol.get("local_context_item_ids"), "local-context item IDs")
     if not local_ids <= active_ids:
@@ -256,7 +265,7 @@ def load_cohort(project, inputs=None):
             inputs["sources"], inputs["source_feedback"], inputs.get("source_compilation", ())
         )
     )
-    cases, categories = _taxonomy_rows(taxonomy, matrix, sources)
+    cases, categories = _taxonomy_rows(taxonomy, matrix, sources, allowed_scopes)
     evidence_rows = validate_cohort_evidence(evidence_document, taxonomy, matrix, sources)
     dimensions = _attribute_counts(attributes, list(allocations.values()), matrix)
     for row in matrix:

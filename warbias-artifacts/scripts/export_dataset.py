@@ -194,7 +194,7 @@ def _inventory(directory):
 
 
 def source_root(source):
-    """Accept the project repository, its exact WarBias child, or a standalone copy.
+    """Prefer the repository's artifact package or accept a standalone copy.
 
     Select the child before inspecting export trees so sibling notebooks, data
     and dependencies never become part of the source package.
@@ -202,17 +202,20 @@ def source_root(source):
     source = Path(source).absolute()
     if source.is_symlink():
         raise ValueError("WarBias source cannot be a symlink")
-    child = source / "warbias"
-    if child.is_symlink():
-        raise ValueError("The WarBias subproject cannot be a symlink")
-    if child.exists():
-        source = child
+    for name in ("warbias-artifacts", "warbias"):
+        child = source / name
+        if child.is_symlink():
+            raise ValueError("The WarBias subproject cannot be a symlink")
+        if child.exists():
+            source = child
+            break
     if (
         not (source / "pyproject.toml").is_file()
         or not (source / "src/warbias_kit/warbias/provider.py").is_file()
     ):
         raise ValueError(
-            "Select the the-project repository, its warbias directory or a standalone WarBias export"
+            "Select the project repository, its warbias-artifacts or warbias directory, "
+            "or a standalone WarBias export"
         )
     return source.resolve()
 
@@ -293,7 +296,7 @@ def main(argv=None):
         "--source",
         type=Path,
         default=Path(__file__).resolve().parents[1],
-        help="the-project repository, warbias subproject, or standalone WarBias source directory",
+        help="project repository, warbias-artifacts or warbias directory, or standalone export",
     )
     build.add_argument("--output", type=Path, required=True)
     check = commands.add_parser("verify", help="Verify an exported source directory")

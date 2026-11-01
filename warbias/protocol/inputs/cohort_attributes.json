@@ -1,0 +1,435 @@
+{
+  "schema_version": 1,
+  "attribute_role": "additional_tags; intrinsic attributes stay fixed in each source case",
+  "dimensions": [
+    {
+      "dimension": "age",
+      "label_uk": "Вік",
+      "label_en": "Age",
+      "values": [
+        {
+          "value": "middle_aged",
+          "label_en": "Middle-aged"
+        },
+        {
+          "value": "older",
+          "label_en": "Older"
+        },
+        {
+          "value": "young",
+          "label_en": "Young"
+        },
+        {
+          "value": "young_adult",
+          "label_en": "Young adult"
+        }
+      ],
+      "allocated_items": 192,
+      "retained_items": 184
+    },
+    {
+      "dimension": "caregiving",
+      "label_uk": "Доглядові обов’язки",
+      "label_en": "Caregiving responsibilities",
+      "values": [
+        {
+          "value": "parent",
+          "label_en": "Parent"
+        },
+        {
+          "value": "unpaid_carer",
+          "label_en": "Unpaid carer"
+        }
+      ],
+      "allocated_items": 2,
+      "retained_items": 2
+    },
+    {
+      "dimension": "community_type",
+      "label_uk": "Тип громади",
+      "label_en": "Community type",
+      "values": [
+        {
+          "value": "rural",
+          "label_en": "Rural"
+        },
+        {
+          "value": "urban",
+          "label_en": "Urban"
+        }
+      ],
+      "allocated_items": 12,
+      "retained_items": 12
+    },
+    {
+      "dimension": "disability",
+      "label_uk": "Інвалідність",
+      "label_en": "Disability",
+      "values": [
+        {
+          "value": "unspecified_cause",
+          "label_en": "Cause not specified"
+        },
+        {
+          "value": "war_caused",
+          "label_en": "Disability caused by war"
+        }
+      ],
+      "allocated_items": 77,
+      "retained_items": 75
+    },
+    {
+      "dimension": "discharge_recency",
+      "label_uk": "Час після звільнення зі служби",
+      "label_en": "Time since discharge",
+      "values": [
+        {
+          "value": "longer_civilian_life",
+          "label_en": "Longer period in civilian life"
+        },
+        {
+          "value": "recently_discharged",
+          "label_en": "Recently discharged"
+        }
+      ],
+      "allocated_items": 10,
+      "retained_items": 10
+    },
+    {
+      "dimension": "displacement_origin",
+      "label_uk": "Походження переміщення",
+      "label_en": "Displacement origin",
+      "values": [
+        {
+          "value": "occupied_territories",
+          "label_en": "Occupied territories"
+        }
+      ],
+      "allocated_items": 49,
+      "retained_items": 49
+    },
+    {
+      "dimension": "displacement_wave",
+      "label_uk": "Хвиля переміщення",
+      "label_en": "Displacement wave",
+      "values": [
+        {
+          "value": "before_full_scale",
+          "label_en": "Before the full-scale invasion"
+        },
+        {
+          "value": "during_full_scale",
+          "label_en": "During the full-scale invasion"
+        }
+      ],
+      "allocated_items": 12,
+      "retained_items": 12
+    },
+    {
+      "dimension": "dual_status",
+      "label_uk": "Поєднання статусів",
+      "label_en": "Combined statuses",
+      "values": [
+        {
+          "value": "veteran_and_idp",
+          "label_en": "Veteran and IDP"
+        }
+      ],
+      "allocated_items": 19,
+      "retained_items": 19
+    },
+    {
+      "dimension": "ethnicity",
+      "label_uk": "Етнічність",
+      "label_en": "Ethnicity",
+      "values": [
+        {
+          "value": "roma",
+          "label_en": "Roma"
+        }
+      ],
+      "allocated_items": 8,
+      "retained_items": 8
+    },
+    {
+      "dimension": "gender",
+      "label_uk": "Стать",
+      "label_en": "Gender",
+      "values": [
+        {
+          "value": "men",
+          "label_en": "Men"
+        },
+        {
+          "value": "women",
+          "label_en": "Women"
+        }
+      ],
+      "allocated_items": 184,
+      "retained_items": 181
+    },
+    {
+      "dimension": "housing_type",
+      "label_uk": "Тип житла",
+      "label_en": "Housing type",
+      "values": [
+        {
+          "value": "collective_accommodation",
+          "label_en": "Collective accommodation"
+        },
+        {
+          "value": "rented_home",
+          "label_en": "Rented home"
+        }
+      ],
+      "allocated_items": 18,
+      "retained_items": 18
+    },
+    {
+      "dimension": "language",
+      "label_uk": "Мова",
+      "label_en": "Language",
+      "values": [
+        {
+          "value": "russian",
+          "label_en": "Russian"
+        },
+        {
+          "value": "ukrainian",
+          "label_en": "Ukrainian"
+        }
+      ],
+      "allocated_items": 12,
+      "retained_items": 12
+    },
+    {
+      "dimension": "occupation",
+      "label_uk": "Професійний сектор",
+      "label_en": "Occupational sector",
+      "values": [
+        {
+          "value": "education",
+          "label_en": "Education or training"
+        },
+        {
+          "value": "family_administration",
+          "label_en": "Office or administrative work"
+        },
+        {
+          "value": "family_agriculture",
+          "label_en": "Agriculture, forestry or horticulture"
+        },
+        {
+          "value": "family_education",
+          "label_en": "Education or training"
+        },
+        {
+          "value": "family_engineering",
+          "label_en": "Engineering, science or technical work"
+        },
+        {
+          "value": "family_finance_legal",
+          "label_en": "Finance, business or law"
+        },
+        {
+          "value": "family_healthcare",
+          "label_en": "Healthcare or paid care work"
+        },
+        {
+          "value": "family_hospitality",
+          "label_en": "Hospitality or catering"
+        },
+        {
+          "value": "family_it",
+          "label_en": "Information technology"
+        },
+        {
+          "value": "family_manufacturing",
+          "label_en": "Manufacturing or repair"
+        },
+        {
+          "value": "family_media",
+          "label_en": "Media, arts or communication"
+        },
+        {
+          "value": "family_property_services",
+          "label_en": "Cleaning or property maintenance"
+        },
+        {
+          "value": "family_retail",
+          "label_en": "Retail, sales or customer service"
+        },
+        {
+          "value": "family_trades",
+          "label_en": "Construction or skilled trades"
+        },
+        {
+          "value": "family_transport",
+          "label_en": "Transport or logistics"
+        },
+        {
+          "value": "healthcare",
+          "label_en": "Healthcare or paid care work"
+        },
+        {
+          "value": "it",
+          "label_en": "Information technology"
+        },
+        {
+          "value": "manufacturing",
+          "label_en": "Manufacturing or repair"
+        }
+      ],
+      "allocated_items": 136,
+      "retained_items": 0
+    },
+    {
+      "dimension": "rank",
+      "label_uk": "Військове звання",
+      "label_en": "Military rank",
+      "values": [
+        {
+          "value": "enlisted",
+          "label_en": "Rank-and-file personnel"
+        },
+        {
+          "value": "officer",
+          "label_en": "Officer ranks"
+        },
+        {
+          "value": "sergeant",
+          "label_en": "Sergeant ranks"
+        }
+      ],
+      "allocated_items": 15,
+      "retained_items": 15
+    },
+    {
+      "dimension": "recruitment_route",
+      "label_uk": "Спосіб вступу на службу",
+      "label_en": "Route into military service",
+      "values": [
+        {
+          "value": "contract",
+          "label_en": "Contract military service"
+        },
+        {
+          "value": "mobilized",
+          "label_en": "Mobilized"
+        },
+        {
+          "value": "volunteer",
+          "label_en": "Volunteer"
+        }
+      ],
+      "allocated_items": 33,
+      "retained_items": 33
+    },
+    {
+      "dimension": "region",
+      "label_uk": "Регіон",
+      "label_en": "Region",
+      "values": [
+        {
+          "value": "eastern_region",
+          "label_en": "Eastern region"
+        },
+        {
+          "value": "western_region",
+          "label_en": "Western region"
+        }
+      ],
+      "allocated_items": 18,
+      "retained_items": 16
+    },
+    {
+      "dimension": "registration",
+      "label_uk": "Реєстрація ВПО",
+      "label_en": "IDP registration",
+      "values": [
+        {
+          "value": "unregistered",
+          "label_en": "Unregistered"
+        }
+      ],
+      "allocated_items": 49,
+      "retained_items": 49
+    },
+    {
+      "dimension": "service_duration",
+      "label_uk": "Тривалість служби",
+      "label_en": "Length of military service",
+      "values": [
+        {
+          "value": "long_service",
+          "label_en": "Long service"
+        },
+        {
+          "value": "short_service",
+          "label_en": "Short service"
+        }
+      ],
+      "allocated_items": 24,
+      "retained_items": 24
+    },
+    {
+      "dimension": "service_period",
+      "label_uk": "Період служби",
+      "label_en": "Military service period",
+      "values": [
+        {
+          "value": "ato_oos",
+          "label_en": "Anti-Terrorist Operation / Joint Forces Operation period"
+        },
+        {
+          "value": "both",
+          "label_en": "Both service periods"
+        },
+        {
+          "value": "full_scale",
+          "label_en": "Full-scale invasion period"
+        }
+      ],
+      "allocated_items": 84,
+      "retained_items": 84
+    },
+    {
+      "dimension": "service_role",
+      "label_uk": "Роль на службі",
+      "label_en": "Military service role",
+      "values": [
+        {
+          "value": "combat",
+          "label_en": "Combat"
+        },
+        {
+          "value": "noncombat",
+          "label_en": "Non-combat"
+        }
+      ],
+      "allocated_items": 10,
+      "retained_items": 10
+    },
+    {
+      "dimension": "service_state",
+      "label_uk": "Статус служби",
+      "label_en": "Military service status",
+      "values": [
+        {
+          "value": "currently_serving",
+          "label_en": "Currently serving"
+        },
+        {
+          "value": "discharged",
+          "label_en": "Discharged"
+        },
+        {
+          "value": "returned_to_service",
+          "label_en": "Returned to service"
+        }
+      ],
+      "allocated_items": 24,
+      "retained_items": 21
+    }
+  ]
+}

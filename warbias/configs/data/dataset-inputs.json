@@ -186,6 +186,14 @@
       "bytes": 74800,
       "rows": 120,
       "role": "scoped_source_taxonomy_case_inventory"
+    },
+    "cohort_taxonomy": {
+      "path": "protocol/inputs/cohort_taxonomy.csv",
+      "sha256": "5c970e828f6662a57ad5918e7a4b1b3200ae0ca20934be705c74af4b0451ff25",
+      "format": "csv",
+      "bytes": 112095,
+      "rows": 125,
+      "role": "full_annotation_cohort_taxonomy_reference"
     }
   },
   "sampling": {
@@ -392,5 +400,9 @@
     "path": "protocol/allocation_design.json",
     "sha256": "864dda3a56b974ba70baf9c43a1eeccfaa6b6ffffe7656c53582882a048999c0",
     "role": "recorded_allocation_design"
+  },
+  "cohort_taxonomy_protocol": {
+    "path": "protocol/cohort_taxonomy.json",
+    "sha256": "026574c4b867f35551781aabb64a49172a2eb435581f065a7dc5c62c5408e3ce"
   }
 }

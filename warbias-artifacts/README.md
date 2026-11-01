@@ -4,11 +4,11 @@ WarBias uses blinded human ratings of Ukrainian samples to inform model and
 prompt selection. It then generates Ukrainian triplets with Lapa and sequential
 prompts and translates them into English. Both languages keep matching item IDs.
 
-The current annotation cohort contains **1,045 triplets in 125 semantic cases and 28
-categories: 611 veterans and 434 internally displaced people (IDPs)**.
+The selected cohort contains **1,006 triplets in 119 semantic cases and 27
+categories: 598 veterans and 408 internally displaced people (IDPs)**.
 [The cohort protocol](protocol/cohort.json) defines its membership.
 [The bilingual taxonomy](protocol/inputs/cohort_taxonomy.csv) lists every case,
-category, claim, source and general/local scope.
+category, claim and source. It includes only cases with `case_scope = general`.
 [The attribute catalog](protocol/inputs/cohort_attributes.json)
 records all 21 added dimensions and their original and retained counts.
 [The evidence mapping](protocol/inputs/cohort_evidence.json) records supporting
@@ -16,8 +16,10 @@ references and pending source checks, including their case or profile scope.
 
 The recorded design selected 1,000 base inputs and 200 profile extensions.
 Excluding 136 occupation profiles and five older women veteran profiles left
-1,059 items for human annotation. Excluding the 14 legitimacy-category items
-leaves the current 1,045. The [construction guide](docs/warbias-construction.md)
+1,059 items for human annotation. Excluding 14 legitimacy-category items and
+39 items in six local cases leaves the selected 1,006. The frozen allocation
+records and pilot ratings retain their original scope.
+The [construction guide](docs/warbias-construction.md)
 explains the selector, extensions and exclusions.
 
 Keep the intentional `the-project/` namespace in this artifact’s repository
@@ -47,7 +49,7 @@ The package includes its data-release validator.
 | --- | --- |
 | [1. Ukrainian pilot](notebooks/01_ukrainian_pilot.ipynb) | Saved Mamay/Lapa samples and two prompt methods |
 | [2. Model selection](notebooks/02_model_selection.ipynb) | Human pilot scores and the recorded Lapa/sequential choice |
-| [3. Ukrainian generation](notebooks/03_full_ukrainian_generation.ipynb) | Reproduce the allocation and prepare the current 1,045 inputs |
+| [3. Ukrainian generation](notebooks/03_full_ukrainian_generation.ipynb) | Reproduce the allocation and prepare the selected 1,006 inputs |
 | [4. Sample translation and COMET](notebooks/04_sample_translation_comet.ipynb) | Recorded Ukrainian-to-English translations and quality scores |
 | [5. English translation](notebooks/05_full_english_translation.ipynb) | Translate a complete Ukrainian input with aligned IDs |
 

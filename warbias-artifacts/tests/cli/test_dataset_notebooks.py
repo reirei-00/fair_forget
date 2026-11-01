@@ -65,7 +65,7 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         }
         assert all(row["candidate_id"] == "lapa12b" for row in result["highest_mean_conditions"])
     elif name == "03_full_ukrainian_generation":
-        assert result["matrix_rows"] == 1045 and result["planned_model_calls"] == 3135
+        assert result["matrix_rows"] == 1006 and result["planned_model_calls"] == 3018
         assert result["model_calls"] == 0
     elif name == "04_sample_translation_comet":
         assert result["translation_model"] == "gpt-6.1-sol"

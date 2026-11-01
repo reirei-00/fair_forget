@@ -99,16 +99,16 @@ def cohort_project(tmp_path, monkeypatch):
                 "label_uk": "Стать",
                 "label_en": "Gender",
                 "values": [{"value": value, "label_en": value} for value in ("men", "women")],
-                "selected_1200": 2,
-                "retained_1045": 2,
+                "allocated_items": 2,
+                "retained_items": 2,
             },
             {
                 "dimension": "occupation",
                 "label_uk": "Професійний сектор",
                 "label_en": "Occupation sector",
                 "values": [{"value": "it", "label_en": "Information technology"}],
-                "selected_1200": 1,
-                "retained_1045": 0,
+                "allocated_items": 1,
+                "retained_items": 0,
             },
         ],
     }
@@ -132,6 +132,8 @@ def cohort_project(tmp_path, monkeypatch):
             "evidence": {"path": "protocol/evidence.json", "sha256": file_digest(evidence_path)},
         },
         "exclude_category_codes": ["vet_legitimacy"],
+        "exclude_case_ids": [],
+        "allowed_case_scopes": ["general", "local"],
         "excluded_item_ids": ["WB-0004"],
         "local_context_item_ids": ["WB-0001", "WB-0002"],
         "expected": {
@@ -181,7 +183,7 @@ def test_cohort_selects_exact_profiles_keeps_local_and_recruitment_items(cohort_
         "ukraine_context",
         "cross_conflict_generic",
     ]
-    assert result["summary"]["dimensions"]["occupation"]["retained_1045"] == 0
+    assert result["summary"]["dimensions"]["occupation"]["retained_items"] == 0
     assert result["summary"]["stages"] == {"base": 3}
     assert original == cohort_project["inputs"]
     for row in rows:
@@ -231,6 +233,78 @@ def test_scope_exclusions_cannot_remove_only_part_of_a_category(cohort_project):
     cohort_project["protocol"]["excluded_item_ids"] = []
     _save_fixture(cohort_project)
     with pytest.raises(ValueError, match="exactly the excluded categories"):
+        cohort.load_cohort(cohort_project["root"])
+
+
+def _general_only_cohort(fixture):
+    original = fixture["inputs"]["matrix_reviewed"][2]
+    for table in ("profile_design", "matrix_reviewed"):
+        fixture["inputs"][table].extend(
+            [
+                {**deepcopy(original), "matrix_item_id": "WB-0006"},
+                {**deepcopy(original), "matrix_item_id": "WB-0007", "case_id": "other"},
+            ]
+        )
+    other = {
+        **fixture["taxonomy"][1],
+        "case_id": "other",
+        "public_case_id": "public-3",
+        "case_scope": "general",
+        "case_scope_reason": "",
+    }
+    fixture["taxonomy"] = [fixture["taxonomy"][0], other]
+    fixture["protocol"].update(
+        exclude_case_ids=["recruitment"],
+        allowed_case_scopes=["general"],
+        excluded_item_ids=["WB-0003", "WB-0004", "WB-0006"],
+    )
+    fixture["protocol"]["expected"].update(
+        original_allocations=7, original_annotation_items=6, scope_exclusions=3
+    )
+    _save_fixture(fixture)
+
+
+def test_general_scope_excludes_whole_cases_and_keeps_other_cases_in_the_category(cohort_project):
+    _general_only_cohort(cohort_project)
+    before = deepcopy(cohort_project["inputs"])
+    result = cohort.load_cohort(cohort_project["root"])
+    assert [row["matrix_item_id"] for row in result["matrix"]] == ["WB-0001", "WB-0002", "WB-0007"]
+    assert {row["case_id"] for row in result["taxonomy"]} == {"housing", "other"}
+    assert all(row["case_scope"] == "general" for row in result["taxonomy"])
+    assert any(row["category_code"] == "politics" for row in result["matrix"])
+    assert sum(row["context_scope"] == "ukraine_context" for row in result["matrix"]) == 2
+    assert cohort_project["inputs"] == before
+
+
+@pytest.mark.parametrize("identity", ["WB-0003", "WB-0006"])
+def test_case_exclusions_cannot_remove_only_part_of_a_family(cohort_project, identity):
+    _general_only_cohort(cohort_project)
+    cohort_project["protocol"]["excluded_item_ids"].remove(identity)
+    _save_fixture(cohort_project)
+    with pytest.raises(ValueError, match="exactly the excluded categories and cases"):
+        cohort.load_cohort(cohort_project["root"])
+
+
+@pytest.mark.parametrize("cases", [["unknown"], ["recruitment", "recruitment"], None])
+def test_cohort_rejects_unknown_or_duplicate_case_selectors(cohort_project, cases):
+    cohort_project["protocol"]["exclude_case_ids"] = cases
+    _save_fixture(cohort_project)
+    with pytest.raises(ValueError, match="case ID"):
+        cohort.load_cohort(cohort_project["root"])
+
+
+@pytest.mark.parametrize("scopes", [[], ["unknown"], ["general", "general"], None, "general"])
+def test_cohort_requires_declared_valid_case_scopes(cohort_project, scopes):
+    cohort_project["protocol"]["allowed_case_scopes"] = scopes
+    _save_fixture(cohort_project)
+    with pytest.raises(ValueError, match="case scopes"):
+        cohort.load_cohort(cohort_project["root"])
+
+
+def test_cohort_rejects_a_disallowed_case_even_when_counts_are_unchanged(cohort_project):
+    cohort_project["protocol"]["allowed_case_scopes"] = ["general"]
+    _save_fixture(cohort_project)
+    with pytest.raises(ValueError, match="case_scope is outside the allowed"):
         cohort.load_cohort(cohort_project["root"])
 
 
@@ -307,7 +381,7 @@ def test_cohort_attribute_catalog_matches_original_and_retained_profiles(cohort_
     elif change == "missing_value":
         dimensions[0]["values"].pop()
     else:
-        dimensions[1]["retained_1045"] = 1
+        dimensions[1]["retained_items"] = 1
     _save_fixture(cohort_project)
     with pytest.raises(ValueError, match="dimensions|values|counts"):
         cohort.load_cohort(cohort_project["root"])
@@ -525,18 +599,21 @@ def test_existing_template_keeps_other_group_mentions():
     assert cohort._display_claim({"claim": original, "bias_type_code": "veteran"}) == original
 
 
-def test_committed_cohort_keeps_all_local_items_and_has_exact_release_scope():
+def test_committed_cohort_contains_only_general_cases_with_exact_release_scope():
     result = cohort.load_cohort(ROOT)
     summary = result["summary"]
-    assert (summary["items"], summary["cases"], summary["categories"]) == (1045, 125, 28)
-    assert summary["by_target_group"] == {"veteran": 611, "idp": 434}
-    assert summary["local_context"] == 32
+    assert (summary["items"], summary["cases"], summary["categories"]) == (1006, 119, 27)
+    assert summary["by_target_group"] == {"veteran": 598, "idp": 408}
+    assert summary["original_allocations"] == 1200
+    assert summary["original_annotation_items"] == 1059
+    assert summary["scope_exclusions"] == 53
+    assert summary["stages"] == {"base": 860, "profile_extension": 146}
+    assert summary["local_context"] == 12
     assert all(
         "[TARGET]" in row[field] for row in result["taxonomy"] for field in ("claim_uk", "claim_en")
     )
-    assert sum(row["context_scope"] == "ukraine_context" for row in result["matrix"]) == 32
-    local_cases = [row for row in result["taxonomy"] if row["case_scope"] == "local"]
-    assert {row["public_case_id"] for row in local_cases} == {
+    assert sum(row["context_scope"] == "ukraine_context" for row in result["matrix"]) == 12
+    excluded_cases = {
         "WB-C029",
         "WB-C042",
         "WB-C081",
@@ -544,17 +621,20 @@ def test_committed_cohort_keeps_all_local_items_and_has_exact_release_scope():
         "WB-C115",
         "WB-C116",
     }
-    assert sum(row["case_scope"] == "general" for row in result["taxonomy"]) == 119
-    assert sum(int(row["triplet_count"]) for row in local_cases) == 39
+    assert not excluded_cases & {row["public_case_id"] for row in result["taxonomy"]}
+    assert all(row["case_scope"] == "general" for row in result["taxonomy"])
     assert not any(row["category_code"] == "vet_legitimacy" for row in result["matrix"])
     recruitment = [
         row
         for row in result["matrix"]
         if row["case_id"] == "ssuk_vet_political_identity_radicalism_tcc_case_006"
     ]
-    assert len(recruitment) == 5
+    assert not recruitment
     evidence = result["evidence"]
-    assert len(evidence) == 18
+    assert len(evidence) == 16
+    assert sum(row["evidence_basis"] == "source_adaptation" for row in evidence) == 8
+    assert sum(row["evidence_basis"] == "adapted_hypothesis" for row in evidence) == 2
+    assert sum(row["evidence_basis"] == "subgroup_transfer" for row in evidence) == 6
     subgroup_items = {
         identity for row in evidence if row["scope"] == "items" for identity in row["item_ids"]
     }

@@ -24,8 +24,8 @@
           "label_en": "Young adult"
         }
       ],
-      "selected_1200": 192,
-      "retained_1045": 184
+      "allocated_items": 192,
+      "retained_items": 181
     },
     {
       "dimension": "caregiving",
@@ -41,8 +41,8 @@
           "label_en": "Unpaid carer"
         }
       ],
-      "selected_1200": 2,
-      "retained_1045": 2
+      "allocated_items": 2,
+      "retained_items": 0
     },
     {
       "dimension": "community_type",
@@ -58,8 +58,8 @@
           "label_en": "Urban"
         }
       ],
-      "selected_1200": 12,
-      "retained_1045": 12
+      "allocated_items": 12,
+      "retained_items": 12
     },
     {
       "dimension": "disability",
@@ -75,8 +75,8 @@
           "label_en": "Disability caused by war"
         }
       ],
-      "selected_1200": 77,
-      "retained_1045": 75
+      "allocated_items": 77,
+      "retained_items": 73
     },
     {
       "dimension": "discharge_recency",
@@ -92,8 +92,8 @@
           "label_en": "Recently discharged"
         }
       ],
-      "selected_1200": 10,
-      "retained_1045": 10
+      "allocated_items": 10,
+      "retained_items": 8
     },
     {
       "dimension": "displacement_origin",
@@ -105,8 +105,8 @@
           "label_en": "Occupied territories"
         }
       ],
-      "selected_1200": 49,
-      "retained_1045": 49
+      "allocated_items": 49,
+      "retained_items": 45
     },
     {
       "dimension": "displacement_wave",
@@ -122,8 +122,8 @@
           "label_en": "During the full-scale invasion"
         }
       ],
-      "selected_1200": 12,
-      "retained_1045": 12
+      "allocated_items": 12,
+      "retained_items": 12
     },
     {
       "dimension": "dual_status",
@@ -135,8 +135,8 @@
           "label_en": "Veteran and IDP"
         }
       ],
-      "selected_1200": 19,
-      "retained_1045": 19
+      "allocated_items": 19,
+      "retained_items": 18
     },
     {
       "dimension": "ethnicity",
@@ -148,8 +148,8 @@
           "label_en": "Roma"
         }
       ],
-      "selected_1200": 8,
-      "retained_1045": 8
+      "allocated_items": 8,
+      "retained_items": 8
     },
     {
       "dimension": "gender",
@@ -165,8 +165,8 @@
           "label_en": "Women"
         }
       ],
-      "selected_1200": 184,
-      "retained_1045": 181
+      "allocated_items": 184,
+      "retained_items": 181
     },
     {
       "dimension": "housing_type",
@@ -182,8 +182,8 @@
           "label_en": "Rented home"
         }
       ],
-      "selected_1200": 18,
-      "retained_1045": 18
+      "allocated_items": 18,
+      "retained_items": 14
     },
     {
       "dimension": "language",
@@ -199,8 +199,8 @@
           "label_en": "Ukrainian"
         }
       ],
-      "selected_1200": 12,
-      "retained_1045": 12
+      "allocated_items": 12,
+      "retained_items": 12
     },
     {
       "dimension": "occupation",
@@ -280,8 +280,8 @@
           "label_en": "Manufacturing or repair"
         }
       ],
-      "selected_1200": 136,
-      "retained_1045": 0
+      "allocated_items": 136,
+      "retained_items": 0
     },
     {
       "dimension": "rank",
@@ -301,8 +301,8 @@
           "label_en": "Sergeant ranks"
         }
       ],
-      "selected_1200": 15,
-      "retained_1045": 15
+      "allocated_items": 15,
+      "retained_items": 15
     },
     {
       "dimension": "recruitment_route",
@@ -322,8 +322,8 @@
           "label_en": "Volunteer"
         }
       ],
-      "selected_1200": 33,
-      "retained_1045": 33
+      "allocated_items": 33,
+      "retained_items": 33
     },
     {
       "dimension": "region",
@@ -339,8 +339,8 @@
           "label_en": "Western region"
         }
       ],
-      "selected_1200": 18,
-      "retained_1045": 16
+      "allocated_items": 18,
+      "retained_items": 16
     },
     {
       "dimension": "registration",
@@ -352,8 +352,8 @@
           "label_en": "Unregistered"
         }
       ],
-      "selected_1200": 49,
-      "retained_1045": 49
+      "allocated_items": 49,
+      "retained_items": 45
     },
     {
       "dimension": "service_duration",
@@ -369,8 +369,8 @@
           "label_en": "Short service"
         }
       ],
-      "selected_1200": 24,
-      "retained_1045": 24
+      "allocated_items": 24,
+      "retained_items": 22
     },
     {
       "dimension": "service_period",
@@ -390,8 +390,8 @@
           "label_en": "Full-scale invasion period"
         }
       ],
-      "selected_1200": 84,
-      "retained_1045": 84
+      "allocated_items": 84,
+      "retained_items": 81
     },
     {
       "dimension": "service_role",
@@ -407,8 +407,8 @@
           "label_en": "Non-combat"
         }
       ],
-      "selected_1200": 10,
-      "retained_1045": 10
+      "allocated_items": 10,
+      "retained_items": 10
     },
     {
       "dimension": "service_state",
@@ -428,8 +428,8 @@
           "label_en": "Returned to service"
         }
       ],
-      "selected_1200": 24,
-      "retained_1045": 21
+      "allocated_items": 24,
+      "retained_items": 21
     }
   ]
 }
