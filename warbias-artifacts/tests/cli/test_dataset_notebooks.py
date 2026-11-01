@@ -38,16 +38,23 @@ def execute_notebook(name, replacements=None):
 def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
     from warbias_kit import cli_support
     from warbias_kit.translation import quality, reference
-    from warbias_kit.warbias import pilot, production
+    from warbias_kit.warbias import pilot, production, provider
 
     def unexpected(*args, **kwargs):
         raise AssertionError("Default dataset notebooks must not fetch data or run models")
+
+    run_requests = provider.run_requests
+
+    def preview_requests(*args, **kwargs):
+        assert kwargs.get("execute") is False
+        return run_requests(*args, **kwargs)
 
     monkeypatch.setattr(cli_support, "load_factory", unexpected)
     monkeypatch.setattr(quality, "load_comet_scorer", unexpected)
     monkeypatch.setattr(reference, "load_reference", unexpected)
     monkeypatch.setattr(pilot, "run_pilot", unexpected)
     monkeypatch.setattr(production, "generate_full", unexpected)
+    monkeypatch.setattr(provider, "run_requests", preview_requests)
     monkeypatch.chdir(ROOT / "notebooks")
     namespace = execute_notebook(name)
     result = namespace["result"]
@@ -68,7 +75,7 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         }
         assert all(row["candidate_id"] == "lapa12b" for row in result["highest_mean_conditions"])
     elif name == "03_full_ukrainian_generation":
-        assert result["matrix_rows"] == 1006 and result["planned_model_calls"] == 3018
+        assert result["matrix_rows"] == 1007 and result["planned_model_calls"] == 3021
         assert result["model_calls"] == 0
         assert namespace["current_dataset"]["summary"]["triplets"] == 1007
     elif name == "04_sample_translation_comet":
@@ -98,6 +105,42 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
         }
         assert result["triplets_per_language"] == {"uk": 1007, "en": 1007}
         assert result["assigned_triplets_per_language"] == {"uk": 881, "en": 881}
+
+
+def test_generation_notebook_preserves_dependencies_and_resumes(tmp_path, monkeypatch):
+    from warbias_kit.warbias.schema import STAGE_FIELD
+
+    class Provider:
+        def __init__(self):
+            self.requests = []
+            self.texts = {}
+
+        def generate(self, request):
+            self.requests.append(request)
+            item, stage = request["id"], request["stage"]
+            previous = self.texts.setdefault(item, {})
+            user = request["messages"][1]["content"]
+            if stage in {"C", "U"}:
+                assert previous["S"] in user
+            if stage == "U":
+                assert previous["C"] in user
+            text = f"Речення {stage} для прикладу {item}."
+            if stage == "U":
+                text = previous["C"]
+            previous[stage] = text
+            return {"text": json.dumps({STAGE_FIELD[stage] + "_uk": text})}
+
+    monkeypatch.chdir(ROOT / "notebooks")
+    namespace = execute_notebook("03_full_ukrainian_generation")
+    cases = namespace["generation_inputs"][:2]
+    run = namespace["run_generation"]
+    provider = Provider()
+    result = run(cases, tmp_path / "generation", provider=provider, execute=True)
+    assert len(provider.requests) == result["model_calls"] == 6
+    assert all(row["human_validated"] is False for row in result["rows"])
+    assert all("duplicate_fields" in row["mechanical_issues"] for row in result["rows"])
+    resumed = run(cases, tmp_path / "generation", provider=provider, execute=True)
+    assert resumed["model_calls"] == 0 and len(provider.requests) == 6
 
 
 def test_pilot_notebook_resolves_its_subproject_in_a_broader_repository(tmp_path, monkeypatch):
