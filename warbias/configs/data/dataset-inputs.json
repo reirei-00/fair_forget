@@ -189,9 +189,9 @@
     },
     "cohort_taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
-      "sha256": "0a7cd35c7fc48716ce9c765c41b40b946ec03e59a983a85f7e2a019f7a24457a",
+      "sha256": "bebe499d5eefd9e14402c77f98d6417c39b4a8c9467b4d9faca15daff93abc0d",
       "format": "csv",
-      "bytes": 113362,
+      "bytes": 113181,
       "rows": 126,
       "role": "full_annotation_cohort_taxonomy_reference"
     }
@@ -403,6 +403,6 @@
   },
   "cohort_taxonomy_protocol": {
     "path": "protocol/cohort_taxonomy.json",
-    "sha256": "f36d51436b7c223c116a38007aa575fe26384e055f7e7d4b45d0f41a27c00f3f"
+    "sha256": "3cc00be48d8f8446551e22527735026835c37505ba833686b250bfdb7810724f"
   }
 }

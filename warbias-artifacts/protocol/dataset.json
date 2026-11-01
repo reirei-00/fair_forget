@@ -15,7 +15,7 @@
     },
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
-      "sha256": "a80f3b8ba0f8975a517c7e9330538d8cf19dd124ae555f41ba1d2bada7147805"
+      "sha256": "a97a1de753d2ac17b7f8c76e0f749ff34efcaf3e505d8c144987b114a5e33577"
     },
     "schema": {
       "path": "protocol/inputs/dataset_schema.json",

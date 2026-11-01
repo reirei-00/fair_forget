@@ -134,7 +134,7 @@ the original text; they do not become independent reviews of changed sentences.
 
 ## Translation and review
 
-The full dataset translates all 1,007 current Ukrainian triplets with GPT-6 Astra.
+GPT-6 Astra translated all 1,007 Ukrainian triplets into English.
 Both languages retain matching IDs, case metadata, context labels and S/C/U
 roles. The [translation instructions](../prompts/current/translation_astra.txt)
 require faithful meaning, attribution and profile attributes. The runtime did
@@ -155,10 +155,34 @@ without an acceptance cutoff. They do not establish human validation of the
 translations or quality of the current Astra translations. The saved sample
 uses its own earlier Ukrainian and English text versions.
 
-Human review applies to the exact text version. Cohort membership identifies
+Triplet-quality review applies to the exact text version. Cohort membership identifies
 items sent for annotation; text provenance identifies subsequent author edits.
 No model-review labels are included. Translation review checks fidelity to the
 Ukrainian source and remains separate from Ukrainian triplet review.
 
-The [notebook guide](../README.md#walkthroughs) provides the five executable
+## Case severity
+
+[Notebook 6](../notebooks/06_severity.ipynb) assigns severity to taxonomy cases
+from the saved human ratings, then maps each case result to its triplets.
+The severity protocol binds the current taxonomy by file hash. Its input ratings
+and annotation stimuli must resolve to case IDs in that taxonomy version.
+Compute the equal-weight mean of at least two independent ratings from the
+confirmed rubric version. Preserve all source ratings and list excluded versions
+in the calculation audit. Report scores on the original 0–100 scale, assign one
+of the five equal-width brackets in the [severity protocol](../protocol/severity.json),
+and flag rater gaps of at least 40 points. Cases with fewer than two compatible
+ratings retain a null score and bracket.
+
+The mean summarises the ratings; their range records disagreement. Severity
+sidecars bind the case, annotation examples and current triplet text. Ukrainian
+and English triplets inherit the same case mean, bracket and status.
+
+The notebook shows each calculation and the cumulative distribution of assigned
+scores. It reports case-weighted and triplet-weighted summaries separately, using
+one language for triplet counts. Pending cases stay outside score distributions.
+The observed means and medians describe this dataset. The bracket boundaries
+divide the scale at 20, 40, 60 and 80; the annotation rubric retains its original
+endpoint meanings.
+
+The [notebook guide](../README.md#walkthroughs) provides the six executable
 walkthroughs and run instructions.

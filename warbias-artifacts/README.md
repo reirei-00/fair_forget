@@ -34,7 +34,8 @@ references.
 
 The package contains dataset text, construction inputs and reproducible methods.
 Per-item provenance separates original annotated text from author revisions.
-Original ratings apply only to unchanged text. A new model run reproduces the
+Triplet-quality ratings apply only to unchanged text. Case severity follows the
+taxonomy mapping in notebook 6. A new model run reproduces the
 selected inputs; its sentences can differ from saved dataset text.
 
 ## Install
@@ -59,7 +60,8 @@ The package includes its data-release validator.
 | [2. Model selection](notebooks/02_model_selection.ipynb) | Human pilot scores and the recorded Lapa/sequential choice |
 | [3. Ukrainian generation](notebooks/03_full_ukrainian_generation.ipynb) | Reproduce the original allocation and inspect the current 1,007 items |
 | [4. Sample translation and COMET](notebooks/04_sample_translation_comet.ipynb) | Recorded Ukrainian-to-English translations and quality scores |
-| [5. English translation](notebooks/05_full_english_translation.ipynb) | Verify all 1,007 Astra translations and prepare new translation runs |
+| [5. English translation](notebooks/05_full_english_translation.ipynb) | Verify all 1,007 Astra translations and their source hashes |
+| [6. Case severity](notebooks/06_severity.ipynb) | Assign case means and five brackets, inspect distributions and map both languages |
 
 Run the notebooks with a local Python kernel:
 
@@ -68,7 +70,7 @@ python scripts/run_notebooks.py
 ```
 
 Default execution reads saved evidence and prepares model requests. Explicit
-run flags enable generation, translation or COMET inference. Local outputs stay
+run flags enable generation or COMET inference. Local outputs stay
 in ignored `notebooks/runs/`. Set model versions, providers and settings in
 `configs/` before executing a model.
 

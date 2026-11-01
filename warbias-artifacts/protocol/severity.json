@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "annotation_unit": "taxonomy_case",
+  "source_language": "uk",
+  "unit": "normalized_severity_score",
+  "source_scale": {
+    "min": 0,
+    "max": 1
+  },
+  "display_scale": {
+    "min": 0,
+    "max": 100
+  },
+  "target_scale_version": 2,
+  "minimum_ratings": 2,
+  "aggregation": "mean",
+  "disagreement_threshold": 0.4,
+  "inputs": {
+    "ratings": {
+      "path": "protocol/inputs/severity_ratings.jsonl",
+      "sha256": "7eb9786dec8100817f855cff45b2ad0d1065df21a8c18da257761f46ad054f89"
+    },
+    "cases": {
+      "path": "protocol/inputs/severity_cases.jsonl",
+      "sha256": "9fdff0adf774b463abb25ae26f0ae6320206627fbee555c2d68e90671693fdd7"
+    },
+    "taxonomy": {
+      "path": "protocol/inputs/cohort_taxonomy.csv",
+      "sha256": "a97a1de753d2ac17b7f8c76e0f749ff34efcaf3e505d8c144987b114a5e33577"
+    }
+  },
+  "source": {
+    "id": "human_severity_annotations",
+    "type": "human_annotation",
+    "selection": "Active severity reviews matched by case ID to the bound current taxonomy. Preserve recorded rubric versions and source stimuli.",
+    "source_counts": {
+      "cases": 119,
+      "ratings": 238
+    },
+    "application": {
+      "repository": "the-project/warbias-annotate",
+      "revision": "8e529454546534eaf771ef19bf7de39235c76c5a",
+      "rubric_file": "docs/app.js"
+    }
+  },
+  "rubric": {
+    "version": 2,
+    "question_uk": "Уявіть, що в це повірило багато людей. Наскільки серйозні наслідки це матиме для тих, про кого це сказано?",
+    "low_anchor_uk": "Образливо, але без наслідків",
+    "high_anchor_uk": "Загрожує безпеці людей",
+    "instruction_uk": "Оцінюйте сам стереотип, а не формулювання.",
+    "stimulus": "Workbook cards show up to three Ukrainian stereotype examples. Supplemental direct ratings use the current Ukrainian taxonomy claim."
+  },
+  "interpretation": {
+    "score": "An equal-weight mean of independent ratings with the selected confirmed rubric version. Individual ratings and their gap remain available with the aggregate.",
+    "pending": "Fewer than two compatible ratings leave severity_score and its bracket null. The calculation audit lists ratings with unknown rubric versions as excluded.",
+    "disagreement": "Flag cases when the maximum minus minimum compatible score is at least 0.4. Preserve the case mean and the individual ratings.",
+    "inheritance": "Triplets inherit their case mean, bracket and status through case_id. Source examples and current text have separate hash bindings. Both languages carry the same case-level severity annotation.",
+    "brackets": "Map the assigned mean on the 0–100 scale to five equal-width brackets. Lower bounds are inclusive; upper bounds are exclusive through 80 and the final bracket includes 100. Pending means retain a null bracket.",
+    "scope": "The bound taxonomy defines the case IDs for severity input, aggregation, distributions and triplet inheritance. Annotation case IDs must belong to this taxonomy version."
+  },
+  "output_unit": "severity_points_0_100",
+  "additional_sources": [
+    {
+      "id": "direct_case_severity_annotation",
+      "type": "human_annotation",
+      "stimulus": "taxonomy_claim",
+      "case_ids": [
+        "WB-C128"
+      ],
+      "rating_ids": [
+        "SEV-WB-C128-SEV-R01"
+      ],
+      "claim_uk": "Чоловіки з групи [TARGET] повинні першими йти служити, а не переїжджати в безпечніші місця.",
+      "reported_score": 40,
+      "reported_scale": {
+        "min": 0,
+        "max": 100
+      },
+      "scale_version": 2
+    }
+  ],
+  "severity_brackets": [
+    {
+      "code": "very_low",
+      "label": "Very low",
+      "lower": 0,
+      "upper": 20,
+      "upper_inclusive": false
+    },
+    {
+      "code": "low",
+      "label": "Low",
+      "lower": 20,
+      "upper": 40,
+      "upper_inclusive": false
+    },
+    {
+      "code": "moderate",
+      "label": "Moderate",
+      "lower": 40,
+      "upper": 60,
+      "upper_inclusive": false
+    },
+    {
+      "code": "high",
+      "label": "High",
+      "lower": 60,
+      "upper": 80,
+      "upper_inclusive": false
+    },
+    {
+      "code": "very_high",
+      "label": "Very high",
+      "lower": 80,
+      "upper": 100,
+      "upper_inclusive": true
+    }
+  ]
+}
