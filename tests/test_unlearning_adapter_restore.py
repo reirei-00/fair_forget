@@ -9,6 +9,7 @@ from unittest import mock
 
 from fairforget.unlearning.adapter_restore import _rebase_recipe, restore
 from fairforget.unlearning.assets import file_hash
+from fairforget.unlearning.trainer import hash_tree
 
 
 class AdapterRestoreTests(unittest.TestCase):
@@ -73,9 +74,36 @@ class AdapterRestoreTests(unittest.TestCase):
                 self.assertIn("intervention.json", result["training_source"]["files_sha256"])
                 receipt["steps"] = 1
                 (source / "intervention.json").write_text(json.dumps(receipt))
-                with self.assertRaisesRegex(ValueError, "complete failed merge"):
+                with self.assertRaisesRegex(ValueError, "complete training"):
                     restore(object(), config, source, output)
                 receipt["steps"] = 2
                 (source / "intervention.json").write_text(json.dumps(receipt))
                 with self.assertRaisesRegex(ValueError, "same recipe"):
                     restore(object(), {**config, "changed": True}, source, output)
+                receipt.update(
+                    status="trained_merged",
+                    export_verification={
+                        "merged": {"passed": True, "expected_parameters_sha256": "verified"},
+                        "reloaded": {"passed": True},
+                    },
+                    adapter_files=hash_tree(source / "intervention_adapter"),
+                    loss_log_sha256=file_hash(source / "losses.jsonl"),
+                    exposure_log_sha256=file_hash(source / "exposure.jsonl"),
+                )
+                (source / "intervention.json").write_text(json.dumps(receipt))
+                result = restore(object(), config, source, output)
+                self.assertEqual(result["training_source"]["merged_parameters_sha256"], "verified")
+                for name in ("intervention_adapter/adapter_config.json", "losses.jsonl"):
+                    with self.subTest(changed=name):
+                        path = source / name
+                        original = path.read_bytes()
+                        path.write_bytes(b" " + original)
+                        try:
+                            with self.assertRaisesRegex(ValueError, "differs from its receipt"):
+                                restore(object(), config, source, output)
+                        finally:
+                            path.write_bytes(original)
+                receipt["export_verification"]["reloaded"]["passed"] = False
+                (source / "intervention.json").write_text(json.dumps(receipt))
+                with self.assertRaisesRegex(ValueError, "verified export"):
+                    restore(object(), config, source, output)

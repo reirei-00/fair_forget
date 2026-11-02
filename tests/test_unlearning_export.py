@@ -1,5 +1,7 @@
 """Export qualification catches BF16 update loss and changed reload behavior."""
 
+import copy
+import tempfile
 import unittest
 from unittest import mock
 
@@ -9,6 +11,29 @@ from fairforget.unlearning import export
 
 
 class ExportTests(unittest.TestCase):
+    def test_saved_adapter_reconstructs_the_same_merged_parameters(self):
+        try:
+            from peft import LoraConfig, get_peft_model
+            from peft.utils.save_and_load import load_peft_weights, set_peft_model_state_dict
+        except ImportError:
+            self.skipTest("Install the pinned training runtime for the PEFT integration check")
+        base = torch.nn.Sequential(torch.nn.Linear(2, 2, bias=False, dtype=torch.bfloat16))
+        original = copy.deepcopy(base)
+        config = LoraConfig(r=1, lora_alpha=2, target_modules=["0"])
+        model = get_peft_model(base, config)
+        with torch.no_grad():
+            base[0].lora_A["default"].weight.fill_(0.13)
+            base[0].lora_B["default"].weight.fill_(0.17)
+        with tempfile.TemporaryDirectory() as directory:
+            model.save_pretrained(directory, safe_serialization=True)
+            _, expected = export.merge_and_verify(model)
+            rebuilt = get_peft_model(copy.deepcopy(original), config)
+            set_peft_model_state_dict(rebuilt, load_peft_weights(directory, device="cpu"))
+            _, actual = export.merge_and_verify(rebuilt)
+            self.assertEqual(
+                expected["expected_parameters_sha256"], actual["expected_parameters_sha256"]
+            )
+
     def test_merge_checks_rounded_updates_and_untouched_parameters(self):
         try:
             from peft import LoraConfig, get_peft_model

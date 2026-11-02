@@ -90,8 +90,11 @@ the same probe positions, using the dtype-specific tolerances in the
 inputs or reload drift. Only a verified reload records `trained_merged`.
 These checks verify checkpoint export, not mitigation quality.
 
-If a completed run failed during merge verification, export its saved adapter
-without repeating training:
+Keep one final adapter per run and the pinned base model. Training uses a fixed
+two-epoch schedule and does not save intermediate checkpoints or select by test
+scores. Keep recipes, logs, export checks and all evaluation results.
+
+Rebuild a completed checkpoint, or recover a failed merge, without repeating training:
 
 ```bash
 python -m fairforget.unlearning.trainer --config /path/to/run/recipe.json \
@@ -102,6 +105,10 @@ The recipe and completed step log must match. The new receipt binds the original
 adapter and training evidence by hash. It keeps the original run unchanged.
 Configuration references may move only when both files retain the recorded hash.
 Model paths, training data and method settings must remain unchanged.
+Rebuilding a completed export checks the adapter files and requires the same
+merged parameters. A temporary merged copy can be removed after matched
+evaluation and reconstruction checks pass. Retain its file hashes, tokenizer
+and configuration so the saved results remain reproducible.
 
 ## Evaluation
 

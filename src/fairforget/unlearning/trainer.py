@@ -922,6 +922,7 @@ def run(config_path: Path | str, output: Path | str, *, export_from=None):
             receipt["task_vector_selection"] = selection
             receipt["null_intervention_selected"] = selection["selected"] == 0
         model.save_pretrained(out / "intervention_adapter", safe_serialization=True)
+        receipt["adapter_files"] = hash_tree(out / "intervention_adapter")
         receipt["development"] = evaluate_development(
             model,
             tokenizer,
@@ -934,6 +935,17 @@ def run(config_path: Path | str, output: Path | str, *, export_from=None):
         model.zero_grad(set_to_none=True)
         adapter_outputs = export.capture(model, probes)
         model, merge_check = export.merge_and_verify(model)
+        expected_merge = receipt.get("training_source", {}).get("merged_parameters_sha256")
+        if expected_merge:
+            reconstruction = {
+                "phase": "adapter_reconstruction",
+                "passed": merge_check["expected_parameters_sha256"] == expected_merge,
+                "expected_parameters_sha256": expected_merge,
+                "actual_parameters_sha256": merge_check["expected_parameters_sha256"],
+            }
+            if not reconstruction["passed"]:
+                raise export.ExportVerificationError(reconstruction)
+            receipt["export_verification"]["adapter_reconstruction"] = reconstruction
         merged_outputs = export.capture(model, probes)
         merge_check["adapter_rounding"] = export.rounding_diagnostics(
             adapter_outputs,
