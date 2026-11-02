@@ -31,8 +31,8 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
     assert (exported / "src/warbias_kit/warbias/provider.py").is_file()
     assert (exported / "protocol/pilot_snapshots.json").is_file()
     assert (exported / "notebooks/04_sample_translation_comet.ipynb").is_file()
-    assert len(list((exported / "notebooks").glob("[0-9][0-9]_*.ipynb"))) == 7
-    assert (exported / "notebooks/warbias_baseline.ipynb").is_file()
+    assert len(list((exported / "notebooks").glob("[0-9][0-9]_*.ipynb"))) == 8
+    assert (exported / "notebooks/08_warbias_baseline.ipynb").is_file()
     for relative in (
         "docs/evaluation.md",
         "scripts/prepare_warbias_evaluation.py",

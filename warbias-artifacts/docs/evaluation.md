@@ -1,6 +1,6 @@
 # WarBias baseline evaluation
 
-The [notebook](../notebooks/warbias_baseline.ipynb) defines the metrics and analyzes
+The [notebook](../notebooks/08_warbias_baseline.ipynb) defines the metrics and analyzes
 saved runs through Fair-UK. [Saved tables and source bindings](../evaluation/warbias_baseline/results/manifest.json)
 support inspection without model inference. Use the companion Fair-UK source revision
 `69616a41475769c63192c8e3bbd93f788e2a4fef` in the same environment:
@@ -28,7 +28,7 @@ python scripts/prepare_warbias_evaluation.py \
   --model-root /path/to/models
 export WARBIAS_BASELINE_RELEASE="$PWD/outputs/warbias-baseline-release"
 export WARBIAS_BASELINE_RESULTS="$PWD/outputs/warbias-baseline-results"
-jupyter lab notebooks/warbias_baseline.ipynb
+jupyter lab notebooks/08_warbias_baseline.ipynb
 ```
 
 Preparation verifies the local dataset and QA manifests and writes the evaluation
