@@ -241,8 +241,8 @@ def main(argv=None):
     }
     if options.model == "mamay27b_v2":
         environment["VLLM_BATCH_INVARIANT"] = "1"
-    else:
-        environment.pop("VLLM_BATCH_INVARIANT", None)
+    if environment.get("VLLM_BATCH_INVARIANT") not in (None, "0", "1"):
+        raise ValueError("VLLM_BATCH_INVARIANT must be 0 or 1")
     plan = {
         "model": options.model,
         "stage": options.stage,

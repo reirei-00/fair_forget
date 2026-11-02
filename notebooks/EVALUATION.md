@@ -21,17 +21,19 @@ with its [own setup](NATIVE_EVALUATION.md).
 
 ## Environment and paths
 
-Use Fair-UK revision `8e16737e4ee1e845a64f9f1ce9bb3329d7e32547`:
+Use Fair-UK revision `e0ffa59ce66a6dbd2b4875f76a01bff142dda20b`:
 
 ```bash
 git clone https://github.com/reirei-00/fair-uk.git ../fair-uk
-git -C ../fair-uk checkout 8e16737e4ee1e845a64f9f1ce9bb3329d7e32547
+git -C ../fair-uk checkout e0ffa59ce66a6dbd2b4875f76a01bff142dda20b
 python -m pip install -e ../fair-uk
 ```
 
 Install this library in the notebook environment.
 Use a separate Python 3.12 environment with vLLM 0.18.1, Transformers 4.57.6
-and NumPy 2.2.6 for GPU collection. Keep its runtime unchanged between phases.
+and NumPy 2.2.6 for GPU collection. Use `VLLM_BATCH_INVARIANT=1` and
+`attention_backend="TRITON_ATTN"` in both phases. Qualify each model on the
+target GPU. Collect a fresh base with these settings before adapter comparisons.
 Configure the existing baseline inputs exactly as in notebook 08:
 
 ```bash
@@ -57,13 +59,17 @@ source snapshot. `WARBIAS_AFTER_INFERENCE_RELEASE` can select that source
 explicitly. Fair-UK verifies unchanged inference and native scoring code.
 
 Run [setup](SETUP.md) first to prepare the four source-bound training bundles.
-Checkpoint directories use `METHOD/MODEL__GROUP_LANGUAGE/merged_checkpoint/`.
+Adapter directories use `METHOD/MODEL__GROUP_LANGUAGE/intervention_adapter/`.
+Load the pinned base with the saved adapter using `representation="adapter"`.
+Fair-UK fingerprints the base and adapter files separately. Do not merge the
+adapter into BF16 base weights for this evaluation. Collect both phases with
+the adapter-capable evaluator; older collector identities remain separate.
 
 ## Workflow
 
 1. Enable `RUN_PREPARE` after training. Verify all 40 exports before creating
    any releases. Preserve the baseline model options and copy its original and
-   control inputs unchanged. Only the measured checkpoint identity changes.
+   control inputs unchanged. The post profile adds the verified adapter path to the same base model.
 2. Enable `RUN_AFTER_COLLECTION` on the GPU host. Reuse the baseline runner,
    serial BF16 options, model-specific attention settings and repeated smoke gates.
    Each checkpoint supplies four original and two neutral panels. Validated

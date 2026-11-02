@@ -72,8 +72,14 @@ class NativeEvaluation:
         bootstrap=1000,
         seed=42,
         tolerance=1e-6,
+        representation="merged",
+        attention_backend=None,
     ):
         self.repo = Path(repo).resolve()
+        if representation not in {"merged", "adapter"}:
+            raise ValueError("Select a merged checkpoint or a separate adapter")
+        self.representation = representation
+        self.attention_backend = attention_backend
         self.fair_uk_root = Path(fair_uk_root).expanduser().resolve()
         self.python = Path(python).expanduser().absolute()
         self.bundle, self.development = [
@@ -138,7 +144,15 @@ class NativeEvaluation:
         )
 
     def require_training(self, item):
-        return verify_training_export(item, cache=self.checkpoint_cache)
+        return verify_training_export(
+            item, cache=self.checkpoint_cache, representation=self.representation
+        )
+
+    def checkpoint(self, item):
+        if self.representation == "adapter":
+            proof = self.require_training(item)
+            return proof["checkpoint"], {"adapter": proof["adapter"]}
+        return item["directory"] / "merged_checkpoint", {}
 
     def invoke(self, arguments, destination, *, gpu=True):
         destination = Path(destination)
@@ -174,9 +188,18 @@ class NativeEvaluation:
         if result.returncode:
             raise RuntimeError(f"Fair-UK failed; see {log}")
 
-    def collect(self, checkpoint, task, bundle, destination):
-        if any(character in str(checkpoint) for character in (",", "\n", "\r")):
+    def collect(self, checkpoint, task, bundle, destination, *, adapter=None):
+        if any(
+            character in str(path)
+            for path in (checkpoint, adapter)
+            for character in (",", "\n", "\r")
+        ):
             raise ValueError("Checkpoint paths cannot contain commas or newlines")
+        model_args = f"pretrained={checkpoint},{MODEL_SETTINGS},seed={self.seed}"
+        if self.attention_backend is not None:
+            model_args += f",attention_backend={self.attention_backend}"
+        if adapter is not None:
+            model_args += f",lora_local_path={adapter}"
         self.invoke(
             [
                 "run",
@@ -187,7 +210,7 @@ class NativeEvaluation:
                 "--model",
                 "vllm",
                 "--model-args",
-                f"pretrained={checkpoint},{MODEL_SETTINGS},seed={self.seed}",
+                model_args,
                 "--batch-size",
                 "8",
                 "--chunk-size",
@@ -208,9 +231,19 @@ class NativeEvaluation:
             destination,
         )
 
-    def require_run(self, directory, task, checkpoint, bundle):
+    def require_run(self, directory, task, checkpoint, bundle, *, adapter=None):
         entry, sources = bundle_rows(bundle, [task])[task]
         record = read_json(directory / "run.json")
+        identity = record.get("model_identity", {})
+        if adapter is not None:
+            from lm_eval.fair_uk.provenance import lora_identity
+
+            if identity.get("adapter") != lora_identity(adapter) or identity.get(
+                "parameters", {}
+            ).get("lora_local_path") != str(adapter):
+                raise ValueError("Saved evaluation uses a different adapter")
+        elif identity.get("adapter") or identity.get("parameters", {}).get("lora_local_path"):
+            raise ValueError("Expected evaluation without an adapter")
         read_json(directory / "report.json")
         predictions = read_rows(directory / "predictions.jsonl")
         ids = [row["id"] for row in predictions]
@@ -230,13 +263,15 @@ class NativeEvaluation:
             raise ValueError(f"Incomplete or mismatched Fair-UK collection: {directory}")
         return predictions
 
-    def qualify(self, checkpoint, label):
+    def qualify(self, checkpoint, label, **options):
         repeats = []
         for repeat in (1, 2):
             destination = self.output / "qualification" / label / f"repeat_{repeat}"
-            self.collect(checkpoint, self.qualification_task, self.development, destination)
+            self.collect(
+                checkpoint, self.qualification_task, self.development, destination, **options
+            )
             rows = self.require_run(
-                destination, self.qualification_task, checkpoint, self.development
+                destination, self.qualification_task, checkpoint, self.development, **options
             )
             if any(
                 not isinstance(row.get("scores"), list)
@@ -253,6 +288,7 @@ class NativeEvaluation:
         )
         proof = {
             "checkpoint": str(checkpoint),
+            **options,
             "absolute_tolerance": self.tolerance,
             "development_manifest_sha256": file_hash(self.development),
             "max_absolute_score_difference": difference,
@@ -289,23 +325,25 @@ class NativeEvaluation:
             raise FileExistsError("Training evidence already exists; choose a new evaluation root")
         write_json(path, evidence)
         for item in self.plan:
-            checkpoint = item["directory"] / "merged_checkpoint"
-            self.qualify(checkpoint, "after/" + item["method"] + "/" + item["run_id"])
+            checkpoint, options = self.checkpoint(item)
+            self.qualify(checkpoint, "after/" + item["method"] + "/" + item["run_id"], **options)
             for task in self.tasks:
-                self.collect(checkpoint, task, self.bundle, self.after(item, task))
-                self.require_run(self.after(item, task), task, checkpoint, self.bundle)
+                self.collect(checkpoint, task, self.bundle, self.after(item, task), **options)
+                self.require_run(self.after(item, task), task, checkpoint, self.bundle, **options)
 
     def run_comparison(self):
         self.preflight()
         self.verify_before()
         for item in self.plan:
             self.require_training(item)
+            checkpoint, options = self.checkpoint(item)
             for task in self.tasks:
                 self.require_run(
                     self.after(item, task),
                     task,
-                    item["directory"] / "merged_checkpoint",
+                    checkpoint,
                     self.bundle,
+                    **options,
                 )
         for item in self.plan:
             for task in self.tasks:

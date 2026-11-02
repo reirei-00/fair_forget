@@ -170,6 +170,105 @@ class WarBiasEvaluationTests(unittest.TestCase):
             },
         )
 
+    def test_saved_adapter_is_valid_without_merged_weights(self):
+        from fairforget.unlearning.evaluation_checkpoints import verify_training_export
+
+        item = self.workflow.plan[0]
+        base = self.root / "base"
+        base.mkdir()
+        (base / "model.safetensors").write_text("fixture base")
+        adapter = item["directory"] / "intervention_adapter"
+        adapter.mkdir()
+        settings = {
+            "peft_type": "LORA",
+            "r": 8,
+            "lora_alpha": 16,
+            "lora_dropout": 0.0,
+            "bias": "none",
+            "use_dora": False,
+            "use_rslora": False,
+            "target_modules": ["q_proj", "v_proj"],
+        }
+        (adapter / "adapter_config.json").write_text(json.dumps(settings))
+        (adapter / "adapter_model.safetensors").write_text("fixture adapter")
+        config = {
+            "method": item["method"],
+            "model_id": item["model"]["repository"],
+            "model_revision": item["model"]["revision"],
+            "tokenizer_revision": item["model"]["tokenizer_revision"],
+            "model_path": str(base),
+            "notebook_matrix": {"model_alias": item["model"]["id"]},
+            "training": {"max_steps": 2},
+            "lora": {"r": 8, "alpha": 16, "target_modules": ["q_proj", "v_proj"]},
+        }
+        receipt = {
+            **config,
+            "status": "trained_merged",
+            "steps": 2,
+            "config_sha256": "a" * 64,
+            "target_group": item["target_group"],
+            "language": item["training_language"],
+            "source_model_files": hash_tree(base),
+            "adapter_files": hash_tree(adapter),
+            "export_verification": {p: {"passed": True} for p in ("merged", "reloaded")},
+        }
+        (item["directory"] / "intervention.json").write_text(json.dumps(receipt))
+        provenance = {
+            "target_group": item["target_group"],
+            "training_language": item["training_language"],
+            "config_sha256": "a" * 64,
+        }
+        for path in (item["directory"] / "merged_checkpoint").iterdir():
+            path.unlink()
+        with mock.patch(
+            "fairforget.unlearning.evaluation_checkpoints.validate_config",
+            return_value=(config, {}, provenance),
+        ):
+            proof = verify_training_export(item, representation="adapter")
+            self.assertEqual(proof["checkpoint"], str(base))
+            self.assertEqual(proof["adapter"], str(adapter))
+            receipt["training_source"] = {
+                "files_sha256": {
+                    "intervention_adapter/" + row["path"]: row["sha256"]
+                    for row in receipt.pop("adapter_files")
+                }
+            }
+            (item["directory"] / "intervention.json").write_text(json.dumps(receipt))
+            restored = verify_training_export(item, representation="adapter")
+            self.assertEqual(restored["adapter_receipt_binding"], "training_source.files_sha256")
+            self.assertEqual(restored["adapter_files"], proof["adapter_files"])
+            (adapter / "adapter_model.safetensors").write_text("changed")
+            with self.assertRaisesRegex(ValueError, "Adapter bytes differ"):
+                verify_training_export(item, representation="adapter")
+
+    def test_adapter_profile_preserves_base_and_binds_adapter_files(self):
+        self.workflow.representation = "adapter"
+        for root in (self.workflow.release, self.workflow.neutral_release):
+            profiles = json.loads((root / "models.json").read_text())
+            for item in self.workflow.plan:
+                proof = self.proofs[item["run_id"]]
+                proof["adapter"] = str(item["directory"] / "intervention_adapter")
+                proof["adapter_files"] = [
+                    {"path": "adapter_config.json", "sha256": "a" * 64},
+                    {"path": "adapter_model.safetensors", "sha256": "b" * 64},
+                ]
+                profiles[item["model"]["id"]]["model_identity"]["local_files_sha256"] = {
+                    row["path"]: row["sha256"] for row in proof["files"]
+                }
+            (root / "models.json").write_text(json.dumps(profiles))
+        self.workflow.prepare()
+        for item in self.workflow.plan:
+            profile = json.loads(
+                (self.workflow._destination(item) / "original/models.json").read_text()
+            )[item["model"]["id"]]["model_identity"]
+            proof = self.proofs[item["run_id"]]
+            self.assertEqual(profile["parameters"]["pretrained"], proof["checkpoint"])
+            self.assertEqual(profile["parameters"]["lora_local_path"], proof["adapter"])
+            self.assertEqual(profile["adapter"]["type"], "lora")
+            self.assertEqual(
+                profile["adapter"]["local_files_sha256"]["adapter_model.safetensors"], "b" * 64
+            )
+
     def test_invalid_training_export_does_not_write_partial_releases(self):
         with mock.patch.object(
             evaluation, "verify_training_export", side_effect=ValueError("unverified export")

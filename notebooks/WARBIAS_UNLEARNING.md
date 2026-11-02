@@ -133,6 +133,8 @@ and configuration so the saved results remain reproducible.
 
 ## Evaluation
 
+Load the pinned base with the trained adapter separately for evaluation.
+Verify both file identities. Keep merged exports as separate results.
 Use the same held-out IDs before and after training. Keep scores separate by
 group and evaluation language. All metrics and uncertainty estimates must
 come from Fair-UK. The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb) supports

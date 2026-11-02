@@ -72,3 +72,10 @@ and 240 QA questions per language. Annotated original/neutral triplets use the
 Fair-UK WarBias adapter. The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb)
 provides their per-checkpoint scores and severity slices. Keep these panels
 separate from native benchmark results.
+
+Load each trained adapter with its pinned base using `representation="adapter"`.
+Fair-UK records both file identities. Keep the same evaluator version and
+inference settings in the two phases.
+
+Use `VLLM_BATCH_INVARIANT=1` and `attention_backend="TRITON_ATTN"`
+for both the base and adapter. Qualify repeated inference on the target GPU.

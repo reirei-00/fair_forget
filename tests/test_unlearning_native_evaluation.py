@@ -187,6 +187,29 @@ class NativeEvaluationTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "SHA256 differs"):
                     native.bundle_rows(bundle, ["stereoset_uk"])
 
+    def test_native_collection_passes_adapter_separately(self):
+        with mock.patch.object(self.workflow, "invoke") as invoke:
+            self.workflow.collect(
+                "/base",
+                "stereoset_uk",
+                self.root / "bundle.json",
+                self.root / "post",
+                adapter="/adapter",
+            )
+        argv = invoke.call_args.args[0]
+        parameters = argv[argv.index("--model-args") + 1]
+        self.assertIn("pretrained=/base,", parameters)
+        self.assertTrue(parameters.endswith(",lora_local_path=/adapter"))
+        self.workflow.representation = "adapter"
+        with mock.patch.object(
+            self.workflow,
+            "require_training",
+            return_value={"checkpoint": "/base", "adapter": "/adapter"},
+        ):
+            self.assertEqual(
+                self.workflow.checkpoint(self.workflow.plan[0]), ("/base", {"adapter": "/adapter"})
+            )
+
     def test_existing_output_or_logs_never_launch_another_process(self):
         destination = self.root / "existing"
         destination.mkdir()

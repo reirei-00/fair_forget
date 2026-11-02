@@ -43,8 +43,18 @@ class WarBiasEvaluation:
         inference_release=None,
         post_inference_release=None,
         selections=None,
+        representation="merged",
+        collector=None,
+        attention_backend=None,
     ):
         self.repo = Path(repo).resolve()
+        if representation not in {"merged", "adapter"}:
+            raise ValueError("Select a merged checkpoint or a separate adapter")
+        self.representation = representation
+        self.attention_backend = attention_backend
+        self.collector = Path(
+            collector or self.repo / "warbias-artifacts/scripts/run_warbias_baseline.py"
+        ).resolve()
         self.release, self.results, self.neutral_release, self.neutral_results = [
             Path(path).expanduser().resolve()
             for path in (release, results, neutral_release, neutral_results)
@@ -152,16 +162,23 @@ class WarBiasEvaluation:
             if identity["local_files_sha256"] != control["local_files_sha256"]:
                 raise ValueError("Baseline and neutral model profiles differ")
             params = profile.get("parameters") or identity["parameters"]
+            control_params = controls[model["id"]].get("parameters") or control["parameters"]
+            if params != control_params:
+                raise ValueError("Baseline and neutral inference parameters differ")
             expected = assets[model["id"]]
+            expected_parameters = dict(expected["inference_parameters"])
+            if self.attention_backend is not None:
+                expected_parameters["attention_backend"] = self.attention_backend
             if (
-                {k: v for k, v in params.items() if k != "pretrained"}
-                != expected["inference_parameters"]
+                {k: v for k, v in params.items() if k != "pretrained"} != expected_parameters
                 or identity["local_files_sha256"] != expected["file_sha256"]
                 or profile.get("revision") != model["revision"]
                 or profile.get("tokenizer_revision") != model["tokenizer_revision"]
             ):
                 raise ValueError("Baseline model profile differs from the selected model pins")
         return {
+            "checkpoint_representation": self.representation,
+            "attention_backend": self.attention_backend,
             "comparison_scope": self.comparison_scope(),
             "post_inference_source": snapshot,
             "collection": dict(SCORING_SETTINGS),
@@ -169,9 +186,7 @@ class WarBiasEvaluation:
             "bootstrap": 1000,
             "seed": 42,
             "baseline_notebook_sha256": file_hash(self.repo / BASELINE_NOTEBOOK),
-            "runner_sha256": file_hash(
-                self.repo / "warbias-artifacts/scripts/run_warbias_baseline.py"
-            ),
+            "runner_sha256": file_hash(self.collector),
         }
 
     def comparison_scope(self):
@@ -209,7 +224,9 @@ class WarBiasEvaluation:
             raise FileExistsError("Use a new WarBias evaluation release directory")
         cache = {}
         evidence = {
-            (item["method"], item["run_id"]): verify_training_export(item, cache=cache)
+            (item["method"], item["run_id"]): verify_training_export(
+                item, cache=cache, representation=self.representation
+            )
             for item in self.plan
         }
         profiles = read_json(self._source() / "models.json")
@@ -240,6 +257,19 @@ class WarBiasEvaluation:
                         },
                     },
                 }
+                if self.representation == "adapter":
+                    if (
+                        profile["model_identity"]["local_files_sha256"]
+                        != base["model_identity"]["local_files_sha256"]
+                    ):
+                        raise ValueError("Adapter base assets differ from the baseline")
+                    params["lora_local_path"] = proof["adapter"]
+                    profile["model_identity"]["adapter"] = {
+                        "type": "lora",
+                        "local_files_sha256": {
+                            row["path"]: row["sha256"] for row in proof["adapter_files"]
+                        },
+                    }
                 root = prepared / item["method"] / item["run_id"]
                 for kind in sources:
                     target = root / kind
@@ -247,10 +277,7 @@ class WarBiasEvaluation:
                         prepared / "_inputs" / kind, target / "inputs", copy_function=os.link
                     )
                     write_json(target / "models.json", {model: profile})
-                    shutil.copyfile(
-                        self.repo / "warbias-artifacts/scripts/run_warbias_baseline.py",
-                        target / "run_model.py",
-                    )
+                    shutil.copyfile(self.collector, target / "run_model.py")
                 record = {
                     "schema_version": 1,
                     "method": item["method"],
@@ -291,7 +318,10 @@ class WarBiasEvaluation:
         cache = {}
         for item in self.plan:
             record = self.verify_prepared(item)
-            if verify_training_export(item, cache=cache) != record["training_export"]:
+            if (
+                verify_training_export(item, cache=cache, representation=self.representation)
+                != record["training_export"]
+            ):
                 raise ValueError("Training export differs from the prepared evaluation")
             records.append((item, record))
         environment = dict(os.environ)
