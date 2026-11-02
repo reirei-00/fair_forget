@@ -360,10 +360,43 @@ def release_overview(release):
                 severity[case_id(value)]["severity_level"] == level for value in values
             )
         counts.append(row)
+    counts_by_actor = []
+    for actor in ("idp", "veteran"):
+        actor_rows = {
+            task: [
+                value
+                for value in values
+                if value.get("actor", value.get("source", {}).get("target_group"))
+                == actor
+            ]
+            for task, values in rows.items()
+        }
+        cases = {case_id(value) for values in actor_rows.values() for value in values}
+        for level in range(1, 6):
+            counts_by_actor.append(
+                {
+                    "actor": actor,
+                    "severity_level": level,
+                    "cases": sum(
+                        severity[case]["severity_level"] == level for case in cases
+                    ),
+                    **{
+                        task: sum(
+                            severity[case_id(value)]["severity_level"] == level
+                            for value in values
+                        )
+                        for task, values in actor_rows.items()
+                    },
+                }
+            )
     return {
         "models": list(profiles),
         "cells": cells,
-        "severity": {"counts": counts, "binding": binding},
+        "severity": {
+            "counts": counts,
+            "counts_by_actor": counts_by_actor,
+            "binding": binding,
+        },
         "source": manifest.get("source"),
         "validation": {
             "status": "verified",

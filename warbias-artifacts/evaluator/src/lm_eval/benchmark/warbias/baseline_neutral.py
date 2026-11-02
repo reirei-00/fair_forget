@@ -17,6 +17,7 @@ from lm_eval.benchmark.warbias.baseline_summary import (
     TRIPLET_FIELDS,
     attach,
     group_diagnostics,
+    group_severity_summary,
     paired_summary,
     scope_selections,
     summary,
@@ -372,6 +373,7 @@ def add_neutral_results(report, languages, draws, seed):
             }
             for scope, selected in scope_selections(items)
         ]
+        + group_severity_summary(items, "ss", draws, seed)
         for language, items in languages.items()
     }
     diagnostics = {

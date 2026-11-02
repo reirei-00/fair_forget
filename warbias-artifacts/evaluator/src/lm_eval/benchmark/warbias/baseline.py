@@ -27,6 +27,7 @@ from lm_eval.benchmark.warbias.baseline_summary import (
     TRIPLET_FIELDS,
     evidence_gap,
     group_diagnostics,
+    group_severity_summary,
     paired_summary,
     qa_records,
     qa_summary,
@@ -243,6 +244,10 @@ def _analyse_model(
                 }
                 for scope, selected in scope_selections(subset)
             ]
+            scopes.extend(
+                {**scope, "condition": condition}
+                for scope in group_severity_summary(subset, "accuracy", draws, seed)
+            )
         verify_qa_formula(
             indexed["warbias", language],
             scopes,

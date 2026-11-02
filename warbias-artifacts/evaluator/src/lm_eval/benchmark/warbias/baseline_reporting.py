@@ -88,7 +88,7 @@ def metric_definitions():
             "signed",
         ),
         "severity_slices": (
-            "Recalculate the existing outcomes within severity levels 1-5, joined by case ID. Empty levels retain counts and undefined scores.",
+            "Report outcomes within severity levels 1-5, joined by case ID. Report primary SS and QA accuracy separately for IDPs and veterans. Empty levels retain counts and undefined scores.",
             "same units as outcome",
             "descriptive; no severity-weighted scalar",
         ),
