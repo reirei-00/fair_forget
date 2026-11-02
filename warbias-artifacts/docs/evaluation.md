@@ -57,6 +57,7 @@ The equivalent CLI command is:
 fair-uk-eval warbias baseline \
   --release "$WARBIAS_BASELINE_RELEASE" \
   --results "$WARBIAS_BASELINE_RESULTS" \
+  --qa-answer-policy abc_explicit_choice_v3 \
   --output ./baseline-summary
 ```
 
