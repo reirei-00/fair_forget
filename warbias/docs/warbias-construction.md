@@ -59,7 +59,7 @@ The notebooks inspect saved evidence and prepare requests by default. Model
 execution requires the corresponding run flag and configured inputs.
 Notebook 2 saves the recorded study choice. Notebook 3 checks it against the
 human ratings and protocol before running the selected full-generation condition.
-Three raters supplied 144 scores for 48 of the 50 pilot items. Lapa sequential
+Three raters supplied 144 scores for 48 pilot triplets. Lapa sequential
 has the highest observed mean, 4.3889, followed by Lapa zero-shot at 4.3333.
 Conditions use different cases, so these means are descriptive. The recorded
 author choice is Lapa sequential for separate control of the three sentence roles.

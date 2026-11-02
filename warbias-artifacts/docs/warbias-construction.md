@@ -101,7 +101,7 @@ requests the complete triplet in one call. Sequential prompting generates S,
 then C using S, then U using both S and C.
 
 Raters did not see model or prompt-method identities. Three raters supplied 144
-scores for 48 of the 50 pilot items. Lapa sequential has the highest observed
+scores for 48 pilot triplets. Lapa sequential has the highest observed
 mean, 4.3889, followed by Lapa zero-shot at 4.3333. Conditions use different cases,
 so these means are descriptive. The final author choice, made after identities
 were revealed, uses Lapa sequential for separate control of the three sentence
