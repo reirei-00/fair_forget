@@ -128,7 +128,7 @@ and one author-edited feedback triplet, **WB-1201 / WB-C128**. This gives
 [additional generation protocol](../protocol/feedback_generation.json) records
 the Lapa model, sequential prompts and fixed male profile for that case.
 The [text provenance](../protocol/inputs/dataset_text_provenance.jsonl) records
-715 unchanged original items, six author-confirmed unchanged items, 285 edited
+715 unchanged original items, seven author-confirmed unchanged items, 284 edited
 items and the one edited addition. Original annotation labels remain bound to
 the original text; they do not become independent reviews of changed sentences.
 
