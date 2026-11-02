@@ -74,6 +74,10 @@ Checkpoint directories use `METHOD/MODEL__GROUP_LANGUAGE/merged_checkpoint/`.
    Check actual before/after runtime, tokenizer, effective inputs and row IDs.
    Save full and held-out analyses in separate directories.
 
+For a completed subset, pass explicit `(method, run_id)` pairs in
+`WarBiasEvaluation(..., selections=[("npo_kl", "qwen3_8b__idp_uk")])`.
+Only those exports are required. The experiment configuration remains unchanged.
+
 All metric definitions, calculations and CSV exports come from Fair-UK.
 The report binds the selected triplet IDs. All native predictions are verified
 before selection, including excluded rows. Empty or undefined outcomes remain

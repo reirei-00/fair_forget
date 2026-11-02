@@ -17,6 +17,25 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class WarBiasEvaluationTests(unittest.TestCase):
+    def test_explicit_selection_limits_evaluation_without_changing_the_study(self):
+        arguments = {
+            "release": self.root / "baseline",
+            "results": self.root / "baseline-results",
+            "neutral_release": self.root / "controls",
+            "neutral_results": self.root / "control-results",
+            "output": self.root / "selected-after",
+            "training_root": self.root / "training",
+        }
+        full = evaluation.WarBiasEvaluation(ROOT, **arguments)
+        selected = [(item["method"], item["run_id"]) for item in (full.plan[0], full.plan[-1])]
+        workflow = evaluation.WarBiasEvaluation(ROOT, **arguments, selections=selected)
+        self.assertEqual(workflow.plan, [full.plan[0], full.plan[-1]])
+        self.assertEqual(len(full.plan), 40)
+        for invalid in ([], selected * 2, [("npo_kl", "unknown-run")]):
+            with self.subTest(invalid=invalid):
+                with self.assertRaisesRegex(ValueError, "unique method/run pairs"):
+                    evaluation.WarBiasEvaluation(ROOT, **arguments, selections=invalid)
+
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)

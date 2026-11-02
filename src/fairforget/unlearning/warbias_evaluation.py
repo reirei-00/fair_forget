@@ -42,6 +42,7 @@ class WarBiasEvaluation:
         metadata_release=None,
         inference_release=None,
         post_inference_release=None,
+        selections=None,
     ):
         self.repo = Path(repo).resolve()
         self.release, self.results, self.neutral_release, self.neutral_results = [
@@ -66,6 +67,18 @@ class WarBiasEvaluation:
             else self.inference_release
         )
         self.plan = intervention_plan(self.repo, self.training_root)
+        if selections is not None:
+            requested = [tuple(key) for key in selections]
+            available = {(item["method"], item["run_id"]) for item in self.plan}
+            if (
+                not requested
+                or len(requested) != len(set(requested))
+                or not set(requested) <= available
+            ):
+                raise ValueError("Select unique method/run pairs from the experiment plan")
+            self.plan = [
+                item for item in self.plan if (item["method"], item["run_id"]) in requested
+            ]
         protected = [
             self.release,
             self.results,
