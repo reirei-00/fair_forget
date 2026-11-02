@@ -148,7 +148,7 @@ class WarBiasDataTests(unittest.TestCase):
         self.assertEqual(binding["global_split_counts"]["training"]["triplets"], 230)
         self.assertEqual(binding["global_split_counts"]["development"]["triplets"], 60)
 
-    def test_declared_metadata_correction_preserves_component_and_evaluation_isolation(self):
+    def test_restored_case_preserves_component_and_evaluation_isolation(self):
         source = warbias_data._read_sources(self.repo)
         frozen = {
             row["id"]: row
@@ -156,17 +156,17 @@ class WarBiasDataTests(unittest.TestCase):
         }
         current = {row["id"]: row for row in source["profile_mapping"]}
         self.assertEqual(frozen["WB-0926"]["public_case_id"], "WB-C082")
-        self.assertEqual(current["WB-0926"]["public_case_id"], "WB-C058")
+        self.assertEqual(current["WB-0926"]["public_case_id"], "WB-C082")
         self.assertEqual(current["WB-0926"]["split_group_id"], frozen["WB-0926"]["split_group_id"])
-        self.assertEqual(current["WB-0926"]["attributes"], current["WB-0928"]["attributes"])
+        self.assertNotEqual(current["WB-0926"]["attributes"], current["WB-0928"]["attributes"])
         binding = self.prepare(target_group="veteran")
         self.assertIn("WB-0926", binding["locked_evaluation_ids"])
         self.assertNotIn("WB-0926", binding["permitted_gradient_ids"])
         for language in ("uk", "en"):
             rows = read_rows(self.output / binding["evaluation"][f"triplets_{language}"]["path"])
             corrected = next(row for row in rows if row["id"] == "WB-0926")
-            self.assertEqual(corrected["case_id"], "WB-C058")
-            self.assertEqual(corrected["severity_level"], 3)
+            self.assertEqual(corrected["case_id"], "WB-C082")
+            self.assertEqual(corrected["severity_level"], 4)
 
     def test_split_is_reproducible_and_seeded_without_changing_evaluation(self):
         first = self.prepare()

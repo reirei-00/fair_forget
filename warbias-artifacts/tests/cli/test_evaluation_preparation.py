@@ -462,6 +462,7 @@ def test_export_prepares_offline_without_parent_repository(tmp_path):
     triplets = data.load(
         "warbias_triplets_annotated_uk", dataset_bundle=output / "inputs/manifest.json"
     )
-    mobility = next(row for row in triplets if row["id"] == "WB-0926")
+    ptsd = next(row for row in triplets if row["id"] == "WB-0926")
     reference = next(row for row in triplets if row["id"] == "WB-0928")
-    assert mobility["source"]["released"]["case_id"] == reference["source"]["released"]["case_id"]
+    assert ptsd["source"]["released"]["case_id"] == "WB-C082"
+    assert reference["source"]["released"]["case_id"] == "WB-C058"

@@ -149,6 +149,7 @@ class WarBiasEvaluation:
             ):
                 raise ValueError("Baseline model profile differs from the selected model pins")
         return {
+            "comparison_scope": self.comparison_scope(),
             "post_inference_source": snapshot,
             "collection": dict(SCORING_SETTINGS),
             "qa_analysis_policy": QA_POLICY,
@@ -159,6 +160,27 @@ class WarBiasEvaluation:
                 self.repo / "warbias-artifacts/scripts/run_warbias_baseline.py"
             ),
         }
+
+    def comparison_scope(self):
+        """Bind scores to current texts or the baseline's explicit frozen snapshot."""
+        scope_path = self.repo / "warbias-artifacts/evaluation/warbias_baseline/result_scope.json"
+        if not scope_path.is_file():
+            return {"status": "current_dataset"}
+        scope = read_json(scope_path)
+        source = read_json(self._source() / "inputs/manifest.json")["source"]["files"]
+        frozen, current = [], []
+        for language in ("uk", "en"):
+            digest = source[f"triplets_{language}"]["sha256"]
+            relative = f"data/{language}.jsonl"
+            frozen.append(digest == scope["snapshot_files"][relative]["sha256"])
+            current.append(digest == file_hash(self.repo / "warbias-artifacts" / relative))
+        if all(current):
+            return {"status": "current_dataset"}
+        if all(frozen):
+            return {**scope, "status": "baseline_reference_snapshot"}
+        raise ValueError(
+            "Evaluation texts match neither the current dataset nor its recorded baseline snapshot"
+        )
 
     def prepare(self):
         settings, ids = self.reference_settings(), self.cohort()
@@ -293,7 +315,7 @@ class WarBiasEvaluation:
         from lm_eval.fair_uk.warbias.baseline import analyze_checkpoints
 
         self.reference_settings()
-        return analyze_checkpoints(
+        report = analyze_checkpoints(
             self.release,
             self.results,
             bootstrap=1000,
@@ -306,6 +328,8 @@ class WarBiasEvaluation:
             qa_answer_policy=QA_POLICY,
             triplet_ids=self.cohort() if held_out else None,
         )
+        report["comparison_scope"] = self.comparison_scope()
+        return report
 
     def analyze_after(self, item, *, held_out=True):
         from lm_eval.fair_uk.warbias.baseline import analyze_checkpoints
@@ -330,6 +354,7 @@ class WarBiasEvaluation:
             key: record[key]
             for key in ("method", "run_id", "target_group", "training_language", "training_export")
         }
+        report["comparison_scope"] = record["settings"]["comparison_scope"]
         model_report = report.get("models", {}).get(record["model"], {})
         if (
             model_report.get("status") == "complete"

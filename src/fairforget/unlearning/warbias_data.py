@@ -17,16 +17,16 @@ TARGET_GROUPS = ("idp", "veteran")
 TRAINING_LANGUAGES = ("uk", "en")
 REPOSITORY = "FairForget/WarBias"
 TRIPLET_REVISION = "9363a1d1b6936ad3d37e52f9ce1e426d2a0573b0"
-SOURCE_COMMIT = "81d737fe29a707cf3e38f71157240968a3dbfc22"
+SOURCE_COMMIT = "769e8343b548d03398765d020a699c9ed8b4f702"
 SOURCES = {
     "triplets_uk": {
         "path": "warbias-artifacts/data/uk.jsonl",
-        "sha256": "849e15e3eb444313f0d2914d20e79550c3f6dcb8f572bd24308a2bbd40af8dd5",
+        "sha256": "214d9954fd6f76a2f857533ea7bdddb551c0499c3efd3187f25a8e740843ec3d",
         "hf_filename": "data/uk/unassigned.jsonl",
     },
     "triplets_en": {
         "path": "warbias-artifacts/data/en.jsonl",
-        "sha256": "59b34443081b7e0e0df5e0c2c0e126ad238e5a1b2db91df153d9bfb29738cc8f",
+        "sha256": "5b0d793c51f4f84e4ef7d071a1bc30dbc9d5ae9a230dbbb9ba76b754b5025803",
         "hf_filename": "data/en/unassigned.jsonl",
     },
     "qa_uk": {
@@ -44,12 +44,12 @@ SOURCES = {
     "dataset_manifest": {
         "path": "warbias-artifacts/protocol/dataset.json",
         "format": "json",
-        "sha256": "6f83eed95341fbf3fe6e846f9dcbb148f6387bc166461bd6483824af7b427732",
+        "sha256": "e7feff8252e5d3d4e81f13e14a632ebb346480b33f5e92e52179f1617dd5a07a",
     },
     "metadata_corrections": {
         "path": "warbias-artifacts/protocol/dataset_metadata_corrections.json",
         "format": "json",
-        "sha256": "1f94b70642faf37bd4f76b983583d2655f79627cf66f61ef9040a273bdd99ca7",
+        "sha256": "55cc8337519d8a462133823a5feb416acb651c2c2382dcbcaea4561740639158",
     },
 }
 STREAM_FILES = {
@@ -248,12 +248,12 @@ def _contents(repo, target_group, training_language, seed=42, development_fracti
         "protocol": PROTOCOL,
         "source": {
             "repository": REPOSITORY,
-            "triplet_revision": TRIPLET_REVISION,
+            "hf_reference_revision": TRIPLET_REVISION,
             "git_source_commit": SOURCE_COMMIT,
             "metadata_correction_implementation_sha256": _sha(
                 Path(dataset_metadata.__file__).read_bytes()
             ),
-            "triplet_metadata_source": "Git release with declared metadata corrections; HF revision binds the unchanged texts.",
+            "triplet_metadata_source": "Current Git source hashes define the texts; the earlier HF revision is a reference only.",
             "files": {name: dict(spec) for name, spec in SOURCES.items()},
             "qa_metadata_source": "Git source files; text and answer keys match the published baseline",
         },
