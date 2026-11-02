@@ -10,6 +10,16 @@ python -m pip install -e '.[notebooks]'
 python -m pip install /path/to/fair-uk
 ```
 
+The baseline reports prior-normalised triplet SS, QA accuracy and QA bias,
+with severity breakdowns. Raw SS, LMS and answer-format checks are diagnostics.
+Before/after effects (forget efficacy, NNR, M2/M3 and RI) belong to paired evaluation.
+
+The notebook labels IDPs (ВПО) and veterans separately. Each language contains
+409 IDP and 598 veteran triplets, and 120 QA questions per group. In `scores.csv`,
+select `scope=actor` with `actor=idp` or `actor=veteran`; `scope=overall` combines
+the groups. Severity tables combine both groups. All scores and intervals come
+from Fair-UK; the notebook only selects and formats them.
+
 Run from this artifact directory:
 
 ```sh
