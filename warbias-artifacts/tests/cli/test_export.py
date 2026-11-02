@@ -31,7 +31,17 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
     assert (exported / "src/warbias_kit/warbias/provider.py").is_file()
     assert (exported / "protocol/pilot_snapshots.json").is_file()
     assert (exported / "notebooks/04_sample_translation_comet.ipynb").is_file()
-    assert len(list((exported / "notebooks").glob("*.ipynb"))) == 7
+    assert len(list((exported / "notebooks").glob("[0-9][0-9]_*.ipynb"))) == 7
+    assert (exported / "notebooks/warbias_baseline.ipynb").is_file()
+    for relative in (
+        "docs/evaluation.md",
+        "scripts/prepare_warbias_evaluation.py",
+        "scripts/run_warbias_baseline.py",
+        "evaluation/warbias_baseline/models.json",
+        "evaluation/warbias_baseline/model_assets.json",
+        "evaluation/warbias_baseline/profile_mapping.jsonl",
+    ):
+        assert (exported / relative).is_file()
     assert (exported / "protocol/history/matrix_full.csv").is_file()
     assert not (exported / "protocol/inputs/matrix_full.csv").exists()
     assert (exported / "protocol/inputs/source_feedback.jsonl").is_file()
@@ -44,7 +54,8 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
         ".venv",
         "outputs",
         "runs",
-        "evaluation",
+        "evaluation/unlearning",
+        "evaluation/stereoset",
         "notebooks/executed",
         "notebooks/unlearning",
         "src/warbias_kit/unlearning",
@@ -172,11 +183,15 @@ def test_export_rejects_authorship_metadata(exported, tmp_path, location):
         exporter.export(exported, tmp_path / "rejected")
 
 
-@pytest.mark.parametrize("style", ["windows", "windows_lowercase", "mac_temporary", "mac_alias"])
+@pytest.mark.parametrize(
+    "style", ["windows", "windows_lowercase", "mac_temporary", "mac_alias", "jupiter"]
+)
 def test_export_rejects_additional_machine_paths(exported, tmp_path, style):
     if style.startswith("windows"):
         users = "users" if style == "windows_lowercase" else "Users"
         personal = "C:" + "\\" + users + "\\example\\model"
+    elif style == "jupiter":
+        personal = "/e/" + "project1/example/model"
     elif style == "mac_alias":
         personal = "/var" + "/folders/example/model"
     else:
@@ -351,3 +366,71 @@ def test_export_rejects_failed_or_inconsistent_notebook_runs(exported, tmp_path,
     with pytest.raises(ValueError):
         exporter.export(exported, tmp_path / "rejected")
     assert not (tmp_path / "rejected").exists()
+
+
+@pytest.mark.parametrize(
+    "damage",
+    [
+        "csv",
+        "dataset",
+        "models",
+        "model_assets",
+        "profile_mapping",
+        "extra_table",
+        "missing_table",
+        "missing_manifest",
+        "missing_input",
+        "schema",
+        "kind",
+        "bytes",
+    ],
+)
+def test_export_rejects_stale_or_incomplete_baseline_results(exported, tmp_path, damage):
+    results = exported / "evaluation/warbias_baseline/results"
+    path = results / "manifest.json"
+    manifest = json.loads(path.read_text())
+    if damage == "csv":
+        with (results / "scores.csv").open("a") as stream:
+            stream.write("\n")
+    elif damage == "dataset":
+        with (exported / "data/uk.jsonl").open("a") as stream:
+            stream.write("\n")
+    elif damage in {"models", "model_assets", "profile_mapping"}:
+        suffix = "jsonl" if damage == "profile_mapping" else "json"
+        target = exported / f"evaluation/warbias_baseline/{damage}.{suffix}"
+        with target.open("a") as stream:
+            stream.write(" ")
+    elif damage == "extra_table":
+        (results / "extra.csv").write_text("unexpected\n")
+    elif damage == "missing_table":
+        (results / "scores.csv").unlink()
+    elif damage == "missing_manifest":
+        path.unlink()
+    else:
+        if damage == "missing_input":
+            del manifest["reproduction_inputs"]["evaluation/warbias_baseline/models.json"]
+        elif damage == "schema":
+            manifest["schema_version"] = 2
+        elif damage == "kind":
+            manifest["kind"] = "unverified_results"
+        else:
+            manifest["files"]["scores.csv"]["bytes"] += 1
+        path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="Baseline result"):
+        exporter.export(exported, tmp_path / "rejected")
+    assert not (tmp_path / "rejected").exists()
+
+
+@pytest.mark.parametrize("relative", ["", ".", "../outside.csv", "/outside.csv", "C:\\outside.csv"])
+def test_result_binding_rejects_nonportable_paths(exported, relative):
+    with pytest.raises(ValueError, match="Baseline result"):
+        exporter._result_binding(
+            exported, relative, {"sha256": "a" * 64, "bytes": 0}, require_size=True
+        )
+
+
+def test_source_export_allows_an_omitted_baseline_results_bundle(exported, tmp_path):
+    shutil.rmtree(exported / "evaluation/warbias_baseline/results")
+    result = exporter.export(exported, tmp_path / "without-results")
+    assert not (result / "evaluation/warbias_baseline/results").exists()
+    assert exporter.verify(result) > 50

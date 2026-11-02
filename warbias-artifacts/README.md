@@ -1,4 +1,4 @@
-# WarBias dataset construction
+# WarBias dataset
 
 WarBias uses blinded human ratings of Ukrainian samples to inform model and
 prompt selection. It then generates Ukrainian triplets with Lapa and sequential
@@ -42,6 +42,9 @@ defines the original selected inputs; the frozen allocation and pilot ratings
 retain their original scope.
 The [construction guide](docs/warbias-construction.md)
 explains the selector, extensions and exclusions.
+The taxonomy's `triplet_count` counts generation inputs; the dataset manifest's
+`counts.triplets_by_case` counts released items after
+[metadata corrections](protocol/dataset_metadata_corrections.json).
 
 Keep the intentional `the-project/` namespace in this artifact’s repository
 references.
@@ -80,8 +83,9 @@ The package includes its data-release validator.
 | [5. English translation](notebooks/05_full_english_translation.ipynb) | Verify all 1,007 Astra translations and their source hashes |
 | [6. Case severity](notebooks/06_severity.ipynb) | Calculate case means and severity levels for both languages |
 | [7. QA sampling and reproduction](notebooks/07_qa_dataset.ipynb) | Rebuild all QA items, sample complete scenarios and export aligned language files |
+| [Baseline evaluation](notebooks/warbias_baseline.ipynb) | Six-model triplet and QA results with severity slices; [run guide](docs/evaluation.md) |
 
-Run the notebooks with a local Python kernel:
+Run the construction notebooks with a local Python kernel:
 
 ```sh
 python scripts/run_notebooks.py

@@ -1,0 +1,509 @@
+{
+  "schema_version": 1,
+  "kind": "warbias_baseline_results",
+  "source": {
+    "repo": "the-project/WarBias",
+    "revision": "6f83eed95341fbf3fe6e846f9dcbb148f6387bc166461bd6483824af7b427732",
+    "revision_kind": "content_sha256",
+    "dataset_manifest_sha256": "6f83eed95341fbf3fe6e846f9dcbb148f6387bc166461bd6483824af7b427732",
+    "qa_manifest_sha256": "e8307a4d480603321705ec8135963b59f4df53a9e493ee5152434df9deecd218",
+    "files": {
+      "triplets_uk": {
+        "filename": "data/uk.jsonl",
+        "sha256": "849e15e3eb444313f0d2914d20e79550c3f6dcb8f572bd24308a2bbd40af8dd5",
+        "path": "sources/data/uk.jsonl"
+      },
+      "triplets_en": {
+        "filename": "data/en.jsonl",
+        "sha256": "59b34443081b7e0e0df5e0c2c0e126ad238e5a1b2db91df153d9bfb29738cc8f",
+        "path": "sources/data/en.jsonl"
+      },
+      "qa_uk": {
+        "filename": "data/qa_uk.jsonl",
+        "sha256": "1f023e27b7bfd1b90c2251f284d4bc6ccfad67bcf251089ca774823f4b0a334d",
+        "path": "sources/data/qa_uk.jsonl"
+      },
+      "qa_en": {
+        "filename": "data/qa_en.jsonl",
+        "sha256": "6436190d503cfe97859ec9c3183901d292f0de01358887f18675f8f87f07a7f5",
+        "path": "sources/data/qa_en.jsonl"
+      },
+      "taxonomy": {
+        "filename": "protocol/inputs/cohort_taxonomy.csv",
+        "sha256": "117b39a77c2ea333bc6625908bf47a40f43e2b88c5cc1ba3465cc75957f514b8",
+        "path": "sources/protocol/inputs/cohort_taxonomy.csv"
+      },
+      "item_sources": {
+        "filename": "protocol/inputs/dataset_item_sources.jsonl",
+        "sha256": "300379f69fda3c849ea0164b873bf5fd6282ac8a168a09218135d560725083d0",
+        "path": "sources/protocol/inputs/dataset_item_sources.jsonl"
+      },
+      "text_provenance": {
+        "filename": "protocol/inputs/dataset_text_provenance.jsonl",
+        "sha256": "eff4a46dec2db0cc49db9ee9380be4dbe783354ae9fdbccc023a0b5c9f5431ba",
+        "path": "sources/protocol/inputs/dataset_text_provenance.jsonl"
+      },
+      "dataset_protocol": {
+        "filename": "protocol/dataset.json",
+        "sha256": "6f83eed95341fbf3fe6e846f9dcbb148f6387bc166461bd6483824af7b427732",
+        "path": "sources/protocol/dataset.json"
+      },
+      "qa_protocol": {
+        "filename": "protocol/qa.json",
+        "sha256": "e8307a4d480603321705ec8135963b59f4df53a9e493ee5152434df9deecd218",
+        "path": "sources/protocol/qa.json"
+      },
+      "metadata_corrections": {
+        "filename": "protocol/dataset_metadata_corrections.json",
+        "sha256": "1f94b70642faf37bd4f76b983583d2655f79627cf66f61ef9040a273bdd99ca7",
+        "path": "sources/protocol/dataset_metadata_corrections.json"
+      }
+    }
+  },
+  "inputs": {
+    "bundle_sha256": "09f900397ffca6372a73c1936c348c168dc1411b924a520fd0042a2b6736865c",
+    "models_sha256": "4fa1e7bce0df4e220049dca1a26f2edf40f9b1f39c1f46bf6935b39da0008a7e"
+  },
+  "inference_inputs": {
+    "bundle_sha256": "002fd2b05c35de35199321c895fb9119f153c2f9ee100d6dcc19349334180249",
+    "models_sha256": "6097602ba6804d5c54693deff936580b64727aa43ac52e0fdb845840570485fb"
+  },
+  "metadata_corrections": {
+    "declarations_sha256": "1f94b70642faf37bd4f76b983583d2655f79627cf66f61ef9040a273bdd99ca7",
+    "changed_triplets": [
+      {
+        "task": "warbias_triplets_annotated_uk",
+        "id": "WB-0926",
+        "original_case_id": "WB-C082",
+        "case_id": "WB-C058"
+      },
+      {
+        "task": "warbias_triplets_annotated_en",
+        "id": "WB-0926",
+        "original_case_id": "WB-C082",
+        "case_id": "WB-C058"
+      }
+    ]
+  },
+  "bootstrap": {
+    "draws": 1000,
+    "seed": 42,
+    "level": 0.95
+  },
+  "weighting": "Equal original claim components after within-component averaging; keep profile and language variants together.",
+  "units": {
+    "rates": "proportion",
+    "signed_bias": "[-1,1]",
+    "association_margin": {
+      "per_token": "nats/token",
+      "per_byte": "nats/UTF-8 byte",
+      "sum": "nats"
+    }
+  },
+  "analysis_code_identity": {
+    "fair_uk/__init__.py": "7126e701c64e4f6ac68ea2f49b3da62c7085023c1313a090de72e6b6eb1ed415",
+    "fair_uk/__main__.py": "c75d1506ae236b5fe2cf9afba434c906464faac6df7c543bacb1627d9e2738bb",
+    "fair_uk/answers.py": "c7f03ab1d1e92b7cde00850a4f97f8c153b78d6c47bff75c68f993dd94826064",
+    "fair_uk/api_runner.py": "491534dbb7481a8016dfa6a8bbae059011b5a149a76aac1aec03223b5af4b57d",
+    "fair_uk/assets.py": "186ae25d647338183f2557f07ebf7295e9dd21d5674e55c4304d6c5a574d1831",
+    "fair_uk/baseline_metrics.py": "b59e22434ae10ca2f40e6465b2ed052ddaa0f4dcf6bdce05180030263c2f1fe0",
+    "fair_uk/benign.py": "3036d8d6c7c5384d197858d4f19d598c781701111d2530a66454484f3417dc34",
+    "fair_uk/bilingual.py": "1a233559a09568bba3b39085c8c0676f8169be8fde30b2c03b158a0aa60eddaf",
+    "fair_uk/capabilities.py": "7fd1b514d2b9568bf0c76ca77463ec72e01b63b77c44f12a546c3d1a7b8f0712",
+    "fair_uk/comparison.py": "d7376cb7fc0cde532ab4f459abb3ddb86af1c8832cc93b555f1090c7009584e4",
+    "fair_uk/contracts.py": "bd0f425c79b0acfebbe9f60551b1cbc7f7ee4107113793bc4c3d92e4b7d07b94",
+    "fair_uk/credentials.py": "7b95765fd0c76302209531a1bdf3347a9960cdef57816dba91bd87aaa523449e",
+    "fair_uk/data.py": "d16ca25ae896f529f03d00b05d914cd02e15c75a280102dc7dafd4fd85724be4",
+    "fair_uk/evaluation_assets.py": "337aefbed326422267ed6c54c68f1854306dd3a8a8870df30c8fb40a9cbd0a4b",
+    "fair_uk/expansion.py": "5f3f294e30cab8b6682bb9413302c5fcb8b1b7c092d47541c09c7b9358eaf366",
+    "fair_uk/expansion_metrics.py": "11319c16b75e2c4d72fc821ed094d0f117274f23771e4a578c0f2199b5d9f8b6",
+    "fair_uk/gemini_runner.py": "8aed08f40f34a6d920dab99b691149d3572b10e0d2bca21f9427b5aead98778c",
+    "fair_uk/lineage.py": "40196bcbbebfda2652a3586d94f55bb8a625a4c9d90ed59dc601a817bc9ed869",
+    "fair_uk/metric_specs.py": "920adf0c8af3ec6219c98f2df9747f3df6bb601ece67206b97a9cfcae6021cb2",
+    "fair_uk/metrics.py": "85936490709f9d9ec20c35e6ad832b7775b0770a8886ce5d6277a2bf1f0c994f",
+    "fair_uk/openai_runner.py": "a80f78936a07ecb8fbe1768a42e66629a8789e2d9b44b6d15a01fe3fef6513d8",
+    "fair_uk/paired.py": "f61826e1dd08f0746a2a3b77888dafe5614d6f54140f592a1535ac0fc5182931",
+    "fair_uk/paper.py": "c7148e09be76e97b5539d0717a841714c04369452ce2ddb8e24075e08bf78a23",
+    "fair_uk/provenance.py": "af2896a587669785cfb6bf6cf7c835d95e1eba69e657e049353a443d0b04d505",
+    "fair_uk/releases.py": "9769320dec0b12be815de2a53d72c4b905b3e9b11a5224456718bef1441c90ad",
+    "fair_uk/reporting.py": "2c0c1ed202cb77f7ee1cfa30492ed22c5ffeee4b2bef35b6074ef84d2d86df45",
+    "fair_uk/runner.py": "3c4721a0345134197d6371c46e16ece21b10a9b4c163b4f44ad963d9bf18312d",
+    "fair_uk/runs.py": "d57acae2705338c6d726088d7faa96aff135739c7b56b74feb5ab56bcf81d807",
+    "fair_uk/suite.py": "41359d6aa79b085af13a2268a73bc4ce90c6ecbfc4892363b92c0a56d3634981",
+    "fair_uk/warbias/__init__.py": "48577a2647d656f09e3eea1491e35927385513a64f6d97fee40681f4128b75c9",
+    "fair_uk/warbias/aggregate.py": "bc940183ed8f30b640531968c36406a8107d03fb26d3c7c13b044435205d7aac",
+    "fair_uk/warbias/baseline.py": "4869dd939d2f601003f67627c557b94f4b55f80d8044bd84ce6d766cfe9bd34d",
+    "fair_uk/warbias/baseline_inputs.py": "2d022863bdc6d72f2ee5dcd1c3ef284ea7b56b1ccbaa04765059e727209b66fc",
+    "fair_uk/warbias/baseline_metadata.py": "61247c2edada74fb19a986b35d24a634b380d6d988017e8997dace05560cd583",
+    "fair_uk/warbias/baseline_replay.py": "597626b30d6a59043b5370914c4e96d6b55972ff1732c53a535df6292929fcb0",
+    "fair_uk/warbias/baseline_reporting.py": "18cb06b1412c8836a7e4ba0664976bdfa50f6e8a871a3ff7896d1fcba10cf331",
+    "fair_uk/warbias/baseline_summary.py": "d8a23d20e93d0d91a6c963f0614576f546c3aa325675f8ea3e24b858db7a9380",
+    "fair_uk/warbias/calibration.py": "130e3d289a0d96c2e2d696d34f53bc7f4d4b51bbd0dc856980b32ddf727bd2b1",
+    "fair_uk/warbias/cli.py": "3af28f54fe62869f9b6c29a21c0e0d20827216c44daec640e0b3094155a22b12",
+    "fair_uk/warbias/detection.py": "138fa188c72f34809c1935b99fa54aaba84eed693a9c6d1254d8ddb319853952",
+    "fair_uk/warbias/files.py": "0249bc0964ea6b8ef5c45482acd2bfd6aa21cbc467aff3bf27fe6da7cadce1c4",
+    "fair_uk/warbias/intervention.py": "7d586c3c5c6845f9f8477ae73d3549f1dafa11ac1d42af8a4b4750dcb0fad83f",
+    "fair_uk/warbias/panel.py": "345bf6df6026de7986e20df8660e6a85670d558067ee5d06684f538542e3a55c",
+    "fair_uk/warbias/prepare.py": "d99720d12dfa67bc7949748db6bb7d88173eca69182947b7bdd83a8433e1e321",
+    "fair_uk/warbias/report_schema.py": "8e3cae2a7839af8c3fe077d17134dac71a51653b35ae25555251c56100cb5827",
+    "fair_uk/warbias/rows.py": "a1a88a5717cc98c6d696bbd4897aa359f60601cbe440b1afdd1b6cb1cc676f46",
+    "fair_uk/warbias/schema.py": "0a708762d14610821126956f567e9d8407b30004992286d984f21ea0f7d649f5",
+    "fair_uk/warbias/scoring.py": "2241466ac4be8e40164c925e5222e1bf73a3e7dc31497cb78709bdb530273d46",
+    "fair_uk/warbias/stats.py": "4f57553aaa619b4089dc28b52a1163e13a49b1dc478159633bf03c3c41920245",
+    "fair_uk/warbias/tables.py": "0a9c7e905bb68fe63ecdf421a3bb9b0603bf55b201a569906cc9bf393c8c646f",
+    "fair_uk/winopron.py": "2aba52b844bedd06d9597fc800d8752550fb320e668c621230d5c68126907827",
+    "fair_uk/datasets.json": "0705f1b2eff4d76855bb0628a7bbe6dc295f3cf6ddbff4b36ab37bb57f2fc239",
+    "api/model.py": "b8b1db336e168b53d9ca808fe837d5bf8943d9dca76a14cf747e4f3a22d50545",
+    "api/registry.py": "1236f1f3a2d22964788081e8984a1f95e8d04133090b06aae72ab97aca5541ef",
+    "utils.py": "2729d2dc6c822a0142707d9f81b92f5da85d962b58f760430bd362db8a1bb704",
+    "models/huggingface.py": "56d215b8f713d7579f9c7b58a9b8771b09c88e0e4fb8d1b6dd9068033b614b80",
+    "models/vllm_causallms.py": "a8552f4e522175f422ad2229813a8a725c0504ad7b8e758c504e3e09911e5c89"
+  },
+  "inference_code_identity": {
+    "fair_uk/__init__.py": "7126e701c64e4f6ac68ea2f49b3da62c7085023c1313a090de72e6b6eb1ed415",
+    "fair_uk/__main__.py": "c75d1506ae236b5fe2cf9afba434c906464faac6df7c543bacb1627d9e2738bb",
+    "fair_uk/answers.py": "c7f03ab1d1e92b7cde00850a4f97f8c153b78d6c47bff75c68f993dd94826064",
+    "fair_uk/api_runner.py": "491534dbb7481a8016dfa6a8bbae059011b5a149a76aac1aec03223b5af4b57d",
+    "fair_uk/assets.py": "186ae25d647338183f2557f07ebf7295e9dd21d5674e55c4304d6c5a574d1831",
+    "fair_uk/baseline_metrics.py": "b59e22434ae10ca2f40e6465b2ed052ddaa0f4dcf6bdce05180030263c2f1fe0",
+    "fair_uk/benign.py": "3036d8d6c7c5384d197858d4f19d598c781701111d2530a66454484f3417dc34",
+    "fair_uk/bilingual.py": "1a233559a09568bba3b39085c8c0676f8169be8fde30b2c03b158a0aa60eddaf",
+    "fair_uk/capabilities.py": "7fd1b514d2b9568bf0c76ca77463ec72e01b63b77c44f12a546c3d1a7b8f0712",
+    "fair_uk/comparison.py": "d7376cb7fc0cde532ab4f459abb3ddb86af1c8832cc93b555f1090c7009584e4",
+    "fair_uk/contracts.py": "bd0f425c79b0acfebbe9f60551b1cbc7f7ee4107113793bc4c3d92e4b7d07b94",
+    "fair_uk/credentials.py": "7b95765fd0c76302209531a1bdf3347a9960cdef57816dba91bd87aaa523449e",
+    "fair_uk/data.py": "d16ca25ae896f529f03d00b05d914cd02e15c75a280102dc7dafd4fd85724be4",
+    "fair_uk/evaluation_assets.py": "337aefbed326422267ed6c54c68f1854306dd3a8a8870df30c8fb40a9cbd0a4b",
+    "fair_uk/expansion.py": "5f3f294e30cab8b6682bb9413302c5fcb8b1b7c092d47541c09c7b9358eaf366",
+    "fair_uk/expansion_metrics.py": "11319c16b75e2c4d72fc821ed094d0f117274f23771e4a578c0f2199b5d9f8b6",
+    "fair_uk/gemini_runner.py": "8aed08f40f34a6d920dab99b691149d3572b10e0d2bca21f9427b5aead98778c",
+    "fair_uk/lineage.py": "40196bcbbebfda2652a3586d94f55bb8a625a4c9d90ed59dc601a817bc9ed869",
+    "fair_uk/metric_specs.py": "920adf0c8af3ec6219c98f2df9747f3df6bb601ece67206b97a9cfcae6021cb2",
+    "fair_uk/metrics.py": "85936490709f9d9ec20c35e6ad832b7775b0770a8886ce5d6277a2bf1f0c994f",
+    "fair_uk/openai_runner.py": "a80f78936a07ecb8fbe1768a42e66629a8789e2d9b44b6d15a01fe3fef6513d8",
+    "fair_uk/paired.py": "f61826e1dd08f0746a2a3b77888dafe5614d6f54140f592a1535ac0fc5182931",
+    "fair_uk/paper.py": "c7148e09be76e97b5539d0717a841714c04369452ce2ddb8e24075e08bf78a23",
+    "fair_uk/provenance.py": "af2896a587669785cfb6bf6cf7c835d95e1eba69e657e049353a443d0b04d505",
+    "fair_uk/releases.py": "9769320dec0b12be815de2a53d72c4b905b3e9b11a5224456718bef1441c90ad",
+    "fair_uk/reporting.py": "2c0c1ed202cb77f7ee1cfa30492ed22c5ffeee4b2bef35b6074ef84d2d86df45",
+    "fair_uk/runner.py": "3c4721a0345134197d6371c46e16ece21b10a9b4c163b4f44ad963d9bf18312d",
+    "fair_uk/runs.py": "d57acae2705338c6d726088d7faa96aff135739c7b56b74feb5ab56bcf81d807",
+    "fair_uk/suite.py": "c603d451f0ce4844b05745e35cb76ffff03030828861e1db57f5abd0c4c07423",
+    "fair_uk/warbias/__init__.py": "48577a2647d656f09e3eea1491e35927385513a64f6d97fee40681f4128b75c9",
+    "fair_uk/warbias/aggregate.py": "bc940183ed8f30b640531968c36406a8107d03fb26d3c7c13b044435205d7aac",
+    "fair_uk/warbias/baseline.py": "60d3873011dc42eac2af5cfbaebe4ae32dec532724b472c63e42896bb6b9aa7a",
+    "fair_uk/warbias/baseline_inputs.py": "a88e3346b75fbb0a0a0bfed57f1c4c8beeba8c83a14bb56c2af7bc585d18cb4f",
+    "fair_uk/warbias/baseline_reporting.py": "1d80d54f0b5be2c68185d21e23254158a894d3d6f403a6d76382f6e2524d3091",
+    "fair_uk/warbias/baseline_summary.py": "d8a23d20e93d0d91a6c963f0614576f546c3aa325675f8ea3e24b858db7a9380",
+    "fair_uk/warbias/calibration.py": "130e3d289a0d96c2e2d696d34f53bc7f4d4b51bbd0dc856980b32ddf727bd2b1",
+    "fair_uk/warbias/cli.py": "76229f21956ee55c24e80fd1578953048660e7ccaa96c5d924a7dc3185e26a68",
+    "fair_uk/warbias/detection.py": "138fa188c72f34809c1935b99fa54aaba84eed693a9c6d1254d8ddb319853952",
+    "fair_uk/warbias/files.py": "0249bc0964ea6b8ef5c45482acd2bfd6aa21cbc467aff3bf27fe6da7cadce1c4",
+    "fair_uk/warbias/intervention.py": "7d586c3c5c6845f9f8477ae73d3549f1dafa11ac1d42af8a4b4750dcb0fad83f",
+    "fair_uk/warbias/panel.py": "345bf6df6026de7986e20df8660e6a85670d558067ee5d06684f538542e3a55c",
+    "fair_uk/warbias/prepare.py": "d99720d12dfa67bc7949748db6bb7d88173eca69182947b7bdd83a8433e1e321",
+    "fair_uk/warbias/report_schema.py": "8e3cae2a7839af8c3fe077d17134dac71a51653b35ae25555251c56100cb5827",
+    "fair_uk/warbias/rows.py": "a1a88a5717cc98c6d696bbd4897aa359f60601cbe440b1afdd1b6cb1cc676f46",
+    "fair_uk/warbias/schema.py": "0a708762d14610821126956f567e9d8407b30004992286d984f21ea0f7d649f5",
+    "fair_uk/warbias/scoring.py": "2241466ac4be8e40164c925e5222e1bf73a3e7dc31497cb78709bdb530273d46",
+    "fair_uk/warbias/stats.py": "4f57553aaa619b4089dc28b52a1163e13a49b1dc478159633bf03c3c41920245",
+    "fair_uk/warbias/tables.py": "0a9c7e905bb68fe63ecdf421a3bb9b0603bf55b201a569906cc9bf393c8c646f",
+    "fair_uk/winopron.py": "2aba52b844bedd06d9597fc800d8752550fb320e668c621230d5c68126907827",
+    "fair_uk/datasets.json": "0705f1b2eff4d76855bb0628a7bbe6dc295f3cf6ddbff4b36ab37bb57f2fc239",
+    "api/model.py": "b8b1db336e168b53d9ca808fe837d5bf8943d9dca76a14cf747e4f3a22d50545",
+    "api/registry.py": "1236f1f3a2d22964788081e8984a1f95e8d04133090b06aae72ab97aca5541ef",
+    "utils.py": "2729d2dc6c822a0142707d9f81b92f5da85d962b58f760430bd362db8a1bb704",
+    "models/huggingface.py": "56d215b8f713d7579f9c7b58a9b8771b09c88e0e4fb8d1b6dd9068033b614b80",
+    "models/vllm_causallms.py": "a8552f4e522175f422ad2229813a8a725c0504ad7b8e758c504e3e09911e5c89"
+  },
+  "models": [
+    {
+      "id": "qwen3_8b",
+      "repository": "Qwen/Qwen3-8B",
+      "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "config_sha256": "f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30",
+      "directory": "Qwen3-8B",
+      "runs": {
+        "warbias_triplets_annotated_uk": {
+          "run_json_sha256": "a9fde3e786849ddcb3b702b5b3072c2f81f4cee33767eeea4b0fc26d594f406d",
+          "predictions_sha256": "ff42265cfa562c131a46d291cbab82b6a7ed028ba79ba8bf823d01503b641bdb"
+        },
+        "warbias_uk": {
+          "run_json_sha256": "06d3875f3a812f004f2507ad8011d0808d69dfa546e0d43483d5e59807266fbd",
+          "predictions_sha256": "32cc3bab169aefa7dbbab00d6bf207221c09152780131d1a4ba0c27c11d79199"
+        },
+        "warbias_triplets_annotated_en": {
+          "run_json_sha256": "3dae6f4ddef75c9afaa01e5f2e23e209df10fc2a3834243acc140eaa67487946",
+          "predictions_sha256": "af2d3a5e117c7bfc87bf6dbe69c5a46bfab62ecf10ab144c127c77b9bb38261a"
+        },
+        "warbias_en": {
+          "run_json_sha256": "d04205a18d1b300eca747e395cf4fde7d704324426fc186f71ed68a88af7073a",
+          "predictions_sha256": "342364794ce9792ea63944932dda6e6ebe61fd8836857098464025d286b6720b"
+        }
+      }
+    },
+    {
+      "id": "llama31_8b_instruct",
+      "repository": "meta-llama/Llama-3.1-8B-Instruct",
+      "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+      "tokenizer_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+      "config_sha256": "29e4c210b0d6ac178b16b2a255a568bdb23b581e50ca1ef6a6d071dd85704e6e",
+      "directory": "Llama-3.1-8B-Instruct",
+      "runs": {
+        "warbias_triplets_annotated_uk": {
+          "run_json_sha256": "8fff79d3d6f4d7ef4731f40d4cbd67213ba97bfdac74ae5a8a0c95832333455a",
+          "predictions_sha256": "b87f96bdccdb99220efeb688f6986d4cd6296a312a8b23f15f7da755bc198ce9"
+        },
+        "warbias_uk": {
+          "run_json_sha256": "484af6a5a38b522e489e4d7afeba76a6b8e25f25744a1ea75d3aff88a753daa4",
+          "predictions_sha256": "2c3f8641eead0775c8c46ff4766020113cf522918f5f22ecfae694f73542f728"
+        },
+        "warbias_triplets_annotated_en": {
+          "run_json_sha256": "095738a2443994106c82fa1f3c38faff04fbbadb0c280051b5945da010f83907",
+          "predictions_sha256": "9e52f502131ef17a50241a462e21bcdfaf04190f4ee59a242c7f7b8acfb34a0a"
+        },
+        "warbias_en": {
+          "run_json_sha256": "a470014b2c44f8d116b73f31f7cc9278857ba93045deb61d224b3ef4f4ef2082",
+          "predictions_sha256": "0d55319788b792f07143f308cfdcb19b50349a4d8522648b465f8bb84365317c"
+        }
+      }
+    },
+    {
+      "id": "gemma3_12b_it",
+      "repository": "google/gemma-3-12b-it",
+      "revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+      "tokenizer_revision": "96b6f1eccf38110c56df3a15bffe176da04bfd80",
+      "config_sha256": "39172c4124d3470341bbbb25f2926fd97edf68f0fe3a9fa4cde6acb9b7ed2cc6",
+      "directory": "gemma-3-12b-it",
+      "runs": {
+        "warbias_triplets_annotated_uk": {
+          "run_json_sha256": "aaf9c94cd01237247ff8ab6bc5aa3a3db2b87716192b06444b567f979c9e239b",
+          "predictions_sha256": "2cd36b9d3be8bc47fddb97e608f99fd2ffcf7cfa58a4f9d832ec10bce39438ef"
+        },
+        "warbias_uk": {
+          "run_json_sha256": "36c42438621163347d6032132ad7dfcf589ed29802089bb33d074976d574fac0",
+          "predictions_sha256": "40d0f704696ca35eb474c715f1d47075aec94cf604e7a12f5f23c237184fbb4f"
+        },
+        "warbias_triplets_annotated_en": {
+          "run_json_sha256": "838605871ea42d77c667073ebff42d0896526007870f564a25c5fda995663c2c",
+          "predictions_sha256": "bddbf3351d38018957bfaadd2f949265b430d715fd9700e3a0171ea2beafa5b3"
+        },
+        "warbias_en": {
+          "run_json_sha256": "a0a7ad6e4c6bee448a42aaaed29d653da68e4e78842404dd71dbf935ede761eb",
+          "predictions_sha256": "1dbef58d89008c71dc477ba25879ca8f0fac1b0e7b4e8b0e2b67fd8bf830392c"
+        }
+      }
+    },
+    {
+      "id": "lapa12b_instruct",
+      "repository": "lapa-llm/lapa-v0.1.2-instruct",
+      "revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+      "tokenizer_revision": "2969fd997f07b33727c6f10795d78ef23cc5c037",
+      "config_sha256": "f02a640a945f26b004b32384e962b6820957ac363df96cd3246298b30a283451",
+      "directory": "lapa-v0.1.2-instruct",
+      "runs": {
+        "warbias_triplets_annotated_uk": {
+          "run_json_sha256": "7f27cc72ec414ec4258fa857dde8d0bfa53ecdff022393d97a01aeb5bd2405bb",
+          "predictions_sha256": "b25ae48bcc2c007596d0f9bb6b43701c47a365deddcd707991f179542ff9a656"
+        },
+        "warbias_uk": {
+          "run_json_sha256": "48094361a3f8a6987122b1afb254976828fb4a3ec5a7c4d84cdeb4f1b667dba5",
+          "predictions_sha256": "7142bd8056f44389cd860e8b9c28a19b823b1fd3463e49f7c1dc0ed64ed4247a"
+        },
+        "warbias_triplets_annotated_en": {
+          "run_json_sha256": "a2f76e11436f37d9e4a6aec06ca5db2481f6e2992dd7fb183e83dba334c3f3d0",
+          "predictions_sha256": "15dbfcc32d336436c2a4d31ca46a8bda02a3602d6bce494970ac634f8265647e"
+        },
+        "warbias_en": {
+          "run_json_sha256": "aa5f436c711f9a2cd50b4bbf7a18ff19745c843c4f0b2c471c62e0b7df236735",
+          "predictions_sha256": "8b8f257b967e50a450604922b0e31068e7f116b9e9bc802864524d3b908a1172"
+        }
+      }
+    },
+    {
+      "id": "mamay12b_v2",
+      "repository": "INSAIT-Institute/MamayLM-Gemma-3-12B-IT-v2.0",
+      "revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+      "tokenizer_revision": "3cb02013b6b37cfe10f4b3da0fcddc1acef7f244",
+      "config_sha256": "89795290a04de188c98bded7b65fcc8366d3b4586d883dcc5751395b9cd76c78",
+      "directory": "MamayLM-Gemma-3-12B-IT-v2.0",
+      "runs": {
+        "warbias_triplets_annotated_uk": {
+          "run_json_sha256": "e5f38e04680fe577e2861fa739984b07bfec8fab1e6b03bc4588f56e40ef185b",
+          "predictions_sha256": "79d7bba32b21292fa22e5fe9c6c0b8013783b3beb32019f3e1967ffd57a6da0f"
+        },
+        "warbias_uk": {
+          "run_json_sha256": "154e694d9e6d3bac1dda11edb4a56fea905897f352fadf64dd5d56826dff4333",
+          "predictions_sha256": "b7ba7ef2127a53aaf0e5b2a0c966f89fa50117695adf3b15b264673694db51cf"
+        },
+        "warbias_triplets_annotated_en": {
+          "run_json_sha256": "e2042501c2b732678a5a7dd70665292f2c829892b0600e75de931edc5700018b",
+          "predictions_sha256": "6a037661f8fe8a232b1feb2a17f2b658c05084546ae29d3b3452b1074f9889d6"
+        },
+        "warbias_en": {
+          "run_json_sha256": "2fd5d637ddfccb560099a6553e8b1780b032ef5c111ba72fcac8176ccf4d0365",
+          "predictions_sha256": "ffb8fecbfd010e6a9bbcb8a497857ef88fd7163127bdf08641d994445cd91e9d"
+        }
+      }
+    },
+    {
+      "id": "mamay27b_v2",
+      "repository": "INSAIT-Institute/MamayLM-Gemma-3-27B-IT-v2.0",
+      "revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+      "tokenizer_revision": "ad1bdfed9646939358adfcba9c88bb4031b50ed7",
+      "config_sha256": "7b912e354dd6973e1bc397b7ee4a8ac6c9f406da95e33e5789a3468f71644d15",
+      "directory": "MamayLM-Gemma-3-27B-IT-v2.0",
+      "runs": {
+        "warbias_triplets_annotated_uk": {
+          "run_json_sha256": "48dd455eb1544c9d2acc84e73ba5a15ed12f167040dc7877ac28c8cf843f57a5",
+          "predictions_sha256": "d276e3b5e6681a4fc9512792778ef2a6c1ca28cd6630336f45e8e7ba3ec9c89c"
+        },
+        "warbias_uk": {
+          "run_json_sha256": "8608caccab5cb4368a5446b4e307b3250668e2bbc625d6750c657da1b0409f56",
+          "predictions_sha256": "3913b07af538c3c238f9c8ca13e921a82b070362c2e20c8e3880a2ed3237c514"
+        },
+        "warbias_triplets_annotated_en": {
+          "run_json_sha256": "5d48cc62bd6f5b585d16e0aae2b883641681cc43e82e9bf9e45cf143fd75d3c3",
+          "predictions_sha256": "57ac08717bec66e75983fdd7651ab2dd737b470b35cb46aa8686b70a9965f147"
+        },
+        "warbias_en": {
+          "run_json_sha256": "09e0803308d60991182e61a58ae5706e57c3b898f28c57ba771459fc588012cf",
+          "predictions_sha256": "e4f07fbb8660293d444e48220927c8a5ef5b848c7bc125d28fe316bf0d0afe3f"
+        }
+      }
+    }
+  ],
+  "files": {
+    "availability.csv": {
+      "sha256": "92710292cd1cad554ed6d7e26ab556f9a767f974264c9f11141a4bf37035b4b0",
+      "bytes": 1855
+    },
+    "evidence_gaps.csv": {
+      "sha256": "94007dd214810186382986b96e944617fd9ad6d70d1fcd03e96ceb237969a9e6",
+      "bytes": 11947
+    },
+    "group_diagnostics.csv": {
+      "sha256": "c22cedeec20c2c726b3ec1c125663ce6ee330077f0d3b6002dbc483aca9006cd",
+      "bytes": 446758
+    },
+    "language_contrasts.csv": {
+      "sha256": "56315bcbf78e461d5d385feec44cb8946d81045f335ac5aaaece5e1f01501091",
+      "bytes": 287949
+    },
+    "scores.csv": {
+      "sha256": "5844e1177322a06647cb11c7670c88d3ca554d5d046a11e89d18a4d94ca29e58",
+      "bytes": 479975
+    }
+  },
+  "validation": {
+    "status": "passed",
+    "full_runs": 24,
+    "smoke_runs": 48,
+    "exact_repeat_pairs": 24,
+    "full_prediction_rows": 14964,
+    "empty_qa_responses": 0,
+    "nonfinite_likelihoods": 0,
+    "native_files_preserved": 216,
+    "generation_stop_reasons_recorded": false,
+    "zero_checks": {
+      "qwen_en_strict_accuracy": {
+        "reason": "Every response violates requested bare-letter form; parsed accuracy is retained separately.",
+        "parse_methods": {
+          "labeled_option": 236,
+          "invalid": 4
+        },
+        "strict_correct_count": 0,
+        "example": {
+          "id": "WBQA-0001",
+          "response": "C. Not enough information",
+          "parse": {
+            "choice_index": 2,
+            "method": "labeled_option",
+            "format_violation": true
+          }
+        }
+      },
+      "llama_uk_very_high_ambiguous_accuracy": {
+        "rows": 6,
+        "components": 3,
+        "correct_count": 0,
+        "items": [
+          {
+            "id": "WBQA-0001",
+            "response": "C\n\nОпис не містить інформації про те, хто пошкодив меблі в орендованій квартирі.",
+            "gold": 2,
+            "unknown_index": 2,
+            "parse_method": "invalid"
+          },
+          {
+            "id": "WBQA-0002",
+            "response": "B",
+            "gold": 2,
+            "unknown_index": 2,
+            "parse_method": "bare_letter"
+          },
+          {
+            "id": "WBQA-0187",
+            "response": "B",
+            "gold": 0,
+            "unknown_index": 0,
+            "parse_method": "bare_letter"
+          },
+          {
+            "id": "WBQA-0188",
+            "response": "C",
+            "gold": 0,
+            "unknown_index": 0,
+            "parse_method": "bare_letter"
+          },
+          {
+            "id": "WBQA-0211",
+            "response": "A",
+            "gold": 1,
+            "unknown_index": 1,
+            "parse_method": "bare_letter"
+          },
+          {
+            "id": "WBQA-0212",
+            "response": "C",
+            "gold": 1,
+            "unknown_index": 1,
+            "parse_method": "bare_letter"
+          }
+        ]
+      },
+      "empty_severity_level": 1
+    }
+  },
+  "primary_prior_normalised_ss": {
+    "status": "unavailable",
+    "reason": "Final-text bilingual neutral controls have not been constructed and reviewed."
+  },
+  "reproduction_inputs": {
+    "protocol/dataset.json": {
+      "sha256": "6f83eed95341fbf3fe6e846f9dcbb148f6387bc166461bd6483824af7b427732",
+      "bytes": 5292
+    },
+    "protocol/qa.json": {
+      "sha256": "e8307a4d480603321705ec8135963b59f4df53a9e493ee5152434df9deecd218",
+      "bytes": 4767
+    },
+    "protocol/dataset_metadata_corrections.json": {
+      "sha256": "1f94b70642faf37bd4f76b983583d2655f79627cf66f61ef9040a273bdd99ca7",
+      "bytes": 1145
+    },
+    "evaluation/warbias_baseline/profile_mapping.jsonl": {
+      "sha256": "13a7248f9dfc21fa3e5e9bcef8fe7746efa4b328ada86adb195aa0dc483c8da5",
+      "bytes": 345012
+    },
+    "evaluation/warbias_baseline/models.json": {
+      "sha256": "bbb36f64ae4e17bf15bb99259639f9b07815fd2eb859c303cd46d8489dcd66e2",
+      "bytes": 2222
+    },
+    "evaluation/warbias_baseline/model_assets.json": {
+      "sha256": "21222bf4543b2c90f894732d3d1def36cdea79cf75f0a52b43b3122a5ccf3bf2",
+      "bytes": 13973
+    }
+  }
+}
