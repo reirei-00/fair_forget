@@ -11,6 +11,24 @@ from .trainer import file_hash
 from .warbias_data import default_root, validate_bundle
 
 
+def selected_models(repo):
+    """Resolve the active model selection against the complete pinned registry."""
+    configuration = Path(repo) / "configs/unlearning"
+    registry = json.loads((configuration / "models.json").read_text())["models"]
+    indexed = {model["id"]: model for model in registry}
+    selected = json.loads((configuration / "warbias_final.json").read_text())["model_ids"]
+    if (
+        len(indexed) != len(registry)
+        or not isinstance(selected, list)
+        or not selected
+        or any(not isinstance(alias, str) for alias in selected)
+        or len(selected) != len(set(selected))
+        or not set(selected) <= indexed.keys()
+    ):
+        raise ValueError("Configure unique registered WarBias model IDs")
+    return [indexed[alias] for alias in selected]
+
+
 def _training_settings(experiment, method, rows):
     training = copy.deepcopy(experiment["training"])
     training.update(experiment["objectives"][method])
@@ -72,9 +90,7 @@ def method_plan(
         raise ValueError("method is not selected for final-release WarBias")
     directions = _directions(experiment, target_group, training_language)
     registry_path = configuration / "models.json"
-    registry = json.loads(registry_path.read_text())["models"]
-    if not registry or len({model["id"] for model in registry}) != len(registry):
-        raise ValueError("model registry must contain unique model IDs")
+    registry = selected_models(repo)
     local_path = configuration / "local.json"
     local = json.loads(local_path.read_text()) if local_path.exists() else {}
     data_root = (
@@ -194,7 +210,7 @@ def validate_recipe(config, manifest_path):
         raise ValueError("recipe settings differ from the final WarBias experiment")
     registry_path = repo / "configs/unlearning/models.json"
     model_registry = config["notebook_matrix"].get("model_registry", {})
-    registry = json.loads(registry_path.read_text())["models"]
+    registry = selected_models(repo)
     selected = [
         model for model in registry if model["id"] == config["notebook_matrix"].get("model_alias")
     ]

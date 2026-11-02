@@ -118,12 +118,14 @@ OUTPUT = Path(output_value).expanduser().resolve()
 PLAN = notebook_matrix.method_plan(
     repo, METHOD, protocol='warbias_final', data_root=DATA_ROOT, models_root=MODELS_ROOT,
 )
-assert len(PLAN) == 24, 'Expected six models in each of four training directions.'
+MODEL_COUNT = len(CONFIGURATION['model_ids'])
+EXPECTED_RUNS = MODEL_COUNT * len(BINDINGS)
+assert len(PLAN) == EXPECTED_RUNS, 'Expected one run per selected model and direction.'
 assert len({item['run_id'] for item in PLAN}) == len(PLAN)
 for item in PLAN:
     recipe = item['recipe']
     print(item['run_id'], recipe['model_id'], recipe['model_revision'], 'GPUs:', item['required_gpus'])
-print('Runs:', len(PLAN), '| Models: 6 | Method:', METHOD, '| Dataset: WarBias')
+print('Runs:', len(PLAN), '| Models:', MODEL_COUNT, '| Method:', METHOD, '| Dataset: WarBias')
 """
 TRAIN = r"""if RUN_TRAINING:
     from fairforget.unlearning.runtime import verify_runtime
@@ -150,10 +152,10 @@ TRAIN = r"""if RUN_TRAINING:
         record.update(status='completed' if completed.returncode == 0 else 'failed', returncode=completed.returncode)
         execution_path.write_text(json.dumps(execution, indent=2) + '\n')
         completed.check_returncode()
-    assert len(execution['runs']) == len(PLAN) == 24
-    print('All 24 model-direction runs completed.')
+    assert len(execution['runs']) == len(PLAN)
+    print('Completed model-direction runs:', len(PLAN))
 else:
-    print('All 24 model-direction runs are configured. Training is disabled.')
+    print('Configured model-direction runs:', len(PLAN), '| Training is disabled.')
 """
 DATA_NOTES = """## WarBias data
 
@@ -180,7 +182,10 @@ Each run saves a checkpoint, loss history and token-exposure log.
 
 
 def build(methods=None):
-    active = json.loads((ROOT / "configs/unlearning/warbias_final.json").read_text())["methods"]
+    experiment = json.loads((ROOT / "configs/unlearning/warbias_final.json").read_text())
+    active = experiment["methods"]
+    model_count = len(experiment["model_ids"])
+    runs = model_count * len(experiment["training_groups"]) * len(experiment["training_languages"])
     for method in active if methods is None else methods:
         title, name = METHODS[method]
         cells = [
@@ -192,7 +197,7 @@ def build(methods=None):
                         if method not in active
                         else ""
                     )
-                    + f"Run the cells in order to prepare the data, see one optimizer step on CPU, and configure 24 runs: six models in four group/language directions. Enable training separately.\n\n{NOTES[method]}"
+                    + f"Run the cells in order to prepare the data, see one optimizer step on CPU, and configure {runs} runs: {model_count} models in four group/language directions. Enable training separately.\n\n{NOTES[method]}"
                 )
             ),
             nbformat.v4.new_markdown_cell(
@@ -207,7 +212,7 @@ def build(methods=None):
             nbformat.v4.new_code_cell(TOKENS),
             nbformat.v4.new_code_cell(LOSSES[method]),
             nbformat.v4.new_markdown_cell(
-                "## Training\n\nEnable `RUN_TRAINING` to run all 24 model/direction combinations. Every run starts from the pinned base checkpoint. It saves a separate checkpoint, log and receipt under its run ID. Each run uses one GPU with enough memory for the model. Methods use the same rows within each direction."
+                f"## Training\n\nEnable `RUN_TRAINING` to run all {runs} model/direction combinations. Every run starts from the pinned base checkpoint. It saves a separate checkpoint, log and receipt under its run ID. Each run uses one GPU with enough memory for the model. Methods use the same rows within each direction."
             ),
             nbformat.v4.new_code_cell(CONFIGURE),
             nbformat.v4.new_code_cell(TRAIN),
@@ -231,10 +236,10 @@ def build(methods=None):
                     "training_groups": ["idp", "veteran"],
                     "training_languages": ["uk", "en"],
                     "training_directions": 4,
-                    "runs_per_method": 24,
+                    "runs_per_method": runs,
                     "evaluation_languages": ["uk", "en"],
                     "automatic_gpu_training": False,
-                    "models": "all_six_models",
+                    "models": experiment["model_ids"],
                 },
             },
         )

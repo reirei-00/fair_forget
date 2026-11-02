@@ -1,4 +1,4 @@
-"""Configure reviewed data and all six pinned checkpoints for the notebooks."""
+"""Configure reviewed data and selected checkpoints for the notebooks."""
 
 from __future__ import annotations
 
@@ -84,11 +84,15 @@ def main():
     parser.add_argument(
         "--download-models",
         action="store_true",
-        help="Download all six immutable checkpoint revisions",
+        help="Download the selected immutable checkpoint revisions",
     )
     args = parser.parse_args()
     models_root = args.models_root.expanduser().resolve()
     models = json.loads((CONFIGURATION / "models.json").read_text())["models"]
+    if not args.legacy:
+        from fairforget.unlearning.warbias_plan import selected_models
+
+        models = selected_models(ROOT)
     availability = {}
     for model in models:
         destination = models_root / model["directory"] / model["revision"]
@@ -161,7 +165,7 @@ def main():
             indent=2,
         )
     )
-    print("Setup saved. Each method notebook configures six models across four directions.")
+    print(f"Setup saved. Selected models: {len(models)}.")
     if not all(availability.values()):
         print("Use --download-models or point --models-root to the staged checkpoints.")
     if not all(data.values()):

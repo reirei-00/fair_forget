@@ -329,6 +329,7 @@ class WarBiasEvaluation:
         report = analyze_checkpoints(
             self.release,
             self.results,
+            models=sorted({item["model"]["id"] for item in self.plan}),
             bootstrap=1000,
             seed=42,
             inference_release=self.inference_release,

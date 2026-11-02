@@ -10,9 +10,9 @@ NPO+KL and BiasUnlearn-style use the final WarBias source. It contains
 | `veteran_uk` | Veteran | Ukrainian |
 | `veteran_en` | Veteran | English |
 
-Each direction trains on one group and one language. All six pinned models
-start independently from their base checkpoints. This gives 24 runs per method
-and 48 across the two methods. Evaluation covers both groups in both languages.
+Each direction trains on one group and one language. All five pinned models
+start independently from their base checkpoints. This gives 20 runs per method
+and 40 across the two methods. Evaluation covers both groups in both languages.
 The application tests whether WarBias supplies useful data for bias mitigation.
 Each unchanged base checkpoint is the comparison control. The main study uses
 one fixed training seed; uncertainty over cases is reported separately.
@@ -64,10 +64,10 @@ within a direction and the same optimizer-step limit for that direction.
 BiasUnlearn builds expanded adversarial pools and can change their direction
 using development scores. Equal step limits do not imply equal token exposure.
 Each trainer records actual exposure.
-WGA+KL remains an [optional experiment](wga_kl.ipynb), outside the 48-run study.
+WGA+KL remains an [optional experiment](wga_kl.ipynb), outside the 40-run study.
 
 Every [notebook](README.md) prepares and validates the four bundles, runs a
-synthetic CPU step, and displays its 24-run plan. Full training starts only when
+synthetic CPU step, and displays its 20-run plan. Full training starts only when
 `RUN_TRAINING=True`. A run ID combines model, group and training language, so
 each checkpoint, log and receipt has its own output directory.
 

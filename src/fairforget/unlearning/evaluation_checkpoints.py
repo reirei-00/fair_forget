@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .assets import file_hash
 from .trainer import hash_tree, validate_config
+from .warbias_plan import selected_models
 
 
 def read_json(path):
@@ -14,7 +15,7 @@ def read_json(path):
 def intervention_plan(repo, training_root):
     repo, training_root = Path(repo), Path(training_root)
     config = read_json(repo / "configs/unlearning/warbias_final.json")
-    models = read_json(repo / "configs/unlearning/models.json")["models"]
+    models = selected_models(repo)
     plan = [
         {
             "method": method,

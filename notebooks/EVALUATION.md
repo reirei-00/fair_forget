@@ -3,8 +3,8 @@
 The [notebook](evaluate_before_after.ipynb) uses the same collector and Fair-UK
 scorer as [baseline notebook 08](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb).
 FairForget selects experiments and labels their before/after reports. Fair-UK
-evaluates the supplied WarBias benchmark inputs. This workflow covers all 48
-selected interventions and six shared base checkpoints.
+evaluates the supplied WarBias benchmark inputs. This workflow covers all 40
+selected interventions and five shared base checkpoints.
 The [native benchmark workflow](native_before_after.ipynb) remains available
 with its [own setup](NATIVE_EVALUATION.md).
 
@@ -21,11 +21,11 @@ with its [own setup](NATIVE_EVALUATION.md).
 
 ## Environment and paths
 
-Use Fair-UK revision `248f1aeb4fc986ad6ae183bf5bf97d9c6be1d995`:
+Use Fair-UK revision `8e16737e4ee1e845a64f9f1ce9bb3329d7e32547`:
 
 ```bash
 git clone https://github.com/reirei-00/fair-uk.git ../fair-uk
-git -C ../fair-uk checkout 248f1aeb4fc986ad6ae183bf5bf97d9c6be1d995
+git -C ../fair-uk checkout 8e16737e4ee1e845a64f9f1ce9bb3329d7e32547
 python -m pip install -e ../fair-uk
 ```
 
@@ -61,14 +61,14 @@ Checkpoint directories use `METHOD/MODEL__GROUP_LANGUAGE/merged_checkpoint/`.
 
 ## Workflow
 
-1. Enable `RUN_PREPARE` after training. Verify all 48 exports before creating
+1. Enable `RUN_PREPARE` after training. Verify all 40 exports before creating
    any releases. Preserve the baseline model options and copy its original and
    control inputs unchanged. Only the measured checkpoint identity changes.
 2. Enable `RUN_AFTER_COLLECTION` on the GPU host. Reuse the baseline runner,
    serial BF16 options, model-specific attention settings and repeated smoke gates.
    Each checkpoint supplies four original and two neutral panels. Validated
    collections can resume; source and runtime changes fail validation.
-3. Enable `RUN_REFERENCE_ANALYSIS` to score the six shared baselines with the
+3. Enable `RUN_REFERENCE_ANALYSIS` to score the five shared baselines with the
    selected parser, controls and held-out IDs.
 4. Enable `RUN_AFTER_ANALYSIS` to apply the same scorer to each post checkpoint.
    Check actual before/after runtime, tokenizer, effective inputs and row IDs.

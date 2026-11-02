@@ -29,14 +29,14 @@ class NativeEvaluationTests(unittest.TestCase):
             training_root=self.root / "training",
         )
 
-    def test_active_matrix_has_48_unique_posts_and_six_shared_bases(self):
+    def test_active_matrix_has_40_unique_posts_and_five_shared_bases(self):
         plan = self.workflow.plan
-        self.assertEqual(len(plan), 48)
+        self.assertEqual(len(plan), 40)
         self.assertEqual({p["method"] for p in plan}, {"npo_kl", "biasunlearn"})
         self.assertEqual({p["target_group"] for p in plan}, {"idp", "veteran"})
         self.assertEqual({p["training_language"] for p in plan}, {"uk", "en"})
-        self.assertEqual(len({p["directory"] for p in plan}), 48)
-        self.assertEqual(len({self.workflow.base(p["model"]) for p in plan}), 6)
+        self.assertEqual(len({p["directory"] for p in plan}), 40)
+        self.assertEqual(len({self.workflow.base(p["model"]) for p in plan}), 5)
         self.assertNotIn("warbias_triplets_uk", self.workflow.tasks)
 
     def test_collection_and_comparison_dispatch_every_direction_with_shared_controls(self):
@@ -49,8 +49,8 @@ class NativeEvaluationTests(unittest.TestCase):
             mock.patch.object(workflow, "require_run"),
         ):
             workflow.run_before()
-        self.assertEqual(qualify.call_count, 6)
-        self.assertEqual(collect.call_count, 6 * len(workflow.tasks))
+        self.assertEqual(qualify.call_count, 5)
+        self.assertEqual(collect.call_count, 5 * len(workflow.tasks))
         workflow.output.mkdir()
         with (
             mock.patch.object(workflow, "preflight"),
@@ -61,8 +61,8 @@ class NativeEvaluationTests(unittest.TestCase):
             mock.patch.object(workflow, "require_run"),
         ):
             workflow.run_after()
-        self.assertEqual(qualify.call_count, 48)
-        self.assertEqual(collect.call_count, 48 * len(workflow.tasks))
+        self.assertEqual(qualify.call_count, 40)
+        self.assertEqual(collect.call_count, 40 * len(workflow.tasks))
         with (
             mock.patch.object(workflow, "preflight"),
             mock.patch.object(workflow, "verify_before"),
@@ -71,7 +71,7 @@ class NativeEvaluationTests(unittest.TestCase):
             mock.patch.object(workflow, "invoke") as invoke,
         ):
             workflow.run_comparison()
-        self.assertEqual(invoke.call_count, 48 * len(workflow.tasks))
+        self.assertEqual(invoke.call_count, 40 * len(workflow.tasks))
         before, after = set(), set()
         for call in invoke.call_args_list:
             command = call.args[0]
@@ -79,8 +79,8 @@ class NativeEvaluationTests(unittest.TestCase):
             self.assertFalse(call.kwargs["gpu"])
             before.add(command[command.index("--before-run") + 1])
             after.add(command[command.index("--after-run") + 1])
-        self.assertEqual(len(before), 6 * len(workflow.tasks))
-        self.assertEqual(len(after), 48 * len(workflow.tasks))
+        self.assertEqual(len(before), 5 * len(workflow.tasks))
+        self.assertEqual(len(after), 40 * len(workflow.tasks))
 
     def test_all_training_exports_are_checked_before_post_collection_starts(self):
         with (
@@ -328,7 +328,7 @@ class NativeEvaluationTests(unittest.TestCase):
                 )
             )
         rows = self.workflow.summary()
-        self.assertEqual(len(rows), 48)
+        self.assertEqual(len(rows), 40)
         self.assertTrue(all(row["before"] is None for row in rows))
         self.assertEqual({row["training_language"] for row in rows}, {"uk", "en"})
         self.assertEqual({row["target_group"] for row in rows}, {"idp", "veteran"})

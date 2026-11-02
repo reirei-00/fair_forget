@@ -16,6 +16,7 @@ from unlearning_fixtures import AssetCatalog
 
 from fairforget.unlearning import native_evaluation, notebook_matrix, warbias_data
 from fairforget.unlearning.trainer import build_biasunlearn_pools, file_hash, hash_tree, write_json
+from fairforget.unlearning.warbias_plan import selected_models
 
 ROOT = Path(__file__).resolve().parents[1]
 METHODS = ("npo_kl", "biasunlearn")
@@ -28,7 +29,23 @@ class WarBiasPlanTests(unittest.TestCase):
         config = json.loads((ROOT / "configs/unlearning/warbias_final.json").read_text())
         self.assertEqual(config["methods"], list(METHODS))
         self.assertEqual(config["optional_methods"], ["wga_kl"])
-        self.assertEqual(len(self.plan("wga_kl")), 24)
+        self.assertEqual(len(selected_models(ROOT)), 5)
+        self.assertNotIn("mamay27b_v2", config["model_ids"])
+        self.assertEqual(len(self.plan("wga_kl")), 20)
+
+    def test_invalid_model_selection_cannot_expand_to_the_registry(self):
+        configuration = self.root / "configs/unlearning"
+        configuration.mkdir(parents=True)
+        (configuration / "models.json").write_text(
+            (ROOT / "configs/unlearning/models.json").read_text()
+        )
+        for aliases in ([], ["unknown"], ["qwen3_8b", "qwen3_8b"], "qwen3_8b"):
+            with self.subTest(aliases=aliases):
+                (configuration / "warbias_final.json").write_text(
+                    json.dumps({"model_ids": aliases})
+                )
+                with self.assertRaisesRegex(ValueError, "unique registered"):
+                    selected_models(self.root)
 
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
@@ -103,14 +120,14 @@ class WarBiasPlanTests(unittest.TestCase):
         write_json(item["directory"] / "intervention.json", receipt)
         self.assertEqual(workflow.require_training(item)["checkpoint"], str(checkpoint))
 
-    def test_all_forty_eight_runs_use_the_correct_direction_and_fresh_base(self):
-        registry = json.loads((ROOT / "configs/unlearning/models.json").read_text())["models"]
+    def test_all_forty_runs_use_the_correct_direction_and_fresh_base(self):
+        registry = selected_models(ROOT)
         expected = {model["id"]: model for model in registry}
         plans = [self.plan(method) for method in METHODS]
-        self.assertEqual(sum(map(len, plans)), 48)
+        self.assertEqual(sum(map(len, plans)), 40)
         base_paths = {alias: set() for alias in expected}
         for method, plan in zip(METHODS, plans, strict=True):
-            self.assertEqual(len({item["run_id"] for item in plan}), 24)
+            self.assertEqual(len({item["run_id"] for item in plan}), 20)
             self.assertEqual(
                 {(i["model_alias"], i["target_group"], i["training_language"]) for i in plan},
                 set(itertools.product(expected, ("idp", "veteran"), ("uk", "en"))),
@@ -150,9 +167,9 @@ class WarBiasPlanTests(unittest.TestCase):
 
     def test_filters_select_only_independent_requested_directions(self):
         for filters, count in (
-            ({"target_group": "idp"}, 12),
-            ({"training_language": "en"}, 12),
-            ({"target_group": "veteran", "training_language": "uk"}, 6),
+            ({"target_group": "idp"}, 10),
+            ({"training_language": "en"}, 10),
+            ({"target_group": "veteran", "training_language": "uk"}, 5),
         ):
             with self.subTest(filters=filters):
                 plan = self.plan("npo_kl", **filters)
@@ -164,19 +181,19 @@ class WarBiasPlanTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "not selected"):
                 self.plan("wga_kl", **filters)
 
-    def test_all_forty_eight_recipes_pass_full_input_preflight_without_collisions(self):
+    def test_all_forty_recipes_pass_full_input_preflight_without_collisions(self):
         paths = []
         for method in METHODS:
             with self.subTest(method=method):
                 prepared = notebook_matrix.prepare_recipes(
                     self.staged_plan(method), self.root / method
                 )
-                self.assertEqual(len(prepared), 24)
+                self.assertEqual(len(prepared), 20)
                 self.assertEqual(
                     {path.stem for path in prepared}, {item["run_id"] for item in self.plan(method)}
                 )
                 paths.extend(prepared)
-        self.assertEqual(len(paths), 48)
+        self.assertEqual(len(paths), 40)
         self.assertEqual(len(paths), len(set(paths)))
 
     def test_historical_recipe_expansion_is_preserved(self):
@@ -207,7 +224,7 @@ class WarBiasPlanTests(unittest.TestCase):
             planned.symlink_to(cached, target_is_directory=True)
             item["config_sha256"] = file_hash(cached / "config.json")
         prepared = notebook_matrix.prepare_recipes(plan, self.root / "symlink_preflight")
-        self.assertEqual(len(prepared), 6)
+        self.assertEqual(len(prepared), 5)
 
     def test_missing_or_historical_data_cannot_fall_back_to_old_recipes(self):
         for method in METHODS:
@@ -313,7 +330,7 @@ class WarBiasPlanTests(unittest.TestCase):
                     self.assertEqual({row["actor"] for row in stream}, {group})
                     self.assertEqual({row["language"] for row in stream}, {language})
 
-    def test_each_notebook_dispatches_twenty_four_unique_runs(self):
+    def test_each_notebook_dispatches_twenty_unique_runs(self):
         destinations = []
         for method, name in NOTEBOOKS.items():
             notebook = json.loads((ROOT / "notebooks" / f"{name}.ipynb").read_text())
@@ -347,7 +364,7 @@ class WarBiasPlanTests(unittest.TestCase):
             ):
                 exec(compile(code, name, "exec"), namespace)
             runtime.assert_called_once_with(require_cuda=False)
-            self.assertEqual(run.call_count, 24)
+            self.assertEqual(run.call_count, 20)
             records = json.loads((output / "matrix_execution.json").read_text())["runs"]
             self.assertEqual(set(records), {item["run_id"] for item in plan})
             self.assertEqual({record["status"] for record in records.values()}, {"completed"})
@@ -355,7 +372,7 @@ class WarBiasPlanTests(unittest.TestCase):
                 self.assertEqual(record["command"][2], "fairforget.unlearning.trainer")
                 self.assertEqual(record["command"][-1], str(output / run_id))
                 destinations.append(record["command"][-1])
-        self.assertEqual(len(destinations), 48)
+        self.assertEqual(len(destinations), 40)
         self.assertEqual(len(destinations), len(set(destinations)))
 
 

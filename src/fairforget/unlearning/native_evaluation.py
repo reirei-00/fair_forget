@@ -12,6 +12,7 @@ from pathlib import Path
 
 from .assets import file_hash, verify_checkpoint
 from .evaluation_checkpoints import intervention_plan, read_json, verify_training_export
+from .warbias_plan import selected_models
 
 TASKS = ("stereoset_uk", "bbq_uk", "winobias_uk_natural", "winobias_uk_controlled", "winopron_uk")
 MODEL_SETTINGS = (
@@ -83,7 +84,7 @@ class NativeEvaluation:
         ]
         self.tasks, self.qualification_task = tuple(tasks), qualification_task
         self.bootstrap, self.seed, self.tolerance = bootstrap, seed, tolerance
-        self.models = read_json(self.repo / "configs/unlearning/models.json")["models"]
+        self.models = selected_models(self.repo)
         self.plan = intervention_plan(self.repo, self.training_root)
         self.checkpoint_cache = {}
 
