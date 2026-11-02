@@ -3,7 +3,7 @@
 The [notebook](../notebooks/08_warbias_baseline.ipynb) defines the metrics and analyzes
 saved runs through Fair-UK. [Saved tables and source bindings](../evaluation/warbias_baseline/results/manifest.json)
 support inspection without model inference. Use the companion Fair-UK source revision
-`69616a41475769c63192c8e3bbd93f788e2a4fef` in the same environment:
+`0e9cd71c776df642050196bbbbaf4eb42956e01d` in the same environment:
 
 ```sh
 python -m pip install -e '.[notebooks]'
@@ -17,7 +17,8 @@ Before/after effects (forget efficacy, NNR, M2/M3 and RI) belong to paired evalu
 The notebook labels IDPs (ВПО) and veterans separately. Each language contains
 409 IDP and 598 veteran triplets, and 120 QA questions per group. In `scores.csv`,
 select `scope=actor` with `actor=idp` or `actor=veteran`; `scope=overall` combines
-the groups. Severity tables combine both groups. All scores and intervals come
+the groups. Severity tables separate IDPs and veterans. Select `scope=actor_severity`
+with `actor` and `severity_level` for these slices. All scores and intervals come
 from Fair-UK; the notebook only selects and formats them.
 
 Run from this artifact directory:
