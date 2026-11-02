@@ -107,7 +107,9 @@ Capability checks use separate evaluation-only runs before and after the
 intervention. They do not supply training, correction or preservation data.
 Their benchmark selection is separate from this WarBias application setup.
 
-Final triplet before/after analysis still needs compatible paired bindings and
-current-text neutral controls. The historical `evaluate_before_after.ipynb`
-workflow does not support these final triplet panels. Preparation and a CPU
-example do not establish a completed intervention or measured mitigation.
+Use the [before/after notebook](evaluate_before_after.ipynb) for native benchmark
+comparisons across all 48 interventions. It reuses six shared base checkpoints.
+For final annotated WarBias triplets, use the Fair-UK original/neutral adapter
+with matching held-out IDs and current-text controls. Keep full-release baseline
+scores separate from held-out intervention results. Preparation and CPU examples
+do not establish measured mitigation.

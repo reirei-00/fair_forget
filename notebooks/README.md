@@ -21,9 +21,10 @@ Mamay 12B v2 and Mamay 27B v2.
 
 The [baseline notebook](../warbias-artifacts/notebooks/warbias_baseline.ipynb) imports Fair-UK for bilingual
 triplet and QA metrics, including severity slices. See the
-[WarBias evaluation guide](../warbias-artifacts/docs/evaluation.md).
+[WarBias evaluation guide](../warbias-artifacts/docs/evaluation.md). The
+[before/after notebook](evaluate_before_after.ipynb) evaluates native benchmarks
+for all 48 selected interventions. See the [evaluation setup](EVALUATION.md).
 
 Separate experiments retain [RMU](rmu.ipynb),
-[task-vector negation](task_vector.ipynb), optional [WGA+KL](wga_kl.ipynb), the historical
-[before/after workflow](evaluate_before_after.ipynb), and saved reports under
+[task-vector negation](task_vector.ipynb), optional [WGA+KL](wga_kl.ipynb), and saved reports under
 [executed/](executed/).

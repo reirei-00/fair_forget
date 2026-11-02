@@ -14,8 +14,8 @@ from unittest import mock
 import torch
 from unlearning_fixtures import AssetCatalog
 
-from fairforget.unlearning import notebook_matrix, warbias_data
-from fairforget.unlearning.trainer import build_biasunlearn_pools, file_hash
+from fairforget.unlearning import native_evaluation, notebook_matrix, warbias_data
+from fairforget.unlearning.trainer import build_biasunlearn_pools, file_hash, hash_tree, write_json
 
 ROOT = Path(__file__).resolve().parents[1]
 METHODS = ("npo_kl", "biasunlearn")
@@ -66,6 +66,42 @@ class WarBiasPlanTests(unittest.TestCase):
             self.assets.stage(path, item["recipe"], item["model_alias"])
             item["config_sha256"] = file_hash(path / "config.json")
         return plan
+
+    def test_native_evaluation_accepts_a_source_bound_current_recipe(self):
+        selected = self.staged_plan("npo_kl")[0]
+        workflow = native_evaluation.NativeEvaluation(
+            ROOT,
+            fair_uk_root=self.root / "fair-uk",
+            python=sys.executable,
+            bundle=self.root / "evaluation/manifest.json",
+            development=self.root / "development/manifest.json",
+            output=self.root / "evaluation",
+            models_root=self.models,
+            training_root=self.root / "training",
+        )
+        item = workflow.plan[0]
+        checkpoint = item["directory"] / "merged_checkpoint"
+        checkpoint.mkdir(parents=True)
+        write_json(item["directory"] / "recipe.json", selected["recipe"])
+        for name in ("config.json", "tokenizer_config.json", "model.safetensors"):
+            (checkpoint / name).write_text("synthetic export fixture, never loaded")
+        recipe = selected["recipe"]
+        receipt = {
+            **{
+                key: recipe[key]
+                for key in ("method", "model_id", "model_revision", "tokenizer_revision")
+            },
+            "status": "trained_merged",
+            "steps": 1,
+            "target_group": item["target_group"],
+            "language": item["training_language"],
+            "config_sha256": file_hash(item["directory"] / "recipe.json"),
+            "merged_checkpoint": str(checkpoint),
+            "merged_checkpoint_files": hash_tree(checkpoint),
+            "export_verification": {phase: {"passed": True} for phase in ("merged", "reloaded")},
+        }
+        write_json(item["directory"] / "intervention.json", receipt)
+        self.assertEqual(workflow.require_training(item)["checkpoint"], str(checkpoint))
 
     def test_all_forty_eight_runs_use_the_correct_direction_and_fresh_base(self):
         registry = json.loads((ROOT / "configs/unlearning/models.json").read_text())["models"]
@@ -278,12 +314,6 @@ class WarBiasPlanTests(unittest.TestCase):
                     self.assertEqual({row["language"] for row in stream}, {language})
 
     def test_each_notebook_dispatches_twenty_four_unique_runs(self):
-        versions = {
-            "torch": "2.9.1+cu128",
-            "transformers": "4.57.6",
-            "peft": "0.17.1",
-            "accelerate": "1.15.0",
-        }
         destinations = []
         for method, name in NOTEBOOKS.items():
             notebook = json.loads((ROOT / "notebooks" / f"{name}.ipynb").read_text())
@@ -309,13 +339,14 @@ class WarBiasPlanTests(unittest.TestCase):
             with (
                 mock.patch("torch.cuda.is_available", return_value=True),
                 mock.patch("torch.cuda.device_count", return_value=1),
-                mock.patch("importlib.metadata.version", side_effect=versions.__getitem__),
+                mock.patch("fairforget.unlearning.runtime.verify_runtime") as runtime,
                 mock.patch(
                     "subprocess.run",
                     side_effect=lambda command, **kwargs: subprocess.CompletedProcess(command, 0),
                 ) as run,
             ):
                 exec(compile(code, name, "exec"), namespace)
+            runtime.assert_called_once_with(require_cuda=False)
             self.assertEqual(run.call_count, 24)
             records = json.loads((output / "matrix_execution.json").read_text())["runs"]
             self.assertEqual(set(records), {item["run_id"] for item in plan})
