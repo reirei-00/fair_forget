@@ -7,10 +7,28 @@ from pathlib import Path
 from types import ModuleType, SimpleNamespace
 from unittest import mock
 
-from fairforget.unlearning.adapter_restore import restore
+from fairforget.unlearning.adapter_restore import _rebase_recipe, restore
+from fairforget.unlearning.assets import file_hash
 
 
 class AdapterRestoreTests(unittest.TestCase):
+    def test_rebasing_checks_both_files_and_all_training_values(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            a, b = Path(temporary) / "a.json", Path(temporary) / "b.json"
+            a.write_text('{"seed":42}')
+            b.write_bytes(a.read_bytes())
+            before = {"path": str(a), "sha256": file_hash(a)}
+            after = {"path": str(b), "sha256": file_hash(b)}
+            recipe = {"training": {"steps": 2}, "notebook_matrix": {"source_template": before}}
+            config = {**recipe, "notebook_matrix": {"source_template": after}}
+            self.assertEqual(len(_rebase_recipe(recipe, config)), 1)
+            self.assertEqual(recipe["notebook_matrix"]["source_template"], before)
+            with self.assertRaisesRegex(ValueError, "same recipe"):
+                _rebase_recipe(recipe, {**config, "training": {"steps": 3}})
+            b.write_text('{"seed":43}')
+            with self.assertRaisesRegex(ValueError, "identical file bytes"):
+                _rebase_recipe(recipe, config)
+
     def test_restore_keeps_training_evidence_and_rejects_incomplete_training(self):
         config = {"training": {"max_steps": 2}, "lora": {"r": 1, "alpha": 2}}
         with tempfile.TemporaryDirectory() as temporary:
@@ -37,6 +55,7 @@ class AdapterRestoreTests(unittest.TestCase):
                         "lora_dropout": 0.0,
                         "bias": "none",
                         "use_dora": False,
+                        "use_rslora": False,
                     }
                 )
             )

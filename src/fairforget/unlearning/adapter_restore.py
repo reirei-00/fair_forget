@@ -1,11 +1,36 @@
 """Restore a completed training adapter for a separately verified export."""
 
+import copy
 import json
 import math
 import shutil
 from pathlib import Path
 
 from .assets import file_hash
+
+
+def _rebase_recipe(recipe, config):
+    """Allow only relocated, byte-identical configuration references."""
+    recipe, records = copy.deepcopy(recipe), []
+    for key in ("source_template", "model_registry"):
+        before = recipe.get("notebook_matrix", {}).get(key)
+        after = config.get("notebook_matrix", {}).get(key)
+        if before == after:
+            continue
+        if (
+            not isinstance(before, dict)
+            or not isinstance(after, dict)
+            or set(before) != {"path", "sha256"}
+            or set(after) != set(before)
+            or before["sha256"] != after["sha256"]
+            or any(file_hash(item["path"]) != item["sha256"] for item in (before, after))
+        ):
+            raise ValueError("Configuration references must retain identical file bytes")
+        recipe["notebook_matrix"][key] = after
+        records.append({"field": key, "before": before, "after": after})
+    if recipe != config:
+        raise ValueError("Restore requires the same recipe and a complete failed merge export")
+    return records
 
 
 def restore(model, config, source, output):
@@ -15,11 +40,11 @@ def restore(model, config, source, output):
     receipt_path = source / "intervention.json"
     receipt = json.loads(receipt_path.read_text())
     recipe = json.loads((source / "recipe.json").read_text())
+    rebasing = _rebase_recipe(recipe, config)
     steps = config["training"]["max_steps"]
     losses = [json.loads(line) for line in (source / "losses.jsonl").read_text().splitlines()]
     if (
-        config != recipe
-        or receipt.get("status") != "failed_export_verification"
+        receipt.get("status") != "failed_export_verification"
         or receipt.get("steps") != steps
         or receipt.get("export_verification", {}).get("failure", {}).get("phase") != "merged"
         or [row.get("step") for row in losses] != list(range(steps))
@@ -37,6 +62,7 @@ def restore(model, config, source, output):
             "lora_dropout": 0.0,
             "bias": "none",
             "use_dora": False,
+            "use_rslora": False,
         }.items()
     ):
         raise ValueError("Saved adapter settings differ from the training recipe")
@@ -54,6 +80,7 @@ def restore(model, config, source, output):
         "exposure_valid_tokens": receipt["exposure_valid_tokens"],
         "training_source": {
             "directory": str(source),
+            "configuration_rebase": rebasing,
             "files_sha256": {
                 str(path.relative_to(source)): file_hash(path) for path in files if path.is_file()
             },

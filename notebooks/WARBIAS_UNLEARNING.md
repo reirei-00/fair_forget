@@ -99,6 +99,8 @@ python -m fairforget.unlearning.trainer --config /path/to/run/recipe.json \
 
 The recipe and completed step log must match. The new receipt binds the original
 adapter and training evidence by hash. It keeps the original run unchanged.
+Configuration references may move only when both files retain the recorded hash.
+Model paths, training data and method settings must remain unchanged.
 
 ## Evaluation
 
