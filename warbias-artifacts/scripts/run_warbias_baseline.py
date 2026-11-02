@@ -34,6 +34,16 @@ SERIAL = {
     "enable_chunked_prefill": False,
     "async_scheduling": False,
 }
+BASELINE_TASKS = {
+    "warbias_triplets_annotated_uk",
+    "warbias_triplets_annotated_en",
+    "warbias_uk",
+    "warbias_en",
+}
+NEUTRAL_TASKS = {
+    "warbias_triplets_annotated_neutral_uk",
+    "warbias_triplets_annotated_neutral_en",
+}
 
 
 def read(path):
@@ -49,6 +59,19 @@ def write(path, value):
     temporary = path.with_suffix(".tmp")
     temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n")
     temporary.replace(path)
+
+
+def collection_tasks(spec):
+    tasks = list(spec["datasets"])
+    if set(tasks) not in (BASELINE_TASKS, NEUTRAL_TASKS) or any(
+        spec["datasets"][task]["language"] != task.rsplit("_", 1)[1] for task in tasks
+    ):
+        raise ValueError(
+            "Select the four baseline tasks or the two bilingual neutral-control tasks"
+        )
+    if set(tasks) == NEUTRAL_TASKS and not spec.get("neutral_controls"):
+        raise ValueError("Neutral-control tasks require their review and source bindings")
+    return tasks
 
 
 def numeric_difference(left, right):
@@ -194,16 +217,10 @@ def main(argv=None):
         raise ValueError("Evaluation inputs must stay in the frozen release")
     if output.is_relative_to(release):
         raise ValueError("Results must stay outside the frozen release")
-    from lm_eval.fair_uk.data import family
     from lm_eval.fair_uk.provenance import code_identity
 
     spec = read(bundle)
-    tasks = list(spec["datasets"])
-    panel = [(family(task), spec["datasets"][task]["language"]) for task in tasks]
-    if len(tasks) != 4 or set(panel) != {
-        (kind, language) for kind in ("warbias_triplets", "warbias") for language in ("uk", "en")
-    }:
-        raise ValueError("Select exactly four bilingual triplet and QA tasks")
+    tasks = collection_tasks(spec)
     selected_profile = read(profiles)[options.model]
     expected_identity = selected_profile["model_identity"]
     args = parameters({options.model: selected_profile}, options.model)

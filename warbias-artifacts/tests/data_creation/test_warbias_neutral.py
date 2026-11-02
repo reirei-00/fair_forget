@@ -1,12 +1,17 @@
 """Neutral-variant validation rules."""
 
+import pytest
+
 from warbias_kit.io import digest
 from warbias_kit.warbias.neutral import (
+    FIELDS,
+    VERSION,
     check_sentence,
     choose,
     clean_output,
     collect,
 )
+from warbias_kit.warbias.neutral_review import validate_reviewed_variants
 
 
 def test_check_sentence_rules():
@@ -73,3 +78,60 @@ def test_collect_marks_rows_valid_only_when_all_three_sentences_are():
     assert record["problems"]["unrelated"] == ["status_term_remains", "unchanged"]
     raw[2]["candidates"] = ["People sing."]
     assert collect(released, raw, "en")[0]["status"] == "valid"
+
+
+@pytest.mark.parametrize(
+    "language,original,target,replacement,expected",
+    [
+        (
+            "uk",
+            "Ветеран каже: ветерани з інвалідністю не працюють.",
+            "ветерани",
+            "люди",
+            "Ветеран каже: люди з інвалідністю не працюють.",
+        ),
+        (
+            "en",
+            "A veteran says IDPs who are veterans do not work.",
+            "IDPs",
+            "people",
+            "A veteran says people who are veterans do not work.",
+        ),
+    ],
+)
+def test_reviewed_target_replacements_keep_speaker_and_attribute_status(
+    language, original, target, replacement, expected
+):
+    released = {"id": "item", **{field: original for field in FIELDS}}
+    start = original.index(target)
+    edit = {
+        "start": start,
+        "end": start + len(target),
+        "source": target,
+        "replacement": replacement,
+        "rule_id": "target-only",
+    }
+    record = {
+        "id": "item",
+        "language": language,
+        "version": VERSION,
+        "status": "valid",
+        "source_sha256": {field: digest(original) for field in FIELDS},
+        "neutral": {field: expected for field in FIELDS},
+        "edits": {field: [dict(edit)] for field in FIELDS},
+        "review": {"reviewer_type": "assistant", "status": "accepted"},
+    }
+    catalog = {
+        "schema_version": 1,
+        "rules": [
+            {
+                "id": "target-only",
+                "language": language,
+                "source": target,
+                "replacement": replacement,
+                "reason": "Replace the target mention; keep the speaker and attributes.",
+            }
+        ],
+    }
+    validated = validate_reviewed_variants({language: [released]}, [record], catalog)
+    assert validated[language, "item"]["neutral"]["stereotype"] == expected
