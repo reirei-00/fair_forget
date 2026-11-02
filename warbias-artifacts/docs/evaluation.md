@@ -3,7 +3,7 @@
 The [notebook](../notebooks/warbias_baseline.ipynb) defines the metrics and analyzes
 saved runs through Fair-UK. [Saved tables and source bindings](../evaluation/warbias_baseline/results/manifest.json)
 support inspection without model inference. Use the companion Fair-UK source revision
-`fdd7c8e972a0758d8c0daa50e9124eea57ec82f5` in the same environment:
+`f672d53e164fdb4bfe49498898ca62bb25c92701` in the same environment:
 
 ```sh
 python -m pip install -e '.[notebooks]'
@@ -36,10 +36,14 @@ python scripts/prepare_warbias_evaluation.py \
   --output ./outputs/warbias-neutral-release \
   --model-root /path/to/models \
   --neutral evaluation/warbias_baseline/neutral_controls.jsonl
+export WARBIAS_BASELINE_NEUTRAL_RELEASE="$PWD/outputs/warbias-neutral-release"
+export WARBIAS_BASELINE_NEUTRAL_RESULTS="$PWD/outputs/warbias-neutral-results"
 ```
 
 The adjacent `neutral_rules.json` binds each target-group replacement. These
-controls have assistant review. They are separate from the original dataset review.
+controls have assistant review and no human review. Speakers, status predicates
+and cross-status attributes stay unchanged. The notebook uses the same collector
+for these two tasks and adds primary SS after their complete outputs are verified.
 
 For existing runs, use their original release. If the analysis library changed,
 set `WARBIAS_BASELINE_INFERENCE_RELEASE` to the frozen collector snapshot.
@@ -58,4 +62,6 @@ fair-uk-eval warbias baseline \
 
 Add `--inference-release /path/to/collector-release` and
 `--metadata-release /path/to/corrected-release` when needed. The notebook
-writes its exports to `$WARBIAS_BASELINE_RESULTS/analysis`.
+writes its exports to `$WARBIAS_BASELINE_RESULTS/analysis`. To include controls,
+add `--neutral-release "$WARBIAS_BASELINE_NEUTRAL_RELEASE"` and
+`--neutral-results "$WARBIAS_BASELINE_NEUTRAL_RESULTS"`.

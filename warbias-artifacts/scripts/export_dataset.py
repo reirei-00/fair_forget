@@ -93,6 +93,10 @@ _REPRODUCTION_INPUTS = {
     "evaluation/warbias_baseline/models.json",
     "evaluation/warbias_baseline/model_assets.json",
 }
+_NEUTRAL_INPUTS = {
+    "evaluation/warbias_baseline/neutral_controls.jsonl": "records_sha256",
+    "evaluation/warbias_baseline/neutral_rules.json": "rules_sha256",
+}
 
 
 def _result_binding(directory, relative, binding, *, require_size=False):
@@ -202,10 +206,23 @@ def _validate_baseline_results(directory):
             raise ValueError("Baseline results differ from their protocol source bindings")
         _result_binding(directory, binding["path"], binding)
     reproduction = manifest.get("reproduction_inputs")
-    if not isinstance(reproduction, dict) or set(reproduction) != _REPRODUCTION_INPUTS:
+    neutral = manifest.get("neutral_release")
+    primary = manifest.get("primary_prior_normalised_ss") or {}
+    if primary.get("status") == "available" and neutral is None:
+        raise ValueError("Baseline results require the neutral-control source declaration")
+    expected = _REPRODUCTION_INPUTS | (set(_NEUTRAL_INPUTS) if neutral is not None else set())
+    if not isinstance(reproduction, dict) or set(reproduction) != expected:
         raise ValueError("Baseline results require complete reproduction input bindings")
     for relative, binding in reproduction.items():
         _result_binding(directory, relative, binding, require_size=True)
+    if neutral is not None and (
+        not isinstance(neutral, dict)
+        or any(
+            neutral.get(field) != reproduction[relative]["sha256"]
+            for relative, field in _NEUTRAL_INPUTS.items()
+        )
+    ):
+        raise ValueError("Baseline results differ from their neutral-control source bindings")
 
 
 def _hash(path):
