@@ -55,6 +55,18 @@ def row(identifier="x", prompt="a ", target="bc", family="f"):
 
 
 class BatchTests(unittest.TestCase):
+    def test_padding_fallback_does_not_change_the_exported_tokenizer(self):
+        tokenizer = CharacterTokenizer()
+        tokenizer.pad_token_id = None
+        tokenizer.eos_token_id = 1
+        tokenizer.padding_side = "left"
+        batch = encode_batch(tokenizer, [row(), row("y", target="d")], max_length=9, device="cpu")
+        self.assertEqual(batch.input_ids[1, -1].item(), 1)
+        self.assertEqual(batch.attention_mask[1, -1].item(), 0)
+        self.assertFalse(batch.completion_mask[1, -1].item())
+        self.assertIsNone(tokenizer.pad_token_id)
+        self.assertEqual(tokenizer.padding_side, "left")
+
     def test_completion_mask_shifts_excludes_prompt_and_padding(self):
         batch = encode_batch(
             CharacterTokenizer(), [row(), row("y", target="d")], max_length=9, device="cpu"

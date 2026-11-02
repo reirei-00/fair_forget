@@ -88,6 +88,8 @@ the observed update. Compare reloaded logits with the verified merged logits at
 the same probe positions, using the dtype-specific tolerances in the
 [configuration](../configs/unlearning/warbias_final.json). Reject changed tokenizer
 inputs or reload drift. Only a verified reload records `trained_merged`.
+Keep the exported tokenizer settings unchanged. Training can use masked EOS
+padding when the tokenizer has no padding token.
 These checks verify checkpoint export, not mitigation quality.
 
 Keep one final adapter per run and the pinned base model. Training uses a fixed

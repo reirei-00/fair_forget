@@ -322,7 +322,9 @@ def encode_batch(tokenizer, rows, *, max_length: int, device, add_special_tokens
     size = max(len(ids) for ids, _ in encoded)
     pad = tokenizer.pad_token_id
     if pad is None:
-        raise ValueError("tokenizer pad_token_id must be explicit")
+        pad = tokenizer.eos_token_id
+    if pad is None:
+        raise ValueError("tokenizer must define a padding or EOS token")
     input_ids = torch.full((len(rows), size), pad, dtype=torch.long, device=device)
     attention = torch.zeros_like(input_ids)
     completion = torch.zeros_like(input_ids, dtype=torch.bool)
@@ -787,11 +789,6 @@ def run(config_path: Path | str, output: Path | str, *, export_from=None):
             raise RuntimeError(
                 "fast tokenizer offsets are required to bind reviewed character masks"
             )
-        if tokenizer.pad_token_id is None:
-            if tokenizer.eos_token_id is None:
-                raise ValueError("no pad or EOS token is available")
-            tokenizer.pad_token = tokenizer.eos_token
-        tokenizer.padding_side = "right"
         model_config = AutoConfig.from_pretrained(config["model_path"], local_files_only=True)
         model_class = AutoModelForCausalLM
         if model_config.model_type == "gemma3":
