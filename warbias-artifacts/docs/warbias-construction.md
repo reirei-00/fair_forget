@@ -100,11 +100,11 @@ The pilot compares Mamay and Lapa with two prompting methods. Zero-shot promptin
 requests the complete triplet in one call. Sequential prompting generates S,
 then C using S, then U using both S and C.
 
-Raters did not see model or prompt-method identities. Two raters supplied 96
-scores for 48 of the 50 pilot items. Both Lapa methods have the highest observed
-mean. The final choice, made after identities were revealed, uses Lapa with
-sequential prompting for separate control of the three sentence roles. It is
-not a claim of statistical superiority. The
+Raters did not see model or prompt-method identities. Three raters supplied 144
+scores for 48 pilot triplets. Lapa sequential has the highest observed
+mean, 4.3889, followed by Lapa zero-shot at 4.3333. The final author choice, made
+after identities were revealed, uses Lapa sequential for separate control of
+the three sentence roles. The
 [selection protocol](../protocol/construction.json) and
 [model-selection notebook](../notebooks/02_model_selection.ipynb) provide the
 settings, scores and calculation.
@@ -208,8 +208,9 @@ state both outcomes. The answer follows this evidence. Choice positions and
 actor order stay fixed within each scenario, and both questions share a context.
 All indices are zero-based.
 
-Assistant-authored [bilingual templates](../protocol/inputs/qa_scenarios.json)
-define the text and case links. The Ukrainian drafting model is not recorded.
+[Bilingual templates](../protocol/inputs/qa_scenarios.json) define the text and
+case links. Ukrainian scenarios use model-assisted drafting and final author
+decisions. The drafting model is not recorded.
 GPT-6 Astra translated all 40 current Ukrainian templates and shared role phrases
 into English. Deterministic expansion produces all 240 English questions.
 The [QA translation protocol](../protocol/qa_translation.json) records the model
@@ -237,11 +238,11 @@ Agreement with the answer key is a separate statistic.
 `human_validated` requires two independent positive reviews with the correct
 answer on the exact released text and no conflicting current-text review.
 `human_edited` marks a retained human edit without this two-review agreement.
-`author_approved` marks an exact text revision approved by an author. These
-[approvals](../protocol/inputs/qa_author_reviews.jsonl) do not count as independent
-answer-choice annotations or enter the agreement calculation.
-`assistant_resolved` marks other corrections or resolutions of flagged items.
-These decisions do not replace the human votes. English QA is marked
+`author_approved` marks an exact retained or revised item approved by the author.
+These [approvals](../protocol/inputs/qa_author_reviews.jsonl) cover 28 revisions
+and 27 decisions to retain the text. They do not replace independent votes or
+enter the agreement calculation. Items without sufficient review evidence use
+`needs_review`. English QA is marked
 `unreviewed_translation`; it has no human translation review or COMET scores.
 [Text provenance](../protocol/inputs/qa_provenance.jsonl)
 and [resolutions](../protocol/inputs/qa_resolutions.jsonl) bind these decisions

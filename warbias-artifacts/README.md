@@ -1,4 +1,4 @@
-# WarBias dataset construction
+# WarBias dataset
 
 WarBias uses blinded human ratings of Ukrainian samples to inform model and
 prompt selection. It then generates Ukrainian triplets with Lapa and sequential
@@ -22,11 +22,10 @@ The separate BBQ-style QA set contains **240 questions per language** from
 [Ukrainian QA](data/qa_uk.jsonl), [English QA](data/qa_en.jsonl) and their
 [protocol](protocol/qa.json) include answer keys and review status. The 480
 Ukrainian human reviews remain bound to the exact text each person saw.
-The current items include 185 with independent human acceptance, 28 with
-[author-approved revisions](protocol/inputs/qa_author_reviews.jsonl), and 27
-with assistant resolutions. Author approval is separate from independent
-annotation. GPT-6 Astra translated all English
-QA text; it has no human translation review.
+The current items include 185 with independent human acceptance and 55 with
+[author approval](protocol/inputs/qa_author_reviews.jsonl): 28 revised and 27
+retained items. Author decisions are separate from independent annotation.
+GPT-6 Astra translated all English QA text; it has no human translation review.
 
 Both languages use the same column order for each dataset type: ID and text
 first, followed by answers and metadata. The dataset manifests declare the order
@@ -43,6 +42,9 @@ defines the original selected inputs; the frozen allocation and pilot ratings
 retain their original scope.
 The [construction guide](docs/warbias-construction.md)
 explains the selector, extensions and exclusions.
+The taxonomy's `triplet_count` counts generation inputs; the dataset manifest's
+`counts.triplets_by_case` counts released items after
+[metadata corrections](protocol/dataset_metadata_corrections.json).
 
 Keep the intentional `the-project/` namespace in this artifact’s repository
 references.
@@ -81,8 +83,9 @@ The package includes its data-release validator.
 | [5. English translation](notebooks/05_full_english_translation.ipynb) | Verify all 1,007 Astra translations and their source hashes |
 | [6. Case severity](notebooks/06_severity.ipynb) | Calculate case means and severity levels for both languages |
 | [7. QA sampling and reproduction](notebooks/07_qa_dataset.ipynb) | Rebuild all QA items, sample complete scenarios and export aligned language files |
+| [Baseline evaluation](notebooks/warbias_baseline.ipynb) | Six-model triplet and QA results with severity slices; [run guide](docs/evaluation.md) |
 
-Run the notebooks with a local Python kernel:
+Run the construction notebooks with a local Python kernel:
 
 ```sh
 python scripts/run_notebooks.py

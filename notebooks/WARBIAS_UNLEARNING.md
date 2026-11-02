@@ -20,7 +20,7 @@ one fixed training seed; uncertainty over cases is reported separately.
 ## Data and losses
 
 The [data builder](../src/fairforget/unlearning/warbias_data.py) verifies the
-source hashes and [component mapping](../evaluation/warbias_baseline/profile_mapping.jsonl).
+source hashes and [component mapping](../warbias-artifacts/evaluation/warbias_baseline/profile_mapping.jsonl).
 It protects every component linked to a QA case from training and development.
 The allocation selects six of the 28 eligible components for development and
 keeps 22 for training. It balances group and severity coverage using source
@@ -52,6 +52,10 @@ target group, training language and held-out bilingual rows. A data binding
 selects eligible inputs; it does not record a training run. Existing bundles
 and checkpoints are never overwritten.
 
+Use the current Git dataset metadata and its declared corrections. The pinned
+HF revision binds the unchanged triplet texts. Apply the dataset package's
+correction helper to the frozen profile mapping and preserve semantic components.
+
 ## Methods and models
 
 The [configuration](../configs/unlearning/warbias_final.json) defines common
@@ -70,7 +74,7 @@ each checkpoint, log and receipt has its own output directory.
 ## Checkpoint verification
 
 CLI and notebook runs use the same checkpoint validator. It checks every pinned
-model and tokenizer asset against the [asset map](../evaluation/warbias_baseline/model_assets.json)
+model and tokenizer asset against the [asset map](../warbias-artifacts/evaluation/warbias_baseline/model_assets.json)
 and rejects missing, changed or unpinned loading files. The shared trainer
 enforces the package versions in `requirements-unlearning.txt` and records
 the actual package builds, CUDA version and GPU identity in its receipt.
@@ -87,7 +91,7 @@ check records `failed_export_verification`; only a verified reload records
 
 Use the same held-out IDs before and after training. Keep scores separate by
 group and evaluation language. All metrics and uncertainty estimates must
-come from Fair-UK. The [baseline notebook](warbias_baseline.ipynb) supports
+come from Fair-UK. The [baseline notebook](../warbias-artifacts/notebooks/warbias_baseline.ipynb) supports
 current per-checkpoint triplet and QA scores, including severity slices.
 A full-release score includes training and development items and is a
 descriptive diagnostic.

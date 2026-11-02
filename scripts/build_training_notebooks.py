@@ -32,7 +32,7 @@ print('PyTorch:', torch.__version__)
 DATA = """settings_path = repo / 'configs/unlearning/local.json'
 settings = json.loads(settings_path.read_text()) if settings_path.exists() else {}
 CONFIGURATION = json.loads((repo / 'configs/unlearning/warbias_final.json').read_text())
-data_value = os.environ.get('FAIRFORGET_DATA_ROOT') or settings.get('data_roots', {}).get('warbias_application') or repo / 'data/unlearning/warbias_application'
+data_value = os.environ.get('FAIRFORGET_DATA_ROOT') or settings.get('data_roots', {}).get('warbias_application') or warbias_data.default_root(repo)
 DATA_ROOT = Path(data_value).expanduser().resolve()
 BINDINGS = {}
 for group in CONFIGURATION['training_groups']:
@@ -167,7 +167,7 @@ EVALUATION = """## Evaluation and implementation
 
 Evaluate the same held-out WarBias IDs in Ukrainian and English before and after each run. Keep scores separate by group and evaluation language. A score over the full release is a descriptive diagnostic because it includes training and development rows. All metrics, including severity slices, come from Fair-UK.
 
-The [baseline notebook](warbias_baseline.ipynb) provides the current per-checkpoint metrics. Final before/after analysis needs compatible paired bindings and current-text neutral controls. See the [WarBias workflow](WARBIAS_UNLEARNING.md).
+The [baseline notebook](../warbias-artifacts/notebooks/warbias_baseline.ipynb) provides the current per-checkpoint metrics. Final before/after analysis needs compatible paired bindings and current-text neutral controls. See the [WarBias workflow](WARBIAS_UNLEARNING.md).
 
 - [Data binding](../src/fairforget/unlearning/warbias_data.py)
 - [Loss implementations](../src/fairforget/unlearning/objectives.py)

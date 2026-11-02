@@ -218,7 +218,7 @@ def _validate_scenarios(rows):
             )
 
 
-def _validate_reviews(indexes, provenance, human_reviews, author_reviews=()):
+def _validate_reviews(indexes, provenance, human_reviews, author_reviews=(), resolutions=()):
     from warbias_kit.warbias.qa_review import review_status, validate_author_review
 
     bound = {}
@@ -238,6 +238,27 @@ def _validate_reviews(indexes, provenance, human_reviews, author_reviews=()):
         validate_author_review(review, indexes["uk"][identity])
     unique_index(author_reviews, "review_id")
     approvals = unique_index(author_reviews, "item_id")
+    _require(isinstance(resolutions, (list, tuple)), "QA resolutions must be a record list")
+    for resolution in resolutions:
+        identity = resolution.get("id") if isinstance(resolution, dict) else None
+        _require(
+            isinstance(identity, str) and identity in indexes["uk"],
+            "QA resolution refers to an unknown item",
+        )
+        approval = approvals.get(identity)
+        scope = {"revise": "text_revision", "retain": "annotation_resolution"}.get(
+            resolution.get("decision")
+        )
+        _require(
+            approval is not None
+            and resolution.get("language") == "uk"
+            and resolution.get("reviewer_kind") == "author"
+            and resolution.get("reviewer_id") == approval["reviewer_id"]
+            and scope == approval["review_scope"]
+            and resolution.get("text_sha256") == approval["text_sha256"],
+            f"{identity}: QA resolution differs from its author decision",
+        )
+    unique_index(resolutions)
     reviews = defaultdict(list)
     unique_index(human_reviews, "review_id")
     for review in human_reviews:
@@ -362,6 +383,7 @@ def load_qa(project, manifest_path="protocol/qa.json"):
         metadata["provenance"],
         metadata["human_reviews"],
         metadata.get("author_reviews", ()),
+        metadata.get("resolutions", ()),
     )
     _validate_translations(indexes, metadata)
     summary = {

@@ -21,9 +21,9 @@ def file_hash(path):
 def load_catalog(repo=ROOT):
     repo = Path(repo)
     registry = json.loads((repo / "configs/unlearning/models.json").read_text())["models"]
-    assets = json.loads((repo / "evaluation/warbias_baseline/model_assets.json").read_text())[
-        "models"
-    ]
+    assets = json.loads(
+        (repo / "warbias-artifacts/evaluation/warbias_baseline/model_assets.json").read_text()
+    )["models"]
     return [{**model, "file_sha256": assets[model["id"]]["file_sha256"]} for model in registry]
 
 

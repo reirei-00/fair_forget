@@ -8,6 +8,8 @@ import math
 import tempfile
 from pathlib import Path
 
+from warbias_kit.warbias import dataset_metadata
+
 from .split import development_components
 
 PROTOCOL = "warbias_group_language_v3"
@@ -15,29 +17,39 @@ TARGET_GROUPS = ("idp", "veteran")
 TRAINING_LANGUAGES = ("uk", "en")
 REPOSITORY = "FairForget/WarBias"
 TRIPLET_REVISION = "9363a1d1b6936ad3d37e52f9ce1e426d2a0573b0"
-SOURCE_COMMIT = "36c49eb65ec370bb7e792dcb4d9b5e63f8bf0609"
+SOURCE_COMMIT = "81d737fe29a707cf3e38f71157240968a3dbfc22"
 SOURCES = {
     "triplets_uk": {
         "path": "warbias-artifacts/data/uk.jsonl",
-        "sha256": "61692dee0036584e7b27014a7e509f751dd372e046903c394c3cd686a1069cdb",
+        "sha256": "849e15e3eb444313f0d2914d20e79550c3f6dcb8f572bd24308a2bbd40af8dd5",
         "hf_filename": "data/uk/unassigned.jsonl",
     },
     "triplets_en": {
         "path": "warbias-artifacts/data/en.jsonl",
-        "sha256": "6611322c7102161a8170bb8e6811b0244e0d6c1a8b5234f6dee0328ffaebc218",
+        "sha256": "59b34443081b7e0e0df5e0c2c0e126ad238e5a1b2db91df153d9bfb29738cc8f",
         "hf_filename": "data/en/unassigned.jsonl",
     },
     "qa_uk": {
         "path": "warbias-artifacts/data/qa_uk.jsonl",
-        "sha256": "f7c85372d89c1ced05ff4419bef67f1012fe6214d8d3e089bb3917542dfc620b",
+        "sha256": "1f023e27b7bfd1b90c2251f284d4bc6ccfad67bcf251089ca774823f4b0a334d",
     },
     "qa_en": {
         "path": "warbias-artifacts/data/qa_en.jsonl",
         "sha256": "6436190d503cfe97859ec9c3183901d292f0de01358887f18675f8f87f07a7f5",
     },
     "profile_mapping": {
-        "path": "evaluation/warbias_baseline/profile_mapping.jsonl",
+        "path": "warbias-artifacts/evaluation/warbias_baseline/profile_mapping.jsonl",
         "sha256": "13a7248f9dfc21fa3e5e9bcef8fe7746efa4b328ada86adb195aa0dc483c8da5",
+    },
+    "dataset_manifest": {
+        "path": "warbias-artifacts/protocol/dataset.json",
+        "format": "json",
+        "sha256": "6f83eed95341fbf3fe6e846f9dcbb148f6387bc166461bd6483824af7b427732",
+    },
+    "metadata_corrections": {
+        "path": "warbias-artifacts/protocol/dataset_metadata_corrections.json",
+        "format": "json",
+        "sha256": "1f94b70642faf37bd4f76b983583d2655f79627cf66f61ef9040a273bdd99ca7",
     },
 }
 STREAM_FILES = {
@@ -68,11 +80,20 @@ def _read_sources(repo):
         payload = path.read_bytes()
         if _sha(payload) != spec["sha256"]:
             raise ValueError(f"Pinned WarBias source checksum differs: {spec['path']}")
+        if spec.get("format") == "json":
+            result[name] = json.loads(payload)
+            continue
         rows = [json.loads(line) for line in payload.decode().splitlines() if line.strip()]
         ids = [row["id"] for row in rows]
         if len(ids) != len(set(ids)):
             raise ValueError(f"Duplicate source IDs: {spec['path']}")
         result[name] = rows
+    corrections = dataset_metadata.load_metadata_corrections(repo / "warbias-artifacts")
+    if corrections != result["metadata_corrections"]["corrections"]:
+        raise ValueError("WarBias metadata correction bindings differ")
+    result["profile_mapping"] = dataset_metadata.apply_metadata_corrections(
+        result["profile_mapping"], corrections, kind="evaluation_profile"
+    )
     uk, en = result["triplets_uk"], result["triplets_en"]
     if [row["id"] for row in uk] != [row["id"] for row in en]:
         raise ValueError("WarBias Ukrainian and English IDs or order differ")
@@ -89,6 +110,11 @@ def _read_sources(repo):
             if left[key] != right[key]:
                 raise ValueError(f"WarBias language QA metadata differs: {left['id']}")
     return result
+
+
+def default_root(repo):
+    """Keep prepared bundles separate for each pinned source release."""
+    return Path(repo) / "data/unlearning/warbias_application" / SOURCE_COMMIT[:12]
 
 
 def _allocate(sources, seed, development_fraction):
@@ -224,6 +250,10 @@ def _contents(repo, target_group, training_language, seed=42, development_fracti
             "repository": REPOSITORY,
             "triplet_revision": TRIPLET_REVISION,
             "git_source_commit": SOURCE_COMMIT,
+            "metadata_correction_implementation_sha256": _sha(
+                Path(dataset_metadata.__file__).read_bytes()
+            ),
+            "triplet_metadata_source": "Git release with declared metadata corrections; HF revision binds the unchanged texts.",
             "files": {name: dict(spec) for name, spec in SOURCES.items()},
             "qa_metadata_source": "Git source files; text and answer keys match the published baseline",
         },

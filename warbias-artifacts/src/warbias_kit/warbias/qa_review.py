@@ -6,7 +6,7 @@ from warbias_kit.warbias.qa import item_digest, text_digest
 
 
 def validate_author_review(review, row):
-    """Bind an author's approval of a revision to its exact text and item."""
+    """Bind an author's decision to its exact text and item."""
     fields = {
         "review_id",
         "item_id",
@@ -30,7 +30,7 @@ def validate_author_review(review, row):
         or review["item_id"] != row["id"]
         or review["reviewer_kind"] != "author"
         or review["decision"] != "approved"
-        or review["review_scope"] != "text_revision"
+        or review["review_scope"] not in {"text_revision", "annotation_resolution"}
     ):
         raise ValueError("QA author review scope or decision differs")
     if review["text_sha256"] != text_digest(row) or review["item_sha256"] != item_digest(row):
@@ -41,7 +41,7 @@ def review_status(row, reviews, source_row=None, *, author_reviews=()):
     """Keep current human acceptance separate from edits and translation checks."""
     if row["language"] == "en":
         return (
-            "assistant_revised_translation"
+            "revised_translation"
             if source_row is not None and text_digest(row) != text_digest(source_row)
             else "unreviewed_translation"
         )
@@ -82,7 +82,7 @@ def review_status(row, reviews, source_row=None, *, author_reviews=()):
         return "author_approved"
     if any(review["verdict"] == "manually_corrected" for review in current):
         return "human_edited"
-    return "assistant_resolved"
+    return "needs_review"
 
 
 def _agreement(reviews, field):
@@ -150,7 +150,7 @@ def annotation_agreement(reviews, keys):
     answered = [review for review in reviews if review["answer_index"] is not None]
     matched = sum(review["answer_index"] == keys[review["item_id"]] for review in answered)
     return {
-        "scope": "First-phase Ukrainian QA annotation only; no final assistant or author resolutions.",
+        "scope": "Original Ukrainian annotation only; final author decisions are excluded.",
         "items": len(groups),
         "annotators": len({review["annotator_id"] for review in reviews}),
         "review_rows": len(reviews),

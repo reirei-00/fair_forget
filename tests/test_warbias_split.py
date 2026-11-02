@@ -19,7 +19,9 @@ class SplitTests(unittest.TestCase):
         cls.rows = read_rows(ROOT / "warbias-artifacts/data/uk.jsonl")
         cls.indexed = {
             row["id"]: row
-            for row in read_rows(ROOT / "evaluation/warbias_baseline/profile_mapping.jsonl")
+            for row in read_rows(
+                ROOT / "warbias-artifacts/evaluation/warbias_baseline/profile_mapping.jsonl"
+            )
         }
         cases = {row["public_case_id"]: row["split_group_id"] for row in cls.indexed.values()}
         cls.protected = {

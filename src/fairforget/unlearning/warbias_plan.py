@@ -8,7 +8,7 @@ import math
 from pathlib import Path
 
 from .trainer import file_hash
-from .warbias_data import validate_bundle
+from .warbias_data import default_root, validate_bundle
 
 
 def _training_settings(experiment, method, rows):
@@ -81,7 +81,7 @@ def method_plan(
         Path(
             data_root
             or local.get("data_roots", {}).get("warbias_application")
-            or repo / "data/unlearning/warbias_application"
+            or default_root(repo)
         )
         .expanduser()
         .resolve()

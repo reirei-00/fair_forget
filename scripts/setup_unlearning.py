@@ -122,13 +122,9 @@ def main():
     else:
         if args.primary_data is not None:
             parser.error("--primary-data applies only to --legacy recipes")
-        directory = (
-            (args.warbias_data or ROOT / "data/unlearning/warbias_application")
-            .expanduser()
-            .resolve()
-        )
-        sys.path.insert(0, str(ROOT / "src"))
-        from fairforget.unlearning.warbias_data import prepare
+        from fairforget.unlearning.warbias_data import default_root, prepare
+
+        directory = (args.warbias_data or default_root(ROOT)).expanduser().resolve()
 
         experiment = json.loads((CONFIGURATION / "warbias_final.json").read_text())
         for group in experiment["training_groups"]:

@@ -36,9 +36,7 @@ def release(tmp_path):
     for language in ("uk", "en"):
         items = expand_scenarios([scenario], language)
         for row in items:
-            row["review_status"] = (
-                "assistant_resolved" if language == "uk" else "unreviewed_translation"
-            )
+            row["review_status"] = "needs_review" if language == "uk" else "unreviewed_translation"
         rows[language] = items
         write_rows(tmp_path / f"data/qa_{language}.jsonl", items)
     inputs = tmp_path / "protocol/inputs"
@@ -200,7 +198,7 @@ def test_human_review_does_not_transfer_to_an_incompatible_item(release, problem
         qa.load_qa(release[0])
 
 
-def _declare_author_approval(release):
+def _declare_author_approval(release, scope="text_revision"):
     root, protocol = release
     row = read_rows(root / "data/qa_uk.jsonl")[0]
     record = {
@@ -210,7 +208,7 @@ def _declare_author_approval(release):
         "reviewer_id": "author_01",
         "reviewer_kind": "author",
         "decision": "approved",
-        "review_scope": "text_revision",
+        "review_scope": scope,
         "text_sha256": qa.text_digest(row),
         "item_sha256": qa.item_digest(row),
     }
@@ -264,9 +262,65 @@ def test_author_status_cannot_be_claimed_without_a_bound_record(release):
 
 def test_bound_author_approval_must_match_the_released_status(release):
     _declare_author_approval(release)
-    _replace(release, "uk", lambda rows: rows[0].update(review_status="assistant_resolved"))
-    _replace(release, "provenance", lambda rows: rows[0].update(review_status="assistant_resolved"))
+    _replace(release, "uk", lambda rows: rows[0].update(review_status="needs_review"))
+    _replace(release, "provenance", lambda rows: rows[0].update(review_status="needs_review"))
     with pytest.raises(ValueError, match="author approval lacks current evidence"):
+        qa.load_qa(release[0])
+
+
+def _declare_author_resolution(release, decision="retain"):
+    scope = "text_revision" if decision == "revise" else "annotation_resolution"
+    _declare_author_approval(release, scope)
+    root, protocol = release
+    row = read_rows(root / "data/qa_uk.jsonl")[0]
+    record = {
+        "id": row["id"],
+        "language": "uk",
+        "decision": decision,
+        "reviewer_kind": "author",
+        "reviewer_id": "author_01",
+        "text_sha256": qa.text_digest(row),
+    }
+    path = "protocol/inputs/resolutions.jsonl"
+    write_rows(root / path, [record])
+    protocol["files"]["resolutions"] = {"path": path, "sha256": file_digest(root / path)}
+    write_json(root / "protocol/qa.json", protocol)
+
+
+@pytest.mark.parametrize("decision", ["retain", "revise"])
+def test_resolution_binds_the_author_and_decision_scope(release, decision):
+    _declare_author_resolution(release, decision)
+    result = qa.load_qa(release[0])
+    assert result["metadata"]["resolutions"][0]["decision"] == decision
+    assert result["rows"]["uk"][0]["review_status"] == "author_approved"
+    assert not result["metadata"]["provenance"][0]["human_validated"]
+
+
+@pytest.mark.parametrize(
+    ("change", "message"),
+    [
+        ({"id": "unknown"}, "unknown item"),
+        ({"language": "en"}, "differs from its author decision"),
+        ({"reviewer_kind": "assistant"}, "differs from its author decision"),
+        ({"reviewer_id": "another-author"}, "differs from its author decision"),
+        ({"decision": "revise"}, "differs from its author decision"),
+        ({"decision": "approve"}, "differs from its author decision"),
+        ({"text_sha256": "stale"}, "differs from its author decision"),
+    ],
+)
+def test_resolution_rejects_unbound_attribution_or_decision(release, change, message):
+    _declare_author_resolution(release)
+    _replace(release, "resolutions", lambda rows: rows[0].update(change))
+    with pytest.raises(ValueError, match=message):
+        qa.load_qa(release[0])
+
+
+def test_resolution_needs_an_author_record_even_without_an_approval_label(release):
+    _declare_author_resolution(release)
+    _replace(release, "uk", lambda rows: rows[0].update(review_status="needs_review"))
+    _replace(release, "provenance", lambda rows: rows[0].update(review_status="needs_review"))
+    _replace(release, "author_reviews", lambda rows: rows.clear())
+    with pytest.raises(ValueError, match="differs from its author decision"):
         qa.load_qa(release[0])
 
 

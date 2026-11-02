@@ -36,6 +36,11 @@ It creates missing direction bundles and does not replace existing bundles.
 Setup and training also verify the pinned model and tokenizer files.
 See the [data and checkpoint rules](WARBIAS_UNLEARNING.md).
 
+Without `--warbias-data`, setup puts bundles under
+`data/unlearning/warbias_application/SOURCE_COMMIT/`. The source commit prefix
+keeps each release separate. Existing explicit paths must match the selected
+source release.
+
 ## Run a method
 
 ```bash
