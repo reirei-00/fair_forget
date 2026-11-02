@@ -1,35 +1,4 @@
 {
   "schema_version": 1,
-  "corrections": [
-    {
-      "id": "WB-0926",
-      "source_type": "author_feedback",
-      "reason": "Align the retained mobility text with its taxonomy case and profile.",
-      "text_sha256": {
-        "uk": "1db7c4a436e8d3c7a668fbc27379253d084559c376289efefe9ba27a38999cd2",
-        "en": "ad8eb0eed6c7a13407c0610adc07186d17f2d36743bcf99bc186c22e25e62d4a"
-      },
-      "original": {
-        "case_id": "WB-C082",
-        "taxonomy_case_id": "ssuk_vet_ptsd_instability_case_001",
-        "profile_id": "ssuk_vet_ptsd_instability_case_001-p5d1616374f",
-        "intrinsic_attributes": {},
-        "additional_tags": {
-          "service_state": "currently_serving"
-        }
-      },
-      "current": {
-        "reference_item_id": "WB-0928",
-        "case_id": "WB-C058",
-        "taxonomy_case_id": "ssuk_vet_disability_work_capacity_case_004",
-        "profile_id": "ssuk_vet_disability_work_capacity_case_004-pec4899f041",
-        "intrinsic_attributes": {
-          "disability": "war_caused"
-        },
-        "additional_tags": {
-          "service_duration": "short_service"
-        }
-      }
-    }
-  ]
+  "corrections": []
 }

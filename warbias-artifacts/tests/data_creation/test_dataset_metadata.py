@@ -13,34 +13,39 @@ from warbias_kit.warbias.dataset_metadata import (
     apply_metadata_corrections,
     load_metadata_corrections,
 )
-from warbias_kit.warbias.schema import FIELDS, text_digest
+from warbias_kit.warbias.schema import FIELDS
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def test_current_metadata_and_generation_allocation_are_distinct():
+def test_restored_ptsd_and_mobility_cases_remain_distinct():
     result = load_dataset(ROOT)
-    correction = result["metadata"]["metadata_corrections"][0]
+    assert load_metadata_corrections(ROOT) == []
     original = next(r for r in load_cohort(ROOT)["matrix"] if r["matrix_item_id"] == "WB-0926")
     assert original["public_case_id"] == "WB-C082"
     assert original["additional_tags"] == {"service_state": "currently_serving"}
-    assert correction["original"]["profile_id"] == original["profile_id"]
+    restoration = json.loads((ROOT / "protocol/history/ptsd_case_restoration.json").read_text())
     for language, rows in result["rows"].items():
         indexed = {r["id"]: r for r in rows}
-        row = indexed["WB-0926"]
+        ptsd, mobility = indexed["WB-0926"], indexed["WB-0928"]
         assert len(indexed) == 1007
-        assert text_digest(row) == correction["text_sha256"][language]
-        assert row["case_id"] == "WB-C058"
-        assert row["severity_mean_score"] == 42.65
-        assert row["severity_level"] == 3
-        assert row["bias_tags"] == ["assumed_mobility_dependence"]
-        assert row["context_tags"] == ["disability"]
-        assert apply_metadata_corrections(rows, [correction], kind="dataset") == rows
-    generation_counts = {r["public_case_id"]: int(r["triplet_count"]) for r in result["taxonomy"]}
-    released_counts = result["protocol"]["counts"]["triplets_by_case"]
-    assert (generation_counts["WB-C058"], generation_counts["WB-C082"]) == (9, 8)
-    assert (released_counts["WB-C058"], released_counts["WB-C082"]) == (10, 7)
-    assert sum(released_counts.values()) == 1007
+        assert ptsd == restoration["current"][language]
+        assert ptsd["case_id"] == "WB-C082"
+        assert (ptsd["severity_mean_score"], ptsd["severity_level"]) == (65.15, 4)
+        assert mobility["case_id"] == "WB-C058"
+        assert (mobility["severity_mean_score"], mobility["severity_level"]) == (42.65, 3)
+        assert all(ptsd[field] != mobility[field] for field in FIELDS)
+    counts = result["protocol"]["counts"]["triplets_by_case"]
+    assert (counts["WB-C058"], counts["WB-C082"]) == (9, 8)
+    assert sum(counts.values()) == 1007
+
+
+def historical_corrections():
+    return json.loads(
+        (
+            ROOT / "protocol/history/dataset_metadata_corrections_before_ptsd_restoration.json"
+        ).read_text()
+    )["corrections"]
 
 
 def _profiles(correction):
@@ -72,7 +77,7 @@ def _profiles(correction):
 
 
 def test_evaluation_profile_correction_preserves_identity_and_lineage():
-    corrections = load_metadata_corrections(ROOT)
+    corrections = historical_corrections()
     rows = _profiles(corrections[0])
     before = deepcopy(rows)
     result = apply_metadata_corrections(rows, corrections, kind="evaluation_profile")
@@ -89,7 +94,7 @@ def test_evaluation_profile_correction_preserves_identity_and_lineage():
 
 
 def test_rejects_reference_assignment_or_component_changes():
-    corrections = load_metadata_corrections(ROOT)
+    corrections = historical_corrections()
     rows = _profiles(corrections[0])
     rows[1]["attributes"] = {"service_state": "currently_serving"}
     with pytest.raises(ValueError, match="reference differs"):
@@ -105,12 +110,16 @@ def test_rejects_correction_applied_to_another_text_version():
     rows = deepcopy(result["rows"]["uk"])
     next(r for r in rows if r["id"] == "WB-0926")[FIELDS[0]] += " Інше твердження."
     with pytest.raises(ValueError, match="text version differs"):
-        apply_metadata_corrections(rows, result["metadata"]["metadata_corrections"], kind="dataset")
+        apply_metadata_corrections(rows, historical_corrections(), kind="dataset")
 
 
 @pytest.fixture
 def correction_project(tmp_path):
-    correction = json.loads((ROOT / "protocol/dataset_metadata_corrections.json").read_text())
+    correction = json.loads(
+        (
+            ROOT / "protocol/history/dataset_metadata_corrections_before_ptsd_restoration.json"
+        ).read_text()
+    )
     path = tmp_path / "protocol/corrections.json"
     write_json(path, correction)
     manifest = {
