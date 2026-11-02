@@ -53,7 +53,8 @@ original run manifests stay unchanged. The CLI accepts the same snapshot with
 `--inference-release /path/to/collector-release`.
 
 The library exports `scores.csv`, `evidence_gaps.csv`, `language_contrasts.csv`,
-`group_diagnostics.csv` and `availability.csv`. The notebook displays every table.
+`group_diagnostics.csv` and `availability.csv`. The notebook lists metric coverage, shows severity estimates with intervals, and
+previews every complete export.
 Exports retain units, support, missing values and uncertainty; `summary.json`
 contains the complete report.
 
