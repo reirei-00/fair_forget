@@ -358,14 +358,18 @@ class TinyBase(torch.nn.Module):
 class TinyLora(torch.nn.Module):
     def __init__(self, base, rank, alpha):
         super().__init__()
-        self.base = base
+        self.base_layer = base
         self.lora_A = torch.nn.ModuleDict({"default": torch.nn.Linear(4, rank, bias=False)})
         self.lora_B = torch.nn.ModuleDict({"default": torch.nn.Linear(rank, 4, bias=False)})
         torch.nn.init.zeros_(self.lora_B["default"].weight)
         self.scale, self.enabled = alpha / rank, True
+        self.active_adapters = ["default"]
+        self.scaling = {"default": self.scale}
+        self.fan_in_fan_out = False
+        self.use_dora = {"default": False}
 
     def forward(self, inputs):
-        base = self.base(inputs)
+        base = self.base_layer(inputs)
         return (
             base + self.scale * self.lora_B["default"](self.lora_A["default"](inputs))
             if self.enabled
@@ -374,10 +378,10 @@ class TinyLora(torch.nn.Module):
 
     def merge(self):
         with torch.no_grad():
-            self.base.weight.add_(
+            self.base_layer.weight.add_(
                 self.scale * self.lora_B["default"].weight @ self.lora_A["default"].weight
             )
-        return self.base
+        return self.base_layer
 
 
 class TinyPeft(torch.nn.Module):
@@ -395,6 +399,9 @@ class TinyPeft(torch.nn.Module):
 
     def get_input_embeddings(self):
         return self.base_model.get_input_embeddings()
+
+    def get_base_model(self):
+        return self.base_model
 
     @contextlib.contextmanager
     def disable_adapter(self):
@@ -441,8 +448,8 @@ class PipelineTests(unittest.TestCase):
 
         class DroppedMerge(TinyPeft):
             def merge_and_unload(self, safe_merge):
-                self.base_model.q_proj = self.base_model.q_proj.base
-                self.base_model.v_proj = self.base_model.v_proj.base
+                self.base_model.q_proj = self.base_model.q_proj.base_layer
+                self.base_model.v_proj = self.base_model.v_proj.base_layer
                 return self.base_model
 
         fake_peft.get_peft_model = DroppedMerge if fault == "merge" else TinyPeft

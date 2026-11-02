@@ -742,9 +742,11 @@ def _optimize(model, tokenizer, streams, config, out, encoding):
     return {"steps": step, "exposure_valid_tokens": exposure_totals}
 
 
-def run(config_path: Path | str, output: Path | str):
+def run(config_path: Path | str, output: Path | str, *, export_from=None):
     runtime = verify_runtime()
     config, streams, provenance = validate_config(config_path)
+    if export_from is not None and config["method"] not in {"npo_kl", "biasunlearn", "wga_kl"}:
+        raise ValueError("Adapter export recovery is not supported for this method")
     if not torch.cuda.is_available():
         raise RuntimeError("training requires an allocated CUDA GPU; no CPU fallback")
     from peft import LoraConfig, TaskType, get_peft_model
@@ -879,9 +881,14 @@ def run(config_path: Path | str, output: Path | str):
         receipt["development_before"] = evaluate_development(
             model, tokenizer, streams["development"], [], **encoding
         )
-        receipt["status"] = "training"
+        receipt["status"] = "restoring_adapter" if export_from else "training"
         write_json(out / "intervention.json", receipt)
-        receipt.update(_optimize(model, tokenizer, streams, config, out, encoding))
+        if export_from:
+            from .adapter_restore import restore
+
+            receipt.update(restore(model, config, export_from, out))
+        else:
+            receipt.update(_optimize(model, tokenizer, streams, config, out, encoding))
         if method == "task_vector":
             model.save_pretrained(out / "positive_adapter", safe_serialization=True)
             positive = _trainable_state(model)
@@ -926,17 +933,17 @@ def run(config_path: Path | str, output: Path | str):
         write_json(out / "intervention.json", receipt)
         model.zero_grad(set_to_none=True)
         adapter_outputs = export.capture(model, probes)
-        model = model.merge_and_unload(safe_merge=True)
+        model, merge_check = export.merge_and_verify(model)
         merged_outputs = export.capture(model, probes)
-        receipt["export_verification"]["merged"] = export.compare(
+        merge_check["adapter_rounding"] = export.rounding_diagnostics(
             adapter_outputs,
             merged_outputs,
             baseline_outputs,
             policy,
-            phase="merged",
             dtype=compute_dtype,
             effect_floor=effect_floor,
         )
+        receipt["export_verification"]["merged"] = merge_check
         receipt["development_after_merge"] = evaluate_development(
             model, tokenizer, streams["development"], [], **encoding
         )
@@ -973,7 +980,7 @@ def run(config_path: Path | str, output: Path | str):
         )
         reloaded_outputs = export.capture(model, reloaded_probes)
         receipt["export_verification"]["reloaded"] = export.compare(
-            adapter_outputs,
+            merged_outputs,
             reloaded_outputs,
             baseline_outputs,
             policy,
@@ -1011,6 +1018,7 @@ def main(argv=None):
     parser.add_argument("--config", required=True, type=Path)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--validate-only", action="store_true")
+    parser.add_argument("--export-from", type=Path)
     args = parser.parse_args(argv)
     if args.validate_only:
         config, streams, provenance = validate_config(args.config)
@@ -1028,7 +1036,9 @@ def main(argv=None):
         return
     if args.output is None:
         parser.error("--output is required for training")
-    print(json.dumps(run(args.config, args.output), ensure_ascii=False))
+    print(
+        json.dumps(run(args.config, args.output, export_from=args.export_from), ensure_ascii=False)
+    )
 
 
 if __name__ == "__main__":

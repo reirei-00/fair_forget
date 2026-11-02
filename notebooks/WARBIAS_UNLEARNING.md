@@ -80,12 +80,25 @@ enforces the package versions in `requirements-unlearning.txt` and records
 the actual package builds, CUDA version and GPU identity in its receipt.
 
 Before training, select fixed S, C and U probes from development components.
-Compare active-adapter logits with merged and reloaded checkpoint logits at
-the configured token positions. The [configuration](../configs/unlearning/warbias_final.json)
-sets dtype-specific tolerances. Reject changed tokenizer inputs, non-finite
-outputs, excessive drift or loss of the observed adapter effect. A failed
-check records `failed_export_verification`; only a verified reload records
-`trained_merged`. These checks verify checkpoint export, not mitigation quality.
+Verify every merged parameter against the independently computed LoRA update,
+rounded to the base dtype. Verify unchanged parameters too. Record the difference
+between adapter and rounded-merge outputs. Reject non-finite outputs or loss of
+the observed update. Compare reloaded logits with the verified merged logits at
+the same probe positions, using the dtype-specific tolerances in the
+[configuration](../configs/unlearning/warbias_final.json). Reject changed tokenizer
+inputs or reload drift. Only a verified reload records `trained_merged`.
+These checks verify checkpoint export, not mitigation quality.
+
+If a completed run failed during merge verification, export its saved adapter
+without repeating training:
+
+```bash
+python -m fairforget.unlearning.trainer --config /path/to/run/recipe.json \
+  --export-from /path/to/run --output /path/to/new-export
+```
+
+The recipe and completed step log must match. The new receipt binds the original
+adapter and training evidence by hash. It keeps the original run unchanged.
 
 ## Evaluation
 

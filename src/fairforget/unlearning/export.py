@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import copy
+import hashlib
+import json
 import math
 
 import torch
@@ -22,6 +24,90 @@ class ExportVerificationError(RuntimeError):
     def __init__(self, report):
         self.report = report
         super().__init__(f"Checkpoint export verification failed: {report['phase']}")
+
+
+def _tensor_identity(value):
+    value = value.detach().cpu().contiguous()
+    return {
+        "shape": list(value.shape),
+        "dtype": str(value.dtype),
+        "sha256": hashlib.sha256(value.view(torch.uint8).numpy().tobytes()).hexdigest(),
+    }
+
+
+@torch.no_grad()
+def merge_and_verify(model):
+    """Check every merged parameter, including BF16 rounding of each LoRA update."""
+    base = model.get_base_model()
+    expected = {
+        name.replace(".base_layer.", "."): _tensor_identity(parameter)
+        for name, parameter in base.named_parameters(remove_duplicate=False)
+        if ".lora_" not in name
+    }
+    layers = 0
+    for name, layer in base.named_modules():
+        if not hasattr(layer, "lora_A"):
+            continue
+        adapters = list(layer.active_adapters)
+        if (
+            len(adapters) != 1
+            or set(layer.lora_A) != set(adapters)
+            or set(layer.lora_B) != set(adapters)
+            or layer.fan_in_fan_out
+            or any(layer.use_dora.values())
+        ):
+            raise ValueError("Export requires one standard linear LoRA adapter")
+        adapter = adapters[0]
+        a, b = layer.lora_A[adapter], layer.lora_B[adapter]
+        if a.bias is not None or b.bias is not None:
+            raise ValueError("Export requires LoRA without adapter bias")
+        weight = layer.base_layer.weight
+        delta = (b.weight.float() @ a.weight.float()) * layer.scaling[adapter]
+        merged = (weight.float() + delta).to(weight.dtype)
+        expected[f"{name}.weight"] = _tensor_identity(merged)
+        layers += 1
+    if not layers:
+        raise ValueError("No linear LoRA layers were found for export")
+    merged = model.merge_and_unload(safe_merge=True)
+    actual = {
+        name: _tensor_identity(parameter)
+        for name, parameter in merged.named_parameters(remove_duplicate=False)
+    }
+    mismatches = sorted(
+        name for name in expected.keys() | actual.keys() if expected.get(name) != actual.get(name)
+    )
+    report = {
+        "phase": "merged",
+        "passed": not mismatches,
+        "verification": "exact_rounded_lora_parameters_v1",
+        "lora_layers": layers,
+        "parameters": len(expected),
+        "expected_parameters_sha256": hashlib.sha256(
+            json.dumps(expected, sort_keys=True).encode()
+        ).hexdigest(),
+        "mismatched_parameters": mismatches,
+    }
+    if mismatches:
+        raise ExportVerificationError(report)
+    return merged, report
+
+
+def rounding_diagnostics(expected, actual, baseline, policy, *, dtype, effect_floor):
+    """Record adapter/rounded-merge drift; reject invalid or erased probe outputs."""
+    try:
+        return compare(
+            expected,
+            actual,
+            baseline,
+            policy,
+            phase="adapter_rounding",
+            dtype=dtype,
+            effect_floor=effect_floor,
+        )
+    except ExportVerificationError as error:
+        if error.report.get("reason") != "numerical equivalence check failed":
+            raise
+        return error.report
 
 
 def settings(value=None):
