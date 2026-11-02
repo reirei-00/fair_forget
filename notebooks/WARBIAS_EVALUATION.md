@@ -8,7 +8,7 @@ Install this pinned Fair-UK library revision in the same Python environment
 as the notebook kernel:
 
 ```sh
-python -m pip install "lm_eval @ git+https://github.com/reirei-00/fair-uk.git@c777fe03021b03590fd482444005d3ae3902c5da"
+python -m pip install "lm_eval @ git+https://github.com/reirei-00/fair-uk.git@871060c8fb03c6a2a06d8fe5b2467b67d15730e8"
 ```
 
 From the FairForget repository root, prepare the versioned inputs from the
