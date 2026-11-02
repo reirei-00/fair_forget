@@ -64,7 +64,7 @@
     "validation_absolute_difference": 0.0
   },
   "review_rows": 480,
-  "scope": "First-phase Ukrainian QA annotation only; no final assistant or author resolutions.",
+  "scope": "Original Ukrainian annotation only; final author decisions are excluded.",
   "validation": {
     "implementation": "nltk.metrics.agreement.AnnotationTask.alpha",
     "nltk_version": "3.9.1",

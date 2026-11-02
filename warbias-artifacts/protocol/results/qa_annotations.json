@@ -1,9 +1,9 @@
 {
   "annotators": 16,
   "author_review": {
-    "items": 28,
+    "items": 55,
     "reviewers": 1,
-    "scope": "Approval of text revisions; not a new independent answer-choice annotation round."
+    "scope": "Final decisions on 28 revised and 27 retained items; separate from independent answer-choice annotations."
   },
   "hash_definition": "sha256(UTF-8 JSON of {context,question,choices}, ensure_ascii=false, sort_keys=true, separators=(comma,colon))",
   "items": 240,
@@ -18,14 +18,13 @@
       "unreviewed_translation": 240
     },
     "uk": {
-      "assistant_resolved": 27,
-      "author_approved": 28,
+      "author_approved": 55,
       "human_validated": 185
     }
   },
   "resolutions": {
     "answer_key_changes": 0,
-    "reviewer_kind": "assistant",
+    "reviewer_kind": "author",
     "uk_text_changes": 28
   },
   "review_scope": "Original or manually edited Ukrainian QA text as shown in each annotation row. Reviews do not automatically validate later edits or English translation.",

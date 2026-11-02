@@ -40,7 +40,7 @@ def test_two_current_independent_correct_reviews_qualify_only_the_ukrainian_text
     row, reviews = reviewed_item
     assert review_status(row, reviews) == "human_validated"
     assert review_status({**row, "language": "en"}, reviews) == "unreviewed_translation"
-    assert review_status({**row, "question": "Changed question?"}, reviews) == "assistant_resolved"
+    assert review_status({**row, "question": "Changed question?"}, reviews) == "needs_review"
 
 
 @pytest.mark.parametrize(
@@ -54,7 +54,7 @@ def test_two_current_independent_correct_reviews_qualify_only_the_ukrainian_text
 def test_conflicting_or_duplicate_evidence_does_not_establish_acceptance(reviewed_item, change):
     row, reviews = reviewed_item
     reviews[1].update(change)
-    assert review_status(row, reviews) == "assistant_resolved"
+    assert review_status(row, reviews) == "needs_review"
 
 
 def test_one_exact_human_edit_stays_distinct_from_independent_acceptance(reviewed_item):
@@ -63,7 +63,7 @@ def test_one_exact_human_edit_stays_distinct_from_independent_acceptance(reviewe
     assert review_status(row, reviews[:1]) == "human_edited"
     assert review_status(row, reviews) == "human_validated"
     row["context"] = "Another situation."
-    assert review_status(row, reviews) == "assistant_resolved"
+    assert review_status(row, reviews) == "needs_review"
 
 
 def test_translation_revision_compares_text_without_inheriting_human_reviews(reviewed_item):
@@ -72,7 +72,12 @@ def test_translation_revision_compares_text_without_inheriting_human_reviews(rev
     source = deepcopy(row)
     assert review_status(row, reviews, source) == "unreviewed_translation"
     row["choices"] = ["Person A", "Person B", "Unknown"]
-    assert review_status(row, reviews, source) == "assistant_revised_translation"
+    assert review_status(row, reviews, source) == "revised_translation"
+
+
+def test_missing_review_does_not_invent_a_decision_maker(reviewed_item):
+    row, _ = reviewed_item
+    assert review_status(row, []) == "needs_review"
 
 
 def test_review_hashes_are_verified(reviewed_item):
@@ -96,9 +101,10 @@ def _author_review(row):
     }
 
 
-def test_author_approval_does_not_count_as_an_independent_human_vote(reviewed_item):
+@pytest.mark.parametrize("scope", ["text_revision", "annotation_resolution"])
+def test_author_approval_does_not_count_as_an_independent_human_vote(reviewed_item, scope):
     row, reviews = reviewed_item
-    approvals = [_author_review(row)]
+    approvals = [{**_author_review(row), "review_scope": scope}]
     original = deepcopy(reviews)
     assert review_status(row, [], author_reviews=approvals) == "author_approved"
     assert review_status(row, reviews[:1], author_reviews=approvals) == "author_approved"
