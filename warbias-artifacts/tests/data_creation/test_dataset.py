@@ -264,3 +264,33 @@ def test_rejects_declared_columns_that_differ_from_the_schema(release):
     write_json(project / "protocol/dataset.json", manifest)
     with pytest.raises(ValueError, match="columns must match the schema"):
         dataset.load_dataset(project)
+
+
+def test_rejects_corrected_labels_without_their_declaration(release):
+    project, manifest = release
+    del manifest["files"]["metadata_corrections"]
+    write_json(project / "protocol/dataset.json", manifest)
+    with pytest.raises(ValueError, match="WB-0926: case_id differs from the selected profile"):
+        dataset.load_dataset(project)
+
+
+def test_rejects_generation_counts_used_as_current_counts(release):
+    project, manifest = release
+    manifest["counts"]["triplets_by_case"]["WB-C058"] = 9
+    manifest["counts"]["triplets_by_case"]["WB-C082"] = 8
+    write_json(project / "protocol/dataset.json", manifest)
+    with pytest.raises(ValueError, match="Released case counts differ"):
+        dataset.load_dataset(project)
+
+
+def test_rejects_old_tags_under_a_corrected_case_label(release):
+    for language in ("uk", "en"):
+        _replace_rows(
+            release,
+            language,
+            lambda rows: next(row for row in rows if row["id"] == "WB-0926").update(
+                bias_tags=["universal_ptsd"], context_tags=["mental_health"]
+            ),
+        )
+    with pytest.raises(ValueError, match="released metadata differs from its correction"):
+        dataset.load_dataset(release[0])
