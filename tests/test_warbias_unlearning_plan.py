@@ -150,7 +150,7 @@ class WarBiasPlanTests(unittest.TestCase):
                     recipe["data_manifest_sha256"], file_hash(root / "training_binding.json")
                 )
                 self.assertEqual(
-                    recipe["training"]["max_steps"], {"idp": 150, "veteran": 310}[group]
+                    recipe["training"]["max_steps"], {"idp": 530, "veteran": 778}[group]
                 )
                 self.assertEqual(recipe["training"]["epochs"], 2)
                 self.assertEqual(item["required_gpus"], 1)

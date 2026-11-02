@@ -20,7 +20,8 @@ def main():
     parser.add_argument("--target-group", choices=TARGET_GROUPS, required=True)
     parser.add_argument("--training-language", choices=TRAINING_LANGUAGES, required=True)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--development-fraction", type=float, default=0.2)
+    parser.add_argument("--development-fraction", type=float, default=0.15)
+    parser.add_argument("--evaluation-fraction", type=float, default=0.2)
     args = parser.parse_args()
     binding = prepare(
         ROOT,
@@ -29,6 +30,7 @@ def main():
         training_language=args.training_language,
         seed=args.seed,
         development_fraction=args.development_fraction,
+        evaluation_fraction=args.evaluation_fraction,
     )
     print(json.dumps(binding["split_counts"], indent=2))
 

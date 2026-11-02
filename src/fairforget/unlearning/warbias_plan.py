@@ -67,6 +67,11 @@ def _check_binding(experiment, binding, target_group, training_language):
         or binding["allocation"]["seed"] != experiment["split"]["seed"]
         or binding["allocation"]["development_fraction"]
         != experiment["split"]["development_fraction"]
+        or binding["allocation"]["evaluation_fraction"]
+        != experiment["split"]["evaluation_fraction"]
+        or not math.isclose(
+            binding["allocation"]["training_fraction"], experiment["split"]["training_fraction"]
+        )
         or binding["loss_policy"]["completion"] != experiment["target_policy"]
         or experiment["preservation_scope"] != "in_domain_unrelated_sentences"
     ):
@@ -160,7 +165,7 @@ def method_plan(
                     "Complete sentences are loss targets; no reviewed predicate spans are asserted.",
                     "Unrelated sentences support in-domain reference KL, not broad utility claims.",
                     "Methods share the step limit within each group and language; token exposure can differ.",
-                    "Only protected components are held out from training and development.",
+                    "Only selected test components are held out from training and development.",
                 ],
             }
             plan.append(

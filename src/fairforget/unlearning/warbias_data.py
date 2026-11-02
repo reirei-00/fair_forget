@@ -10,9 +10,9 @@ from pathlib import Path
 
 from warbias_kit.warbias import dataset_metadata
 
-from .split import development_components
+from .split import SPLITS, component_partitions
 
-PROTOCOL = "warbias_group_language_v3"
+PROTOCOL = "warbias_group_language_v4"
 TARGET_GROUPS = ("idp", "veteran")
 TRAINING_LANGUAGES = ("uk", "en")
 REPOSITORY = "FairForget/WarBias"
@@ -114,19 +114,10 @@ def _read_sources(repo):
 
 def default_root(repo):
     """Keep prepared bundles separate for each pinned source release."""
-    return Path(repo) / "data/unlearning/warbias_application" / SOURCE_COMMIT[:12]
+    return Path(repo) / "data/unlearning/warbias_application" / PROTOCOL / SOURCE_COMMIT[:12]
 
 
-def _allocate(sources, seed, development_fraction):
-    if not isinstance(seed, int) or isinstance(seed, bool):
-        raise ValueError("The split seed must be an integer")
-    if (
-        not isinstance(development_fraction, (int, float))
-        or isinstance(development_fraction, bool)
-        or not math.isfinite(development_fraction)
-        or not 0 < development_fraction < 1
-    ):
-        raise ValueError("The development fraction must be between zero and one")
+def _allocate(sources, seed, development_fraction, evaluation_fraction):
     indexed = {row["id"]: row for row in sources["profile_mapping"]}
     cases = {}
     for row in sources["triplets_uk"]:
@@ -137,29 +128,40 @@ def _allocate(sources, seed, development_fraction):
         if not component or cases.get(case, component) != component:
             raise ValueError("WarBias cases must map to a single component")
         cases[case] = component
-    protected = {cases[row["source_case_id"]] for row in sources["qa_uk"]}
-    eligible = set(cases.values()) - protected
-    if len(eligible) < 2:
-        raise ValueError("At least two eligible components are needed for training and development")
-    development = development_components(
+    for name, fraction in (
+        ("development", development_fraction),
+        ("evaluation", evaluation_fraction),
+    ):
+        if (
+            isinstance(fraction, bool)
+            or not isinstance(fraction, (int, float))
+            or not math.isfinite(fraction)
+            or not 0 < fraction < 1
+        ):
+            raise ValueError(f"The {name} fraction must be between zero and one")
+    partitions = component_partitions(
         sources["triplets_uk"],
         indexed,
-        protected,
         seed=seed,
-        fraction=development_fraction,
+        fractions=(
+            1 - development_fraction - evaluation_fraction,
+            development_fraction,
+            evaluation_fraction,
+        ),
     )
-    splits = {"training": [], "development": [], "evaluation": []}
-    for row in sources["triplets_uk"]:
-        component = indexed[row["id"]]["split_group_id"]
-        split = (
-            "evaluation"
-            if component in protected
-            else "development"
-            if component in development
-            else "training"
-        )
-        splits[split].append(row["id"])
-    return indexed, splits
+    splits = {
+        name: [
+            row["id"]
+            for row in sources["triplets_uk"]
+            if indexed[row["id"]]["split_group_id"] in components
+        ]
+        for name, components in zip(SPLITS, partitions, strict=True)
+    }
+    qa_splits = {
+        name: [row["id"] for row in sources["qa_uk"] if cases[row["source_case_id"]] in components]
+        for name, components in zip(SPLITS, partitions, strict=True)
+    }
+    return indexed, splits, qa_splits
 
 
 def _stream(row, meta, role, field, language):
@@ -193,13 +195,22 @@ def _split_records(indexed, splits):
     return counts, records
 
 
-def _contents(repo, target_group, training_language, seed=42, development_fraction=0.2):
+def _contents(
+    repo,
+    target_group,
+    training_language,
+    seed=42,
+    development_fraction=0.15,
+    evaluation_fraction=0.2,
+):
     if not isinstance(target_group, str) or target_group not in TARGET_GROUPS:
         raise ValueError("WarBias target_group must be idp or veteran")
     if not isinstance(training_language, str) or training_language not in TRAINING_LANGUAGES:
         raise ValueError("WarBias training_language must be uk or en")
     sources = _read_sources(repo)
-    indexed, global_splits = _allocate(sources, seed, development_fraction)
+    indexed, global_splits, qa_splits = _allocate(
+        sources, seed, development_fraction, evaluation_fraction
+    )
     splits = {
         name: [item for item in ids if indexed[item]["target_group"] == target_group]
         for name, ids in global_splits.items()
@@ -230,8 +241,8 @@ def _contents(repo, target_group, training_language, seed=42, development_fracti
         for kind in ("triplets", "qa"):
             rows = sources[f"{kind}_{language}"]
             if kind == "triplets":
-                protected = set(global_splits["evaluation"])
-                rows = [row for row in rows if row["id"] in protected]
+                selected_ids = set(global_splits["evaluation"])
+                rows = [row for row in rows if row["id"] in selected_ids]
             name = f"evaluation/{kind}_{language}.jsonl"
             payloads[name] = _jsonl(rows)
             evaluation[f"{kind}_{language}"] = {
@@ -239,7 +250,7 @@ def _contents(repo, target_group, training_language, seed=42, development_fracti
                 "sha256": _sha(payloads[name]),
                 "rows": len(rows),
                 "language": language,
-                "role": "held_out_evaluation",
+                "role": "held_out_evaluation" if kind == "triplets" else "evaluation_only",
             }
     counts, split_records = _split_records(indexed, splits)
     global_counts, global_records = _split_records(indexed, global_splits)
@@ -281,11 +292,13 @@ def _contents(repo, target_group, training_language, seed=42, development_fracti
             "seed": seed,
             "development_fraction": development_fraction,
             "unit": "semantic_component",
-            "method": "group_severity_balanced_components_v1",
-            "coverage": "Keep each group/severity stratum in training and development when it has at least two eligible components; retain singleton strata in training.",
-            "ranking": "Minimize per-group development fraction deviations for rows, then cases, then components; resolve ties by SHA256(seed:sorted_component_ids).",
-            "development_count": "ceil(fraction * eligible components), keeping both splits nonempty",
-            "evaluation_rule": "Protect every component linked to any QA source case from training and development.",
+            "training_fraction": 1 - development_fraction - evaluation_fraction,
+            "evaluation_fraction": evaluation_fraction,
+            "method": "three_way_component_search_v1",
+            "coverage": "Both groups in each split. Group/severity strata with at least three components occur in all splits; two components supply training and test; singletons stay in training.",
+            "ranking": "32 seeded starts with improving component swaps. Rank by missing coverage, then per-group fraction deviations for rows, cases and components. No model outcomes enter selection.",
+            "component_counts": "Largest-remainder allocation of all components to the requested fractions.",
+            "evaluation_rule": "Hold out selected triplet components. Evaluate all QA questions as in the baseline; QA never supplies gradient data.",
         },
         "split_counts": counts,
         "splits": split_records,
@@ -293,6 +306,9 @@ def _contents(repo, target_group, training_language, seed=42, development_fracti
         "global_splits": global_records,
         "permitted_gradient_ids": splits["training"],
         "locked_evaluation_ids": global_splits["evaluation"],
+        "qa_claim_overlap": {
+            name: {"ids": ids, "rows": len(ids)} for name, ids in qa_splits.items()
+        },
         "streams": {
             role: {
                 "path": STREAM_FILES[role],
@@ -302,10 +318,11 @@ def _contents(repo, target_group, training_language, seed=42, development_fracti
             for role, rows in streams.items()
         },
         "evaluation": evaluation,
-        "evaluation_scope": "Both groups and both languages on the global protected component panel.",
+        "evaluation_scope": "Both groups and languages: selected test triplets and the full baseline QA panel.",
         "limitations": [
             "English translations have no human review.",
-            "Whole-release baseline results are descriptive; only the protected component panel is held out here.",
+            "Whole-release baseline results are descriptive; only the selected test components are held out here.",
+            "QA questions are evaluation-only, but some share claim components with training or development triplets; see qa_claim_overlap.",
             "Preparation and input validation do not establish trained checkpoints or intervention effects.",
         ],
     }
@@ -313,7 +330,7 @@ def _contents(repo, target_group, training_language, seed=42, development_fracti
 
 
 def overview(repo, *, target_group, training_language):
-    """Describe one direction and the shared protected panel without writing."""
+    """Describe one direction and the shared test panel without writing."""
     binding, _ = _contents(Path(repo).expanduser().resolve(), target_group, training_language)
     return {
         "protocol": binding["protocol"],
@@ -330,7 +347,16 @@ def overview(repo, *, target_group, training_language):
     }
 
 
-def prepare(repo, output, *, target_group, training_language, seed=42, development_fraction=0.2):
+def prepare(
+    repo,
+    output,
+    *,
+    target_group,
+    training_language,
+    seed=42,
+    development_fraction=0.15,
+    evaluation_fraction=0.2,
+):
     """Create new, deterministic streams without changing their source data."""
     repo, output = Path(repo).expanduser().resolve(), Path(output).expanduser().resolve()
     if output.exists():
@@ -340,7 +366,9 @@ def prepare(repo, output, *, target_group, training_language, seed=42, developme
         for spec in SOURCES.values()
     ):
         raise ValueError("WarBias output must not contain source files")
-    binding, payloads = _contents(repo, target_group, training_language, seed, development_fraction)
+    binding, payloads = _contents(
+        repo, target_group, training_language, seed, development_fraction, evaluation_fraction
+    )
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="warbias-streams-", dir=output.parent) as temporary:
         root = Path(temporary) / "bundle"
@@ -368,6 +396,7 @@ def validate_bundle(root, repo):
         binding.get("training_language"),
         allocation.get("seed"),
         allocation.get("development_fraction"),
+        allocation.get("evaluation_fraction"),
     )
     if binding != expected:
         raise ValueError("WarBias training binding differs from the pinned source allocation")

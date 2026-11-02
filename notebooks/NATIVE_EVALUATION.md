@@ -67,7 +67,7 @@ and availability reasons remain explicit. All metric calculations use Fair-UK.
 
 ## WarBias panels
 
-The [WarBias workflow](WARBIAS_UNLEARNING.md) defines the 717 held-out triplets
+The [WarBias workflow](WARBIAS_UNLEARNING.md) defines the 201 held-out triplets
 and 240 QA questions per language. Annotated original/neutral triplets use the
 Fair-UK WarBias adapter. The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb)
 provides their per-checkpoint scores and severity slices. Keep these panels

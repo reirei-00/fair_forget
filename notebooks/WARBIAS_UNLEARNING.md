@@ -21,25 +21,31 @@ one fixed training seed; uncertainty over cases is reported separately.
 
 The [data builder](../src/fairforget/unlearning/warbias_data.py) verifies the
 source hashes and [component mapping](../warbias-artifacts/evaluation/warbias_baseline/profile_mapping.jsonl).
-It protects every component linked to a QA case from training and development.
-The allocation selects six of the 28 eligible components for development and
-keeps 22 for training. It balances group and severity coverage using source
-labels only, then minimizes per-group development fraction deviations for
-rows, cases and components. SHA256 resolves ties. Severity strata with only
-one eligible component stay in training. The same global split applies to all four directions.
+It assigns complete components to training, development and test with target
+fractions of 65%, 15% and 20%. The same global split applies to all four directions.
 
-| Group | Training | Development | Held-out |
+The [allocator](../src/fairforget/unlearning/split.py) gives 34 components to
+training, eight to development and ten to test using largest-remainder rounding.
+It uses 32 starts with seed 42 and improving component swaps. It first satisfies
+coverage, then reduces per-group fraction deviations for rows, cases and components.
+It uses source labels only. Both groups occur in every split. A group/severity
+stratum with at least three components occurs in every split; two components
+supply training and test, and a singleton stays in training. This search does not claim a globally optimal allocation.
+
+| Group | Training | Development | Test |
 | --- | ---: | ---: | ---: |
-| IDP | 75 | 20 | 314 |
-| Veteran | 155 | 40 | 403 |
-| Total | 230 | 60 | 717 |
+| IDP | 265 | 62 | 82 |
+| Veteran | 389 | 90 | 119 |
+| Total | 654 | 152 | 201 |
 
-Counts are triplets per language. Each training bundle selects its group's
-rows in its training language. Evaluation retains all 717 held-out triplets
-and 240 QA questions per language, with both groups represented.
-Available IDP severity levels 3, 4 and 5 occur in training and development.
-Its only eligible level-2 component stays in training. Veteran levels 2, 3 and 4
-occur in both; all veteran level-5 components remain protected for evaluation.
+Counts are triplets per language. Development contains five components per
+group, with eight distinct components across both groups. Veteran severity
+level 5 has only two components, so it appears in training and test.
+Evaluation uses the same 201 test triplets and all 240 baseline QA questions per
+language. QA questions never supply gradient data. Some QA claims also occur
+in training or development triplets; each bundle records this overlap. The full
+QA panel measures performance on the QA format, with shared claims. Whole-release
+triplet scores are separate diagnostics.
 
 Forget targets are complete S sentences, and correction targets are complete C
 sentences. Both use an empty prompt. Token masks cover the complete sentence.
@@ -64,7 +70,7 @@ within a direction and the same optimizer-step limit for that direction.
 BiasUnlearn builds expanded adversarial pools and can change their direction
 using development scores. Equal step limits do not imply equal token exposure.
 Each trainer records actual exposure.
-The limits are 150 updates for IDPs and 310 for veterans, equivalent to two
+The limits are 530 updates for IDPs and 778 for veterans, equivalent to two
 passes over each original forget set. Expanded BiasUnlearn pools can leave the
 last pass incomplete.
 
@@ -145,7 +151,7 @@ Their benchmark selection is separate from this WarBias application setup.
 Use the [before/after notebook](evaluate_before_after.ipynb) for WarBias scores.
 It reuses baseline notebook 08's collector, explicit-choice parser, neutral
 controls, group/severity summaries and component bootstrap. Score the same
-717 held-out triplets and all QA questions in both phases. Save full-release
+201 held-out triplets and all 240 QA questions in both phases. Save full-release
 triplet diagnostics separately. The [native benchmark notebook](native_before_after.ipynb)
 retains the other registered integrations. Preparation and CPU checks do not
 establish mitigation results.

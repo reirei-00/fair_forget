@@ -109,7 +109,7 @@ class WarBiasDataTests(unittest.TestCase):
                         self.assertIn("English text has no human review", binding["review_kind"])
                     for eval_language in ("uk", "en"):
                         self.assertEqual(
-                            binding["evaluation"][f"triplets_{eval_language}"]["rows"], 717
+                            binding["evaluation"][f"triplets_{eval_language}"]["rows"], 201
                         )
                         self.assertEqual(binding["evaluation"][f"qa_{eval_language}"]["rows"], 240)
                         rows = read_rows(
@@ -119,34 +119,50 @@ class WarBiasDataTests(unittest.TestCase):
             self.assertEqual(selected_ids[group, "uk"], selected_ids[group, "en"])
         self.assertFalse(set(selected_ids["idp", "uk"]) & set(selected_ids["veteran", "uk"]))
 
-    def test_qa_components_and_translations_share_one_protected_panel(self):
+    def test_triplet_splits_preserve_the_full_bilingual_qa_panel(self):
         binding = self.prepare()
         split = binding["global_splits"]
         components = {key: set(value["components"]) for key, value in split.items()}
         self.assertFalse(components["training"] & components["development"])
         self.assertFalse(components["evaluation"] & components["training"])
         self.assertFalse(components["evaluation"] & components["development"])
-        self.assertEqual(len(components["evaluation"]), 24)
-        self.assertEqual(len(components["training"] | components["development"]), 28)
+        self.assertEqual(len(components["evaluation"]), 10)
+        self.assertEqual(len(components["training"] | components["development"]), 42)
         eligible = len(split["training"]["ids"]) + len(split["development"]["ids"])
-        self.assertEqual(eligible, 290)
+        self.assertEqual(eligible, 806)
         languages = []
         for language in ("uk", "en"):
             spec = binding["evaluation"][f"triplets_{language}"]
             languages.append([row["id"] for row in read_rows(self.output / spec["path"])])
             self.assertEqual(binding["evaluation"][f"qa_{language}"]["rows"], 240)
+        cases = {
+            row["public_case_id"]: row["split_group_id"]
+            for row in read_rows(self.repo / warbias_data.SOURCES["profile_mapping"]["path"])
+        }
+        qa_source = read_rows(self.repo / warbias_data.SOURCES["qa_uk"]["path"])
+        for name, partition in components.items():
+            expected = {row["id"] for row in qa_source if cases[row["source_case_id"]] in partition}
+            self.assertEqual(set(binding["qa_claim_overlap"][name]["ids"]), expected)
+            self.assertEqual(binding["qa_claim_overlap"][name]["rows"], len(expected))
+        for language in ("uk", "en"):
+            spec = binding["evaluation"][f"qa_{language}"]
+            qa_rows = read_rows(self.output / spec["path"])
+            self.assertEqual(
+                qa_rows, read_rows(self.repo / warbias_data.SOURCES[f"qa_{language}"]["path"])
+            )
+            self.assertEqual(spec["role"], "evaluation_only")
         self.assertEqual(languages[0], languages[1])
         self.assertEqual(languages[0], split["evaluation"]["ids"])
-        self.assertEqual(len(languages[0]), 717)
+        self.assertEqual(len(languages[0]), 201)
         self.assertEqual(
             set(binding["permitted_gradient_ids"]), set(binding["splits"]["training"]["ids"])
         )
         self.assertFalse(set(binding["permitted_gradient_ids"]) & set(languages[0]))
         self.assertEqual(set(binding["locked_evaluation_ids"]), set(languages[0]))
-        self.assertEqual(binding["split_counts"]["training"]["triplets"], 75)
-        self.assertEqual(binding["split_counts"]["development"]["triplets"], 20)
-        self.assertEqual(binding["global_split_counts"]["training"]["triplets"], 230)
-        self.assertEqual(binding["global_split_counts"]["development"]["triplets"], 60)
+        self.assertEqual(binding["split_counts"]["training"]["triplets"], 265)
+        self.assertEqual(binding["split_counts"]["development"]["triplets"], 62)
+        self.assertEqual(binding["global_split_counts"]["training"]["triplets"], 654)
+        self.assertEqual(binding["global_split_counts"]["development"]["triplets"], 152)
 
     def test_restored_case_preserves_component_and_evaluation_isolation(self):
         source = warbias_data._read_sources(self.repo)
@@ -160,21 +176,29 @@ class WarBiasDataTests(unittest.TestCase):
         self.assertEqual(current["WB-0926"]["split_group_id"], frozen["WB-0926"]["split_group_id"])
         self.assertNotEqual(current["WB-0926"]["attributes"], current["WB-0928"]["attributes"])
         binding = self.prepare(target_group="veteran")
-        self.assertIn("WB-0926", binding["locked_evaluation_ids"])
-        self.assertNotIn("WB-0926", binding["permitted_gradient_ids"])
+        split = next(
+            name for name, spec in binding["global_splits"].items() if "WB-0926" in spec["ids"]
+        )
+        linked = {
+            row["id"]
+            for row in source["profile_mapping"]
+            if row["split_group_id"] == current["WB-0926"]["split_group_id"]
+        }
+        self.assertTrue(linked <= set(binding["global_splits"][split]["ids"]))
         for language in ("uk", "en"):
-            rows = read_rows(self.output / binding["evaluation"][f"triplets_{language}"]["path"])
-            corrected = next(row for row in rows if row["id"] == "WB-0926")
+            corrected = next(
+                row for row in source[f"triplets_{language}"] if row["id"] == "WB-0926"
+            )
             self.assertEqual(corrected["case_id"], "WB-C082")
             self.assertEqual(corrected["severity_level"], 4)
 
-    def test_split_is_reproducible_and_seeded_without_changing_evaluation(self):
+    def test_split_is_reproducible_and_seeded(self):
         first = self.prepare()
         other = self.root / "other"
         self.assertEqual(self.prepare(other), first)
         seeded = self.prepare(self.root / "seeded", seed=7)
         self.assertEqual(seeded["allocation"]["seed"], 7)
-        self.assertEqual(first["splits"]["evaluation"], seeded["splits"]["evaluation"])
+        self.assertEqual(warbias_data.validate_bundle(self.root / "seeded", self.repo), seeded)
         overview = warbias_data.overview(self.repo, target_group="idp", training_language="uk")
         self.assertEqual(overview["triplets_per_language"], 1007)
         self.assertEqual(overview["split_counts"], first["split_counts"])

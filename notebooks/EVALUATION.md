@@ -16,7 +16,7 @@ with its [own setup](NATIVE_EVALUATION.md).
 | QA policies | Native `abc_option_text_v2`; analysis `abc_explicit_choice_v3` |
 | Weighting | Equal semantic components after within-component averaging |
 | Uncertainty | 1,000 component-bootstrap draws, seed 42 |
-| Held-out panel | The same 717 triplet IDs in both phases; all 240 QA questions |
+| Analysis panels | The same 201 held-out triplet IDs in both phases; all 240 baseline QA questions |
 | Full-release scores | Separate descriptive diagnostics |
 
 ## Environment and paths
@@ -88,3 +88,7 @@ units as baseline notebook 08. QA bias remains signed and condition-specific;
 raw SS, LMS and format checks remain diagnostics. These are matched checkpoint
 scores. Paired intervention effects and their intervals use the separate Fair-UK
 intervention analysis.
+
+QA questions are evaluation-only. Their claim overlap with training and development
+triplets is recorded in each data binding. Full QA scores do not establish unseen-claim
+generalization.

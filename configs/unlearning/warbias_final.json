@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "protocol": "warbias_group_language_v3",
+  "protocol": "warbias_group_language_v4",
   "model_ids": [
     "qwen3_8b",
     "llama31_8b_instruct",
@@ -18,7 +18,9 @@
   ],
   "split": {
     "seed": 42,
-    "development_fraction": 0.2
+    "development_fraction": 0.15,
+    "training_fraction": 0.65,
+    "evaluation_fraction": 0.2
   },
   "target_policy": "complete_sentence",
   "preservation_scope": "in_domain_unrelated_sentences",

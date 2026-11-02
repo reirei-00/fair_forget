@@ -214,6 +214,7 @@ class WarBiasEvaluationTests(unittest.TestCase):
             self.assertEqual(kwargs["qa_answer_policy"], "abc_explicit_choice_v3")
             self.assertEqual((kwargs["bootstrap"], kwargs["seed"]), (1000, 42))
             self.assertEqual(kwargs["triplet_ids"], ["held"])
+            self.assertNotIn("qa_ids", kwargs)
             self.assertEqual(
                 kwargs["neutral_release"], self.workflow._destination(item) / "neutral"
             )
@@ -224,6 +225,7 @@ class WarBiasEvaluationTests(unittest.TestCase):
             self.assertEqual(report["phase"], "before")
             self.assertNotIn("phase", analyze.call_args.kwargs)
             self.assertEqual(analyze.call_args.kwargs["triplet_ids"], ["held"])
+            self.assertNotIn("qa_ids", analyze.call_args.kwargs)
 
     def test_policy_metrics_and_collection_settings_match_baseline_notebook_08(self):
         notebook = json.loads((ROOT / evaluation.BASELINE_NOTEBOOK).read_text())

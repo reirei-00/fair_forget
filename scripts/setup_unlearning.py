@@ -140,7 +140,9 @@ def main():
                         root,
                         target_group=group,
                         training_language=language,
-                        **experiment["split"],
+                        seed=experiment["split"]["seed"],
+                        development_fraction=experiment["split"]["development_fraction"],
+                        evaluation_fraction=experiment["split"]["evaluation_fraction"],
                     )
         data_roots = {"warbias_application": directory}
     data = {name: data_available(name, directory) for name, directory in data_roots.items()}

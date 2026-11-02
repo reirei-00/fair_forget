@@ -113,7 +113,7 @@ NOTES = {
     "biasunlearn": "BiasUnlearn combines NPO suppression, anti-stereotype correction and reference KL. The trainer builds adversarial pools and uses development scores to update their direction.",
 }
 CONFIGURE = """MODELS_ROOT = os.environ.get('FAIRFORGET_MODELS_ROOT')
-output_value = os.environ.get('FAIRFORGET_OUTPUT') or str(Path(settings.get('output_root', repo / 'outputs/unlearning')) / METHOD)
+output_value = os.environ.get('FAIRFORGET_OUTPUT') or str(Path(settings.get('output_root', repo / 'outputs/unlearning' / warbias_data.PROTOCOL)) / METHOD)
 OUTPUT = Path(output_value).expanduser().resolve()
 PLAN = notebook_matrix.method_plan(
     repo, METHOD, protocol='warbias_final', data_root=DATA_ROOT, models_root=MODELS_ROOT,
@@ -161,7 +161,7 @@ DATA_NOTES = """## WarBias data
 
 Use the current 1,007 aligned source triplets in Ukrainian and English. Prepare four separate training directions: IDP in Ukrainian, IDP in English, veteran in Ukrainian, and veteran in English. Every direction trains on one group and one language. Both languages remain available for evaluation.
 
-Split whole claim components. Protect every component used by a QA case from training and development. Use one component split for all directions. Choose 20% of eligible components for development, rounded up. Use group and severity labels to keep shared severity levels in both training and development, retain singleton levels in training, and minimize per-group deviations from the requested development fraction. SHA256 resolves ties. Then select one target group and training language for each bundle. Keep the other group out of its training streams. The Ukrainian and English versions keep the same item IDs and splits.
+Split whole claim components with targets of 65% training, 15% development and 20% test. The source-label allocation gives 654, 152 and 201 triplets per language. Use the same global split for every direction. Keep related cases and translations together. Balance group and severity coverage; see [the allocation rules](WARBIAS_UNLEARNING.md). Keep all 240 baseline QA questions for evaluation only; record their claim overlap with each triplet split. Then select one group and language for each training bundle.
 
 Use complete S sentences as forget targets and complete C sentences as correction targets, with an empty prompt. Use U sentences from the same group and training language for in-domain reference KL. This measures preservation of WarBias text; general capability needs separate evidence.
 """
@@ -232,7 +232,7 @@ def build(methods=None):
                     "method": method,
                     "active_study": method in active,
                     "dataset": "WarBias",
-                    "protocol": "warbias_group_language_v3",
+                    "protocol": "warbias_group_language_v4",
                     "training_groups": ["idp", "veteran"],
                     "training_languages": ["uk", "en"],
                     "training_directions": 4,
