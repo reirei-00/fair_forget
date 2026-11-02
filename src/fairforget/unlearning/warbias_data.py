@@ -1,4 +1,4 @@
-"""Build source-bound WarBias streams shared by the three unlearning methods."""
+"""Build source-bound WarBias streams for independent group and language runs."""
 
 from __future__ import annotations
 
@@ -8,7 +8,9 @@ import math
 import tempfile
 from pathlib import Path
 
-PROTOCOL = "warbias_group_language_v2"
+from .split import development_components
+
+PROTOCOL = "warbias_group_language_v3"
 TARGET_GROUPS = ("idp", "veteran")
 TRAINING_LANGUAGES = ("uk", "en")
 REPOSITORY = "FairForget/WarBias"
@@ -113,9 +115,13 @@ def _allocate(sources, seed, development_fraction):
     eligible = set(cases.values()) - protected
     if len(eligible) < 2:
         raise ValueError("At least two eligible components are needed for training and development")
-    ranked = sorted(eligible, key=lambda group: (_sha(f"{seed}:{group}".encode()), group))
-    count = min(len(ranked) - 1, max(1, math.ceil(len(ranked) * development_fraction)))
-    development = set(ranked[:count])
+    development = development_components(
+        sources["triplets_uk"],
+        indexed,
+        protected,
+        seed=seed,
+        fraction=development_fraction,
+    )
     splits = {"training": [], "development": [], "evaluation": []}
     for row in sources["triplets_uk"]:
         component = indexed[row["id"]]["split_group_id"]
@@ -245,7 +251,9 @@ def _contents(repo, target_group, training_language, seed=42, development_fracti
             "seed": seed,
             "development_fraction": development_fraction,
             "unit": "semantic_component",
-            "ranking": "SHA256 of UTF-8 seed:component, then component ID",
+            "method": "group_severity_balanced_components_v1",
+            "coverage": "Keep each group/severity stratum in training and development when it has at least two eligible components; retain singleton strata in training.",
+            "ranking": "Minimize per-group development fraction deviations for rows, then cases, then components; resolve ties by SHA256(seed:sorted_component_ids).",
             "development_count": "ceil(fraction * eligible components), keeping both splits nonempty",
             "evaluation_rule": "Protect every component linked to any QA source case from training and development.",
         },

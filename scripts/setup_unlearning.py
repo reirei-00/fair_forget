@@ -36,7 +36,7 @@ def checkpoint_available(path, expected_config):
 
 
 def data_available(protocol, directory):
-    if protocol == "warbias_directions":
+    if protocol == "warbias_application":
         sys.path.insert(0, str(ROOT / "src"))
         from fairforget.unlearning.warbias_data import validate_bundle
 
@@ -120,7 +120,7 @@ def main():
         if args.primary_data is not None:
             parser.error("--primary-data applies only to --legacy recipes")
         directory = (
-            (args.warbias_data or ROOT / "data/unlearning/warbias_directions")
+            (args.warbias_data or ROOT / "data/unlearning/warbias_application")
             .expanduser()
             .resolve()
         )
@@ -139,7 +139,7 @@ def main():
                         training_language=language,
                         **experiment["split"],
                     )
-        data_roots = {"warbias_directions": directory}
+        data_roots = {"warbias_application": directory}
     data = {name: data_available(name, directory) for name, directory in data_roots.items()}
     settings_path = CONFIGURATION / "local.json"
     previous = json.loads(settings_path.read_text()) if settings_path.exists() else {}

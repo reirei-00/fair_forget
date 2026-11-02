@@ -101,7 +101,8 @@ def validate_config(config_path: Path | str, *, methods=None):
         raise ValueError("data manifest SHA256 mismatch")
     manifest = json.loads(manifest_path.read_text())
     if (
-        manifest.get("protocol") in {"warbias_final_v1", "warbias_group_language_v2"}
+        manifest.get("protocol")
+        in {"warbias_final_v1", "warbias_group_language_v2", "warbias_group_language_v3"}
         or config.get("notebook_matrix", {}).get("protocol") == "warbias_final"
     ):
         from .warbias_plan import validate_recipe
@@ -115,7 +116,7 @@ def validate_config(config_path: Path | str, *, methods=None):
     permitted = set(manifest.get("permitted_gradient_ids", []))
     if not permitted:
         raise ValueError("reviewed permitted_gradient_ids are required")
-    if manifest.get("protocol") == "warbias_group_language_v2":
+    if manifest.get("protocol") == "warbias_group_language_v3":
         if manifest.get("language") not in {"uk", "en"}:
             raise ValueError("final WarBias training language must be uk or en")
     elif manifest.get("language") != "uk":

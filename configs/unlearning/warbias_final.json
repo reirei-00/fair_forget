@@ -1,8 +1,7 @@
 {
   "schema_version": 1,
-  "protocol": "warbias_group_language_v2",
+  "protocol": "warbias_group_language_v3",
   "methods": [
-    "wga_kl",
     "npo_kl",
     "biasunlearn"
   ],
@@ -61,5 +60,8 @@
   "training_languages": [
     "uk",
     "en"
+  ],
+  "optional_methods": [
+    "wga_kl"
   ]
 }

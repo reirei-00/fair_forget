@@ -5,14 +5,13 @@ Use the [setup notebook](setup.ipynb), [setup guide](SETUP.md) and
 
 | Method | Notebook |
 | --- | --- |
-| WGA+KL | [wga_kl.ipynb](wga_kl.ipynb) |
 | NPO+KL | [npo_retention.ipynb](npo_retention.ipynb) |
 | BiasUnlearn-style | [biasunlearn.ipynb](biasunlearn.ipynb) |
 
 Every notebook configures four separate training directions: IDP in Ukrainian,
 IDP in English, veteran in Ukrainian, and veteran in English. Each direction
 uses one group and one language. All six pinned models run independently from
-their base checkpoints. This gives 24 runs per method and 72 across the three
+their base checkpoints. This gives 24 runs per method and 48 across the two
 methods. Evaluation covers both groups in Ukrainian and English.
 
 The [configuration](../configs/unlearning/warbias_final.json) defines the methods
@@ -25,6 +24,6 @@ triplet and QA metrics, including severity slices. See the
 [WarBias evaluation guide](WARBIAS_EVALUATION.md).
 
 Separate experiments retain [RMU](rmu.ipynb),
-[task-vector negation](task_vector.ipynb), the historical
+[task-vector negation](task_vector.ipynb), optional [WGA+KL](wga_kl.ipynb), the historical
 [before/after workflow](evaluate_before_after.ipynb), and saved reports under
 [executed/](executed/).

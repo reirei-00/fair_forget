@@ -68,7 +68,7 @@ def method_plan(
     configuration = repo / "configs/unlearning"
     experiment_path = configuration / "warbias_final.json"
     experiment = json.loads(experiment_path.read_text())
-    if method not in experiment["methods"]:
+    if method not in experiment["methods"] + experiment.get("optional_methods", []):
         raise ValueError("method is not selected for final-release WarBias")
     directions = _directions(experiment, target_group, training_language)
     registry_path = configuration / "models.json"
@@ -80,8 +80,8 @@ def method_plan(
     data_root = (
         Path(
             data_root
-            or local.get("data_roots", {}).get("warbias_directions")
-            or repo / "data/unlearning/warbias_directions"
+            or local.get("data_roots", {}).get("warbias_application")
+            or repo / "data/unlearning/warbias_application"
         )
         .expanduser()
         .resolve()
@@ -180,7 +180,7 @@ def validate_recipe(config, manifest_path):
         raise ValueError("final WarBias recipes require target_group and training_language")
     _directions(experiment, group, language)
     _check_binding(experiment, binding, group, language)
-    if config["method"] not in experiment["methods"]:
+    if config["method"] not in experiment["methods"] + experiment.get("optional_methods", []):
         raise ValueError("method is not selected for final-release WarBias")
     expected_training = _training_settings(
         experiment, config["method"], binding["streams"]["forget"]["rows"]

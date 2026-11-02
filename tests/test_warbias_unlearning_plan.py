@@ -17,12 +17,18 @@ from fairforget.unlearning import notebook_matrix, warbias_data
 from fairforget.unlearning.trainer import build_biasunlearn_pools, file_hash
 
 ROOT = Path(__file__).resolve().parents[1]
-METHODS = ("wga_kl", "npo_kl", "biasunlearn")
+METHODS = ("npo_kl", "biasunlearn")
 DIRECTIONS = tuple(itertools.product(("idp", "veteran"), ("uk", "en")))
-NOTEBOOKS = {"wga_kl": "wga_kl", "npo_kl": "npo_retention", "biasunlearn": "biasunlearn"}
+NOTEBOOKS = {"npo_kl": "npo_retention", "biasunlearn": "biasunlearn"}
 
 
 class WarBiasPlanTests(unittest.TestCase):
+    def test_active_study_has_two_methods_with_wga_available_separately(self):
+        config = json.loads((ROOT / "configs/unlearning/warbias_final.json").read_text())
+        self.assertEqual(config["methods"], list(METHODS))
+        self.assertEqual(config["optional_methods"], ["wga_kl"])
+        self.assertEqual(len(self.plan("wga_kl")), 24)
+
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
@@ -58,11 +64,11 @@ class WarBiasPlanTests(unittest.TestCase):
             item["config_sha256"] = file_hash(path / "config.json")
         return plan
 
-    def test_all_seventy_two_runs_use_the_correct_direction_and_fresh_base(self):
+    def test_all_forty_eight_runs_use_the_correct_direction_and_fresh_base(self):
         registry = json.loads((ROOT / "configs/unlearning/models.json").read_text())["models"]
         expected = {model["id"]: model for model in registry}
         plans = [self.plan(method) for method in METHODS]
-        self.assertEqual(sum(map(len, plans)), 72)
+        self.assertEqual(sum(map(len, plans)), 48)
         base_paths = {alias: set() for alias in expected}
         for method, plan in zip(METHODS, plans, strict=True):
             self.assertEqual(len({item["run_id"] for item in plan}), 24)
@@ -88,7 +94,7 @@ class WarBiasPlanTests(unittest.TestCase):
                     recipe["data_manifest_sha256"], file_hash(root / "training_binding.json")
                 )
                 self.assertEqual(
-                    recipe["training"]["max_steps"], {"idp": 106, "veteran": 334}[group]
+                    recipe["training"]["max_steps"], {"idp": 150, "veteran": 310}[group]
                 )
                 self.assertEqual(recipe["training"]["epochs"], 2)
                 self.assertEqual(item["required_gpus"], 1)
@@ -119,7 +125,7 @@ class WarBiasPlanTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "not selected"):
                 self.plan("wga_kl", **filters)
 
-    def test_all_seventy_two_recipes_pass_full_input_preflight_without_collisions(self):
+    def test_all_forty_eight_recipes_pass_full_input_preflight_without_collisions(self):
         paths = []
         for method in METHODS:
             with self.subTest(method=method):
@@ -131,7 +137,7 @@ class WarBiasPlanTests(unittest.TestCase):
                     {path.stem for path in prepared}, {item["run_id"] for item in self.plan(method)}
                 )
                 paths.extend(prepared)
-        self.assertEqual(len(paths), 72)
+        self.assertEqual(len(paths), 48)
         self.assertEqual(len(paths), len(set(paths)))
 
     def test_historical_recipe_expansion_is_preserved(self):
@@ -314,7 +320,7 @@ class WarBiasPlanTests(unittest.TestCase):
                 self.assertEqual(record["command"][2], "fairforget.unlearning.trainer")
                 self.assertEqual(record["command"][-1], str(output / run_id))
                 destinations.append(record["command"][-1])
-        self.assertEqual(len(destinations), 72)
+        self.assertEqual(len(destinations), 48)
         self.assertEqual(len(destinations), len(set(destinations)))
 
 

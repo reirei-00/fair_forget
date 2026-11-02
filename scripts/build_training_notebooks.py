@@ -1,6 +1,7 @@
-"""Build the three WarBias unlearning notebooks."""
+"""Build WarBias unlearning notebooks from the study configuration."""
 
 import argparse
+import json
 from pathlib import Path
 
 import nbformat
@@ -31,7 +32,7 @@ print('PyTorch:', torch.__version__)
 DATA = """settings_path = repo / 'configs/unlearning/local.json'
 settings = json.loads(settings_path.read_text()) if settings_path.exists() else {}
 CONFIGURATION = json.loads((repo / 'configs/unlearning/warbias_final.json').read_text())
-data_value = os.environ.get('FAIRFORGET_DATA_ROOT') or settings.get('data_roots', {}).get('warbias_directions') or repo / 'data/unlearning/warbias_directions'
+data_value = os.environ.get('FAIRFORGET_DATA_ROOT') or settings.get('data_roots', {}).get('warbias_application') or repo / 'data/unlearning/warbias_application'
 DATA_ROOT = Path(data_value).expanduser().resolve()
 BINDINGS = {}
 for group in CONFIGURATION['training_groups']:
@@ -161,7 +162,7 @@ DATA_NOTES = """## WarBias data
 
 Use the current 1,007 aligned source triplets in Ukrainian and English. Prepare four separate training directions: IDP in Ukrainian, IDP in English, veteran in Ukrainian, and veteran in English. Every direction trains on one group and one language. Both languages remain available for evaluation.
 
-Split whole claim components. Protect every component used by a QA case from training and development. Use one component split for all directions. Seeded SHA256 order assigns 20% of eligible components to development, rounded up. Then select one target group and training language for each bundle. Keep the other group out of its training streams. The Ukrainian and English versions keep the same item IDs and splits.
+Split whole claim components. Protect every component used by a QA case from training and development. Use one component split for all directions. Choose 20% of eligible components for development, rounded up. Use group and severity labels to keep shared severity levels in both training and development, retain singleton levels in training, and minimize per-group deviations from the requested development fraction. SHA256 resolves ties. Then select one target group and training language for each bundle. Keep the other group out of its training streams. The Ukrainian and English versions keep the same item IDs and splits.
 
 Use complete S sentences as forget targets and complete C sentences as correction targets, with an empty prompt. Use U sentences from the same group and training language for in-domain reference KL. This measures preservation of WarBias text; general capability needs separate evidence.
 """
@@ -179,12 +180,21 @@ Each run saves a checkpoint, loss history and token-exposure log.
 """
 
 
-def build(methods=METHODS):
-    for method in methods:
+def build(methods=None):
+    active = json.loads((ROOT / "configs/unlearning/warbias_final.json").read_text())["methods"]
+    for method in active if methods is None else methods:
         title, name = METHODS[method]
         cells = [
             nbformat.v4.new_markdown_cell(
-                f"# {title}: WarBias training\n\nRun the cells in order to prepare the data, see one optimizer step on CPU, and configure 24 runs: six models in four group/language directions. Enable training separately.\n\n{NOTES[method]}"
+                (
+                    f"# {title}: WarBias training\n\n"
+                    + (
+                        "Optional experiment outside the main application study.\n\n"
+                        if method not in active
+                        else ""
+                    )
+                    + f"Run the cells in order to prepare the data, see one optimizer step on CPU, and configure 24 runs: six models in four group/language directions. Enable training separately.\n\n{NOTES[method]}"
+                )
             ),
             nbformat.v4.new_markdown_cell(
                 "## Setup\n\nInstall `requirements-unlearning.txt` and configure the checkpoint and output paths with the [setup guide](SETUP.md). The data and CPU cells do not load model weights."
@@ -198,7 +208,7 @@ def build(methods=METHODS):
             nbformat.v4.new_code_cell(TOKENS),
             nbformat.v4.new_code_cell(LOSSES[method]),
             nbformat.v4.new_markdown_cell(
-                "## Training\n\nEnable `RUN_TRAINING` to run all 24 model/direction combinations. Every run starts from the pinned base checkpoint. It saves a separate checkpoint, log and receipt under its run ID. Each run uses one GPU with enough memory for the model. All three methods use the same rows within each direction."
+                "## Training\n\nEnable `RUN_TRAINING` to run all 24 model/direction combinations. Every run starts from the pinned base checkpoint. It saves a separate checkpoint, log and receipt under its run ID. Each run uses one GPU with enough memory for the model. Methods use the same rows within each direction."
             ),
             nbformat.v4.new_code_cell(CONFIGURE),
             nbformat.v4.new_code_cell(TRAIN),
@@ -216,8 +226,9 @@ def build(methods=METHODS):
                 "fairforget": {
                     "kind": "working_unlearning_algorithm",
                     "method": method,
+                    "active_study": method in active,
                     "dataset": "WarBias",
-                    "protocol": "warbias_group_language_v2",
+                    "protocol": "warbias_group_language_v3",
                     "training_groups": ["idp", "veteran"],
                     "training_languages": ["uk", "en"],
                     "training_directions": 4,
@@ -236,5 +247,5 @@ def build(methods=METHODS):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--methods", nargs="+", choices=METHODS, default=tuple(METHODS))
+    parser.add_argument("--methods", nargs="+", choices=METHODS, default=None)
     build(parser.parse_args().methods)

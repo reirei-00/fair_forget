@@ -1,6 +1,6 @@
 # WarBias unlearning
 
-WGA+KL, NPO+KL and BiasUnlearn-style use the final WarBias source. It contains
+NPO+KL and BiasUnlearn-style use the final WarBias source. It contains
 1,007 aligned triplets per language: 409 IDP and 598 veteran items.
 
 | Training direction | Group | Language |
@@ -12,25 +12,34 @@ WGA+KL, NPO+KL and BiasUnlearn-style use the final WarBias source. It contains
 
 Each direction trains on one group and one language. All six pinned models
 start independently from their base checkpoints. This gives 24 runs per method
-and 72 across the three methods. Evaluation covers both groups in both languages.
+and 48 across the two methods. Evaluation covers both groups in both languages.
+The application tests whether WarBias supplies useful data for bias mitigation.
+Each unchanged base checkpoint is the comparison control. The main study uses
+one fixed training seed; uncertainty over cases is reported separately.
 
 ## Data and losses
 
 The [data builder](../src/fairforget/unlearning/warbias_data.py) verifies the
 source hashes and [component mapping](../evaluation/warbias_baseline/profile_mapping.jsonl).
 It protects every component linked to a QA case from training and development.
-Seeded SHA256 order assigns six of the 28 eligible components to development;
-the remaining 22 train. The same global split applies to all four directions.
+The allocation selects six of the 28 eligible components for development and
+keeps 22 for training. It balances group and severity coverage using source
+labels only, then minimizes per-group development fraction deviations for
+rows, cases and components. SHA256 resolves ties. Severity strata with only
+one eligible component stay in training. The same global split applies to all four directions.
 
 | Group | Training | Development | Held-out |
 | --- | ---: | ---: | ---: |
-| IDP | 53 | 42 | 314 |
-| Veteran | 167 | 28 | 403 |
-| Total | 220 | 70 | 717 |
+| IDP | 75 | 20 | 314 |
+| Veteran | 155 | 40 | 403 |
+| Total | 230 | 60 | 717 |
 
 Counts are triplets per language. Each training bundle selects its group's
 rows in its training language. Evaluation retains all 717 held-out triplets
 and 240 QA questions per language, with both groups represented.
+Available IDP severity levels 3, 4 and 5 occur in training and development.
+Its only eligible level-2 component stays in training. Veteran levels 2, 3 and 4
+occur in both; all veteran level-5 components remain protected for evaluation.
 
 Forget targets are complete S sentences, and correction targets are complete C
 sentences. Both use an empty prompt. Token masks cover the complete sentence.
@@ -46,11 +55,12 @@ and checkpoints are never overwritten.
 ## Methods and models
 
 The [configuration](../configs/unlearning/warbias_final.json) defines common
-optimizer settings and the three objectives. All methods use the same rows
+optimizer settings and the two objectives. All methods use the same rows
 within a direction and the same optimizer-step limit for that direction.
 BiasUnlearn builds expanded adversarial pools and can change their direction
 using development scores. Equal step limits do not imply equal token exposure.
 Each trainer records actual exposure.
+WGA+KL remains an [optional experiment](wga_kl.ipynb), outside the 48-run study.
 
 Every [notebook](README.md) prepares and validates the four bundles, runs a
 synthetic CPU step, and displays its 24-run plan. Full training starts only when
@@ -65,6 +75,17 @@ come from Fair-UK. The [baseline notebook](warbias_baseline.ipynb) supports
 current per-checkpoint triplet and QA scores, including severity slices.
 A full-release score includes training and development items and is a
 descriptive diagnostic.
+
+Assess mitigation jointly with evidence-based QA correctness. Report
+stereotyped answers on ambiguous questions, accuracy with informative evidence,
+unknown answers in each condition and invalid outputs. Keep raw triplet
+preference and polarity changes visible. Compute paired component intervals
+through Fair-UK. Lower raw stereotype preference alone does not establish
+successful mitigation.
+
+Capability checks use separate evaluation-only runs before and after the
+intervention. They do not supply training, correction or preservation data.
+Their benchmark selection is separate from this WarBias application setup.
 
 Final triplet before/after analysis still needs compatible paired bindings and
 current-text neutral controls. The historical `evaluate_before_after.ipynb`

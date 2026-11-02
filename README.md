@@ -43,17 +43,17 @@ their root dependencies remain independent of this subproject.
 ## Unlearning
 
 The [unlearning notebooks](notebooks/README.md) contain one notebook per method:
-WGA+KL, NPO+KL and BiasUnlearn-style. All three use the same final WarBias
+NPO+KL and BiasUnlearn-style. Both use the same final WarBias
 sources and component split. Each trains IDP and veteran groups separately,
 in separate Ukrainian and English directions. All six pinned models start from
-their base checkpoints in every direction: 24 runs per method, 72 in total.
+their base checkpoints in every direction: 24 runs per method, 48 in total.
 Evaluation covers both groups in Ukrainian and English. Start with the
 [setup notebook](notebooks/setup.ipynb) or [setup guide](notebooks/SETUP.md).
 The [configuration](configs/unlearning/warbias_final.json) defines the methods
 and shared training settings.
 
 The [WarBias workflow](notebooks/WARBIAS_UNLEARNING.md) defines data roles and
-evaluation requirements. All metrics use Fair-UK. RMU and task-vector notebooks
+evaluation requirements. All metrics use Fair-UK. WGA, RMU and task-vector notebooks
 remain separate experiments.
 
 Saved unlearning reports remain under [executed notebooks](notebooks/executed/).

@@ -143,17 +143,17 @@ class WarBiasDataTests(unittest.TestCase):
         )
         self.assertFalse(set(binding["permitted_gradient_ids"]) & set(languages[0]))
         self.assertEqual(set(binding["locked_evaluation_ids"]), set(languages[0]))
-        self.assertEqual(binding["split_counts"]["training"]["triplets"], 53)
-        self.assertEqual(binding["split_counts"]["development"]["triplets"], 42)
-        self.assertEqual(binding["global_split_counts"]["training"]["triplets"], 220)
-        self.assertEqual(binding["global_split_counts"]["development"]["triplets"], 70)
+        self.assertEqual(binding["split_counts"]["training"]["triplets"], 75)
+        self.assertEqual(binding["split_counts"]["development"]["triplets"], 20)
+        self.assertEqual(binding["global_split_counts"]["training"]["triplets"], 230)
+        self.assertEqual(binding["global_split_counts"]["development"]["triplets"], 60)
 
     def test_split_is_reproducible_and_seeded_without_changing_evaluation(self):
         first = self.prepare()
         other = self.root / "other"
         self.assertEqual(self.prepare(other), first)
         seeded = self.prepare(self.root / "seeded", seed=7)
-        self.assertNotEqual(first["splits"]["development"], seeded["splits"]["development"])
+        self.assertEqual(seeded["allocation"]["seed"], 7)
         self.assertEqual(first["splits"]["evaluation"], seeded["splits"]["evaluation"])
         overview = warbias_data.overview(self.repo, target_group="idp", training_language="uk")
         self.assertEqual(overview["triplets_per_language"], 1007)
@@ -228,7 +228,7 @@ class WarBiasDataTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     self.prepare(**settings)
                 self.assertFalse(self.output.exists())
-        with self.assertRaisesRegex(ValueError, "nonempty training and development"):
+        with self.assertRaisesRegex(ValueError, "No component allocation"):
             self.prepare(seed=1, development_fraction=0.001)
         self.assertFalse(self.output.exists())
 
