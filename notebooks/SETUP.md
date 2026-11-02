@@ -19,20 +19,21 @@ Hugging Face account and `HF_TOKEN` environment variable.
 ```bash
 python scripts/setup_unlearning.py \
   --models-root /absolute/path/to/models \
-  --warbias-data /absolute/path/to/warbias-training-data \
+  --warbias-data /absolute/path/to/warbias-directions \
   --output-root /absolute/path/to/new-unlearning-runs \
   --download-models
 ```
 
-This prepares the shared WarBias streams and downloads all six checkpoints at
-the revisions in [models.json](../configs/unlearning/models.json). Omit
-`--download-models` to use staged checkpoints. Their layout is
+This prepares four WarBias bundles under the data root: `idp_uk`, `idp_en`,
+`veteran_uk` and `veteran_en`. It downloads all six checkpoints at the revisions
+in [models.json](../configs/unlearning/models.json). Omit `--download-models`
+to use staged checkpoints. Their layout is
 `MODELS_ROOT/CHECKPOINT_DIRECTORY/IMMUTABLE_REVISION/`.
 
 The setup saves local paths in the ignored `configs/unlearning/local.json`.
-Each notebook validates the same source files, split assignments and stream
-hashes. It creates the data bundle if the configured directory does not exist.
-It does not replace an existing bundle. See the [data rules](WARBIAS_UNLEARNING.md).
+Each notebook validates the source files, component splits and stream hashes.
+It creates missing direction bundles and does not replace existing bundles.
+See the [data rules](WARBIAS_UNLEARNING.md).
 
 ## Run a method
 
@@ -42,13 +43,15 @@ jupyter lab
 
 Open a [WarBias method notebook](README.md) and run all cells. The default
 walkthrough prepares data and runs a CPU example without loading model weights.
-Set `RUN_TRAINING=True` to train all six models in sequence. Each model uses one
-GPU with enough memory for its training state. All model configurations and data
-pass validation before the first training process starts.
+Set `RUN_TRAINING=True` to train all 24 model/direction combinations in sequence.
+Each run starts from the pinned base checkpoint and uses one GPU with enough
+memory for its training state. All configurations and data pass validation
+before the first training process starts.
 
-Each method writes separate model directories, logs and receipts. Use a new
-output directory for each run. `FAIRFORGET_OUTPUT`, `FAIRFORGET_MODELS_ROOT`
-and `FAIRFORGET_DATA_ROOT` override the saved paths.
+Checkpoints, logs and receipts use the run ID `MODEL__GROUP_LANGUAGE`.
+Use a new output directory for each complete method run. `FAIRFORGET_OUTPUT`,
+`FAIRFORGET_MODELS_ROOT` and `FAIRFORGET_DATA_ROOT` override the saved paths.
+The data override points to the parent of all four direction directories.
 
 The `--legacy` setup option uses the separate historical data protocols for
 RMU, task-vector and earlier integrations. It does not select the current
@@ -56,6 +59,6 @@ WarBias experiment.
 
 ## Evaluation
 
-Train on Ukrainian text and evaluate the aligned Ukrainian and English panels.
+Evaluate both groups in Ukrainian and English after every training direction.
 Use Fair-UK for every metric. The [WarBias workflow](WARBIAS_UNLEARNING.md)
 distinguishes current baseline scoring from the remaining paired-analysis work.

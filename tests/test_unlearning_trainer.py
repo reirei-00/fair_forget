@@ -211,6 +211,11 @@ class InputGuardTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unapproved or locked"):
             validate_config(self.save())
 
+    def test_english_requires_the_source_bound_group_language_protocol(self):
+        self.manifest["language"] = "en"
+        with self.assertRaisesRegex(ValueError, "requires reviewed Ukrainian"):
+            validate_config(self.save())
+
     def test_family_and_exact_id_leakage_rejected(self):
         self.rows["development"][0]["family_id"] = "train"
         with self.assertRaisesRegex(ValueError, "semantic families overlap"):

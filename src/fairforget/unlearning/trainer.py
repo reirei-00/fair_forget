@@ -101,7 +101,7 @@ def validate_config(config_path: Path | str, *, methods=None):
         raise ValueError("data manifest SHA256 mismatch")
     manifest = json.loads(manifest_path.read_text())
     if (
-        manifest.get("protocol") == "warbias_final_v1"
+        manifest.get("protocol") in {"warbias_final_v1", "warbias_group_language_v2"}
         or config.get("notebook_matrix", {}).get("protocol") == "warbias_final"
     ):
         from .warbias_plan import validate_recipe
@@ -115,7 +115,10 @@ def validate_config(config_path: Path | str, *, methods=None):
     permitted = set(manifest.get("permitted_gradient_ids", []))
     if not permitted:
         raise ValueError("reviewed permitted_gradient_ids are required")
-    if manifest.get("language") != "uk":
+    if manifest.get("protocol") == "warbias_group_language_v2":
+        if manifest.get("language") not in {"uk", "en"}:
+            raise ValueError("final WarBias training language must be uk or en")
+    elif manifest.get("language") != "uk":
         raise ValueError("this recipe requires reviewed Ukrainian streams")
     stream_specs = config.get("streams", {})
     required = {"forget", "retain", "development"}
@@ -264,6 +267,8 @@ def validate_config(config_path: Path | str, *, methods=None):
         "gradient_families": sorted(train_families),
         "development_families": sorted(dev_families),
         "data_review_kind": manifest.get("review_kind", "unspecified; not asserted human-reviewed"),
+        "training_language": manifest["language"],
+        "target_group": manifest.get("target_group"),
     }
     return config, streams, provenance
 
@@ -563,7 +568,8 @@ def run(config_path: Path | str, output: Path | str):
     receipt = {
         "status": "loading",
         "method": method,
-        "language": "uk",
+        "language": provenance["training_language"],
+        "target_group": provenance["target_group"],
         "started_unix": time.time(),
         "config_sha256": provenance["config_sha256"],
         "model_id": config["model_id"],

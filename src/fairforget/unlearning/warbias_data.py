@@ -8,7 +8,9 @@ import math
 import tempfile
 from pathlib import Path
 
-PROTOCOL = "warbias_final_v1"
+PROTOCOL = "warbias_group_language_v2"
+TARGET_GROUPS = ("idp", "veteran")
+TRAINING_LANGUAGES = ("uk", "en")
 REPOSITORY = "FairForget/WarBias"
 TRIPLET_REVISION = "9363a1d1b6936ad3d37e52f9ce1e426d2a0573b0"
 SOURCE_COMMIT = "36c49eb65ec370bb7e792dcb4d9b5e63f8bf0609"
@@ -128,7 +130,7 @@ def _allocate(sources, seed, development_fraction):
     return indexed, splits
 
 
-def _stream(row, meta, role, field):
+def _stream(row, meta, role, field, language):
     target = row[field]
     if not isinstance(target, str) or not target.strip():
         raise ValueError(f"WarBias has an empty {field}: {row['id']}")
@@ -138,23 +140,43 @@ def _stream(row, meta, role, field):
         "family_id": meta["split_group_id"],
         "case_id": row["case_id"],
         "actor": row["actor"],
-        "language": "uk",
+        "language": language,
         "role": role,
         "source_field": field,
         "prompt": "",
         "target": target,
         "completion_character_span": [0, len(target)],
         "completion_policy": "complete_sentence",
-        "source_sha256": SOURCES["triplets_uk"]["sha256"],
+        "source_sha256": SOURCES[f"triplets_{language}"]["sha256"],
     }
 
 
-def _contents(repo, seed=42, development_fraction=0.2):
+def _split_records(indexed, splits):
+    counts, records = {}, {}
+    for name, ids in splits.items():
+        components = sorted({indexed[item]["split_group_id"] for item in ids})
+        cases = sorted({indexed[item]["public_case_id"] for item in ids})
+        counts[name] = {"triplets": len(ids), "components": len(components), "cases": len(cases)}
+        records[name] = {"ids": ids, "components": components, "cases": cases}
+    return counts, records
+
+
+def _contents(repo, target_group, training_language, seed=42, development_fraction=0.2):
+    if not isinstance(target_group, str) or target_group not in TARGET_GROUPS:
+        raise ValueError("WarBias target_group must be idp or veteran")
+    if not isinstance(training_language, str) or training_language not in TRAINING_LANGUAGES:
+        raise ValueError("WarBias training_language must be uk or en")
     sources = _read_sources(repo)
-    indexed, splits = _allocate(sources, seed, development_fraction)
+    indexed, global_splits = _allocate(sources, seed, development_fraction)
+    splits = {
+        name: [item for item in ids if indexed[item]["target_group"] == target_group]
+        for name, ids in global_splits.items()
+    }
+    if not splits["training"] or not splits["development"]:
+        raise ValueError("Each WarBias direction needs nonempty training and development streams")
     selected = {key: set(ids) for key, ids in splits.items()}
     streams = {role: [] for role in STREAM_FILES}
-    for row in sources["triplets_uk"]:
+    for row in sources[f"triplets_{training_language}"]:
         meta = indexed[row["id"]]
         if row["id"] in selected["training"]:
             for role, field in (
@@ -162,13 +184,13 @@ def _contents(repo, seed=42, development_fraction=0.2):
                 ("correction", "counter_stereotype"),
                 ("retain", "unrelated"),
             ):
-                streams[role].append(_stream(row, meta, role, field))
+                streams[role].append(_stream(row, meta, role, field, training_language))
         elif row["id"] in selected["development"]:
-            dev = _stream(row, meta, "development", "stereotype")
+            dev = _stream(row, meta, "development", "stereotype", training_language)
             dev.update(stereotype=row["stereotype"], counter_stereotype=row["counter_stereotype"])
             streams["development"].append(dev)
             streams["retain_development"].append(
-                _stream(row, meta, "retain_development", "unrelated")
+                _stream(row, meta, "retain_development", "unrelated", training_language)
             )
     payloads = {STREAM_FILES[role]: _jsonl(rows) for role, rows in streams.items()}
     evaluation = {}
@@ -176,7 +198,8 @@ def _contents(repo, seed=42, development_fraction=0.2):
         for kind in ("triplets", "qa"):
             rows = sources[f"{kind}_{language}"]
             if kind == "triplets":
-                rows = [row for row in rows if row["id"] in selected["evaluation"]]
+                protected = set(global_splits["evaluation"])
+                rows = [row for row in rows if row["id"] in protected]
             name = f"evaluation/{kind}_{language}.jsonl"
             payloads[name] = _jsonl(rows)
             evaluation[f"{kind}_{language}"] = {
@@ -186,15 +209,10 @@ def _contents(repo, seed=42, development_fraction=0.2):
                 "language": language,
                 "role": "held_out_evaluation",
             }
-    counts = {}
-    split_records = {}
-    for name, ids in splits.items():
-        components = sorted({indexed[item]["split_group_id"] for item in ids})
-        cases = sorted({indexed[item]["public_case_id"] for item in ids})
-        counts[name] = {"triplets": len(ids), "components": len(components), "cases": len(cases)}
-        split_records[name] = {"ids": ids, "components": components, "cases": cases}
+    counts, split_records = _split_records(indexed, splits)
+    global_counts, global_records = _split_records(indexed, global_splits)
     binding = {
-        "schema_version": 1,
+        "schema_version": 2,
         "protocol": PROTOCOL,
         "source": {
             "repository": REPOSITORY,
@@ -203,13 +221,18 @@ def _contents(repo, seed=42, development_fraction=0.2):
             "files": {name: dict(spec) for name, spec in SOURCES.items()},
             "qa_metadata_source": "Git source files; text and answer keys match the published baseline",
         },
-        "language": "uk",
-        "training_language": "uk",
+        "target_group": target_group,
+        "language": training_language,
+        "training_language": training_language,
         "evaluation_languages": ["uk", "en"],
         "authorized_for_training": True,
         "reviewed_for_gradients": False,
         "authorization_scope": "Data designation for these recipes; preparation does not launch training.",
-        "review_kind": "Human-annotated complete Ukrainian triplets; predicate spans are not separately reviewed.",
+        "review_kind": (
+            "Human-annotated complete Ukrainian triplets; predicate spans are not separately reviewed."
+            if training_language == "uk"
+            else "English translations of human-annotated Ukrainian triplets; English text has no human review."
+        ),
         "loss_policy": {
             "prompt": "empty",
             "completion": "complete_sentence",
@@ -228,8 +251,10 @@ def _contents(repo, seed=42, development_fraction=0.2):
         },
         "split_counts": counts,
         "splits": split_records,
+        "global_split_counts": global_counts,
+        "global_splits": global_records,
         "permitted_gradient_ids": splits["training"],
-        "locked_evaluation_ids": splits["evaluation"],
+        "locked_evaluation_ids": global_splits["evaluation"],
         "streams": {
             role: {
                 "path": STREAM_FILES[role],
@@ -239,6 +264,7 @@ def _contents(repo, seed=42, development_fraction=0.2):
             for role, rows in streams.items()
         },
         "evaluation": evaluation,
+        "evaluation_scope": "Both groups and both languages on the global protected component panel.",
         "limitations": [
             "English translations have no human review.",
             "Whole-release baseline results are descriptive; only the protected component panel is held out here.",
@@ -248,21 +274,25 @@ def _contents(repo, seed=42, development_fraction=0.2):
     return binding, payloads
 
 
-def overview(repo):
-    """Describe the pinned sources and default component allocation without writing."""
-    binding, _ = _contents(Path(repo).expanduser().resolve())
+def overview(repo, *, target_group, training_language):
+    """Describe one direction and the shared protected panel without writing."""
+    binding, _ = _contents(Path(repo).expanduser().resolve(), target_group, training_language)
     return {
         "protocol": binding["protocol"],
-        "triplets_per_language": sum(row["triplets"] for row in binding["split_counts"].values()),
+        "triplets_per_language": sum(
+            row["triplets"] for row in binding["global_split_counts"].values()
+        ),
         "qa_per_language": binding["evaluation"]["qa_uk"]["rows"],
+        "target_group": binding["target_group"],
         "training_language": binding["training_language"],
         "evaluation_languages": binding["evaluation_languages"],
         "source": binding["source"],
         "split_counts": binding["split_counts"],
+        "global_split_counts": binding["global_split_counts"],
     }
 
 
-def prepare(repo, output, *, seed=42, development_fraction=0.2):
+def prepare(repo, output, *, target_group, training_language, seed=42, development_fraction=0.2):
     """Create new, deterministic streams without changing their source data."""
     repo, output = Path(repo).expanduser().resolve(), Path(output).expanduser().resolve()
     if output.exists():
@@ -272,7 +302,7 @@ def prepare(repo, output, *, seed=42, development_fraction=0.2):
         for spec in SOURCES.values()
     ):
         raise ValueError("WarBias output must not contain source files")
-    binding, payloads = _contents(repo, seed, development_fraction)
+    binding, payloads = _contents(repo, target_group, training_language, seed, development_fraction)
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="warbias-streams-", dir=output.parent) as temporary:
         root = Path(temporary) / "bundle"
@@ -291,9 +321,15 @@ def validate_bundle(root, repo):
     root, repo = Path(root).expanduser().resolve(), Path(repo).expanduser().resolve()
     manifest = root / "training_binding.json"
     binding = json.loads(manifest.read_text())
+    if binding.get("protocol") != PROTOCOL:
+        raise ValueError("WarBias protocol differs; prepare a new group/language bundle")
     allocation = binding.get("allocation", {})
     expected, payloads = _contents(
-        repo, allocation.get("seed"), allocation.get("development_fraction")
+        repo,
+        binding.get("target_group"),
+        binding.get("training_language"),
+        allocation.get("seed"),
+        allocation.get("development_fraction"),
     )
     if binding != expected:
         raise ValueError("WarBias training binding differs from the pinned source allocation")

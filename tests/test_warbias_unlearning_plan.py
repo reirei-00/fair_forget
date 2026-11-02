@@ -1,16 +1,25 @@
-"""Final WarBias recipes must share current text, allocation and model pins."""
+"""WarBias runs must isolate group and language while preserving base pins."""
 
 import copy
+import itertools
 import json
+import os
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
+
+import torch
 
 from fairforget.unlearning import notebook_matrix, warbias_data
 from fairforget.unlearning.trainer import build_biasunlearn_pools, file_hash
 
 ROOT = Path(__file__).resolve().parents[1]
 METHODS = ("wga_kl", "npo_kl", "biasunlearn")
+DIRECTIONS = tuple(itertools.product(("idp", "veteran"), ("uk", "en")))
+NOTEBOOKS = {"wga_kl": "wga_kl", "npo_kl": "npo_retention", "biasunlearn": "biasunlearn"}
 
 
 class WarBiasPlanTests(unittest.TestCase):
@@ -18,21 +27,30 @@ class WarBiasPlanTests(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name).resolve()
-        self.data = self.root / "warbias"
-        self.binding = warbias_data.prepare(ROOT, self.data)
+        self.data = self.root / "directions"
+        self.bindings = {
+            (group, language): warbias_data.prepare(
+                ROOT,
+                self.data / f"{group}_{language}",
+                target_group=group,
+                training_language=language,
+            )
+            for group, language in DIRECTIONS
+        }
         self.models = self.root / "models"
 
-    def plan(self, method):
+    def plan(self, method, **filters):
         return notebook_matrix.method_plan(
             ROOT,
             method,
             data_root=self.data,
             models_root=self.models,
             protocol="warbias_final",
+            **filters,
         )
 
-    def staged_plan(self, method):
-        plan = self.plan(method)
+    def staged_plan(self, method, **filters):
+        plan = self.plan(method, **filters)
         for item in plan:
             path = Path(item["recipe"]["model_path"])
             path.mkdir(parents=True, exist_ok=True)
@@ -40,85 +58,161 @@ class WarBiasPlanTests(unittest.TestCase):
             item["config_sha256"] = file_hash(path / "config.json")
         return plan
 
-    def test_all_eighteen_recipes_share_current_warbias_and_six_pinned_models(self):
+    def test_all_seventy_two_runs_use_the_correct_direction_and_fresh_base(self):
         registry = json.loads((ROOT / "configs/unlearning/models.json").read_text())["models"]
         expected = {model["id"]: model for model in registry}
         plans = [self.plan(method) for method in METHODS]
-        self.assertEqual(sum(map(len, plans)), 18)
-        manifest_sha = file_hash(self.data / "training_binding.json")
+        self.assertEqual(sum(map(len, plans)), 72)
+        base_paths = {alias: set() for alias in expected}
         for method, plan in zip(METHODS, plans, strict=True):
-            self.assertEqual({item["model_alias"] for item in plan}, set(expected))
+            self.assertEqual(len({item["run_id"] for item in plan}), 24)
+            self.assertEqual(
+                {(i["model_alias"], i["target_group"], i["training_language"]) for i in plan},
+                set(itertools.product(expected, ("idp", "veteran"), ("uk", "en"))),
+            )
             for item in plan:
                 recipe = item["recipe"]
                 model = expected[item["model_alias"]]
+                group, language = item["target_group"], item["training_language"]
+                root = self.data / f"{group}_{language}"
+                binding = self.bindings[group, language]
                 self.assertEqual(recipe["method"], method)
-                self.assertEqual(recipe["notebook_matrix"]["protocol"], "warbias_final")
+                self.assertEqual(recipe["target_group"], group)
+                self.assertEqual(recipe["training_language"], language)
+                self.assertEqual(recipe["notebook_matrix"]["run_id"], item["run_id"])
                 self.assertEqual(recipe["model_id"], model["repository"])
                 self.assertEqual(recipe["model_revision"], model["revision"])
                 self.assertEqual(recipe["tokenizer_revision"], model["tokenizer_revision"])
                 self.assertEqual(item["config_sha256"], model["config_sha256"])
-                self.assertEqual(recipe["data_manifest_sha256"], manifest_sha)
-                self.assertEqual(recipe["training"]["max_steps"], 440)
+                self.assertEqual(
+                    recipe["data_manifest_sha256"], file_hash(root / "training_binding.json")
+                )
+                self.assertEqual(
+                    recipe["training"]["max_steps"], {"idp": 106, "veteran": 334}[group]
+                )
                 self.assertEqual(recipe["training"]["epochs"], 2)
                 self.assertEqual(item["required_gpus"], 1)
+                base_paths[model["id"]].add(recipe["model_path"])
                 for role, spec in recipe["streams"].items():
-                    self.assertEqual(
-                        spec["path"], str(self.data / self.binding["streams"][role]["path"])
-                    )
-                    self.assertEqual(spec["sha256"], self.binding["streams"][role]["sha256"])
+                    self.assertEqual(spec["path"], str(root / binding["streams"][role]["path"]))
+                    self.assertEqual(spec["sha256"], binding["streams"][role]["sha256"])
                 self.assertNotIn("rmu", recipe)
                 self.assertNotIn("task_vector", recipe)
+        for model in registry:
+            self.assertEqual(
+                base_paths[model["id"]], {str(self.models / model["directory"] / model["revision"])}
+            )
 
-    def test_all_eighteen_recipes_pass_full_input_preflight_with_staged_fixtures(self):
+    def test_filters_select_only_independent_requested_directions(self):
+        for filters, count in (
+            ({"target_group": "idp"}, 12),
+            ({"training_language": "en"}, 12),
+            ({"target_group": "veteran", "training_language": "uk"}, 6),
+        ):
+            with self.subTest(filters=filters):
+                plan = self.plan("npo_kl", **filters)
+                self.assertEqual(len(plan), count)
+                for item in plan:
+                    for key, value in filters.items():
+                        self.assertEqual(item[key], value)
+        for filters in ({"target_group": "refugee"}, {"training_language": "fr"}):
+            with self.assertRaisesRegex(ValueError, "not selected"):
+                self.plan("wga_kl", **filters)
+
+    def test_all_seventy_two_recipes_pass_full_input_preflight_without_collisions(self):
+        paths = []
         for method in METHODS:
             with self.subTest(method=method):
-                paths = notebook_matrix.prepare_recipes(
+                prepared = notebook_matrix.prepare_recipes(
                     self.staged_plan(method), self.root / method
                 )
-                self.assertEqual(len(paths), 6)
+                self.assertEqual(len(prepared), 24)
                 self.assertEqual(
-                    {path.stem for path in paths},
-                    {item["model_alias"] for item in self.plan(method)},
+                    {path.stem for path in prepared}, {item["run_id"] for item in self.plan(method)}
                 )
+                paths.extend(prepared)
+        self.assertEqual(len(paths), 72)
+        self.assertEqual(len(paths), len(set(paths)))
+
+    def test_historical_recipe_expansion_is_preserved(self):
+        for method in METHODS:
+            plan = notebook_matrix.method_plan(ROOT, method)
+            self.assertEqual(len(plan), 6)
+            self.assertEqual(
+                {item["recipe"]["notebook_matrix"]["protocol"] for item in plan},
+                {"warbias" if method == "wga_kl" else "primary"},
+            )
+            for item in plan:
+                recipe = item["recipe"]
+                source = json.loads(
+                    Path(recipe["notebook_matrix"]["source_template"]["path"]).read_text()
+                )
+                self.assertEqual(recipe["training"], source["training"])
+                self.assertEqual(recipe["data_manifest_sha256"], source["data_manifest_sha256"])
+
+    def test_staged_base_checkpoint_symlinks_preserve_the_planned_initialization(self):
+        plan = self.plan("wga_kl", target_group="veteran", training_language="en")
+        for item in plan:
+            planned = Path(item["recipe"]["model_path"])
+            cached = self.root / "cache" / item["model_alias"] / "snapshot"
+            cached.mkdir(parents=True)
+            (cached / "config.json").write_text(json.dumps({"fixture": item["model_alias"]}))
+            planned.parent.mkdir(parents=True)
+            planned.symlink_to(cached, target_is_directory=True)
+            item["config_sha256"] = file_hash(cached / "config.json")
+        prepared = notebook_matrix.prepare_recipes(plan, self.root / "symlink_preflight")
+        self.assertEqual(len(prepared), 6)
 
     def test_missing_or_historical_data_cannot_fall_back_to_old_recipes(self):
         for method in METHODS:
-            with self.subTest(method=method):
-                with self.assertRaisesRegex(FileNotFoundError, "Prepare the current WarBias"):
-                    notebook_matrix.method_plan(
-                        ROOT,
-                        method,
-                        data_root=self.root / "missing",
-                        protocol="warbias_final",
-                    )
+            with self.assertRaisesRegex(FileNotFoundError, "Prepare the current WarBias"):
+                notebook_matrix.method_plan(
+                    ROOT, method, data_root=self.root / "missing", protocol="warbias_final"
+                )
         historical = self.root / "historical"
-        historical.mkdir()
-        (historical / "training_binding.json").write_text(
-            json.dumps({"language": "uk", "authorized_for_training": True})
-        )
+        for group, language in DIRECTIONS:
+            child = historical / f"{group}_{language}"
+            child.mkdir(parents=True)
+            (child / "training_binding.json").write_text(
+                json.dumps({"language": "uk", "authorized_for_training": True})
+            )
         with self.assertRaises(ValueError):
             notebook_matrix.method_plan(
                 ROOT, "npo_kl", data_root=historical, protocol="warbias_final"
             )
-        with self.assertRaisesRegex(ValueError, "not selected"):
-            self.plan("rmu")
-        with self.assertRaisesRegex(ValueError, "not selected"):
-            self.plan("task_vector")
+        for method in ("rmu", "task_vector"):
+            with self.assertRaisesRegex(ValueError, "not selected"):
+                self.plan(method)
 
-    def test_changed_training_model_identity_and_role_bindings_are_rejected(self):
-        for mode in ("steps", "model", "role"):
+    def test_changed_settings_directions_and_base_identity_are_rejected(self):
+        for mode in ("steps", "model", "role", "language", "group", "run_id", "base"):
             with self.subTest(mode=mode):
-                plan = self.staged_plan("npo_kl")
+                plan = self.staged_plan("npo_kl", target_group="idp", training_language="uk")
                 recipe = plan[-1]["recipe"]
+                message = "recipe settings differ"
                 if mode == "steps":
-                    recipe["training"]["max_steps"] = 128
-                    message = "recipe settings differ"
+                    recipe["training"]["max_steps"] = 440
                 elif mode == "model":
                     recipe["model_revision"] = "wrong-immutable-revision"
                     message = "pinned model registry"
-                else:
+                elif mode == "role":
                     recipe["streams"]["forget"] = copy.deepcopy(recipe["streams"]["correction"])
                     message = "recipe streams differ"
+                elif mode in ("language", "group"):
+                    recipe["training_language" if mode == "language" else "target_group"] = (
+                        "en" if mode == "language" else "veteran"
+                    )
+                    message = "data binding differs"
+                elif mode == "run_id":
+                    recipe["notebook_matrix"]["run_id"] = "another_direction"
+                    message = "run ID differs|direction or base checkpoint"
+                else:
+                    recipe["model_path"] = str(self.root / "previous_unlearning_checkpoint")
+                    message = "staged model config differs|direction or base checkpoint"
+                    destination = Path(recipe["model_path"])
+                    destination.mkdir()
+                    (destination / "config.json").write_text("{}")
+                    plan[-1]["config_sha256"] = file_hash(destination / "config.json")
                 output = self.root / mode
                 with self.assertRaisesRegex(ValueError, message):
                     notebook_matrix.prepare_recipes(plan, output)
@@ -127,12 +221,13 @@ class WarBiasPlanTests(unittest.TestCase):
     def test_self_consistent_hash_changes_do_not_allow_another_source_or_split(self):
         for mode in ("text", "split"):
             with self.subTest(mode=mode):
-                plan = self.staged_plan("biasunlearn")
-                binding_path = self.data / "training_binding.json"
+                plan = self.staged_plan("biasunlearn", target_group="idp", training_language="uk")
+                root = self.data / "idp_uk"
+                binding_path = root / "training_binding.json"
                 original_binding = binding_path.read_bytes()
                 binding = json.loads(original_binding)
                 stream = binding["streams"]["forget"]
-                path = self.data / stream["path"]
+                path = root / stream["path"]
                 original_rows = path.read_bytes()
                 rows = [json.loads(line) for line in path.read_text().splitlines()]
                 if mode == "text":
@@ -152,20 +247,75 @@ class WarBiasPlanTests(unittest.TestCase):
                 path.write_bytes(original_rows)
                 binding_path.write_bytes(original_binding)
 
-    def test_biasunlearn_pool_rows_keep_unique_ids_and_original_source_ids(self):
-        def rows(role):
-            path = self.data / self.binding["streams"][role]["path"]
-            return [json.loads(line) for line in path.read_text().splitlines()]
+    def test_biasunlearn_pools_keep_only_the_selected_group_and_language(self):
+        for group, language in DIRECTIONS:
+            root, binding = self.data / f"{group}_{language}", self.bindings[group, language]
 
-        pools, receipt = build_biasunlearn_pools(
-            rows("forget"), rows("correction"), fraction=0.25, seed=42
-        )
-        self.assertEqual(len(receipt["adversarial_ids"]), 55)
-        allowed = set(self.binding["permitted_gradient_ids"])
-        for pool in pools.values():
-            for stream in pool.values():
-                self.assertEqual(len(stream), len({row["id"] for row in stream}))
-                self.assertTrue({row["source_item_id"] for row in stream} <= allowed)
+            def rows(role):
+                path = root / binding["streams"][role]["path"]
+                return [json.loads(line) for line in path.read_text().splitlines()]
+
+            pools, receipt = build_biasunlearn_pools(
+                rows("forget"), rows("correction"), fraction=0.25, seed=42
+            )
+            self.assertEqual(len(receipt["adversarial_ids"]), round(len(rows("forget")) * 0.25))
+            allowed = set(binding["permitted_gradient_ids"])
+            for pool in pools.values():
+                for stream in pool.values():
+                    self.assertEqual(len(stream), len({row["id"] for row in stream}))
+                    self.assertTrue({row["source_item_id"] for row in stream} <= allowed)
+                    self.assertEqual({row["actor"] for row in stream}, {group})
+                    self.assertEqual({row["language"] for row in stream}, {language})
+
+    def test_each_notebook_dispatches_twenty_four_unique_runs(self):
+        versions = {
+            "torch": "2.9.1+cu128",
+            "transformers": "4.57.6",
+            "peft": "0.17.1",
+            "accelerate": "1.15.0",
+        }
+        destinations = []
+        for method, name in NOTEBOOKS.items():
+            notebook = json.loads((ROOT / "notebooks" / f"{name}.ipynb").read_text())
+            code = next(
+                "".join(cell["source"])
+                for cell in reversed(notebook["cells"])
+                if cell["cell_type"] == "code"
+            )
+            output, plan = self.root / method, self.staged_plan(method)
+            namespace = {
+                "RUN_TRAINING": True,
+                "OUTPUT": output,
+                "PLAN": plan,
+                "METHOD": method,
+                "repo": ROOT,
+                "torch": torch,
+                "os": os,
+                "json": json,
+                "sys": sys,
+                "subprocess": subprocess,
+                "notebook_matrix": notebook_matrix,
+            }
+            with (
+                mock.patch("torch.cuda.is_available", return_value=True),
+                mock.patch("torch.cuda.device_count", return_value=1),
+                mock.patch("importlib.metadata.version", side_effect=versions.__getitem__),
+                mock.patch(
+                    "subprocess.run",
+                    side_effect=lambda command, **kwargs: subprocess.CompletedProcess(command, 0),
+                ) as run,
+            ):
+                exec(compile(code, name, "exec"), namespace)
+            self.assertEqual(run.call_count, 24)
+            records = json.loads((output / "matrix_execution.json").read_text())["runs"]
+            self.assertEqual(set(records), {item["run_id"] for item in plan})
+            self.assertEqual({record["status"] for record in records.values()}, {"completed"})
+            for run_id, record in records.items():
+                self.assertEqual(record["command"][2], "fairforget.unlearning.trainer")
+                self.assertEqual(record["command"][-1], str(output / run_id))
+                destinations.append(record["command"][-1])
+        self.assertEqual(len(destinations), 72)
+        self.assertEqual(len(destinations), len(set(destinations)))
 
 
 if __name__ == "__main__":

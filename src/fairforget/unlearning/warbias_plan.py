@@ -1,4 +1,4 @@
-"""Bind the selected methods to one final-release WarBias training bundle."""
+"""Bind independent group and language runs to final-release WarBias data."""
 
 from __future__ import annotations
 
@@ -18,10 +18,33 @@ def _training_settings(experiment, method, rows):
     return training
 
 
-def _check_binding(experiment, binding):
+def _directions(experiment, target_group, training_language):
+    groups, languages = experiment["training_groups"], experiment["training_languages"]
+    for values, allowed, label in (
+        (groups, {"idp", "veteran"}, "training groups"),
+        (languages, {"uk", "en"}, "training languages"),
+    ):
+        if not values or len(values) != len(set(values)) or not set(values) <= allowed:
+            raise ValueError(f"Configure unique supported {label}")
+    if target_group is not None and target_group not in groups:
+        raise ValueError("target_group is not selected for final-release WarBias")
+    if training_language is not None and training_language not in languages:
+        raise ValueError("training_language is not selected for final-release WarBias")
+    return [
+        (group, language)
+        for group in groups
+        for language in languages
+        if (target_group is None or group == target_group)
+        and (training_language is None or language == training_language)
+    ]
+
+
+def _check_binding(experiment, binding, target_group, training_language):
     if (
         binding["protocol"] != experiment["protocol"]
-        or binding["training_language"] != experiment["training_language"]
+        or binding["target_group"] != target_group
+        or binding["training_language"] != training_language
+        or binding["language"] != training_language
         or binding["evaluation_languages"] != experiment["evaluation_languages"]
         or binding["allocation"]["seed"] != experiment["split"]["seed"]
         or binding["allocation"]["development_fraction"]
@@ -32,82 +55,108 @@ def _check_binding(experiment, binding):
         raise ValueError("WarBias data binding differs from the experiment configuration")
 
 
-def method_plan(repo, method, *, data_root=None, models_root=None):
+def method_plan(
+    repo,
+    method,
+    *,
+    data_root=None,
+    models_root=None,
+    target_group=None,
+    training_language=None,
+):
     repo = Path(repo).resolve()
     configuration = repo / "configs/unlearning"
     experiment_path = configuration / "warbias_final.json"
     experiment = json.loads(experiment_path.read_text())
     if method not in experiment["methods"]:
         raise ValueError("method is not selected for final-release WarBias")
+    directions = _directions(experiment, target_group, training_language)
     registry_path = configuration / "models.json"
     registry = json.loads(registry_path.read_text())["models"]
     if not registry or len({model["id"] for model in registry}) != len(registry):
         raise ValueError("model registry must contain unique model IDs")
     local_path = configuration / "local.json"
     local = json.loads(local_path.read_text()) if local_path.exists() else {}
-    root = (
+    data_root = (
         Path(
             data_root
-            or local.get("data_roots", {}).get("warbias_final")
-            or repo / "data/unlearning/warbias_final"
+            or local.get("data_roots", {}).get("warbias_directions")
+            or repo / "data/unlearning/warbias_directions"
         )
         .expanduser()
         .resolve()
     )
-    if not (root / "training_binding.json").is_file():
-        raise FileNotFoundError(
-            "Prepare the current WarBias inputs with scripts/prepare_warbias_unlearning.py"
-        )
-    binding = validate_bundle(root, repo)
-    _check_binding(experiment, binding)
+    bindings = {}
+    for group, language in directions:
+        root = data_root / f"{group}_{language}"
+        if not (root / "training_binding.json").is_file():
+            raise FileNotFoundError(
+                "Prepare the current WarBias directions with scripts/prepare_warbias_unlearning.py"
+            )
+        binding = validate_bundle(root, repo)
+        _check_binding(experiment, binding, group, language)
+        bindings[group, language] = (root, binding)
     models_root = Path(models_root or local.get("models_root") or repo / "models")
     models_root = models_root.expanduser().resolve()
     plan = []
-    for model in registry:
-        training = _training_settings(experiment, method, binding["streams"]["forget"]["rows"])
-        recipe = {
-            "schema_version": 1,
-            "method": method,
-            "study_stage": "final-release WarBias training",
-            "model_path": str(models_root / model["directory"] / model["revision"]),
-            "model_id": model["repository"],
-            "model_revision": model["revision"],
-            "tokenizer_revision": model["tokenizer_revision"],
-            "data_manifest": str(root / "training_binding.json"),
-            "data_manifest_sha256": file_hash(root / "training_binding.json"),
-            "streams": {
-                role: {"path": str(root / spec["path"]), "sha256": spec["sha256"]}
-                for role, spec in binding["streams"].items()
-            },
-            "lora": copy.deepcopy(experiment["lora"]),
-            "training": training,
-            "notebook_matrix": {
-                "protocol": "warbias_final",
-                "model_alias": model["id"],
-                "source_template": {
-                    "path": str(experiment_path),
-                    "sha256": file_hash(experiment_path),
+    for group, language in directions:
+        root, binding = bindings[group, language]
+        for model in registry:
+            run_id = f"{model['id']}__{group}_{language}"
+            training = _training_settings(experiment, method, binding["streams"]["forget"]["rows"])
+            recipe = {
+                "schema_version": 1,
+                "method": method,
+                "target_group": group,
+                "training_language": language,
+                "study_stage": "final-release WarBias training",
+                "model_path": str(models_root / model["directory"] / model["revision"]),
+                "model_id": model["repository"],
+                "model_revision": model["revision"],
+                "tokenizer_revision": model["tokenizer_revision"],
+                "data_manifest": str(root / "training_binding.json"),
+                "data_manifest_sha256": file_hash(root / "training_binding.json"),
+                "streams": {
+                    role: {"path": str(root / spec["path"]), "sha256": spec["sha256"]}
+                    for role, spec in binding["streams"].items()
                 },
-                "model_registry": {
-                    "path": str(registry_path),
-                    "sha256": file_hash(registry_path),
+                "lora": copy.deepcopy(experiment["lora"]),
+                "training": training,
+                "notebook_matrix": {
+                    "protocol": "warbias_final",
+                    "model_alias": model["id"],
+                    "run_id": run_id,
+                    "target_group": group,
+                    "training_language": language,
+                    "initialization": "pinned_base_checkpoint",
+                    "base_checkpoint": str(models_root / model["directory"] / model["revision"]),
+                    "source_template": {
+                        "path": str(experiment_path),
+                        "sha256": file_hash(experiment_path),
+                    },
+                    "model_registry": {
+                        "path": str(registry_path),
+                        "sha256": file_hash(registry_path),
+                    },
                 },
-            },
-            "limitations": [
-                "Complete sentences are loss targets; no reviewed predicate spans are asserted.",
-                "Unrelated sentences support in-domain reference KL, not broad utility claims.",
-                "All methods use the same optimizer-step limit; loss-token exposure can differ.",
-                "Only protected components are held out from training and development.",
-            ],
-        }
-        plan.append(
-            {
-                "model_alias": model["id"],
-                "recipe": recipe,
-                "config_sha256": model["config_sha256"],
-                "required_gpus": 1,
+                "limitations": [
+                    "Complete sentences are loss targets; no reviewed predicate spans are asserted.",
+                    "Unrelated sentences support in-domain reference KL, not broad utility claims.",
+                    "Methods share the step limit within each group and language; token exposure can differ.",
+                    "Only protected components are held out from training and development.",
+                ],
             }
-        )
+            plan.append(
+                {
+                    "model_alias": model["id"],
+                    "run_id": run_id,
+                    "target_group": group,
+                    "training_language": language,
+                    "recipe": recipe,
+                    "config_sha256": model["config_sha256"],
+                    "required_gpus": 1,
+                }
+            )
     return plan
 
 
@@ -126,7 +175,11 @@ def validate_recipe(config, manifest_path):
     ):
         raise ValueError("final WarBias experiment configuration differs")
     experiment = json.loads(experiment_path.read_text())
-    _check_binding(experiment, binding)
+    group, language = config.get("target_group"), config.get("training_language")
+    if group is None or language is None:
+        raise ValueError("final WarBias recipes require target_group and training_language")
+    _directions(experiment, group, language)
+    _check_binding(experiment, binding, group, language)
     if config["method"] not in experiment["methods"]:
         raise ValueError("method is not selected for final-release WarBias")
     expected_training = _training_settings(
@@ -149,6 +202,19 @@ def validate_recipe(config, manifest_path):
         or config["tokenizer_revision"] != selected[0]["tokenizer_revision"]
     ):
         raise ValueError("recipe differs from the pinned model registry")
+    matrix = config["notebook_matrix"]
+    base_checkpoint = Path(matrix.get("base_checkpoint", ""))
+    if (
+        matrix.get("run_id") != f"{selected[0]['id']}__{group}_{language}"
+        or matrix.get("target_group") != group
+        or matrix.get("training_language") != language
+        or matrix.get("initialization") != "pinned_base_checkpoint"
+        or not base_checkpoint.is_absolute()
+        or base_checkpoint.name != selected[0]["revision"]
+        or base_checkpoint.parent.name != selected[0]["directory"]
+        or Path(config["model_path"]).resolve() != base_checkpoint.resolve()
+    ):
+        raise ValueError("recipe direction or base checkpoint initialization differs")
     expected_streams = {
         role: {"path": str(root / spec["path"]), "sha256": spec["sha256"]}
         for role, spec in binding["streams"].items()

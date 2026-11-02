@@ -1,8 +1,7 @@
 # Unlearning notebooks
 
-Use the [setup guide](SETUP.md) and the [WarBias workflow](WARBIAS_UNLEARNING.md).
-Each notebook prepares the same WarBias data, shows a CPU optimizer step, and
-configures all six pinned models. Training is disabled by default.
+Use the [setup notebook](setup.ipynb), [setup guide](SETUP.md) and
+[WarBias workflow](WARBIAS_UNLEARNING.md). Training is disabled by default.
 
 | Method | Notebook |
 | --- | --- |
@@ -10,9 +9,13 @@ configures all six pinned models. Training is disabled by default.
 | NPO+KL | [npo_retention.ipynb](npo_retention.ipynb) |
 | BiasUnlearn-style | [biasunlearn.ipynb](biasunlearn.ipynb) |
 
-All three methods train on Ukrainian WarBias text. Ukrainian and English
-use the same item IDs and component splits for evaluation. The
-[configuration](../configs/unlearning/warbias_final.json) defines the methods
+Every notebook configures four separate training directions: IDP in Ukrainian,
+IDP in English, veteran in Ukrainian, and veteran in English. Each direction
+uses one group and one language. All six pinned models run independently from
+their base checkpoints. This gives 24 runs per method and 72 across the three
+methods. Evaluation covers both groups in Ukrainian and English.
+
+The [configuration](../configs/unlearning/warbias_final.json) defines the methods
 and training settings. The [model registry](../configs/unlearning/models.json)
 pins Qwen3 8B, Llama 3.1 8B Instruct, Gemma 3 12B IT, Lapa 12B Instruct,
 Mamay 12B v2 and Mamay 27B v2.

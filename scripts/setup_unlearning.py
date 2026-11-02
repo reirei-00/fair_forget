@@ -36,13 +36,19 @@ def checkpoint_available(path, expected_config):
 
 
 def data_available(protocol, directory):
-    if protocol == "warbias_final":
-        if not (directory / "training_binding.json").is_file():
-            return False
+    if protocol == "warbias_directions":
         sys.path.insert(0, str(ROOT / "src"))
         from fairforget.unlearning.warbias_data import validate_bundle
 
-        validate_bundle(directory, ROOT)
+        experiment = json.loads((CONFIGURATION / "warbias_final.json").read_text())
+        for group in experiment["training_groups"]:
+            for language in experiment["training_languages"]:
+                root = directory / f"{group}_{language}"
+                if not (root / "training_binding.json").is_file():
+                    return False
+                binding = validate_bundle(root, ROOT)
+                if binding["target_group"] != group or binding["training_language"] != language:
+                    raise ValueError("WarBias directory contains the wrong direction")
         return True
     methods = (
         ("rmu", "task_vector", "wga_kl") if protocol == "warbias" else ("npo_kl", "biasunlearn")
@@ -114,14 +120,26 @@ def main():
         if args.primary_data is not None:
             parser.error("--primary-data applies only to --legacy recipes")
         directory = (
-            (args.warbias_data or ROOT / "data/unlearning/warbias_final").expanduser().resolve()
+            (args.warbias_data or ROOT / "data/unlearning/warbias_directions")
+            .expanduser()
+            .resolve()
         )
         sys.path.insert(0, str(ROOT / "src"))
         from fairforget.unlearning.warbias_data import prepare
 
-        if not directory.exists():
-            prepare(ROOT, directory)
-        data_roots = {"warbias_final": directory}
+        experiment = json.loads((CONFIGURATION / "warbias_final.json").read_text())
+        for group in experiment["training_groups"]:
+            for language in experiment["training_languages"]:
+                root = directory / f"{group}_{language}"
+                if not root.exists():
+                    prepare(
+                        ROOT,
+                        root,
+                        target_group=group,
+                        training_language=language,
+                        **experiment["split"],
+                    )
+        data_roots = {"warbias_directions": directory}
     data = {name: data_available(name, directory) for name, directory in data_roots.items()}
     settings_path = CONFIGURATION / "local.json"
     previous = json.loads(settings_path.read_text()) if settings_path.exists() else {}
@@ -144,7 +162,7 @@ def main():
             indent=2,
         )
     )
-    print("Setup saved. Open a method notebook to train all six models.")
+    print("Setup saved. Each method notebook configures six models across four directions.")
     if not all(availability.values()):
         print("Use --download-models or point --models-root to the staged checkpoints.")
     if not all(data.values()):

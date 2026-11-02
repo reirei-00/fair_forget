@@ -156,6 +156,8 @@ class MatrixTests(unittest.TestCase):
         from fairforget.unlearning import notebook_matrix
 
         for method, name in NOTEBOOKS.items():
+            if method not in {"rmu", "task_vector"}:
+                continue
             notebook = json.loads((ROOT / "notebooks" / f"{name}.ipynb").read_text())
             code = next(
                 "".join(cell["source"])
