@@ -66,14 +66,12 @@ def test_dataset_notebook_default_execution_is_offline(name, monkeypatch):
     elif name == "02_model_selection":
         assert result["selection"]["candidate_id"] == "lapa12b"
         assert result["selection"]["strategy"] == "sequential"
-        assert result["coverage"]["ratings"] == 96
-        assert result["coverage"]["raters"] == 2
+        assert result["coverage"]["ratings"] == 144
+        assert result["coverage"]["raters"] == 3
         assert result["coverage"]["rated_items"] == 48
-        assert {row["strategy"] for row in result["highest_mean_conditions"]} == {
-            "sequential",
-            "zero_shot",
-        }
-        assert all(row["candidate_id"] == "lapa12b" for row in result["highest_mean_conditions"])
+        assert len(result["highest_mean_conditions"]) == 1
+        winner = result["highest_mean_conditions"][0]
+        assert (winner["candidate_id"], winner["strategy"]) == ("lapa12b", "sequential")
     elif name == "03_full_ukrainian_generation":
         assert result["matrix_rows"] == 1007 and result["planned_model_calls"] == 3021
         assert result["model_calls"] == 0
