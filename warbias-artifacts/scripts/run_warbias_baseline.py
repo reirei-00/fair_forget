@@ -1,8 +1,9 @@
-"""Qualify and collect a pinned model with the maintained Fair-UK CLI."""
+"""Qualify and collect a pinned model with the maintained the evaluation library CLI."""
 
 import argparse
 import fcntl
 import hashlib
+import importlib
 import importlib.metadata
 import json
 import math
@@ -115,7 +116,7 @@ def command(bundle, task, model_args, output, *, smoke):
     argv = [
         sys.executable,
         "-m",
-        "lm_eval.fair_uk",
+        os.environ.get("WARBIAS_EVALUATOR_MODULE", "lm_eval.benchmark"),
         "run",
         "--task",
         task,
@@ -160,7 +161,10 @@ def runtime(environment):
 
 
 def verify(directory, task, bundle, args, expected_identity, *, smoke):
-    from lm_eval.fair_uk.warbias.baseline import verify_baseline_run
+    namespace = os.environ.get("WARBIAS_EVALUATOR_MODULE", "lm_eval.benchmark")
+    verify_baseline_run = importlib.import_module(
+        f"{namespace}.warbias.baseline"
+    ).verify_baseline_run
 
     return verify_baseline_run(
         directory,
@@ -217,7 +221,8 @@ def main(argv=None):
         raise ValueError("Evaluation inputs must stay in the frozen release")
     if output.is_relative_to(release):
         raise ValueError("Results must stay outside the frozen release")
-    from lm_eval.fair_uk.provenance import code_identity
+    namespace = os.environ.get("WARBIAS_EVALUATOR_MODULE", "lm_eval.benchmark")
+    code_identity = importlib.import_module(f"{namespace}.provenance").code_identity
 
     spec = read(bundle)
     tasks = collection_tasks(spec)

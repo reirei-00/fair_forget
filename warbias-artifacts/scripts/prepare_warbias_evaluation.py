@@ -8,9 +8,9 @@ import shutil
 import tempfile
 from pathlib import Path
 
-from lm_eval.fair_uk import data
-from lm_eval.fair_uk.warbias.baseline import release_overview
-from lm_eval.fair_uk.warbias.rows import PROTOCOL, adapt_annotated
+from lm_eval.benchmark import data
+from lm_eval.benchmark.warbias.baseline import release_overview
+from lm_eval.benchmark.warbias.rows import PROTOCOL, adapt_annotated
 
 from warbias_kit.warbias.dataset import load_dataset
 from warbias_kit.warbias.dataset_metadata import (

@@ -126,8 +126,8 @@
   "source": {
     "application": {
       "repository": "the-project/warbias-annotate",
-      "revision": "8e529454546534eaf771ef19bf7de39235c76c5a",
-      "rubric_file": "docs/app.js"
+      "rubric_file": "docs/app.js",
+      "revision_sha256": "7eb116df89c88047f4f690c63bad65fc2bc1e179a0f4b0f97f219dfdd128d3ca"
     },
     "id": "human_severity_annotations",
     "selection": "Active severity reviews matched by case ID to the bound current taxonomy. Preserve recorded rubric versions and source stimuli.",

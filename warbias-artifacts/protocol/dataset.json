@@ -43,7 +43,7 @@
     },
     "severity_protocol": {
       "path": "protocol/severity.json",
-      "sha256": "7655828b3327c4801c2263d6b16ff22cf1f44dbfdba201dfa3b94109333d2779"
+      "sha256": "71a8a434b9f233500dc3c052a499a871bea2de0b113733a41b901dafa2a65b65"
     },
     "metadata_corrections": {
       "path": "protocol/dataset_metadata_corrections.json",
