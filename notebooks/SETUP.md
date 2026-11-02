@@ -33,7 +33,8 @@ to use staged checkpoints. Their layout is
 The setup saves local paths in the ignored `configs/unlearning/local.json`.
 Each notebook validates the source files, component splits and stream hashes.
 It creates missing direction bundles and does not replace existing bundles.
-See the [data rules](WARBIAS_UNLEARNING.md).
+Setup and training also verify the pinned model and tokenizer files.
+See the [data and checkpoint rules](WARBIAS_UNLEARNING.md).
 
 ## Run a method
 

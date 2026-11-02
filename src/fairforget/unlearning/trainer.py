@@ -1,12 +1,9 @@
-"""Local-checkpoint trainers for reviewed Ukrainian unlearning streams.
-
-The configuration is an explicit exploratory recipe, not a tuned paper result.
-Dataset curation, held-out native evaluation and qualification remain separate.
-"""
+"""Train source-bound unlearning recipes and verify their checkpoint exports."""
 
 from __future__ import annotations
 
 import argparse
+import gc
 import hashlib
 import json
 import math
@@ -19,6 +16,8 @@ from typing import Any
 import torch
 from torch import Tensor
 
+from . import export
+from .assets import file_hash, verify_checkpoint
 from .objectives import (
     biasunlearn_loss,
     completion_ce_loss,
@@ -28,16 +27,9 @@ from .objectives import (
     select_biasunlearn_direction,
     wga_kl_loss,
 )
+from .runtime import verify_runtime
 
 METHODS = {"wga_kl", "npo_kl", "task_vector", "biasunlearn"}
-
-
-def file_hash(path: Path | str) -> str:
-    digest = hashlib.sha256()
-    with Path(path).open("rb") as handle:
-        for chunk in iter(lambda: handle.read(8 * 1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def hash_tree(path: Path | str) -> list[dict[str, Any]]:
@@ -80,7 +72,7 @@ def read_jsonl_verified(spec: dict[str, Any], base_dir: Path) -> list[dict[str, 
     return rows
 
 
-def validate_config(config_path: Path | str, *, methods=None):
+def validate_config(config_path: Path | str, *, methods=None, checkpoint_cache=None):
     path = Path(config_path).resolve()
     config = json.loads(path.read_text())
     allowed = METHODS if methods is None else set(methods)
@@ -253,6 +245,8 @@ def validate_config(config_path: Path | str, *, methods=None):
             or lora["alpha"] <= 0
         ):
             raise ValueError("positive LoRA rank and alpha are required")
+    config["export_verification"] = export.settings(config.get("export_verification"))
+    checkpoint = verify_checkpoint(config, cache=checkpoint_cache)
     provenance = {
         "config_sha256": file_hash(path),
         "data_manifest": {"path": str(manifest_path), "sha256": file_hash(manifest_path)},
@@ -270,6 +264,7 @@ def validate_config(config_path: Path | str, *, methods=None):
         "data_review_kind": manifest.get("review_kind", "unspecified; not asserted human-reviewed"),
         "training_language": manifest["language"],
         "target_group": manifest.get("target_group"),
+        "checkpoint": checkpoint,
     }
     return config, streams, provenance
 
@@ -550,7 +545,205 @@ def _write_line(handle, value):
     handle.flush()
 
 
+def _optimize(model, tokenizer, streams, config, out, encoding):
+    training, method = config["training"], config["method"]
+    seed = training["seed"]
+    optimizer = torch.optim.AdamW(
+        [p for p in model.parameters() if p.requires_grad],
+        lr=training["learning_rate"],
+        weight_decay=0.0,
+    )
+    step, direction, exposure_totals = 0, "normal", {}
+    rng = random.Random(seed)
+    ordered_retain = retention_order(streams["retain"], seed)
+    bias_pools, bias_pool_receipt = None, None
+    if method == "biasunlearn":
+        bias_pools, bias_pool_receipt = build_biasunlearn_pools(
+            streams["forget"],
+            streams["correction"],
+            fraction=training["adversarial_fraction"],
+            seed=seed,
+        )
+    with (
+        (out / "losses.jsonl").open("w") as losses,
+        (out / "exposure.jsonl").open("w") as exposure,
+        (out / "controller.jsonl").open("w") as controllers,
+    ):
+        for epoch in range(training["epochs"]):
+            current_forget = list(streams["forget"])
+            current_correction = list(streams.get("correction", []))
+            if method == "biasunlearn":
+                current_forget = list(bias_pools[direction]["forget"])
+                current_correction = list(bias_pools[direction]["correction"])
+                _write_line(
+                    controllers,
+                    {
+                        "epoch": epoch,
+                        "direction": direction,
+                        "forget_pool_rows": len(current_forget),
+                        "correction_pool_rows": len(current_correction),
+                        **bias_pool_receipt,
+                    },
+                )
+            rng.shuffle(current_forget)
+            model.train()
+            for rows in _batches(current_forget, training["batch_size"]):
+                if step >= training["max_steps"]:
+                    break
+                fb = encode_batch(tokenizer, rows, **encoding)
+                rb = encode_batch(
+                    tokenizer, _cycle_rows(ordered_retain, step, len(rows)), **encoding
+                )
+                optimizer.zero_grad(set_to_none=True)
+                flogits = model(**fb.model_inputs(), use_cache=False).logits
+                flp = shifted_logps(flogits, fb.input_ids)
+                components, exposed = (
+                    {},
+                    [
+                        (
+                            "forget",
+                            fb,
+                            training["suppression_weight"] if method == "biasunlearn" else 1.0,
+                        )
+                    ],
+                )
+                if method == "task_vector":
+                    total = completion_ce_loss(
+                        flp, fb.completion_mask, reduction=training["acquisition_reduction"]
+                    )
+                    components["positive_acquisition_ce"] = float(total.detach())
+                    # Primary task-vector acquisition has no preservation gradient.
+                    exposed = [("positive_acquisition", fb, 1.0)]
+                else:
+                    rref = reference_forward(model, rb)
+                    rcur = model(**rb.model_inputs(), use_cache=False).logits
+                    kwargs = {
+                        "retain_weight": training["retain_weight"],
+                        "retain_reduction": training["retain_reduction"],
+                    }
+                    if method == "wga_kl":
+                        terms = wga_kl_loss(
+                            flp,
+                            fb.completion_mask,
+                            rcur[:, :-1],
+                            rref[:, :-1],
+                            rb.prediction_mask,
+                            alpha=training["wga_alpha"],
+                            **kwargs,
+                        )
+                        total = terms.total
+                        components.update(
+                            forget=float(terms.forget.detach()),
+                            preservation=float(terms.preservation.detach()),
+                        )
+                        weights = (training["wga_alpha"] * flp[fb.completion_mask].detach()).exp()
+                        components.update(
+                            wga_weight_mean=float(weights.mean()),
+                            wga_weight_min=float(weights.min()),
+                            wga_weight_max=float(weights.max()),
+                            wga_weight_zero_fraction=float((weights == 0).float().mean()),
+                        )
+                    else:
+                        fref = reference_forward(model, fb)
+                        reflp = shifted_logps(fref, fb.input_ids)
+                        if method == "npo_kl":
+                            terms = npo_kl_loss(
+                                flp,
+                                reflp,
+                                fb.completion_mask,
+                                rcur[:, :-1],
+                                rref[:, :-1],
+                                rb.prediction_mask,
+                                beta=training["npo_beta"],
+                                **kwargs,
+                            )
+                            total = terms.total
+                            components.update(
+                                forget=float(terms.forget.detach()),
+                                preservation=float(terms.preservation.detach()),
+                            )
+                        else:
+                            cb = encode_batch(
+                                tokenizer,
+                                _cycle_rows(current_correction, step, len(rows)),
+                                **encoding,
+                            )
+                            clp = shifted_logps(
+                                model(**cb.model_inputs(), use_cache=False).logits, cb.input_ids
+                            )
+                            terms = biasunlearn_loss(
+                                flp,
+                                reflp,
+                                fb.completion_mask,
+                                clp,
+                                cb.completion_mask,
+                                rcur[:, :-1],
+                                rref[:, :-1],
+                                rb.prediction_mask,
+                                beta=training["npo_beta"],
+                                suppression_weight=training["suppression_weight"],
+                                correction_weight=training["correction_weight"],
+                                preservation_weight=training["retain_weight"],
+                                correction_reduction=training["correction_reduction"],
+                                retain_reduction=training["retain_reduction"],
+                            )
+                            total = terms.total
+                            components.update(
+                                suppression=float(terms.suppression.detach()),
+                                correction=float(terms.correction.detach()),
+                                preservation=float(terms.preservation.detach()),
+                            )
+                            exposed.append(("correction", cb, training["correction_weight"]))
+                    exposed.append(("preservation", rb, training["retain_weight"]))
+                if not torch.isfinite(total):
+                    raise RuntimeError("non-finite training objective")
+                total.backward()
+                grad_norm = torch.nn.utils.clip_grad_norm_(
+                    [p for p in model.parameters() if p.requires_grad],
+                    training["max_grad_norm"],
+                    error_if_nonfinite=True,
+                )
+                optimizer.step()
+                for role, batch, weight in exposed:
+                    counts = record_exposures(
+                        exposure, step, role, batch, weight=weight, direction=direction
+                    )
+                    exposure_totals[role] = exposure_totals.get(role, 0) + counts["tokens"]
+                _write_line(
+                    losses,
+                    {
+                        "epoch": epoch,
+                        "step": step,
+                        "direction": direction,
+                        "total": float(total.detach()),
+                        "gradient_norm": float(grad_norm),
+                        **components,
+                    },
+                )
+                step += 1
+            if method == "biasunlearn":
+                development = evaluate_development(
+                    model, tokenizer, streams["development"], [], **encoding
+                )
+                next_direction = select_biasunlearn_direction(
+                    development["stereotype_preference_rate"], direction
+                )
+                _write_line(
+                    controllers,
+                    {
+                        "epoch_completed": epoch,
+                        "development": development,
+                        "next_direction": next_direction,
+                    },
+                )
+                direction = next_direction
+            if step >= training["max_steps"]:
+                break
+    return {"steps": step, "exposure_valid_tokens": exposure_totals}
+
+
 def run(config_path: Path | str, output: Path | str):
+    runtime = verify_runtime()
     config, streams, provenance = validate_config(config_path)
     if not torch.cuda.is_available():
         raise RuntimeError("training requires an allocated CUDA GPU; no CPU fallback")
@@ -581,6 +774,7 @@ def run(config_path: Path | str, output: Path | str):
         "study_stage": config.get("study_stage", "exploratory integration"),
         "general_utility_qualified": False,
         "retain_sampler": training["retain_sampler"],
+        "runtime": runtime,
     }
     write_json(out / "intervention.json", receipt)
     try:
@@ -650,11 +844,6 @@ def run(config_path: Path | str, output: Path | str):
             p.numel() for p in model.parameters() if p.requires_grad
         )
         receipt["total_parameters"] = sum(p.numel() for p in model.parameters())
-        optimizer = torch.optim.AdamW(
-            [p for p in model.parameters() if p.requires_grad],
-            lr=training["learning_rate"],
-            weight_decay=0.0,
-        )
         encoding = {
             "max_length": training["max_length"],
             "device": device,
@@ -664,200 +853,35 @@ def run(config_path: Path | str, output: Path | str):
         for role in ("forget", "retain", "correction", "retain_development"):
             for rows in _batches(streams.get(role, []), training["batch_size"]):
                 encode_batch(tokenizer, rows, **encoding)
+        policy = config["export_verification"]
+        probes = export.build_probes(streams, tokenizer, encode_batch, encoding, policy)
+        probe_manifest = export.manifest(probes)
+        compute_dtype = next(model.parameters()).dtype
+        with model.disable_adapter():
+            baseline_outputs = export.capture(model, probes)
+        initial_outputs = export.capture(model, probes)
+        initial_check = export.compare(
+            baseline_outputs,
+            initial_outputs,
+            baseline_outputs,
+            policy,
+            phase="zero_adapter",
+            dtype=compute_dtype,
+            check_effect=False,
+        )
+        effect_floor = max(policy["effect_atol"], 2 * initial_check["max_abs_error"])
+        receipt["export_verification"] = {
+            "policy": policy,
+            "probes": probe_manifest,
+            "zero_adapter": initial_check,
+            "effect_floor": effect_floor,
+        }
         receipt["development_before"] = evaluate_development(
             model, tokenizer, streams["development"], [], **encoding
         )
         receipt["status"] = "training"
         write_json(out / "intervention.json", receipt)
-        step, direction, exposure_totals = 0, "normal", {}
-        rng = random.Random(seed)
-        ordered_retain = retention_order(streams["retain"], seed)
-        bias_pools, bias_pool_receipt = None, None
-        if method == "biasunlearn":
-            bias_pools, bias_pool_receipt = build_biasunlearn_pools(
-                streams["forget"],
-                streams["correction"],
-                fraction=training["adversarial_fraction"],
-                seed=seed,
-            )
-        with (
-            (out / "losses.jsonl").open("w") as losses,
-            (out / "exposure.jsonl").open("w") as exposure,
-            (out / "controller.jsonl").open("w") as controllers,
-        ):
-            for epoch in range(training["epochs"]):
-                current_forget = list(streams["forget"])
-                current_correction = list(streams.get("correction", []))
-                if method == "biasunlearn":
-                    current_forget = list(bias_pools[direction]["forget"])
-                    current_correction = list(bias_pools[direction]["correction"])
-                    _write_line(
-                        controllers,
-                        {
-                            "epoch": epoch,
-                            "direction": direction,
-                            "forget_pool_rows": len(current_forget),
-                            "correction_pool_rows": len(current_correction),
-                            **bias_pool_receipt,
-                        },
-                    )
-                rng.shuffle(current_forget)
-                model.train()
-                for rows in _batches(current_forget, training["batch_size"]):
-                    if step >= training["max_steps"]:
-                        break
-                    fb = encode_batch(tokenizer, rows, **encoding)
-                    rb = encode_batch(
-                        tokenizer, _cycle_rows(ordered_retain, step, len(rows)), **encoding
-                    )
-                    optimizer.zero_grad(set_to_none=True)
-                    flogits = model(**fb.model_inputs(), use_cache=False).logits
-                    flp = shifted_logps(flogits, fb.input_ids)
-                    components, exposed = (
-                        {},
-                        [
-                            (
-                                "forget",
-                                fb,
-                                training["suppression_weight"] if method == "biasunlearn" else 1.0,
-                            )
-                        ],
-                    )
-                    if method == "task_vector":
-                        total = completion_ce_loss(
-                            flp, fb.completion_mask, reduction=training["acquisition_reduction"]
-                        )
-                        components["positive_acquisition_ce"] = float(total.detach())
-                        # Primary task-vector acquisition has no preservation gradient.
-                        exposed = [("positive_acquisition", fb, 1.0)]
-                    else:
-                        rref = reference_forward(model, rb)
-                        rcur = model(**rb.model_inputs(), use_cache=False).logits
-                        kwargs = {
-                            "retain_weight": training["retain_weight"],
-                            "retain_reduction": training["retain_reduction"],
-                        }
-                        if method == "wga_kl":
-                            terms = wga_kl_loss(
-                                flp,
-                                fb.completion_mask,
-                                rcur[:, :-1],
-                                rref[:, :-1],
-                                rb.prediction_mask,
-                                alpha=training["wga_alpha"],
-                                **kwargs,
-                            )
-                            total = terms.total
-                            components.update(
-                                forget=float(terms.forget.detach()),
-                                preservation=float(terms.preservation.detach()),
-                            )
-                            weights = (
-                                training["wga_alpha"] * flp[fb.completion_mask].detach()
-                            ).exp()
-                            components.update(
-                                wga_weight_mean=float(weights.mean()),
-                                wga_weight_min=float(weights.min()),
-                                wga_weight_max=float(weights.max()),
-                                wga_weight_zero_fraction=float((weights == 0).float().mean()),
-                            )
-                        else:
-                            fref = reference_forward(model, fb)
-                            reflp = shifted_logps(fref, fb.input_ids)
-                            if method == "npo_kl":
-                                terms = npo_kl_loss(
-                                    flp,
-                                    reflp,
-                                    fb.completion_mask,
-                                    rcur[:, :-1],
-                                    rref[:, :-1],
-                                    rb.prediction_mask,
-                                    beta=training["npo_beta"],
-                                    **kwargs,
-                                )
-                                total = terms.total
-                                components.update(
-                                    forget=float(terms.forget.detach()),
-                                    preservation=float(terms.preservation.detach()),
-                                )
-                            else:
-                                cb = encode_batch(
-                                    tokenizer,
-                                    _cycle_rows(current_correction, step, len(rows)),
-                                    **encoding,
-                                )
-                                clp = shifted_logps(
-                                    model(**cb.model_inputs(), use_cache=False).logits, cb.input_ids
-                                )
-                                terms = biasunlearn_loss(
-                                    flp,
-                                    reflp,
-                                    fb.completion_mask,
-                                    clp,
-                                    cb.completion_mask,
-                                    rcur[:, :-1],
-                                    rref[:, :-1],
-                                    rb.prediction_mask,
-                                    beta=training["npo_beta"],
-                                    suppression_weight=training["suppression_weight"],
-                                    correction_weight=training["correction_weight"],
-                                    preservation_weight=training["retain_weight"],
-                                    correction_reduction=training["correction_reduction"],
-                                    retain_reduction=training["retain_reduction"],
-                                )
-                                total = terms.total
-                                components.update(
-                                    suppression=float(terms.suppression.detach()),
-                                    correction=float(terms.correction.detach()),
-                                    preservation=float(terms.preservation.detach()),
-                                )
-                                exposed.append(("correction", cb, training["correction_weight"]))
-                        exposed.append(("preservation", rb, training["retain_weight"]))
-                    if not torch.isfinite(total):
-                        raise RuntimeError("non-finite training objective")
-                    total.backward()
-                    grad_norm = torch.nn.utils.clip_grad_norm_(
-                        [p for p in model.parameters() if p.requires_grad],
-                        training["max_grad_norm"],
-                        error_if_nonfinite=True,
-                    )
-                    optimizer.step()
-                    for role, batch, weight in exposed:
-                        counts = record_exposures(
-                            exposure, step, role, batch, weight=weight, direction=direction
-                        )
-                        exposure_totals[role] = exposure_totals.get(role, 0) + counts["tokens"]
-                    _write_line(
-                        losses,
-                        {
-                            "epoch": epoch,
-                            "step": step,
-                            "direction": direction,
-                            "total": float(total.detach()),
-                            "gradient_norm": float(grad_norm),
-                            **components,
-                        },
-                    )
-                    step += 1
-                if method == "biasunlearn":
-                    development = evaluate_development(
-                        model, tokenizer, streams["development"], [], **encoding
-                    )
-                    next_direction = select_biasunlearn_direction(
-                        development["stereotype_preference_rate"], direction
-                    )
-                    _write_line(
-                        controllers,
-                        {
-                            "epoch_completed": epoch,
-                            "development": development,
-                            "next_direction": next_direction,
-                        },
-                    )
-                    direction = next_direction
-                if step >= training["max_steps"]:
-                    break
-        receipt.update(steps=step, exposure_valid_tokens=exposure_totals)
+        receipt.update(_optimize(model, tokenizer, streams, config, out, encoding))
         if method == "task_vector":
             model.save_pretrained(out / "positive_adapter", safe_serialization=True)
             positive = _trainable_state(model)
@@ -900,8 +924,19 @@ def run(config_path: Path | str, output: Path | str):
         )
         receipt["status"] = "merging"
         write_json(out / "intervention.json", receipt)
-        del optimizer
+        model.zero_grad(set_to_none=True)
+        adapter_outputs = export.capture(model, probes)
         model = model.merge_and_unload(safe_merge=True)
+        merged_outputs = export.capture(model, probes)
+        receipt["export_verification"]["merged"] = export.compare(
+            adapter_outputs,
+            merged_outputs,
+            baseline_outputs,
+            policy,
+            phase="merged",
+            dtype=compute_dtype,
+            effect_floor=effect_floor,
+        )
         receipt["development_after_merge"] = evaluate_development(
             model, tokenizer, streams["development"], [], **encoding
         )
@@ -912,6 +947,40 @@ def run(config_path: Path | str, output: Path | str):
             out / "merged_checkpoint", safe_serialization=True, max_shard_size="4GB"
         )
         tokenizer.save_pretrained(out / "merged_checkpoint")
+        receipt["status"] = "verifying_reloaded_checkpoint"
+        write_json(out / "intervention.json", receipt)
+        del model
+        gc.collect()
+        torch.cuda.empty_cache()
+        tokenizer = AutoTokenizer.from_pretrained(
+            out / "merged_checkpoint", local_files_only=True, use_fast=True
+        )
+        reloaded_probes = export.build_probes(streams, tokenizer, encode_batch, encoding, policy)
+        if export.manifest(reloaded_probes) != probe_manifest:
+            raise export.ExportVerificationError(
+                {
+                    "phase": "reloaded_tokenizer",
+                    "passed": False,
+                    "reason": "saved tokenizer changed probe inputs",
+                }
+            )
+        model = model_class.from_pretrained(
+            out / "merged_checkpoint",
+            local_files_only=True,
+            torch_dtype=torch.bfloat16,
+            device_map={"": 0},
+            attn_implementation="sdpa",
+        )
+        reloaded_outputs = export.capture(model, reloaded_probes)
+        receipt["export_verification"]["reloaded"] = export.compare(
+            adapter_outputs,
+            reloaded_outputs,
+            baseline_outputs,
+            policy,
+            phase="reloaded",
+            dtype=compute_dtype,
+            effect_floor=effect_floor,
+        )
         receipt.update(
             status="trained_merged",
             finished_unix=time.time(),
@@ -923,8 +992,12 @@ def run(config_path: Path | str, output: Path | str):
         write_json(out / "intervention.json", receipt)
         return receipt
     except Exception as error:
+        if isinstance(error, export.ExportVerificationError):
+            receipt.setdefault("export_verification", {})["failure"] = error.report
         receipt.update(
-            status="failed",
+            status="failed_export_verification"
+            if isinstance(error, export.ExportVerificationError)
+            else "failed",
             error_type=type(error).__name__,
             error=str(error),
             finished_unix=time.time(),

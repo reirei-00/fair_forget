@@ -63,5 +63,20 @@
   ],
   "optional_methods": [
     "wga_kl"
-  ]
+  ],
+  "export_verification": {
+    "max_probe_families": 4,
+    "positions_per_probe": 3,
+    "effect_atol": 1e-06,
+    "tolerances": {
+      "bfloat16": {
+        "rtol": 0.016,
+        "atol": 1e-05
+      },
+      "float32": {
+        "rtol": 1.3e-06,
+        "atol": 1e-05
+      }
+    }
+  }
 }

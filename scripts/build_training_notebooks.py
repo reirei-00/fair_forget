@@ -126,11 +126,8 @@ for item in PLAN:
 print('Runs:', len(PLAN), '| Models: 6 | Method:', METHOD, '| Dataset: WarBias')
 """
 TRAIN = r"""if RUN_TRAINING:
-    from importlib.metadata import version
-    required_versions = {'torch': '2.9.1', 'transformers': '4.57.6', 'peft': '0.17.1', 'accelerate': '1.15.0'}
-    for package, expected in required_versions.items():
-        if version(package).split('+')[0] != expected:
-            raise RuntimeError(f'Use requirements-unlearning.txt: {package}=={expected} is required for full training.')
+    from fairforget.unlearning.runtime import verify_runtime
+    verify_runtime(require_cuda=False)
     if not torch.cuda.is_available() or torch.cuda.device_count() < max(item['required_gpus'] for item in PLAN):
         raise RuntimeError('Allocate one GPU with enough memory for the selected model.')
     # Validate all checkpoints and data before starting the first model.
@@ -175,6 +172,8 @@ The [baseline notebook](warbias_baseline.ipynb) provides the current per-checkpo
 - [Data binding](../src/fairforget/unlearning/warbias_data.py)
 - [Loss implementations](../src/fairforget/unlearning/objectives.py)
 - [Trainer](../src/fairforget/unlearning/trainer.py)
+
+Each run verifies the pinned model files and training runtime. It checks the merged and reloaded checkpoint on fixed development inputs before marking the export complete. See the [checkpoint rules](WARBIAS_UNLEARNING.md#checkpoint-verification).
 
 Each run saves a checkpoint, loss history and token-exposure log.
 """

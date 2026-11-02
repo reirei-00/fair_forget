@@ -12,6 +12,7 @@ from pathlib import Path
 from unittest import mock
 
 import torch
+from unlearning_fixtures import AssetCatalog
 
 from fairforget.unlearning import notebook_matrix, warbias_data
 from fairforget.unlearning.trainer import build_biasunlearn_pools, file_hash
@@ -33,6 +34,7 @@ class WarBiasPlanTests(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name).resolve()
+        self.assets = AssetCatalog(self)
         self.data = self.root / "directions"
         self.bindings = {
             (group, language): warbias_data.prepare(
@@ -61,6 +63,7 @@ class WarBiasPlanTests(unittest.TestCase):
             path = Path(item["recipe"]["model_path"])
             path.mkdir(parents=True, exist_ok=True)
             (path / "config.json").write_text(json.dumps({"software_fixture": item["model_alias"]}))
+            self.assets.stage(path, item["recipe"], item["model_alias"])
             item["config_sha256"] = file_hash(path / "config.json")
         return plan
 
@@ -163,6 +166,7 @@ class WarBiasPlanTests(unittest.TestCase):
             cached = self.root / "cache" / item["model_alias"] / "snapshot"
             cached.mkdir(parents=True)
             (cached / "config.json").write_text(json.dumps({"fixture": item["model_alias"]}))
+            self.assets.stage(cached, item["recipe"], item["model_alias"])
             planned.parent.mkdir(parents=True)
             planned.symlink_to(cached, target_is_directory=True)
             item["config_sha256"] = file_hash(cached / "config.json")

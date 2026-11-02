@@ -20,19 +20,21 @@ def digest(path):
     return value.hexdigest()
 
 
-def checkpoint_available(path, expected_config):
-    config = path / "config.json"
-    if not config.is_file():
-        return False
-    if digest(config) != expected_config:
-        raise ValueError(f"Checkpoint config does not match the pinned model: {path}")
-    index = path / "model.safetensors.index.json"
-    if index.is_file():
-        weights = set(json.loads(index.read_text())["weight_map"].values())
-        return bool(weights) and all(
-            (path / name).is_file() and (path / name).stat().st_size for name in weights
+def checkpoint_available(path, model):
+    from fairforget.unlearning.assets import verify_checkpoint
+
+    try:
+        verify_checkpoint(
+            {
+                "model_path": str(path),
+                "model_id": model["repository"],
+                "model_revision": model["revision"],
+                "tokenizer_revision": model["tokenizer_revision"],
+            }
         )
-    return any(item.stat().st_size for item in path.glob("*.safetensors"))
+    except FileNotFoundError:
+        return False
+    return True
 
 
 def data_available(protocol, directory):
@@ -70,6 +72,7 @@ def data_available(protocol, directory):
 
 
 def main():
+    sys.path.insert(0, str(ROOT / "src"))
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--models-root", type=Path, default=ROOT / "models")
     parser.add_argument("--warbias-data", type=Path)
@@ -105,7 +108,7 @@ def main():
                     "*.tiktoken",
                 ],
             )
-        availability[model["id"]] = checkpoint_available(destination, model["config_sha256"])
+        availability[model["id"]] = checkpoint_available(destination, model)
         print(model["id"], model["repository"], model["revision"], flush=True)
     if args.legacy:
         data_roots = {

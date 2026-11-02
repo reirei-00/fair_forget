@@ -122,6 +122,7 @@ def method_plan(
                 },
                 "lora": copy.deepcopy(experiment["lora"]),
                 "training": training,
+                "export_verification": copy.deepcopy(experiment["export_verification"]),
                 "notebook_matrix": {
                     "protocol": "warbias_final",
                     "model_alias": model["id"],
@@ -185,7 +186,11 @@ def validate_recipe(config, manifest_path):
     expected_training = _training_settings(
         experiment, config["method"], binding["streams"]["forget"]["rows"]
     )
-    if config["training"] != expected_training or config["lora"] != experiment["lora"]:
+    if (
+        config["training"] != expected_training
+        or config["lora"] != experiment["lora"]
+        or config.get("export_verification") != experiment["export_verification"]
+    ):
         raise ValueError("recipe settings differ from the final WarBias experiment")
     registry_path = repo / "configs/unlearning/models.json"
     model_registry = config["notebook_matrix"].get("model_registry", {})

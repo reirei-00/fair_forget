@@ -67,6 +67,22 @@ synthetic CPU step, and displays its 24-run plan. Full training starts only when
 `RUN_TRAINING=True`. A run ID combines model, group and training language, so
 each checkpoint, log and receipt has its own output directory.
 
+## Checkpoint verification
+
+CLI and notebook runs use the same checkpoint validator. It checks every pinned
+model and tokenizer asset against the [asset map](../evaluation/warbias_baseline/model_assets.json)
+and rejects missing, changed or unpinned loading files. The shared trainer
+enforces the package versions in `requirements-unlearning.txt` and records
+the actual package builds, CUDA version and GPU identity in its receipt.
+
+Before training, select fixed S, C and U probes from development components.
+Compare active-adapter logits with merged and reloaded checkpoint logits at
+the configured token positions. The [configuration](../configs/unlearning/warbias_final.json)
+sets dtype-specific tolerances. Reject changed tokenizer inputs, non-finite
+outputs, excessive drift or loss of the observed adapter effect. A failed
+check records `failed_export_verification`; only a verified reload records
+`trained_merged`. These checks verify checkpoint export, not mitigation quality.
+
 ## Evaluation
 
 Use the same held-out IDs before and after training. Keep scores separate by

@@ -117,6 +117,7 @@ def prepare_recipes(plan, output):
     if len(methods) != 1 or not methods <= METHODS:
         raise ValueError("one known method is required per notebook")
     with tempfile.TemporaryDirectory(prefix="fairforget-matrix-preflight-") as temporary:
+        checkpoint_cache = {}
         for item, run_id in zip(plan, run_ids, strict=True):
             recipe = item["recipe"]
             if (
@@ -135,7 +136,7 @@ def prepare_recipes(plan, output):
                 raise ValueError(f"staged model config differs: {item['model_alias']}")
             candidate = Path(temporary) / f"{run_id}.json"
             candidate.write_text(json.dumps(recipe, ensure_ascii=False, indent=2) + "\n")
-            validate_config(candidate, methods=methods)
+            validate_config(candidate, methods=methods, checkpoint_cache=checkpoint_cache)
     # Every direction has passed before the first trainer may start.
     output.mkdir(parents=True, exist_ok=False)
     prepared = output / "prepared_recipes"

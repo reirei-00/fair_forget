@@ -10,6 +10,7 @@ from pathlib import Path
 from unittest import mock
 
 import torch
+from unlearning_fixtures import AssetCatalog
 
 from fairforget.unlearning.notebook_matrix import METHODS, method_plan, prepare_recipes
 from fairforget.unlearning.trainer import file_hash
@@ -37,6 +38,7 @@ class MatrixTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
+        self.assets = AssetCatalog(self)
         self.data = self.root / "data"
         self.data.mkdir()
         train = {"id": "train", "family_id": "train", "prompt": "a ", "target": "b"}
@@ -76,6 +78,7 @@ class MatrixTests(unittest.TestCase):
             (model / "config.json").write_text(
                 json.dumps({"software_fixture": item["model_alias"]})
             )
+            self.assets.stage(model, recipe, item["model_alias"])
             item["config_sha256"] = file_hash(model / "config.json")
             recipe["data_manifest_sha256"] = file_hash(self.data / "training_binding.json")
             for stream in recipe["streams"].values():
