@@ -3,7 +3,7 @@
 The [notebook](../notebooks/warbias_baseline.ipynb) defines the metrics and analyzes
 saved runs through Fair-UK. [Saved tables and source bindings](../evaluation/warbias_baseline/results/manifest.json)
 support inspection without model inference. Use the companion Fair-UK source revision
-`2c1ef7034653a6d74399c3aaab7234f99b38a131` in the same environment:
+`69616a41475769c63192c8e3bbd93f788e2a4fef` in the same environment:
 
 ```sh
 python -m pip install -e '.[notebooks]'
@@ -57,6 +57,7 @@ The equivalent CLI command is:
 fair-uk-eval warbias baseline \
   --release "$WARBIAS_BASELINE_RELEASE" \
   --results "$WARBIAS_BASELINE_RESULTS" \
+  --qa-answer-policy abc_explicit_choice_v3 \
   --output ./baseline-summary
 ```
 
