@@ -12,39 +12,23 @@ from lm_eval.fair_uk import data
 from lm_eval.fair_uk.warbias.baseline import release_overview
 from lm_eval.fair_uk.warbias.rows import PROTOCOL, adapt_annotated
 
-REPOSITORY = "FairForget/WarBias"
-REVISION = "9363a1d1b6936ad3d37e52f9ce1e426d2a0573b0"
+from warbias_kit.warbias.dataset import load_dataset
+from warbias_kit.warbias.dataset_metadata import (
+    apply_metadata_corrections,
+    load_metadata_corrections,
+)
+
+REPOSITORY = "the-project/WarBias"
 ROOT = Path(__file__).resolve().parents[1]
 RESOURCES = ROOT / "evaluation/warbias_baseline"
-SOURCES = {
-    "triplets_uk": {
-        "filename": "data/uk/unassigned.jsonl",
-        "sha256": "61692dee0036584e7b27014a7e509f751dd372e046903c394c3cd686a1069cdb",
-    },
-    "triplets_en": {
-        "filename": "data/en/unassigned.jsonl",
-        "sha256": "6611322c7102161a8170bb8e6811b0244e0d6c1a8b5234f6dee0328ffaebc218",
-    },
-    "qa_uk": {
-        "filename": "data/eval_uk/unassigned.jsonl",
-        "sha256": "5645f1813a76fb738a36a5cd898f10fd29b6c26df95b6d029fcbfc804e46e0a2",
-    },
-    "qa_en": {
-        "filename": "data/eval_en/unassigned.jsonl",
-        "sha256": "6436190d503cfe97859ec9c3183901d292f0de01358887f18675f8f87f07a7f5",
-    },
-    "taxonomy": {
-        "filename": "taxonomy.csv",
-        "sha256": "117b39a77c2ea333bc6625908bf47a40f43e2b88c5cc1ba3465cc75957f514b8",
-    },
-    "item_sources": {
-        "filename": "metadata/item_sources.jsonl",
-        "sha256": "ded636f093a0f1f33827a5d1c1319eb464622f37f6cfd8913a009982e85ecc16",
-    },
-    "text_provenance": {
-        "filename": "metadata/text_provenance.jsonl",
-        "sha256": "eff4a46dec2db0cc49db9ee9380be4dbe783354ae9fdbccc023a0b5c9f5431ba",
-    },
+SOURCE_FIELDS = {
+    "triplets_uk": ("dataset", "uk"),
+    "triplets_en": ("dataset", "en"),
+    "qa_uk": ("qa", "uk"),
+    "qa_en": ("qa", "en"),
+    "taxonomy": ("dataset", "taxonomy"),
+    "item_sources": ("dataset", "item_sources"),
+    "text_provenance": ("dataset", "text_provenance"),
 }
 ROLES = ("stereotype", "counter_stereotype", "unrelated")
 
@@ -84,24 +68,39 @@ def write_rows(path, rows):
 
 
 def source_files(destination, source_dir):
+    source_dir = Path(source_dir).resolve()
+    protocols = {
+        name: read_json(source_dir / f"protocol/{name}.json") for name in ("dataset", "qa")
+    }
+    bindings = {
+        name: protocols[protocol]["files"][field]
+        for name, (protocol, field) in SOURCE_FIELDS.items()
+    }
+    for name in protocols:
+        path = source_dir / f"protocol/{name}.json"
+        bindings[f"{name}_protocol"] = {
+            "path": path.relative_to(source_dir).as_posix(),
+            "sha256": sha(path),
+        }
+    correction = protocols["dataset"]["files"].get("metadata_corrections")
+    if correction is not None:
+        bindings["metadata_corrections"] = correction
     records = {}
-    for name, spec in SOURCES.items():
-        if source_dir is None:
-            from huggingface_hub import hf_hub_download
-
-            source = Path(
-                hf_hub_download(
-                    REPOSITORY, spec["filename"], repo_type="dataset", revision=REVISION
-                )
-            )
-        else:
-            source = Path(source_dir) / spec["filename"]
-        if sha(source) != spec["sha256"]:
-            raise ValueError(f"Pinned source checksum differs: {spec['filename']}")
-        target = destination / "sources" / spec["filename"]
+    for name, binding in bindings.items():
+        relative = Path(binding["path"])
+        source = (source_dir / relative).resolve()
+        if relative.is_absolute() or not source.is_relative_to(source_dir):
+            raise ValueError("Evaluation inputs must stay within the source artifact")
+        if sha(source) != binding["sha256"]:
+            raise ValueError(f"Bound source checksum differs: {relative}")
+        target = destination / "sources" / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source, target)
-        records[name] = {**spec, "path": target.relative_to(destination).as_posix()}
+        records[name] = {
+            "filename": relative.as_posix(),
+            "sha256": binding["sha256"],
+            "path": target.relative_to(destination).as_posix(),
+        }
     return records
 
 
@@ -165,6 +164,7 @@ def adapted_inputs(inputs, sources, mapping):
 
 
 def dataset_manifest(inputs, adapted, sources, mapping_path):
+    revision = sources["dataset_protocol"]["sha256"]
     datasets = {}
     for kind, prefix in (("triplets", "warbias_triplets_annotated"), ("qa", "warbias")):
         uk_task, en_task = f"{prefix}_uk", f"{prefix}_en"
@@ -189,7 +189,7 @@ def dataset_manifest(inputs, adapted, sources, mapping_path):
             write_rows(path, adapted[task])
             datasets[task] = {
                 "repo": REPOSITORY,
-                "revision": REVISION,
+                "revision": revision,
                 "source_filename": sources[f"{kind}_{language}"]["filename"],
                 "source_sha256": sources[f"{kind}_{language}"]["sha256"],
                 "filename": path.relative_to(inputs).as_posix(),
@@ -208,7 +208,14 @@ def dataset_manifest(inputs, adapted, sources, mapping_path):
     return {
         "schema_version": 1,
         "datasets": datasets,
-        "source": {"repo": REPOSITORY, "revision": REVISION, "files": sources},
+        "source": {
+            "repo": REPOSITORY,
+            "revision": revision,
+            "revision_kind": "content_sha256",
+            "dataset_manifest_sha256": revision,
+            "qa_manifest_sha256": sources["qa_protocol"]["sha256"],
+            "files": sources,
+        },
         "profile_mapping_sha256": sha(mapping_path),
         "panel": {
             "role": "complete published release baseline",
@@ -226,8 +233,11 @@ def prepare(output, model_root, source_dir=None, *, resources=RESOURCES, model_r
     )
     if output.exists():
         raise ValueError("Use a new output directory")
+    source_dir = Path(source_dir or ROOT).resolve()
+    load_dataset(source_dir)
+    corrections = load_metadata_corrections(source_dir)
     mapping_path = Path(resources) / "profile_mapping.jsonl"
-    registry = read_json(model_registry or ROOT / "configs/unlearning/models.json")["models"]
+    registry = read_json(model_registry or Path(resources) / "models.json")["models"]
     assets = read_json(Path(resources) / "model_assets.json")["models"]
     if {row["id"] for row in registry} != set(assets):
         raise ValueError("Model registry and pinned asset maps differ")
@@ -235,9 +245,16 @@ def prepare(output, model_root, source_dir=None, *, resources=RESOURCES, model_r
     with tempfile.TemporaryDirectory(prefix=output.name + "-", dir=output.parent) as temporary:
         release = Path(temporary) / "release"
         inputs = release / "inputs"
-        sources = source_files(inputs, source_dir)
-        adapted, taxonomy = adapted_inputs(inputs, sources, read_rows(mapping_path))
+        sources = source_files(inputs, source_dir or ROOT)
+        mapping = apply_metadata_corrections(
+            read_rows(mapping_path), corrections, kind="evaluation_profile"
+        )
+        adapted, taxonomy = adapted_inputs(inputs, sources, mapping)
         manifest = dataset_manifest(inputs, adapted, sources, mapping_path)
+        if "metadata_corrections" in sources:
+            manifest["metadata_corrections"] = {
+                key: sources["metadata_corrections"][key] for key in ("path", "sha256")
+            }
         write_json(inputs / "manifest.json", manifest)
         severity = [
             {
@@ -252,8 +269,8 @@ def prepare(output, model_root, source_dir=None, *, resources=RESOURCES, model_r
         write_json(
             inputs / "severity/binding.json",
             {
-                "source_kind": "published_taxonomy",
-                "published_hf_revision": REVISION,
+                "source_kind": "artifact_taxonomy",
+                "dataset_manifest_sha256": sources["dataset_protocol"]["sha256"],
                 "taxonomy_sha256": sources["taxonomy"]["sha256"],
                 "case_scores_sha256": sha(scores),
                 "join": {"triplets": "case_id", "qa": "source_case_id", "sidecar": "case_id"},
@@ -291,7 +308,7 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--model-root", type=Path, required=True)
     parser.add_argument(
-        "--source-dir", type=Path, help="Local files from the pinned Hugging Face snapshot"
+        "--source-dir", type=Path, help="Source artifact directory (defaults to this artifact)"
     )
     args = parser.parse_args(argv)
     overview = prepare(args.output, args.model_root, args.source_dir)

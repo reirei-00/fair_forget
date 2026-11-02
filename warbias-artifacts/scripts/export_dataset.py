@@ -30,21 +30,26 @@ TREES = {
     "configs": {".json"},
     "protocol": {".json", ".jsonl", ".csv"},
     "notebooks": {".ipynb"},
+    "evaluation/warbias_baseline": {".json", ".jsonl", ".csv"},
     "tests/data_creation": {".py", ".json"},
     "tests/cli": {".py", ".json"},
 }
 FILES = (
     "README.md",
     "docs/warbias-construction.md",
+    "docs/evaluation.md",
     "pyproject.toml",
     "requirements.txt",
     "requirements-dev.txt",
     ".gitignore",
     "scripts/run_notebooks.py",
     "scripts/run_coverage.py",
+    "scripts/prepare_warbias_evaluation.py",
+    "scripts/run_warbias_baseline.py",
 )
 MACHINE_PATH = re.compile(
     r"/(?:Users|home|scratch)/[^\s\"']+|/p/(?:project|scratch)/[^\s\"']+"
+    r"|/e/(?:project|scratch)[0-9]*/[^\s\"']+"
     r"|/(?:(?:private)/)?(?:var)/folders/[^\s\"']+"
     r"|[A-Za-z]:(?:\\+|/)(?i:Users)(?:\\+|/)[^\s\"']+"
 )
@@ -71,6 +76,136 @@ PRIVATE_CONFIG_KEYS = {
     "credential_reference",
     "credentials_file",
 }
+
+
+_RESULT_TABLES = {
+    "scores.csv",
+    "evidence_gaps.csv",
+    "language_contrasts.csv",
+    "group_diagnostics.csv",
+    "availability.csv",
+}
+_REPRODUCTION_INPUTS = {
+    "protocol/dataset.json",
+    "protocol/qa.json",
+    "protocol/dataset_metadata_corrections.json",
+    "evaluation/warbias_baseline/profile_mapping.jsonl",
+    "evaluation/warbias_baseline/models.json",
+    "evaluation/warbias_baseline/model_assets.json",
+}
+
+
+def _result_binding(directory, relative, binding, *, require_size=False):
+    if not isinstance(relative, str) or not relative or "\\" in relative:
+        raise ValueError("Baseline result inputs require portable relative paths")
+    name = Path(relative)
+    path = (directory / name).resolve()
+    if (
+        name.is_absolute()
+        or not name.parts
+        or ".." in name.parts
+        or ":" in relative
+        or relative != name.as_posix()
+        or _runtime(name.parts)
+        or not path.is_relative_to(directory)
+        or not path.is_file()
+    ):
+        raise ValueError("Baseline result input must stay within its artifact")
+    if (
+        not isinstance(binding, dict)
+        or not isinstance(binding.get("sha256"), str)
+        or re.fullmatch(r"[0-9a-f]{64}", binding["sha256"]) is None
+        or _hash(path) != binding["sha256"]
+        or require_size
+        and (type(binding.get("bytes")) is not int or binding["bytes"] != path.stat().st_size)
+    ):
+        raise ValueError(f"Baseline result binding differs: {relative}")
+
+
+def _validate_baseline_results(directory):
+    results = directory / "evaluation/warbias_baseline/results"
+    if not results.exists() or not any(results.iterdir()):
+        return
+    manifest_path = results / "manifest.json"
+    if not manifest_path.is_file():
+        raise ValueError("Baseline results require their manifest")
+    manifest = json.loads(manifest_path.read_text())
+    if (
+        not isinstance(manifest, dict)
+        or type(manifest.get("schema_version")) is not int
+        or manifest["schema_version"] != 1
+        or manifest.get("kind") != "warbias_baseline_results"
+        or not isinstance(manifest.get("files"), dict)
+        or set(manifest["files"]) != _RESULT_TABLES
+        or {path.name for path in results.iterdir()} != _RESULT_TABLES | {"manifest.json"}
+    ):
+        raise ValueError("Baseline results require schema one and exactly five tables")
+    for name, binding in manifest["files"].items():
+        _result_binding(
+            directory, f"evaluation/warbias_baseline/results/{name}", binding, require_size=True
+        )
+    source = manifest.get("source") or {}
+    dataset_sha, qa_sha = (_hash(directory / f"protocol/{name}.json") for name in ("dataset", "qa"))
+    if (
+        not isinstance(source, dict)
+        or source.get("repo") != "the-project/WarBias"
+        or source.get("revision_kind") != "content_sha256"
+        or source.get("revision") != dataset_sha
+        or source.get("dataset_manifest_sha256") != dataset_sha
+        or source.get("qa_manifest_sha256") != qa_sha
+    ):
+        raise ValueError("Baseline results differ from the current dataset manifests")
+    protocols = {
+        name: json.loads((directory / f"protocol/{name}.json").read_text())
+        for name in ("dataset", "qa")
+    }
+    names = {
+        "triplets_uk": ("dataset", "uk"),
+        "triplets_en": ("dataset", "en"),
+        "qa_uk": ("qa", "uk"),
+        "qa_en": ("qa", "en"),
+        "taxonomy": ("dataset", "taxonomy"),
+        "item_sources": ("dataset", "item_sources"),
+        "text_provenance": ("dataset", "text_provenance"),
+        "metadata_corrections": ("dataset", "metadata_corrections"),
+    }
+    if any(
+        not isinstance(record, dict) or not isinstance(record.get("files"), dict)
+        for record in protocols.values()
+    ):
+        raise ValueError("Baseline results need valid dataset source bindings")
+    bindings = {
+        name: protocols[protocol]["files"].get(field) for name, (protocol, field) in names.items()
+    }
+    if any(
+        not isinstance(record, dict) or not isinstance(record.get("path"), str)
+        for record in bindings.values()
+    ):
+        raise ValueError("Baseline result source bindings are incomplete")
+    bindings.update(
+        {
+            f"{name}_protocol": {"path": f"protocol/{name}.json", "sha256": digest}
+            for name, digest in (("dataset", dataset_sha), ("qa", qa_sha))
+        }
+    )
+    files = source.get("files") or {}
+    if not isinstance(files, dict) or set(files) != set(bindings):
+        raise ValueError("Baseline result source bindings are incomplete")
+    for name, binding in bindings.items():
+        record = files[name]
+        if (
+            not isinstance(record, dict)
+            or record.get("filename") != binding["path"]
+            or record.get("path") != "sources/" + binding["path"]
+            or record.get("sha256") != binding["sha256"]
+        ):
+            raise ValueError("Baseline results differ from their protocol source bindings")
+        _result_binding(directory, binding["path"], binding)
+    reproduction = manifest.get("reproduction_inputs")
+    if not isinstance(reproduction, dict) or set(reproduction) != _REPRODUCTION_INPUTS:
+        raise ValueError("Baseline results require complete reproduction input bindings")
+    for relative, binding in reproduction.items():
+        _result_binding(directory, relative, binding, require_size=True)
 
 
 def _hash(path):
@@ -244,6 +379,7 @@ def verify(directory, *, check_imports=False):
         )
     for relative in actual:
         _validate_text(directory / relative, Path(relative))
+    _validate_baseline_results(directory)
     if check_imports:
         spec = importlib.util.find_spec("warbias_kit")
         actual_origin = Path(spec.origin).resolve() if spec and spec.origin else None
