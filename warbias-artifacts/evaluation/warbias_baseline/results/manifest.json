@@ -132,11 +132,11 @@
     "fair_uk/suite.py": "41359d6aa79b085af13a2268a73bc4ce90c6ecbfc4892363b92c0a56d3634981",
     "fair_uk/warbias/__init__.py": "48577a2647d656f09e3eea1491e35927385513a64f6d97fee40681f4128b75c9",
     "fair_uk/warbias/aggregate.py": "bc940183ed8f30b640531968c36406a8107d03fb26d3c7c13b044435205d7aac",
-    "fair_uk/warbias/baseline.py": "4869dd939d2f601003f67627c557b94f4b55f80d8044bd84ce6d766cfe9bd34d",
+    "fair_uk/warbias/baseline.py": "a18c2aa95185e3b199337bfcfc745c8211e9216692122440460393436dc7a8f5",
     "fair_uk/warbias/baseline_inputs.py": "2d022863bdc6d72f2ee5dcd1c3ef284ea7b56b1ccbaa04765059e727209b66fc",
     "fair_uk/warbias/baseline_metadata.py": "61247c2edada74fb19a986b35d24a634b380d6d988017e8997dace05560cd583",
     "fair_uk/warbias/baseline_replay.py": "597626b30d6a59043b5370914c4e96d6b55972ff1732c53a535df6292929fcb0",
-    "fair_uk/warbias/baseline_reporting.py": "18cb06b1412c8836a7e4ba0664976bdfa50f6e8a871a3ff7896d1fcba10cf331",
+    "fair_uk/warbias/baseline_reporting.py": "787f0d7fe327b375b6de212138e9d597c2b9e191c0ce5020d467ed2c302fa39b",
     "fair_uk/warbias/baseline_summary.py": "d8a23d20e93d0d91a6c963f0614576f546c3aa325675f8ea3e24b858db7a9380",
     "fair_uk/warbias/calibration.py": "130e3d289a0d96c2e2d696d34f53bc7f4d4b51bbd0dc856980b32ddf727bd2b1",
     "fair_uk/warbias/cli.py": "3af28f54fe62869f9b6c29a21c0e0d20827216c44daec640e0b3094155a22b12",
@@ -376,8 +376,8 @@
   ],
   "files": {
     "availability.csv": {
-      "sha256": "92710292cd1cad554ed6d7e26ab556f9a767f974264c9f11141a4bf37035b4b0",
-      "bytes": 1855
+      "sha256": "8963c7a82e0a71611e7b844cd211f1e3fdd4913e531483da47d03a8a40daf671",
+      "bytes": 1845
     },
     "evidence_gaps.csv": {
       "sha256": "94007dd214810186382986b96e944617fd9ad6d70d1fcd03e96ceb237969a9e6",
@@ -478,7 +478,7 @@
   },
   "primary_prior_normalised_ss": {
     "status": "unavailable",
-    "reason": "Final-text bilingual neutral controls have not been constructed and reviewed."
+    "reason": "Neutral-group control scores are not included in this baseline run."
   },
   "reproduction_inputs": {
     "protocol/dataset.json": {

@@ -1,5 +1,5 @@
 model,format,language,metric,status,reason,missing_tasks
-,triplets,,prior_normalised_ss,unavailable,Final-text bilingual neutral controls have not been constructed and reviewed.,
+,triplets,,prior_normalised_ss,unavailable,Neutral-group control scores are not included in this baseline run.,
 qwen3_8b,,,,complete,,
 qwen3_8b,qa,uk,gender_age_contrasts,unavailable,QA scenarios do not provide matched explicit gender and age profiles.,
 qwen3_8b,qa,en,gender_age_contrasts,unavailable,QA scenarios do not provide matched explicit gender and age profiles.,
