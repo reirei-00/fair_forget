@@ -51,6 +51,7 @@ def verify_training_export(item, *, cache=None):
     if (
         receipt.get("status") != "trained_merged"
         or receipt.get("steps", 0) < 1
+        or receipt.get("steps") != config["training"]["max_steps"]
         or receipt.get("config_sha256") != provenance["config_sha256"]
         or receipt.get("target_group") != item["target_group"]
         or receipt.get("language") != item["training_language"]

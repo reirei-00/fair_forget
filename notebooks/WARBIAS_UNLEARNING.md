@@ -64,6 +64,16 @@ within a direction and the same optimizer-step limit for that direction.
 BiasUnlearn builds expanded adversarial pools and can change their direction
 using development scores. Equal step limits do not imply equal token exposure.
 Each trainer records actual exposure.
+The limits are 150 updates for IDPs and 310 for veterans, equivalent to two
+passes over each original forget set. Expanded BiasUnlearn pools can leave the
+last pass incomplete.
+
+NPO uses mean token log-likelihood ratios, rather than sequence-sum ratios.
+BiasUnlearn adds counter-stereotype cross-entropy and reference KL. Its current
+controller uses the unweighted raw S-versus-C preference on development rows.
+The primary evaluation instead uses component weights and neutral-group controls.
+These are different decision criteria. Keep this adaptation distinct from an
+exact reproduction of the original methods.
 WGA+KL remains an [optional experiment](wga_kl.ipynb), outside the 40-run study.
 
 Every [notebook](README.md) prepares and validates the four bundles, runs a
@@ -92,8 +102,8 @@ Keep the exported tokenizer settings unchanged. Training can use masked EOS
 padding when the tokenizer has no padding token.
 These checks verify checkpoint export, not mitigation quality.
 
-Keep one final adapter per run and the pinned base model. Training uses a fixed
-two-epoch schedule and does not save intermediate checkpoints or select by test
+Keep one final adapter per run and the pinned base model. Training uses the fixed
+update budget and does not save intermediate checkpoints or select by test
 scores. Keep recipes, logs, export checks and all evaluation results.
 
 Rebuild a completed checkpoint, or recover a failed merge, without repeating training:

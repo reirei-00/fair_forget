@@ -110,11 +110,12 @@ class NativeEvaluationTests(unittest.TestCase):
             "model_revision": item["model"]["revision"],
             "tokenizer_revision": item["model"]["tokenizer_revision"],
             "notebook_matrix": {"model_alias": item["model"]["id"]},
+            "training": {"max_steps": 2},
         }
         receipt = {
             **config,
             "status": "trained_merged",
-            "steps": 1,
+            "steps": 2,
             "config_sha256": "0" * 64,
             "target_group": item["target_group"],
             "language": item["training_language"],
@@ -140,6 +141,8 @@ class NativeEvaluationTests(unittest.TestCase):
                 {"status": "failed_export_verification"},
                 {"export_verification": {}},
                 {"config_sha256": "changed"},
+                {"steps": 1},
+                {"steps": 3},
             ):
                 with self.subTest(change=change):
                     path.write_text(json.dumps({**receipt, **change}))

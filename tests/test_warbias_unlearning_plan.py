@@ -109,7 +109,7 @@ class WarBiasPlanTests(unittest.TestCase):
                 for key in ("method", "model_id", "model_revision", "tokenizer_revision")
             },
             "status": "trained_merged",
-            "steps": 1,
+            "steps": recipe["training"]["max_steps"],
             "target_group": item["target_group"],
             "language": item["training_language"],
             "config_sha256": file_hash(item["directory"] / "recipe.json"),
