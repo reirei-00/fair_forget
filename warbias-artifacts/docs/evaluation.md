@@ -77,12 +77,7 @@ writes its exports to `$WARBIAS_BASELINE_RESULTS/analysis`. To include controls,
 add `--neutral-release "$WARBIAS_BASELINE_NEUTRAL_RELEASE"` and
 `--neutral-results "$WARBIAS_BASELINE_NEUTRAL_RESULTS"`.
 
-WB-0926 restores its original PTSD text and currently-serving profile (WB-C082).
-WB-0928 keeps its mobility text and disability/short-service profile (WB-C058).
-The [restoration record](../protocol/history/ptsd_case_restoration.json) preserves
-both text versions and the fresh GPT-6 Astra English translation binding.
-Saved baseline scores use the earlier duplicate text for WB-0926. They remain
-historical results, with their changed source files preserved under
-`evaluation/warbias_baseline/source_snapshot/`. The `result_scope.json` record
-binds those files and the current release. Recollect WB-0926 in both languages
-before reporting updated triplet results. QA text and saved QA results are unchanged.
+
+Saved baseline tables are versioned by `source.git_revision` and the input hashes
+in their manifest. Use that source revision to reproduce the saved scores.
+The current dataset requires new inference for changed text.

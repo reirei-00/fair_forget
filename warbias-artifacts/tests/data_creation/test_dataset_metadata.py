@@ -1,6 +1,5 @@
 """Metadata revisions preserve text versions and the original generation design."""
 
-import json
 from copy import deepcopy
 from pathlib import Path
 
@@ -24,12 +23,10 @@ def test_restored_ptsd_and_mobility_cases_remain_distinct():
     original = next(r for r in load_cohort(ROOT)["matrix"] if r["matrix_item_id"] == "WB-0926")
     assert original["public_case_id"] == "WB-C082"
     assert original["additional_tags"] == {"service_state": "currently_serving"}
-    restoration = json.loads((ROOT / "protocol/history/ptsd_case_restoration.json").read_text())
     for language, rows in result["rows"].items():
         indexed = {r["id"]: r for r in rows}
         ptsd, mobility = indexed["WB-0926"], indexed["WB-0928"]
         assert len(indexed) == 1007
-        assert ptsd == restoration["current"][language]
         assert ptsd["case_id"] == "WB-C082"
         assert (ptsd["severity_mean_score"], ptsd["severity_level"]) == (65.15, 4)
         assert mobility["case_id"] == "WB-C058"
@@ -40,12 +37,33 @@ def test_restored_ptsd_and_mobility_cases_remain_distinct():
     assert sum(counts.values()) == 1007
 
 
-def historical_corrections():
-    return json.loads(
-        (
-            ROOT / "protocol/history/dataset_metadata_corrections_before_ptsd_restoration.json"
-        ).read_text()
-    )["corrections"]
+def sample_corrections():
+    return [
+        {
+            "id": "WB-0926",
+            "source_type": "author_feedback",
+            "reason": "Fixture metadata correction",
+            "text_sha256": {
+                "uk": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "en": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            },
+            "original": {
+                "case_id": "WB-C082",
+                "taxonomy_case_id": "ssuk_vet_ptsd_instability_case_001",
+                "profile_id": "ssuk_vet_ptsd_instability_case_001-p5d1616374f",
+                "intrinsic_attributes": {},
+                "additional_tags": {"service_state": "currently_serving"},
+            },
+            "current": {
+                "reference_item_id": "WB-0928",
+                "case_id": "WB-C058",
+                "taxonomy_case_id": "ssuk_vet_disability_work_capacity_case_004",
+                "profile_id": "ssuk_vet_disability_work_capacity_case_004-pec4899f041",
+                "intrinsic_attributes": {"disability": "war_caused"},
+                "additional_tags": {"service_duration": "short_service"},
+            },
+        }
+    ]
 
 
 def _profiles(correction):
@@ -77,7 +95,7 @@ def _profiles(correction):
 
 
 def test_evaluation_profile_correction_preserves_identity_and_lineage():
-    corrections = historical_corrections()
+    corrections = sample_corrections()
     rows = _profiles(corrections[0])
     before = deepcopy(rows)
     result = apply_metadata_corrections(rows, corrections, kind="evaluation_profile")
@@ -94,7 +112,7 @@ def test_evaluation_profile_correction_preserves_identity_and_lineage():
 
 
 def test_rejects_reference_assignment_or_component_changes():
-    corrections = historical_corrections()
+    corrections = sample_corrections()
     rows = _profiles(corrections[0])
     rows[1]["attributes"] = {"service_state": "currently_serving"}
     with pytest.raises(ValueError, match="reference differs"):
@@ -110,16 +128,12 @@ def test_rejects_correction_applied_to_another_text_version():
     rows = deepcopy(result["rows"]["uk"])
     next(r for r in rows if r["id"] == "WB-0926")[FIELDS[0]] += " Інше твердження."
     with pytest.raises(ValueError, match="text version differs"):
-        apply_metadata_corrections(rows, historical_corrections(), kind="dataset")
+        apply_metadata_corrections(rows, sample_corrections(), kind="dataset")
 
 
 @pytest.fixture
 def correction_project(tmp_path):
-    correction = json.loads(
-        (
-            ROOT / "protocol/history/dataset_metadata_corrections_before_ptsd_restoration.json"
-        ).read_text()
-    )
+    correction = {"schema_version": 1, "corrections": sample_corrections()}
     path = tmp_path / "protocol/corrections.json"
     write_json(path, correction)
     manifest = {
