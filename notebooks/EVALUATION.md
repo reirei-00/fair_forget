@@ -2,7 +2,9 @@
 
 The [notebook](evaluate_before_after.ipynb) uses the same collector and Fair-UK
 scorer as [baseline notebook 08](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb).
-It covers all 48 selected interventions and six shared base checkpoints.
+FairForget selects experiments and labels their before/after reports. Fair-UK
+evaluates the supplied WarBias benchmark inputs. This workflow covers all 48
+selected interventions and six shared base checkpoints.
 The [native benchmark workflow](native_before_after.ipynb) remains available
 with its [own setup](NATIVE_EVALUATION.md).
 
@@ -19,11 +21,11 @@ with its [own setup](NATIVE_EVALUATION.md).
 
 ## Environment and paths
 
-Use Fair-UK revision `dc28922fcb35dc4d373f7c2097dbeaf677171176`:
+Use Fair-UK revision `248f1aeb4fc986ad6ae183bf5bf97d9c6be1d995`:
 
 ```bash
 git clone https://github.com/reirei-00/fair-uk.git ../fair-uk
-git -C ../fair-uk checkout dc28922fcb35dc4d373f7c2097dbeaf677171176
+git -C ../fair-uk checkout 248f1aeb4fc986ad6ae183bf5bf97d9c6be1d995
 python -m pip install -e ../fair-uk
 ```
 

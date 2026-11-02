@@ -323,7 +323,6 @@ class WarBiasEvaluation:
             self.results,
             bootstrap=1000,
             seed=42,
-            phase="before",
             inference_release=self.inference_release,
             metadata_release=self.metadata_release,
             neutral_release=self.neutral_release,
@@ -331,6 +330,7 @@ class WarBiasEvaluation:
             qa_answer_policy=QA_POLICY,
             triplet_ids=self.cohort() if held_out else None,
         )
+        report["phase"] = "before"
         report["comparison_scope"] = self.comparison_scope()
         return report
 
@@ -345,7 +345,6 @@ class WarBiasEvaluation:
             models=[record["model"]],
             bootstrap=1000,
             seed=42,
-            phase="after",
             inference_release=self.post_inference_release,
             neutral_release=root / "neutral",
             neutral_results=self._results(item, "neutral"),
@@ -353,6 +352,7 @@ class WarBiasEvaluation:
             qa_answer_policy=QA_POLICY,
             triplet_ids=record["held_out_triplet_ids"] if held_out else None,
         )
+        report["phase"] = "after"
         report["intervention"] = {
             key: record[key]
             for key in ("method", "run_id", "target_group", "training_language", "training_export")

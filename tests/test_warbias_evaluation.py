@@ -180,10 +180,13 @@ class WarBiasEvaluationTests(unittest.TestCase):
             self.skipTest("Install the companion Fair-UK checkpoint API")
         self.workflow.prepare()
         item = self.workflow.plan[0]
-        with mock.patch.object(baseline, "analyze_checkpoints", return_value={}) as analyze:
-            self.workflow.analyze_after(item)
+        with mock.patch.object(
+            baseline, "analyze_checkpoints", autospec=True, side_effect=lambda *a, **kw: {}
+        ) as analyze:
+            report = self.workflow.analyze_after(item)
+            self.assertEqual(report["phase"], "after")
             kwargs = analyze.call_args.kwargs
-            self.assertEqual(kwargs["phase"], "after")
+            self.assertNotIn("phase", kwargs)
             self.assertEqual(kwargs["qa_answer_policy"], "abc_explicit_choice_v3")
             self.assertEqual((kwargs["bootstrap"], kwargs["seed"]), (1000, 42))
             self.assertEqual(kwargs["triplet_ids"], ["held"])
@@ -192,6 +195,11 @@ class WarBiasEvaluationTests(unittest.TestCase):
             )
             self.workflow.analyze_after(item, held_out=False)
             self.assertIsNone(analyze.call_args.kwargs["triplet_ids"])
+            with mock.patch.object(self.workflow, "comparison_scope", return_value={}):
+                report = self.workflow.analyze_before()
+            self.assertEqual(report["phase"], "before")
+            self.assertNotIn("phase", analyze.call_args.kwargs)
+            self.assertEqual(analyze.call_args.kwargs["triplet_ids"], ["held"])
 
     def test_policy_metrics_and_collection_settings_match_baseline_notebook_08(self):
         notebook = json.loads((ROOT / evaluation.BASELINE_NOTEBOOK).read_text())
