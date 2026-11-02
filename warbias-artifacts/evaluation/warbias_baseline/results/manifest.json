@@ -58,6 +58,38 @@
         "sha256": "1f94b70642faf37bd4f76b983583d2655f79627cf66f61ef9040a273bdd99ca7",
         "path": "sources/protocol/dataset_metadata_corrections.json"
       }
+    },
+    "git_revision": "ca74608bafe2e84d3cc34d76526f7e25113191e7",
+    "subdirectory": "warbias-artifacts",
+    "external_inputs": {
+      "data/uk.jsonl": {
+        "sha256": "849e15e3eb444313f0d2914d20e79550c3f6dcb8f572bd24308a2bbd40af8dd5",
+        "bytes": 798755
+      },
+      "data/en.jsonl": {
+        "sha256": "59b34443081b7e0e0df5e0c2c0e126ad238e5a1b2db91df153d9bfb29738cc8f",
+        "bytes": 604276
+      },
+      "protocol/inputs/dataset_item_sources.jsonl": {
+        "sha256": "300379f69fda3c849ea0164b873bf5fd6282ac8a168a09218135d560725083d0",
+        "bytes": 383647
+      },
+      "protocol/inputs/dataset_text_provenance.jsonl": {
+        "sha256": "eff4a46dec2db0cc49db9ee9380be4dbe783354ae9fdbccc023a0b5c9f5431ba",
+        "bytes": 394277
+      },
+      "protocol/dataset.json": {
+        "sha256": "6f83eed95341fbf3fe6e846f9dcbb148f6387bc166461bd6483824af7b427732",
+        "bytes": 5292
+      },
+      "protocol/dataset_metadata_corrections.json": {
+        "sha256": "1f94b70642faf37bd4f76b983583d2655f79627cf66f61ef9040a273bdd99ca7",
+        "bytes": 1145
+      },
+      "evaluation/warbias_baseline/neutral_controls.jsonl": {
+        "sha256": "d448327dbb3d835d2a090daefaa2bb242f5c44d6f44fe71e75e7bee1e01b8f7a",
+        "bytes": 2805109
+      }
     }
   },
   "inputs": {
