@@ -8,7 +8,7 @@ Use [evaluate_before_after.ipynb](evaluate_before_after.ipynb) for the shared
 Fair-UK evaluation workflow: collect the six baselines, evaluate the 30 post
 checkpoints and compare matched results. See the [evaluation setup](EVALUATION.md).
 
-Use [WarBias baseline notebook](../warbias-artifacts/notebooks/warbias_baseline.ipynb) for the final bilingual
+Use [WarBias baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb) for the final bilingual
 WarBias triplet and QA baselines, including severity slices. It imports the
 Fair-UK library. See the [WarBias evaluation guide](../warbias-artifacts/docs/evaluation.md).
 
