@@ -63,7 +63,7 @@ def merge_and_verify(model):
             raise ValueError("Export requires LoRA without adapter bias")
         weight = layer.base_layer.weight
         delta = (b.weight.float() @ a.weight.float()) * layer.scaling[adapter]
-        merged = (weight.float() + delta).to(weight.dtype)
+        merged = weight + delta.to(weight.dtype)
         expected[f"{name}.weight"] = _tensor_identity(merged)
         layers += 1
     if not layers:

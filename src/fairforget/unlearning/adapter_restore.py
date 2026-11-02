@@ -70,7 +70,7 @@ def restore(model, config, source, output):
     result = set_peft_model_state_dict(model, state)
     if result.unexpected_keys or any("lora_" in key for key in result.missing_keys):
         raise ValueError("Saved adapter tensors differ from the loaded model")
-    files = [receipt_path, source / "recipe.json", *adapter.iterdir()]
+    files = [receipt_path, source / "recipe.json", source / "provenance.json", *adapter.iterdir()]
     for name in ("losses.jsonl", "exposure.jsonl", "controller.jsonl"):
         path = source / name
         shutil.copyfile(path, output / name)

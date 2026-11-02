@@ -80,8 +80,9 @@ enforces the package versions in `requirements-unlearning.txt` and records
 the actual package builds, CUDA version and GPU identity in its receipt.
 
 Before training, select fixed S, C and U probes from development components.
-Verify every merged parameter against the independently computed LoRA update,
-rounded to the base dtype. Verify unchanged parameters too. Record the difference
+Round the LoRA update to the base dtype before addition, as in the pinned PEFT
+safe merge. Verify every resulting parameter and all unchanged parameters.
+Record the difference
 between adapter and rounded-merge outputs. Reject non-finite outputs or loss of
 the observed update. Compare reloaded logits with the verified merged logits at
 the same probe positions, using the dtype-specific tolerances in the

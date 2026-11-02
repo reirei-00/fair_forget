@@ -28,15 +28,26 @@ class ExportTests(unittest.TestCase):
 
         model, base = adapter()
         layer = base[0]
-        expected = (
-            layer.base_layer.weight.float()
-            + 2 * layer.lora_B["default"].weight @ layer.lora_A["default"].weight
-        ).bfloat16()
+        delta = 2 * layer.lora_B["default"].weight @ layer.lora_A["default"].weight
+        expected = layer.base_layer.weight + delta.bfloat16()
         unchanged = base[1].weight.detach().clone()
         merged, report = export.merge_and_verify(model)
         self.assertTrue(report["passed"])
         self.assertTrue(torch.equal(merged[0].weight, expected))
         self.assertTrue(torch.equal(merged[1].weight, unchanged))
+
+        model, base = adapter()
+        with torch.no_grad():
+            base[0].base_layer.weight.fill_(1.0)
+            base[0].lora_A["default"].weight.fill_(0.003907 / 2)
+            base[0].lora_B["default"].weight.fill_(1.0)
+        delta = 2 * base[0].lora_B["default"].weight @ base[0].lora_A["default"].weight
+        expected = base[0].base_layer.weight + delta.bfloat16()
+        single_round = (base[0].base_layer.weight.float() + delta).bfloat16()
+        self.assertFalse(torch.equal(expected, single_round))
+        merged, report = export.merge_and_verify(model)
+        self.assertTrue(report["passed"])
+        self.assertTrue(torch.equal(merged[0].weight, expected))
 
         for fault in ("drop_update", "change_other_weight"):
             model, base = adapter()
