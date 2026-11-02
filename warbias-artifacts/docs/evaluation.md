@@ -29,6 +29,18 @@ GPU collection requires vLLM 0.18.1 and the
 [pinned inference settings](../evaluation/warbias_baseline/model_assets.json).
 The notebook shows the `run_model.py` collection command.
 
+Prepare the separate neutral-group control tasks with the reviewed replacements:
+
+```sh
+python scripts/prepare_warbias_evaluation.py \
+  --output ./outputs/warbias-neutral-release \
+  --model-root /path/to/models \
+  --neutral evaluation/warbias_baseline/neutral_controls.jsonl
+```
+
+The adjacent `neutral_rules.json` binds each target-group replacement. These
+controls have assistant review. They are separate from the original dataset review.
+
 For existing runs, use their original release. If the analysis library changed,
 set `WARBIAS_BASELINE_INFERENCE_RELEASE` to the frozen collector snapshot.
 For corrected case/profile labels, prepare a separate release and set

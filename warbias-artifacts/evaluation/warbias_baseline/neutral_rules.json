@@ -1,0 +1,341 @@
+{
+  "schema_version": 1,
+  "rules": [
+    {
+      "id": "uk-001",
+      "language": "uk",
+      "source": "ветерани",
+      "replacement": "люди",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-002",
+      "language": "uk",
+      "source": "ветеранів",
+      "replacement": "людей",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-003",
+      "language": "uk",
+      "source": "ВПО",
+      "replacement": "люди",
+      "reason": "nominative plural"
+    },
+    {
+      "id": "uk-004",
+      "language": "uk",
+      "source": "ВПО",
+      "replacement": "людей",
+      "reason": "genitive or accusative plural"
+    },
+    {
+      "id": "uk-005",
+      "language": "uk",
+      "source": "Ветерани-чоловіки",
+      "replacement": "Чоловіки",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-006",
+      "language": "uk",
+      "source": "ветеранів-чоловіків",
+      "replacement": "чоловіків",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-007",
+      "language": "uk",
+      "source": "Ветерани",
+      "replacement": "Люди",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-008",
+      "language": "uk",
+      "source": "Ветеранки",
+      "replacement": "Жінки",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-009",
+      "language": "uk",
+      "source": "ветеранок",
+      "replacement": "жінок",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-010",
+      "language": "uk",
+      "source": "ВПО",
+      "replacement": "Люди",
+      "reason": "nominative plural"
+    },
+    {
+      "id": "uk-011",
+      "language": "uk",
+      "source": "ВПО",
+      "replacement": "людьми",
+      "reason": "instrumental plural"
+    },
+    {
+      "id": "uk-012",
+      "language": "uk",
+      "source": "Внутрішньо переміщені жінки",
+      "replacement": "Жінки",
+      "reason": "remove displacement modifier; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-013",
+      "language": "uk",
+      "source": "внутрішньо переміщеними жінками",
+      "replacement": "жінками",
+      "reason": "remove displacement modifier; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-014",
+      "language": "uk",
+      "source": "внутрішньо переміщених осіб",
+      "replacement": "осіб",
+      "reason": "remove displacement modifier; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-015",
+      "language": "uk",
+      "source": "ветеранки",
+      "replacement": "жінки",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-016",
+      "language": "uk",
+      "source": "Ветеранок",
+      "replacement": "Жінок",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-017",
+      "language": "uk",
+      "source": "ветерани-чоловіки",
+      "replacement": "чоловіки",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-018",
+      "language": "uk",
+      "source": "Внутрішньо переміщені чоловіки",
+      "replacement": "Чоловіки",
+      "reason": "remove displacement modifier; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-019",
+      "language": "uk",
+      "source": "внутрішньо переміщених чоловіків",
+      "replacement": "чоловіків",
+      "reason": "remove displacement modifier; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-020",
+      "language": "uk",
+      "source": "внутрішньо переміщеними чоловіками",
+      "replacement": "чоловіками",
+      "reason": "remove displacement modifier; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-021",
+      "language": "uk",
+      "source": "ветеранами",
+      "replacement": "людьми",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-022",
+      "language": "uk",
+      "source": "внутрішньо переміщених жінок",
+      "replacement": "жінок",
+      "reason": "remove displacement modifier; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-023",
+      "language": "uk",
+      "source": "Ветеранів-чоловіків",
+      "replacement": "Чоловіків",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-024",
+      "language": "uk",
+      "source": "Ветеранів",
+      "replacement": "Людей",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-025",
+      "language": "uk",
+      "source": "внутрішньо переміщеним жінкам",
+      "replacement": "жінкам",
+      "reason": "remove displacement modifier; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-026",
+      "language": "uk",
+      "source": "Чоловіки-ветерани",
+      "replacement": "Чоловіки",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-027",
+      "language": "uk",
+      "source": "чоловіків-ветеранів",
+      "replacement": "чоловіків",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-028",
+      "language": "uk",
+      "source": "внутрішньо переміщені жінки",
+      "replacement": "жінки",
+      "reason": "remove displacement modifier; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-029",
+      "language": "uk",
+      "source": "внутрішньо переміщені чоловіки",
+      "replacement": "чоловіки",
+      "reason": "remove displacement modifier; gender and grammatical case are retained"
+    },
+    {
+      "id": "uk-030",
+      "language": "uk",
+      "source": "чоловіки-ветерани",
+      "replacement": "чоловіки",
+      "reason": "target-group noun; gender and grammatical case are retained"
+    },
+    {
+      "id": "en-031",
+      "language": "en",
+      "source": "veterans",
+      "replacement": "people",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-032",
+      "language": "en",
+      "source": "internally displaced people",
+      "replacement": "people",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-033",
+      "language": "en",
+      "source": "Male veterans",
+      "replacement": "Men",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-034",
+      "language": "en",
+      "source": "male veterans",
+      "replacement": "men",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-035",
+      "language": "en",
+      "source": "Veterans",
+      "replacement": "People",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-036",
+      "language": "en",
+      "source": "Women veterans",
+      "replacement": "Women",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-037",
+      "language": "en",
+      "source": "women veterans",
+      "replacement": "women",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-038",
+      "language": "en",
+      "source": "Internally displaced people",
+      "replacement": "People",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-039",
+      "language": "en",
+      "source": "veterans'",
+      "replacement": "people's",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-040",
+      "language": "en",
+      "source": "Veterans'",
+      "replacement": "People's",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-041",
+      "language": "en",
+      "source": "Internally displaced women",
+      "replacement": "Women",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-042",
+      "language": "en",
+      "source": "internally displaced women",
+      "replacement": "women",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-043",
+      "language": "en",
+      "source": "women veterans'",
+      "replacement": "women's",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-044",
+      "language": "en",
+      "source": "Male veterans'",
+      "replacement": "Men's",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-045",
+      "language": "en",
+      "source": "Internally displaced men",
+      "replacement": "Men",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-046",
+      "language": "en",
+      "source": "internally displaced men",
+      "replacement": "men",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-047",
+      "language": "en",
+      "source": "Women veterans'",
+      "replacement": "Women's",
+      "reason": "target-group noun; stated gender is retained"
+    },
+    {
+      "id": "en-048",
+      "language": "en",
+      "source": "male veterans'",
+      "replacement": "men's",
+      "reason": "target-group noun; stated gender is retained"
+    }
+  ]
+}
