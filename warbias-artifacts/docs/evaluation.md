@@ -3,7 +3,7 @@
 The [notebook](../notebooks/warbias_baseline.ipynb) defines the metrics and analyzes
 saved runs through Fair-UK. [Saved tables and source bindings](../evaluation/warbias_baseline/results/manifest.json)
 support inspection without model inference. Use the companion Fair-UK source revision
-`f672d53e164fdb4bfe49498898ca62bb25c92701` in the same environment:
+`2c1ef7034653a6d74399c3aaab7234f99b38a131` in the same environment:
 
 ```sh
 python -m pip install -e '.[notebooks]'
