@@ -8,6 +8,10 @@ from jsonschema import Draft202012Validator
 
 from warbias_kit.io import file_digest, read_csv, read_rows, unique_index
 from warbias_kit.warbias.cohort import load_cohort
+from warbias_kit.warbias.dataset_metadata import (
+    apply_metadata_corrections,
+    load_metadata_corrections,
+)
 from warbias_kit.warbias.schema import FIELDS, structural_issues, text_digest
 from warbias_kit.warbias.severity import assign_taxonomy_severity, load_severity
 
@@ -27,7 +31,13 @@ _FILE_KEYS = {
 _SEVERITY_FIELDS = ("severity_mean_score", "severity_level")
 
 
-def _bound_files(project, bindings, required=_FILE_KEYS):
+def _bound_files(project, bindings, required=None):
+    if required is None:
+        required = _FILE_KEYS | (
+            {"metadata_corrections"}
+            if isinstance(bindings, dict) and "metadata_corrections" in bindings
+            else set()
+        )
     if not isinstance(bindings, dict) or set(bindings) != required:
         raise ValueError("Dataset manifest must bind every dataset input")
     paths = {}
@@ -105,7 +115,7 @@ def _validate_taxonomy(taxonomy, expected, sources):
     return cases
 
 
-def _validate_membership(rows, item_sources, taxonomy, cohort, additions):
+def _validate_membership(rows, item_sources, taxonomy, cohort, additions, corrections):
     if additions.get("schema_version") != 1 or not isinstance(additions.get("items"), list):
         raise ValueError("Dataset additions need schema version one and item records")
     original = unique_index(cohort["matrix"], "matrix_item_id")
@@ -118,6 +128,10 @@ def _validate_membership(rows, item_sources, taxonomy, cohort, additions):
     if taxonomy != cohort["taxonomy_catalog"]:
         raise ValueError("Dataset and generation taxonomy catalogs differ")
     cases = _validate_taxonomy(taxonomy, expected, cohort["sources"])
+    expected = unique_index(
+        apply_metadata_corrections(expected.values(), corrections, kind="cohort"),
+        "matrix_item_id",
+    )
     for identity, row in rows.items():
         selected, source = expected[identity], item_sources[identity]
         case = cases[selected["case_id"]]
@@ -152,6 +166,9 @@ def _validate_membership(rows, item_sources, taxonomy, cohort, additions):
             or _evidence_ids(case["evidence_ids"]) != _evidence_ids(source["evidence_ids"])
         ):
             raise ValueError(f"{identity}: taxonomy differs from its profile")
+    for corrected in apply_metadata_corrections(rows.values(), corrections, kind="dataset"):
+        if corrected != rows[corrected["id"]]:
+            raise ValueError(f"{corrected['id']}: released metadata differs from its correction")
     return original
 
 
@@ -306,12 +323,14 @@ def load_dataset(project):
     metadata["translation_protocol"] = json.loads(
         paths["translation_protocol"].read_text(encoding="utf-8")
     )
+    metadata["metadata_corrections"] = load_metadata_corrections(project)
     original = _validate_membership(
         indexes["uk"],
         _index(metadata["item_sources"], "item sources"),
         taxonomy,
         load_cohort(project),
         json.loads(paths["additions"].read_text(encoding="utf-8")),
+        metadata["metadata_corrections"],
     )
     _validate_text_bindings(project, indexes, metadata, original)
     severity = _validate_severity(project, indexes, taxonomy, paths["severity_protocol"])
@@ -338,8 +357,19 @@ def load_dataset(project):
     }
     if review != protocol.get("review"):
         raise ValueError("Dataset review summary differs from its text provenance")
-    if summary != protocol.get("counts"):
+    counts = protocol.get("counts", {})
+    if summary != {key: value for key, value in counts.items() if key != "triplets_by_case"}:
         raise ValueError("Dataset counts differ from the selected protocol")
+    if metadata["metadata_corrections"] or "triplets_by_case" in counts:
+        actual = Counter(row["case_id"] for row in rows["uk"])
+        expected = counts.get("triplets_by_case")
+        if (
+            not isinstance(expected, dict)
+            or any(type(value) is not int for value in expected.values())
+            or expected
+            != {case["public_case_id"]: actual[case["public_case_id"]] for case in taxonomy}
+        ):
+            raise ValueError("Released case counts differ from the current assignments")
     if severity != protocol.get("severity"):
         raise ValueError("Dataset severity coverage differs from its annotations")
     _validate_columns(rows, schema, protocol)
