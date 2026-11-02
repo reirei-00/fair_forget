@@ -1,4 +1,4 @@
-"""Export the WarBias subproject without copying the broader the-project repository."""
+"""Export the WarBias subproject as a standalone source package."""
 
 import argparse
 import hashlib
@@ -8,6 +8,7 @@ import os
 import re
 import shutil
 import tempfile
+from functools import lru_cache
 from pathlib import Path
 
 MANIFEST = "MANIFEST.sha256.json"
@@ -25,6 +26,7 @@ RUNTIME = {
 }
 TREES = {
     "src": {".py"},
+    "evaluator": {".py", ".json", ".yaml", ".yml", ".md", ".toml"},
     "data": {".jsonl", ".md"},
     "prompts": {".txt", ".md", ".json", ".yaml", ".yml"},
     "configs": {".json"},
@@ -53,6 +55,23 @@ MACHINE_PATH = re.compile(
     r"|/(?:(?:private)/)?(?:var)/folders/[^\s\"']+"
     r"|[A-Za-z]:(?:\\+|/)(?i:Users)(?:\\+|/)[^\s\"']+"
 )
+
+# Identity fingerprints keep private names out of the source release.
+IDENTITY_FINGERPRINTS = frozenset(
+    [
+        "1fe4fd7d2773e1216b181e68864b37b9561f0c678fbf7bb2d3275bc957764020",
+        "21dbd405b90d3e758ddf02e024936b33a5d78104a638aa6cfcd672a484aa8555",
+        "2491293c6233d08bfe96844f5ef93428f405fa512203d95e799c2b0174040ea8",
+        "2af4790633767cfd9795a26c950da9cd7eee552f223dd274e10f85624ea5b3df",
+        "43aeff6ee04c685cf1c4616bf45cdae38121632903a5b03cea2265f5d08862b9",
+        "69a3129f65ab1e1c9eae9229e84081ec246264f06885092ec117bacca85628ad",
+        "7eb116df89c88047f4f690c63bad65fc2bc1e179a0f4b0f97f219dfdd128d3ca",
+        "886536de306479b2907f6366fcdfac76495936658b8b1785be313ee5ba8e9c9b",
+        "a42c67a23fb9bdd667935da495fe3efc2ace4780bcc82c2643cb1f20733a1214",
+        "d6cc3865665978886b8a846bb10650d666d613ac1e68b894890bdc6e23619f4f",
+    ]
+)
+
 AUTHOR_METADATA = {
     "author",
     "authors",
@@ -152,7 +171,7 @@ def _validate_baseline_results(directory):
     for binding in current["files"].values():
         _result_binding(directory, binding["path"], binding)
     source = manifest.get("source") or {}
-    if "git_revision" in source:
+    if "external_inputs" in source:
         _validate_external_result_inputs(directory, manifest)
         return
     dataset_sha, qa_sha = (_hash(directory / f"protocol/{name}.json") for name in ("dataset", "qa"))
@@ -232,7 +251,7 @@ def _validate_baseline_results(directory):
 
 
 def _validate_external_result_inputs(directory, manifest):
-    """Validate saved tables whose source inputs are pinned to an earlier Git revision."""
+    """Validate saved tables against their source content bindings."""
     source = manifest["source"]
     external = source.get("external_inputs")
     reproduction = manifest.get("reproduction_inputs")
@@ -252,9 +271,10 @@ def _validate_external_result_inputs(directory, manifest):
         "qa_protocol",
     }
     if (
-        not isinstance(source.get("git_revision"), str)
-        or re.fullmatch(r"[0-9a-f]{40}", source["git_revision"]) is None
-        or source.get("subdirectory") != "warbias-artifacts"
+        source.get("snapshot_sha256")
+        != hashlib.sha256(
+            json.dumps(external, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest()
         or source.get("repo") != "the-project/WarBias"
         or source.get("revision_kind") != "content_sha256"
         or source.get("revision") != source.get("dataset_manifest_sha256")
@@ -333,8 +353,23 @@ def _credentials(value):
             _credentials(child)
 
 
+@lru_cache(maxsize=32768)
+def _identifying_token(token):
+    normalized = re.sub(r"[^a-z0-9]", "", token.lower())
+    return hashlib.sha256(normalized.encode()).hexdigest() in IDENTITY_FINGERPRINTS
+
+
 def _validate_text(path, relative):
     text = path.read_text(encoding="utf-8")
+    tokens = set(
+        re.findall(
+            r"(?<![A-Za-z0-9_-])[A-Za-z][A-Za-z0-9_-]{5,30}(?![A-Za-z0-9_-])"
+            r"|(?<![0-9a-f])[0-9a-f]{40}(?![0-9a-f])",
+            text,
+        )
+    )
+    if any(_identifying_token(token) for token in tokens):
+        raise ValueError(f"Identifying project reference in source file: {relative}")
     if MACHINE_PATH.search(text):
         raise ValueError(f"Machine-specific path in source file: {relative}")
     if relative.parts[0] == "configs" and path.suffix == ".json":
@@ -483,12 +518,20 @@ def verify(directory, *, check_imports=False):
         _validate_text(directory / relative, Path(relative))
     _validate_baseline_results(directory)
     if check_imports:
-        spec = importlib.util.find_spec("warbias_kit")
-        actual_origin = Path(spec.origin).resolve() if spec and spec.origin else None
-        if actual_origin != directory / "src/warbias_kit/__init__.py":
-            raise ValueError(
-                "warbias_kit must resolve to this export's src tree; install it editable in its own environment"
-            )
+        packages = {"warbias_kit": "src/warbias_kit/__init__.py"}
+        if (directory / "evaluator").is_dir():
+            packages["lm_eval.benchmark"] = "evaluator/src/lm_eval/benchmark/__init__.py"
+        for package, relative in packages.items():
+            try:
+                spec = importlib.util.find_spec(package)
+            except ModuleNotFoundError:
+                spec = None
+            actual_origin = Path(spec.origin).resolve() if spec and spec.origin else None
+            if actual_origin != directory / relative:
+                raise ValueError(
+                    f"{package} must resolve to this export's src tree; "
+                    "install it editable in its own environment"
+                )
     return len(actual)
 
 

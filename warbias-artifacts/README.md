@@ -65,12 +65,14 @@ exported package:
 
 ```sh
 python -m pip install -e '.[dev,notebooks]'
+python -m pip install -e ./evaluator
 warbias_kit doctor
 ```
 
 The package is `warbias_kit-warbias`; its Python namespace and command are
 `warbias_kit`. Add `generation` for local vLLM inference or `quality` for COMET.
-The package includes its data-release validator.
+The package includes its data-release validator. The `evaluator/` directory
+contains the local evaluation library; see the [evaluation guide](docs/evaluation.md).
 
 ## Walkthroughs
 
@@ -85,7 +87,7 @@ The package includes its data-release validator.
 | [7. QA sampling and reproduction](notebooks/07_qa_dataset.ipynb) | Rebuild all QA items, sample complete scenarios and export aligned language files |
 | [8. Baseline evaluation](notebooks/08_warbias_baseline.ipynb) | Six-model triplet and QA results with severity slices; [run guide](docs/evaluation.md) |
 
-Run construction notebooks 1–7 with a local Python kernel:
+Run all eight notebooks with a local Python kernel:
 
 ```sh
 python scripts/run_notebooks.py

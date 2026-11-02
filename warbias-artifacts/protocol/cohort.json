@@ -142,7 +142,7 @@
   },
   "reference": {
     "repository": "the-project/WarBias",
-    "revision": "164f355623c2da0028821e0942cad493558a6c13",
+    "revision": "b4917bfc7a0ac53057b71253e19a93525503a4c32e7414cacc0612ad9fe5ecbe",
     "ukrainian_sha256": "c253c3bc90b544ebed42901f1bf3c9eed63565191a278c64562e23bdc32c8c48",
     "english_sha256": "0b3c34a90e51f2c0827f4f0e2f8d5ce7b19ec1cab50bc4c5a5a12adb998c425a",
     "use": "Pinned reference for original item IDs and metadata. Current reviewed text is bound by protocol/dataset.json."

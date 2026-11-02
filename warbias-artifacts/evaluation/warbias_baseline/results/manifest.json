@@ -59,8 +59,6 @@
         "path": "sources/protocol/dataset_metadata_corrections.json"
       }
     },
-    "git_revision": "ca74608bafe2e84d3cc34d76526f7e25113191e7",
-    "subdirectory": "warbias-artifacts",
     "external_inputs": {
       "data/uk.jsonl": {
         "sha256": "849e15e3eb444313f0d2914d20e79550c3f6dcb8f572bd24308a2bbd40af8dd5",
@@ -90,7 +88,8 @@
         "sha256": "d448327dbb3d835d2a090daefaa2bb242f5c44d6f44fe71e75e7bee1e01b8f7a",
         "bytes": 2805109
       }
-    }
+    },
+    "snapshot_sha256": "c7e8a67eeabedb32474db59b1902f537261383ce3bdc1476c6827e7030d9b3e2"
   },
   "inputs": {
     "bundle_sha256": "09f900397ffca6372a73c1936c348c168dc1411b924a520fd0042a2b6736865c",
@@ -133,124 +132,6 @@
       "prior_normalised": "nats"
     }
   },
-  "analysis_code_identity": {
-    "fair_uk/__init__.py": "7126e701c64e4f6ac68ea2f49b3da62c7085023c1313a090de72e6b6eb1ed415",
-    "fair_uk/__main__.py": "c75d1506ae236b5fe2cf9afba434c906464faac6df7c543bacb1627d9e2738bb",
-    "fair_uk/answers.py": "c7f03ab1d1e92b7cde00850a4f97f8c153b78d6c47bff75c68f993dd94826064",
-    "fair_uk/api_runner.py": "491534dbb7481a8016dfa6a8bbae059011b5a149a76aac1aec03223b5af4b57d",
-    "fair_uk/assets.py": "186ae25d647338183f2557f07ebf7295e9dd21d5674e55c4304d6c5a574d1831",
-    "fair_uk/baseline_metrics.py": "b59e22434ae10ca2f40e6465b2ed052ddaa0f4dcf6bdce05180030263c2f1fe0",
-    "fair_uk/benign.py": "3036d8d6c7c5384d197858d4f19d598c781701111d2530a66454484f3417dc34",
-    "fair_uk/bilingual.py": "1a233559a09568bba3b39085c8c0676f8169be8fde30b2c03b158a0aa60eddaf",
-    "fair_uk/capabilities.py": "7fd1b514d2b9568bf0c76ca77463ec72e01b63b77c44f12a546c3d1a7b8f0712",
-    "fair_uk/comparison.py": "d7376cb7fc0cde532ab4f459abb3ddb86af1c8832cc93b555f1090c7009584e4",
-    "fair_uk/contracts.py": "bd0f425c79b0acfebbe9f60551b1cbc7f7ee4107113793bc4c3d92e4b7d07b94",
-    "fair_uk/credentials.py": "7b95765fd0c76302209531a1bdf3347a9960cdef57816dba91bd87aaa523449e",
-    "fair_uk/data.py": "d16ca25ae896f529f03d00b05d914cd02e15c75a280102dc7dafd4fd85724be4",
-    "fair_uk/evaluation_assets.py": "337aefbed326422267ed6c54c68f1854306dd3a8a8870df30c8fb40a9cbd0a4b",
-    "fair_uk/expansion.py": "5f3f294e30cab8b6682bb9413302c5fcb8b1b7c092d47541c09c7b9358eaf366",
-    "fair_uk/expansion_metrics.py": "11319c16b75e2c4d72fc821ed094d0f117274f23771e4a578c0f2199b5d9f8b6",
-    "fair_uk/gemini_runner.py": "8aed08f40f34a6d920dab99b691149d3572b10e0d2bca21f9427b5aead98778c",
-    "fair_uk/lineage.py": "40196bcbbebfda2652a3586d94f55bb8a625a4c9d90ed59dc601a817bc9ed869",
-    "fair_uk/metric_specs.py": "920adf0c8af3ec6219c98f2df9747f3df6bb601ece67206b97a9cfcae6021cb2",
-    "fair_uk/metrics.py": "85936490709f9d9ec20c35e6ad832b7775b0770a8886ce5d6277a2bf1f0c994f",
-    "fair_uk/openai_runner.py": "a80f78936a07ecb8fbe1768a42e66629a8789e2d9b44b6d15a01fe3fef6513d8",
-    "fair_uk/paired.py": "f61826e1dd08f0746a2a3b77888dafe5614d6f54140f592a1535ac0fc5182931",
-    "fair_uk/paper.py": "c7148e09be76e97b5539d0717a841714c04369452ce2ddb8e24075e08bf78a23",
-    "fair_uk/provenance.py": "af2896a587669785cfb6bf6cf7c835d95e1eba69e657e049353a443d0b04d505",
-    "fair_uk/releases.py": "9769320dec0b12be815de2a53d72c4b905b3e9b11a5224456718bef1441c90ad",
-    "fair_uk/reporting.py": "2c0c1ed202cb77f7ee1cfa30492ed22c5ffeee4b2bef35b6074ef84d2d86df45",
-    "fair_uk/runner.py": "3c4721a0345134197d6371c46e16ece21b10a9b4c163b4f44ad963d9bf18312d",
-    "fair_uk/runs.py": "d57acae2705338c6d726088d7faa96aff135739c7b56b74feb5ab56bcf81d807",
-    "fair_uk/suite.py": "41359d6aa79b085af13a2268a73bc4ce90c6ecbfc4892363b92c0a56d3634981",
-    "fair_uk/warbias/__init__.py": "48577a2647d656f09e3eea1491e35927385513a64f6d97fee40681f4128b75c9",
-    "fair_uk/warbias/aggregate.py": "bc940183ed8f30b640531968c36406a8107d03fb26d3c7c13b044435205d7aac",
-    "fair_uk/warbias/baseline.py": "8974447081ccb95449c0c6f4d43514e173a4f26a4393d45f5c89c82ec9859f97",
-    "fair_uk/warbias/baseline_answers.py": "0bdbf40a93ec4bf904babdc3c439f11cf72a669268947f45326d5ec812f204eb",
-    "fair_uk/warbias/baseline_inputs.py": "e4f60d48080a4a3107dc7f2cdbbb5d2ab9b399bde138bfb07eac981e6bc3d8ea",
-    "fair_uk/warbias/baseline_metadata.py": "61247c2edada74fb19a986b35d24a634b380d6d988017e8997dace05560cd583",
-    "fair_uk/warbias/baseline_neutral.py": "f49ff329087e48fa35ab7cd6982ec5337254c65a9302684aed3ad0bd1e3badf4",
-    "fair_uk/warbias/baseline_replay.py": "cd8fa808967ac881b3c1ab6a8dc0437138caa30200be732f9fae137ca0fd7d62",
-    "fair_uk/warbias/baseline_reporting.py": "e7c0147a194118830ac126d391fba18b1fb83ba317cacad3fbdd34a6684cc121",
-    "fair_uk/warbias/baseline_summary.py": "d98f896638a1f75b65978fa338dabbce9dda6e202d9dcbe1f9d48b5ef14e363f",
-    "fair_uk/warbias/calibration.py": "130e3d289a0d96c2e2d696d34f53bc7f4d4b51bbd0dc856980b32ddf727bd2b1",
-    "fair_uk/warbias/cli.py": "384d54880ad74629f486838b0ed79c78b5a01e971b8a933158395648a70f4f2f",
-    "fair_uk/warbias/detection.py": "138fa188c72f34809c1935b99fa54aaba84eed693a9c6d1254d8ddb319853952",
-    "fair_uk/warbias/files.py": "0249bc0964ea6b8ef5c45482acd2bfd6aa21cbc467aff3bf27fe6da7cadce1c4",
-    "fair_uk/warbias/intervention.py": "7d586c3c5c6845f9f8477ae73d3549f1dafa11ac1d42af8a4b4750dcb0fad83f",
-    "fair_uk/warbias/panel.py": "345bf6df6026de7986e20df8660e6a85670d558067ee5d06684f538542e3a55c",
-    "fair_uk/warbias/prepare.py": "d99720d12dfa67bc7949748db6bb7d88173eca69182947b7bdd83a8433e1e321",
-    "fair_uk/warbias/report_schema.py": "8e3cae2a7839af8c3fe077d17134dac71a51653b35ae25555251c56100cb5827",
-    "fair_uk/warbias/rows.py": "a1a88a5717cc98c6d696bbd4897aa359f60601cbe440b1afdd1b6cb1cc676f46",
-    "fair_uk/warbias/schema.py": "0a708762d14610821126956f567e9d8407b30004992286d984f21ea0f7d649f5",
-    "fair_uk/warbias/scoring.py": "2241466ac4be8e40164c925e5222e1bf73a3e7dc31497cb78709bdb530273d46",
-    "fair_uk/warbias/stats.py": "4f57553aaa619b4089dc28b52a1163e13a49b1dc478159633bf03c3c41920245",
-    "fair_uk/warbias/tables.py": "0a9c7e905bb68fe63ecdf421a3bb9b0603bf55b201a569906cc9bf393c8c646f",
-    "fair_uk/winopron.py": "2aba52b844bedd06d9597fc800d8752550fb320e668c621230d5c68126907827",
-    "fair_uk/datasets.json": "0705f1b2eff4d76855bb0628a7bbe6dc295f3cf6ddbff4b36ab37bb57f2fc239",
-    "api/model.py": "b8b1db336e168b53d9ca808fe837d5bf8943d9dca76a14cf747e4f3a22d50545",
-    "api/registry.py": "1236f1f3a2d22964788081e8984a1f95e8d04133090b06aae72ab97aca5541ef",
-    "utils.py": "2729d2dc6c822a0142707d9f81b92f5da85d962b58f760430bd362db8a1bb704",
-    "models/huggingface.py": "56d215b8f713d7579f9c7b58a9b8771b09c88e0e4fb8d1b6dd9068033b614b80",
-    "models/vllm_causallms.py": "a8552f4e522175f422ad2229813a8a725c0504ad7b8e758c504e3e09911e5c89"
-  },
-  "inference_code_identity": {
-    "fair_uk/__init__.py": "7126e701c64e4f6ac68ea2f49b3da62c7085023c1313a090de72e6b6eb1ed415",
-    "fair_uk/__main__.py": "c75d1506ae236b5fe2cf9afba434c906464faac6df7c543bacb1627d9e2738bb",
-    "fair_uk/answers.py": "c7f03ab1d1e92b7cde00850a4f97f8c153b78d6c47bff75c68f993dd94826064",
-    "fair_uk/api_runner.py": "491534dbb7481a8016dfa6a8bbae059011b5a149a76aac1aec03223b5af4b57d",
-    "fair_uk/assets.py": "186ae25d647338183f2557f07ebf7295e9dd21d5674e55c4304d6c5a574d1831",
-    "fair_uk/baseline_metrics.py": "b59e22434ae10ca2f40e6465b2ed052ddaa0f4dcf6bdce05180030263c2f1fe0",
-    "fair_uk/benign.py": "3036d8d6c7c5384d197858d4f19d598c781701111d2530a66454484f3417dc34",
-    "fair_uk/bilingual.py": "1a233559a09568bba3b39085c8c0676f8169be8fde30b2c03b158a0aa60eddaf",
-    "fair_uk/capabilities.py": "7fd1b514d2b9568bf0c76ca77463ec72e01b63b77c44f12a546c3d1a7b8f0712",
-    "fair_uk/comparison.py": "d7376cb7fc0cde532ab4f459abb3ddb86af1c8832cc93b555f1090c7009584e4",
-    "fair_uk/contracts.py": "bd0f425c79b0acfebbe9f60551b1cbc7f7ee4107113793bc4c3d92e4b7d07b94",
-    "fair_uk/credentials.py": "7b95765fd0c76302209531a1bdf3347a9960cdef57816dba91bd87aaa523449e",
-    "fair_uk/data.py": "d16ca25ae896f529f03d00b05d914cd02e15c75a280102dc7dafd4fd85724be4",
-    "fair_uk/evaluation_assets.py": "337aefbed326422267ed6c54c68f1854306dd3a8a8870df30c8fb40a9cbd0a4b",
-    "fair_uk/expansion.py": "5f3f294e30cab8b6682bb9413302c5fcb8b1b7c092d47541c09c7b9358eaf366",
-    "fair_uk/expansion_metrics.py": "11319c16b75e2c4d72fc821ed094d0f117274f23771e4a578c0f2199b5d9f8b6",
-    "fair_uk/gemini_runner.py": "8aed08f40f34a6d920dab99b691149d3572b10e0d2bca21f9427b5aead98778c",
-    "fair_uk/lineage.py": "40196bcbbebfda2652a3586d94f55bb8a625a4c9d90ed59dc601a817bc9ed869",
-    "fair_uk/metric_specs.py": "920adf0c8af3ec6219c98f2df9747f3df6bb601ece67206b97a9cfcae6021cb2",
-    "fair_uk/metrics.py": "85936490709f9d9ec20c35e6ad832b7775b0770a8886ce5d6277a2bf1f0c994f",
-    "fair_uk/openai_runner.py": "a80f78936a07ecb8fbe1768a42e66629a8789e2d9b44b6d15a01fe3fef6513d8",
-    "fair_uk/paired.py": "f61826e1dd08f0746a2a3b77888dafe5614d6f54140f592a1535ac0fc5182931",
-    "fair_uk/paper.py": "c7148e09be76e97b5539d0717a841714c04369452ce2ddb8e24075e08bf78a23",
-    "fair_uk/provenance.py": "af2896a587669785cfb6bf6cf7c835d95e1eba69e657e049353a443d0b04d505",
-    "fair_uk/releases.py": "9769320dec0b12be815de2a53d72c4b905b3e9b11a5224456718bef1441c90ad",
-    "fair_uk/reporting.py": "2c0c1ed202cb77f7ee1cfa30492ed22c5ffeee4b2bef35b6074ef84d2d86df45",
-    "fair_uk/runner.py": "3c4721a0345134197d6371c46e16ece21b10a9b4c163b4f44ad963d9bf18312d",
-    "fair_uk/runs.py": "d57acae2705338c6d726088d7faa96aff135739c7b56b74feb5ab56bcf81d807",
-    "fair_uk/suite.py": "c603d451f0ce4844b05745e35cb76ffff03030828861e1db57f5abd0c4c07423",
-    "fair_uk/warbias/__init__.py": "48577a2647d656f09e3eea1491e35927385513a64f6d97fee40681f4128b75c9",
-    "fair_uk/warbias/aggregate.py": "bc940183ed8f30b640531968c36406a8107d03fb26d3c7c13b044435205d7aac",
-    "fair_uk/warbias/baseline.py": "60d3873011dc42eac2af5cfbaebe4ae32dec532724b472c63e42896bb6b9aa7a",
-    "fair_uk/warbias/baseline_inputs.py": "a88e3346b75fbb0a0a0bfed57f1c4c8beeba8c83a14bb56c2af7bc585d18cb4f",
-    "fair_uk/warbias/baseline_reporting.py": "1d80d54f0b5be2c68185d21e23254158a894d3d6f403a6d76382f6e2524d3091",
-    "fair_uk/warbias/baseline_summary.py": "d8a23d20e93d0d91a6c963f0614576f546c3aa325675f8ea3e24b858db7a9380",
-    "fair_uk/warbias/calibration.py": "130e3d289a0d96c2e2d696d34f53bc7f4d4b51bbd0dc856980b32ddf727bd2b1",
-    "fair_uk/warbias/cli.py": "76229f21956ee55c24e80fd1578953048660e7ccaa96c5d924a7dc3185e26a68",
-    "fair_uk/warbias/detection.py": "138fa188c72f34809c1935b99fa54aaba84eed693a9c6d1254d8ddb319853952",
-    "fair_uk/warbias/files.py": "0249bc0964ea6b8ef5c45482acd2bfd6aa21cbc467aff3bf27fe6da7cadce1c4",
-    "fair_uk/warbias/intervention.py": "7d586c3c5c6845f9f8477ae73d3549f1dafa11ac1d42af8a4b4750dcb0fad83f",
-    "fair_uk/warbias/panel.py": "345bf6df6026de7986e20df8660e6a85670d558067ee5d06684f538542e3a55c",
-    "fair_uk/warbias/prepare.py": "d99720d12dfa67bc7949748db6bb7d88173eca69182947b7bdd83a8433e1e321",
-    "fair_uk/warbias/report_schema.py": "8e3cae2a7839af8c3fe077d17134dac71a51653b35ae25555251c56100cb5827",
-    "fair_uk/warbias/rows.py": "a1a88a5717cc98c6d696bbd4897aa359f60601cbe440b1afdd1b6cb1cc676f46",
-    "fair_uk/warbias/schema.py": "0a708762d14610821126956f567e9d8407b30004992286d984f21ea0f7d649f5",
-    "fair_uk/warbias/scoring.py": "2241466ac4be8e40164c925e5222e1bf73a3e7dc31497cb78709bdb530273d46",
-    "fair_uk/warbias/stats.py": "4f57553aaa619b4089dc28b52a1163e13a49b1dc478159633bf03c3c41920245",
-    "fair_uk/warbias/tables.py": "0a9c7e905bb68fe63ecdf421a3bb9b0603bf55b201a569906cc9bf393c8c646f",
-    "fair_uk/winopron.py": "2aba52b844bedd06d9597fc800d8752550fb320e668c621230d5c68126907827",
-    "fair_uk/datasets.json": "0705f1b2eff4d76855bb0628a7bbe6dc295f3cf6ddbff4b36ab37bb57f2fc239",
-    "api/model.py": "b8b1db336e168b53d9ca808fe837d5bf8943d9dca76a14cf747e4f3a22d50545",
-    "api/registry.py": "1236f1f3a2d22964788081e8984a1f95e8d04133090b06aae72ab97aca5541ef",
-    "utils.py": "2729d2dc6c822a0142707d9f81b92f5da85d962b58f760430bd362db8a1bb704",
-    "models/huggingface.py": "56d215b8f713d7579f9c7b58a9b8771b09c88e0e4fb8d1b6dd9068033b614b80",
-    "models/vllm_causallms.py": "a8552f4e522175f422ad2229813a8a725c0504ad7b8e758c504e3e09911e5c89"
-  },
   "models": [
     {
       "id": "qwen3_8b",
@@ -291,7 +172,7 @@
         "uk": {
           "native_policy": "abc_option_text_v2",
           "analysis_policy": "abc_explicit_choice_v3",
-          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
           "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
           "rows": 240,
           "native_method_counts": {
@@ -306,7 +187,7 @@
         "en": {
           "native_policy": "abc_option_text_v2",
           "analysis_policy": "abc_explicit_choice_v3",
-          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
           "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
           "rows": 240,
           "native_method_counts": {
@@ -391,7 +272,7 @@
         "uk": {
           "native_policy": "abc_option_text_v2",
           "analysis_policy": "abc_explicit_choice_v3",
-          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
           "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
           "rows": 240,
           "native_method_counts": {
@@ -436,7 +317,7 @@
         "en": {
           "native_policy": "abc_option_text_v2",
           "analysis_policy": "abc_explicit_choice_v3",
-          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
           "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
           "rows": 240,
           "native_method_counts": {
@@ -649,7 +530,7 @@
         "uk": {
           "native_policy": "abc_option_text_v2",
           "analysis_policy": "abc_explicit_choice_v3",
-          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
           "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
           "rows": 240,
           "native_method_counts": {
@@ -664,7 +545,7 @@
         "en": {
           "native_policy": "abc_option_text_v2",
           "analysis_policy": "abc_explicit_choice_v3",
-          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
           "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
           "rows": 240,
           "native_method_counts": {
@@ -717,7 +598,7 @@
         "uk": {
           "native_policy": "abc_option_text_v2",
           "analysis_policy": "abc_explicit_choice_v3",
-          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
           "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
           "rows": 240,
           "native_method_counts": {
@@ -734,7 +615,7 @@
         "en": {
           "native_policy": "abc_option_text_v2",
           "analysis_policy": "abc_explicit_choice_v3",
-          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
           "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
           "rows": 240,
           "native_method_counts": {
@@ -791,7 +672,7 @@
         "uk": {
           "native_policy": "abc_option_text_v2",
           "analysis_policy": "abc_explicit_choice_v3",
-          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
           "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
           "rows": 240,
           "native_method_counts": {
@@ -806,7 +687,7 @@
         "en": {
           "native_policy": "abc_option_text_v2",
           "analysis_policy": "abc_explicit_choice_v3",
-          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
           "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
           "rows": 240,
           "native_method_counts": {
@@ -859,7 +740,7 @@
         "uk": {
           "native_policy": "abc_option_text_v2",
           "analysis_policy": "abc_explicit_choice_v3",
-          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
           "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
           "rows": 240,
           "native_method_counts": {
@@ -874,7 +755,7 @@
         "en": {
           "native_policy": "abc_option_text_v2",
           "analysis_policy": "abc_explicit_choice_v3",
-          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
           "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
           "rows": 240,
           "native_method_counts": {
@@ -982,75 +863,17 @@
     "reviewer_type": "assistant"
   },
   "neutral_inference_source": {
-    "code_identity": {
-      "fair_uk/__init__.py": "7126e701c64e4f6ac68ea2f49b3da62c7085023c1313a090de72e6b6eb1ed415",
-      "fair_uk/__main__.py": "c75d1506ae236b5fe2cf9afba434c906464faac6df7c543bacb1627d9e2738bb",
-      "fair_uk/answers.py": "c7f03ab1d1e92b7cde00850a4f97f8c153b78d6c47bff75c68f993dd94826064",
-      "fair_uk/api_runner.py": "491534dbb7481a8016dfa6a8bbae059011b5a149a76aac1aec03223b5af4b57d",
-      "fair_uk/assets.py": "186ae25d647338183f2557f07ebf7295e9dd21d5674e55c4304d6c5a574d1831",
-      "fair_uk/baseline_metrics.py": "b59e22434ae10ca2f40e6465b2ed052ddaa0f4dcf6bdce05180030263c2f1fe0",
-      "fair_uk/benign.py": "3036d8d6c7c5384d197858d4f19d598c781701111d2530a66454484f3417dc34",
-      "fair_uk/bilingual.py": "1a233559a09568bba3b39085c8c0676f8169be8fde30b2c03b158a0aa60eddaf",
-      "fair_uk/capabilities.py": "7fd1b514d2b9568bf0c76ca77463ec72e01b63b77c44f12a546c3d1a7b8f0712",
-      "fair_uk/comparison.py": "d7376cb7fc0cde532ab4f459abb3ddb86af1c8832cc93b555f1090c7009584e4",
-      "fair_uk/contracts.py": "bd0f425c79b0acfebbe9f60551b1cbc7f7ee4107113793bc4c3d92e4b7d07b94",
-      "fair_uk/credentials.py": "7b95765fd0c76302209531a1bdf3347a9960cdef57816dba91bd87aaa523449e",
-      "fair_uk/data.py": "d16ca25ae896f529f03d00b05d914cd02e15c75a280102dc7dafd4fd85724be4",
-      "fair_uk/evaluation_assets.py": "337aefbed326422267ed6c54c68f1854306dd3a8a8870df30c8fb40a9cbd0a4b",
-      "fair_uk/expansion.py": "5f3f294e30cab8b6682bb9413302c5fcb8b1b7c092d47541c09c7b9358eaf366",
-      "fair_uk/expansion_metrics.py": "11319c16b75e2c4d72fc821ed094d0f117274f23771e4a578c0f2199b5d9f8b6",
-      "fair_uk/gemini_runner.py": "8aed08f40f34a6d920dab99b691149d3572b10e0d2bca21f9427b5aead98778c",
-      "fair_uk/lineage.py": "40196bcbbebfda2652a3586d94f55bb8a625a4c9d90ed59dc601a817bc9ed869",
-      "fair_uk/metric_specs.py": "920adf0c8af3ec6219c98f2df9747f3df6bb601ece67206b97a9cfcae6021cb2",
-      "fair_uk/metrics.py": "85936490709f9d9ec20c35e6ad832b7775b0770a8886ce5d6277a2bf1f0c994f",
-      "fair_uk/openai_runner.py": "a80f78936a07ecb8fbe1768a42e66629a8789e2d9b44b6d15a01fe3fef6513d8",
-      "fair_uk/paired.py": "f61826e1dd08f0746a2a3b77888dafe5614d6f54140f592a1535ac0fc5182931",
-      "fair_uk/paper.py": "c7148e09be76e97b5539d0717a841714c04369452ce2ddb8e24075e08bf78a23",
-      "fair_uk/provenance.py": "af2896a587669785cfb6bf6cf7c835d95e1eba69e657e049353a443d0b04d505",
-      "fair_uk/releases.py": "9769320dec0b12be815de2a53d72c4b905b3e9b11a5224456718bef1441c90ad",
-      "fair_uk/reporting.py": "2c0c1ed202cb77f7ee1cfa30492ed22c5ffeee4b2bef35b6074ef84d2d86df45",
-      "fair_uk/runner.py": "3c4721a0345134197d6371c46e16ece21b10a9b4c163b4f44ad963d9bf18312d",
-      "fair_uk/runs.py": "d57acae2705338c6d726088d7faa96aff135739c7b56b74feb5ab56bcf81d807",
-      "fair_uk/suite.py": "41359d6aa79b085af13a2268a73bc4ce90c6ecbfc4892363b92c0a56d3634981",
-      "fair_uk/warbias/__init__.py": "48577a2647d656f09e3eea1491e35927385513a64f6d97fee40681f4128b75c9",
-      "fair_uk/warbias/aggregate.py": "bc940183ed8f30b640531968c36406a8107d03fb26d3c7c13b044435205d7aac",
-      "fair_uk/warbias/baseline.py": "787d70ab75e21fb1b405f2585bf2adecf3de0926443a6adac874f280eccdf8d2",
-      "fair_uk/warbias/baseline_inputs.py": "e4f60d48080a4a3107dc7f2cdbbb5d2ab9b399bde138bfb07eac981e6bc3d8ea",
-      "fair_uk/warbias/baseline_metadata.py": "61247c2edada74fb19a986b35d24a634b380d6d988017e8997dace05560cd583",
-      "fair_uk/warbias/baseline_neutral.py": "f49ff329087e48fa35ab7cd6982ec5337254c65a9302684aed3ad0bd1e3badf4",
-      "fair_uk/warbias/baseline_replay.py": "f476cd5761d24976dc348d74819ebab4c0547ca280728336f6e5b9d7b621f0b5",
-      "fair_uk/warbias/baseline_reporting.py": "2f63901e5795f5fe2eb98e18c97b8816b546bf5f8de005eb9b0c0a8f55370483",
-      "fair_uk/warbias/baseline_summary.py": "d8a23d20e93d0d91a6c963f0614576f546c3aa325675f8ea3e24b858db7a9380",
-      "fair_uk/warbias/calibration.py": "130e3d289a0d96c2e2d696d34f53bc7f4d4b51bbd0dc856980b32ddf727bd2b1",
-      "fair_uk/warbias/cli.py": "9f541c77acd8cb382e4b799d90f949b76699bb72fd3b9e9de11f3c01cc4cf48a",
-      "fair_uk/warbias/detection.py": "138fa188c72f34809c1935b99fa54aaba84eed693a9c6d1254d8ddb319853952",
-      "fair_uk/warbias/files.py": "0249bc0964ea6b8ef5c45482acd2bfd6aa21cbc467aff3bf27fe6da7cadce1c4",
-      "fair_uk/warbias/intervention.py": "7d586c3c5c6845f9f8477ae73d3549f1dafa11ac1d42af8a4b4750dcb0fad83f",
-      "fair_uk/warbias/panel.py": "345bf6df6026de7986e20df8660e6a85670d558067ee5d06684f538542e3a55c",
-      "fair_uk/warbias/prepare.py": "d99720d12dfa67bc7949748db6bb7d88173eca69182947b7bdd83a8433e1e321",
-      "fair_uk/warbias/report_schema.py": "8e3cae2a7839af8c3fe077d17134dac71a51653b35ae25555251c56100cb5827",
-      "fair_uk/warbias/rows.py": "a1a88a5717cc98c6d696bbd4897aa359f60601cbe440b1afdd1b6cb1cc676f46",
-      "fair_uk/warbias/schema.py": "0a708762d14610821126956f567e9d8407b30004992286d984f21ea0f7d649f5",
-      "fair_uk/warbias/scoring.py": "2241466ac4be8e40164c925e5222e1bf73a3e7dc31497cb78709bdb530273d46",
-      "fair_uk/warbias/stats.py": "4f57553aaa619b4089dc28b52a1163e13a49b1dc478159633bf03c3c41920245",
-      "fair_uk/warbias/tables.py": "0a9c7e905bb68fe63ecdf421a3bb9b0603bf55b201a569906cc9bf393c8c646f",
-      "fair_uk/winopron.py": "2aba52b844bedd06d9597fc800d8752550fb320e668c621230d5c68126907827",
-      "fair_uk/datasets.json": "0705f1b2eff4d76855bb0628a7bbe6dc295f3cf6ddbff4b36ab37bb57f2fc239",
-      "api/model.py": "b8b1db336e168b53d9ca808fe837d5bf8943d9dca76a14cf747e4f3a22d50545",
-      "api/registry.py": "1236f1f3a2d22964788081e8984a1f95e8d04133090b06aae72ab97aca5541ef",
-      "utils.py": "2729d2dc6c822a0142707d9f81b92f5da85d962b58f760430bd362db8a1bb704",
-      "models/huggingface.py": "56d215b8f713d7579f9c7b58a9b8771b09c88e0e4fb8d1b6dd9068033b614b80",
-      "models/vllm_causallms.py": "a8552f4e522175f422ad2229813a8a725c0504ad7b8e758c504e3e09911e5c89"
-    },
     "checksums_sha256": "ddf8d5824607590428d698a2a860322c70eaf0d84c5356f051311a0d0dc81ad3",
     "release_metadata_sha256": "34bccaf1d04a6e106f170824f1b65c973410e5c73041f1f0e5a5f8eb791b39d1",
-    "evaluator_commit": "f672d53e164fdb4bfe49498898ca62bb25c92701",
-    "compatibility": "Identical inference and native scoring; analysis is versioned separately."
+    "compatibility": "Identical inference and native scoring; analysis is versioned separately.",
+    "code_identity_sha256": "65ac4f97b37a95e1ab93aa7d349feb0ef198f746584f9c839b51d30210067de5"
   },
   "qa_parsing": {
     "native_policy": "abc_option_text_v2",
     "analysis_policy": "abc_explicit_choice_v3",
-    "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+    "definition": "Accept the native ABC/exact-option forms, Answer:/\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
     "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case."
-  }
+  },
+  "analysis_code_identity_sha256": "366183e6b23fbdcf3f39b425cd31a41707a6085b420b4da4cd3635bbba054616",
+  "inference_code_identity_sha256": "0d845c3484887d7f31d3ace648ad7ab349779bf6fb4eb3c88dff9c1df69eba93"
 }

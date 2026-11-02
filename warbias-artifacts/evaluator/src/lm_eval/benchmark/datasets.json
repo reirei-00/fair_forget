@@ -1,0 +1,82 @@
+{
+  "bbq_uk": {
+    "repo": "the-project/BBQ-UK",
+    "revision": "de97272d7b1368d8fc9d347d71a004a0781d9336d8670ede5c6ed0d80e819c0f",
+    "filename": "data/test.csv",
+    "sha256": "de97272d7b1368d8fc9d347d71a004a0781d9336d8670ede5c6ed0d80e819c0f",
+    "rows": 58492,
+    "language": "uk",
+    "human_validated": false,
+    "revision_kind": "content_sha256"
+  },
+  "stereoset_uk": {
+    "repo": "the-project/StereoSet-UK-Eval",
+    "revision": "0fd16c79b88dd4d1384466b27b46e0b305aadf1a6086798da22c0e7c2f17d202",
+    "filename": "data/validation.csv",
+    "sha256": "0fd16c79b88dd4d1384466b27b46e0b305aadf1a6086798da22c0e7c2f17d202",
+    "rows": 949,
+    "language": "uk",
+    "human_validated": false,
+    "revision_kind": "content_sha256"
+  },
+  "winobias_uk_natural": {
+    "repo": "the-project/WinoBias-UK-Natural",
+    "revision": "2e2a638adbecd9f3cf84e961b6c2e4720fa941d13637fda06e328e65f2deab27",
+    "filename": "data/validation.csv",
+    "sha256": "2e2a638adbecd9f3cf84e961b6c2e4720fa941d13637fda06e328e65f2deab27",
+    "rows": 1674,
+    "language": "uk",
+    "human_validated": false,
+    "revision_kind": "content_sha256"
+  },
+  "winobias_uk_controlled": {
+    "repo": "the-project/WinoBias-UK-Controlled",
+    "revision": "1f4eed3b2e0984eaf2615640bdba910f2a241c5556de86439bddfadf3794cf45",
+    "filename": "data/test.csv",
+    "sha256": "1f4eed3b2e0984eaf2615640bdba910f2a241c5556de86439bddfadf3794cf45",
+    "rows": 1580,
+    "language": "uk",
+    "human_validated": false,
+    "revision_kind": "content_sha256"
+  },
+  "warbias_uk": {
+    "repo": "the-project/WarBias",
+    "revision": "c391f39287ac432df09d3c031ddbdba1037c27e1b94f2bef393c7a567fd0d293",
+    "filename": "data/eval_uk/unassigned.jsonl",
+    "sha256": "c391f39287ac432df09d3c031ddbdba1037c27e1b94f2bef393c7a567fd0d293",
+    "rows": 240,
+    "language": "uk",
+    "human_validated": false,
+    "revision_kind": "content_sha256"
+  },
+  "warbias_intersectional_uk": {
+    "repo": "the-project/WarBias",
+    "revision": "69b8362c52ca8d938f6cb3e86eed928dcc505c6f3092706cb96dc702accac5dc",
+    "filename": "data/eval_intersectional_uk/unassigned.jsonl",
+    "sha256": "69b8362c52ca8d938f6cb3e86eed928dcc505c6f3092706cb96dc702accac5dc",
+    "rows": 1320,
+    "language": "uk",
+    "human_validated": false,
+    "revision_kind": "content_sha256"
+  },
+  "warbias_en": {
+    "repo": "the-project/WarBias",
+    "revision": "1df421e0b5c0f7a72f71b217fe072fe294ae7a192e94e0b128584a620b19f41a",
+    "filename": "data/eval_en/unassigned.jsonl",
+    "sha256": "1df421e0b5c0f7a72f71b217fe072fe294ae7a192e94e0b128584a620b19f41a",
+    "rows": 240,
+    "language": "en",
+    "human_validated": false,
+    "revision_kind": "content_sha256"
+  },
+  "warbias_intersectional_en": {
+    "repo": "the-project/WarBias",
+    "revision": "9bd72fb7f8c48610266adb129f26987f8406e5c099190a2582740029a62d553a",
+    "filename": "data/eval_intersectional_en/unassigned.jsonl",
+    "sha256": "9bd72fb7f8c48610266adb129f26987f8406e5c099190a2582740029a62d553a",
+    "rows": 1320,
+    "language": "en",
+    "human_validated": false,
+    "revision_kind": "content_sha256"
+  }
+}

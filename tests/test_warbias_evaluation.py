@@ -104,6 +104,10 @@ class WarBiasEvaluationTests(unittest.TestCase):
             source["source"]["files"][f"triplets_{language}"]["sha256"] = "earlier-" + language
         selected.write_text(json.dumps(source))
         self.assertEqual(self.workflow.comparison_scope()["status"], "baseline_reference_snapshot")
+        saved.pop("git_revision")
+        saved["snapshot_sha256"] = "a" * 64
+        manifest.write_text(json.dumps({"source": saved}))
+        self.assertEqual(self.workflow.comparison_scope()["source_snapshot_sha256"], "a" * 64)
         source["source"]["files"]["triplets_uk"]["sha256"] = file_hash(artifact / "data/uk.jsonl")
         selected.write_text(json.dumps(source))
         with self.assertRaisesRegex(ValueError, "neither the current dataset"):
@@ -168,6 +172,7 @@ class WarBiasEvaluationTests(unittest.TestCase):
             command = call.args[0]
             self.assertEqual(command[-3:], ["--stage", "all", "--execute"])
             self.assertEqual(call.kwargs["env"]["PYTHONPATH"], str(source))
+            self.assertEqual(call.kwargs["env"]["WARBIAS_EVALUATOR_MODULE"], "lm_eval.fair_uk")
             self.assertEqual(
                 file_hash(Path(command[1])),
                 file_hash(ROOT / "warbias-artifacts/scripts/run_warbias_baseline.py"),

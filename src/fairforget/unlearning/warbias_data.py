@@ -17,7 +17,7 @@ TARGET_GROUPS = ("idp", "veteran")
 TRAINING_LANGUAGES = ("uk", "en")
 REPOSITORY = "FairForget/WarBias"
 TRIPLET_REVISION = "9363a1d1b6936ad3d37e52f9ce1e426d2a0573b0"
-SOURCE_COMMIT = "f3aee5b1b49c90ce622bd4a22676b3581fa5f5ba"
+SOURCE_COMMIT = "9a4c8d93264ca408a69c57bd943935a9d716b8d4"
 SOURCES = {
     "triplets_uk": {
         "path": "warbias-artifacts/data/uk.jsonl",
@@ -44,7 +44,7 @@ SOURCES = {
     "dataset_manifest": {
         "path": "warbias-artifacts/protocol/dataset.json",
         "format": "json",
-        "sha256": "2aafdd5b71fac4421644dfb0e8cee77319784a35de18665bc766a2f7ca0ba2d0",
+        "sha256": "f8771131e98751bd9d697510294f047046597a2f2b61e15561b2ca39f0d3357f",
     },
     "metadata_corrections": {
         "path": "warbias-artifacts/protocol/dataset_metadata_corrections.json",

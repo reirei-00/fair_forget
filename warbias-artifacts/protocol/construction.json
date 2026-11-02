@@ -118,7 +118,7 @@
   "dataset_reference": {
     "url": "https://huggingface.co/datasets/the-project/WarBias",
     "role": "reference",
-    "revision": "164f355623c2da0028821e0942cad493558a6c13",
+    "revision": "b4917bfc7a0ac53057b71253e19a93525503a4c32e7414cacc0612ad9fe5ecbe",
     "config": "configs/data/warbias-reference.json"
   },
   "generation_prompt_bundle": {

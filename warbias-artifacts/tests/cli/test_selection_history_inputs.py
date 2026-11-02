@@ -80,11 +80,13 @@ def test_selection_history_uses_the_saved_input_design():
         load_selection_history(ROOT, inputs)
 
 
-def test_selection_history_preserves_source_hashes_and_reference_links():
+def test_selection_history_preserves_source_content_bindings():
     result = load_selection_history(ROOT)
     source = result["sources"]["profile_exclusions"]
     assert source["repository"] == "the-project/WarBias"
     assert source["source_path"] == "metadata/profile_exclusions.json"
     assert source["exact_bytes"] is True
     assert file_digest(ROOT / source["path"]) == source["sha256"]
-    assert source["revision"] in source["source_url"]
+    reference = json.loads((ROOT / "configs/data/warbias-reference.json").read_text())
+    assert source["revision"] == reference["revision"]
+    assert "source_url" not in source

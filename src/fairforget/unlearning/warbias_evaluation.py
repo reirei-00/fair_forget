@@ -178,7 +178,11 @@ class WarBiasEvaluation:
         if all(reference):
             return {
                 "status": "baseline_reference_snapshot",
-                "source_git_revision": saved["git_revision"],
+                **(
+                    {"source_snapshot_sha256": saved["snapshot_sha256"]}
+                    if "snapshot_sha256" in saved
+                    else {"source_git_revision": saved["git_revision"]}
+                ),
                 "triplet_source_sha256": hashes,
             }
         raise ValueError(
@@ -285,7 +289,11 @@ class WarBiasEvaluation:
         )
         if not (source / "lm_eval/fair_uk/__main__.py").is_file():
             raise ValueError("Configure the baseline-compatible Fair-UK collection source")
-        environment.update(PYTHONPATH=str(source), PYTHONDONTWRITEBYTECODE="1")
+        environment.update(
+            PYTHONPATH=str(source),
+            PYTHONDONTWRITEBYTECODE="1",
+            WARBIAS_EVALUATOR_MODULE="lm_eval.fair_uk",
+        )
         for item, record in records:
             for kind in ("original", "neutral"):
                 release = self._destination(item) / kind

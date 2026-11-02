@@ -48,7 +48,7 @@
     },
     "source_reference": {
       "repository": "the-project/WarBias",
-      "revision": "164f355623c2da0028821e0942cad493558a6c13",
+      "revision": "b4917bfc7a0ac53057b71253e19a93525503a4c32e7414cacc0612ad9fe5ecbe",
       "role": "reference",
       "source_file": "data/uk/unassigned.jsonl",
       "source_file_sha256": "c253c3bc90b544ebed42901f1bf3c9eed63565191a278c64562e23bdc32c8c48"
@@ -88,7 +88,7 @@
     "snapshot_revision_verified": true,
     "strict_state_dict": false
   },
-  "plan_sha256": "89dfd2b67aea4e5a3ecbe386bc256c7563726d6e894c57811ddc076859345b55",
+  "plan_sha256": "adabe25182638ef8152ce42b9216462cbe8d95ba7e897ecda5ff0f46396e7c0e",
   "prediction_options": {
     "accelerator": "mps",
     "batch_size": 8,
@@ -96,7 +96,7 @@
     "num_workers": 1
   },
   "reference_free": true,
-  "result_sha256": "e77b94385438fee683b569b6bcf62c7584fbc37f1b42fdf1a70d71748c9d5c5d",
+  "result_sha256": "4ff96e3dfe24fc4646784ded8f9a47ad5408366c5dbfa2481648fab2492ca520",
   "schema_version": 1,
   "segments": [
     {

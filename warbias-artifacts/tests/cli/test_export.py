@@ -34,6 +34,9 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
     assert len(list((exported / "notebooks").glob("[0-9][0-9]_*.ipynb"))) == 8
     assert (exported / "notebooks/08_warbias_baseline.ipynb").is_file()
     for relative in (
+        "evaluator/pyproject.toml",
+        "evaluator/LICENSE.md",
+        "evaluator/src/lm_eval/benchmark/warbias/baseline.py",
         "docs/evaluation.md",
         "scripts/prepare_warbias_evaluation.py",
         "scripts/run_warbias_baseline.py",
@@ -106,7 +109,7 @@ def test_broader_repository_exports_only_its_warbias_child_without_changes(expor
     assert exporter.verify(result) > 50
 
 
-@pytest.mark.parametrize("main_namespace", ["fairforget", "warbias_kit"])
+@pytest.mark.parametrize("main_namespace", ["the-project", "warbias_kit"])
 def test_repository_prefers_general_artifacts_over_full_taxonomy_sibling(
     exported, tmp_path, main_namespace
 ):
@@ -263,7 +266,10 @@ def test_verifier_is_standalone_and_checks_import_origin(exported, tmp_path):
 
 
 def test_export_imports_and_cli_work_without_the_parent_working_directory(exported, tmp_path):
-    environment = {**os.environ, "PYTHONPATH": str(exported / "src")}
+    environment = {
+        **os.environ,
+        "PYTHONPATH": os.pathsep.join([str(exported / "src"), str(exported / "evaluator/src")]),
+    }
     checked = subprocess.run(
         [
             sys.executable,
@@ -453,6 +459,11 @@ def neutral_result_bindings(exported):
     path.write_text(json.dumps(manifest))
     for relative in exporter._NEUTRAL_INPUTS:
         manifest["source"]["external_inputs"].pop(relative, None)
+    manifest["source"]["snapshot_sha256"] = exporter.hashlib.sha256(
+        json.dumps(
+            manifest["source"]["external_inputs"], sort_keys=True, separators=(",", ":")
+        ).encode()
+    ).hexdigest()
     path.write_text(json.dumps(manifest))
     return exported, path, manifest
 
@@ -508,9 +519,17 @@ def test_export_rejects_invalid_external_source_bindings(exported, tmp_path, dam
     path = exported / "evaluation/warbias_baseline/results/manifest.json"
     manifest = json.loads(path.read_text())
     if damage == "revision":
-        manifest["source"]["git_revision"] = "main"
+        manifest["source"]["snapshot_sha256"] = "0" * 64
     else:
         manifest["source"]["external_inputs"]["data/uk.jsonl"]["sha256"] = "0" * 64
     path.write_text(json.dumps(manifest))
     with pytest.raises(ValueError, match="Baseline result"):
+        exporter.export(exported, tmp_path / "rejected")
+
+
+def test_export_rejects_identifying_dependency_references(exported, tmp_path):
+    path = exported / "docs/evaluation.md"
+    token = bytes.fromhex("666169725f756b").decode()
+    path.write_text(path.read_text() + "\nimport " + token + "\n")
+    with pytest.raises(ValueError, match="Identifying project reference"):
         exporter.export(exported, tmp_path / "rejected")

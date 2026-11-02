@@ -48,7 +48,7 @@
     },
     "source_reference": {
       "repository": "the-project/WarBias",
-      "revision": "164f355623c2da0028821e0942cad493558a6c13",
+      "revision": "b4917bfc7a0ac53057b71253e19a93525503a4c32e7414cacc0612ad9fe5ecbe",
       "role": "reference",
       "source_file": "data/uk/unassigned.jsonl",
       "source_file_sha256": "c253c3bc90b544ebed42901f1bf3c9eed63565191a278c64562e23bdc32c8c48"
@@ -75,8 +75,8 @@
   "metadata_correction": {
     "kind": "translator_model_identity",
     "original_file": "translation_sample_quality.json",
-    "original_file_sha256": "c0f0b138a7a8e473045d46a7d367d3f0fd69b9aabf743900b6576841baf7a7b9",
-    "original_result_sha256": "e77b94385438fee683b569b6bcf62c7584fbc37f1b42fdf1a70d71748c9d5c5d",
+    "original_file_sha256": "b820c77ee1e2baeb9ffda0f8fd8068d75e985f964dac8d31212291399e2e9fea",
+    "original_result_sha256": "4ff96e3dfe24fc4646784ded8f9a47ad5408366c5dbfa2481648fab2492ca520",
     "scores_reused_without_inference": true
   },
   "metric": "COMET",
@@ -97,7 +97,7 @@
     "snapshot_revision_verified": true,
     "strict_state_dict": false
   },
-  "plan_sha256": "0eca36edc01c7fb104a404b66f1b4d37d1ab5d3844b341590facb89240a11a71",
+  "plan_sha256": "a3f28f8bd13cf0b5944ae271baa614472f874f9ba74c07783af4c0f0de818d32",
   "prediction_options": {
     "accelerator": "mps",
     "batch_size": 8,
@@ -105,7 +105,7 @@
     "num_workers": 1
   },
   "reference_free": true,
-  "result_sha256": "5c9e9c6a1eea003fb305c388523eafa10d5d44fade10df09079fe080c41be83c",
+  "result_sha256": "2d4541d1613ac9ed67f7a72337e6b15da89fa1d534baa51a7958c6a79181058e",
   "schema_version": 1,
   "segments": [
     {

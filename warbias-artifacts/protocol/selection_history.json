@@ -28,19 +28,16 @@
       "sha256": "b0099f2df352e108c834967fdc3bc289e585195febe968211c1193bfa1987cb2",
       "exact_bytes": true,
       "repository": "the-project/WarBias",
-      "revision": "164f355623c2da0028821e0942cad493558a6c13",
+      "revision": "b4917bfc7a0ac53057b71253e19a93525503a4c32e7414cacc0612ad9fe5ecbe",
       "source_path": "metadata/profile_exclusions.json",
-      "source_url": "https://huggingface.co/datasets/the-project/WarBias/blob/164f355623c2da0028821e0942cad493558a6c13/metadata/profile_exclusions.json",
       "changes": [
         {
           "criterion": "Occupation-qualified actor profiles",
-          "url": "https://huggingface.co/datasets/the-project/WarBias/discussions/18",
-          "revision": "4f696b82f91731caa1b0122c183a23bae8e0abce"
+          "revision_sha256": "65df26225acd1603c6cc5b1da9442899193cce316625fdd8b7ca6ccedca67734"
         },
         {
           "criterion": "Older women veterans",
-          "url": "https://huggingface.co/datasets/the-project/WarBias/discussions/19",
-          "revision": "c71e3b65f2b720e67d0705d337d0e7ec3f896316"
+          "revision_sha256": "4b5955672d4a3eb39702d8f4f10c23a5ddd8767b20d664ca0f6533ab099628a4"
         }
       ]
     }
