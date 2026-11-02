@@ -148,45 +148,14 @@ def _validate_baseline_results(directory):
         _result_binding(
             directory, f"evaluation/warbias_baseline/results/{name}", binding, require_size=True
         )
-    current_protocol = json.loads((directory / "protocol/dataset.json").read_text())
-    for binding in current_protocol["files"].values():
+    current = json.loads((directory / "protocol/dataset.json").read_text())
+    for binding in current["files"].values():
         _result_binding(directory, binding["path"], binding)
-    scope_path = directory / "evaluation/warbias_baseline/result_scope.json"
-    snapshots = {}
-    if scope_path.is_file():
-        scope = json.loads(scope_path.read_text())
-        snapshots = scope.get("snapshot_files")
-        if (
-            scope.get("schema_version") != 1
-            or scope.get("status") != "historical_changed_triplet"
-            or scope.get("changed_ids") != ["WB-0926"]
-            or scope.get("current_dataset_sha256") != _hash(directory / "protocol/dataset.json")
-            or scope.get("current_neutral_controls_sha256")
-            != _hash(directory / "evaluation/warbias_baseline/neutral_controls.jsonl")
-            or scope.get("results_manifest_sha256") != _hash(manifest_path)
-            or not isinstance(snapshots, dict)
-            or not snapshots
-        ):
-            raise ValueError("Baseline result historical scope differs from its release")
-        for relative, binding in snapshots.items():
-            _result_binding(
-                directory,
-                f"evaluation/warbias_baseline/source_snapshot/{relative}",
-                binding,
-                require_size=True,
-            )
-
-    def source_path(relative):
-        return (
-            f"evaluation/warbias_baseline/source_snapshot/{relative}"
-            if relative in snapshots
-            else relative
-        )
-
     source = manifest.get("source") or {}
-    dataset_sha, qa_sha = (
-        _hash(directory / source_path(f"protocol/{name}.json")) for name in ("dataset", "qa")
-    )
+    if "git_revision" in source:
+        _validate_external_result_inputs(directory, manifest)
+        return
+    dataset_sha, qa_sha = (_hash(directory / f"protocol/{name}.json") for name in ("dataset", "qa"))
     if (
         not isinstance(source, dict)
         or source.get("repo") != "the-project/WarBias"
@@ -197,7 +166,7 @@ def _validate_baseline_results(directory):
     ):
         raise ValueError("Baseline results differ from the current dataset manifests")
     protocols = {
-        name: json.loads((directory / source_path(f"protocol/{name}.json")).read_text())
+        name: json.loads((directory / f"protocol/{name}.json").read_text())
         for name in ("dataset", "qa")
     }
     names = {
@@ -241,7 +210,7 @@ def _validate_baseline_results(directory):
             or record.get("sha256") != binding["sha256"]
         ):
             raise ValueError("Baseline results differ from their protocol source bindings")
-        _result_binding(directory, source_path(binding["path"]), binding)
+        _result_binding(directory, binding["path"], binding)
     reproduction = manifest.get("reproduction_inputs")
     neutral = manifest.get("neutral_release")
     primary = manifest.get("primary_prior_normalised_ss") or {}
@@ -251,7 +220,7 @@ def _validate_baseline_results(directory):
     if not isinstance(reproduction, dict) or set(reproduction) != expected:
         raise ValueError("Baseline results require complete reproduction input bindings")
     for relative, binding in reproduction.items():
-        _result_binding(directory, source_path(relative), binding, require_size=True)
+        _result_binding(directory, relative, binding, require_size=True)
     if neutral is not None and (
         not isinstance(neutral, dict)
         or any(
@@ -260,6 +229,85 @@ def _validate_baseline_results(directory):
         )
     ):
         raise ValueError("Baseline results differ from their neutral-control source bindings")
+
+
+def _validate_external_result_inputs(directory, manifest):
+    """Validate saved tables whose source inputs are pinned to an earlier Git revision."""
+    source = manifest["source"]
+    external = source.get("external_inputs")
+    reproduction = manifest.get("reproduction_inputs")
+    neutral = manifest.get("neutral_release")
+    expected = _REPRODUCTION_INPUTS | (set(_NEUTRAL_INPUTS) if neutral is not None else set())
+    files = source.get("files")
+    names = {
+        "triplets_uk",
+        "triplets_en",
+        "qa_uk",
+        "qa_en",
+        "taxonomy",
+        "item_sources",
+        "text_provenance",
+        "metadata_corrections",
+        "dataset_protocol",
+        "qa_protocol",
+    }
+    if (
+        not isinstance(source.get("git_revision"), str)
+        or re.fullmatch(r"[0-9a-f]{40}", source["git_revision"]) is None
+        or source.get("subdirectory") != "warbias-artifacts"
+        or source.get("repo") != "the-project/WarBias"
+        or source.get("revision_kind") != "content_sha256"
+        or source.get("revision") != source.get("dataset_manifest_sha256")
+        or not isinstance(external, dict)
+        or not external
+        or not isinstance(files, dict)
+        or set(files) != names
+        or not isinstance(reproduction, dict)
+        or set(reproduction) != expected
+    ):
+        raise ValueError("Baseline result archived source declaration is incomplete")
+    bindings = dict(reproduction)
+    for name, record in files.items():
+        relative = record.get("filename")
+        if (
+            not isinstance(relative, str)
+            or record.get("path") != "sources/" + relative
+            or relative in bindings
+            and bindings[relative]["sha256"] != record.get("sha256")
+        ):
+            raise ValueError("Baseline result archived input bindings differ")
+        bindings.setdefault(relative, {"sha256": record.get("sha256")})
+    if (
+        not set(external) <= set(bindings)
+        or files["dataset_protocol"]["sha256"] != source["dataset_manifest_sha256"]
+        or files["qa_protocol"]["sha256"] != source.get("qa_manifest_sha256")
+    ):
+        raise ValueError("Baseline result archived manifests differ")
+    for relative, binding in bindings.items():
+        if relative in external:
+            record = external[relative]
+            if (
+                record.get("sha256") != binding.get("sha256")
+                or not isinstance(record.get("sha256"), str)
+                or re.fullmatch(r"[0-9a-f]{64}", record["sha256"]) is None
+                or type(record.get("bytes")) is not int
+                or record["bytes"] <= 0
+                or "bytes" in binding
+                and record["bytes"] != binding["bytes"]
+            ):
+                raise ValueError("Baseline result external input binding differs")
+        else:
+            _result_binding(directory, relative, binding, require_size="bytes" in binding)
+    if (
+        manifest.get("primary_prior_normalised_ss", {}).get("status") == "available"
+        and neutral is None
+        or neutral is not None
+        and any(
+            neutral.get(field) != reproduction[relative]["sha256"]
+            for relative, field in _NEUTRAL_INPUTS.items()
+        )
+    ):
+        raise ValueError("Baseline result neutral source declaration differs")
 
 
 def _hash(path):

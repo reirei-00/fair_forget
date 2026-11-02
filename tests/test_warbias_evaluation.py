@@ -69,7 +69,12 @@ class WarBiasEvaluationTests(unittest.TestCase):
             (directory / "inputs/manifest.json").write_text(json.dumps({"datasets": {task: {}}}))
         self.addCleanup(mock.patch.stopall)
         mock.patch.object(
-            self.workflow, "reference_settings", return_value={"policy": evaluation.QA_POLICY}
+            self.workflow,
+            "reference_settings",
+            return_value={
+                "policy": evaluation.QA_POLICY,
+                "comparison_scope": {"status": "current_dataset"},
+            },
         ).start()
         mock.patch.object(self.workflow, "cohort", return_value=["held"]).start()
         mock.patch.object(
@@ -77,6 +82,32 @@ class WarBiasEvaluationTests(unittest.TestCase):
             "verify_training_export",
             side_effect=lambda item, **kw: self.proofs[item["run_id"]],
         ).start()
+
+    def test_scope_distinguishes_current_and_saved_sources_and_rejects_mixed_versions(self):
+        artifact = self.root / "repo/warbias-artifacts"
+        self.workflow.repo = artifact.parent
+        (artifact / "data").mkdir(parents=True)
+        saved = {"git_revision": "recorded-source", "external_inputs": {}}
+        source = {"source": {"files": {}}}
+        for language in ("uk", "en"):
+            path = artifact / f"data/{language}.jsonl"
+            path.write_text(language)
+            saved["external_inputs"][f"data/{language}.jsonl"] = {"sha256": "earlier-" + language}
+            source["source"]["files"][f"triplets_{language}"] = {"sha256": file_hash(path)}
+        manifest = artifact / "evaluation/warbias_baseline/results/manifest.json"
+        manifest.parent.mkdir(parents=True)
+        manifest.write_text(json.dumps({"source": saved}))
+        selected = self.workflow.release / "inputs/manifest.json"
+        selected.write_text(json.dumps(source))
+        self.assertEqual(self.workflow.comparison_scope()["status"], "current_dataset")
+        for language in ("uk", "en"):
+            source["source"]["files"][f"triplets_{language}"]["sha256"] = "earlier-" + language
+        selected.write_text(json.dumps(source))
+        self.assertEqual(self.workflow.comparison_scope()["status"], "baseline_reference_snapshot")
+        source["source"]["files"]["triplets_uk"]["sha256"] = file_hash(artifact / "data/uk.jsonl")
+        selected.write_text(json.dumps(source))
+        with self.assertRaisesRegex(ValueError, "neither the current dataset"):
+            self.workflow.comparison_scope()
 
     def test_prepare_changes_only_checkpoint_profiles_and_preserves_inputs(self):
         before = {

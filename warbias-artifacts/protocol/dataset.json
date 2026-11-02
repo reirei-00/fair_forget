@@ -27,7 +27,7 @@
     },
     "text_provenance": {
       "path": "protocol/inputs/dataset_text_provenance.jsonl",
-      "sha256": "ecdaced27c17550f92ac3a52aad510bb5ff2b0a293ba10ef94fdcafe0a078380"
+      "sha256": "1605c72a0635b9ffee8fb9c09726ce61c2176a5e67134b0806781919431257fe"
     },
     "translations": {
       "path": "protocol/inputs/dataset_translations.jsonl",

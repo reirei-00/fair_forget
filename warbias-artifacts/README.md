@@ -111,13 +111,3 @@ Keep credentials, model weights, raw annotation exports and service responses in
 local storage. Prompt hashes are in `prompts/manifest.json`.
 Use the exported files in a fresh anonymous repository. The source repository,
 pull requests and Git history are not part of the anonymous export.
-
-WB-0926 restores its original PTSD text and currently-serving profile (WB-C082).
-WB-0928 keeps its mobility text and disability/short-service profile (WB-C058).
-The [restoration record](protocol/history/ptsd_case_restoration.json) preserves
-both text versions and the fresh GPT-6 Astra English translation binding.
-Saved baseline scores use the earlier duplicate text for WB-0926. They remain
-historical results, with their changed source files preserved under
-`evaluation/warbias_baseline/source_snapshot/`. The `result_scope.json` record
-binds those files and the current release. Recollect WB-0926 in both languages
-before reporting updated triplet results. QA text and saved QA results are unchanged.

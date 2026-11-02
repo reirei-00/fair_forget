@@ -47,6 +47,9 @@ export FAIR_UK_PYTHON=/path/to/evaluation-environment/bin/python
 
 Metadata and inference release variables are optional for fresh collections.
 For saved runs, retain their frozen collector and declared corrections.
+The report identifies the input version from its hashes. Saved predictions for an
+earlier dataset version remain results for that version. Changed text and its
+neutral controls need new inference in both phases.
 Post collection uses the compatible control collector when it contains a frozen
 source snapshot. `WARBIAS_AFTER_INFERENCE_RELEASE` can select that source
 explicitly. Fair-UK verifies unchanged inference and native scoring code.

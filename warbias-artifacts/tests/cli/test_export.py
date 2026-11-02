@@ -451,12 +451,9 @@ def neutral_result_bindings(exported):
     manifest["neutral_release"] = neutral
     manifest["primary_prior_normalised_ss"] = {"status": "available"}
     path.write_text(json.dumps(manifest))
-    scope_path = exported / "evaluation/warbias_baseline/result_scope.json"
-    scope = json.loads(scope_path.read_text())
-    scope["results_manifest_sha256"] = exporter._hash(path)
     for relative in exporter._NEUTRAL_INPUTS:
-        scope["snapshot_files"].pop(relative, None)
-    scope_path.write_text(json.dumps(scope))
+        manifest["source"]["external_inputs"].pop(relative, None)
+    path.write_text(json.dumps(manifest))
     return exported, path, manifest
 
 
@@ -506,15 +503,14 @@ def test_export_rejects_unbound_or_changed_neutral_inputs(
     assert not (tmp_path / "rejected").exists()
 
 
-@pytest.mark.parametrize("damage", ["snapshot", "scope"])
-def test_export_rejects_damaged_historical_source_bindings(exported, tmp_path, damage):
-    base = exported / "evaluation/warbias_baseline"
-    path = base / ("source_snapshot/data/uk.jsonl" if damage == "snapshot" else "result_scope.json")
-    if damage == "snapshot":
-        path.write_text(path.read_text() + "\n")
+@pytest.mark.parametrize("damage", ["revision", "binding"])
+def test_export_rejects_invalid_external_source_bindings(exported, tmp_path, damage):
+    path = exported / "evaluation/warbias_baseline/results/manifest.json"
+    manifest = json.loads(path.read_text())
+    if damage == "revision":
+        manifest["source"]["git_revision"] = "main"
     else:
-        scope = json.loads(path.read_text())
-        scope["current_dataset_sha256"] = "0" * 64
-        path.write_text(json.dumps(scope))
+        manifest["source"]["external_inputs"]["data/uk.jsonl"]["sha256"] = "0" * 64
+    path.write_text(json.dumps(manifest))
     with pytest.raises(ValueError, match="Baseline result"):
         exporter.export(exported, tmp_path / "rejected")

@@ -162,24 +162,27 @@ class WarBiasEvaluation:
         }
 
     def comparison_scope(self):
-        """Bind scores to current texts or the baseline's explicit frozen snapshot."""
-        scope_path = self.repo / "warbias-artifacts/evaluation/warbias_baseline/result_scope.json"
-        if not scope_path.is_file():
-            return {"status": "current_dataset"}
-        scope = read_json(scope_path)
+        """Identify the dataset version used by the selected input release."""
+        artifact = self.repo / "warbias-artifacts"
+        saved = read_json(artifact / "evaluation/warbias_baseline/results/manifest.json")["source"]
         source = read_json(self._source() / "inputs/manifest.json")["source"]["files"]
-        frozen, current = [], []
+        current, reference, hashes = [], [], {}
         for language in ("uk", "en"):
-            digest = source[f"triplets_{language}"]["sha256"]
             relative = f"data/{language}.jsonl"
-            frozen.append(digest == scope["snapshot_files"][relative]["sha256"])
-            current.append(digest == file_hash(self.repo / "warbias-artifacts" / relative))
+            digest = source[f"triplets_{language}"]["sha256"]
+            hashes[relative] = digest
+            current.append(digest == file_hash(artifact / relative))
+            reference.append(digest == saved["external_inputs"][relative]["sha256"])
         if all(current):
-            return {"status": "current_dataset"}
-        if all(frozen):
-            return {**scope, "status": "baseline_reference_snapshot"}
+            return {"status": "current_dataset", "triplet_source_sha256": hashes}
+        if all(reference):
+            return {
+                "status": "baseline_reference_snapshot",
+                "source_git_revision": saved["git_revision"],
+                "triplet_source_sha256": hashes,
+            }
         raise ValueError(
-            "Evaluation texts match neither the current dataset nor its recorded baseline snapshot"
+            "Evaluation texts match neither the current dataset nor its recorded baseline source"
         )
 
     def prepare(self):
