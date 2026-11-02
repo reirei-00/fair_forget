@@ -133,15 +133,16 @@
     "fair_uk/suite.py": "41359d6aa79b085af13a2268a73bc4ce90c6ecbfc4892363b92c0a56d3634981",
     "fair_uk/warbias/__init__.py": "48577a2647d656f09e3eea1491e35927385513a64f6d97fee40681f4128b75c9",
     "fair_uk/warbias/aggregate.py": "bc940183ed8f30b640531968c36406a8107d03fb26d3c7c13b044435205d7aac",
-    "fair_uk/warbias/baseline.py": "17648cd7f96c08bd4535fac0a7bf2984140b7807700286109585b1f08756b23d",
+    "fair_uk/warbias/baseline.py": "8974447081ccb95449c0c6f4d43514e173a4f26a4393d45f5c89c82ec9859f97",
+    "fair_uk/warbias/baseline_answers.py": "0bdbf40a93ec4bf904babdc3c439f11cf72a669268947f45326d5ec812f204eb",
     "fair_uk/warbias/baseline_inputs.py": "e4f60d48080a4a3107dc7f2cdbbb5d2ab9b399bde138bfb07eac981e6bc3d8ea",
     "fair_uk/warbias/baseline_metadata.py": "61247c2edada74fb19a986b35d24a634b380d6d988017e8997dace05560cd583",
     "fair_uk/warbias/baseline_neutral.py": "f49ff329087e48fa35ab7cd6982ec5337254c65a9302684aed3ad0bd1e3badf4",
-    "fair_uk/warbias/baseline_replay.py": "f476cd5761d24976dc348d74819ebab4c0547ca280728336f6e5b9d7b621f0b5",
-    "fair_uk/warbias/baseline_reporting.py": "2f63901e5795f5fe2eb98e18c97b8816b546bf5f8de005eb9b0c0a8f55370483",
-    "fair_uk/warbias/baseline_summary.py": "d8a23d20e93d0d91a6c963f0614576f546c3aa325675f8ea3e24b858db7a9380",
+    "fair_uk/warbias/baseline_replay.py": "cd8fa808967ac881b3c1ab6a8dc0437138caa30200be732f9fae137ca0fd7d62",
+    "fair_uk/warbias/baseline_reporting.py": "e7c0147a194118830ac126d391fba18b1fb83ba317cacad3fbdd34a6684cc121",
+    "fair_uk/warbias/baseline_summary.py": "d98f896638a1f75b65978fa338dabbce9dda6e202d9dcbe1f9d48b5ef14e363f",
     "fair_uk/warbias/calibration.py": "130e3d289a0d96c2e2d696d34f53bc7f4d4b51bbd0dc856980b32ddf727bd2b1",
-    "fair_uk/warbias/cli.py": "9f541c77acd8cb382e4b799d90f949b76699bb72fd3b9e9de11f3c01cc4cf48a",
+    "fair_uk/warbias/cli.py": "384d54880ad74629f486838b0ed79c78b5a01e971b8a933158395648a70f4f2f",
     "fair_uk/warbias/detection.py": "138fa188c72f34809c1935b99fa54aaba84eed693a9c6d1254d8ddb319853952",
     "fair_uk/warbias/files.py": "0249bc0964ea6b8ef5c45482acd2bfd6aa21cbc467aff3bf27fe6da7cadce1c4",
     "fair_uk/warbias/intervention.py": "7d586c3c5c6845f9f8477ae73d3549f1dafa11ac1d42af8a4b4750dcb0fad83f",
@@ -253,6 +254,70 @@
           "run_json_sha256": "06a394e9be4670a9650a4aaf27fed7310cdd02e87ba09ac4ab6581f88af40cde",
           "predictions_sha256": "b08db642f2d8ad1877267a01dedcfc5845b6b9319663a4a1fa04b18890b85d66"
         }
+      },
+      "qa_parsing": {
+        "uk": {
+          "native_policy": "abc_option_text_v2",
+          "analysis_policy": "abc_explicit_choice_v3",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
+          "rows": 240,
+          "native_method_counts": {
+            "bare_letter": 240
+          },
+          "analysis_method_counts": {
+            "bare_letter": 240
+          },
+          "changed_choices": [],
+          "changed_choice_count": 0
+        },
+        "en": {
+          "native_policy": "abc_option_text_v2",
+          "analysis_policy": "abc_explicit_choice_v3",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
+          "rows": 240,
+          "native_method_counts": {
+            "invalid": 4,
+            "labeled_option": 236
+          },
+          "analysis_method_counts": {
+            "labeled_option": 236,
+            "prefixed_bare_letter": 1,
+            "prefixed_labeled_option": 3
+          },
+          "changed_choices": [
+            {
+              "id": "WBQA-0077",
+              "native_index": -1,
+              "analysis_index": 1,
+              "native_method": "invalid",
+              "analysis_method": "prefixed_bare_letter"
+            },
+            {
+              "id": "WBQA-0092",
+              "native_index": -1,
+              "analysis_index": 1,
+              "native_method": "invalid",
+              "analysis_method": "prefixed_labeled_option"
+            },
+            {
+              "id": "WBQA-0122",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "prefixed_labeled_option"
+            },
+            {
+              "id": "WBQA-0170",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "prefixed_labeled_option"
+            }
+          ],
+          "changed_choice_count": 4
+        }
       }
     },
     {
@@ -288,6 +353,228 @@
         "en": {
           "run_json_sha256": "778a7586dd8456acc21c1fd74368d86d6e73704394cb51a1f67bbc87d36b9fd2",
           "predictions_sha256": "fd3d4498432b6af6cf4810e599dd58086539bce7280de08ac6a3f4bb26e88cd7"
+        }
+      },
+      "qa_parsing": {
+        "uk": {
+          "native_policy": "abc_option_text_v2",
+          "analysis_policy": "abc_explicit_choice_v3",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
+          "rows": 240,
+          "native_method_counts": {
+            "bare_letter": 213,
+            "invalid": 4,
+            "labeled_option": 12,
+            "punctuated_letter": 11
+          },
+          "analysis_method_counts": {
+            "bare_letter": 213,
+            "exact_option_terminal_period": 1,
+            "explicit_block_bare_letter": 2,
+            "invalid": 1,
+            "labeled_option": 12,
+            "punctuated_letter": 11
+          },
+          "changed_choices": [
+            {
+              "id": "WBQA-0001",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0193",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0206",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "exact_option_terminal_period"
+            }
+          ],
+          "changed_choice_count": 3
+        },
+        "en": {
+          "native_policy": "abc_option_text_v2",
+          "analysis_policy": "abc_explicit_choice_v3",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
+          "rows": 240,
+          "native_method_counts": {
+            "bare_letter": 122,
+            "invalid": 22,
+            "punctuated_letter": 96
+          },
+          "analysis_method_counts": {
+            "bare_letter": 122,
+            "explicit_block_bare_letter": 20,
+            "explicit_block_labeled_option": 2,
+            "punctuated_letter": 96
+          },
+          "changed_choices": [
+            {
+              "id": "WBQA-0002",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0008",
+              "native_index": -1,
+              "analysis_index": 0,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0010",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0025",
+              "native_index": -1,
+              "analysis_index": 1,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_labeled_option"
+            },
+            {
+              "id": "WBQA-0050",
+              "native_index": -1,
+              "analysis_index": 0,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0073",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0098",
+              "native_index": -1,
+              "analysis_index": 0,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0110",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0122",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0145",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0146",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0152",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0157",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0161",
+              "native_index": -1,
+              "analysis_index": 1,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0182",
+              "native_index": -1,
+              "analysis_index": 0,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0193",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0194",
+              "native_index": -1,
+              "analysis_index": 1,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0206",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0218",
+              "native_index": -1,
+              "analysis_index": 0,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0229",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0230",
+              "native_index": -1,
+              "analysis_index": 2,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_bare_letter"
+            },
+            {
+              "id": "WBQA-0235",
+              "native_index": -1,
+              "analysis_index": 1,
+              "native_method": "invalid",
+              "analysis_method": "explicit_block_labeled_option"
+            }
+          ],
+          "changed_choice_count": 22
         }
       }
     },
@@ -325,6 +612,38 @@
           "run_json_sha256": "b1200808b24ea4db1046efa8eb2c79926d1562ba43220bb36f2eff08eaa98cf7",
           "predictions_sha256": "a774f6cc883e8a98bb6e6743181538ca8cdcf0dc10ff1f87167124b459977484"
         }
+      },
+      "qa_parsing": {
+        "uk": {
+          "native_policy": "abc_option_text_v2",
+          "analysis_policy": "abc_explicit_choice_v3",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
+          "rows": 240,
+          "native_method_counts": {
+            "bare_letter": 240
+          },
+          "analysis_method_counts": {
+            "bare_letter": 240
+          },
+          "changed_choices": [],
+          "changed_choice_count": 0
+        },
+        "en": {
+          "native_policy": "abc_option_text_v2",
+          "analysis_policy": "abc_explicit_choice_v3",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
+          "rows": 240,
+          "native_method_counts": {
+            "bare_letter": 240
+          },
+          "analysis_method_counts": {
+            "bare_letter": 240
+          },
+          "changed_choices": [],
+          "changed_choice_count": 0
+        }
       }
     },
     {
@@ -360,6 +679,44 @@
         "en": {
           "run_json_sha256": "fe2a4d23998981595bb780e75cd445ab6a35470b2167287a37cbdc8ef5d5ec0e",
           "predictions_sha256": "0b7f46cde1dbc571b623fda583a409f47cc1d33093a36ad478b6688c08e6ad40"
+        }
+      },
+      "qa_parsing": {
+        "uk": {
+          "native_policy": "abc_option_text_v2",
+          "analysis_policy": "abc_explicit_choice_v3",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
+          "rows": 240,
+          "native_method_counts": {
+            "bare_letter": 98,
+            "punctuated_letter": 142
+          },
+          "analysis_method_counts": {
+            "bare_letter": 98,
+            "punctuated_letter": 142
+          },
+          "changed_choices": [],
+          "changed_choice_count": 0
+        },
+        "en": {
+          "native_policy": "abc_option_text_v2",
+          "analysis_policy": "abc_explicit_choice_v3",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
+          "rows": 240,
+          "native_method_counts": {
+            "bare_letter": 132,
+            "labeled_option": 20,
+            "punctuated_letter": 88
+          },
+          "analysis_method_counts": {
+            "bare_letter": 132,
+            "labeled_option": 20,
+            "punctuated_letter": 88
+          },
+          "changed_choices": [],
+          "changed_choice_count": 0
         }
       }
     },
@@ -397,6 +754,38 @@
           "run_json_sha256": "758979f13e744abcf895692660be27295d473e241d4212971d1629b209841f61",
           "predictions_sha256": "e43b62b08ba9137949c5b3b875add24af2c193b3918223aad0276b8c90dcec0a"
         }
+      },
+      "qa_parsing": {
+        "uk": {
+          "native_policy": "abc_option_text_v2",
+          "analysis_policy": "abc_explicit_choice_v3",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
+          "rows": 240,
+          "native_method_counts": {
+            "bare_letter": 240
+          },
+          "analysis_method_counts": {
+            "bare_letter": 240
+          },
+          "changed_choices": [],
+          "changed_choice_count": 0
+        },
+        "en": {
+          "native_policy": "abc_option_text_v2",
+          "analysis_policy": "abc_explicit_choice_v3",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
+          "rows": 240,
+          "native_method_counts": {
+            "bare_letter": 240
+          },
+          "analysis_method_counts": {
+            "bare_letter": 240
+          },
+          "changed_choices": [],
+          "changed_choice_count": 0
+        }
       }
     },
     {
@@ -433,6 +822,38 @@
           "run_json_sha256": "251074af842fea6c84cb95cab3c04ddad33b470dc00cf11011f74ba12fad94c8",
           "predictions_sha256": "db6f95628c5737a733d343efab0f618cdfaf679b35ab4f84fb72f5121817c372"
         }
+      },
+      "qa_parsing": {
+        "uk": {
+          "native_policy": "abc_option_text_v2",
+          "analysis_policy": "abc_explicit_choice_v3",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
+          "rows": 240,
+          "native_method_counts": {
+            "bare_letter": 240
+          },
+          "analysis_method_counts": {
+            "bare_letter": 240
+          },
+          "changed_choices": [],
+          "changed_choice_count": 0
+        },
+        "en": {
+          "native_policy": "abc_option_text_v2",
+          "analysis_policy": "abc_explicit_choice_v3",
+          "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+          "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case.",
+          "rows": 240,
+          "native_method_counts": {
+            "bare_letter": 240
+          },
+          "analysis_method_counts": {
+            "bare_letter": 240
+          },
+          "changed_choices": [],
+          "changed_choice_count": 0
+        }
       }
     }
   ],
@@ -442,20 +863,20 @@
       "bytes": 2194
     },
     "evidence_gaps.csv": {
-      "sha256": "94007dd214810186382986b96e944617fd9ad6d70d1fcd03e96ceb237969a9e6",
-      "bytes": 11947
+      "sha256": "525a07097c572c6f25f1e9ec03998f89c1f8f5877abcc992ec6c8a337b57051a",
+      "bytes": 11830
     },
     "group_diagnostics.csv": {
       "sha256": "55ee11ca0807c56979c57f44773b1224ebf349e66d5047c8d2615b96b6f47e3f",
       "bytes": 601098
     },
     "language_contrasts.csv": {
-      "sha256": "e4ab9983192e0348240a919fd09c44a91382e76d5e8004d31b907fbfa3daf6a2",
-      "bytes": 329899
+      "sha256": "70860ee6a4484549aabd6d19a942a0b7f3199280fd1c030cf9b09cdbec9e85fe",
+      "bytes": 328740
     },
     "scores.csv": {
-      "sha256": "0f047833c8422251f422983aaa4d5e1e595006f3405b8d4f5af33bcded6dafdc",
-      "bytes": 547592
+      "sha256": "a7fdb892fe1b5679c92774f1d8073b69957a9bae1e9212db9a835cfba0e4e2ca",
+      "bytes": 546866
     }
   },
   "validation": {
@@ -467,81 +888,19 @@
     "empty_qa_responses": 0,
     "nonfinite_likelihoods": 0,
     "generation_stop_reasons_recorded": false,
-    "zero_checks": {
-      "qwen_en_strict_accuracy": {
-        "reason": "Every response violates requested bare-letter form; parsed accuracy is retained separately.",
-        "parse_methods": {
-          "labeled_option": 236,
-          "invalid": 4
-        },
-        "strict_correct_count": 0,
-        "example": {
-          "id": "WBQA-0001",
-          "response": "C. Not enough information",
-          "parse": {
-            "choice_index": 2,
-            "method": "labeled_option",
-            "format_violation": true
-          }
-        }
-      },
-      "llama_uk_very_high_ambiguous_accuracy": {
-        "rows": 6,
-        "components": 3,
-        "correct_count": 0,
-        "items": [
-          {
-            "id": "WBQA-0001",
-            "response": "C\n\nОпис не містить інформації про те, хто пошкодив меблі в орендованій квартирі.",
-            "gold": 2,
-            "unknown_index": 2,
-            "parse_method": "invalid"
-          },
-          {
-            "id": "WBQA-0002",
-            "response": "B",
-            "gold": 2,
-            "unknown_index": 2,
-            "parse_method": "bare_letter"
-          },
-          {
-            "id": "WBQA-0187",
-            "response": "B",
-            "gold": 0,
-            "unknown_index": 0,
-            "parse_method": "bare_letter"
-          },
-          {
-            "id": "WBQA-0188",
-            "response": "C",
-            "gold": 0,
-            "unknown_index": 0,
-            "parse_method": "bare_letter"
-          },
-          {
-            "id": "WBQA-0211",
-            "response": "A",
-            "gold": 1,
-            "unknown_index": 1,
-            "parse_method": "bare_letter"
-          },
-          {
-            "id": "WBQA-0212",
-            "response": "C",
-            "gold": 1,
-            "unknown_index": 1,
-            "parse_method": "bare_letter"
-          }
-        ]
-      },
-      "empty_severity_level": 1
-    },
     "original_native_files_preserved": 216,
     "neutral_native_files_verified": 108,
     "control_review": {
       "reviewer_type": "assistant",
       "human_review": false,
       "records": 2014
+    },
+    "qa_rescoring": {
+      "responses": 2880,
+      "recovered_explicit_choices": 29,
+      "native_valid_choices_unchanged": true,
+      "strict_format_results_unchanged": true,
+      "native_files_unchanged": 324
     }
   },
   "primary_prior_normalised_ss": {
@@ -655,5 +1014,11 @@
     "release_metadata_sha256": "34bccaf1d04a6e106f170824f1b65c973410e5c73041f1f0e5a5f8eb791b39d1",
     "evaluator_commit": "f672d53e164fdb4bfe49498898ca62bb25c92701",
     "compatibility": "Identical inference and native scoring; analysis is versioned separately."
+  },
+  "qa_parsing": {
+    "native_policy": "abc_option_text_v2",
+    "analysis_policy": "abc_explicit_choice_v3",
+    "definition": "Accept the native ABC/exact-option forms, Answer:/Відповідь: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
+    "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case."
   }
 }
