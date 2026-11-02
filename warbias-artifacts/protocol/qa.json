@@ -34,7 +34,7 @@
       "url": "https://aclanthology.org/2022.findings-acl.165/"
     },
     "selection": "Forty selected general taxonomy cases: 20 IDP and 20 veteran cases. This is not a probability sample.",
-    "source_authorship": "Assistant-authored Ukrainian scenario templates; the drafting model is not recorded."
+    "source_authorship": "Model-assisted Ukrainian scenario drafting, with final decisions by the dataset author. The drafting model is not recorded."
   },
   "counts": {
     "actors": {
@@ -48,15 +48,15 @@
   "files": {
     "agreement": {
       "path": "protocol/results/qa_agreement.json",
-      "sha256": "944d1c82facc8eddad4f58363df9e4d707789fff36778ac0d6087a29f45adfec"
+      "sha256": "a24ea1725f136604bbe930155a95f48b34916582c354c0719de954ffbf8fe062"
     },
     "annotation_summary": {
       "path": "protocol/results/qa_annotations.json",
-      "sha256": "b933e859686a81799f2c2c5048f2837a8a3f80601ebcf2ff245e546acfd65613"
+      "sha256": "daf90d4a51346274d199406a27f998cc3094344daf75a2de443b77b474914372"
     },
     "author_reviews": {
       "path": "protocol/inputs/qa_author_reviews.jsonl",
-      "sha256": "06290a4891aa61fe82ed879f138d8939d05393a8b880963f6f9f64a2b6838249"
+      "sha256": "8c4d84ed346535599d5c37e55ba8b3ad435cbf3cb73c5167e21a7b5715394650"
     },
     "en": {
       "path": "data/qa_en.jsonl",
@@ -72,11 +72,11 @@
     },
     "provenance": {
       "path": "protocol/inputs/qa_provenance.jsonl",
-      "sha256": "1c61d8e977ebadaef1db0ab861d3b937a1485559d20abdb0c937a5fb02478e5d"
+      "sha256": "887730b49b0612d6501a9ad4a9a1643026e8d8bd9898864bb548c27282e9083a"
     },
     "resolutions": {
       "path": "protocol/inputs/qa_resolutions.jsonl",
-      "sha256": "7a27cf153d08672d9c5895d06cf49e3046419af1b63c50f7d2ef8416bb853172"
+      "sha256": "fe66a571e15130b29c2b3c5b0f45c4bf790fa9307cb274f4424a2a2b1aa060ef"
     },
     "scenarios": {
       "path": "protocol/inputs/qa_scenarios.json",
@@ -84,7 +84,7 @@
     },
     "schema": {
       "path": "protocol/inputs/qa_schema.json",
-      "sha256": "4e72023bed1f5fb142c11dd6c653e1143a517edcd0fd59adc3d186f12d03c1ce"
+      "sha256": "d373756407747969ae147a569b3e229d57b27e99618b3bd4d1da1cfca7133048"
     },
     "taxonomy": {
       "path": "protocol/inputs/cohort_taxonomy.csv",
@@ -100,7 +100,7 @@
     },
     "uk": {
       "path": "data/qa_uk.jsonl",
-      "sha256": "f7c85372d89c1ced05ff4419bef67f1012fe6214d8d3e089bb3917542dfc620b"
+      "sha256": "1f023e27b7bfd1b90c2251f284d4bc6ccfad67bcf251089ca774823f4b0a334d"
     }
   },
   "languages": [
@@ -109,21 +109,20 @@
   ],
   "review": {
     "annotators": 16,
-    "author_approval_rule": "Author approval of the exact text revision, recorded separately from independent answer-choice annotations.",
+    "author_approval_rule": "Author approval of the exact retained or revised item, recorded separately from independent answer-choice annotations.",
     "english_human_review": "not_performed",
     "human_reviews_apply_to": "The exact context, question and choices in each review record.",
     "human_validation_rule": "At least two independent accepted or manually corrected reviews of the exact released text with the correct answer, and no current-text rewrite request or wrong answer.",
     "language": "uk",
-    "resolution_kind": "assistant",
+    "resolution_kind": "author",
     "reviews_per_original_item": 2,
-    "scope": "Human annotation covers the Ukrainian source items. Author approvals and assistant resolutions remain separate from independent human consensus.",
+    "scope": "Human annotation covers the Ukrainian source items. Final author decisions remain separate from independent human consensus.",
     "status_counts": {
       "en": {
         "unreviewed_translation": 240
       },
       "uk": {
-        "assistant_resolved": 27,
-        "author_approved": 28,
+        "author_approved": 55,
         "human_validated": 185
       }
     }

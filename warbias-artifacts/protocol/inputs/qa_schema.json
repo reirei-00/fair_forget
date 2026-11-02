@@ -102,9 +102,9 @@
         "human_validated",
         "human_edited",
         "author_approved",
-        "assistant_resolved",
+        "needs_review",
         "unreviewed_translation",
-        "assistant_revised_translation"
+        "revised_translation"
       ],
       "type": "string"
     }
