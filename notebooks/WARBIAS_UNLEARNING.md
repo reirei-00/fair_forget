@@ -75,11 +75,14 @@ passes over each original forget set. Expanded BiasUnlearn pools can leave the
 last pass incomplete.
 
 NPO uses mean token log-likelihood ratios, rather than sequence-sum ratios.
-BiasUnlearn adds counter-stereotype cross-entropy and reference KL. Its current
-controller uses the unweighted raw S-versus-C preference on development rows.
-The primary evaluation instead uses component weights and neutral-group controls.
-These are different decision criteria. Keep this adaptation distinct from an
-exact reproduction of the original methods.
+BiasUnlearn adds counter-stereotype cross-entropy and reference KL. Keep its
+raw-preference switching rule: above 50%, use the normal pools; below 50%, use
+the reversed pools; at 50%, keep the current direction. The controller uses
+unweighted development rows and aims to balance raw stereotype preference.
+Report both raw and primary neutral-adjusted scores through Fair-UK. The primary
+score uses component weights and neutral controls; the switching rule does not
+guarantee balance on that score. Keep this WarBias adaptation distinct from an
+exact reproduction of the original study.
 WGA+KL remains an [optional experiment](wga_kl.ipynb), outside the 40-run study.
 
 Every [notebook](README.md) prepares and validates the four bundles, runs a
