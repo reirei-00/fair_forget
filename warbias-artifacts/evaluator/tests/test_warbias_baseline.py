@@ -44,6 +44,7 @@ def test_empty_severity_level_and_single_component_have_no_interval():
     selected = {
         scope.get("severity_level"): values
         for scope, values in analysis.scope_selections([row("a", "A", 1)])
+        if scope["scope"] == "severity"
     }
     assert selected[1] == []
     assert analysis.summary([], ("accuracy",), "difference")["status"] == "empty"
@@ -388,3 +389,71 @@ def test_cli_writes_library_analysis(release, tmp_path, capsys):
         json.loads((output / "summary.json").read_text())["models"]["fixture"]["status"]
         == "pending_collection"
     )
+
+
+def test_group_severity_filters_before_component_weighting():
+    items = [row(str(i), "shared", 1.0) for i in range(9)] + [
+        row("idp-zero", "other", 0.0),
+        row("veteran", "shared", 0.0, actor="veteran"),
+        row("other-level", "third", 0.0, level=4),
+    ]
+    selected = {
+        (scope["actor"], scope["severity_level"]): scope
+        for scope in analysis.group_severity_summary(items, "accuracy", 100, 42)
+    }
+    assert len(selected) == 10
+    idp, veteran = selected["idp", 3], selected["veteran", 3]
+    assert (idp["rows"], idp["components"]) == (10, 2)
+    assert idp["metrics"]["accuracy"]["estimate"] == 0.5
+    assert idp["metrics"]["accuracy"]["ci95"] == [0.0, 1.0]
+    assert veteran["metrics"]["accuracy"]["estimate"] == 0.0
+    assert veteran["metrics"]["accuracy"]["ci95"] is None
+    assert selected["veteran", 4]["status"] == "empty"
+    assert selected["veteran", 4]["metrics"] == {}
+
+
+def test_group_severity_counts_and_exports(release, tmp_path):
+    import csv
+
+    overview = api.release_overview(release)["severity"]
+    for total in overview["counts"]:
+        slices = [
+            r
+            for r in overview["counts_by_actor"]
+            if r["severity_level"] == total["severity_level"]
+        ]
+        assert len(slices) == 2
+        for key in total.keys() - {"severity_level"}:
+            assert sum(r[key] for r in slices) == total[key]
+    results = tmp_path / "runs"
+    _saved_runs(release, results)
+    report = api.analyze_baselines(release, results, bootstrap=100)
+    model = report["models"]["fixture"]
+    assert model["status"] == "complete", model
+    for language in ("uk", "en"):
+        for condition in ("ambiguous", "stereotype_aligned", "stereotype_conflicting"):
+            scopes = [
+                r
+                for r in model["qa"][language]["scopes"]
+                if r["condition"] == condition
+            ]
+            for total in (r for r in scopes if r["scope"] == "severity"):
+                slices = [
+                    r
+                    for r in scopes
+                    if r["scope"] == "actor_severity"
+                    and r["severity_level"] == total["severity_level"]
+                ]
+                assert sum(r["rows"] for r in slices) == total["rows"]
+    output = tmp_path / "analysis"
+    api.write_baseline_results(report, output)
+    for name in ("scores.csv", "evidence_gaps.csv", "language_contrasts.csv"):
+        with (output / name).open() as stream:
+            rows = [r for r in csv.DictReader(stream) if r["scope"] == "actor_severity"]
+        if name != "scores.csv":
+            assert not rows
+            continue
+        assert {r["metric"] for r in rows} == {"accuracy", ""}
+        assert {r["actor"] for r in rows} == {"idp", "veteran"}
+        assert all(r["severity_level"] for r in rows)
+        assert any(r["status"] == "empty" and r["estimate"] == "" for r in rows)

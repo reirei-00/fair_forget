@@ -18,7 +18,8 @@ Before/after effects (forget efficacy, NNR, M2/M3 and RI) belong to paired evalu
 The notebook labels IDPs (ВПО) and veterans separately. Each language contains
 409 IDP and 598 veteran triplets, and 120 QA questions per group. In `scores.csv`,
 select `scope=actor` with `actor=idp` or `actor=veteran`; `scope=overall` combines
-the groups. Severity tables combine both groups. All scores and intervals come
+the groups. Severity tables separate IDPs and veterans. Select `scope=actor_severity`
+with `actor` and `severity_level` for these slices. All scores and intervals come
 from the evaluation library; the notebook only selects and formats them.
 
 Run from this artifact directory:

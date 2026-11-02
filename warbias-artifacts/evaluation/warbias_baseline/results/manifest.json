@@ -788,8 +788,8 @@
       "bytes": 328740
     },
     "scores.csv": {
-      "sha256": "a7fdb892fe1b5679c92774f1d8073b69957a9bae1e9212db9a835cfba0e4e2ca",
-      "bytes": 546866
+      "sha256": "ff32873d56255637f09f7fee74868f2d3d22d4f733c3cc398dffc06af00b7f48",
+      "bytes": 606223
     }
   },
   "validation": {
@@ -874,6 +874,6 @@
     "definition": "Accept the native ABC/exact-option forms, Answer:/\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c: prefixes, a unique exact option with one terminal period, or an explicit first answer block followed by a blank line and explanation. Reject conflicting answer declarations, inconsistent label/text pairs and prose without an explicit choice. Strict format still requires a bare letter.",
     "strict_format": "A single bare A, B or C, ignoring surrounding whitespace and letter case."
   },
-  "analysis_code_identity_sha256": "366183e6b23fbdcf3f39b425cd31a41707a6085b420b4da4cd3635bbba054616",
+  "analysis_code_identity_sha256": "843a3ceef82e773abf46e9cccd759f87c39902302ca78fc6c9117c288198941c",
   "inference_code_identity_sha256": "0d845c3484887d7f31d3ace648ad7ab349779bf6fb4eb3c88dff9c1df69eba93"
 }

@@ -170,6 +170,12 @@ def test_primary_scores_use_matched_controls_and_retain_raw_results(
     assert model["triplets"]["per_token"]["uk"][0]["metrics"]["ss"]["estimate"] == 1
     primary = model["triplets"]["prior_normalised"]["uk"]
     assert primary[0]["metrics"]["ss"]["estimate"] == 0
+    slices = [scope for scope in primary if scope["scope"] == "actor_severity"]
+    assert len(slices) == 10
+    assert all(set(scope["metrics"]) <= {"ss"} for scope in slices)
+    assert all(
+        scope["metrics"]["ss"]["estimate"] == 0 for scope in slices if scope["rows"]
+    )
     assert primary[0]["metrics"]["tie_rate"]["estimate"] == 1
     assert primary[0]["metrics"]["association_margin"]["estimate"] == 0
     assert primary[0]["metrics"]["ss"]["ci95"] == [0, 0]
