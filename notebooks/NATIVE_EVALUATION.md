@@ -11,7 +11,8 @@ paths. They use evaluation data only.
 Use a separate Python 3.12 environment for evaluation. From the repository root:
 
 ```bash
-git clone --branch paper/paired-evaluation https://github.com/reirei-00/fair-uk.git ../fair-uk
+git clone https://github.com/reirei-00/fair-uk.git ../fair-uk
+git -C ../fair-uk checkout e0ffa59ce66a6dbd2b4875f76a01bff142dda20b
 python3.12 -m venv .venv-evaluation
 .venv-evaluation/bin/python -m pip install -e '../fair-uk[vllm]' \
   'vllm==0.18.1' 'transformers==4.57.6' 'numpy==2.2.6'
@@ -20,6 +21,8 @@ python3.12 -m venv .venv-evaluation
 Use a compatible CUDA build and allocate a GPU for collection. Keep the same
 Fair-UK checkout and environment for both phases. The notebook can use the
 training Jupyter kernel; model calls run through the evaluation Python.
+Use `VLLM_BATCH_INVARIANT=1` and `attention_backend="TRITON_ATTN"` in both
+phases. Qualify repeated inference on the target GPU.
 
 ## Inputs
 
@@ -45,9 +48,10 @@ twice on this development task. Scores must be finite and agree within an
 absolute tolerance of 1e-6. Development and evaluation IDs must not overlap.
 
 Model paths come from [setup](SETUP.md). Training outputs use
-`METHOD/MODEL__GROUP_LANGUAGE/merged_checkpoint/`. The workflow verifies the
-selected group, language, base model, data recipe, export checks and complete
-checkpoint inventory against the trainer receipt.
+`METHOD/MODEL__GROUP_LANGUAGE/intervention_adapter/`. Load each adapter with
+its pinned base using `representation="adapter"`. The workflow verifies the
+group, language, base model, data recipe and export checks against the training
+receipt. Fair-UK records the base and adapter file hashes separately.
 
 ## Run
 
@@ -72,10 +76,3 @@ and 240 QA questions per language. Annotated original/neutral triplets use the
 Fair-UK WarBias adapter. The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb)
 provides their per-checkpoint scores and severity slices. Keep these panels
 separate from native benchmark results.
-
-Load each trained adapter with its pinned base using `representation="adapter"`.
-Fair-UK records both file identities. Keep the same evaluator version and
-inference settings in the two phases.
-
-Use `VLLM_BATCH_INVARIANT=1` and `attention_backend="TRITON_ATTN"`
-for both the base and adapter. Qualify repeated inference on the target GPU.
