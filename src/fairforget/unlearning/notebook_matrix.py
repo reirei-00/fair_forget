@@ -13,13 +13,18 @@ METHODS = frozenset({"rmu", "task_vector", "wga_kl", "npo_kl", "biasunlearn"})
 WARBIAS_METHODS = frozenset({"rmu", "task_vector", "wga_kl"})
 
 
-def method_plan(repo, method, *, data_root=None, models_root=None):
+def method_plan(repo, method, *, data_root=None, models_root=None, protocol=None):
     """Expand one method over every registered checkpoint without touching inputs.
 
-    Model-specific WarBias recipes supply placement and immutable identities.
-    NPO/BiasUnlearn keep the original primary integration's data and settings.
-    Their model identity is expanded, never borrowed as a completed result.
+    The final WarBias protocol shares verified data across the selected methods.
+    Calls without a protocol preserve the historical model-specific recipes.
     """
+    if protocol == "warbias_final":
+        from .warbias_plan import method_plan as warbias_method_plan
+
+        return warbias_method_plan(repo, method, data_root=data_root, models_root=models_root)
+    if protocol is not None:
+        raise ValueError("unknown notebook data protocol")
     if method not in METHODS:
         raise ValueError("unknown notebook method")
     repo = Path(repo).resolve()

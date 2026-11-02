@@ -1,8 +1,9 @@
 # Fair-UK before/after evaluation
 
-Use [evaluate_before_after.ipynb](evaluate_before_after.ipynb) for all six pinned
-models and all five methods. The notebook contains collection and
-paired-comparison commands.
+This [workflow](evaluate_before_after.ipynb) covers the historical native
+benchmark integrations. It does not accept the final annotated WarBias triplet
+panels. Use the [current WarBias workflow](WARBIAS_UNLEARNING.md) for the three
+WarBias methods and their bilingual evaluation requirements.
 
 ## Evaluation environment
 

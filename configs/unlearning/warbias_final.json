@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "protocol": "warbias_final_v1",
+  "methods": ["wga_kl", "npo_kl", "biasunlearn"],
+  "training_language": "uk",
+  "evaluation_languages": ["uk", "en"],
+  "split": {"seed": 42, "development_fraction": 0.2},
+  "target_policy": "complete_sentence",
+  "preservation_scope": "in_domain_unrelated_sentences",
+  "lora": {
+    "r": 8,
+    "alpha": 16,
+    "target_modules": ["q_proj", "v_proj"],
+    "dropout": 0.0,
+    "bias": "none"
+  },
+  "training": {
+    "seed": 42,
+    "learning_rate": 0.00001,
+    "epochs": 2,
+    "batch_size": 1,
+    "max_length": 512,
+    "max_grad_norm": 1.0,
+    "gradient_checkpointing": true,
+    "retain_sampler": "seeded_family_round_robin_v1",
+    "retain_weight": 1.0,
+    "retain_reduction": "token_mean",
+    "add_special_tokens": true
+  },
+  "objectives": {
+    "wga_kl": {"wga_alpha": 1.0},
+    "npo_kl": {"npo_beta": 0.1},
+    "biasunlearn": {
+      "npo_beta": 0.1,
+      "suppression_weight": 1.0,
+      "correction_weight": 1.0,
+      "correction_reduction": "token_mean",
+      "adversarial_fraction": 0.25
+    }
+  }
+}

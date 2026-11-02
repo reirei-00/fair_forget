@@ -100,6 +100,13 @@ def validate_config(config_path: Path | str, *, methods=None):
     ):
         raise ValueError("data manifest SHA256 mismatch")
     manifest = json.loads(manifest_path.read_text())
+    if (
+        manifest.get("protocol") == "warbias_final_v1"
+        or config.get("notebook_matrix", {}).get("protocol") == "warbias_final"
+    ):
+        from .warbias_plan import validate_recipe
+
+        validate_recipe(config, manifest_path)
     if not (
         manifest.get("reviewed_for_gradients") is True
         or manifest.get("authorized_for_training") is True
