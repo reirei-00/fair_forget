@@ -165,14 +165,14 @@
     "fair_uk/suite.py": "41359d6aa79b085af13a2268a73bc4ce90c6ecbfc4892363b92c0a56d3634981",
     "fair_uk/warbias/__init__.py": "48577a2647d656f09e3eea1491e35927385513a64f6d97fee40681f4128b75c9",
     "fair_uk/warbias/aggregate.py": "bc940183ed8f30b640531968c36406a8107d03fb26d3c7c13b044435205d7aac",
-    "fair_uk/warbias/baseline.py": "405135bc321eda7bbdbdd49df7cacc4171bebd2594b80f0c53f0b6a87ed4247e",
+    "fair_uk/warbias/baseline.py": "3c8a41e2e5f5e0d5a5001f051ca93053660d23d91e84c0695b524790ca1e93c6",
     "fair_uk/warbias/baseline_answers.py": "0bdbf40a93ec4bf904babdc3c439f11cf72a669268947f45326d5ec812f204eb",
     "fair_uk/warbias/baseline_inputs.py": "b38665c09200e0a795b15d223cebf4883cad9e8f467ba987df9d823bef496b31",
     "fair_uk/warbias/baseline_metadata.py": "61247c2edada74fb19a986b35d24a634b380d6d988017e8997dace05560cd583",
-    "fair_uk/warbias/baseline_neutral.py": "8fa0fcdff375a997f94e4310510c7d56a33f110bb5b19c3d67ab894e59de36e6",
+    "fair_uk/warbias/baseline_neutral.py": "a176c89d1dd30754f695c94fc363d16931821347fa04cc6fbfcba459632fafc9",
     "fair_uk/warbias/baseline_replay.py": "cd8fa808967ac881b3c1ab6a8dc0437138caa30200be732f9fae137ca0fd7d62",
-    "fair_uk/warbias/baseline_reporting.py": "c1389c3e6d4928817696116e7354c1abbef7fc726986de15a8bea74c1b186057",
-    "fair_uk/warbias/baseline_summary.py": "fe508a918289fb0c5a3151024d0e87ddb1ddd5abc08ec92d5de11eee34d18f11",
+    "fair_uk/warbias/baseline_reporting.py": "418b612489ee81639de82fd35afb6a18f35310b7edda3801a74374e0baac6df5",
+    "fair_uk/warbias/baseline_summary.py": "3011b098000ac47551bb6621ee1578f28d624184833e7743e897b67c62d91bdc",
     "fair_uk/warbias/calibration.py": "130e3d289a0d96c2e2d696d34f53bc7f4d4b51bbd0dc856980b32ddf727bd2b1",
     "fair_uk/warbias/cli.py": "5afc2d64396b68b5d2b71bdc5834ba805f47869c956ff69036a449bcfd1a8d4d",
     "fair_uk/warbias/detection.py": "138fa188c72f34809c1935b99fa54aaba84eed693a9c6d1254d8ddb319853952",
@@ -895,20 +895,20 @@
       "bytes": 2194
     },
     "evidence_gaps.csv": {
-      "sha256": "c1fb69ba0c4ae4b165e3eac621d9faf4f0864e5d1857718f3a1b5a4c7d30f64e",
-      "bytes": 26856
+      "sha256": "525a07097c572c6f25f1e9ec03998f89c1f8f5877abcc992ec6c8a337b57051a",
+      "bytes": 11830
     },
     "group_diagnostics.csv": {
       "sha256": "55ee11ca0807c56979c57f44773b1224ebf349e66d5047c8d2615b96b6f47e3f",
       "bytes": 601098
     },
     "language_contrasts.csv": {
-      "sha256": "796fa0c3edff5f241f8b1d96c7856f4c084bf28f2f35d05712059ce78ccd07f4",
-      "bytes": 710301
+      "sha256": "70860ee6a4484549aabd6d19a942a0b7f3199280fd1c030cf9b09cdbec9e85fe",
+      "bytes": 328740
     },
     "scores.csv": {
-      "sha256": "640532c2de5443919dae1ebd1857f95340b36af97a3621eb78b68d542c72efa9",
-      "bytes": 1196596
+      "sha256": "ff32873d56255637f09f7fee74868f2d3d22d4f733c3cc398dffc06af00b7f48",
+      "bytes": 606223
     }
   },
   "validation": {
