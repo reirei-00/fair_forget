@@ -31,8 +31,8 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
     assert (exported / "src/warbias_kit/warbias/provider.py").is_file()
     assert (exported / "protocol/pilot_snapshots.json").is_file()
     assert (exported / "notebooks/04_sample_translation_comet.ipynb").is_file()
-    assert len(list((exported / "notebooks").glob("[0-9][0-9]_*.ipynb"))) == 7
-    assert (exported / "notebooks/warbias_baseline.ipynb").is_file()
+    assert len(list((exported / "notebooks").glob("[0-9][0-9]_*.ipynb"))) == 8
+    assert (exported / "notebooks/08_warbias_baseline.ipynb").is_file()
     for relative in (
         "docs/evaluation.md",
         "scripts/prepare_warbias_evaluation.py",
@@ -40,6 +40,8 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
         "evaluation/warbias_baseline/models.json",
         "evaluation/warbias_baseline/model_assets.json",
         "evaluation/warbias_baseline/profile_mapping.jsonl",
+        "evaluation/warbias_baseline/neutral_controls.jsonl",
+        "evaluation/warbias_baseline/neutral_rules.json",
     ):
         assert (exported / relative).is_file()
     assert (exported / "protocol/history/matrix_full.csv").is_file()
@@ -434,3 +436,65 @@ def test_source_export_allows_an_omitted_baseline_results_bundle(exported, tmp_p
     result = exporter.export(exported, tmp_path / "without-results")
     assert not (result / "evaluation/warbias_baseline/results").exists()
     assert exporter.verify(result) > 50
+
+
+@pytest.fixture
+def neutral_result_bindings(exported):
+    path = exported / "evaluation/warbias_baseline/results/manifest.json"
+    manifest = json.loads(path.read_text())
+    neutral = {"reviewer_type": "assistant"}
+    for relative, field in exporter._NEUTRAL_INPUTS.items():
+        source = exported / relative
+        binding = {"sha256": exporter._hash(source), "bytes": source.stat().st_size}
+        manifest["reproduction_inputs"][relative] = binding
+        neutral[field] = binding["sha256"]
+    manifest["neutral_release"] = neutral
+    manifest["primary_prior_normalised_ss"] = {"status": "available"}
+    path.write_text(json.dumps(manifest))
+    return exported, path, manifest
+
+
+def test_export_binds_both_neutral_inputs_to_the_saved_analysis(neutral_result_bindings, tmp_path):
+    source, _, manifest = neutral_result_bindings
+    assert len(manifest["reproduction_inputs"]) == 8
+    result = exporter.export(source, tmp_path / "with-controls")
+    assert exporter.verify(result) > 50
+    for relative in exporter._NEUTRAL_INPUTS:
+        assert (result / relative).read_bytes() == (source / relative).read_bytes()
+
+
+@pytest.mark.parametrize(
+    "damage",
+    [
+        "records_file",
+        "rules_file",
+        "records_binding",
+        "rules_binding",
+        "records_declaration",
+        "rules_declaration",
+        "missing_declaration",
+        "orphaned_bindings",
+    ],
+)
+def test_export_rejects_unbound_or_changed_neutral_inputs(
+    neutral_result_bindings, tmp_path, damage
+):
+    source, manifest_path, manifest = neutral_result_bindings
+    records, rules = exporter._NEUTRAL_INPUTS
+    if damage in {"records_file", "rules_file"}:
+        target = source / (records if damage == "records_file" else rules)
+        with target.open("a") as stream:
+            stream.write("\n")
+    elif damage in {"records_binding", "rules_binding"}:
+        del manifest["reproduction_inputs"][records if damage == "records_binding" else rules]
+    elif damage in {"records_declaration", "rules_declaration"}:
+        field = "records_sha256" if damage == "records_declaration" else "rules_sha256"
+        manifest["neutral_release"][field] = "0" * 64
+    else:
+        del manifest["neutral_release"]
+        if damage == "orphaned_bindings":
+            manifest["primary_prior_normalised_ss"]["status"] = "unavailable"
+    manifest_path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="Baseline result"):
+        exporter.export(source, tmp_path / "rejected")
+    assert not (tmp_path / "rejected").exists()

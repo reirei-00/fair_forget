@@ -91,7 +91,7 @@ check records `failed_export_verification`; only a verified reload records
 
 Use the same held-out IDs before and after training. Keep scores separate by
 group and evaluation language. All metrics and uncertainty estimates must
-come from Fair-UK. The [baseline notebook](../warbias-artifacts/notebooks/warbias_baseline.ipynb) supports
+come from Fair-UK. The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb) supports
 current per-checkpoint triplet and QA scores, including severity slices.
 A full-release score includes training and development items and is a
 descriptive diagnostic.
@@ -107,9 +107,10 @@ Capability checks use separate evaluation-only runs before and after the
 intervention. They do not supply training, correction or preservation data.
 Their benchmark selection is separate from this WarBias application setup.
 
-Use the [before/after notebook](evaluate_before_after.ipynb) for native benchmark
-comparisons across all 48 interventions. It reuses six shared base checkpoints.
-For final annotated WarBias triplets, use the Fair-UK original/neutral adapter
-with matching held-out IDs and current-text controls. Keep full-release baseline
-scores separate from held-out intervention results. Preparation and CPU examples
-do not establish measured mitigation.
+Use the [before/after notebook](evaluate_before_after.ipynb) for WarBias scores.
+It reuses baseline notebook 08's collector, explicit-choice parser, neutral
+controls, group/severity summaries and component bootstrap. Score the same
+717 held-out triplets and all QA questions in both phases. Save full-release
+triplet diagnostics separately. The [native benchmark notebook](native_before_after.ipynb)
+retains the other registered integrations. Preparation and CPU checks do not
+establish mitigation results.

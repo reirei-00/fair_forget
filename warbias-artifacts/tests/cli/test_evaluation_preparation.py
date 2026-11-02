@@ -9,6 +9,9 @@ from pathlib import Path
 
 import pytest
 
+from warbias_kit.io import digest
+from warbias_kit.warbias.neutral import VERSION as NEUTRAL_VERSION
+
 pytest.importorskip("lm_eval.fair_uk.warbias.baseline")
 from lm_eval.fair_uk import data
 
@@ -17,6 +20,11 @@ SCRIPT = ROOT / "scripts/prepare_warbias_evaluation.py"
 spec = importlib.util.spec_from_file_location("warbias_preparation", SCRIPT)
 preparation = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(preparation)
+collector_spec = importlib.util.spec_from_file_location(
+    "warbias_collector", ROOT / "scripts/run_warbias_baseline.py"
+)
+collector = importlib.util.module_from_spec(collector_spec)
+collector_spec.loader.exec_module(collector)
 
 
 def run_command(arguments, **kwargs):
@@ -222,6 +230,177 @@ def test_local_source_binding_rejects_escape(source, tmp_path):
             output, tmp_path / "models", snapshot, resources=resources, model_registry=registry
         )
     assert not output.exists()
+
+
+@pytest.fixture
+def neutral_source(source, tmp_path):
+    snapshot, _, _ = source
+    records, rules = [], []
+    for language in ("uk", "en"):
+        rule = {
+            "id": f"{language}-target",
+            "language": language,
+            "source": "S",
+            "replacement": "People",
+            "reason": "Replace the target group only.",
+        }
+        rules.append(rule)
+        for row in preparation.read_rows(snapshot / f"data/{language}.jsonl"):
+            neutral = {field: row[field] for field in preparation.ROLES}
+            neutral["stereotype"] = "People text."
+            records.append(
+                {
+                    "id": row["id"],
+                    "language": language,
+                    "version": NEUTRAL_VERSION,
+                    "status": "valid",
+                    "source_sha256": {field: digest(row[field]) for field in preparation.ROLES},
+                    "neutral": neutral,
+                    "edits": {
+                        "stereotype": [
+                            {
+                                "start": 0,
+                                "end": 1,
+                                "source": "S",
+                                "replacement": "People",
+                                "rule_id": rule["id"],
+                            }
+                        ],
+                        "counter_stereotype": [],
+                        "unrelated": [],
+                    },
+                    "review": {"reviewer_type": "assistant", "status": "accepted"},
+                }
+            )
+    records_path, rules_path = tmp_path / "neutral.jsonl", tmp_path / "neutral_rules.json"
+    preparation.write_rows(records_path, records)
+    preparation.write_json(rules_path, {"schema_version": 1, "rules": rules})
+    return records_path, rules_path
+
+
+def test_neutral_preparation_preserves_source_and_separates_collection(
+    source, neutral_source, tmp_path
+):
+    snapshot, resources, registry = source
+    records, rules = neutral_source
+    original, supplement = tmp_path / "original", tmp_path / "supplement"
+    kwargs = {"resources": resources, "model_registry": registry}
+    preparation.prepare(original, tmp_path / "models", snapshot, **kwargs)
+    overview = preparation.prepare(
+        supplement, tmp_path / "models", snapshot, neutral=records, neutral_rules=rules, **kwargs
+    )
+    manifest = preparation.read_json(supplement / "inputs/manifest.json")
+    assert set(manifest["datasets"]) == collector.NEUTRAL_TASKS
+    assert len(overview["cells"]) == 2
+    assert collector.collection_tasks(manifest) == list(manifest["datasets"])
+    binding = manifest["neutral_controls"]
+    assert binding["source_bundle_sha256"] == preparation.sha(original / "inputs/manifest.json")
+    assert (supplement / "inputs" / binding["source_bundle"]["path"]).read_bytes() == (
+        original / "inputs/manifest.json"
+    ).read_bytes()
+    assert binding["source_dataset_manifest_sha256"] == preparation.sha(
+        snapshot / "protocol/dataset.json"
+    )
+    assert (original / "models.json").read_bytes() == (supplement / "models.json").read_bytes()
+    assert (supplement / "inputs" / binding["records"]["path"]).read_bytes() == records.read_bytes()
+    assert (supplement / "inputs" / binding["rules"]["path"]).read_bytes() == rules.read_bytes()
+    for language in ("uk", "en"):
+        task = f"warbias_triplets_annotated_neutral_{language}"
+        control = data.load(task, dataset_bundle=supplement / "inputs/manifest.json")
+        baseline = data.load(
+            task.replace("_neutral", ""), dataset_bundle=original / "inputs/manifest.json"
+        )
+        for row, original_row in zip(control, baseline, strict=True):
+            assert row["sentences"] == ["People text.", "C text.", "U text."]
+            assert row["source"]["released"] == original_row["source"]["released"]
+            metadata = dict(row["source"]["metadata"])
+            del metadata["neutral_variant"]
+            assert metadata == original_row["source"]["metadata"]
+        assert not (supplement / f"inputs/data/warbias_{language}.jsonl").exists()
+
+
+@pytest.mark.parametrize(
+    "change, message",
+    [
+        ("stale_text", "stale source"),
+        ("unreviewed", "accepted assistant review"),
+        ("duplicate", "unique current-release"),
+        ("missing", "complete bilingual"),
+        ("wrong_span", "source span"),
+        ("overlap", "source span"),
+        ("unrecorded_change", "replayed"),
+        ("unknown_rule", "declared rule"),
+    ],
+)
+def test_neutral_preparation_rejects_unbound_controls(
+    source, neutral_source, tmp_path, change, message
+):
+    snapshot, resources, registry = source
+    records_path, rules_path = neutral_source
+    records = preparation.read_rows(records_path)
+    record = records[0]
+    edit = record["edits"]["stereotype"][0]
+    if change == "stale_text":
+        record["source_sha256"]["stereotype"] = "0" * 64
+    elif change == "unreviewed":
+        record["review"]["status"] = "pending"
+    elif change == "duplicate":
+        records.append(record)
+    elif change == "missing":
+        records.pop()
+    elif change == "wrong_span":
+        edit["end"] = 2
+    elif change == "overlap":
+        record["edits"]["stereotype"].append(dict(edit))
+    elif change == "unrecorded_change":
+        record["neutral"]["unrelated"] = "Changed content."
+    elif change == "unknown_rule":
+        edit["rule_id"] = "unknown"
+    preparation.write_rows(records_path, records)
+    output = tmp_path / "release"
+    with pytest.raises(ValueError, match=message):
+        preparation.prepare(
+            output,
+            tmp_path / "models",
+            snapshot,
+            resources=resources,
+            model_registry=registry,
+            neutral=records_path,
+            neutral_rules=rules_path,
+        )
+    assert not output.exists()
+
+
+@pytest.mark.parametrize(
+    "tasks",
+    [
+        {"warbias_triplets_annotated_neutral_uk"},
+        collector.NEUTRAL_TASKS | {"warbias_uk"},
+        {"warbias_triplets_uk", "warbias_triplets_en", "warbias_uk", "warbias_en"},
+    ],
+)
+def test_collector_rejects_partial_or_mixed_panels(tasks):
+    manifest = {"datasets": {task: {"language": task.rsplit("_", 1)[1]} for task in tasks}}
+    with pytest.raises(ValueError, match="four baseline tasks or the two"):
+        collector.collection_tasks(manifest)
+
+
+def test_collector_requires_neutral_bindings_and_keeps_baseline_panel():
+    baseline = {
+        "datasets": {
+            task: {"language": task.rsplit("_", 1)[1]} for task in collector.BASELINE_TASKS
+        }
+    }
+    assert set(collector.collection_tasks(baseline)) == collector.BASELINE_TASKS
+    neutral = {
+        "datasets": {task: {"language": task.rsplit("_", 1)[1]} for task in collector.NEUTRAL_TASKS}
+    }
+    with pytest.raises(ValueError, match="review and source bindings"):
+        collector.collection_tasks(neutral)
+    neutral["neutral_controls"] = {"schema_version": 1}
+    neutral["datasets"]["warbias_triplets_annotated_neutral_en"]["language"] = "uk"
+    with pytest.raises(ValueError, match="four baseline tasks or the two"):
+        collector.collection_tasks(neutral)
 
 
 def test_export_prepares_offline_without_parent_repository(tmp_path):

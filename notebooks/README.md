@@ -19,12 +19,15 @@ and training settings. The [model registry](../configs/unlearning/models.json)
 pins Qwen3 8B, Llama 3.1 8B Instruct, Gemma 3 12B IT, Lapa 12B Instruct,
 Mamay 12B v2 and Mamay 27B v2.
 
-The [baseline notebook](../warbias-artifacts/notebooks/warbias_baseline.ipynb) imports Fair-UK for bilingual
+The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb) imports Fair-UK for bilingual
 triplet and QA metrics, including severity slices. See the
 [WarBias evaluation guide](../warbias-artifacts/docs/evaluation.md). The
-[before/after notebook](evaluate_before_after.ipynb) evaluates native benchmarks
-for all 48 selected interventions. See the [evaluation setup](EVALUATION.md).
+[before/after notebook](evaluate_before_after.ipynb) evaluates WarBias with the
+same outcomes and controls as baseline notebook 08 for all 48 interventions. See the [evaluation setup](EVALUATION.md).
 
 Separate experiments retain [RMU](rmu.ipynb),
 [task-vector negation](task_vector.ipynb), optional [WGA+KL](wga_kl.ipynb), and saved reports under
 [executed/](executed/).
+
+Use the [native benchmark notebook](native_before_after.ipynb) for additional
+registered benchmark comparisons. These inputs are evaluation only.

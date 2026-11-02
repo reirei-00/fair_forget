@@ -167,7 +167,7 @@ EVALUATION = """## Evaluation and implementation
 
 Evaluate the same held-out WarBias IDs in Ukrainian and English before and after each run. Keep scores separate by group and evaluation language. A score over the full release is a descriptive diagnostic because it includes training and development rows. All metrics, including severity slices, come from Fair-UK.
 
-The [baseline notebook](../warbias-artifacts/notebooks/warbias_baseline.ipynb) provides the current per-checkpoint metrics. Use the [before/after notebook](evaluate_before_after.ipynb) for native benchmark comparisons. Annotated WarBias triplets use the Fair-UK original/neutral adapter with matched held-out inputs. See the [WarBias workflow](WARBIAS_UNLEARNING.md).
+The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb) provides the current per-checkpoint metrics. Use the [before/after notebook](evaluate_before_after.ipynb) for the same WarBias outcomes, parser and controls as baseline notebook 08 on matched held-out IDs. The [native benchmark notebook](native_before_after.ipynb) retains the other registered integrations. See the [WarBias workflow](WARBIAS_UNLEARNING.md).
 
 - [Data binding](../src/fairforget/unlearning/warbias_data.py)
 - [Loss implementations](../src/fairforget/unlearning/objectives.py)

@@ -17,6 +17,7 @@ from warbias_kit.warbias.dataset_metadata import (
     apply_metadata_corrections,
     load_metadata_corrections,
 )
+from warbias_kit.warbias.neutral_review import validate_reviewed_variants
 
 REPOSITORY = "the-project/WarBias"
 ROOT = Path(__file__).resolve().parents[1]
@@ -226,7 +227,95 @@ def dataset_manifest(inputs, adapted, sources, mapping_path):
     }
 
 
-def prepare(output, model_root, source_dir=None, *, resources=RESOURCES, model_registry=None):
+def reviewed_neutral_records(path, rules_path, adapted):
+    released = {
+        language: [
+            row["source"]["released"] for row in adapted[f"warbias_triplets_annotated_{language}"]
+        ]
+        for language in ("uk", "en")
+    }
+    return validate_reviewed_variants(released, read_rows(path), read_json(rules_path))
+
+
+def neutral_manifest(inputs, manifest, adapted, records_path, rules_path):
+    records = reviewed_neutral_records(records_path, rules_path, adapted)
+    source_bundle = inputs / "sources/baseline_manifest.json"
+    write_json(source_bundle, manifest)
+    binding = {
+        "schema_version": 1,
+        "source_bundle": {
+            "path": source_bundle.relative_to(inputs).as_posix(),
+            "sha256": sha(source_bundle),
+        },
+        "source_bundle_sha256": sha(source_bundle),
+        "source_dataset_manifest_sha256": manifest["source"]["dataset_manifest_sha256"],
+    }
+    for name, source in (("records", records_path), ("rules", rules_path)):
+        target = inputs / "neutral" / ("records.jsonl" if name == "records" else "rules.json")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, target)
+        binding[name] = {"path": target.relative_to(inputs).as_posix(), "sha256": sha(target)}
+    # The original manifest is evidence; only the two control tasks are collected.
+    shutil.rmtree(inputs / "data")
+    shutil.rmtree(inputs / "pairs")
+    datasets = {}
+    tasks = {
+        language: f"warbias_triplets_annotated_neutral_{language}" for language in ("uk", "en")
+    }
+    ids = [row["id"] for row in adapted["warbias_triplets_annotated_uk"]]
+    pairs = inputs / "pairs/triplets_neutral.jsonl"
+    write_rows(pairs, [{"id": item, "uk_id": item, "en_id": item} for item in ids])
+    pairing = {
+        "mode": "mapped",
+        "uk_task": tasks["uk"],
+        "en_task": tasks["en"],
+        "matched_rows": len(ids),
+        "excluded_uk_rows": 0,
+        "filename": pairs.relative_to(inputs).as_posix(),
+        "sha256": sha(pairs),
+        "alignment": "identical_current_release_ids",
+    }
+    for language, task in tasks.items():
+        original_task = f"warbias_triplets_annotated_{language}"
+        rows = [
+            adapt_annotated(
+                row["source"]["released"],
+                {
+                    **row["source"]["metadata"],
+                    "neutral_variant": records[language, row["id"]]["neutral"],
+                },
+                language,
+            )
+            for row in adapted[original_task]
+        ]
+        path = inputs / "data" / f"{task}.jsonl"
+        write_rows(path, rows)
+        datasets[task] = {
+            **manifest["datasets"][original_task],
+            "filename": path.relative_to(inputs).as_posix(),
+            "sha256": sha(path),
+            "pairing": pairing,
+            "counterpart": tasks["en" if language == "uk" else "uk"],
+            "measurement_purpose": "complete_current_release_neutral_controls",
+        }
+    return {
+        **manifest,
+        "datasets": datasets,
+        "neutral_controls": binding,
+        "panel": {**manifest["panel"], "role": "neutral-group control baseline"},
+    }
+
+
+def prepare(
+    output,
+    model_root,
+    source_dir=None,
+    *,
+    resources=RESOURCES,
+    model_registry=None,
+    neutral=None,
+    neutral_rules=None,
+):
     output, model_root = (
         Path(output).expanduser().resolve(),
         Path(model_root).expanduser().resolve(),
@@ -234,6 +323,13 @@ def prepare(output, model_root, source_dir=None, *, resources=RESOURCES, model_r
     if output.exists():
         raise ValueError("Use a new output directory")
     source_dir = Path(source_dir or ROOT).resolve()
+    if neutral_rules is not None and neutral is None:
+        raise ValueError("Neutral replacement rules require neutral records")
+    if neutral is not None:
+        neutral = Path(neutral).expanduser().resolve()
+        neutral_rules = (
+            Path(neutral_rules or neutral.with_name("neutral_rules.json")).expanduser().resolve()
+        )
     load_dataset(source_dir)
     corrections = load_metadata_corrections(source_dir)
     mapping_path = Path(resources) / "profile_mapping.jsonl"
@@ -255,6 +351,8 @@ def prepare(output, model_root, source_dir=None, *, resources=RESOURCES, model_r
             manifest["metadata_corrections"] = {
                 key: sources["metadata_corrections"][key] for key in ("path", "sha256")
             }
+        if neutral is not None:
+            manifest = neutral_manifest(inputs, manifest, adapted, neutral, neutral_rules)
         write_json(inputs / "manifest.json", manifest)
         severity = [
             {
@@ -310,8 +408,18 @@ def main(argv=None):
     parser.add_argument(
         "--source-dir", type=Path, help="Source artifact directory (defaults to this artifact)"
     )
+    parser.add_argument("--neutral", type=Path, help="Reviewed current-text neutral records")
+    parser.add_argument(
+        "--neutral-rules", type=Path, help="Replacement rules (defaults beside neutral records)"
+    )
     args = parser.parse_args(argv)
-    overview = prepare(args.output, args.model_root, args.source_dir)
+    overview = prepare(
+        args.output,
+        args.model_root,
+        args.source_dir,
+        neutral=args.neutral,
+        neutral_rules=args.neutral_rules,
+    )
     print(
         json.dumps(
             {"status": "prepared", "cells": len(overview["cells"]), "output": str(args.output)},

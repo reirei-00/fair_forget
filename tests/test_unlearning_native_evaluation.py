@@ -129,7 +129,10 @@ class NativeEvaluationTests(unittest.TestCase):
         }
         path = item["directory"] / "intervention.json"
         path.write_text(json.dumps(receipt))
-        with mock.patch.object(native, "validate_config", return_value=(config, {}, provenance)):
+        with mock.patch(
+            "fairforget.unlearning.evaluation_checkpoints.validate_config",
+            return_value=(config, {}, provenance),
+        ):
             self.workflow.require_training(item)
             for change in (
                 {"language": "en"},
