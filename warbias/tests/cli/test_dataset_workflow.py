@@ -366,27 +366,32 @@ def test_recorded_choice_uses_the_exact_saved_analysis_and_author_decision():
     inputs = dataset_workflow.load_inputs(ROOT)
     analysis, record = dataset_workflow.recorded_selection(ROOT, inputs)
     protocol = json.loads((ROOT / "protocol/construction.json").read_text())
-    assert analysis["coverage"]["ratings"] == 96
-    assert analysis["coverage"]["raters"] == 2
-    assert analysis["coverage"]["expected_ratings"] == 100
+    assert analysis["coverage"]["ratings"] == 144
+    assert analysis["coverage"]["raters"] == 3
+    assert analysis["coverage"]["expected_ratings"] == 150
     assert analysis["coverage"]["rated_items"] == 48
     assert len(analysis["coverage"]["missing_condition_ids"]) == 2
-    assert {row["strategy"] for row in analysis["highest_mean_conditions"]} == {
-        "sequential",
-        "zero_shot",
+    assert len(analysis["highest_mean_conditions"]) == 1
+    winner = analysis["highest_mean_conditions"][0]
+    assert (winner["candidate_id"], winner["strategy"]) == ("lapa12b", "sequential")
+    expected_means = {
+        ("lapa12b", "sequential"): 158 / 36,
+        ("lapa12b", "zero_shot"): 156 / 36,
+        ("mamay27b", "sequential"): 148 / 36,
+        ("mamay27b", "zero_shot"): 136 / 36,
     }
-    assert all(
-        row["candidate_id"] == "lapa12b"
-        and row["mean_score"] == pytest.approx(107 / 24)
-        and row["ratings"] == 24
-        for row in analysis["highest_mean_conditions"]
-    )
-    corrected = [
+    assert len(analysis["condition_summary"]) == len(expected_means)
+    for row in analysis["condition_summary"]:
+        assert row["ratings"] == 36
+        assert row["mean_score"] == pytest.approx(
+            expected_means[row["candidate_id"], row["strategy"]]
+        )
+    source_rating = [
         row
         for row in inputs["pilot_human_ratings"]
         if row["blind_id"] == "WBV-DFEE19A565" and row["rater_id"] == "rater_02"
     ]
-    assert len(corrected) == 1 and corrected[0]["score"] == "3"
+    assert len(source_rating) == 1 and source_rating[0]["score"] == "2"
     assert record["kind"] == "recorded_study_condition_choice"
     assert record["selected_condition"] == protocol["selected_condition"]
     assert record["decision_record"] == protocol["selection"]

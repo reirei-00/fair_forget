@@ -30,8 +30,8 @@
     ],
     "pilot_generated_items": 50,
     "pilot_reviewed_items": 48,
-    "raters": 2,
-    "valid_scores": 96,
+    "raters": 3,
+    "valid_scores": 144,
     "review_coverage": {
       "missing_items": 2,
       "missing_reason": null
@@ -56,7 +56,7 @@
       },
       {
         "artifact": "author_supplied_annotation_workbook",
-        "sha256": "95c99aa517971f8974c68682e2a61a17632cb6fcdc4916dfef31a852444ba9cb"
+        "sha256": "bbc5ee6ef73a41cf92552b420dd72cc0619da5b00e2e88863c8563c1010ad68e"
       }
     ],
     "rating_source": "author_supplied_annotation_workbook"
