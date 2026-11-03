@@ -17,7 +17,7 @@ from unlearning_fixtures import AssetCatalog
 
 from fairforget.unlearning import native_evaluation, notebook_matrix, warbias_data
 from fairforget.unlearning.trainer import build_biasunlearn_pools, file_hash, hash_tree, write_json
-from fairforget.unlearning.warbias_plan import selected_models
+from fairforget.unlearning.warbias_plan import selected_models, validate_recipe
 
 ROOT = Path(__file__).resolve().parents[1]
 METHODS = ("biasunlearn",)
@@ -31,6 +31,7 @@ class WarBiasPlanTests(unittest.TestCase):
         self.assertEqual(config["methods"], list(METHODS))
         self.assertEqual(config["optional_methods"], [])
         self.assertEqual(set(config["objectives"]), {"biasunlearn"})
+        self.assertEqual(config["evaluation_language_policy"], "training_language")
         self.assertEqual(len(selected_models(ROOT)), 5)
         self.assertNotIn("mamay27b_v2", config["model_ids"])
         for method in ("npo_kl", "wga_kl"):
@@ -68,6 +69,34 @@ class WarBiasPlanTests(unittest.TestCase):
                 )
                 with self.assertRaisesRegex(ValueError, "unique registered"):
                     selected_models(self.root)
+
+    def test_evaluation_policy_change_preserves_verified_training_sources(self):
+        recipe = self.plan("biasunlearn")[0]["recipe"]
+        source = json.loads((ROOT / "configs/unlearning/warbias_final.json").read_text())
+        source.pop("evaluation_language_policy")
+        source_path = self.root / "original_experiment.json"
+        source_path.write_text(json.dumps(source))
+        registry = self.root / "original_models.json"
+        registry.write_bytes((ROOT / "configs/unlearning/models.json").read_bytes())
+        matrix = recipe["notebook_matrix"]
+        matrix["source_template"] = {"path": str(source_path), "sha256": file_hash(source_path)}
+        matrix["model_registry"] = {"path": str(registry), "sha256": file_hash(registry)}
+        original = copy.deepcopy(recipe)
+        validate_recipe(recipe, recipe["data_manifest"])
+        self.assertEqual(recipe, original)
+        source["training"]["epochs"] = 3
+        source_path.write_text(json.dumps(source))
+        with self.assertRaisesRegex(ValueError, "configuration differs"):
+            validate_recipe(recipe, recipe["data_manifest"])
+        matrix["source_template"]["sha256"] = file_hash(source_path)
+        with self.assertRaisesRegex(ValueError, "configuration differs"):
+            validate_recipe(recipe, recipe["data_manifest"])
+        source["training"]["epochs"] = 2
+        source_path.write_text(json.dumps(source))
+        matrix["source_template"]["sha256"] = file_hash(source_path)
+        registry.write_text("{}")
+        with self.assertRaisesRegex(ValueError, "pinned model registry"):
+            validate_recipe(recipe, recipe["data_manifest"])
 
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()

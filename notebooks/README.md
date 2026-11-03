@@ -10,8 +10,8 @@ Use the [setup notebook](setup.ipynb), [setup guide](SETUP.md) and
 The BiasUnlearn notebook configures four separate training directions: IDP in Ukrainian,
 IDP in English, veteran in Ukrainian, and veteran in English. Each direction
 uses one group and one language. All five pinned models run independently from
-their base checkpoints. This gives 20 BiasUnlearn runs. Evaluation covers both
-groups in Ukrainian and English.
+their base checkpoints. This gives 20 BiasUnlearn runs. Each adapter is evaluated
+in its training language, with both groups included.
 
 The [configuration](../configs/unlearning/warbias_final.json) defines the method
 and training settings. The [model registry](../configs/unlearning/models.json)

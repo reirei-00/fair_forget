@@ -29,6 +29,22 @@ def selected_models(repo):
     return [indexed[alias] for alias in selected]
 
 
+def evaluation_languages(repo, training_language):
+    """Select the intervention's evaluation language from the current policy."""
+    path = Path(repo) / "configs/unlearning/warbias_final.json"
+    experiment = json.loads(path.read_text())
+    if (
+        experiment.get("evaluation_language_policy") != "training_language"
+        or training_language not in experiment["evaluation_languages"]
+    ):
+        raise ValueError("Evaluate each intervention in its training language")
+    return [training_language]
+
+
+def _training_configuration(experiment):
+    return {key: value for key, value in experiment.items() if key != "evaluation_language_policy"}
+
+
 def _training_settings(experiment, method, rows):
     training = copy.deepcopy(experiment["training"])
     training.update(experiment["objectives"][method])
@@ -191,12 +207,13 @@ def validate_recipe(config, manifest_path):
         raise ValueError("final WarBias data requires an explicit final-release recipe")
     experiment_path = repo / "configs/unlearning/warbias_final.json"
     template = config["notebook_matrix"].get("source_template", {})
-    if (
-        template.get("sha256") != file_hash(experiment_path)
-        or Path(template.get("path", "")).resolve() != experiment_path
-    ):
+    source_path = Path(template.get("path", "")).resolve()
+    if not source_path.is_file() or template.get("sha256") != file_hash(source_path):
         raise ValueError("final WarBias experiment configuration differs")
     experiment = json.loads(experiment_path.read_text())
+    source_experiment = json.loads(source_path.read_text())
+    if _training_configuration(source_experiment) != _training_configuration(experiment):
+        raise ValueError("final WarBias experiment configuration differs")
     group, language = config.get("target_group"), config.get("training_language")
     if group is None or language is None:
         raise ValueError("final WarBias recipes require target_group and training_language")
@@ -215,13 +232,15 @@ def validate_recipe(config, manifest_path):
         raise ValueError("recipe settings differ from the final WarBias experiment")
     registry_path = repo / "configs/unlearning/models.json"
     model_registry = config["notebook_matrix"].get("model_registry", {})
+    source_registry = Path(model_registry.get("path", "")).resolve()
     registry = selected_models(repo)
     selected = [
         model for model in registry if model["id"] == config["notebook_matrix"].get("model_alias")
     ]
     if (
         model_registry.get("sha256") != file_hash(registry_path)
-        or Path(model_registry.get("path", "")).resolve() != registry_path
+        or not source_registry.is_file()
+        or file_hash(source_registry) != model_registry.get("sha256")
         or len(selected) != 1
         or config["model_id"] != selected[0]["repository"]
         or config["model_revision"] != selected[0]["revision"]

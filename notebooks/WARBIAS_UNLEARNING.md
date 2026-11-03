@@ -12,7 +12,7 @@ BiasUnlearn-style uses the final WarBias source. It contains
 
 Each direction trains on one group and one language. All five pinned models
 start independently from their base checkpoints. This gives 20 BiasUnlearn runs.
-Evaluation covers both groups in both languages.
+Each adapter is evaluated only in its training language, with both groups included.
 The application tests whether WarBias supplies useful data for bias mitigation.
 Each unchanged base checkpoint is the comparison control. The main study uses
 one fixed training seed; uncertainty over cases is reported separately.
@@ -41,9 +41,9 @@ supply training and test, and a singleton stays in training. This search does no
 Counts are triplets per language. Development contains five components per
 group, with eight distinct components across both groups. Veteran severity
 level 5 has only two components, so it appears in training and test.
-Evaluation uses the same 201 test triplets and all 240 baseline QA questions per
-language. QA questions never supply gradient data. Some QA claims also occur
-in training or development triplets; each bundle records this overlap. The full
+Evaluation uses the same 201 test triplets and all 240 baseline QA questions in
+the adapter's training language. QA questions never supply gradient data. Some
+QA claims also occur in training or development triplets; each bundle records this overlap. The full
 QA panel measures performance on the QA format, with shared claims. Whole-release
 triplet scores are separate diagnostics.
 
@@ -54,7 +54,8 @@ This measures preservation of WarBias text; general capability needs separate
 evidence.
 
 Each bundle records source and stream hashes, item IDs, component assignments,
-target group, training language and held-out bilingual rows. A data binding
+target group, training language and held-out rows in both available languages.
+Evaluation selects the rows in the adapter's training language. A data binding
 selects eligible inputs; it does not record a training run. Existing bundles
 and checkpoints are never overwritten.
 
@@ -133,9 +134,9 @@ and configuration so the saved results remain reproducible.
 
 Load the pinned base with the trained adapter separately for evaluation.
 Verify both file identities. Keep merged exports as separate results.
-Use the same held-out IDs before and after training. Keep scores separate by
-group and evaluation language. All metrics and uncertainty estimates must
-come from Fair-UK. The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb) supports
+Use the same held-out IDs and the adapter's training language before and after
+training. Report both groups separately and together. All metrics and uncertainty
+estimates must come from Fair-UK. The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb) supports
 current per-checkpoint triplet and QA scores, including severity slices.
 A full-release score includes training and development items and is a
 descriptive diagnostic.
@@ -153,7 +154,7 @@ evaluation. These before/after capability checks use evaluation data only.
 Use the [before/after notebook](evaluate_before_after.ipynb) for WarBias scores.
 It reuses baseline notebook 08's collector, explicit-choice parser, neutral
 controls, group/severity summaries and component bootstrap. Score the same
-201 held-out triplets and all 240 QA questions in both phases. Save full-release
-triplet diagnostics separately. The [native benchmark notebook](native_before_after.ipynb)
+201 held-out triplets and all 240 QA questions in the training language in both
+phases. Save full-release triplet diagnostics separately. The [native benchmark notebook](native_before_after.ipynb)
 retains the other registered integrations. Preparation and CPU checks do not
 establish mitigation results.

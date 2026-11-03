@@ -85,12 +85,18 @@ class WarBiasEvaluationTests(unittest.TestCase):
             (directory / "inputs").mkdir(parents=True)
             (directory / "inputs/source.jsonl").write_text('{"id":"held"}\n')
             (directory / "models.json").write_text(json.dumps(profiles))
-            task = (
-                "warbias_triplets_annotated_uk"
-                if directory == self.workflow.release
-                else "warbias_triplets_annotated_neutral_uk"
+            tasks = [
+                task
+                for language in ("uk", "en")
+                for task in (
+                    (f"warbias_triplets_annotated_{language}", f"warbias_{language}")
+                    if directory == self.workflow.release
+                    else (f"warbias_triplets_annotated_neutral_{language}",)
+                )
+            ]
+            (directory / "inputs/manifest.json").write_text(
+                json.dumps({"datasets": {task: {} for task in tasks}})
             )
-            (directory / "inputs/manifest.json").write_text(json.dumps({"datasets": {task: {}}}))
         self.addCleanup(mock.patch.stopall)
         mock.patch.object(
             self.workflow,
@@ -149,6 +155,7 @@ class WarBiasEvaluationTests(unittest.TestCase):
             record = self.workflow.verify_prepared(item)
             root = self.workflow._destination(item)
             self.assertEqual(record["held_out_triplet_ids"], ["held"])
+            self.assertEqual(record["evaluation_languages"], [item["training_language"]])
             for kind, source in (
                 ("original", self.workflow.release),
                 ("neutral", self.workflow.neutral_release),
@@ -291,9 +298,20 @@ class WarBiasEvaluationTests(unittest.TestCase):
         with mock.patch.object(evaluation.subprocess, "run") as run:
             self.workflow.collect(sys.executable, source)
         self.assertEqual(run.call_count, 4)
-        for call in run.call_args_list:
+        for call, (item, kind) in zip(
+            run.call_args_list,
+            ((item, kind) for item in self.workflow.plan for kind in ("original", "neutral")),
+            strict=True,
+        ):
             command = call.args[0]
-            self.assertEqual(command[-3:], ["--stage", "all", "--execute"])
+            self.assertEqual(command[command.index("--stage") + 1], "all")
+            self.assertEqual(command[-1], "--execute")
+            selected = command[command.index("--tasks") + 1 : -1]
+            self.assertEqual(selected, self.workflow.tasks(item, kind))
+            self.assertTrue(
+                all(task.endswith("_" + item["training_language"]) for task in selected)
+            )
+            self.assertEqual(len(selected), 2 if kind == "original" else 1)
             self.assertEqual(call.kwargs["env"]["PYTHONPATH"], str(source))
             self.assertEqual(call.kwargs["env"]["WARBIAS_EVALUATOR_MODULE"], "lm_eval.fair_uk")
             self.assertEqual(
@@ -318,18 +336,29 @@ class WarBiasEvaluationTests(unittest.TestCase):
             self.assertEqual(kwargs["qa_answer_policy"], "abc_explicit_choice_v3")
             self.assertEqual((kwargs["bootstrap"], kwargs["seed"]), (1000, 42))
             self.assertEqual(kwargs["triplet_ids"], ["held"])
+            self.assertEqual(kwargs["languages"], [item["training_language"]])
             self.assertNotIn("qa_ids", kwargs)
             self.assertEqual(
                 kwargs["neutral_release"], self.workflow._destination(item) / "neutral"
             )
             self.workflow.analyze_after(item, held_out=False)
             self.assertIsNone(analyze.call_args.kwargs["triplet_ids"])
+            self.workflow.inference_release = self.root / "frozen-evaluator"
             with mock.patch.object(self.workflow, "comparison_scope", return_value={}):
                 report = self.workflow.analyze_before()
             self.assertEqual(report["phase"], "before")
             self.assertNotIn("phase", analyze.call_args.kwargs)
             self.assertEqual(analyze.call_args.kwargs["triplet_ids"], ["held"])
             self.assertNotIn("qa_ids", analyze.call_args.kwargs)
+            self.assertEqual(
+                analyze.call_args.kwargs["neutral_inference_release"],
+                self.workflow.inference_release,
+            )
+            self.assertEqual(set(analyze.call_args.kwargs["languages"]), {"uk", "en"})
+            self.workflow.plan = [item]
+            with mock.patch.object(self.workflow, "comparison_scope", return_value={}):
+                self.workflow.analyze_before()
+            self.assertEqual(analyze.call_args.kwargs["languages"], [item["training_language"]])
 
     def test_policy_metrics_and_collection_settings_match_baseline_notebook_08(self):
         notebook = json.loads((ROOT / evaluation.BASELINE_NOTEBOOK).read_text())
@@ -386,7 +415,8 @@ class WarBiasEvaluationTests(unittest.TestCase):
             manifest = json.loads(
                 (self.workflow._destination(item) / kind / "inputs/manifest.json").read_text()
             )
-            for task in manifest["datasets"]:
+            for task in self.workflow.tasks(item, kind):
+                self.assertIn(task, manifest["datasets"])
                 record = {
                     "task": task,
                     "selected_rows": 1,
@@ -405,7 +435,10 @@ class WarBiasEvaluationTests(unittest.TestCase):
                     path = root / item["model"]["id"] / "full" / task / "run.json"
                     path.parent.mkdir(parents=True)
                     path.write_text(json.dumps(record))
-        self.assertEqual(self.workflow.verify_alignment(item)["status"], "verified")
+        alignment = self.workflow.verify_alignment(item)
+        self.assertEqual(alignment["status"], "verified")
+        self.assertEqual(len(alignment["tasks"]), 3)
+        self.assertTrue(all(row["task"].endswith("_uk") for row in alignment["tasks"]))
         path = (
             self.workflow._results(item, "original")
             / item["model"]["id"]

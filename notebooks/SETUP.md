@@ -65,6 +65,6 @@ WarBias experiment.
 
 ## Evaluation
 
-Evaluate both groups in Ukrainian and English after every training direction.
+Evaluate each adapter in its training language, with both groups included.
 Use Fair-UK for every metric. The [WarBias workflow](WARBIAS_UNLEARNING.md)
 distinguishes current baseline scoring from the remaining paired-analysis work.

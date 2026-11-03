@@ -12,6 +12,7 @@ from .assets import file_hash
 from .evaluation_checkpoints import intervention_plan, read_json, verify_training_export
 from .trainer import hash_tree, write_json
 from .warbias_data import default_root, validate_bundle
+from .warbias_plan import evaluation_languages
 
 QA_POLICY = "abc_explicit_choice_v3"
 METRICS = (
@@ -134,6 +135,21 @@ class WarBiasEvaluation:
     def _results(self, item, kind):
         return self.output / "predictions" / item["method"] / item["run_id"] / kind
 
+    def languages(self, item):
+        return evaluation_languages(self.repo, item["training_language"])
+
+    def tasks(self, item, kind):
+        languages = self.languages(item)
+        if kind == "neutral":
+            return [f"warbias_triplets_annotated_neutral_{language}" for language in languages]
+        if kind != "original":
+            raise ValueError("Select original or neutral evaluation inputs")
+        return [
+            task
+            for language in languages
+            for task in (f"warbias_triplets_annotated_{language}", f"warbias_{language}")
+        ]
+
     def reference_settings(self):
         """Verify source panels and preserve every baseline model option."""
         from lm_eval.fair_uk.warbias.baseline import SCORING_SETTINGS, release_overview
@@ -178,6 +194,7 @@ class WarBiasEvaluation:
                 raise ValueError("Baseline model profile differs from the selected model pins")
         return {
             "checkpoint_representation": self.representation,
+            "evaluation_language_policy": "training_language",
             "attention_backend": self.attention_backend,
             "comparison_scope": self.comparison_scope(),
             "post_inference_source": snapshot,
@@ -285,6 +302,7 @@ class WarBiasEvaluation:
                     "model": model,
                     "target_group": item["target_group"],
                     "training_language": item["training_language"],
+                    "evaluation_languages": self.languages(item),
                     "training_export": proof,
                     "settings": settings,
                     "held_out_triplet_ids": ids,
@@ -303,6 +321,7 @@ class WarBiasEvaluation:
         if (
             record["held_out_triplet_ids"] != self.cohort()
             or record["settings"] != self.reference_settings()
+            or record.get("evaluation_languages") != self.languages(item)
         ):
             raise ValueError(
                 "Prepared evaluation differs from the baseline contract or held-out split"
@@ -357,6 +376,8 @@ class WarBiasEvaluation:
                     str(output),
                     "--stage",
                     "all",
+                    "--tasks",
+                    *self.tasks(item, kind),
                     "--execute",
                 ]
                 # The baseline runner verifies receipts before resuming any saved panel.
@@ -373,12 +394,14 @@ class WarBiasEvaluation:
             self.release,
             self.results,
             models=sorted({item["model"]["id"] for item in self.plan}),
+            languages=sorted({language for item in self.plan for language in self.languages(item)}),
             bootstrap=1000,
             seed=42,
             inference_release=self.inference_release,
             metadata_release=self.metadata_release,
             neutral_release=self.neutral_release,
             neutral_results=self.neutral_results,
+            neutral_inference_release=self.inference_release,
             qa_answer_policy=QA_POLICY,
             triplet_ids=self.cohort() if held_out else None,
         )
@@ -395,6 +418,7 @@ class WarBiasEvaluation:
             root / "original",
             self._results(item, "original"),
             models=[record["model"]],
+            languages=self.languages(item),
             bootstrap=1000,
             seed=42,
             inference_release=self.post_inference_release,
@@ -407,7 +431,14 @@ class WarBiasEvaluation:
         report["phase"] = "after"
         report["intervention"] = {
             key: record[key]
-            for key in ("method", "run_id", "target_group", "training_language", "training_export")
+            for key in (
+                "method",
+                "run_id",
+                "target_group",
+                "training_language",
+                "evaluation_languages",
+                "training_export",
+            )
         }
         report["comparison_scope"] = record["settings"]["comparison_scope"]
         model_report = report.get("models", {}).get(record["model"], {})
@@ -428,7 +459,9 @@ class WarBiasEvaluation:
         checks = []
         for kind, before in (("original", self.results), ("neutral", self.neutral_results)):
             manifest = read_json(self._destination(item) / kind / "inputs/manifest.json")
-            for task in manifest["datasets"]:
+            for task in self.tasks(item, kind):
+                if task not in manifest["datasets"]:
+                    raise ValueError(f"Missing selected evaluation task: {task}")
                 left = before / model / "full" / task / "run.json"
                 right = self._results(item, kind) / model / "full" / task / "run.json"
                 a, b = read_json(left), read_json(right)

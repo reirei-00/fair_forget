@@ -12,7 +12,7 @@ from pathlib import Path
 
 from .assets import file_hash, verify_checkpoint
 from .evaluation_checkpoints import intervention_plan, read_json, verify_training_export
-from .warbias_plan import selected_models
+from .warbias_plan import evaluation_languages, selected_models
 
 TASKS = ("stereoset_uk", "bbq_uk", "winobias_uk_natural", "winobias_uk_controlled", "winopron_uk")
 MODEL_SETTINGS = (
@@ -69,6 +69,7 @@ class NativeEvaluation:
         training_root,
         tasks=TASKS,
         qualification_task="stereoset_uk",
+        task_languages=None,
         bootstrap=1000,
         seed=42,
         tolerance=1e-6,
@@ -89,6 +90,17 @@ class NativeEvaluation:
             Path(p).expanduser().resolve() for p in (output, models_root, training_root)
         ]
         self.tasks, self.qualification_task = tuple(tasks), qualification_task
+        self.task_languages = dict(task_languages or {})
+        for task in (*self.tasks, self.qualification_task):
+            languages = set(task.split("_")) & {"uk", "en"}
+            if task not in self.task_languages:
+                if len(languages) != 1:
+                    raise ValueError(f"Declare the evaluation language for task {task}")
+                self.task_languages[task] = next(iter(languages))
+            if self.task_languages[task] not in {"uk", "en"}:
+                raise ValueError(f"Unsupported evaluation language for task {task}")
+            if languages and languages != {self.task_languages[task]}:
+                raise ValueError(f"Task name and declared language differ: {task}")
         self.bootstrap, self.seed, self.tolerance = bootstrap, seed, tolerance
         self.models = selected_models(self.repo)
         self.plan = intervention_plan(self.repo, self.training_root)
@@ -103,14 +115,36 @@ class NativeEvaluation:
     def after(self, item, task):
         return self.output / "after" / item["method"] / item["run_id"] / task
 
+    def tasks_for(self, item):
+        languages = evaluation_languages(self.repo, item["training_language"])
+        return tuple(task for task in self.tasks if self.task_languages[task] in languages)
+
+    @property
+    def active_plan(self):
+        return [item for item in self.plan if self.tasks_for(item)]
+
     def preflight(self):
         if (
             not self.python.is_file()
             or not (self.fair_uk_root / "lm_eval/fair_uk/__main__.py").is_file()
         ):
             raise ValueError("Configure the Fair-UK checkout and evaluation Python")
+        if any(
+            self.task_languages[task] != self.task_languages[self.qualification_task]
+            for task in self.tasks
+        ):
+            raise ValueError("Use matching qualification data for each native evaluation language")
         full = bundle_rows(self.bundle, self.tasks)
+        for task, (entry, _) in full.items():
+            if entry.get("language", self.task_languages[task]) != self.task_languages[task]:
+                raise ValueError(f"Task language differs from its source: {task}")
         dev = bundle_rows(self.development, [self.qualification_task], development=True)
+        qualification_language = self.task_languages[self.qualification_task]
+        if (
+            dev[self.qualification_task][0].get("language", qualification_language)
+            != qualification_language
+        ):
+            raise ValueError("Qualification source uses a different language")
         if self.qualification_task in full:
             if {r["id"] for r in dev[self.qualification_task][1]} & {
                 r["id"] for r in full[self.qualification_task][1]
@@ -318,26 +352,27 @@ class NativeEvaluation:
         self.preflight()
         self.verify_before()
         evidence = {
-            item["method"] + "/" + item["run_id"]: self.require_training(item) for item in self.plan
+            item["method"] + "/" + item["run_id"]: self.require_training(item)
+            for item in self.active_plan
         }
         path = self.output / "training_evidence.json"
         if path.exists():
             raise FileExistsError("Training evidence already exists; choose a new evaluation root")
         write_json(path, evidence)
-        for item in self.plan:
+        for item in self.active_plan:
             checkpoint, options = self.checkpoint(item)
             self.qualify(checkpoint, "after/" + item["method"] + "/" + item["run_id"], **options)
-            for task in self.tasks:
+            for task in self.tasks_for(item):
                 self.collect(checkpoint, task, self.bundle, self.after(item, task), **options)
                 self.require_run(self.after(item, task), task, checkpoint, self.bundle, **options)
 
     def run_comparison(self):
         self.preflight()
         self.verify_before()
-        for item in self.plan:
+        for item in self.active_plan:
             self.require_training(item)
             checkpoint, options = self.checkpoint(item)
-            for task in self.tasks:
+            for task in self.tasks_for(item):
                 self.require_run(
                     self.after(item, task),
                     task,
@@ -345,8 +380,8 @@ class NativeEvaluation:
                     self.bundle,
                     **options,
                 )
-        for item in self.plan:
-            for task in self.tasks:
+        for item in self.active_plan:
+            for task in self.tasks_for(item):
                 destination = self.output / "paired" / item["method"] / item["run_id"] / task
                 self.invoke(
                     [
@@ -371,8 +406,8 @@ class NativeEvaluation:
 
     def summary(self):
         rows = []
-        for item in self.plan:
-            for task in self.tasks:
+        for item in self.active_plan:
+            for task in self.tasks_for(item):
                 path = (
                     self.output / "paired" / item["method"] / item["run_id"] / task / "paired.json"
                 )

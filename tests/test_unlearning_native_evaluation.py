@@ -38,6 +38,28 @@ class NativeEvaluationTests(unittest.TestCase):
         self.assertEqual(len({p["directory"] for p in plan}), 20)
         self.assertEqual(len({self.workflow.base(p["model"]) for p in plan}), 5)
         self.assertNotIn("warbias_triplets_uk", self.workflow.tasks)
+        self.assertEqual(len(self.workflow.active_plan), 10)
+        self.assertEqual({p["training_language"] for p in self.workflow.active_plan}, {"uk"})
+        for item in plan:
+            expected = self.workflow.tasks if item["training_language"] == "uk" else ()
+            self.assertEqual(self.workflow.tasks_for(item), expected)
+
+    def test_english_native_tasks_select_only_english_adapters(self):
+        self.workflow.tasks = ("stereoset_en", "bbq_en")
+        self.workflow.task_languages.update(stereoset_en="en", bbq_en="en")
+        self.assertEqual(len(self.workflow.active_plan), 10)
+        self.assertEqual({p["training_language"] for p in self.workflow.active_plan}, {"en"})
+        self.assertEqual({p["target_group"] for p in self.workflow.active_plan}, {"idp", "veteran"})
+
+    def test_qualification_cannot_use_a_different_language(self):
+        self.workflow.tasks = ("stereoset_en",)
+        self.workflow.task_languages["stereoset_en"] = "en"
+        self.workflow.python.touch()
+        entrypoint = self.workflow.fair_uk_root / "lm_eval/fair_uk/__main__.py"
+        entrypoint.parent.mkdir(parents=True)
+        entrypoint.touch()
+        with self.assertRaisesRegex(ValueError, "matching qualification data"):
+            self.workflow.preflight()
 
     def test_collection_and_comparison_dispatch_every_direction_with_shared_controls(self):
         workflow = self.workflow
@@ -61,8 +83,9 @@ class NativeEvaluationTests(unittest.TestCase):
             mock.patch.object(workflow, "require_run"),
         ):
             workflow.run_after()
-        self.assertEqual(qualify.call_count, 20)
-        self.assertEqual(collect.call_count, 20 * len(workflow.tasks))
+        self.assertEqual(qualify.call_count, 10)
+        self.assertEqual(collect.call_count, 10 * len(workflow.tasks))
+        self.assertTrue(all("_uk" in call.args[1] for call in qualify.call_args_list))
         with (
             mock.patch.object(workflow, "preflight"),
             mock.patch.object(workflow, "verify_before"),
@@ -71,7 +94,7 @@ class NativeEvaluationTests(unittest.TestCase):
             mock.patch.object(workflow, "invoke") as invoke,
         ):
             workflow.run_comparison()
-        self.assertEqual(invoke.call_count, 20 * len(workflow.tasks))
+        self.assertEqual(invoke.call_count, 10 * len(workflow.tasks))
         before, after = set(), set()
         for call in invoke.call_args_list:
             command = call.args[0]
@@ -80,7 +103,8 @@ class NativeEvaluationTests(unittest.TestCase):
             before.add(command[command.index("--before-run") + 1])
             after.add(command[command.index("--after-run") + 1])
         self.assertEqual(len(before), 5 * len(workflow.tasks))
-        self.assertEqual(len(after), 20 * len(workflow.tasks))
+        self.assertEqual(len(after), 10 * len(workflow.tasks))
+        self.assertTrue(all(path.parent.name.endswith("_uk") for path in after))
 
     def test_all_training_exports_are_checked_before_post_collection_starts(self):
         with (
@@ -354,7 +378,7 @@ class NativeEvaluationTests(unittest.TestCase):
                 )
             )
         rows = self.workflow.summary()
-        self.assertEqual(len(rows), 20)
+        self.assertEqual(len(rows), 10)
         self.assertTrue(all(row["before"] is None for row in rows))
-        self.assertEqual({row["training_language"] for row in rows}, {"uk", "en"})
+        self.assertEqual({row["training_language"] for row in rows}, {"uk"})
         self.assertEqual({row["target_group"] for row in rows}, {"idp", "veteran"})

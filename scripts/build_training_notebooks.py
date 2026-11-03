@@ -44,7 +44,8 @@ for group in CONFIGURATION['training_groups']:
         BINDINGS[direction] = warbias_data.validate_bundle(directory, repo)
 print('WarBias: 1,007 aligned source triplets per language.')
 print(json.dumps({name: value['split_counts'] for name, value in BINDINGS.items()}, ensure_ascii=False, indent=2))
-print('Evaluation languages:', ', '.join(CONFIGURATION['evaluation_languages']))
+assert CONFIGURATION['evaluation_language_policy'] == 'training_language'
+print('Evaluation: each adapter in its training language, both groups.')
 """
 TOKENS = """# Synthetic tensors for one optimizer step on CPU.
 torch.manual_seed(42)
@@ -159,7 +160,7 @@ else:
 """
 DATA_NOTES = """## WarBias data
 
-Use the current 1,007 aligned source triplets in Ukrainian and English. Prepare four separate training directions: IDP in Ukrainian, IDP in English, veteran in Ukrainian, and veteran in English. Every direction trains on one group and one language. Both languages remain available for evaluation.
+Use the current 1,007 aligned source triplets in Ukrainian and English. Prepare four separate training directions: IDP in Ukrainian, IDP in English, veteran in Ukrainian, and veteran in English. Every direction trains on one group and one language. Evaluate each adapter in its training language, with both groups included.
 
 Split whole claim components with targets of 65% training, 15% development and 20% test. The source-label allocation gives 654, 152 and 201 triplets per language. Use the same global split for every direction. Keep related cases and translations together. Balance group and severity coverage; see [the allocation rules](WARBIAS_UNLEARNING.md). Keep all 240 baseline QA questions for evaluation only; record their claim overlap with each triplet split. Then select one group and language for each training bundle.
 
@@ -167,7 +168,7 @@ Use complete S sentences as forget targets and complete C sentences as correctio
 """
 EVALUATION = """## Evaluation and implementation
 
-Evaluate the same held-out WarBias IDs in Ukrainian and English before and after each run. Keep scores separate by group and evaluation language. A score over the full release is a descriptive diagnostic because it includes training and development rows. All metrics, including severity slices, come from Fair-UK.
+Evaluate the same held-out WarBias IDs in the adapter's training language before and after each run. Report both groups separately and together. A score over the full release is a descriptive diagnostic because it includes training and development rows. All metrics, including severity slices, come from Fair-UK.
 
 The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb) provides the current per-checkpoint metrics. Use the [before/after notebook](evaluate_before_after.ipynb) for the same WarBias outcomes, parser and controls as baseline notebook 08 on matched held-out IDs. The [native benchmark notebook](native_before_after.ipynb) retains the other registered integrations. See the [WarBias workflow](WARBIAS_UNLEARNING.md).
 
@@ -238,6 +239,7 @@ def build(methods=None):
                     "training_directions": 4,
                     "runs_per_method": runs,
                     "evaluation_languages": ["uk", "en"],
+                    "evaluation_language_policy": experiment["evaluation_language_policy"],
                     "automatic_gpu_training": False,
                     "models": experiment["model_ids"],
                 },

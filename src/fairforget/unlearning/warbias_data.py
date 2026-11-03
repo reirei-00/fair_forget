@@ -340,7 +340,7 @@ def overview(repo, *, target_group, training_language):
         "qa_per_language": binding["evaluation"]["qa_uk"]["rows"],
         "target_group": binding["target_group"],
         "training_language": binding["training_language"],
-        "evaluation_languages": binding["evaluation_languages"],
+        "evaluation_languages": [training_language],
         "source": binding["source"],
         "split_counts": binding["split_counts"],
         "global_split_counts": binding["global_split_counts"],

@@ -5,12 +5,14 @@ scorer as [baseline notebook 08](../warbias-artifacts/notebooks/08_warbias_basel
 FairForget selects experiments and labels their before/after reports. Fair-UK
 evaluates the supplied WarBias benchmark inputs. This workflow covers all 20
 selected BiasUnlearn interventions and five shared base checkpoints.
+Evaluate each adapter only in its training language: Ukrainian for Ukrainian
+training, English for English training. Include both target groups.
 The [native benchmark workflow](native_before_after.ipynb) remains available
 with its [own setup](NATIVE_EVALUATION.md).
 
 | Setting | Before and after |
 | --- | --- |
-| Collection | 1,007 triplets and 240 QA questions per language; the same neutral controls |
+| Collection | 1,007 triplets and 240 QA questions in the training language; the same neutral controls |
 | Main outcomes | Prior-normalised SS, QA accuracy and QA bias |
 | Slices | IDPs, veterans, both groups and case-level severity |
 | QA policies | Native `abc_option_text_v2`; analysis `abc_explicit_choice_v3` |
@@ -21,11 +23,11 @@ with its [own setup](NATIVE_EVALUATION.md).
 
 ## Environment and paths
 
-Use Fair-UK revision `e0ffa59ce66a6dbd2b4875f76a01bff142dda20b`:
+Use Fair-UK revision `2aa46722164ec718a1affada6579529839bfba11`:
 
 ```bash
 git clone https://github.com/reirei-00/fair-uk.git ../fair-uk
-git -C ../fair-uk checkout e0ffa59ce66a6dbd2b4875f76a01bff142dda20b
+git -C ../fair-uk checkout 2aa46722164ec718a1affada6579529839bfba11
 python -m pip install -e ../fair-uk
 ```
 
@@ -73,13 +75,14 @@ the adapter-capable evaluator; older collector identities remain separate.
    control inputs unchanged. The post profile adds the verified adapter path to the same base model.
 2. Enable `RUN_AFTER_COLLECTION` on the GPU host. Reuse the baseline runner,
    serial BF16 options, model-specific attention settings and repeated smoke gates.
-   Each checkpoint supplies four original and two neutral panels. Validated
-   collections can resume; source and runtime changes fail validation.
+   Each adapter supplies two original panels and one neutral panel in its training
+   language. Validated collections can resume; source and runtime changes fail validation.
 3. Enable `RUN_REFERENCE_ANALYSIS` to score the five shared baselines with the
-   selected parser, controls and held-out IDs.
+   selected parser, controls and held-out IDs. The shared bases cover both languages.
 4. Enable `RUN_AFTER_ANALYSIS` to apply the same scorer to each post checkpoint.
    Check actual before/after runtime, tokenizer, effective inputs and row IDs.
-   Save full and held-out analyses in separate directories.
+   Compare with the shared base scores in the same language. Save full and
+   held-out analyses in separate directories.
 
 For a completed subset, pass explicit `(method, run_id)` pairs in
 `WarBiasEvaluation(..., selections=[("biasunlearn", "qwen3_8b__idp_uk")])`.

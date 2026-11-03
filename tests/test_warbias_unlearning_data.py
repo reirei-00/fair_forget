@@ -91,6 +91,10 @@ class WarBiasDataTests(unittest.TestCase):
                     self.assertEqual(binding["language"], language)
                     self.assertEqual(binding["training_language"], language)
                     self.assertEqual(binding["evaluation_languages"], ["uk", "en"])
+                    overview = warbias_data.overview(
+                        self.repo, target_group=group, training_language=language
+                    )
+                    self.assertEqual(overview["evaluation_languages"], [language])
                     for role, spec in binding["streams"].items():
                         rows = read_rows(output / spec["path"])
                         self.assertTrue(rows)

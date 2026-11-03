@@ -62,7 +62,7 @@ def write(path, value):
     temporary.replace(path)
 
 
-def collection_tasks(spec):
+def collection_tasks(spec, selected=None):
     tasks = list(spec["datasets"])
     if set(tasks) not in (BASELINE_TASKS, NEUTRAL_TASKS) or any(
         spec["datasets"][task]["language"] != task.rsplit("_", 1)[1] for task in tasks
@@ -72,6 +72,10 @@ def collection_tasks(spec):
         )
     if set(tasks) == NEUTRAL_TASKS and not spec.get("neutral_controls"):
         raise ValueError("Neutral-control tasks require their review and source bindings")
+    if selected is not None:
+        if not selected or len(selected) != len(set(selected)) or not set(selected) <= set(tasks):
+            raise ValueError("Select unique tasks from the verified input bundle")
+        tasks = [task for task in tasks if task in selected]
     return tasks
 
 
@@ -212,6 +216,7 @@ def main(argv=None):
     parser.add_argument("--model", required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--stage", choices=("smoke", "collect", "all"), default="all")
+    parser.add_argument("--tasks", nargs="+", choices=sorted(BASELINE_TASKS | NEUTRAL_TASKS))
     parser.add_argument("--execute", action="store_true")
     options = parser.parse_args(argv)
     release, bundle, profiles, output = (
@@ -225,7 +230,7 @@ def main(argv=None):
     code_identity = importlib.import_module(f"{namespace}.provenance").code_identity
 
     spec = read(bundle)
-    tasks = collection_tasks(spec)
+    tasks = collection_tasks(spec, options.tasks)
     selected_profile = read(profiles)[options.model]
     expected_identity = selected_profile["model_identity"]
     args = parameters({options.model: selected_profile}, options.model)

@@ -15,6 +15,7 @@
     "uk",
     "en"
   ],
+  "evaluation_language_policy": "training_language",
   "split": {
     "seed": 42,
     "development_fraction": 0.15,

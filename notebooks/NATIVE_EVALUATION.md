@@ -1,8 +1,9 @@
 # Native benchmark evaluation
 
 The [before/after notebook](native_before_after.ipynb) evaluates the current
-WarBias interventions with Fair-UK. It collects five shared base checkpoints
-and 20 BiasUnlearn checkpoints: two target groups and two training languages.
+WarBias interventions with Fair-UK. The default Ukrainian tasks use five shared
+base checkpoints and ten Ukrainian-trained BiasUnlearn adapters across both groups.
+Each adapter is evaluated only on tasks in its training language.
 Native benchmark integrations are maintained evaluation paths. They use
 evaluation data only.
 
@@ -12,7 +13,7 @@ Use a separate Python 3.12 environment for evaluation. From the repository root:
 
 ```bash
 git clone https://github.com/reirei-00/fair-uk.git ../fair-uk
-git -C ../fair-uk checkout e0ffa59ce66a6dbd2b4875f76a01bff142dda20b
+git -C ../fair-uk checkout 2aa46722164ec718a1affada6579529839bfba11
 python3.12 -m venv .venv-evaluation
 .venv-evaluation/bin/python -m pip install -e '../fair-uk[vllm]' \
   'vllm==0.18.1' 'transformers==4.57.6' 'numpy==2.2.6'
@@ -40,7 +41,8 @@ export FAIRFORGET_TRAINING_ROOT=/absolute/path/to/unlearning-runs
 Use current registered native source views. The defaults are StereoSet UK,
 BBQ UK, both WinoBias UK views and WinoPron UK. Select other approved native
 views by exact task ID. Each source must be active and match its manifest.
-Task language is independent of intervention training language.
+The task language must match the adapter's training language. For English
+adapters, use English task inputs and an English qualification task in a separate run.
 
 The development bundle supplies a separate three-candidate likelihood task.
 `QUALIFICATION_TASK` defaults to `stereoset_uk`. Each unchanged checkpoint runs
@@ -57,7 +59,8 @@ receipt. Fair-UK records the base and adapter file hashes separately.
 
 1. Enable `RUN_BEFORE` to verify and collect the five base checkpoints.
 2. Run the [BiasUnlearn notebook](biasunlearn.ipynb). Enable `RUN_AFTER` when all
-   20 exports are complete. Each intervention uses its model's shared baseline.
+   ten Ukrainian exports are complete for the default tasks. Each intervention
+   uses its model's shared baseline in the same language.
 3. Enable `RUN_COMPARISON` to calculate paired changes from saved predictions
    through Fair-UK `paper compare-native`, without GPUs.
 
