@@ -2,9 +2,9 @@
 
 The [before/after notebook](native_before_after.ipynb) evaluates the current
 WarBias interventions with Fair-UK. It collects five shared base checkpoints
-and 40 post-training checkpoints: two methods, two target groups and two
-training languages. Native benchmark integrations are maintained evaluation
-paths. They use evaluation data only.
+and 20 BiasUnlearn checkpoints: two target groups and two training languages.
+Native benchmark integrations are maintained evaluation paths. They use
+evaluation data only.
 
 ## Evaluation environment
 
@@ -56,8 +56,8 @@ receipt. Fair-UK records the base and adapter file hashes separately.
 ## Run
 
 1. Enable `RUN_BEFORE` to verify and collect the five base checkpoints.
-2. Run the [two method notebooks](README.md). Enable `RUN_AFTER` when all
-   40 exports are complete. Each intervention uses its model's shared baseline.
+2. Run the [BiasUnlearn notebook](biasunlearn.ipynb). Enable `RUN_AFTER` when all
+   20 exports are complete. Each intervention uses its model's shared baseline.
 3. Enable `RUN_COMPARISON` to calculate paired changes from saved predictions
    through Fair-UK `paper compare-native`, without GPUs.
 

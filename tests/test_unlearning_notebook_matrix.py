@@ -27,9 +27,6 @@ ALIASES = {
 NOTEBOOKS = {
     "rmu": "rmu",
     "task_vector": "task_vector",
-    "wga_kl": "wga_kl",
-    "npo_kl": "npo_retention",
-    "biasunlearn": "biasunlearn",
 }
 
 
@@ -159,8 +156,6 @@ class MatrixTests(unittest.TestCase):
         from fairforget.unlearning import notebook_matrix
 
         for method, name in NOTEBOOKS.items():
-            if method not in {"rmu", "task_vector"}:
-                continue
             notebook = json.loads((ROOT / "notebooks" / f"{name}.ipynb").read_text())
             code = next(
                 "".join(cell["source"])

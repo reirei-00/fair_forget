@@ -4,6 +4,7 @@ import copy
 import itertools
 import json
 import os
+import runpy
 import subprocess
 import sys
 import tempfile
@@ -19,19 +20,40 @@ from fairforget.unlearning.trainer import build_biasunlearn_pools, file_hash, ha
 from fairforget.unlearning.warbias_plan import selected_models
 
 ROOT = Path(__file__).resolve().parents[1]
-METHODS = ("npo_kl", "biasunlearn")
+METHODS = ("biasunlearn",)
 DIRECTIONS = tuple(itertools.product(("idp", "veteran"), ("uk", "en")))
-NOTEBOOKS = {"npo_kl": "npo_retention", "biasunlearn": "biasunlearn"}
+NOTEBOOKS = {"biasunlearn": "biasunlearn"}
 
 
 class WarBiasPlanTests(unittest.TestCase):
-    def test_active_study_has_two_methods_with_wga_available_separately(self):
+    def test_active_study_selects_only_biasunlearn(self):
         config = json.loads((ROOT / "configs/unlearning/warbias_final.json").read_text())
         self.assertEqual(config["methods"], list(METHODS))
-        self.assertEqual(config["optional_methods"], ["wga_kl"])
+        self.assertEqual(config["optional_methods"], [])
+        self.assertEqual(set(config["objectives"]), {"biasunlearn"})
         self.assertEqual(len(selected_models(ROOT)), 5)
         self.assertNotIn("mamay27b_v2", config["model_ids"])
-        self.assertEqual(len(self.plan("wga_kl")), 20)
+        for method in ("npo_kl", "wga_kl"):
+            with self.subTest(method=method), self.assertRaisesRegex(ValueError, "not selected"):
+                self.plan(method)
+
+    def test_notebook_builder_cannot_restore_excluded_methods(self):
+        builder = runpy.run_path(str(ROOT / "scripts/build_training_notebooks.py"))
+        with mock.patch("nbformat.write") as write:
+            builder["build"]()
+            write.assert_called_once()
+            notebook, destination = write.call_args.args
+            self.assertEqual(destination, ROOT / "notebooks/biasunlearn.ipynb")
+            self.assertEqual(notebook.metadata.fairforget.method, "biasunlearn")
+            self.assertEqual(notebook.metadata.fairforget.runs_per_method, 20)
+            write.reset_mock()
+            for methods in (["npo_kl"], ["wga_kl"], ["biasunlearn", "npo_kl"]):
+                with (
+                    self.subTest(methods=methods),
+                    self.assertRaisesRegex(ValueError, "active study configuration"),
+                ):
+                    builder["build"](methods)
+            write.assert_not_called()
 
     def test_invalid_model_selection_cannot_expand_to_the_registry(self):
         configuration = self.root / "configs/unlearning"
@@ -85,7 +107,7 @@ class WarBiasPlanTests(unittest.TestCase):
         return plan
 
     def test_native_evaluation_accepts_a_source_bound_current_recipe(self):
-        selected = self.staged_plan("npo_kl")[0]
+        selected = self.staged_plan("biasunlearn")[0]
         workflow = native_evaluation.NativeEvaluation(
             ROOT,
             fair_uk_root=self.root / "fair-uk",
@@ -120,11 +142,11 @@ class WarBiasPlanTests(unittest.TestCase):
         write_json(item["directory"] / "intervention.json", receipt)
         self.assertEqual(workflow.require_training(item)["checkpoint"], str(checkpoint))
 
-    def test_all_forty_runs_use_the_correct_direction_and_fresh_base(self):
+    def test_all_twenty_runs_use_the_correct_direction_and_fresh_base(self):
         registry = selected_models(ROOT)
         expected = {model["id"]: model for model in registry}
         plans = [self.plan(method) for method in METHODS]
-        self.assertEqual(sum(map(len, plans)), 40)
+        self.assertEqual(sum(map(len, plans)), 20)
         base_paths = {alias: set() for alias in expected}
         for method, plan in zip(METHODS, plans, strict=True):
             self.assertEqual(len({item["run_id"] for item in plan}), 20)
@@ -172,16 +194,16 @@ class WarBiasPlanTests(unittest.TestCase):
             ({"target_group": "veteran", "training_language": "uk"}, 5),
         ):
             with self.subTest(filters=filters):
-                plan = self.plan("npo_kl", **filters)
+                plan = self.plan("biasunlearn", **filters)
                 self.assertEqual(len(plan), count)
                 for item in plan:
                     for key, value in filters.items():
                         self.assertEqual(item[key], value)
         for filters in ({"target_group": "refugee"}, {"training_language": "fr"}):
             with self.assertRaisesRegex(ValueError, "not selected"):
-                self.plan("wga_kl", **filters)
+                self.plan("biasunlearn", **filters)
 
-    def test_all_forty_recipes_pass_full_input_preflight_without_collisions(self):
+    def test_all_twenty_recipes_pass_full_input_preflight_without_collisions(self):
         paths = []
         for method in METHODS:
             with self.subTest(method=method):
@@ -193,11 +215,11 @@ class WarBiasPlanTests(unittest.TestCase):
                     {path.stem for path in prepared}, {item["run_id"] for item in self.plan(method)}
                 )
                 paths.extend(prepared)
-        self.assertEqual(len(paths), 40)
+        self.assertEqual(len(paths), 20)
         self.assertEqual(len(paths), len(set(paths)))
 
     def test_historical_recipe_expansion_is_preserved(self):
-        for method in METHODS:
+        for method in ("npo_kl", "wga_kl", "biasunlearn"):
             plan = notebook_matrix.method_plan(ROOT, method)
             self.assertEqual(len(plan), 6)
             self.assertEqual(
@@ -213,7 +235,7 @@ class WarBiasPlanTests(unittest.TestCase):
                 self.assertEqual(recipe["data_manifest_sha256"], source["data_manifest_sha256"])
 
     def test_staged_base_checkpoint_symlinks_preserve_the_planned_initialization(self):
-        plan = self.plan("wga_kl", target_group="veteran", training_language="en")
+        plan = self.plan("biasunlearn", target_group="veteran", training_language="en")
         for item in plan:
             planned = Path(item["recipe"]["model_path"])
             cached = self.root / "cache" / item["model_alias"] / "snapshot"
@@ -241,16 +263,16 @@ class WarBiasPlanTests(unittest.TestCase):
             )
         with self.assertRaises(ValueError):
             notebook_matrix.method_plan(
-                ROOT, "npo_kl", data_root=historical, protocol="warbias_final"
+                ROOT, "biasunlearn", data_root=historical, protocol="warbias_final"
             )
-        for method in ("rmu", "task_vector"):
+        for method in ("npo_kl", "wga_kl", "rmu", "task_vector"):
             with self.assertRaisesRegex(ValueError, "not selected"):
                 self.plan(method)
 
     def test_changed_settings_directions_and_base_identity_are_rejected(self):
         for mode in ("steps", "model", "role", "language", "group", "run_id", "base"):
             with self.subTest(mode=mode):
-                plan = self.staged_plan("npo_kl", target_group="idp", training_language="uk")
+                plan = self.staged_plan("biasunlearn", target_group="idp", training_language="uk")
                 recipe = plan[-1]["recipe"]
                 message = "recipe settings differ"
                 if mode == "steps":
@@ -372,7 +394,7 @@ class WarBiasPlanTests(unittest.TestCase):
                 self.assertEqual(record["command"][2], "fairforget.unlearning.trainer")
                 self.assertEqual(record["command"][-1], str(output / run_id))
                 destinations.append(record["command"][-1])
-        self.assertEqual(len(destinations), 40)
+        self.assertEqual(len(destinations), 20)
         self.assertEqual(len(destinations), len(set(destinations)))
 
 

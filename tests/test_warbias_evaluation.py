@@ -30,8 +30,13 @@ class WarBiasEvaluationTests(unittest.TestCase):
         selected = [(item["method"], item["run_id"]) for item in (full.plan[0], full.plan[-1])]
         workflow = evaluation.WarBiasEvaluation(ROOT, **arguments, selections=selected)
         self.assertEqual(workflow.plan, [full.plan[0], full.plan[-1]])
-        self.assertEqual(len(full.plan), 40)
-        for invalid in ([], selected * 2, [("npo_kl", "unknown-run")]):
+        self.assertEqual(len(full.plan), 20)
+        for invalid in (
+            [],
+            selected * 2,
+            [("biasunlearn", "unknown-run")],
+            [("npo_kl", full.plan[0]["run_id"])],
+        ):
             with self.subTest(invalid=invalid):
                 with self.assertRaisesRegex(ValueError, "unique method/run pairs"):
                     evaluation.WarBiasEvaluation(ROOT, **arguments, selections=invalid)

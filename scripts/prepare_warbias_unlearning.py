@@ -1,4 +1,4 @@
-"""Prepare shared final-release WarBias streams for all three methods."""
+"""Prepare source-bound training streams for the selected WarBias method."""
 
 import argparse
 import json

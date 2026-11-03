@@ -3,8 +3,8 @@
 The [notebook](evaluate_before_after.ipynb) uses the same collector and Fair-UK
 scorer as [baseline notebook 08](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb).
 FairForget selects experiments and labels their before/after reports. Fair-UK
-evaluates the supplied WarBias benchmark inputs. This workflow covers all 40
-selected interventions and five shared base checkpoints.
+evaluates the supplied WarBias benchmark inputs. This workflow covers all 20
+selected BiasUnlearn interventions and five shared base checkpoints.
 The [native benchmark workflow](native_before_after.ipynb) remains available
 with its [own setup](NATIVE_EVALUATION.md).
 
@@ -68,7 +68,7 @@ the adapter-capable evaluator; older collector identities remain separate.
 
 ## Workflow
 
-1. Enable `RUN_PREPARE` after training. Verify all 40 exports before creating
+1. Enable `RUN_PREPARE` after training. Verify all 20 exports before creating
    any releases. Preserve the baseline model options and copy its original and
    control inputs unchanged. The post profile adds the verified adapter path to the same base model.
 2. Enable `RUN_AFTER_COLLECTION` on the GPU host. Reuse the baseline runner,
@@ -82,7 +82,7 @@ the adapter-capable evaluator; older collector identities remain separate.
    Save full and held-out analyses in separate directories.
 
 For a completed subset, pass explicit `(method, run_id)` pairs in
-`WarBiasEvaluation(..., selections=[("npo_kl", "qwen3_8b__idp_uk")])`.
+`WarBiasEvaluation(..., selections=[("biasunlearn", "qwen3_8b__idp_uk")])`.
 Only those exports are required. The experiment configuration remains unchanged.
 
 All metric definitions, calculations and CSV exports come from Fair-UK.

@@ -9,7 +9,6 @@
     "mamay12b_v2"
   ],
   "methods": [
-    "npo_kl",
     "biasunlearn"
   ],
   "evaluation_languages": [
@@ -48,12 +47,6 @@
     "add_special_tokens": true
   },
   "objectives": {
-    "wga_kl": {
-      "wga_alpha": 1.0
-    },
-    "npo_kl": {
-      "npo_beta": 0.1
-    },
     "biasunlearn": {
       "npo_beta": 0.1,
       "suppression_weight": 1.0,
@@ -70,9 +63,7 @@
     "uk",
     "en"
   ],
-  "optional_methods": [
-    "wga_kl"
-  ],
+  "optional_methods": [],
   "export_verification": {
     "max_probe_families": 4,
     "positions_per_probe": 3,

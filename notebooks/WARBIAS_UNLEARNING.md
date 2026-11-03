@@ -1,6 +1,6 @@
 # WarBias unlearning
 
-NPO+KL and BiasUnlearn-style use the final WarBias source. It contains
+BiasUnlearn-style uses the final WarBias source. It contains
 1,007 aligned triplets per language: 409 IDP and 598 veteran items.
 
 | Training direction | Group | Language |
@@ -11,8 +11,8 @@ NPO+KL and BiasUnlearn-style use the final WarBias source. It contains
 | `veteran_en` | Veteran | English |
 
 Each direction trains on one group and one language. All five pinned models
-start independently from their base checkpoints. This gives 20 runs per method
-and 40 across the two methods. Evaluation covers both groups in both languages.
+start independently from their base checkpoints. This gives 20 BiasUnlearn runs.
+Evaluation covers both groups in both languages.
 The application tests whether WarBias supplies useful data for bias mitigation.
 Each unchanged base checkpoint is the comparison control. The main study uses
 one fixed training seed; uncertainty over cases is reported separately.
@@ -62,20 +62,19 @@ Use the current Git dataset metadata and its declared corrections. The pinned
 HF revision binds the unchanged triplet texts. Apply the dataset package's
 correction helper to the frozen profile mapping and preserve semantic components.
 
-## Methods and models
+## Method and models
 
 The [configuration](../configs/unlearning/warbias_final.json) defines common
-optimizer settings and the two objectives. All methods use the same rows
-within a direction and the same optimizer-step limit for that direction.
+optimizer settings and the BiasUnlearn objective. Each direction uses its own
+rows and optimizer-step limit.
 BiasUnlearn builds expanded adversarial pools and can change their direction
-using development scores. Equal step limits do not imply equal token exposure.
-Each trainer records actual exposure.
+using development scores. Each run records actual token exposure.
 The limits are 530 updates for IDPs and 778 for veterans, equivalent to two
 passes over each original forget set. Expanded BiasUnlearn pools can leave the
 last pass incomplete.
 
-NPO uses mean token log-likelihood ratios, rather than sequence-sum ratios.
-BiasUnlearn adds counter-stereotype cross-entropy and reference KL. Keep its
+BiasUnlearn combines suppression based on mean token log-likelihood ratios,
+counter-stereotype cross-entropy and reference KL. Keep its
 raw-preference switching rule: above 50%, use the normal pools; below 50%, use
 the reversed pools; at 50%, keep the current direction. The controller uses
 unweighted development rows and aims to balance raw stereotype preference.
@@ -83,9 +82,8 @@ Report both raw and primary neutral-adjusted scores through Fair-UK. The primary
 score uses component weights and neutral controls; the switching rule does not
 guarantee balance on that score. Keep this WarBias adaptation distinct from an
 exact reproduction of the original study.
-WGA+KL remains an [optional experiment](wga_kl.ipynb), outside the 40-run study.
 
-Every [notebook](README.md) prepares and validates the four bundles, runs a
+The [BiasUnlearn notebook](biasunlearn.ipynb) prepares and validates the four bundles, runs a
 synthetic CPU step, and displays its 20-run plan. Full training starts only when
 `RUN_TRAINING=True`. A run ID combines model, group and training language, so
 each checkpoint, log and receipt has its own output directory.
@@ -149,9 +147,8 @@ preference and polarity changes visible. Compute paired component intervals
 through Fair-UK. Lower raw stereotype preference alone does not establish
 successful mitigation.
 
-Capability checks use separate evaluation-only runs before and after the
-intervention. They do not supply training, correction or preservation data.
-Their benchmark selection is separate from this WarBias application setup.
+Run MMLU and Belebele last for all five models, after WarBias training and
+evaluation. These before/after capability checks use evaluation data only.
 
 Use the [before/after notebook](evaluate_before_after.ipynb) for WarBias scores.
 It reuses baseline notebook 08's collector, explicit-choice parser, neutral

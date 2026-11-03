@@ -178,25 +178,25 @@ The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb
 Each run verifies the pinned model files and training runtime. It checks the merged and reloaded checkpoint on fixed development inputs before marking the export complete. See the [checkpoint rules](WARBIAS_UNLEARNING.md#checkpoint-verification).
 
 Each run saves a checkpoint, loss history and token-exposure log.
+
+Run MMLU and Belebele last for all five models, after WarBias training and evaluation.
 """
 
 
 def build(methods=None):
     experiment = json.loads((ROOT / "configs/unlearning/warbias_final.json").read_text())
     active = experiment["methods"]
+    selected = active if methods is None else methods
+    if not selected or len(selected) != len(set(selected)) or not set(selected) <= set(active):
+        raise ValueError("Select only methods in the active study configuration")
     model_count = len(experiment["model_ids"])
     runs = model_count * len(experiment["training_groups"]) * len(experiment["training_languages"])
-    for method in active if methods is None else methods:
+    for method in selected:
         title, name = METHODS[method]
         cells = [
             nbformat.v4.new_markdown_cell(
                 (
                     f"# {title}: WarBias training\n\n"
-                    + (
-                        "Optional experiment outside the main application study.\n\n"
-                        if method not in active
-                        else ""
-                    )
                     + f"Run the cells in order to prepare the data, see one optimizer step on CPU, and configure {runs} runs: {model_count} models in four group/language directions. Enable training separately.\n\n{NOTES[method]}"
                 )
             ),
@@ -212,7 +212,7 @@ def build(methods=None):
             nbformat.v4.new_code_cell(TOKENS),
             nbformat.v4.new_code_cell(LOSSES[method]),
             nbformat.v4.new_markdown_cell(
-                f"## Training\n\nEnable `RUN_TRAINING` to run all {runs} model/direction combinations. Every run starts from the pinned base checkpoint. It saves a separate checkpoint, log and receipt under its run ID. Each run uses one GPU with enough memory for the model. Methods use the same rows within each direction."
+                f"## Training\n\nEnable `RUN_TRAINING` to run all {runs} model/direction combinations. Every run starts from the pinned base checkpoint. It saves a separate checkpoint, log and receipt under its run ID. Each run uses one GPU with enough memory for the model."
             ),
             nbformat.v4.new_code_cell(CONFIGURE),
             nbformat.v4.new_code_cell(TRAIN),
