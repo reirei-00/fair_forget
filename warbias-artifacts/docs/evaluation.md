@@ -13,7 +13,7 @@ python -m pip install -e ./evaluator
 
 The baseline reports prior-normalised triplet SS, QA accuracy and QA bias,
 with severity breakdowns. Raw SS, LMS and answer-format checks are diagnostics.
-Before/after effects (forget efficacy, NNR, M2/M3 and RI) belong to paired evaluation.
+Before/after effects require matched intervention evaluation.
 
 The notebook labels IDPs (ВПО) and veterans separately. Each language contains
 409 IDP and 598 veteran triplets, and 120 QA questions per group. In `scores.csv`,
@@ -57,11 +57,10 @@ controls have assistant review and no human review. Speakers, status predicates
 and cross-status attributes stay unchanged. The notebook uses the same collector
 for these two tasks and adds primary SS after their complete outputs are verified.
 
-For existing runs, use their original release. If the analysis library changed,
-set `WARBIAS_BASELINE_INFERENCE_RELEASE` to the frozen collector snapshot.
-For corrected case/profile labels, prepare a separate release and set
-`WARBIAS_BASELINE_METADATA_RELEASE` to it. The evaluation library verifies unchanged inference
-inputs before applying declared metadata corrections; original runs stay intact.
+Use the input release bound to each prediction file.
+`WARBIAS_BASELINE_INFERENCE_RELEASE` selects its collector snapshot;
+`WARBIAS_BASELINE_METADATA_RELEASE` selects declared case/profile corrections.
+The library verifies unchanged inference inputs before applying metadata corrections.
 
 The equivalent CLI command is:
 
@@ -79,6 +78,5 @@ writes its exports to `$WARBIAS_BASELINE_RESULTS/analysis`. To include controls,
 add `--neutral-release "$WARBIAS_BASELINE_NEUTRAL_RELEASE"` and
 `--neutral-results "$WARBIAS_BASELINE_NEUTRAL_RESULTS"`.
 
-
 Saved baseline tables are bound to the input content hashes in their manifest.
-The current dataset requires new inference for changed text.
+Recompute predictions when dataset text changes.

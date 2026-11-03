@@ -13,10 +13,10 @@ case, target group, category, claim and context. Intrinsic attributes belong to
 the case; added attributes define comparison profiles. The
 [attribute catalog](../protocol/inputs/cohort_attributes.json) lists all 21 added
 dimensions, their values and profile counts. The taxonomy has 120 cases in
-27 categories. `in_original_annotation_cohort` marks the 119 cases used in the
-original selected cohort; one case was added from feedback.
+27 categories. `in_original_annotation_cohort` identifies the 119 cohort cases;
+the remaining case comes from author feedback.
 
-The active taxonomy includes only cases marked `case_scope = general`. Cases
+The taxonomy includes only cases marked `case_scope = general`. Cases
 tied to a named country, institution, legal status, language or source-specific
 regional identity are excluded. This case-level selection retains language
 profiles within general cases. It does not establish stereotype prevalence.
@@ -25,8 +25,8 @@ The taxonomy combines claim and supporting references in `source_urls` and
 `source_titles`. Their roles remain distinct in `evidence_ids` and
 `supporting_evidence_ids`; category feedback has its own field.
 “Source-based adaptation” (`source_adaptation`) means a case constructed
-from topics or subtypes described in cited sources. Feedback informs category
-names, merges and splits, and supplies the additional case about military-service
+from topics or subtypes described in cited sources. Feedback defines category
+names and boundaries and supplies the case about military-service
 priority for displaced men. Its source type is `feedback`; no published source
 is claimed. All claim templates use `[TARGET]` for the group name
 while retaining intrinsic qualifiers; generation uses the source claim wording.
@@ -46,7 +46,7 @@ further 1,384 profiles add one attribute, giving 1,511 profiles. Each allows thr
 framings: no speaker, or either of two case-specific speakers. The pool therefore
 contains **1,511 × 3 = 4,533 candidate inputs**.
 
-The original base allocation selects 1,000 inputs:
+The base allocation selects 1,000 inputs:
 
 | Component | Inputs |
 | --- | ---: |
@@ -84,8 +84,7 @@ the 1,200 inputs leaves **1,059 triplets for human annotation**. The dataset sco
 also excludes 14 triplets in two ATO/OOS and full-scale-war legitimacy cases
 and 39 triplets in six local cases. This gives **1,006 triplets in 119 general
 cases and 27 categories: 598 veterans and 408 IDPs**. These exclusions define
-profile coverage and scope; they are not quality-review decisions. The frozen
-allocation records and pilot examples retain their original scope.
+profile coverage and scope; they are not quality-review decisions. Allocation and pilot records bind their own input IDs.
 
 The [cohort protocol](../protocol/cohort.json) lists the exact excluded and
 local-context IDs. Item-level `context_scope` describes the saved text and added
@@ -120,25 +119,24 @@ sets temperature to `0.3` and the response limit to `1,200` tokens.
 [Notebook 3](../notebooks/03_full_ukrainian_generation.ipynb) reproduces the
 allocation, applies the exclusions and prepares the model requests. Input
 selection is deterministic; a new model run can produce different sentences.
-The generation record does not specify an immutable historical model revision.
+The generation model revision is not recorded.
 
-The current Ukrainian data contain the retained 1,006 cohort items after review
+The Ukrainian release contains 1,006 reviewed cohort items
 and one author-edited feedback triplet, **WB-1201 / WB-C128**. This gives
 **1,007 items: 598 veterans and 409 IDPs**. The
 [additional generation protocol](../protocol/feedback_generation.json) records
 the Lapa model, sequential prompts and fixed male profile for that case.
 The [text provenance](../protocol/inputs/dataset_text_provenance.jsonl) records
-715 unchanged original items, seven author-confirmed unchanged items, 284 edited
-items and the one edited addition. Original annotation labels remain bound to
-the original text; they do not become independent reviews of changed sentences.
+715 items with unchanged annotated text, seven with author-confirmed unchanged
+text, 284 author-edited cohort items and one author-edited feedback item.
+Annotation labels apply only to the exact text reviewed.
 
 ## Translation and review
 
 GPT-6 Astra translated all 1,007 Ukrainian triplets into English.
 Both languages retain matching IDs, case metadata, context labels and S/C/U
 roles. The [translation instructions](../prompts/current/translation_astra.txt)
-require faithful meaning, attribution and profile attributes. The runtime did
-not expose an immutable model revision or inference settings.
+require faithful meaning, attribution and profile attributes. The model revision and inference settings are not recorded.
 
 The [translation protocol](../protocol/translation.json) records the model and
 method. The [dataset manifest](../protocol/dataset.json) binds both language
@@ -152,11 +150,11 @@ pairs with the reference-free quality-estimation model
 `Unbabel/wmt20-comet-qe-da`; its revision and settings are in the
 [COMET configuration](../configs/translation/quality.json). Scores are reported
 without an acceptance cutoff. They do not establish human validation of the
-translations or quality of the current Astra translations. The saved sample
-uses its own earlier Ukrainian and English text versions.
+translations or quality of the Astra release. Sample scores apply only to
+the source and target text hashes in the sample manifest.
 
 Triplet-quality review applies to the exact text version. Cohort membership identifies
-items sent for annotation; text provenance identifies subsequent author edits.
+items sent for annotation; text provenance identifies author-edited text.
 No model-review labels are included. Translation review checks fidelity to the
 Ukrainian source and remains separate from Ukrainian triplet review.
 
@@ -185,11 +183,11 @@ All 120 taxonomy cases and 1,007 triplets per language have severity values from
 included rating counts and ranges. A gap of at least 40 points flags a case for
 review while preserving its mean and level.
 
-The [severity protocol](../protocol/severity.json) binds the current taxonomy,
+The [severity protocol](../protocol/severity.json) binds the taxonomy,
 ratings and annotation examples. The notebook checks the published values against
 fresh calculations, shows case-weighted and triplet-weighted distributions, and
 exports the calculation audit and large-gap review list. Source annotation examples
-and current triplet text retain separate bindings.
+and released triplet text have separate bindings.
 
 ## Question answering
 
@@ -211,11 +209,11 @@ All indices are zero-based.
 [Bilingual templates](../protocol/inputs/qa_scenarios.json) define the text and
 case links. Ukrainian scenarios use model-assisted drafting and final author
 decisions. The drafting model is not recorded.
-GPT-6 Astra translated all 40 current Ukrainian templates and shared role phrases
+GPT-6 Astra translated all 40 Ukrainian templates and shared role phrases
 into English. Deterministic expansion produces all 240 English questions.
 The [QA translation protocol](../protocol/qa_translation.json) records the model
 and instructions. [Translation records](../protocol/inputs/qa_translations.jsonl)
-bind every English question to the current Ukrainian text. The triplet Lapa
+bind every English question to the released Ukrainian text. The triplet Lapa
 generation settings do not describe QA construction.
 [Notebook 7](../notebooks/07_qa_dataset.ipynb) rebuilds all variants and verifies
 them against the saved files and [QA protocol](../protocol/qa.json).
@@ -236,7 +234,7 @@ quality decisions and answer choices. Missing ratings are excluded per measure.
 Agreement with the answer key is a separate statistic.
 
 `human_validated` requires two independent positive reviews with the correct
-answer on the exact released text and no conflicting current-text review.
+answer on the exact released text and no conflicting review of that text.
 `human_edited` marks a retained human edit without this two-review agreement.
 `author_approved` marks an exact retained or revised item approved by the author.
 These [approvals](../protocol/inputs/qa_author_reviews.jsonl) cover 28 revisions
@@ -250,5 +248,5 @@ to exact text hashes. Scenarios test specific actions or fictional eligibility;
 they do not establish lasting traits, diagnoses or moral deservingness. QA
 shares stereotype associations with the triplets.
 
-The [notebook guide](../README.md#walkthroughs) provides the seven executable
+The [notebook guide](../README.md#walkthroughs) provides the eight executable
 walkthroughs and run instructions.
