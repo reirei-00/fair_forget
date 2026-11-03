@@ -5,9 +5,9 @@
   "files": {
     "taxonomy": {
       "path": "protocol/inputs/taxonomy.csv",
-      "sha256": "df0fcefe512544da1f3d425cf8c3189488823a06c444868722ab62c64872f1fc",
+      "sha256": "11de7f3b44561c4e17dd317628ecbc115853e45e5a44c6b935657aa2ddc0a7c3",
       "format": "csv",
-      "bytes": 23319,
+      "bytes": 23823,
       "rows": 28,
       "role": "recorded_taxonomy_registry"
     },
@@ -29,10 +29,10 @@
     },
     "sources": {
       "path": "protocol/inputs/sources.csv",
-      "sha256": "bba749becbe3284ec6e74becb8812910a723296390154db4e4608a4b62fe08eb",
+      "sha256": "0c10f24f374450513964ac88b060c2bddafb6ab189b9f5694293353e3fdb66d3",
       "format": "csv",
-      "bytes": 12612,
-      "rows": 34,
+      "bytes": 25883,
+      "rows": 64,
       "role": "current_evidence_registry"
     },
     "matrix_full": {
@@ -213,7 +213,7 @@
     {
       "artifact": "taxonomy",
       "source_sha256": "fe6dbac3f8834aa40fa09c91cfc0033d3a95b05be0bc18850652fe20f3aea7e1",
-      "portable_sha256": "df0fcefe512544da1f3d425cf8c3189488823a06c444868722ab62c64872f1fc",
+      "portable_sha256": "11de7f3b44561c4e17dd317628ecbc115853e45e5a44c6b935657aa2ddc0a7c3",
       "exact_bytes": false,
       "scope_protocol": "protocol/coverage_extension.json#/scope"
     },
@@ -234,7 +234,7 @@
     {
       "artifact": "sources",
       "source_sha256": "29385ba2fe71cf583229c99fda06d64e2220f3321b75313fefcffe4971ab9380",
-      "portable_sha256": "bba749becbe3284ec6e74becb8812910a723296390154db4e4608a4b62fe08eb",
+      "portable_sha256": "0c10f24f374450513964ac88b060c2bddafb6ab189b9f5694293353e3fdb66d3",
       "exact_bytes": false,
       "scope_protocol": "protocol/coverage_extension.json#/scope"
     },
