@@ -19,6 +19,23 @@ _ANALYSIS_FILES = {
     "benchmark/warbias/baseline_neutral.py",
     "benchmark/warbias/baseline_answers.py",
 }
+
+# These collector revisions differ only in explicit actor-row selection and
+# its saved evidence. Native inputs, inference and scoring stay unchanged.
+_SELECTION_REVISIONS = {
+    "benchmark/__main__.py": (
+        "32733ef81adf4cff3dee2c9e72d5d61fcdac98f36fac7fe012368adc1ae96088",
+        "0dcd5d79b030e44a1f6223feb9c8a02b1519a1cd5a3b531ee6abcf562f350c33",
+    ),
+    "benchmark/runs.py": (
+        "d57acae2705338c6d726088d7faa96aff135739c7b56b74feb5ab56bcf81d807",
+        "fffd20ca4888a08286ae396fa7cc33fbeeb4963403756517b24a55aa27219a12",
+    ),
+    "benchmark/warbias/selection.py": (
+        None,
+        "bb27e475601d3cc30c40e369ab7d897c4a82dc62622a7026637b3521e5308a44",
+    ),
+}
 _HARNESS_FILES = (
     "api/model.py",
     "api/registry.py",
@@ -30,6 +47,16 @@ _HARNESS_FILES = (
 
 def _sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def selection_code_identity(identity):
+    """Normalize only the reviewed selection-only collector source pair."""
+    return {
+        name: _SELECTION_REVISIONS[name][0]
+        if name in _SELECTION_REVISIONS and digest in _SELECTION_REVISIONS[name]
+        else digest
+        for name, digest in identity.items()
+    }
 
 
 def validate_inference_release(directory):
@@ -63,7 +90,11 @@ def validate_inference_release(directory):
         identity[relative] = digest
     current = code_identity()
     protected = (set(current) | set(identity)) - _ANALYSIS_FILES
-    if any(current.get(name) != identity.get(name) for name in protected):
+    current_collection = selection_code_identity(current)
+    saved_collection = selection_code_identity(identity)
+    if any(
+        current_collection.get(name) != saved_collection.get(name) for name in protected
+    ):
         raise ValueError(
             "Frozen inference or native scorer differs from the current library"
         )

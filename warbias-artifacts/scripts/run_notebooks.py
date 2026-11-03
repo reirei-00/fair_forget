@@ -37,7 +37,10 @@ def run(source, *, names=None, run_directory=None, timeout=300):
     output.mkdir(parents=True, exist_ok=False)
     environment = {**os.environ, "WARBIAS_NOTEBOOK_RUN": relative.as_posix()}
     environment["PYTHONPATH"] = os.pathsep.join(
-        filter(None, [str(project / "src"), environment.get("PYTHONPATH")])
+        filter(
+            None,
+            [str(project / "src"), str(project / "evaluator/src"), environment.get("PYTHONPATH")],
+        )
     )
     completed = []
     records = []

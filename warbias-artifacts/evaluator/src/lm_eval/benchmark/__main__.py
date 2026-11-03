@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import importlib.metadata
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -104,6 +105,7 @@ def main(argv=None):
             sub.add_argument("--seed", type=int, default=42)
             sub.add_argument("--answer-policy", choices=POLICIES, default=NORMALIZED)
         if command == "run":
+            sub.add_argument("--actors", nargs="+", choices=("idp", "veteran"))
             sub.add_argument("--model", default="hf", help="Harness model backend")
             sub.add_argument("--model-args", required=True)
             sub.add_argument("--batch-size", default="auto")
@@ -273,7 +275,17 @@ def main(argv=None):
         if args.max_output_tokens < 1:
             parser.error("--max-output-tokens must be positive")
     registry_rows = load(args.task, args.input, dataset_bundle=args.dataset_bundle)
-    rows = select_clusters(registry_rows, args.limit_clusters_per_stratum)
+    actors = getattr(args, "actors", None)
+    if actors is not None:
+        from lm_eval.benchmark.warbias.selection import actor_names, select_actors
+
+        if family(args.task) not in {"warbias", "warbias_triplets"}:
+            raise ValueError("Actor selection applies only to WarBias tasks")
+        actors = actor_names(actors)
+        selected_source = select_actors(registry_rows, actors)
+    else:
+        selected_source = registry_rows
+    rows = select_clusters(selected_source, args.limit_clusters_per_stratum)
     if args.command == "validate":
         print(
             json.dumps(
@@ -323,6 +335,8 @@ def main(argv=None):
     }
     if family(args.task) == "warbias":
         run["scoring_policy"] = args.answer_policy
+    if actors is not None:
+        run["actors"] = actors
     if args.command == "run":
         from lm_eval.api.registry import get_model
         from lm_eval.benchmark.evaluation_assets import evaluation_asset_identity
@@ -347,6 +361,11 @@ def main(argv=None):
                 for name in ("numpy", "transformers", "torch")
             },
         )
+        if args.model == "vllm":
+            run["inference_environment"] = {
+                key: os.environ.get(key)
+                for key in ("VLLM_BATCH_INVARIANT", "VLLM_ENABLE_V1_MULTIPROCESSING")
+            }
         # Keep the legacy raw manifest shape; native chat is an explicit new
         # generation identity. Likelihood protocols always retain their raw input.
         if (
@@ -360,7 +379,8 @@ def main(argv=None):
             declared = {
                 key: value
                 for key, value in previous_run.items()
-                if key != "evaluation_asset_identity"
+                if key
+                not in {"evaluation_asset_identity", "source_evaluation_asset_identity"}
             }
             if declared != run:
                 raise ValueError(
@@ -382,6 +402,10 @@ def main(argv=None):
         run["evaluation_asset_identity"] = evaluation_asset_identity(
             backend, rows, args.generation_prompt_format
         )
+        if actors is not None:
+            run["source_evaluation_asset_identity"] = evaluation_asset_identity(
+                backend, registry_rows, args.generation_prompt_format
+            )
         if previous_run is not None and previous_run != run:
             raise ValueError("Saved tokenizer or effective evaluation inputs differ")
         write_json(manifest, run)

@@ -31,9 +31,14 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
     assert (exported / "src/warbias_kit/warbias/provider.py").is_file()
     assert (exported / "protocol/pilot_snapshots.json").is_file()
     assert (exported / "notebooks/04_sample_translation_comet.ipynb").is_file()
-    assert len(list((exported / "notebooks").glob("[0-9][0-9]_*.ipynb"))) == 8
+    assert len(list((exported / "notebooks").glob("[0-9][0-9]_*.ipynb"))) == 13
     assert (exported / "notebooks/08_warbias_baseline.ipynb").is_file()
     for relative in (
+        "src/warbias_kit/unlearning/trainer.py",
+        "configs/unlearning/warbias_final.json",
+        "tests/unlearning/test_unlearning_trainer.py",
+        "notebooks/12_after_intervention.ipynb",
+        "requirements-unlearning.txt",
         "evaluator/pyproject.toml",
         "evaluator/LICENSE.md",
         "evaluator/src/lm_eval/benchmark/warbias/baseline.py",
@@ -63,9 +68,6 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
         "evaluation/stereoset",
         "notebooks/executed",
         "notebooks/unlearning",
-        "src/warbias_kit/unlearning",
-        "configs/unlearning",
-        "tests/unlearning",
     ):
         assert not (exported / relative).exists()
     assert "file://" not in (exported / "pyproject.toml").read_text()
@@ -73,6 +75,18 @@ def test_export_contains_maintained_source_and_is_reproducible(exported, tmp_pat
     assert json.loads((exported / exporter.MANIFEST).read_text())["subproject"] == "warbias"
     with pytest.raises(ValueError, match="must not exist"):
         exporter.export(ROOT, exported)
+
+
+def test_export_excludes_host_configuration_and_model_weights(exported, tmp_path):
+    local = exported / "configs/unlearning/local.json"
+    local.write_text('{"models_root": "private-model-cache"}\n')
+    weights = exported / "models/checkpoint"
+    weights.mkdir(parents=True)
+    (weights / "weights.safetensors").write_bytes(b"local weights")
+    result = exporter.export(exported, tmp_path / "portable")
+    assert not (result / "configs/unlearning/local.json").exists()
+    assert not (result / "models").exists()
+    assert (result / "configs/unlearning/warbias_final.json").is_file()
 
 
 def test_broader_repository_exports_only_its_warbias_child_without_changes(exported, tmp_path):

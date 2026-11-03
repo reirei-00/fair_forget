@@ -16,6 +16,7 @@ from lm_eval.benchmark.warbias.baseline_inputs import (
     release_overview,
     sha,
     verify_baseline_run,
+    verify_collection_tasks,
     verify_language_inference,
 )
 from lm_eval.benchmark.warbias.baseline_reporting import (
@@ -35,6 +36,12 @@ from lm_eval.benchmark.warbias.baseline_summary import (
     summary,
     triplet_items,
     verify_qa_formula,
+)
+from lm_eval.benchmark.warbias.selection import (
+    actor_names,
+    collection_actors,
+    select_actors,
+    select_verified_actors,
 )
 
 
@@ -57,7 +64,7 @@ def _select(items, triplet_ids):
     )
 
 
-def _cohort(rows, triplet_ids):
+def _cohort(rows, triplet_ids, actors=None):
     if triplet_ids is None:
         return None
     from lm_eval.benchmark.data import family
@@ -73,6 +80,7 @@ def _cohort(rows, triplet_ids):
     for task, items in rows.items():
         if family(task) != "warbias_triplets":
             continue
+        items = select_actors(items, actors)
         if not selected <= {row["id"] for row in items}:
             raise ValueError("Selected triplet IDs are absent from a language panel")
         membership = {}
@@ -98,11 +106,18 @@ def _analyse_model(
     qa_answer_policy="abc_option_text_v2",
     triplet_ids=None,
     neutral_inference_source=None,
+    selected_languages=("uk", "en"),
+    selected_actors=None,
 ):
     from lm_eval.benchmark.data import family
 
     bundle = release / "inputs/manifest.json"
-    tasks = read(bundle)["datasets"]
+    all_tasks = read(bundle)["datasets"]
+    tasks = {
+        task: spec
+        for task, spec in all_tasks.items()
+        if spec["language"] in selected_languages
+    }
     root = results / model
     expected = (
         profiles[model].get("parameters")
@@ -133,6 +148,8 @@ def _analyse_model(
         or binding.get("settings") != SCORING_SETTINGS
     ):
         raise ValueError("Collection binding differs from the selected release")
+    verify_collection_tasks(binding, tasks, all_tasks)
+    collected_actors = collection_actors(binding, selected_actors)
     runs = {
         task: verify_baseline_run(
             root / "full" / task,
@@ -142,10 +159,14 @@ def _analyse_model(
             profiles[model]["model_identity"],
             smoke=False,
             inference_code_identity=inference_source["code_identity"],
+            actors=collected_actors,
         )
         for task in tasks
     }
-    if any(len(run.selected_rows) != len(run.source_rows) for run in runs.values()):
+    if any(
+        run.selected_rows != select_actors(run.source_rows, collected_actors)
+        for run in runs.values()
+    ):
         raise ValueError("A full-panel analysis received a source subset")
     provenance = {
         task: {
@@ -159,6 +180,12 @@ def _analyse_model(
     }
     language_inference = {}
     for kind in ("warbias_triplets", "warbias"):
+        if len(selected_languages) == 1:
+            language_inference[kind] = {
+                "status": "not_requested",
+                "reason": "Only one language was selected.",
+            }
+            continue
         left, right = (
             indexed[kind, language].provenance["run"] for language in ("uk", "en")
         )
@@ -174,6 +201,10 @@ def _analyse_model(
             )
             for task, run in runs.items()
         }
+    indexed = {
+        key: select_verified_actors(run, selected_actors)
+        for key, run in indexed.items()
+    }
     report = {
         "status": "complete",
         "runs": provenance,
@@ -189,7 +220,7 @@ def _analyse_model(
                 triplet_items(indexed["warbias_triplets", language], severity, scoring),
                 triplet_ids,
             )
-            for language in ("uk", "en")
+            for language in selected_languages
         }
         report["group_diagnostics"][scoring] = {
             language: group_diagnostics(items, scoring, draws, seed)
@@ -207,30 +238,31 @@ def _analyse_model(
             ]
             for language, items in languages.items()
         }
-        for scope, left in scope_selections(languages["uk"]):
-            ids = {row["id"] for row in left}
-            right = [row for row in languages["en"] if row["id"] in ids]
-            report["language_contrasts"].append(
-                {
-                    "format": "triplets",
-                    "scoring": scoring,
-                    **scope,
-                    **paired_summary(
-                        left, right, TRIPLET_FIELDS, "triplets", None, draws, seed
-                    ),
-                }
-            )
+        if len(selected_languages) == 2:
+            for scope, left in scope_selections(languages["uk"]):
+                ids = {row["id"] for row in left}
+                right = [row for row in languages["en"] if row["id"] in ids]
+                report["language_contrasts"].append(
+                    {
+                        "format": "triplets",
+                        "scoring": scoring,
+                        **scope,
+                        **paired_summary(
+                            left, right, TRIPLET_FIELDS, "triplets", None, draws, seed
+                        ),
+                    }
+                )
     from lm_eval.benchmark.warbias.baseline_answers import rescore_qa
 
     parsed_predictions, parsing = {}, {}
-    for language in ("uk", "en"):
+    for language in selected_languages:
         key = ("warbias", language)
         indexed[key], parsed_predictions[language], parsing[language] = rescore_qa(
             indexed[key], qa_answer_policy
         )
     languages = {
         language: qa_records(indexed["warbias", language], severity)
-        for language in ("uk", "en")
+        for language in selected_languages
     }
     for language, items in languages.items():
         scopes = []
@@ -263,22 +295,23 @@ def _analyse_model(
         }
         if parsing[language] is not None:
             report["qa"][language]["parsing"] = parsing[language]
-    for condition in ("ambiguous", "stereotype_aligned", "stereotype_conflicting"):
-        for scope, left in scope_selections(
-            [row for row in languages["uk"] if row["condition"] == condition]
-        ):
-            ids = {row["id"] for row in left}
-            right = [row for row in languages["en"] if row["id"] in ids]
-            report["language_contrasts"].append(
-                {
-                    "format": "qa",
-                    "condition": condition,
-                    **scope,
-                    **paired_summary(
-                        left, right, QA_FIELDS, "qa", condition, draws, seed
-                    ),
-                }
-            )
+    if len(selected_languages) == 2:
+        for condition in ("ambiguous", "stereotype_aligned", "stereotype_conflicting"):
+            for scope, left in scope_selections(
+                [row for row in languages["uk"] if row["condition"] == condition]
+            ):
+                ids = {row["id"] for row in left}
+                right = [row for row in languages["en"] if row["id"] in ids]
+                report["language_contrasts"].append(
+                    {
+                        "format": "qa",
+                        "condition": condition,
+                        **scope,
+                        **paired_summary(
+                            left, right, QA_FIELDS, "qa", condition, draws, seed
+                        ),
+                    }
+                )
     if neutral is not None:
         from lm_eval.benchmark.warbias.baseline_neutral import (
             add_neutral_results,
@@ -295,6 +328,8 @@ def _analyse_model(
                 draws,
                 seed,
                 inference_source=neutral_inference_source,
+                selected_languages=selected_languages,
+                selected_actors=selected_actors,
             )
             report["primary_prior_normalised_ss"] = status
             if languages is not None:
@@ -325,6 +360,8 @@ def analyze_checkpoints(
     qa_answer_policy="abc_option_text_v2",
     triplet_ids=None,
     neutral_inference_release=None,
+    languages=None,
+    actors=None,
 ):
     """Analyze complete saved checkpoints with baseline metrics and severity slices.
 
@@ -339,6 +376,12 @@ def analyze_checkpoints(
     original native runs pass verification; prompts and predictions stay fixed.
     ``neutral_release`` and ``neutral_results`` add source-bound control
     likelihoods after the original runs pass verification.
+    ``languages`` selects UK, EN or both (default). Only selected-language runs
+    are required; complete frozen input bundles remain verified. Language
+    contrasts are calculated only when both languages are selected.
+    ``actors`` selects complete IDP or veteran panels, including QA. A source
+    component can span actors; triplet cohorts keep complete components within
+    the selected actor domain. Full saved runs may be projected after validation.
     """
     if type(bootstrap) is not int or bootstrap < 0 or type(seed) is not int:
         raise ValueError(
@@ -346,6 +389,17 @@ def analyze_checkpoints(
         )
     if (neutral_release is None) != (neutral_results is None):
         raise ValueError("Provide both the neutral release and its results")
+    selected_languages = ("uk", "en") if languages is None else tuple(languages)
+    if (
+        not selected_languages
+        or any(language not in ("uk", "en") for language in selected_languages)
+        or len(set(selected_languages)) != len(selected_languages)
+    ):
+        raise ValueError("Select unique languages from uk and en")
+    selected_languages = tuple(
+        language for language in ("uk", "en") if language in selected_languages
+    )
+    selected_actors = actor_names(actors)
     from lm_eval.benchmark.warbias.baseline_answers import policy_definition
 
     qa_parsing = policy_definition(qa_answer_policy)
@@ -391,7 +445,9 @@ def analyze_checkpoints(
             neutral_release, corrected if metadata is not None else original
         )
     triplet_ids = _cohort(
-        corrected[3] if metadata is not None else original[3], triplet_ids
+        corrected[3] if metadata is not None else original[3],
+        triplet_ids,
+        selected_actors,
     )
     results = Path(results).resolve()
     models = list(profiles) if models is None else list(models)
@@ -417,7 +473,8 @@ def analyze_checkpoints(
         },
         "weighting": "Equal original claim components after within-component averaging; keep profile and language variants together.",
         "bootstrap": {"draws": bootstrap, "seed": seed, "level": 0.95},
-        "language_pair": {"lg1": "uk", "lg2": "en"},
+        "languages": list(selected_languages),
+        "actors": selected_actors or ["idp", "veteran"],
         "definitions": metric_definitions(),
         "analysis_code_identity": code_identity(),
         "inference_source": inference_source,
@@ -440,6 +497,8 @@ def analyze_checkpoints(
         "models": {},
         "qa_parsing": qa_parsing,
     }
+    if len(selected_languages) == 2:
+        report["language_pair"] = {"lg1": "uk", "lg2": "en"}
     if triplet_ids is not None:
         ids = sorted(triplet_ids)
         report["triplet_cohort"] = {
@@ -448,8 +507,8 @@ def analyze_checkpoints(
             "sha256": hashlib.sha256(
                 json.dumps(ids, separators=(",", ":")).encode()
             ).hexdigest(),
-            "selection": "Complete semantic components, applied after full native run verification.",
-            "qa_selection": "All QA rows remain included.",
+            "selection": "Complete semantic components within selected actors, applied after native run verification.",
+            "qa_selection": "All QA rows for the selected actors remain included.",
         }
     if metadata is not None:
         report["metadata_release"] = metadata["provenance"]
@@ -479,6 +538,8 @@ def analyze_checkpoints(
                 qa_answer_policy,
                 triplet_ids,
                 neutral_inference_source,
+                selected_languages,
+                selected_actors,
             )
         except (ValueError, KeyError, FileNotFoundError) as error:
             report["models"][model] = {

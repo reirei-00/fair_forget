@@ -33,6 +33,18 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def verify_collection_tasks(binding, selected, available):
+    """Require selected tasks to belong to the qualified collection scope."""
+    tasks = binding.get("tasks", list(available))
+    if (
+        not isinstance(tasks, list)
+        or any(not isinstance(task, str) for task in tasks)
+        or len(set(tasks)) != len(tasks)
+        or not set(selected) <= set(tasks) <= set(available)
+    ):
+        raise ValueError("Selected tasks differ from the qualified collection scope")
+
+
 def verify_language_inference(left, right, expected_identity, parameters, source):
     """Compare language runs without treating rendered prompts as tokenizers.
 
@@ -181,6 +193,7 @@ def verify_baseline_run(
     smoke=False,
     collection_settings=None,
     inference_code_identity=None,
+    actors=None,
 ):
     """Verify complete native outputs against their frozen source and checkpoint.
 
@@ -192,12 +205,15 @@ def verify_baseline_run(
     from lm_eval.benchmark.provenance import code_identity
     from lm_eval.benchmark.runs import load_verified_run
     from lm_eval.benchmark.suite import verify_result
+    from lm_eval.benchmark.warbias.selection import actor_names, select_actors
 
     settings = SCORING_SETTINGS if collection_settings is None else collection_settings
     if set(settings) != set(SCORING_SETTINGS):
         raise ValueError("Declare all collection settings")
     directory, bundle = Path(directory), Path(bundle)
     run, report = read(directory / "run.json"), read(directory / "report.json")
+    if actor_names(run.get("actors")) != actor_names(actors):
+        raise ValueError("Run actor selection differs from its collection binding")
     identity = run.get("model_identity") or {}
     hashes = expected_identity.get("local_files_sha256")
     if (
@@ -208,6 +224,8 @@ def verify_baseline_run(
         raise ValueError("Run checkpoint files differ from pinned weights or assets")
     if identity.get("parameters") != parameters:
         raise ValueError("Run model parameters differ")
+    if identity.get("adapter") != expected_identity.get("adapter"):
+        raise ValueError("Run adapter files differ from pinned assets")
     expected_code = (
         code_identity() if inference_code_identity is None else inference_code_identity
     )
@@ -246,7 +264,9 @@ def verify_baseline_run(
         }.items()
     ):
         raise ValueError("Native report bootstrap settings differ")
-    selected = select_clusters(load(task, dataset_bundle=bundle), limit)
+    selected = select_clusters(
+        select_actors(load(task, dataset_bundle=bundle), actors), limit
+    )
     verify_result(
         directory,
         task,

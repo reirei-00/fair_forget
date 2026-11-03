@@ -69,7 +69,15 @@ def load_verified_run(
     ):
         raise ValueError("Comparison requires a fingerprinted model run")
     full = load(task, input_path, dataset_bundle=dataset_bundle)
-    rows = select_clusters(full, manifest["limit_clusters_per_stratum"])
+    if manifest.get("actors") is not None:
+        from lm_eval.benchmark.warbias.selection import select_actors
+
+        if family(task) not in {"warbias", "warbias_triplets"}:
+            raise ValueError("Actor selection applies only to WarBias tasks")
+        selected_source = select_actors(full, manifest["actors"])
+    else:
+        selected_source = full
+    rows = select_clusters(selected_source, manifest["limit_clusters_per_stratum"])
     checksum = hashlib.sha256("\n".join(r["id"] for r in rows).encode()).hexdigest()
     if (
         checksum != manifest["selected_ids_sha256"]
