@@ -38,6 +38,29 @@ case; item-level checks apply only to the listed IDs. A supporting reference
 does not establish the exact wording or prevalence of a stereotype. Missing
 entries do not imply verified support.
 
+## International references
+
+The [combined taxonomy](../protocol/inputs/taxonomy_with_int.csv) adds international
+references to the Ukrainian sources for the same 120 claims. Its `source_urls`
+and `source_titles` contain deduplicated unions. The
+[source list](../protocol/inputs/sources.csv) includes all 30 international
+references. `international_evidence_ids` identifies these additions; the original
+`evidence_ids` and `supporting_evidence_ids` retain their generation roles.
+
+`sources_int_urls` and `sources_int_comment` preserve the supplied international
+links and qualifications, including indirect evidence, refugee-to-IDP transfer,
+missing support and pending citation checks. DOI metadata confirms bibliographic
+identity only. It does not confirm support for a claim or establish stereotype
+prevalence. The [reference mapping](../protocol/international_sources.json)
+records bibliographic and claim-support status separately. One DOI identifies an
+edited volume rather than the specific chapter named in its comment; its chapter
+locator remains unverified.
+
+The [generation taxonomy](../protocol/inputs/cohort_taxonomy.csv) remains the input
+for construction and the saved measurements. The combined taxonomy adds reference
+metadata without changing claims, categories, counts, severity values or dataset
+text.
+
 ## Case and profile selection
 
 The frozen candidate pool contains 127 cases: 78 veteran and 49 internally displaced

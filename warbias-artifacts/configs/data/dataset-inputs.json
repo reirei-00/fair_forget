@@ -29,10 +29,10 @@
     },
     "sources": {
       "path": "protocol/inputs/sources.csv",
-      "sha256": "bba749becbe3284ec6e74becb8812910a723296390154db4e4608a4b62fe08eb",
+      "sha256": "0c10f24f374450513964ac88b060c2bddafb6ab189b9f5694293353e3fdb66d3",
       "format": "csv",
-      "bytes": 12612,
-      "rows": 34,
+      "bytes": 25883,
+      "rows": 64,
       "role": "current_evidence_registry"
     },
     "matrix_full": {
@@ -186,6 +186,14 @@
       "bytes": 74800,
       "rows": 120,
       "role": "scoped_source_taxonomy_case_inventory"
+    },
+    "taxonomy_with_int": {
+      "path": "protocol/inputs/taxonomy_with_int.csv",
+      "sha256": "6d95c79d2776c08b2c5d0aae2342e350039f3fde0f2607b1fa57c28b2f4a7c2b",
+      "format": "csv",
+      "bytes": 161490,
+      "rows": 120,
+      "role": "taxonomy_with_supplementary_international_references"
     }
   },
   "sampling": {
@@ -234,9 +242,11 @@
     {
       "artifact": "sources",
       "source_sha256": "29385ba2fe71cf583229c99fda06d64e2220f3321b75313fefcffe4971ab9380",
-      "portable_sha256": "bba749becbe3284ec6e74becb8812910a723296390154db4e4608a4b62fe08eb",
+      "portable_sha256": "0c10f24f374450513964ac88b060c2bddafb6ab189b9f5694293353e3fdb66d3",
       "exact_bytes": false,
-      "scope_protocol": "protocol/coverage_extension.json#/scope"
+      "scope_protocol": "protocol/coverage_extension.json#/scope",
+      "original_portable_sha256": "bba749becbe3284ec6e74becb8812910a723296390154db4e4608a4b62fe08eb",
+      "supplementary_references": "protocol/international_sources.json"
     },
     {
       "artifact": "matrix_full",
@@ -393,5 +403,10 @@
     "sha256": "864dda3a56b974ba70baf9c43a1eeccfaa6b6ffffe7656c53582882a048999c0",
     "role": "recorded_allocation_design"
   },
-  "cohort_protocol": "protocol/cohort.json"
+  "cohort_protocol": "protocol/cohort.json",
+  "international_sources": {
+    "path": "protocol/international_sources.json",
+    "sha256": "51dc2a5f16d56ec5a559c445dbbe9684c2cb96dd3e0a61a4312f2f8399c8759b",
+    "role": "supplementary_international_reference_mapping"
+  }
 }
