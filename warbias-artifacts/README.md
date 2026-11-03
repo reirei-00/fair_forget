@@ -84,7 +84,7 @@ contains the local evaluation library; see the [evaluation guide](docs/evaluatio
 | [12. After-intervention evaluation](notebooks/12_after_intervention.ipynb) | Compare each adapter with its base on the same group and language |
 | [13. Native benchmark evaluation](notebooks/13_native_evaluation.ipynb) | Prepare optional capability and native benchmark comparisons |
 
-The [unlearning protocol](docs/unlearning.md) defines the two methods, three
+The [unlearning protocol](docs/unlearning.md) defines the two methods, six
 models and four group/language directions. The [setup guide](docs/unlearning-setup.md)
 describes model downloads and training. Evaluation uses the bundled library.
 

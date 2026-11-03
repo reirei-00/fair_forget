@@ -10,8 +10,8 @@ BiasUnlearn and WGA+KL use the final WarBias source. It contains
 | `veteran_uk` | Veteran | Ukrainian |
 | `veteran_en` | Veteran | English |
 
-Each direction trains on one group and one language. All three pinned models
-start independently from their base checkpoints. This gives 12 runs per method.
+Each direction trains on one group and one language. All six pinned models
+start independently from their base checkpoints. This gives 24 runs per method.
 Each adapter is evaluated only on its training group and language. Cross-group
 and cross-language evaluation are deferred.
 The application tests whether WarBias supplies useful data for bias mitigation.
@@ -155,7 +155,7 @@ preference and polarity changes visible. Compute paired component intervals
 through the evaluation library. Lower raw stereotype preference alone does not establish
 successful mitigation.
 
-Run MMLU and Belebele last for all three models, after WarBias training and
+Run MMLU and Belebele last for all six models, after WarBias training and
 evaluation. These before/after capability checks use evaluation data only.
 
 Use the [before/after notebook](../notebooks/12_after_intervention.ipynb) for WarBias scores.

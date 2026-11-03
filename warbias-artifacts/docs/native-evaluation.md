@@ -1,8 +1,8 @@
 # Native benchmark evaluation
 
 The [before/after notebook](../notebooks/13_native_evaluation.ipynb) evaluates the current
-WarBias interventions with the evaluation library. The default Ukrainian tasks use three shared
-base checkpoints and 12 Ukrainian-trained BiasUnlearn and WGA+KL adapters across both groups.
+WarBias interventions with the evaluation library. The default Ukrainian tasks use six shared
+base checkpoints and 24 Ukrainian-trained BiasUnlearn and WGA+KL adapters across both groups.
 Each adapter is evaluated only on tasks in its training language.
 Native benchmark integrations are maintained evaluation paths. They use
 evaluation data only.
@@ -55,9 +55,9 @@ receipt. The evaluation library records the base and adapter file hashes separat
 
 ## Run
 
-1. Enable `RUN_BEFORE` to verify and collect the three base checkpoints.
+1. Enable `RUN_BEFORE` to verify and collect the six base checkpoints.
 2. Run the [training notebooks](../README.md). Enable `RUN_AFTER` when all
-   12 Ukrainian exports are complete for the default tasks. Each intervention
+   24 Ukrainian exports are complete for the default tasks. Each intervention
    uses its model's shared baseline in the same language.
 3. Enable `RUN_COMPARISON` to calculate paired changes from saved predictions
    through the evaluation library `paper compare-native`, without GPUs.

@@ -39,8 +39,8 @@ class WarBiasPlanTests(unittest.TestCase):
         self.assertEqual(set(config["objectives"]), set(METHODS))
         self.assertEqual(config["evaluation_language_policy"], "training_language")
         self.assertEqual(config["evaluation_group_policy"], "training_group")
-        self.assertEqual(len(selected_models(ROOT)), 3)
-        self.assertNotIn("mamay27b_v2", config["model_ids"])
+        self.assertEqual(len(selected_models(ROOT)), 6)
+        self.assertIn("mamay27b_v2", config["model_ids"])
         for method in ("npo_kl", "rmu", "task_vector"):
             with self.subTest(method=method), self.assertRaisesRegex(ValueError, "not selected"):
                 self.plan(method)
@@ -53,7 +53,7 @@ class WarBiasPlanTests(unittest.TestCase):
             notebook, destination = write.call_args.args
             self.assertEqual(destination, ROOT / "notebooks/11_wga_kl.ipynb")
             self.assertEqual(notebook.metadata.warbias_kit.method, "wga_kl")
-            self.assertEqual(notebook.metadata.warbias_kit.runs_per_method, 12)
+            self.assertEqual(notebook.metadata.warbias_kit.runs_per_method, 24)
             write.reset_mock()
             for methods in (["npo_kl"], ["rmu"], ["biasunlearn", "npo_kl"]):
                 with (
@@ -185,10 +185,10 @@ class WarBiasPlanTests(unittest.TestCase):
         registry = selected_models(ROOT)
         expected = {model["id"]: model for model in registry}
         plans = [self.plan(method) for method in METHODS]
-        self.assertEqual(sum(map(len, plans)), 24)
+        self.assertEqual(sum(map(len, plans)), 48)
         base_paths = {alias: set() for alias in expected}
         for method, plan in zip(METHODS, plans, strict=True):
-            self.assertEqual(len({item["run_id"] for item in plan}), 12)
+            self.assertEqual(len({item["run_id"] for item in plan}), 24)
             self.assertEqual(
                 {(i["model_alias"], i["target_group"], i["training_language"]) for i in plan},
                 set(itertools.product(expected, ("idp", "veteran"), ("uk", "en"))),
@@ -233,9 +233,9 @@ class WarBiasPlanTests(unittest.TestCase):
 
     def test_filters_select_only_independent_requested_directions(self):
         for filters, count in (
-            ({"target_group": "idp"}, 6),
-            ({"training_language": "en"}, 6),
-            ({"target_group": "veteran", "training_language": "uk"}, 3),
+            ({"target_group": "idp"}, 12),
+            ({"training_language": "en"}, 12),
+            ({"target_group": "veteran", "training_language": "uk"}, 6),
         ):
             with self.subTest(filters=filters):
                 plan = self.plan("biasunlearn", **filters)
@@ -293,12 +293,12 @@ class WarBiasPlanTests(unittest.TestCase):
                 prepared = notebook_matrix.prepare_recipes(
                     self.staged_plan(method), self.root / method
                 )
-                self.assertEqual(len(prepared), 12)
+                self.assertEqual(len(prepared), 24)
                 self.assertEqual(
                     {path.stem for path in prepared}, {item["run_id"] for item in self.plan(method)}
                 )
                 paths.extend(prepared)
-        self.assertEqual(len(paths), 24)
+        self.assertEqual(len(paths), 48)
         self.assertEqual(len(paths), len(set(paths)))
 
     def test_staged_base_checkpoint_symlinks_preserve_the_planned_initialization(self):
@@ -313,7 +313,7 @@ class WarBiasPlanTests(unittest.TestCase):
             planned.symlink_to(cached, target_is_directory=True)
             item["config_sha256"] = file_hash(cached / "config.json")
         prepared = notebook_matrix.prepare_recipes(plan, self.root / "symlink_preflight")
-        self.assertEqual(len(prepared), 3)
+        self.assertEqual(len(prepared), 6)
 
     def test_missing_or_historical_data_cannot_fall_back_to_old_recipes(self):
         for method in METHODS:
@@ -457,7 +457,7 @@ class WarBiasPlanTests(unittest.TestCase):
             ):
                 exec(compile(code, name, "exec"), namespace)
             runtime.assert_called_once_with(require_cuda=False)
-            self.assertEqual(run.call_count, 12)
+            self.assertEqual(run.call_count, 24)
             records = json.loads((output / "matrix_execution.json").read_text())["runs"]
             self.assertEqual(set(records), {item["run_id"] for item in plan})
             self.assertEqual({record["status"] for record in records.values()}, {"completed"})
@@ -465,7 +465,7 @@ class WarBiasPlanTests(unittest.TestCase):
                 self.assertEqual(record["command"][2], "warbias_kit.unlearning.trainer")
                 self.assertEqual(record["command"][-1], str(output / run_id))
                 destinations.append(record["command"][-1])
-        self.assertEqual(len(destinations), 24)
+        self.assertEqual(len(destinations), 48)
         self.assertEqual(len(destinations), len(set(destinations)))
 
 

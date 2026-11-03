@@ -2,9 +2,12 @@
   "schema_version": 1,
   "protocol": "warbias_group_language_v4",
   "model_ids": [
+    "qwen3_8b",
+    "llama31_8b_instruct",
     "gemma3_12b_it",
     "lapa12b_instruct",
-    "mamay12b_v2"
+    "mamay12b_v2",
+    "mamay27b_v2"
   ],
   "methods": [
     "biasunlearn",

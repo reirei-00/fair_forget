@@ -41,7 +41,7 @@ SOURCES = {
     "dataset_manifest": {
         "path": "protocol/dataset.json",
         "format": "json",
-        "sha256": "f8771131e98751bd9d697510294f047046597a2f2b61e15561b2ca39f0d3357f",
+        "sha256": "ef14adf5bb9487418b72ce1b025082e05995345db1839fdad2918754b981f1de",
     },
     "metadata_corrections": {
         "path": "protocol/dataset_metadata_corrections.json",
