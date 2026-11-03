@@ -1,8 +1,8 @@
 # Native benchmark evaluation
 
 The [before/after notebook](native_before_after.ipynb) evaluates the current
-WarBias interventions with Fair-UK. The default Ukrainian tasks use five shared
-base checkpoints and ten Ukrainian-trained BiasUnlearn adapters across both groups.
+WarBias interventions with Fair-UK. The default Ukrainian tasks use three shared
+base checkpoints and 12 Ukrainian-trained BiasUnlearn and WGA+KL adapters across both groups.
 Each adapter is evaluated only on tasks in its training language.
 Native benchmark integrations are maintained evaluation paths. They use
 evaluation data only.
@@ -57,8 +57,8 @@ receipt. Fair-UK records the base and adapter file hashes separately.
 
 ## Run
 
-1. Enable `RUN_BEFORE` to verify and collect the five base checkpoints.
-2. Run the [BiasUnlearn notebook](biasunlearn.ipynb). Enable `RUN_AFTER` when all
+1. Enable `RUN_BEFORE` to verify and collect the three base checkpoints.
+2. Run the [training notebooks](README.md). Enable `RUN_AFTER` when all
    ten Ukrainian exports are complete for the default tasks. Each intervention
    uses its model's shared baseline in the same language.
 3. Enable `RUN_COMPARISON` to calculate paired changes from saved predictions

@@ -2,14 +2,13 @@
   "schema_version": 1,
   "protocol": "warbias_group_language_v4",
   "model_ids": [
-    "qwen3_8b",
-    "llama31_8b_instruct",
     "gemma3_12b_it",
     "lapa12b_instruct",
     "mamay12b_v2"
   ],
   "methods": [
-    "biasunlearn"
+    "biasunlearn",
+    "wga_kl"
   ],
   "evaluation_languages": [
     "uk",
@@ -54,7 +53,13 @@
       "suppression_weight": 1.0,
       "correction_weight": 1.0,
       "correction_reduction": "token_mean",
-      "adversarial_fraction": 0.25
+      "adversarial_fraction": 0.25,
+      "epochs": 1,
+      "step_budget": "first_epoch"
+    },
+    "wga_kl": {
+      "wga_alpha": 1.0,
+      "epochs": 1
     }
   },
   "training_groups": [

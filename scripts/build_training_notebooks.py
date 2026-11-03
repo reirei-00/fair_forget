@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 METHODS = {
     "wga_kl": ("WGA+KL", "wga_kl"),
     "npo_kl": ("NPO+KL", "npo_retention"),
-    "biasunlearn": ("BiasUnlearn-style", "biasunlearn"),
+    "biasunlearn": ("BiasUnlearn", "biasunlearn"),
 }
 SETUP = """import json
 import os
@@ -45,7 +45,8 @@ for group in CONFIGURATION['training_groups']:
 print('WarBias: 1,007 aligned source triplets per language.')
 print(json.dumps({name: value['split_counts'] for name, value in BINDINGS.items()}, ensure_ascii=False, indent=2))
 assert CONFIGURATION['evaluation_language_policy'] == 'training_language'
-print('Evaluation: each adapter in its training language, both groups.')
+assert CONFIGURATION['evaluation_group_policy'] == 'training_group'
+print('Evaluation: each adapter on its training group and language.')
 """
 TOKENS = """# Synthetic tensors for one optimizer step on CPU.
 torch.manual_seed(42)
@@ -104,14 +105,18 @@ torch.nn.utils.clip_grad_norm_(parameters, 1.0)
 optimizer.step()
 direction = objectives.select_biasunlearn_direction(preference=0.6, current='normal')
 assert direction == 'normal'
-print('BiasUnlearn-style CPU optimizer step completed.')
-print('The trainer builds adversarial pools and updates their direction on development data.')
+print('BiasUnlearn CPU optimizer step completed.')
+print('One epoch uses the normal pools. The next direction is recorded but not applied.')
 """,
 }
 NOTES = {
-    "wga_kl": "WGA suppresses target completions using detached confidence weights, normalized by valid completion-token count. Reference KL preserves predictions on retain tokens.",
+    "wga_kl": "WGA+KL suppresses S sentences using detached token-confidence weights with exponent 1.0. Reference KL on U sentences has weight 1.0. Losses use valid-token means. C sentences do not receive training loss. Train for one epoch: 265 updates for IDPs or 389 for veterans.",
     "npo_kl": "NPO suppresses target completions using their token-mean log-likelihood ratio against a fixed reference. Reference KL preserves predictions on retain data.",
-    "biasunlearn": "BiasUnlearn combines NPO suppression, anti-stereotype correction and reference KL. The trainer builds adversarial pools and uses development scores to update their direction.",
+    "biasunlearn": """[BiasUnlearn](https://aclanthology.org/2025.emnlp-main.208/) uses NPO for forgetting, cross-entropy for counter-stereotype correction and a reference KL term for preservation. NPO is part of the original method.
+
+This WarBias implementation uses token-mean likelihood ratios with beta 0.1 and weight 1.0 for each loss. Each update uses one suppression example, one correction example and one U example. The suppression pool contains all training S sentences and a fixed sample of C sentences, 25% of the S count rounded to the nearest integer. The correction pool contains all training C sentences.
+
+Train for one normal-direction epoch: 331 updates for IDPs or 486 for veterans. The controller checks raw development preference at the epoch boundary and records the next direction. That direction is not applied in a one-epoch run. These batch proportions, loss weights and controller timing differ from the [authors' training recipe](https://github.com/a101269/BiasUnlearn/blob/main/train_7B.py); this is an adaptation, not an exact reproduction.""",
 }
 CONFIGURE = """MODELS_ROOT = os.environ.get('FAIRFORGET_MODELS_ROOT')
 output_value = os.environ.get('FAIRFORGET_OUTPUT') or str(Path(settings.get('output_root', repo / 'outputs/unlearning' / warbias_data.PROTOCOL)) / METHOD)
@@ -125,8 +130,12 @@ assert len(PLAN) == EXPECTED_RUNS, 'Expected one run per selected model and dire
 assert len({item['run_id'] for item in PLAN}) == len(PLAN)
 for item in PLAN:
     recipe = item['recipe']
-    print(item['run_id'], recipe['model_id'], recipe['model_revision'], 'GPUs:', item['required_gpus'])
+    print(item['run_id'], recipe['model_id'], recipe['model_revision'], 'Epochs:', recipe['training']['epochs'], 'Steps:', recipe['training']['max_steps'], 'GPUs:', item['required_gpus'])
+assert all(item['recipe']['training']['epochs'] == 1 for item in PLAN)
 print('Runs:', len(PLAN), '| Models:', MODEL_COUNT, '| Method:', METHOD, '| Dataset: WarBias')
+training = PLAN[0]['recipe']['training']
+print('Training settings:', {key: training[key] for key in ('seed', 'learning_rate', 'batch_size', 'max_length')})
+print('LoRA:', CONFIGURATION['lora'])
 """
 TRAIN = r"""if RUN_TRAINING:
     from fairforget.unlearning.runtime import verify_runtime
@@ -160,15 +169,15 @@ else:
 """
 DATA_NOTES = """## WarBias data
 
-Use the current 1,007 aligned source triplets in Ukrainian and English. Prepare four separate training directions: IDP in Ukrainian, IDP in English, veteran in Ukrainian, and veteran in English. Every direction trains on one group and one language. Evaluate each adapter in its training language, with both groups included.
+Use the current 1,007 aligned source triplets in Ukrainian and English. Prepare four separate training directions: IDP in Ukrainian, IDP in English, veteran in Ukrainian, and veteran in English. Every direction trains on one group and one language. Evaluate each adapter only on its training group and language.
 
-Split whole claim components with targets of 65% training, 15% development and 20% test. The source-label allocation gives 654, 152 and 201 triplets per language. Use the same global split for every direction. Keep related cases and translations together. Balance group and severity coverage; see [the allocation rules](WARBIAS_UNLEARNING.md). Keep all 240 baseline QA questions for evaluation only; record their claim overlap with each triplet split. Then select one group and language for each training bundle.
+Split whole claim components with targets of 65% training, 15% development and 20% test. The source-label allocation gives 654, 152 and 201 triplets per language. Use the same global split for every direction. Keep related cases and translations together. Balance group and severity coverage; see [the allocation rules](WARBIAS_UNLEARNING.md). Use all 120 QA questions for the selected group and language for evaluation only; record their claim overlap with each triplet split. Then select one group and language for each training bundle.
 
-Use complete S sentences as forget targets and complete C sentences as correction targets, with an empty prompt. Use U sentences from the same group and training language for in-domain reference KL. This measures preservation of WarBias text; general capability needs separate evidence.
+Use complete S sentences as forget targets, with an empty prompt. BiasUnlearn also uses complete C sentences for correction. Use U sentences from the same group and training language for in-domain reference KL. This measures preservation of WarBias text; general capability needs separate evidence.
 """
 EVALUATION = """## Evaluation and implementation
 
-Evaluate the same held-out WarBias IDs in the adapter's training language before and after each run. Report both groups separately and together. A score over the full release is a descriptive diagnostic because it includes training and development rows. All metrics, including severity slices, come from Fair-UK.
+Evaluate the same held-out WarBias IDs in the adapter's training language before and after each run. Use only the trained group. A score over the full release is a descriptive diagnostic because it includes training and development rows. All metrics, including severity slices, come from Fair-UK.
 
 The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb) provides the current per-checkpoint metrics. Use the [before/after notebook](evaluate_before_after.ipynb) for the same WarBias outcomes, parser and controls as baseline notebook 08 on matched held-out IDs. The [native benchmark notebook](native_before_after.ipynb) retains the other registered integrations. See the [WarBias workflow](WARBIAS_UNLEARNING.md).
 
@@ -178,9 +187,9 @@ The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb
 
 Each run verifies the pinned model files and training runtime. It checks the merged and reloaded checkpoint on fixed development inputs before marking the export complete. See the [checkpoint rules](WARBIAS_UNLEARNING.md#checkpoint-verification).
 
-Each run saves a checkpoint, loss history and token-exposure log.
+Keep the final adapter, pinned base identity, recipe, loss history, development scores and token-exposure log. Evaluate the base with the adapter loaded separately. Temporary merged weights can be removed after evaluation and reconstruction checks pass.
 
-Run MMLU and Belebele last for all five models, after WarBias training and evaluation.
+Run MMLU and Belebele later for the selected models. These capability checks are separate from WarBias evaluation.
 """
 
 
@@ -213,7 +222,7 @@ def build(methods=None):
             nbformat.v4.new_code_cell(TOKENS),
             nbformat.v4.new_code_cell(LOSSES[method]),
             nbformat.v4.new_markdown_cell(
-                f"## Training\n\nEnable `RUN_TRAINING` to run all {runs} model/direction combinations. Every run starts from the pinned base checkpoint. It saves a separate checkpoint, log and receipt under its run ID. Each run uses one GPU with enough memory for the model."
+                f"## Training\n\nEnable `RUN_TRAINING` to run all {runs} model/direction combinations. Every run starts from the pinned base checkpoint and trains for one epoch. It saves a separate adapter, log and receipt under its run ID. Method settings override the common training defaults; the plan below shows the effective values. Each run uses one GPU with enough memory for the model."
             ),
             nbformat.v4.new_code_cell(CONFIGURE),
             nbformat.v4.new_code_cell(TRAIN),
@@ -240,6 +249,10 @@ def build(methods=None):
                     "runs_per_method": runs,
                     "evaluation_languages": ["uk", "en"],
                     "evaluation_language_policy": experiment["evaluation_language_policy"],
+                    "evaluation_group_policy": experiment["evaluation_group_policy"],
+                    "epochs": experiment["objectives"][method].get(
+                        "epochs", experiment["training"]["epochs"]
+                    ),
                     "automatic_gpu_training": False,
                     "models": experiment["model_ids"],
                 },

@@ -25,22 +25,22 @@ from fairforget.unlearning.trainer import build_biasunlearn_pools, file_hash, ha
 from fairforget.unlearning.warbias_plan import selected_models, validate_recipe
 
 ROOT = Path(__file__).resolve().parents[1]
-METHODS = ("biasunlearn",)
+METHODS = ("biasunlearn", "wga_kl")
 DIRECTIONS = tuple(itertools.product(("idp", "veteran"), ("uk", "en")))
-NOTEBOOKS = {"biasunlearn": "biasunlearn"}
+NOTEBOOKS = {"biasunlearn": "biasunlearn", "wga_kl": "wga_kl"}
 
 
 class WarBiasPlanTests(unittest.TestCase):
-    def test_active_study_selects_only_biasunlearn(self):
+    def test_active_study_selects_biasunlearn_and_wga(self):
         config = json.loads((ROOT / "configs/unlearning/warbias_final.json").read_text())
         self.assertEqual(config["methods"], list(METHODS))
         self.assertEqual(config["optional_methods"], [])
-        self.assertEqual(set(config["objectives"]), {"biasunlearn"})
+        self.assertEqual(set(config["objectives"]), set(METHODS))
         self.assertEqual(config["evaluation_language_policy"], "training_language")
         self.assertEqual(config["evaluation_group_policy"], "training_group")
-        self.assertEqual(len(selected_models(ROOT)), 5)
+        self.assertEqual(len(selected_models(ROOT)), 3)
         self.assertNotIn("mamay27b_v2", config["model_ids"])
-        for method in ("npo_kl", "wga_kl"):
+        for method in ("npo_kl", "rmu", "task_vector"):
             with self.subTest(method=method), self.assertRaisesRegex(ValueError, "not selected"):
                 self.plan(method)
 
@@ -48,13 +48,13 @@ class WarBiasPlanTests(unittest.TestCase):
         builder = runpy.run_path(str(ROOT / "scripts/build_training_notebooks.py"))
         with mock.patch("nbformat.write") as write:
             builder["build"]()
-            write.assert_called_once()
+            self.assertEqual(write.call_count, 2)
             notebook, destination = write.call_args.args
-            self.assertEqual(destination, ROOT / "notebooks/biasunlearn.ipynb")
-            self.assertEqual(notebook.metadata.fairforget.method, "biasunlearn")
-            self.assertEqual(notebook.metadata.fairforget.runs_per_method, 20)
+            self.assertEqual(destination, ROOT / "notebooks/wga_kl.ipynb")
+            self.assertEqual(notebook.metadata.fairforget.method, "wga_kl")
+            self.assertEqual(notebook.metadata.fairforget.runs_per_method, 12)
             write.reset_mock()
-            for methods in (["npo_kl"], ["wga_kl"], ["biasunlearn", "npo_kl"]):
+            for methods in (["npo_kl"], ["rmu"], ["biasunlearn", "npo_kl"]):
                 with (
                     self.subTest(methods=methods),
                     self.assertRaisesRegex(ValueError, "active study configuration"),
@@ -79,6 +79,8 @@ class WarBiasPlanTests(unittest.TestCase):
     def test_evaluation_policy_change_preserves_verified_training_sources(self):
         recipe = self.plan("biasunlearn")[0]["recipe"]
         source = json.loads((ROOT / "configs/unlearning/warbias_final.json").read_text())
+        source["methods"] = ["biasunlearn"]
+        source["objectives"].pop("wga_kl")
         source.pop("evaluation_language_policy")
         source.pop("evaluation_group_policy")
         source_path = self.root / "original_experiment.json"
@@ -182,10 +184,10 @@ class WarBiasPlanTests(unittest.TestCase):
         registry = selected_models(ROOT)
         expected = {model["id"]: model for model in registry}
         plans = [self.plan(method) for method in METHODS]
-        self.assertEqual(sum(map(len, plans)), 20)
+        self.assertEqual(sum(map(len, plans)), 24)
         base_paths = {alias: set() for alias in expected}
         for method, plan in zip(METHODS, plans, strict=True):
-            self.assertEqual(len({item["run_id"] for item in plan}), 20)
+            self.assertEqual(len({item["run_id"] for item in plan}), 12)
             self.assertEqual(
                 {(i["model_alias"], i["target_group"], i["training_language"]) for i in plan},
                 set(itertools.product(expected, ("idp", "veteran"), ("uk", "en"))),
@@ -208,9 +210,14 @@ class WarBiasPlanTests(unittest.TestCase):
                     recipe["data_manifest_sha256"], file_hash(root / "training_binding.json")
                 )
                 self.assertEqual(
-                    recipe["training"]["max_steps"], {"idp": 530, "veteran": 778}[group]
+                    recipe["training"]["max_steps"],
+                    (
+                        {"idp": 331, "veteran": 486}
+                        if method == "biasunlearn"
+                        else {"idp": 265, "veteran": 389}
+                    )[group],
                 )
-                self.assertEqual(recipe["training"]["epochs"], 2)
+                self.assertEqual(recipe["training"]["epochs"], 1)
                 self.assertEqual(item["required_gpus"], 1)
                 base_paths[model["id"]].add(recipe["model_path"])
                 for role, spec in recipe["streams"].items():
@@ -225,9 +232,9 @@ class WarBiasPlanTests(unittest.TestCase):
 
     def test_filters_select_only_independent_requested_directions(self):
         for filters, count in (
-            ({"target_group": "idp"}, 10),
-            ({"training_language": "en"}, 10),
-            ({"target_group": "veteran", "training_language": "uk"}, 5),
+            ({"target_group": "idp"}, 6),
+            ({"training_language": "en"}, 6),
+            ({"target_group": "veteran", "training_language": "uk"}, 3),
         ):
             with self.subTest(filters=filters):
                 plan = self.plan("biasunlearn", **filters)
@@ -285,12 +292,12 @@ class WarBiasPlanTests(unittest.TestCase):
                 prepared = notebook_matrix.prepare_recipes(
                     self.staged_plan(method), self.root / method
                 )
-                self.assertEqual(len(prepared), 20)
+                self.assertEqual(len(prepared), 12)
                 self.assertEqual(
                     {path.stem for path in prepared}, {item["run_id"] for item in self.plan(method)}
                 )
                 paths.extend(prepared)
-        self.assertEqual(len(paths), 20)
+        self.assertEqual(len(paths), 24)
         self.assertEqual(len(paths), len(set(paths)))
 
     def test_historical_recipe_expansion_is_preserved(self):
@@ -321,7 +328,7 @@ class WarBiasPlanTests(unittest.TestCase):
             planned.symlink_to(cached, target_is_directory=True)
             item["config_sha256"] = file_hash(cached / "config.json")
         prepared = notebook_matrix.prepare_recipes(plan, self.root / "symlink_preflight")
-        self.assertEqual(len(prepared), 5)
+        self.assertEqual(len(prepared), 3)
 
     def test_missing_or_historical_data_cannot_fall_back_to_old_recipes(self):
         for method in METHODS:
@@ -340,7 +347,7 @@ class WarBiasPlanTests(unittest.TestCase):
             notebook_matrix.method_plan(
                 ROOT, "biasunlearn", data_root=historical, protocol="warbias_final"
             )
-        for method in ("npo_kl", "wga_kl", "rmu", "task_vector"):
+        for method in ("npo_kl", "rmu", "task_vector"):
             with self.assertRaisesRegex(ValueError, "not selected"):
                 self.plan(method)
 
@@ -418,6 +425,10 @@ class WarBiasPlanTests(unittest.TestCase):
             pools, receipt = build_biasunlearn_pools(
                 rows("forget"), rows("correction"), fraction=0.25, seed=42
             )
+            for item in self.plan("biasunlearn", target_group=group, training_language=language):
+                self.assertEqual(
+                    item["recipe"]["training"]["max_steps"], len(pools["normal"]["forget"])
+                )
             self.assertEqual(len(receipt["adversarial_ids"]), round(len(rows("forget")) * 0.25))
             allowed = set(binding["permitted_gradient_ids"])
             for pool in pools.values():
@@ -461,7 +472,7 @@ class WarBiasPlanTests(unittest.TestCase):
             ):
                 exec(compile(code, name, "exec"), namespace)
             runtime.assert_called_once_with(require_cuda=False)
-            self.assertEqual(run.call_count, 20)
+            self.assertEqual(run.call_count, 12)
             records = json.loads((output / "matrix_execution.json").read_text())["runs"]
             self.assertEqual(set(records), {item["run_id"] for item in plan})
             self.assertEqual({record["status"] for record in records.values()}, {"completed"})
@@ -469,7 +480,7 @@ class WarBiasPlanTests(unittest.TestCase):
                 self.assertEqual(record["command"][2], "fairforget.unlearning.trainer")
                 self.assertEqual(record["command"][-1], str(output / run_id))
                 destinations.append(record["command"][-1])
-        self.assertEqual(len(destinations), 20)
+        self.assertEqual(len(destinations), 24)
         self.assertEqual(len(destinations), len(set(destinations)))
 
 

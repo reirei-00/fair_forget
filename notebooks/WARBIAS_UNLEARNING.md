@@ -1,6 +1,6 @@
 # WarBias unlearning
 
-BiasUnlearn-style uses the final WarBias source. It contains
+BiasUnlearn and WGA+KL use the final WarBias source. It contains
 1,007 aligned triplets per language: 409 IDP and 598 veteran items.
 
 | Training direction | Group | Language |
@@ -10,8 +10,8 @@ BiasUnlearn-style uses the final WarBias source. It contains
 | `veteran_uk` | Veteran | Ukrainian |
 | `veteran_en` | Veteran | English |
 
-Each direction trains on one group and one language. All five pinned models
-start independently from their base checkpoints. This gives 20 BiasUnlearn runs.
+Each direction trains on one group and one language. All three pinned models
+start independently from their base checkpoints. This gives 12 runs per method.
 Each adapter is evaluated only on its training group and language. Cross-group
 and cross-language evaluation are deferred.
 The application tests whether WarBias supplies useful data for bias mitigation.
@@ -67,16 +67,20 @@ correction helper to the frozen profile mapping and preserve semantic components
 ## Method and models
 
 The [configuration](../configs/unlearning/warbias_final.json) defines common
-optimizer settings and the BiasUnlearn objective. Each direction uses its own
+optimizer settings and both objectives. Method settings override common defaults. Each direction uses its own
 rows and optimizer-step limit.
 BiasUnlearn builds expanded adversarial pools and can change their direction
 using development scores. Each run records actual token exposure.
-The limits are 530 updates for IDPs and 778 for veterans, equivalent to two
-passes over each original forget set. Expanded BiasUnlearn pools can leave the
-last pass incomplete.
+BiasUnlearn runs one complete normal-direction epoch: 331 updates for IDPs and
+486 for veterans, including the 25% added correction examples. The controller
+records the next direction, but no second epoch runs. WGA+KL also runs one epoch:
+265 updates for IDPs and 389 for veterans.
 
-BiasUnlearn combines suppression based on mean token log-likelihood ratios,
-counter-stereotype cross-entropy and reference KL. Keep its
+[BiasUnlearn](https://aclanthology.org/2025.emnlp-main.208/) combines NPO forgetting,
+counter-stereotype cross-entropy and reference KL. NPO is part of the original method.
+This implementation uses mean token log-likelihood ratios with beta 0.1, three
+loss weights of 1.0, and one example per loss in each update. Its batch proportions,
+loss weights and epoch-boundary controller differ from the authors' training recipe. Keep its
 raw-preference switching rule: above 50%, use the normal pools; below 50%, use
 the reversed pools; at 50%, keep the current direction. The controller uses
 unweighted development rows and aims to balance raw stereotype preference.
@@ -85,8 +89,10 @@ score uses component weights and neutral controls; the switching rule does not
 guarantee balance on that score. Keep this WarBias adaptation distinct from an
 exact reproduction of the original study.
 
-The [BiasUnlearn notebook](biasunlearn.ipynb) prepares and validates the four bundles, runs a
-synthetic CPU step, and displays its 20-run plan. Full training starts only when
+WGA+KL uses confidence exponent 1.0 and reference KL weight 1.0. It suppresses S sentences, preserves predictions on U sentences and does not train on C sentences. It uses the same base models, split and LoRA settings as BiasUnlearn, with the one-epoch limits stated above.
+
+The [BiasUnlearn](biasunlearn.ipynb) and [WGA+KL](wga_kl.ipynb) notebooks each
+validate the four bundles, run a synthetic CPU step, and display a 12-run plan. Full training starts only when
 `RUN_TRAINING=True`. A run ID combines model, group and training language, so
 each checkpoint, log and receipt has its own output directory.
 
@@ -149,7 +155,7 @@ preference and polarity changes visible. Compute paired component intervals
 through Fair-UK. Lower raw stereotype preference alone does not establish
 successful mitigation.
 
-Run MMLU and Belebele last for all five models, after WarBias training and
+Run MMLU and Belebele last for all three models, after WarBias training and
 evaluation. These before/after capability checks use evaluation data only.
 
 Use the [before/after notebook](evaluate_before_after.ipynb) for WarBias scores.

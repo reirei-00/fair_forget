@@ -42,16 +42,16 @@ their root dependencies remain independent of this subproject.
 
 ## Unlearning
 
-The [BiasUnlearn notebook](notebooks/biasunlearn.ipynb) uses the final WarBias
-sources and component split. It trains IDP and veteran groups separately,
-in Ukrainian and English. All five selected models start from their base
-checkpoints in every direction: 20 runs in total. Evaluation covers both groups
-in Ukrainian and English. Start with the [setup notebook](notebooks/setup.ipynb)
-or [setup guide](notebooks/SETUP.md). The [configuration](configs/unlearning/warbias_final.json)
-defines the method and training settings.
+The [BiasUnlearn](notebooks/biasunlearn.ipynb) and [WGA+KL](notebooks/wga_kl.ipynb)
+notebooks use the final WarBias sources and component split. Each method trains
+three models for one epoch, separately for IDPs and veterans in Ukrainian and
+English: 24 runs in total. Each adapter is evaluated only on its training group
+and language. Start with the [setup notebook](notebooks/setup.ipynb) or
+[setup guide](notebooks/SETUP.md). The [configuration](configs/unlearning/warbias_final.json)
+defines the methods and training settings.
 
 The [WarBias workflow](notebooks/WARBIAS_UNLEARNING.md) defines data roles and
-evaluation requirements. All metrics use Fair-UK. Run MMLU and Belebele last
-for all five models. Other method implementations and saved experiments remain separate.
+evaluation requirements. All metrics use Fair-UK. MMLU and Belebele are deferred
+until WarBias evaluation is complete. Other methods and saved experiments remain separate.
 
 Saved unlearning reports remain under [executed notebooks](notebooks/executed/).

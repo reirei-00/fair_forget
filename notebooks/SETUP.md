@@ -25,7 +25,8 @@ python scripts/setup_unlearning.py \
 ```
 
 This prepares four WarBias bundles under the data root: `idp_uk`, `idp_en`,
-`veteran_uk` and `veteran_en`. It downloads all five checkpoints at the revisions
+`veteran_uk` and `veteran_en`. It downloads the three checkpoints selected in
+[warbias_final.json](../configs/unlearning/warbias_final.json), at the revisions
 in [models.json](../configs/unlearning/models.json). Omit `--download-models`
 to use staged checkpoints. Their layout is
 `MODELS_ROOT/CHECKPOINT_DIRECTORY/IMMUTABLE_REVISION/`.
@@ -49,7 +50,7 @@ jupyter lab
 
 Open a [WarBias method notebook](README.md) and run all cells. The default
 walkthrough prepares data and runs a CPU example without loading model weights.
-Set `RUN_TRAINING=True` to train all 20 model/direction combinations in sequence.
+Set `RUN_TRAINING=True` to train all 12 model/direction combinations for that method in sequence.
 Each run starts from the pinned base checkpoint and uses one GPU with enough
 memory for its training state. All configurations and data pass validation
 before the first training process starts.

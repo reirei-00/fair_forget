@@ -41,14 +41,29 @@ def evaluation_languages(repo, training_language):
     return [training_language]
 
 
-def _training_configuration(experiment):
-    evaluation_policies = {"evaluation_language_policy", "evaluation_group_policy"}
-    return {key: value for key, value in experiment.items() if key not in evaluation_policies}
+def _training_configuration(experiment, method):
+    unrelated = {
+        "evaluation_language_policy",
+        "evaluation_group_policy",
+        "methods",
+        "optional_methods",
+        "objectives",
+    }
+    configuration = {key: value for key, value in experiment.items() if key not in unrelated}
+    configuration["objective"] = experiment["objectives"].get(method)
+    return configuration
 
 
 def _training_settings(experiment, method, rows):
     training = copy.deepcopy(experiment["training"])
     training.update(experiment["objectives"][method])
+    step_budget = training.pop("step_budget", "original_forget")
+    if step_budget == "first_epoch":
+        if method != "biasunlearn" or training["epochs"] != 1:
+            raise ValueError("First-epoch budget requires one BiasUnlearn epoch")
+        rows += round(rows * training["adversarial_fraction"])
+    elif step_budget != "original_forget":
+        raise ValueError("Unknown optimizer-step budget")
     training["max_steps"] = training["epochs"] * math.ceil(rows / training["batch_size"])
     return training
 
@@ -213,7 +228,9 @@ def validate_recipe(config, manifest_path):
         raise ValueError("final WarBias experiment configuration differs")
     experiment = json.loads(experiment_path.read_text())
     source_experiment = json.loads(source_path.read_text())
-    if _training_configuration(source_experiment) != _training_configuration(experiment):
+    if _training_configuration(source_experiment, config["method"]) != _training_configuration(
+        experiment, config["method"]
+    ):
         raise ValueError("final WarBias experiment configuration differs")
     group, language = config.get("target_group"), config.get("training_language")
     if group is None or language is None:
