@@ -13,13 +13,7 @@ metadata. The [dataset manifest](protocol/dataset.json) binds all release files.
 English triplet translations use GPT-6 Astra; they have not undergone human translation
 review. Dataset text is licensed under [CC BY-SA 4.0](data/LICENSE.md).
 [The bilingual taxonomy](protocol/inputs/cohort_taxonomy.csv) lists every case,
-category and claim. Its `category_evidence_ids` includes international references
-alongside the existing category feedback. The [source list](protocol/inputs/sources.csv)
-contains the Ukrainian sources and 30 international references. The
-[category registry](protocol/inputs/taxonomy.csv) includes the international source
-IDs for each category. The [reference mapping](protocol/international_sources.json)
-preserves case-specific links, indirect evidence and pending checks. The taxonomy
-includes only cases with `case_scope = general`.
+category, claim and source. It includes only cases with `case_scope = general`.
 [The attribute catalog](protocol/inputs/cohort_attributes.json)
 records all 21 attribute dimensions, their values and selection counts.
 [The evidence mapping](protocol/inputs/cohort_evidence.json) records supporting

@@ -5,10 +5,10 @@
   "files": {
     "taxonomy": {
       "path": "protocol/inputs/taxonomy.csv",
-      "sha256": "c3d6593e8b4f50a18bbf9470e64fc8fc4509bf1a1a9e9966e6fcf456df87b03d",
+      "sha256": "11de7f3b44561c4e17dd317628ecbc115853e45e5a44c6b935657aa2ddc0a7c3",
       "format": "csv",
-      "bytes": 28917,
-      "rows": 34,
+      "bytes": 23823,
+      "rows": 28,
       "role": "recorded_taxonomy_registry"
     },
     "targets": {
@@ -213,11 +213,9 @@
     {
       "artifact": "taxonomy",
       "source_sha256": "fe6dbac3f8834aa40fa09c91cfc0033d3a95b05be0bc18850652fe20f3aea7e1",
-      "portable_sha256": "c3d6593e8b4f50a18bbf9470e64fc8fc4509bf1a1a9e9966e6fcf456df87b03d",
+      "portable_sha256": "11de7f3b44561c4e17dd317628ecbc115853e45e5a44c6b935657aa2ddc0a7c3",
       "exact_bytes": false,
-      "scope_protocol": "protocol/coverage_extension.json#/scope",
-      "original_portable_sha256": "df0fcefe512544da1f3d425cf8c3189488823a06c444868722ab62c64872f1fc",
-      "supplementary_references": "protocol/international_sources.json"
+      "scope_protocol": "protocol/coverage_extension.json#/scope"
     },
     {
       "artifact": "targets",
@@ -238,9 +236,7 @@
       "source_sha256": "29385ba2fe71cf583229c99fda06d64e2220f3321b75313fefcffe4971ab9380",
       "portable_sha256": "0c10f24f374450513964ac88b060c2bddafb6ab189b9f5694293353e3fdb66d3",
       "exact_bytes": false,
-      "scope_protocol": "protocol/coverage_extension.json#/scope",
-      "original_portable_sha256": "bba749becbe3284ec6e74becb8812910a723296390154db4e4608a4b62fe08eb",
-      "supplementary_references": "protocol/international_sources.json"
+      "scope_protocol": "protocol/coverage_extension.json#/scope"
     },
     {
       "artifact": "matrix_full",
@@ -397,10 +393,5 @@
     "sha256": "864dda3a56b974ba70baf9c43a1eeccfaa6b6ffffe7656c53582882a048999c0",
     "role": "recorded_allocation_design"
   },
-  "cohort_protocol": "protocol/cohort.json",
-  "international_sources": {
-    "path": "protocol/international_sources.json",
-    "sha256": "bc17a0b8e296687b03d9d7e672f161dab97556df372afde8b0d16931db6ac727",
-    "role": "supplementary_international_reference_mapping"
-  }
+  "cohort_protocol": "protocol/cohort.json"
 }

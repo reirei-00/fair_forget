@@ -23,7 +23,7 @@ profiles within general cases. It does not establish stereotype prevalence.
 
 The taxonomy combines claim and supporting references in `source_urls` and
 `source_titles`. Their roles remain distinct in `evidence_ids` and
-`supporting_evidence_ids`; category references have their own field.
+`supporting_evidence_ids`; category feedback has its own field.
 “Source-based adaptation” (`source_adaptation`) means a case constructed
 from topics or subtypes described in cited sources. Feedback defines category
 names and boundaries and supplies the case about military-service
@@ -37,33 +37,6 @@ claims and six subgroup variants. Case-level checks apply to all profiles in a
 case; item-level checks apply only to the listed IDs. A supporting reference
 does not establish the exact wording or prevalence of a stereotype. Missing
 entries do not imply verified support.
-
-## International references
-
-The [source list](../protocol/inputs/sources.csv) includes the Ukrainian sources
-and 30 international references. The [bilingual taxonomy](../protocol/inputs/cohort_taxonomy.csv)
-adds international source IDs to `category_evidence_ids` for 108 of its 120 cases,
-alongside existing category feedback. The [category registry](../protocol/inputs/taxonomy.csv)
-adds the union of these international IDs to `evidence_ids` for each category.
-Earlier category references are preserved. The registry also includes six current
-category codes previously missing after the recorded splits, merge and case
-reassignments. Current labels match the bilingual taxonomy. The seven registry
-rows outside the active cohort remain for historical reproduction. Historical
-quota columns remain blank for the six added categories. These fields identify
-category-level context; they do not verify the exact wording of a claim.
-
-The [reference mapping](../protocol/international_sources.json) preserves each
-case's supplied international URLs and comments, including indirect evidence,
-refugee-to-IDP transfer, missing support and pending citation checks. It records
-bibliographic identity separately from claim-support status. One DOI identifies
-an edited volume whose cited chapter locator remains unverified.
-
-Claim-generation `evidence_ids`, adaptation `supporting_evidence_ids` and their
-deduplicated `source_urls` and `source_titles` keep their existing roles.
-International category references resolve through `category_evidence_ids` and
-the source list. Claims, categories, dataset text and severity values remain
-unchanged. Current input hashes bind the updated metadata; saved measurements
-retain the original taxonomy and protocol hashes in their external source record.
 
 ## Case and profile selection
 
