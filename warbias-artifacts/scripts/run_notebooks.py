@@ -23,7 +23,7 @@ def run(source, *, names=None, run_directory=None, timeout=300):
     project = source_root(source)
     directory = project / "notebooks"
     paths = sorted(directory.glob("[0-9][0-9]_*.ipynb"))
-    selected = set(names or (path.stem for path in paths if path.stem != "08_warbias_baseline"))
+    selected = set(names or (path.stem for path in paths))
     if not paths or selected - {path.stem for path in paths}:
         raise ValueError("Select existing numbered dataset notebooks")
     run_directory = run_directory or os.environ.get("WARBIAS_NOTEBOOK_RUN")

@@ -1,0 +1,82 @@
+[build-system]
+requires = ["setuptools>=64.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lm_eval"
+version = "0.4.14.dev0"
+description = "WarBias benchmark evaluation"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = ["datasets>=2.16.0", "numpy", "evaluate>=0.4.0", "jinja2", "pytablewriter", "rouge-score>=0.0.4", "sacrebleu>=1.5.0", "scikit-learn>=0.24.1", "sqlitedict", "dill", "word2number", "more_itertools", "typing_extensions", "tqdm>=4.59.0"]
+
+[project.optional-dependencies]
+"benchmark" = ["lm_eval[hf]", "transformers>=4.46.3,<5"]
+"benchmark-openai" = ["openai>=3.2,<4"]
+"benchmark-gemini" = ["httpx>=0.28,<1"]
+"benchmark-api" = ["httpx>=0.28,<1"]
+"api" = ["requests", "aiohttp", "tenacity", "tqdm", "tiktoken"]
+"archiver" = ["jsonlines", "zstandard"]
+"hf" = ["transformers>=4.1", "torch>=1.8", "accelerate>=0.26.0", "peft>=0.2.0"]
+"vllm" = ["vllm>=0.18"]
+"gptq" = ["auto-gptq[triton]>=0.6.0"]
+"gptqmodel" = ["gptqmodel>=1.0.9"]
+"ipex" = ["optimum-intel"]
+"ibm_watsonx_ai" = ["ibm_watsonx_ai>=1.1.22", "python-dotenv"]
+"onnxruntime-genai" = ["onnxruntime-genai", "transformers", "numpy"]
+"onnxruntime" = ["onnxruntime>=1.23", "transformers", "numpy"]
+"litellm" = ["litellm>=1.60,<1.85", "aiohttp", "requests", "tenacity", "tqdm"]
+"optimum" = ["optimum[openvino]"]
+"habana" = ["optimum-habana"]
+"sparsify" = ["sparsify"]
+"acpbench" = ["lark>=1.1.9", "tarski[clingo]==0.8.2", "pddl==0.4.2", "kstar-planner==1.4.2"]
+"audiolm_qwen" = ["librosa", "soundfile"]
+"dev" = ["pytest>=9.0", "pytest-cov", "pytest-xdist", "requests", "aiohttp", "tenacity", "tqdm", "tiktoken", "sentencepiece", "pillow"]
+"ifeval" = ["langdetect", "immutabledict", "nltk>=3.9.1"]
+"japanese_leaderboard" = ["emoji==2.14.0", "neologdn==0.5.3", "fugashi[unidic-lite]", "rouge_score>=0.1.2"]
+"longbench" = ["jieba", "fuzzywuzzy", "rouge"]
+"libra" = ["pymorphy2"]
+"math" = ["sympy>=1.12", "antlr4-python3-runtime==4.11", "math_verify[antlr4_11_0]"]
+"multilingual" = ["nagisa>=0.2.7", "jieba>=0.42.1", "pycountry"]
+"ruler" = ["nltk", "wonderwords", "scipy"]
+"sentencepiece" = ["sentencepiece>=0.1.98"]
+"discrim_eval" = ["statsmodels==0.14.4"]
+"unitxt" = ["unitxt==1.22.0"]
+"trackio" = ["trackio>=0.23.0"]
+"wandb" = ["wandb>=0.16.3", "pandas", "numpy"]
+"zeno" = ["pandas", "zeno-client"]
+"tasks" = ["lm_eval[discrim_eval]", "lm_eval[ifeval]", "lm_eval[japanese_leaderboard]", "lm_eval[longbench]", "lm_eval[libra]", "lm_eval[math]", "lm_eval[multilingual]", "lm_eval[ruler]"]
+
+[project.scripts]
+benchmark-eval = "lm_eval.benchmark.__main__:main"
+warbias-detect = "lm_eval.benchmark.warbias.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["lm_eval*"]
+
+[tool.setuptools.package-data]
+lm_eval = ["**/*.yaml", "**/*.json"]
+
+[tool.ruff]
+required-version = "==0.16.2"
+target-version = "py310"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+ignore = ["E701", "E731", "E741"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "F403", "F405"]
+# The harness exposes these functions through __getattr__.
+"src/lm_eval/__init__.py" = ["F822"]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+known-first-party = ["lm_eval"]
+lines-after-imports = 2
+
+[tool.pytest]
+testpaths = ["tests"]

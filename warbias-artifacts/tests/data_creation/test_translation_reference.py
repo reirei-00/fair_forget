@@ -7,7 +7,7 @@ from types import ModuleType
 
 import pytest
 
-from warbias_kit.io import file_digest, write_json, write_rows
+from warbias_kit.io import digest, file_digest, write_json, write_rows
 from warbias_kit.translation.reference import load_reference
 
 
@@ -67,3 +67,29 @@ def test_reference_does_not_overwrite_conflicting_language(tmp_path, monkeypatch
     config["files"]["uk"]["sha256"] = file_digest(path)
     with pytest.raises(ValueError, match="language differs"):
         load_reference(config)
+
+
+def test_local_reference_checks_manifest_and_bytes_without_hub(tmp_path, monkeypatch):
+    config = reference_inputs(tmp_path, monkeypatch)
+    config.update(revision_kind="content_sha256", revision=digest(config["files"]))
+    uk, en, origin = load_reference(config, source_directory=tmp_path)
+    assert uk[0]["language"] == "uk" and en[0]["language"] == "en"
+    assert origin["kind"] == "local_reference"
+    with pytest.raises(ValueError, match="local source_directory"):
+        load_reference(config)
+    with pytest.raises(ValueError, match="manifest SHA256"):
+        load_reference({**config, "revision": "a" * 64}, source_directory=tmp_path)
+    (tmp_path / "uk.jsonl").write_text("{}\n")
+    with pytest.raises(ValueError, match="file SHA256"):
+        load_reference(config, source_directory=tmp_path)
+
+
+def test_local_reference_rejects_file_symlink_outside_source(tmp_path, monkeypatch):
+    config = reference_inputs(tmp_path, monkeypatch)
+    source = tmp_path / "source"
+    source.mkdir()
+    for entry in [*config["files"].values(), config["authorship"]]:
+        (source / entry["path"]).symlink_to(tmp_path / entry["path"])
+    config.update(revision_kind="content_sha256", revision=digest(config["files"]))
+    with pytest.raises(ValueError, match="within source_directory"):
+        load_reference(config, source_directory=source)

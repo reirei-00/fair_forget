@@ -1,13 +1,14 @@
 # WarBias baseline evaluation
 
 The [notebook](../notebooks/08_warbias_baseline.ipynb) defines the metrics and analyzes
-saved runs through Fair-UK. [Saved tables and source bindings](../evaluation/warbias_baseline/results/manifest.json)
-support inspection without model inference. Use the companion Fair-UK source revision
-`8e16737e4ee1e845a64f9f1ce9bb3329d7e32547` in the same environment:
+saved runs through the evaluation library. [Saved tables and source bindings](../evaluation/warbias_baseline/results/manifest.json)
+support inspection without model inference. The notebook displays these tables by
+default; set `RUN_ANALYSIS = True` to score raw predictions. Install the bundled evaluation library
+in a separate environment:
 
 ```sh
 python -m pip install -e '.[notebooks]'
-python -m pip install /path/to/fair-uk
+python -m pip install -e ./evaluator
 ```
 
 The baseline reports prior-normalised triplet SS, QA accuracy and QA bias,
@@ -19,7 +20,7 @@ The notebook labels IDPs (ВПО) and veterans separately. Each language contain
 select `scope=actor` with `actor=idp` or `actor=veteran`; `scope=overall` combines
 the groups. Severity tables separate IDPs and veterans. Select `scope=actor_severity`
 with `actor` and `severity_level` for these slices. All scores and intervals come
-from Fair-UK; the notebook only selects and formats them.
+from the evaluation library; the notebook only selects and formats them.
 
 Run from this artifact directory:
 
@@ -38,7 +39,7 @@ Weights use the directory/revision layout in the
 [model registry](../evaluation/warbias_baseline/models.json).
 GPU collection requires vLLM 0.18.1 and the
 [pinned inference settings](../evaluation/warbias_baseline/model_assets.json).
-The notebook shows the `run_model.py` collection command.
+Run `python "$WARBIAS_BASELINE_RELEASE/run_model.py" --help` for collection options.
 
 Prepare the separate neutral-group control tasks with the reviewed replacements:
 
@@ -59,13 +60,13 @@ for these two tasks and adds primary SS after their complete outputs are verifie
 For existing runs, use their original release. If the analysis library changed,
 set `WARBIAS_BASELINE_INFERENCE_RELEASE` to the frozen collector snapshot.
 For corrected case/profile labels, prepare a separate release and set
-`WARBIAS_BASELINE_METADATA_RELEASE` to it. Fair-UK verifies unchanged inference
+`WARBIAS_BASELINE_METADATA_RELEASE` to it. The evaluation library verifies unchanged inference
 inputs before applying declared metadata corrections; original runs stay intact.
 
 The equivalent CLI command is:
 
 ```sh
-fair-uk-eval warbias baseline \
+benchmark-eval warbias baseline \
   --release "$WARBIAS_BASELINE_RELEASE" \
   --results "$WARBIAS_BASELINE_RESULTS" \
   --qa-answer-policy abc_explicit_choice_v3 \
@@ -79,6 +80,5 @@ add `--neutral-release "$WARBIAS_BASELINE_NEUTRAL_RELEASE"` and
 `--neutral-results "$WARBIAS_BASELINE_NEUTRAL_RESULTS"`.
 
 
-Saved baseline tables are versioned by `source.git_revision` and the input hashes
-in their manifest. Use that source revision to reproduce the saved scores.
+Saved baseline tables are bound to the input content hashes in their manifest.
 The current dataset requires new inference for changed text.

@@ -1,4 +1,4 @@
-"""Local artifact preparation uses bound sources and the installed Fair-UK adapter."""
+"""Local artifact preparation uses bound sources and the bundled evaluation library adapter."""
 
 import importlib.util
 import json
@@ -12,8 +12,8 @@ import pytest
 from warbias_kit.io import digest
 from warbias_kit.warbias.neutral import VERSION as NEUTRAL_VERSION
 
-pytest.importorskip("lm_eval.fair_uk.warbias.baseline")
-from lm_eval.fair_uk import data
+pytest.importorskip("lm_eval.benchmark.warbias.baseline")
+from lm_eval.benchmark import data
 
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "scripts/prepare_warbias_evaluation.py"
@@ -25,6 +25,26 @@ collector_spec = importlib.util.spec_from_file_location(
 )
 collector = importlib.util.module_from_spec(collector_spec)
 collector_spec.loader.exec_module(collector)
+
+
+def test_collector_uses_one_namespace_for_commands_and_verification(monkeypatch):
+    from types import SimpleNamespace
+
+    monkeypatch.delenv("WARBIAS_EVALUATOR_MODULE", raising=False)
+    arguments = ("bundle", "task", "model", "output")
+    assert collector.command(*arguments, smoke=False)[2] == "lm_eval.benchmark"
+    monkeypatch.setenv("WARBIAS_EVALUATOR_MODULE", "fixture.evaluation")
+    assert collector.command(*arguments, smoke=False)[2] == "fixture.evaluation"
+    imported = []
+
+    def import_module(name):
+        imported.append(name)
+        return SimpleNamespace(verify_baseline_run=lambda *args, **kwargs: kwargs)
+
+    monkeypatch.setattr(collector.importlib, "import_module", import_module)
+    receipt = collector.verify("run", "task", "bundle", {}, {}, smoke=True)
+    assert imported == ["fixture.evaluation.warbias.baseline"]
+    assert receipt == {"smoke": True, "collection_settings": collector.SETTINGS}
 
 
 def run_command(arguments, **kwargs):
@@ -404,7 +424,6 @@ def test_collector_requires_neutral_bindings_and_keeps_baseline_panel():
 
 
 def test_export_prepares_offline_without_parent_repository(tmp_path):
-    import lm_eval.fair_uk
 
     exporter_spec = importlib.util.spec_from_file_location(
         "evaluation_exporter", ROOT / "scripts/export_dataset.py"
@@ -419,7 +438,7 @@ def test_export_prepares_offline_without_parent_repository(tmp_path):
         [sys.executable, "-m", "venv", "--system-site-packages", str(venv)], env=environment
     )
     python = venv / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
-    companion = Path(lm_eval.fair_uk.__file__).resolve().parents[2]
+    companion = exported / "evaluator"
     run_command(
         [
             str(python),
