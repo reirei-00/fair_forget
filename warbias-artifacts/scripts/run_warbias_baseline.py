@@ -62,7 +62,7 @@ def write(path, value):
     temporary.replace(path)
 
 
-def collection_tasks(spec):
+def collection_tasks(spec, selected=None):
     tasks = list(spec["datasets"])
     if set(tasks) not in (BASELINE_TASKS, NEUTRAL_TASKS) or any(
         spec["datasets"][task]["language"] != task.rsplit("_", 1)[1] for task in tasks
@@ -72,6 +72,10 @@ def collection_tasks(spec):
         )
     if set(tasks) == NEUTRAL_TASKS and not spec.get("neutral_controls"):
         raise ValueError("Neutral-control tasks require their review and source bindings")
+    if selected is not None:
+        if not selected or len(selected) != len(set(selected)) or not set(selected) <= set(tasks):
+            raise ValueError("Select unique tasks from the verified input bundle")
+        tasks = [task for task in tasks if task in selected]
     return tasks
 
 
@@ -112,7 +116,7 @@ def parameters(profiles, model):
     return args
 
 
-def command(bundle, task, model_args, output, *, smoke):
+def command(bundle, task, model_args, output, *, smoke, actors=None):
     argv = [
         sys.executable,
         "-m",
@@ -133,6 +137,8 @@ def command(bundle, task, model_args, output, *, smoke):
         argv += ["--" + key.replace("_", "-"), str(value)]
     if smoke:
         argv += ["--limit-clusters-per-stratum", "1"]
+    if actors is not None:
+        argv += ["--actors", *actors]
     return argv
 
 
@@ -160,7 +166,7 @@ def runtime(environment):
     }
 
 
-def verify(directory, task, bundle, args, expected_identity, *, smoke):
+def verify(directory, task, bundle, args, expected_identity, *, smoke, actors=None):
     namespace = os.environ.get("WARBIAS_EVALUATOR_MODULE", "lm_eval.benchmark")
     verify_baseline_run = importlib.import_module(
         f"{namespace}.warbias.baseline"
@@ -174,6 +180,7 @@ def verify(directory, task, bundle, args, expected_identity, *, smoke):
         expected_identity,
         smoke=smoke,
         collection_settings=SETTINGS,
+        **({"actors": actors} if actors is not None else {}),
     )
 
 
@@ -188,20 +195,21 @@ def run_task(
     expected_identity,
     *,
     smoke,
+    actors=None,
 ):
     output.parent.mkdir(parents=True, exist_ok=True)
     artifacts = ("run.json", "report.json", "predictions.jsonl")
     if not all((output / name).is_file() for name in artifacts):
         with output.with_suffix(".log").open("a") as log:
             subprocess.run(
-                command(bundle, task, model_args, output, smoke=smoke),
+                command(bundle, task, model_args, output, smoke=smoke, actors=actors),
                 cwd=release,
                 env=environment,
                 stdout=log,
                 stderr=subprocess.STDOUT,
                 check=True,
             )
-    return verify(output, task, bundle, args, expected_identity, smoke=smoke)
+    return verify(output, task, bundle, args, expected_identity, smoke=smoke, actors=actors)
 
 
 def main(argv=None):
@@ -212,6 +220,8 @@ def main(argv=None):
     parser.add_argument("--model", required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--stage", choices=("smoke", "collect", "all"), default="all")
+    parser.add_argument("--tasks", nargs="+", choices=sorted(BASELINE_TASKS | NEUTRAL_TASKS))
+    parser.add_argument("--actors", nargs="+", choices=("idp", "veteran"))
     parser.add_argument("--execute", action="store_true")
     options = parser.parse_args(argv)
     release, bundle, profiles, output = (
@@ -225,7 +235,12 @@ def main(argv=None):
     code_identity = importlib.import_module(f"{namespace}.provenance").code_identity
 
     spec = read(bundle)
-    tasks = collection_tasks(spec)
+    tasks = collection_tasks(spec, options.tasks)
+    actors = options.actors
+    if actors is not None:
+        if len(actors) != len(set(actors)):
+            raise ValueError("Select unique target groups")
+        actors = [actor for actor in ("idp", "veteran") if actor in actors]
     selected_profile = read(profiles)[options.model]
     expected_identity = selected_profile["model_identity"]
     args = parameters({options.model: selected_profile}, options.model)
@@ -241,8 +256,8 @@ def main(argv=None):
     }
     if options.model == "mamay27b_v2":
         environment["VLLM_BATCH_INVARIANT"] = "1"
-    else:
-        environment.pop("VLLM_BATCH_INVARIANT", None)
+    if environment.get("VLLM_BATCH_INVARIANT") not in (None, "0", "1"):
+        raise ValueError("VLLM_BATCH_INVARIANT must be 0 or 1")
     plan = {
         "model": options.model,
         "stage": options.stage,
@@ -254,6 +269,7 @@ def main(argv=None):
         "settings": SETTINGS,
         "model_parameters": args,
         "code_identity": code_identity(),
+        **({"actors": actors} if actors is not None else {}),
     }
     if not options.execute:
         print(json.dumps(plan, indent=2))
@@ -283,6 +299,7 @@ def main(argv=None):
                     environment,
                     expected_identity,
                     smoke=True,
+                    actors=actors,
                 )
                 for repeat in ("before", "repeat")
             ]
@@ -327,6 +344,7 @@ def main(argv=None):
                 environment,
                 expected_identity,
                 smoke=False,
+                actors=actors,
             )
             smoke_run = read(output / "smoke" / "before" / task / "run.json")
             if verified.provenance["run"]["model_identity"] != smoke_run["model_identity"]:

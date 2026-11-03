@@ -1,41 +1,34 @@
 # Unlearning notebooks
 
-Start with [setup.ipynb](setup.ipynb) or the [setup guide](SETUP.md).
-Each method notebook configures and trains **all six models**, with separate
-logs, checkpoints and receipts for every model.
-
-Use [evaluate_before_after.ipynb](evaluate_before_after.ipynb) for the shared
-Fair-UK evaluation workflow: collect the six baselines, evaluate the 30 post
-checkpoints and compare matched results. See the [evaluation setup](EVALUATION.md).
-
-Use [WarBias baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb) for the final bilingual
-WarBias triplet and QA baselines, including severity slices. It imports the
-Fair-UK library. See the [WarBias evaluation guide](../warbias-artifacts/docs/evaluation.md).
+Use the [setup notebook](setup.ipynb), [setup guide](SETUP.md) and
+[WarBias workflow](WARBIAS_UNLEARNING.md). Training is disabled by default.
 
 | Method | Notebook |
 | --- | --- |
-| Fixed-target RMU | [rmu.ipynb](rmu.ipynb) |
-| Task-vector negation | [task_vector.ipynb](task_vector.ipynb) |
-| WGA+KL | [wga_kl.ipynb](wga_kl.ipynb) |
-| NPO+retention | [npo_retention.ipynb](npo_retention.ipynb) |
 | BiasUnlearn | [biasunlearn.ipynb](biasunlearn.ipynb) |
+| WGA+KL | [wga_kl.ipynb](wga_kl.ipynb) |
 
-| Model | Configuration name |
-| --- | --- |
-| Qwen3 8B | `qwen3_8b` |
-| Llama 3.1 8B Instruct | `llama31_8b_instruct` |
-| Gemma 3 12B IT | `gemma3_12b_it` |
-| Lapa 12B Instruct | `lapa12b_instruct` |
-| Mamay 12B v2 | `mamay12b_v2` |
-| Mamay 27B v2 | `mamay27b_v2` |
+The BiasUnlearn and [WGA+KL](wga_kl.ipynb) notebooks configure four separate training directions: IDP in Ukrainian,
+IDP in English, veteran in Ukrainian, and veteran in English. Each direction
+uses one group and one language. All three pinned models run independently from
+their base checkpoints. Each run trains for one epoch. This gives 12 runs per method, 24 in total. Each adapter is evaluated
+on its training group and language. Cross-group and cross-language checks are deferred.
 
-The [model registry](../configs/unlearning/models.json) pins model and tokenizer
-revisions. The [recipes](../configs/unlearning/recipes/) contain all 30
-model-method configurations. The [setup script](../scripts/setup_unlearning.py)
-configures local paths and can download every checkpoint.
+The [configuration](../configs/unlearning/warbias_final.json) defines the method
+and training settings. The selected models are Gemma 3 12B IT, Lapa 12B Instruct and Mamay 12B v2.
+The [model registry](../configs/unlearning/models.json) also retains models outside this experiment.
 
-RMU, task vector and WGA train on WarBias. NPO and BiasUnlearn train on
-StereoSet. The recipes specify each method's data files, objectives and
-training/development split.
+The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb) imports Fair-UK for bilingual
+triplet and QA metrics, including severity slices. See the
+[WarBias evaluation guide](../warbias-artifacts/docs/evaluation.md). The
+[before/after notebook](evaluate_before_after.ipynb) evaluates WarBias with the
+same outcomes and controls as baseline notebook 08 for all 24 interventions. See the [evaluation setup](EVALUATION.md).
 
-Existing saved reports remain under [executed/](executed/).
+Separate experiments retain [RMU](rmu.ipynb), [task-vector negation](task_vector.ipynb),
+and saved reports under
+[executed/](executed/).
+
+Use the [native benchmark notebook](native_before_after.ipynb) for additional
+registered benchmark comparisons. These inputs are evaluation only.
+
+Run MMLU and Belebele last for all three models, after WarBias training and evaluation.

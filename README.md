@@ -42,15 +42,16 @@ their root dependencies remain independent of this subproject.
 
 ## Unlearning
 
-The [unlearning notebooks](notebooks/README.md) contain one notebook per method:
-RMU, task-vector negation, WGA+KL, NPO+retention and BiasUnlearn. Every method
-supports all six pinned models. Start with the [setup notebook](notebooks/setup.ipynb)
-or [setup guide](notebooks/SETUP.md) for installation, checkpoint downloads and
-reviewed data paths. The [model configurations](configs/unlearning/) contain the
-complete 30-combination setup.
+The [BiasUnlearn](notebooks/biasunlearn.ipynb) and [WGA+KL](notebooks/wga_kl.ipynb)
+notebooks use the final WarBias sources and component split. Each method trains
+three models for one epoch, separately for IDPs and veterans in Ukrainian and
+English: 24 runs in total. Each adapter is evaluated only on its training group
+and language. Start with the [setup notebook](notebooks/setup.ipynb) or
+[setup guide](notebooks/SETUP.md). The [configuration](configs/unlearning/warbias_final.json)
+defines the methods and training settings.
 
-The [shared Fair-UK evaluation notebook](notebooks/evaluate_before_after.ipynb)
-collects native measurements before and after every method and compares paired
-results across all six models.
+The [WarBias workflow](notebooks/WARBIAS_UNLEARNING.md) defines data roles and
+evaluation requirements. All metrics use Fair-UK. MMLU and Belebele are deferred
+until WarBias evaluation is complete. Other methods and saved experiments remain separate.
 
 Saved unlearning reports remain under [executed notebooks](notebooks/executed/).

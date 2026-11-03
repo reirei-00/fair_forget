@@ -1,69 +1,106 @@
-# Fair-UK before/after evaluation
+# WarBias evaluation before and after unlearning
 
-Use [evaluate_before_after.ipynb](evaluate_before_after.ipynb) for all six pinned
-models and all five methods. The notebook contains collection and
-paired-comparison commands.
+The [notebook](evaluate_before_after.ipynb) uses the same collector and Fair-UK
+scorer as [baseline notebook 08](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb).
+FairForget selects experiments and labels their before/after reports. Fair-UK
+evaluates the supplied WarBias benchmark inputs. This workflow covers all 24
+one-epoch interventions: BiasUnlearn and WGA+KL across three models, two groups
+and two languages. Reuse three shared base checkpoints.
+Evaluate each adapter only on its training group and language. Cross-group
+and cross-language evaluation are deferred.
+The [native benchmark workflow](native_before_after.ipynb) remains available
+with its [own setup](NATIVE_EVALUATION.md).
 
-## Evaluation environment
+| Setting | Before and after |
+| --- | --- |
+| Collection | 409 IDP or 598 veteran triplets, 120 same-group QA questions and matching neutral controls in the training language |
+| Main outcomes | Prior-normalised SS, QA accuracy and QA bias |
+| Slices | The training group and its case-level severity |
+| QA policies | Native `abc_option_text_v2`; analysis `abc_explicit_choice_v3` |
+| Weighting | Equal semantic components after within-component averaging |
+| Uncertainty | 1,000 component-bootstrap draws, seed 42 |
+| Analysis panels | The same 82 IDP or 119 veteran held-out triplets and 120 same-group QA questions before and after |
+| Full target-group scores | Separate descriptive diagnostics |
 
-Keep evaluation in its own environment. The training notebooks use a different
-PyTorch runtime. On the GPU host, use the Fair-UK evaluation environment
-or install these evaluation versions in a separate Python 3.12 environment:
+## Environment and paths
+
+Use Fair-UK revision `becd30cb6b182c9bdd7e85033f380abe6d6bf9a2`:
 
 ```bash
 git clone https://github.com/reirei-00/fair-uk.git ../fair-uk
-python3.12 -m venv .venv-evaluation
-.venv-evaluation/bin/python -m pip install -e '../fair-uk[vllm]' \
-  'vllm==0.18.1' 'transformers==4.57.6' 'numpy==2.2.6'
+git -C ../fair-uk checkout becd30cb6b182c9bdd7e85033f380abe6d6bf9a2
+python -m pip install -e ../fair-uk
 ```
 
-Use a compatible CUDA build and allocate a GPU for collection. Keep the
-same evaluator checkout and environment for both checkpoints. The notebook
-itself can stay in the existing FairForget Jupyter kernel; model calls run as
-separate processes through the evaluation Python executable.
-
-## Local inputs
-
-Set these paths in the notebook, or before starting Jupyter:
+Install this library in the notebook environment.
+Use a separate Python 3.12 environment with vLLM 0.18.1, Transformers 4.57.6
+and NumPy 2.2.6 for GPU collection. Use `VLLM_BATCH_INVARIANT=1` and
+`attention_backend="TRITON_ATTN"` in both phases. Qualify each model on the
+target GPU. Collect a fresh base with these settings before adapter comparisons.
+Configure the existing baseline inputs exactly as in notebook 08:
 
 ```bash
-export FAIR_UK_ROOT=/absolute/path/to/fair-uk
-export FAIR_UK_PYTHON=/absolute/path/to/evaluation-environment/bin/python
-export FAIR_UK_EVALUATION_BUNDLE=/absolute/path/to/evaluation/manifest.json
-export FAIR_UK_QUALIFICATION_BUNDLE=/absolute/path/to/development/manifest.json
-export FAIR_UK_OUTPUT=/absolute/path/to/new-evaluation-output
+export WARBIAS_BASELINE_RELEASE=/path/to/original-release
+export WARBIAS_BASELINE_RESULTS=/path/to/original-predictions
+export WARBIAS_BASELINE_METADATA_RELEASE=/path/to/current-metadata-release
+export WARBIAS_BASELINE_INFERENCE_RELEASE=/path/to/frozen-original-collector
+export WARBIAS_BASELINE_NEUTRAL_RELEASE=/path/to/control-release
+export WARBIAS_BASELINE_NEUTRAL_RESULTS=/path/to/control-predictions
+export WARBIAS_AFTER_ROOT=/path/to/new-post-evaluation
+export FAIRFORGET_TRAINING_ROOT=/path/to/unlearning-runs
+export FAIR_UK_ROOT=/path/to/fair-uk
+export FAIR_UK_PYTHON=/path/to/evaluation-environment/bin/python
 ```
 
-Use a Fair-UK native evaluation bundle. The default tasks are StereoSet UK,
-BBQ UK, both WinoBias UK views, WinoPron UK and native WarBias triplets UK. Other native views
-can be selected by their exact task IDs in the same bundle. The annotated
-original/neutral WarBias panel uses Fair-UK's separate primary paper adapter.
+Metadata and inference release variables are optional for fresh collections.
+Use fresh base and control collections for separate-adapter comparisons. Read
+saved merged-model results with their recorded evaluator and source corrections.
+The report identifies the input version from its hashes. Saved predictions for an
+earlier dataset version remain results for that version. Changed text and its
+neutral controls need new inference in both phases.
+Post collection uses the compatible control collector when it contains a frozen
+source snapshot. `WARBIAS_AFTER_INFERENCE_RELEASE` can select that source
+explicitly. Fair-UK verifies unchanged inference and native scoring code.
 
-The repeatability check uses development data and a three-candidate
-likelihood task. Set `QUALIFICATION_TASK` to its task ID; the default is
-`warbias_triplets_uk`. The notebook repeats each unchanged checkpoint twice and
-requires finite candidate scores within an absolute tolerance of 1e-6.
-These development runs stay separate from evaluation.
+Run [setup](SETUP.md) first to prepare the four source-bound training bundles.
+Adapter directories use `METHOD/MODEL__GROUP_LANGUAGE/intervention_adapter/`.
+Load the pinned base with the saved adapter using `representation="adapter"`.
+Fair-UK fingerprints the base and adapter files separately. Do not merge the
+adapter into BF16 base weights for this evaluation. Collect both phases with
+the adapter-capable evaluator; older collector identities remain separate.
 
-Base checkpoint paths and training outputs come from [setup](SETUP.md).
-`TRAINING_ROOTS` can be edited if methods were saved in different directories.
-The notebook checks the complete RMU or merged exports against their training
-receipts and exported file hashes. Adapters alone cannot supply the post
-checkpoints.
+## Workflow
 
-## Run the three stages
+1. Enable `RUN_PREPARE` after training. Verify all selected exports before creating
+   any releases. Preserve the baseline model options and select the training group
+   and language from its original and control inputs without changing their text. The post profile adds the verified adapter path to the same base model.
+2. Enable `RUN_AFTER_COLLECTION` on the GPU host. Reuse the baseline runner,
+   serial BF16 options, model-specific attention settings and repeated smoke gates.
+   Each adapter supplies two original panels and one neutral panel for its training
+   group and language. Validated collections can resume; source and runtime changes fail validation.
+3. Enable `RUN_REFERENCE_ANALYSIS` to score the three shared baselines with the
+   selected parser, controls and target-group held-out IDs. Reuse the matching rows
+   from the shared bases for each training group and language.
+4. Enable `RUN_AFTER_ANALYSIS` to apply the same scorer to each post checkpoint.
+   Check actual before/after runtime, tokenizer, effective inputs and row IDs.
+   Compare with the shared base scores for the same group and language. Save full
+   target-group and held-out analyses in separate directories for each run.
 
-1. Enable `RUN_BEFORE`. All six base models pass the repeatability check, then
-   each task is collected once per model. Keep these shared baselines.
-2. Train using the five method notebooks. Disable `RUN_BEFORE`, enable
-   `RUN_AFTER`, then run the after section when all 30 checkpoints are saved.
-3. Disable collection switches and enable `RUN_COMPARISON`. Fair-UK runs
-   `paper compare-native` on saved before/after predictions without GPUs.
+For a completed subset, pass explicit `(method, run_id)` pairs in
+`WarBiasEvaluation(..., selections=[("wga_kl", "gemma3_12b_it__idp_uk")])`.
+Only those exports are required. The experiment configuration remains unchanged.
 
-New collections and comparisons require absent output directories. Existing
-files and logs are preserved. To continue from saved baselines, leave the
-before switch off and keep the same evaluation root.
+All metric definitions, calculations and CSV exports come from Fair-UK.
+The report binds the selected triplet and QA IDs. All native predictions are verified
+before selection, including excluded rows. Empty or undefined outcomes remain
+explicit. Analysis outputs require new directories and do not replace native files.
 
-The final section reads `paired.json` and writes `native_before_after.csv` with
-all native scores, changes, units, uncertainty and availability reasons. It
-preserves undefined values. The table contains native benchmark metrics.
+The notebook displays target-group scores, severity slices and diagnostics in the same
+units as baseline notebook 08. QA bias remains signed and condition-specific;
+raw SS, LMS and format checks remain diagnostics. These are matched checkpoint
+scores. Paired intervention effects and their intervals use the separate Fair-UK
+intervention analysis.
+
+QA questions are evaluation-only. Their claim overlap with training and development
+triplets is recorded in each data binding. Target-group QA scores do not establish unseen-claim
+generalization.

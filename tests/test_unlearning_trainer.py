@@ -13,6 +13,7 @@ from pathlib import Path
 from unittest import mock
 
 import torch
+from unlearning_fixtures import AssetCatalog
 
 from fairforget.unlearning.trainer import (
     build_biasunlearn_pools,
@@ -54,6 +55,18 @@ def row(identifier="x", prompt="a ", target="bc", family="f"):
 
 
 class BatchTests(unittest.TestCase):
+    def test_padding_fallback_does_not_change_the_exported_tokenizer(self):
+        tokenizer = CharacterTokenizer()
+        tokenizer.pad_token_id = None
+        tokenizer.eos_token_id = 1
+        tokenizer.padding_side = "left"
+        batch = encode_batch(tokenizer, [row(), row("y", target="d")], max_length=9, device="cpu")
+        self.assertEqual(batch.input_ids[1, -1].item(), 1)
+        self.assertEqual(batch.attention_mask[1, -1].item(), 0)
+        self.assertFalse(batch.completion_mask[1, -1].item())
+        self.assertIsNone(tokenizer.pad_token_id)
+        self.assertEqual(tokenizer.padding_side, "left")
+
     def test_completion_mask_shifts_excludes_prompt_and_padding(self):
         batch = encode_batch(
             CharacterTokenizer(), [row(), row("y", target="d")], max_length=9, device="cpu"
@@ -182,6 +195,8 @@ class InputGuardTests(unittest.TestCase):
             "permitted_gradient_ids": ["f", "r"],
             "locked_evaluation_ids": ["locked"],
         }
+        self.assets = AssetCatalog(self)
+        self.assets.stage(model, self.config)
 
     def tearDown(self):
         self.temp.cleanup()
@@ -202,6 +217,17 @@ class InputGuardTests(unittest.TestCase):
         self.assertEqual(len(streams["forget"]), 1)
         self.assertEqual(provenance["gradient_families"], ["retain", "train"])
 
+    def test_direct_validation_rejects_missing_weights_and_tokenizer(self):
+        config = self.save()
+        for name in ("model.safetensors", "tokenizer.json"):
+            with self.subTest(asset=name):
+                path = self.root / "model" / name
+                original = path.read_bytes()
+                path.unlink()
+                with self.assertRaisesRegex(FileNotFoundError, "missing checkpoint asset"):
+                    validate_config(config)
+                path.write_bytes(original)
+
     def test_unauthorized_manifest_and_gradient_id_rejected(self):
         self.manifest["reviewed_for_gradients"] = False
         with self.assertRaisesRegex(ValueError, "has not authorized"):
@@ -209,6 +235,11 @@ class InputGuardTests(unittest.TestCase):
         self.manifest["reviewed_for_gradients"] = True
         self.manifest["permitted_gradient_ids"] = ["r"]
         with self.assertRaisesRegex(ValueError, "unapproved or locked"):
+            validate_config(self.save())
+
+    def test_english_requires_the_source_bound_group_language_protocol(self):
+        self.manifest["language"] = "en"
+        with self.assertRaisesRegex(ValueError, "requires reviewed Ukrainian"):
             validate_config(self.save())
 
     def test_family_and_exact_id_leakage_rejected(self):
@@ -339,14 +370,18 @@ class TinyBase(torch.nn.Module):
 class TinyLora(torch.nn.Module):
     def __init__(self, base, rank, alpha):
         super().__init__()
-        self.base = base
+        self.base_layer = base
         self.lora_A = torch.nn.ModuleDict({"default": torch.nn.Linear(4, rank, bias=False)})
         self.lora_B = torch.nn.ModuleDict({"default": torch.nn.Linear(rank, 4, bias=False)})
         torch.nn.init.zeros_(self.lora_B["default"].weight)
         self.scale, self.enabled = alpha / rank, True
+        self.active_adapters = ["default"]
+        self.scaling = {"default": self.scale}
+        self.fan_in_fan_out = False
+        self.use_dora = {"default": False}
 
     def forward(self, inputs):
-        base = self.base(inputs)
+        base = self.base_layer(inputs)
         return (
             base + self.scale * self.lora_B["default"](self.lora_A["default"](inputs))
             if self.enabled
@@ -355,10 +390,10 @@ class TinyLora(torch.nn.Module):
 
     def merge(self):
         with torch.no_grad():
-            self.base.weight.add_(
+            self.base_layer.weight.add_(
                 self.scale * self.lora_B["default"].weight @ self.lora_A["default"].weight
             )
-        return self.base
+        return self.base_layer
 
 
 class TinyPeft(torch.nn.Module):
@@ -376,6 +411,9 @@ class TinyPeft(torch.nn.Module):
 
     def get_input_embeddings(self):
         return self.base_model.get_input_embeddings()
+
+    def get_base_model(self):
+        return self.base_model
 
     @contextlib.contextmanager
     def disable_adapter(self):
@@ -403,6 +441,74 @@ class PipelineTests(unittest.TestCase):
     tearDown = InputGuardTests.tearDown
     save = InputGuardTests.save
 
+    @contextlib.contextmanager
+    def model_environment(self, *, fault=None):
+        import importlib
+
+        importlib.import_module("torch._dynamo")
+
+        class Tokenizer(CharacterTokenizer):
+            is_fast = True
+            eos_token_id = 1
+
+            def save_pretrained(self, directory):
+                (Path(directory) / "tokenizer_config.json").write_text('{"test_fixture": true}')
+
+        fake_peft = types.ModuleType("peft")
+        fake_peft.LoraConfig = lambda **kwargs: types.SimpleNamespace(**kwargs)
+        fake_peft.TaskType = types.SimpleNamespace(CAUSAL_LM="causal")
+
+        class DroppedMerge(TinyPeft):
+            def merge_and_unload(self, safe_merge):
+                self.base_model.q_proj = self.base_model.q_proj.base_layer
+                self.base_model.v_proj = self.base_model.v_proj.base_layer
+                return self.base_model
+
+        fake_peft.get_peft_model = DroppedMerge if fault == "merge" else TinyPeft
+        fake_tf = types.ModuleType("transformers")
+        fake_tf.AutoConfig = types.SimpleNamespace(
+            from_pretrained=lambda *a, **k: types.SimpleNamespace(model_type="qwen3")
+        )
+
+        def load_model(directory, **kwargs):
+            model = TinyBase()
+            saved = Path(directory) / "fake-test-model.bin"
+            if saved.is_file():
+                model.load_state_dict(torch.load(saved, map_location="cpu", weights_only=True))
+                if fault == "reload":
+                    with torch.no_grad():
+                        model.output.weight[0, 0].add_(1.0)
+            return model
+
+        fake_tf.AutoModelForCausalLM = types.SimpleNamespace(from_pretrained=load_model)
+
+        class ChangedTokenizer(Tokenizer):
+            def __call__(self, text, **kwargs):
+                result = super().__call__(text, **kwargs)
+                result["input_ids"][-1] = 2 + (result["input_ids"][-1] - 1) % 10
+                return result
+
+        def load_tokenizer(directory, **kwargs):
+            if fault == "tokenizer" and Path(directory).name == "merged_checkpoint":
+                return ChangedTokenizer()
+            return Tokenizer()
+
+        fake_tf.AutoTokenizer = types.SimpleNamespace(from_pretrained=load_tokenizer)
+        with (
+            mock.patch.dict("sys.modules", {"peft": fake_peft, "transformers": fake_tf}),
+            mock.patch("torch.cuda.is_available", return_value=True),
+            mock.patch(
+                "fairforget.unlearning.trainer.verify_runtime",
+                return_value={
+                    "packages": {"torch": "2.9.1+fixture"},
+                    "devices": [{"name": "CPU test fixture"}],
+                },
+            ),
+            mock.patch("torch.cuda.manual_seed_all"),
+            mock.patch("torch.cuda.is_current_stream_capturing", return_value=False),
+        ):
+            yield
+
     def test_four_training_dispatches_real_autograd_without_gpu_or_hub(self):
         self.rows["forget"] = [row(f"f{i}", target="ab", family=f"train{i}") for i in range(4)]
         self.rows["correction"] = [row(f"c{i}", target="ac", family=f"train{i}") for i in range(4)]
@@ -428,31 +534,7 @@ class PipelineTests(unittest.TestCase):
             "selection": {"max_retain_token_kl": 0.05},
         }
 
-        class Tokenizer(CharacterTokenizer):
-            is_fast = True
-            eos_token_id = 1
-
-            def save_pretrained(self, directory):
-                (Path(directory) / "tokenizer_config.json").write_text('{"test_fixture": true}')
-
-        fake_peft = types.ModuleType("peft")
-        fake_peft.LoraConfig = lambda **kwargs: types.SimpleNamespace(**kwargs)
-        fake_peft.TaskType = types.SimpleNamespace(CAUSAL_LM="causal")
-        fake_peft.get_peft_model = TinyPeft
-        fake_tf = types.ModuleType("transformers")
-        fake_tf.AutoConfig = types.SimpleNamespace(
-            from_pretrained=lambda *a, **k: types.SimpleNamespace(model_type="qwen3")
-        )
-        fake_tf.AutoModelForCausalLM = types.SimpleNamespace(
-            from_pretrained=lambda *a, **k: TinyBase()
-        )
-        fake_tf.AutoTokenizer = types.SimpleNamespace(from_pretrained=lambda *a, **k: Tokenizer())
-        with (
-            mock.patch.dict("sys.modules", {"peft": fake_peft, "transformers": fake_tf}),
-            mock.patch("torch.cuda.is_available", return_value=True),
-            mock.patch("torch.cuda.manual_seed_all"),
-            mock.patch("torch.cuda.is_current_stream_capturing", return_value=False),
-        ):
+        with self.model_environment():
             for method in ["wga_kl", "npo_kl", "task_vector", "biasunlearn"]:
                 with self.subTest(method=method):
                     self.config["method"] = method
@@ -461,6 +543,9 @@ class PipelineTests(unittest.TestCase):
                     receipt = run(config, output)
                     self.assertEqual(receipt["status"], "trained_merged")
                     self.assertEqual(receipt["steps"], 2)
+                    self.assertTrue(receipt["export_verification"]["merged"]["passed"])
+                    self.assertTrue(receipt["export_verification"]["reloaded"]["passed"])
+                    self.assertIn("packages", receipt["runtime"])
                     self.assertTrue((output / "merged_checkpoint/fake-test-model.bin").exists())
                     events = [
                         json.loads(x) for x in (output / "exposure.jsonl").read_text().splitlines()
@@ -502,6 +587,21 @@ class PipelineTests(unittest.TestCase):
                             self.assertLessEqual(entry["wga_weight_mean"], entry["wga_weight_max"])
                     else:
                         self.assertTrue(all(not diagnostic_keys & set(entry) for entry in history))
+
+    def test_corrupt_reloaded_weights_and_tokenizer_never_produce_success(self):
+        from fairforget.unlearning.export import ExportVerificationError
+
+        self.config["training"]["gradient_checkpointing"] = False
+        self.config["training"]["learning_rate"] = 0.01
+        config = self.save()
+        for fault in ("merge", "reload", "tokenizer"):
+            with self.subTest(fault=fault), self.model_environment(fault=fault):
+                output = self.root / fault
+                with self.assertRaises(ExportVerificationError):
+                    run(config, output)
+                receipt = json.loads((output / "intervention.json").read_text())
+                self.assertEqual(receipt["status"], "failed_export_verification")
+                self.assertFalse(receipt["export_verification"]["failure"]["passed"])
 
 
 if __name__ == "__main__":

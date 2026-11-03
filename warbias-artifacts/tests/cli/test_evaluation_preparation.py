@@ -423,6 +423,26 @@ def test_collector_requires_neutral_bindings_and_keeps_baseline_panel():
         collector.collection_tasks(neutral)
 
 
+def test_collector_selects_language_tasks_without_changing_source_bindings():
+    for available, selected in (
+        (collector.BASELINE_TASKS, ["warbias_triplets_annotated_uk", "warbias_uk"]),
+        (collector.NEUTRAL_TASKS, ["warbias_triplets_annotated_neutral_en"]),
+    ):
+        manifest = {
+            "datasets": {task: {"language": task.rsplit("_", 1)[1]} for task in sorted(available)},
+            "neutral_controls": {"schema_version": 1},
+        }
+        original = json.dumps(manifest, sort_keys=True)
+        assert set(collector.collection_tasks(manifest, selected)) == set(selected)
+        assert json.dumps(manifest, sort_keys=True) == original
+        for invalid in ([], selected * 2, ["unknown"]):
+            with pytest.raises(ValueError, match="unique tasks"):
+                collector.collection_tasks(manifest, invalid)
+        manifest["datasets"].pop(next(task for task in available if task not in selected))
+        with pytest.raises(ValueError, match="four baseline tasks or the two"):
+            collector.collection_tasks(manifest, selected)
+
+
 def test_export_prepares_offline_without_parent_repository(tmp_path):
 
     exporter_spec = importlib.util.spec_from_file_location(

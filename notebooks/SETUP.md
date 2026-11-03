@@ -1,4 +1,4 @@
-# Setup for all six models
+# WarBias training setup
 
 ## Install
 
@@ -11,34 +11,36 @@ python -m pip install -r requirements-unlearning.txt
 python -m ipykernel install --user --name fairforget --display-name FairForget
 ```
 
-Use a CUDA build of PyTorch on the training host. Checkpoints that require model
-access use your Hugging Face account and `HF_TOKEN` environment variable.
+Use a CUDA build of PyTorch on the training host. Model access uses your
+Hugging Face account and `HF_TOKEN` environment variable.
 
-## Configure checkpoints and data
+## Configure data and checkpoints
 
 ```bash
 python scripts/setup_unlearning.py \
   --models-root /absolute/path/to/models \
-  --warbias-data /absolute/path/to/warbias-data \
-  --primary-data /absolute/path/to/primary-data \
+  --warbias-data /absolute/path/to/warbias-directions \
   --output-root /absolute/path/to/new-unlearning-runs \
   --download-models
 ```
 
-This downloads Qwen3 8B, Llama 3.1 8B Instruct, Gemma 3 12B IT, Lapa 12B
-Instruct, Mamay 12B v2 and Mamay 27B v2 at the revisions in
-[models.json](../configs/unlearning/models.json). Omit `--download-models` to use
-already staged checkpoints. The checkpoint layout is
+This prepares four WarBias bundles under the data root: `idp_uk`, `idp_en`,
+`veteran_uk` and `veteran_en`. It downloads the three checkpoints selected in
+[warbias_final.json](../configs/unlearning/warbias_final.json), at the revisions
+in [models.json](../configs/unlearning/models.json). Omit `--download-models`
+to use staged checkpoints. Their layout is
 `MODELS_ROOT/CHECKPOINT_DIRECTORY/IMMUTABLE_REVISION/`.
 
-Each data directory must contain `training_binding.json`,
-`forget_train.jsonl`, `correct_train.jsonl`, `retain_train.jsonl`, `dev.jsonl`
-and `retain_dev.jsonl`. The setup checks the file hashes. The WarBias directory
-supplies RMU, task vector and WGA. The primary directory supplies NPO and BiasUnlearn.
+The setup saves local paths in the ignored `configs/unlearning/local.json`.
+Each notebook validates the source files, component splits and stream hashes.
+It creates missing direction bundles and does not replace existing bundles.
+Setup and training also verify the pinned model and tokenizer files.
+See the [data and checkpoint rules](WARBIAS_UNLEARNING.md).
 
-Your machine-specific paths are saved in `configs/unlearning/local.json`,
-which Git ignores. Each method notebook reads this setup automatically.
-Run training from a method notebook after setup.
+Without `--warbias-data`, setup puts bundles under
+`data/unlearning/warbias_application/SOURCE_COMMIT/`. The source commit prefix
+keeps each release separate. Existing explicit paths must match the selected
+source release.
 
 ## Run a method
 
@@ -46,19 +48,24 @@ Run training from a method notebook after setup.
 jupyter lab
 ```
 
-Open one of the [five method notebooks](README.md), run its setup and algorithm
-cells, then enable `RUN_TRAINING` to run the complete six-model training loop.
-RMU needs two visible GPUs for Mamay 27B's separate reference model. The other
-notebooks use one GPU with enough memory for their largest model and training
-state. The existing input validator runs before any model training starts.
+Open a [WarBias method notebook](README.md) and run all cells. The default
+walkthrough prepares data and runs a CPU example without loading model weights.
+Set `RUN_TRAINING=True` to train all 12 model/direction combinations for that method in sequence.
+Each run starts from the pinned base checkpoint and uses one GPU with enough
+memory for its training state. All configurations and data pass validation
+before the first training process starts.
 
-Each method writes its own directory under `OUTPUT_ROOT`, with a separate
-subdirectory and log for every model. Choose a new output directory for a new
-run. `FAIRFORGET_OUTPUT`, `FAIRFORGET_MODELS_ROOT` and `FAIRFORGET_DATA_ROOT` can
-override the saved paths for an individual notebook.
+Checkpoints, logs and receipts use the run ID `MODEL__GROUP_LANGUAGE`.
+Use a new output directory for each complete method run. `FAIRFORGET_OUTPUT`,
+`FAIRFORGET_MODELS_ROOT` and `FAIRFORGET_DATA_ROOT` override the saved paths.
+The data override points to the parent of all four direction directories.
 
-## Evaluate before and after
+The `--legacy` setup option uses the separate historical data protocols for
+RMU, task-vector and earlier integrations. It does not select the current
+WarBias experiment.
 
-Use the [shared Fair-UK evaluation notebook](evaluate_before_after.ipynb) and
-its [evaluation setup guide](EVALUATION.md). Evaluation runs in its own Fair-UK
-environment and reuses each base-model baseline across all five methods.
+## Evaluation
+
+Evaluate each adapter on its training group and language. Cross-group and cross-language checks are deferred.
+Use Fair-UK for every metric. The [WarBias workflow](WARBIAS_UNLEARNING.md)
+distinguishes current baseline scoring from the remaining paired-analysis work.

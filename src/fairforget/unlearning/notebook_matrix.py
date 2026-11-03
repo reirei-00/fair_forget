@@ -13,13 +13,36 @@ METHODS = frozenset({"rmu", "task_vector", "wga_kl", "npo_kl", "biasunlearn"})
 WARBIAS_METHODS = frozenset({"rmu", "task_vector", "wga_kl"})
 
 
-def method_plan(repo, method, *, data_root=None, models_root=None):
+def method_plan(
+    repo,
+    method,
+    *,
+    data_root=None,
+    models_root=None,
+    protocol=None,
+    target_group=None,
+    training_language=None,
+):
     """Expand one method over every registered checkpoint without touching inputs.
 
-    Model-specific WarBias recipes supply placement and immutable identities.
-    NPO/BiasUnlearn keep the original primary integration's data and settings.
-    Their model identity is expanded, never borrowed as a completed result.
+    The final WarBias protocol shares verified data across the selected methods.
+    Calls without a protocol preserve the historical model-specific recipes.
     """
+    if protocol == "warbias_final":
+        from .warbias_plan import method_plan as warbias_method_plan
+
+        return warbias_method_plan(
+            repo,
+            method,
+            data_root=data_root,
+            models_root=models_root,
+            target_group=target_group,
+            training_language=training_language,
+        )
+    if protocol is not None:
+        raise ValueError("unknown notebook data protocol")
+    if target_group is not None or training_language is not None:
+        raise ValueError("group and language selection require the final WarBias protocol")
     if method not in METHODS:
         raise ValueError("unknown notebook method")
     repo = Path(repo).resolve()
@@ -79,14 +102,29 @@ def prepare_recipes(plan, output):
     output = Path(output).expanduser().resolve()
     if output.exists():
         raise FileExistsError("Choose a new output directory for this complete method matrix")
-    if not plan or len({item["model_alias"] for item in plan}) != len(plan):
-        raise ValueError("model plan must be nonempty with unique aliases")
+    run_ids = [item.get("run_id", item["model_alias"]) for item in plan]
+    if not plan or len(set(run_ids)) != len(plan):
+        raise ValueError("model plan must be nonempty with unique run IDs")
+    if any(
+        not isinstance(run_id, str)
+        or not run_id
+        or Path(run_id).name != run_id
+        or run_id in {".", ".."}
+        for run_id in run_ids
+    ):
+        raise ValueError("run IDs must be simple directory names")
     methods = {item["recipe"]["method"] for item in plan}
     if len(methods) != 1 or not methods <= METHODS:
         raise ValueError("one known method is required per notebook")
     with tempfile.TemporaryDirectory(prefix="fairforget-matrix-preflight-") as temporary:
-        for item in plan:
+        checkpoint_cache = {}
+        for item, run_id in zip(plan, run_ids, strict=True):
             recipe = item["recipe"]
+            if (
+                recipe.get("notebook_matrix", {}).get("protocol") == "warbias_final"
+                and recipe["notebook_matrix"].get("run_id") != run_id
+            ):
+                raise ValueError("output run ID differs from the recipe direction")
             input_paths = [
                 Path(recipe["model_path"]).resolve(),
                 Path(recipe["data_manifest"]).resolve().parent,
@@ -96,16 +134,16 @@ def prepare_recipes(plan, output):
                 raise ValueError("output must be outside frozen input and checkpoint directories")
             if file_hash(Path(recipe["model_path"]) / "config.json") != item["config_sha256"]:
                 raise ValueError(f"staged model config differs: {item['model_alias']}")
-            candidate = Path(temporary) / f"{item['model_alias']}.json"
+            candidate = Path(temporary) / f"{run_id}.json"
             candidate.write_text(json.dumps(recipe, ensure_ascii=False, indent=2) + "\n")
-            validate_config(candidate, methods=methods)
-    # All six recipes have passed before the first trainer may start.
+            validate_config(candidate, methods=methods, checkpoint_cache=checkpoint_cache)
+    # Every direction has passed before the first trainer may start.
     output.mkdir(parents=True, exist_ok=False)
     prepared = output / "prepared_recipes"
     prepared.mkdir()
     paths = []
-    for item in plan:
-        path = prepared / f"{item['model_alias']}.json"
+    for item, run_id in zip(plan, run_ids, strict=True):
+        path = prepared / f"{run_id}.json"
         path.write_text(json.dumps(item["recipe"], ensure_ascii=False, indent=2) + "\n")
         paths.append(path)
     return paths

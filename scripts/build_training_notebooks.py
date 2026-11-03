@@ -1,16 +1,16 @@
-"""Build the five unlearning method notebooks."""
+"""Build WarBias unlearning notebooks from the study configuration."""
 
+import argparse
+import json
 from pathlib import Path
 
 import nbformat
 
 ROOT = Path(__file__).resolve().parents[1]
 METHODS = {
-    "rmu": ("Fixed-target RMU", "rmu", "WarBias"),
-    "task_vector": ("Task-vector negation", "task_vector", "WarBias"),
-    "wga_kl": ("WGA+KL", "wga_kl", "WarBias"),
-    "npo_kl": ("NPO+retention (KL)", "npo_retention", "StereoSet"),
-    "biasunlearn": ("BiasUnlearn", "biasunlearn", "StereoSet"),
+    "wga_kl": ("WGA+KL", "wga_kl"),
+    "npo_kl": ("NPO+KL", "npo_retention"),
+    "biasunlearn": ("BiasUnlearn", "biasunlearn"),
 }
 SETUP = """import json
 import os
@@ -22,12 +22,31 @@ import torch
 
 repo = next((p for p in (Path.cwd(), *Path.cwd().parents) if (p / 'src/fairforget/unlearning/objectives.py').is_file()), None)
 if repo is None:
-    raise FileNotFoundError('Open this notebook from a checked-out fair_forget repository containing src/fairforget/unlearning.')
+    raise FileNotFoundError('Open this notebook from a fair_forget checkout.')
 sys.path.insert(0, str(repo / 'src'))
-from fairforget.unlearning import notebook_matrix, objectives, rmu  # noqa: E402, F401
+from fairforget.unlearning import notebook_matrix, objectives, warbias_data  # noqa: E402
 
-print('Algorithm source:', repo / 'src/fairforget/unlearning')
+print('Algorithm module:', objectives.__name__)
 print('PyTorch:', torch.__version__)
+"""
+DATA = """settings_path = repo / 'configs/unlearning/local.json'
+settings = json.loads(settings_path.read_text()) if settings_path.exists() else {}
+CONFIGURATION = json.loads((repo / 'configs/unlearning/warbias_final.json').read_text())
+data_value = os.environ.get('FAIRFORGET_DATA_ROOT') or settings.get('data_roots', {}).get('warbias_application') or warbias_data.default_root(repo)
+DATA_ROOT = Path(data_value).expanduser().resolve()
+BINDINGS = {}
+for group in CONFIGURATION['training_groups']:
+    for language in CONFIGURATION['training_languages']:
+        direction = f'{group}_{language}'
+        directory = DATA_ROOT / direction
+        if not directory.exists():
+            warbias_data.prepare(repo, directory, target_group=group, training_language=language)
+        BINDINGS[direction] = warbias_data.validate_bundle(directory, repo)
+print('WarBias: 1,007 aligned source triplets per language.')
+print(json.dumps({name: value['split_counts'] for name, value in BINDINGS.items()}, ensure_ascii=False, indent=2))
+assert CONFIGURATION['evaluation_language_policy'] == 'training_language'
+assert CONFIGURATION['evaluation_group_policy'] == 'training_group'
+print('Evaluation: each adapter on its training group and language.')
 """
 TOKENS = """# Synthetic tensors for one optimizer step on CPU.
 torch.manual_seed(42)
@@ -68,7 +87,7 @@ assert torch.all(forget_logits.grad[~completion_mask] == 0)
 assert reference_forget.grad is None and reference_retain.grad is None
 torch.nn.utils.clip_grad_norm_(parameters, 1.0)
 optimizer.step()
-print('NPO with separate reference-KL retention: CPU optimizer step completed.')
+print('NPO+KL CPU optimizer step completed.')
 """,
     "biasunlearn": """correction_logits = torch.nn.Parameter(torch.randn(2, 4, 7))
 parameters.append(correction_logits)
@@ -79,156 +98,136 @@ loss = objectives.biasunlearn_loss(
     completion_logps(correction_logits), completion_mask,
     retain_logits, reference_retain, retain_mask,
     beta=0.1, suppression_weight=1.0, correction_weight=1.0, preservation_weight=1.0,
-    correction_reduction='example_mean', retain_reduction='token_mean',
+    correction_reduction='token_mean', retain_reduction='token_mean',
 )
 loss.total.backward()
 torch.nn.utils.clip_grad_norm_(parameters, 1.0)
 optimizer.step()
 direction = objectives.select_biasunlearn_direction(preference=0.6, current='normal')
 assert direction == 'normal'
-print('Separate suppression, correction and preservation losses: CPU step completed.')
-print('The trainer builds adversarial pools and updates their direction on development data.')
+print('BiasUnlearn CPU optimizer step completed.')
+print('One epoch uses the normal pools. The next direction is recorded but not applied.')
 """,
 }
-RMU = """torch.manual_seed(42)
-forget_activations = torch.nn.Parameter(torch.randn(2, 5, 8))
-retain_activations = torch.nn.Parameter(torch.randn(2, 5, 8))
-reference_retain = retain_activations.detach().clone()
-mask = torch.tensor([[False, True, True, True], [False, True, True, False]])
-control = rmu.fixed_control_vector(8, coefficient=20.0, seed=42)
-optimizer = torch.optim.AdamW([forget_activations, retain_activations], lr=0.01)
-optimizer.zero_grad(set_to_none=True)
-loss = rmu.rmu_loss(
-    forget_activations, retain_activations, reference_retain, control, mask, mask,
-    retain_weight=1.0,
-)
-loss.total.backward()
-assert torch.all(forget_activations.grad[:, 0] == 0)
-assert torch.all(forget_activations.grad[:, 1:][~mask] == 0)
-assert reference_retain.grad is None
-optimizer.step()
-print('Fixed-target RMU CPU optimizer step completed.')
-"""
-TASK_VECTOR = """torch.manual_seed(42)
-# One tiny linear-LoRA layer: A is acquired, B starts at zero.
-initial = {'layer.lora_A.weight': torch.randn(2, 5), 'layer.lora_B.weight': torch.zeros(5, 2)}
-a = torch.nn.Parameter(initial['layer.lora_A.weight'].clone())
-b = torch.nn.Parameter(initial['layer.lora_B.weight'].clone())
-inputs = torch.randn(2, 3, 5)
-base_logits = torch.randn(2, 3, 5)
-labels = torch.tensor([[0, 1, 2], [1, 2, 3]])
-mask = torch.tensor([[False, True, True], [False, True, True]])
-optimizer = torch.optim.AdamW([a, b], lr=0.01)
-optimizer.zero_grad(set_to_none=True)
-logits = base_logits + inputs @ (b @ a).T
-logps = logits.log_softmax(-1).gather(-1, labels.unsqueeze(-1)).squeeze(-1)
-acquisition_loss = objectives.completion_ce_loss(logps, mask, reduction='example_mean')
-acquisition_loss.backward()
-optimizer.step()
-positive = {'layer.lora_A.weight': a.detach().clone(), 'layer.lora_B.weight': b.detach().clone()}
-# Example scale; training selects it on development data.
-scale = 0.5
-negated = objectives.negate_lora_state(positive, scale=scale, initial_state=initial)
-torch.testing.assert_close(negated['layer.lora_B.weight'] @ negated['layer.lora_A.weight'], -scale * (positive['layer.lora_B.weight'] @ positive['layer.lora_A.weight']))
-print('Positive acquisition and B-only task-vector negation completed on CPU.')
-"""
 NOTES = {
-    "rmu": "RMU moves target activations toward a fixed seeded vector and preserves reference activations on retain data. Training updates the specified decoder projections.",
-    "task_vector": "The acquisition step minimizes completion cross-entropy. Negation keeps the acquired A matrix and multiplies B by a negative scale. The scale is selected on development data using a retain-KL limit.",
-    "wga_kl": "WGA suppresses target completions using detached confidence weights, normalized by valid completion-token count. Reference KL preserves predictions on retain tokens.",
+    "wga_kl": "WGA+KL suppresses S sentences using detached token-confidence weights with exponent 1.0. Reference KL on U sentences has weight 1.0. Losses use valid-token means. C sentences do not receive training loss. Train for one epoch: 265 updates for IDPs or 389 for veterans.",
     "npo_kl": "NPO suppresses target completions using their token-mean log-likelihood ratio against a fixed reference. Reference KL preserves predictions on retain data.",
-    "biasunlearn": "BiasUnlearn combines NPO suppression, anti-stereotype correction and reference KL. The trainer builds adversarial pools and uses development scores to update their direction.",
+    "biasunlearn": """[BiasUnlearn](https://aclanthology.org/2025.emnlp-main.208/) uses NPO for forgetting, cross-entropy for counter-stereotype correction and a reference KL term for preservation. NPO is part of the original method.
+
+This WarBias implementation uses token-mean likelihood ratios with beta 0.1 and weight 1.0 for each loss. Each update uses one suppression example, one correction example and one U example. The suppression pool contains all training S sentences and a fixed sample of C sentences, 25% of the S count rounded to the nearest integer. The correction pool contains all training C sentences.
+
+Train for one normal-direction epoch: 331 updates for IDPs or 486 for veterans. The controller checks raw development preference at the epoch boundary and records the next direction. That direction is not applied in a one-epoch run. These batch proportions, loss weights and controller timing differ from the [authors' training recipe](https://github.com/a101269/BiasUnlearn/blob/main/train_7B.py); this is an adaptation, not an exact reproduction.""",
 }
-
-
-def build():
-    for method, (title, name, dataset) in METHODS.items():
-        setup = SETUP + f"\nMETHOD = {method!r}\nRUN_TRAINING = False\n"
-        configure = """# Load the six-model plan and optional path overrides.
-DATA_ROOT = os.environ.get('FAIRFORGET_DATA_ROOT')
-MODELS_ROOT = os.environ.get('FAIRFORGET_MODELS_ROOT')
-settings_path = repo / 'configs/unlearning/local.json'
-settings = json.loads(settings_path.read_text()) if settings_path.exists() else {}
-output_value = os.environ.get('FAIRFORGET_OUTPUT') or str(Path(settings.get('output_root', repo / 'outputs/unlearning')) / METHOD)
+CONFIGURE = """MODELS_ROOT = os.environ.get('FAIRFORGET_MODELS_ROOT')
+output_value = os.environ.get('FAIRFORGET_OUTPUT') or str(Path(settings.get('output_root', repo / 'outputs/unlearning' / warbias_data.PROTOCOL)) / METHOD)
 OUTPUT = Path(output_value).expanduser().resolve()
-PLAN = notebook_matrix.method_plan(repo, METHOD, data_root=DATA_ROOT, models_root=MODELS_ROOT)
-assert len(PLAN) == 6, 'Expected six models in the training plan.'
+PLAN = notebook_matrix.method_plan(
+    repo, METHOD, protocol='warbias_final', data_root=DATA_ROOT, models_root=MODELS_ROOT,
+)
+MODEL_COUNT = len(CONFIGURATION['model_ids'])
+EXPECTED_RUNS = MODEL_COUNT * len(BINDINGS)
+assert len(PLAN) == EXPECTED_RUNS, 'Expected one run per selected model and direction.'
+assert len({item['run_id'] for item in PLAN}) == len(PLAN)
 for item in PLAN:
     recipe = item['recipe']
-    print(item['model_alias'], recipe['model_id'], recipe['model_revision'], 'GPUs:', item['required_gpus'])
-print('Models:', len(PLAN), '| Method:', METHOD)
-print('Dataset:', 'WarBias' if PLAN[0]['recipe']['notebook_matrix']['protocol'] == 'warbias' else 'StereoSet')
+    print(item['run_id'], recipe['model_id'], recipe['model_revision'], 'Epochs:', recipe['training']['epochs'], 'Steps:', recipe['training']['max_steps'], 'GPUs:', item['required_gpus'])
+assert all(item['recipe']['training']['epochs'] == 1 for item in PLAN)
+print('Runs:', len(PLAN), '| Models:', MODEL_COUNT, '| Method:', METHOD, '| Dataset: WarBias')
+training = PLAN[0]['recipe']['training']
+print('Training settings:', {key: training[key] for key in ('seed', 'learning_rate', 'batch_size', 'max_length')})
+print('LoRA:', CONFIGURATION['lora'])
 """
-        run = r"""if RUN_TRAINING:
-    if OUTPUT is None:
-        raise ValueError('Set FAIRFORGET_OUTPUT to a new directory for all six model runs.')
-    from importlib.metadata import version
-    required_versions = {'torch': '2.9.1', 'transformers': '4.57.6', 'peft': '0.17.1', 'accelerate': '1.15.0'}
-    for package, expected in required_versions.items():
-        if version(package).split('+')[0] != expected:
-            raise RuntimeError(f'Use requirements-unlearning.txt: {package}=={expected} is required for full training.')
+TRAIN = r"""if RUN_TRAINING:
+    from fairforget.unlearning.runtime import verify_runtime
+    verify_runtime(require_cuda=False)
     if not torch.cuda.is_available() or torch.cuda.device_count() < max(item['required_gpus'] for item in PLAN):
-        raise RuntimeError('Allocate the GPUs listed above; RMU for Mamay 27B needs two visible GPUs.')
-    # Validate model configs, input hashes and dataset roles.
+        raise RuntimeError('Allocate one GPU with enough memory for the selected model.')
+    # Validate all checkpoints and data before starting the first model.
     recipe_paths = notebook_matrix.prepare_recipes(PLAN, OUTPUT)
     environment = dict(os.environ)
     environment['PYTHONPATH'] = str(repo / 'src') + os.pathsep + environment.get('PYTHONPATH', '')
     environment.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1')
-    module = 'fairforget.unlearning.rmu' if METHOD == 'rmu' else 'fairforget.unlearning.trainer'
-    execution = {'method': METHOD, 'models': {}}
+    execution = {'method': METHOD, 'runs': {}}
     execution_path = OUTPUT / 'matrix_execution.json'
     for item, recipe_path in zip(PLAN, recipe_paths, strict=True):
-        alias = item['model_alias']
-        command = [sys.executable, '-m', module, '--config', str(recipe_path), '--output', str(OUTPUT / alias)]
+        run_id = item['run_id']
+        command = [sys.executable, '-m', 'fairforget.unlearning.trainer', '--config', str(recipe_path), '--output', str(OUTPUT / run_id)]
         record = {'status': 'running', 'recipe': str(recipe_path), 'command': command}
-        execution['models'][alias] = record
+        execution['runs'][run_id] = record
         execution_path.write_text(json.dumps(execution, indent=2) + '\n')
-        print('Training', alias, flush=True)
-        # Separate processes release GPU memory between complete model runs.
-        with (OUTPUT / (alias + '.log')).open('w') as log:
+        print('Training', run_id, flush=True)
+        # A new process releases GPU memory between runs.
+        with (OUTPUT / (run_id + '.log')).open('w') as log:
             completed = subprocess.run(command, cwd=repo, env=environment, stdout=log, stderr=subprocess.STDOUT, check=False)
         record.update(status='completed' if completed.returncode == 0 else 'failed', returncode=completed.returncode)
         execution_path.write_text(json.dumps(execution, indent=2) + '\n')
         completed.check_returncode()
-    assert len(execution['models']) == len(PLAN) == 6
-    print('All six model runs completed:', execution_path)
+    assert len(execution['runs']) == len(PLAN)
+    print('Completed model-direction runs:', len(PLAN))
 else:
-    print('All six models are configured. Full training starts only when RUN_TRAINING=True.')
+    print('Configured model-direction runs:', len(PLAN), '| Training is disabled.')
 """
+DATA_NOTES = """## WarBias data
+
+Use the current 1,007 aligned source triplets in Ukrainian and English. Prepare four separate training directions: IDP in Ukrainian, IDP in English, veteran in Ukrainian, and veteran in English. Every direction trains on one group and one language. Evaluate each adapter only on its training group and language.
+
+Split whole claim components with targets of 65% training, 15% development and 20% test. The source-label allocation gives 654, 152 and 201 triplets per language. Use the same global split for every direction. Keep related cases and translations together. Balance group and severity coverage; see [the allocation rules](WARBIAS_UNLEARNING.md). Use all 120 QA questions for the selected group and language for evaluation only; record their claim overlap with each triplet split. Then select one group and language for each training bundle.
+
+Use complete S sentences as forget targets, with an empty prompt. BiasUnlearn also uses complete C sentences for correction. Use U sentences from the same group and training language for in-domain reference KL. This measures preservation of WarBias text; general capability needs separate evidence.
+"""
+EVALUATION = """## Evaluation and implementation
+
+Evaluate the same held-out WarBias IDs in the adapter's training language before and after each run. Use only the trained group. A score over the full release is a descriptive diagnostic because it includes training and development rows. All metrics, including severity slices, come from Fair-UK.
+
+The [baseline notebook](../warbias-artifacts/notebooks/08_warbias_baseline.ipynb) provides the current per-checkpoint metrics. Use the [before/after notebook](evaluate_before_after.ipynb) for the same WarBias outcomes, parser and controls as baseline notebook 08 on matched held-out IDs. The [native benchmark notebook](native_before_after.ipynb) retains the other registered integrations. See the [WarBias workflow](WARBIAS_UNLEARNING.md).
+
+- [Data binding](../src/fairforget/unlearning/warbias_data.py)
+- [Loss implementations](../src/fairforget/unlearning/objectives.py)
+- [Trainer](../src/fairforget/unlearning/trainer.py)
+
+Each run verifies the pinned model files and training runtime. It checks the merged and reloaded checkpoint on fixed development inputs before marking the export complete. See the [checkpoint rules](WARBIAS_UNLEARNING.md#checkpoint-verification).
+
+Keep the final adapter, pinned base identity, recipe, loss history, development scores and token-exposure log. Evaluate the base with the adapter loaded separately. Temporary merged weights can be removed after evaluation and reconstruction checks pass.
+
+Run MMLU and Belebele later for the selected models. These capability checks are separate from WarBias evaluation.
+"""
+
+
+def build(methods=None):
+    experiment = json.loads((ROOT / "configs/unlearning/warbias_final.json").read_text())
+    active = experiment["methods"]
+    selected = active if methods is None else methods
+    if not selected or len(selected) != len(set(selected)) or not set(selected) <= set(active):
+        raise ValueError("Select only methods in the active study configuration")
+    model_count = len(experiment["model_ids"])
+    runs = model_count * len(experiment["training_groups"]) * len(experiment["training_languages"])
+    for method in selected:
+        title, name = METHODS[method]
         cells = [
             nbformat.v4.new_markdown_cell(
-                f"# {title}: algorithm and training\n\nRun the cells in order to see one optimizer step on CPU, then train the six models listed in the configuration.\n\n{NOTES[method]}"
+                (
+                    f"# {title}: WarBias training\n\n"
+                    + f"Run the cells in order to prepare the data, see one optimizer step on CPU, and configure {runs} runs: {model_count} models in four group/language directions. Enable training separately.\n\n{NOTES[method]}"
+                )
             ),
             nbformat.v4.new_markdown_cell(
-                "## Setup\n\nStart with [setup.ipynb](setup.ipynb) or the [setup guide](SETUP.md). Install `requirements-unlearning.txt` and configure the model and data paths. The CPU example requires PyTorch."
+                "## Setup\n\nInstall `requirements-unlearning.txt` and configure the checkpoint and output paths with the [setup guide](SETUP.md). The data and CPU cells do not load model weights."
             ),
-            nbformat.v4.new_code_cell(setup),
+            nbformat.v4.new_code_cell(SETUP + f"\nMETHOD = {method!r}\nRUN_TRAINING = False\n"),
+            nbformat.v4.new_markdown_cell(DATA_NOTES),
+            nbformat.v4.new_code_cell(DATA),
             nbformat.v4.new_markdown_cell(
-                "## CPU example\n\nSynthetic tensors illustrate one optimizer step. Training parameters are loaded from the recipe files in the next section."
+                "## CPU example\n\nSynthetic tensors illustrate one optimizer step. Training uses the WarBias rows and settings loaded below."
             ),
+            nbformat.v4.new_code_cell(TOKENS),
+            nbformat.v4.new_code_cell(LOSSES[method]),
+            nbformat.v4.new_markdown_cell(
+                f"## Training\n\nEnable `RUN_TRAINING` to run all {runs} model/direction combinations. Every run starts from the pinned base checkpoint and trains for one epoch. It saves a separate adapter, log and receipt under its run ID. Method settings override the common training defaults; the plan below shows the effective values. Each run uses one GPU with enough memory for the model."
+            ),
+            nbformat.v4.new_code_cell(CONFIGURE),
+            nbformat.v4.new_code_cell(TRAIN),
+            nbformat.v4.new_markdown_cell(EVALUATION),
         ]
-        if method == "rmu":
-            cells.append(nbformat.v4.new_code_cell(RMU))
-        elif method == "task_vector":
-            cells.append(nbformat.v4.new_code_cell(TASK_VECTOR))
-        else:
-            cells.extend(
-                [nbformat.v4.new_code_cell(TOKENS), nbformat.v4.new_code_cell(LOSSES[method])]
-            )
-        cells.extend(
-            [
-                nbformat.v4.new_markdown_cell(
-                    "## Training\n\nSet the data, checkpoint and output paths in [setup.ipynb](setup.ipynb), then enable `RUN_TRAINING` to train all six models in sequence. Each model has a separate log and output directory. RMU for Mamay 27B uses two GPUs; other runs use one.\n\nTraining data: **"
-                    + dataset
-                    + "**. See the [setup guide](SETUP.md) for the required files."
-                ),
-                nbformat.v4.new_code_cell(configure),
-                nbformat.v4.new_code_cell(run),
-                nbformat.v4.new_markdown_cell(
-                    "## Implementation\n\n- [Loss implementations](../src/fairforget/unlearning/objectives.py)\n- [Full NPO, WGA, task-vector and BiasUnlearn trainer](../src/fairforget/unlearning/trainer.py)\n- [Full fixed-target RMU trainer](../src/fairforget/unlearning/rmu.py)\n\nEach run saves a checkpoint, loss history and token-exposure log. Use the [Fair-UK evaluation notebook](evaluate_before_after.ipynb) to compare measurements before and after training."
-                ),
-            ]
-        )
         notebook = nbformat.v4.new_notebook(
             cells=cells,
             metadata={
@@ -241,9 +240,21 @@ else:
                 "fairforget": {
                     "kind": "working_unlearning_algorithm",
                     "method": method,
-                    "dataset": dataset,
+                    "active_study": method in active,
+                    "dataset": "WarBias",
+                    "protocol": "warbias_group_language_v4",
+                    "training_groups": ["idp", "veteran"],
+                    "training_languages": ["uk", "en"],
+                    "training_directions": 4,
+                    "runs_per_method": runs,
+                    "evaluation_languages": ["uk", "en"],
+                    "evaluation_language_policy": experiment["evaluation_language_policy"],
+                    "evaluation_group_policy": experiment["evaluation_group_policy"],
+                    "epochs": experiment["objectives"][method].get(
+                        "epochs", experiment["training"]["epochs"]
+                    ),
                     "automatic_gpu_training": False,
-                    "models": "all_six_models",
+                    "models": experiment["model_ids"],
                 },
             },
         )
@@ -254,4 +265,6 @@ else:
 
 
 if __name__ == "__main__":
-    build()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--methods", nargs="+", choices=METHODS, default=None)
+    build(parser.parse_args().methods)
