@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from warbias_kit.unlearning.assets import verify_checkpoint  # noqa: E402
+from warbias_kit.unlearning.paths import training_root  # noqa: E402
 from warbias_kit.unlearning.warbias_data import default_root, prepare, validate_bundle  # noqa: E402
 from warbias_kit.unlearning.warbias_plan import selected_models  # noqa: E402
 
@@ -16,7 +17,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--models-root", type=Path, default=ROOT / "models")
     parser.add_argument("--warbias-data", type=Path, default=default_root(ROOT))
-    parser.add_argument("--output-root", type=Path, default=ROOT / "outputs/unlearning")
+    parser.add_argument("--output-root", type=Path, default=training_root(ROOT))
     parser.add_argument("--download-models", action="store_true")
     args = parser.parse_args()
     models_root = args.models_root.expanduser().resolve()

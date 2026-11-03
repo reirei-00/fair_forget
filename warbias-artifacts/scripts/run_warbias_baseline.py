@@ -1,4 +1,4 @@
-"""Qualify and collect a pinned model with the maintained the evaluation library CLI."""
+"""Qualify and collect a pinned model with the evaluation library CLI."""
 
 import argparse
 import fcntl

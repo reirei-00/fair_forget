@@ -248,5 +248,5 @@ to exact text hashes. Scenarios test specific actions or fictional eligibility;
 they do not establish lasting traits, diagnoses or moral deservingness. QA
 shares stereotype associations with the triplets.
 
-The [notebook guide](../README.md#walkthroughs) provides the eight executable
+The [notebook guide](../README.md#walkthroughs) provides the dataset, evaluation and unlearning
 walkthroughs and run instructions.

@@ -31,6 +31,9 @@ in [models.json](../configs/unlearning/models.json). Omit `--download-models`
 to use staged checkpoints. Their layout is
 `MODELS_ROOT/CHECKPOINT_DIRECTORY/IMMUTABLE_REVISION/`.
 
+Training and evaluation default to `outputs/unlearning/PROTOCOL/`.
+Set `WARBIAS_TRAINING_ROOT` to use another shared run directory.
+
 The setup saves local paths in the ignored `configs/unlearning/local.json`.
 Each notebook validates the source files, component splits and stream hashes.
 It creates missing direction bundles and does not replace existing bundles.

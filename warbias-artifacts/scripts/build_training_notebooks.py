@@ -118,8 +118,10 @@ This WarBias implementation uses token-mean likelihood ratios with beta 0.1 and 
 
 Train for one normal-direction epoch: 331 updates for IDPs or 486 for veterans. The controller checks raw development preference at the epoch boundary and records the next direction. That direction is not applied in a one-epoch run. These batch proportions, loss weights and controller timing differ from the [authors' training recipe](https://github.com/a101269/BiasUnlearn/blob/main/train_7B.py); this is an adaptation, not an exact reproduction.""",
 }
-CONFIGURE = """MODELS_ROOT = os.environ.get('WARBIAS_MODELS_ROOT')
-output_value = os.environ.get('WARBIAS_OUTPUT') or str(Path(settings.get('output_root', repo / 'outputs/unlearning' / warbias_data.PROTOCOL)) / METHOD)
+CONFIGURE = """from warbias_kit.unlearning.paths import training_root
+
+MODELS_ROOT = os.environ.get('WARBIAS_MODELS_ROOT')
+output_value = os.environ.get('WARBIAS_OUTPUT') or str(training_root(repo, settings) / METHOD)
 OUTPUT = Path(output_value).expanduser().resolve()
 PLAN = notebook_matrix.method_plan(
     repo, METHOD, protocol='warbias_final', data_root=DATA_ROOT, models_root=MODELS_ROOT,
