@@ -1,5 +1,7 @@
 # WarBias dataset
 
+WarBias is a Ukrainian–English benchmark of stereotypes about veterans and internally displaced people: 1,007 sentence triplets and 240 multiple-choice questions per language, built from a taxonomy of 120 claims in 27 categories.
+
 WarBias uses blinded human ratings of Ukrainian samples to inform model and
 prompt selection. It then generates Ukrainian triplets with Lapa and sequential
 prompts and translates them into English. Both languages keep matching item IDs.
@@ -76,7 +78,6 @@ contains the local evaluation library; see the [evaluation guide](docs/evaluatio
 | [6. Case severity](notebooks/06_severity.ipynb) | Calculate case means and severity levels for both languages |
 | [7. QA sampling and reproduction](notebooks/07_qa_dataset.ipynb) | Rebuild all QA items, sample complete scenarios and export aligned language files |
 | [8. Baseline evaluation](notebooks/08_warbias_baseline.ipynb) | Six-model triplet and QA results with severity slices; [run guide](docs/evaluation.md) |
-
 | [9. Unlearning setup](notebooks/09_unlearning_setup.ipynb) | Prepare model assets and component-level data splits |
 | [10. BiasUnlearn](notebooks/10_biasunlearn.ipynb) | Train separate group and language adapters for one epoch |
 | [11. WGA+KL](notebooks/11_wga_kl.ipynb) | Train stereotype-suppression adapters with a KL penalty |
