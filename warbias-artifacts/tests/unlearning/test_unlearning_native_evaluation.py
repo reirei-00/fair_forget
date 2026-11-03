@@ -31,14 +31,14 @@ class NativeEvaluationTests(unittest.TestCase):
 
     def test_active_matrix_has_24_unique_posts_and_three_shared_bases(self):
         plan = self.workflow.plan
-        self.assertEqual(len(plan), 24)
+        self.assertEqual(len(plan), 48)
         self.assertEqual({p["method"] for p in plan}, {"biasunlearn", "wga_kl"})
         self.assertEqual({p["target_group"] for p in plan}, {"idp", "veteran"})
         self.assertEqual({p["training_language"] for p in plan}, {"uk", "en"})
-        self.assertEqual(len({p["directory"] for p in plan}), 24)
-        self.assertEqual(len({self.workflow.base(p["model"]) for p in plan}), 3)
+        self.assertEqual(len({p["directory"] for p in plan}), 48)
+        self.assertEqual(len({self.workflow.base(p["model"]) for p in plan}), 6)
         self.assertNotIn("warbias_triplets_uk", self.workflow.tasks)
-        self.assertEqual(len(self.workflow.active_plan), 12)
+        self.assertEqual(len(self.workflow.active_plan), 24)
         self.assertEqual({p["training_language"] for p in self.workflow.active_plan}, {"uk"})
         for item in plan:
             expected = self.workflow.tasks if item["training_language"] == "uk" else ()
@@ -47,7 +47,7 @@ class NativeEvaluationTests(unittest.TestCase):
     def test_english_native_tasks_select_only_english_adapters(self):
         self.workflow.tasks = ("stereoset_en", "bbq_en")
         self.workflow.task_languages.update(stereoset_en="en", bbq_en="en")
-        self.assertEqual(len(self.workflow.active_plan), 12)
+        self.assertEqual(len(self.workflow.active_plan), 24)
         self.assertEqual({p["training_language"] for p in self.workflow.active_plan}, {"en"})
         self.assertEqual({p["target_group"] for p in self.workflow.active_plan}, {"idp", "veteran"})
 
@@ -71,8 +71,8 @@ class NativeEvaluationTests(unittest.TestCase):
             mock.patch.object(workflow, "require_run"),
         ):
             workflow.run_before()
-        self.assertEqual(qualify.call_count, 3)
-        self.assertEqual(collect.call_count, 3 * len(workflow.tasks))
+        self.assertEqual(qualify.call_count, 6)
+        self.assertEqual(collect.call_count, 6 * len(workflow.tasks))
         workflow.output.mkdir()
         with (
             mock.patch.object(workflow, "preflight"),
@@ -83,8 +83,8 @@ class NativeEvaluationTests(unittest.TestCase):
             mock.patch.object(workflow, "require_run"),
         ):
             workflow.run_after()
-        self.assertEqual(qualify.call_count, 12)
-        self.assertEqual(collect.call_count, 12 * len(workflow.tasks))
+        self.assertEqual(qualify.call_count, 24)
+        self.assertEqual(collect.call_count, 24 * len(workflow.tasks))
         self.assertTrue(all("_uk" in call.args[1] for call in qualify.call_args_list))
         with (
             mock.patch.object(workflow, "preflight"),
@@ -94,7 +94,7 @@ class NativeEvaluationTests(unittest.TestCase):
             mock.patch.object(workflow, "invoke") as invoke,
         ):
             workflow.run_comparison()
-        self.assertEqual(invoke.call_count, 12 * len(workflow.tasks))
+        self.assertEqual(invoke.call_count, 24 * len(workflow.tasks))
         before, after = set(), set()
         for call in invoke.call_args_list:
             command = call.args[0]
@@ -102,8 +102,8 @@ class NativeEvaluationTests(unittest.TestCase):
             self.assertFalse(call.kwargs["gpu"])
             before.add(command[command.index("--before-run") + 1])
             after.add(command[command.index("--after-run") + 1])
-        self.assertEqual(len(before), 3 * len(workflow.tasks))
-        self.assertEqual(len(after), 12 * len(workflow.tasks))
+        self.assertEqual(len(before), 6 * len(workflow.tasks))
+        self.assertEqual(len(after), 24 * len(workflow.tasks))
         self.assertTrue(all(path.parent.name.endswith("_uk") for path in after))
 
     def test_all_training_exports_are_checked_before_post_collection_starts(self):
@@ -378,7 +378,7 @@ class NativeEvaluationTests(unittest.TestCase):
                 )
             )
         rows = self.workflow.summary()
-        self.assertEqual(len(rows), 12)
+        self.assertEqual(len(rows), 24)
         self.assertTrue(all(row["before"] is None for row in rows))
         self.assertEqual({row["training_language"] for row in rows}, {"uk"})
         self.assertEqual({row["target_group"] for row in rows}, {"idp", "veteran"})

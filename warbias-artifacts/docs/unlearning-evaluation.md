@@ -3,9 +3,9 @@
 The [notebook](../notebooks/12_after_intervention.ipynb) uses the same collector and the evaluation library
 scorer as [baseline notebook 08](../notebooks/08_warbias_baseline.ipynb).
 WarBias selects experiments and labels their before/after reports. The evaluation library
-evaluates the supplied WarBias benchmark inputs. This workflow covers all 24
-one-epoch interventions: BiasUnlearn and WGA+KL across three models, two groups
-and two languages. Reuse three shared base checkpoints.
+evaluates the supplied WarBias benchmark inputs. This workflow covers all 48
+one-epoch interventions: BiasUnlearn and WGA+KL across six models, two groups
+and two languages. Reuse six shared base checkpoints.
 Evaluate each adapter only on its training group and language. Cross-group
 and cross-language evaluation are deferred.
 The [native benchmark workflow](../notebooks/13_native_evaluation.ipynb) remains available
@@ -76,7 +76,7 @@ the adapter-capable evaluator; older collector identities remain separate.
    serial BF16 options, model-specific attention settings and repeated smoke gates.
    Each adapter supplies two original panels and one neutral panel for its training
    group and language. Validated collections can resume; source and runtime changes fail validation.
-3. Enable `RUN_REFERENCE_ANALYSIS` to score the three shared baselines with the
+3. Enable `RUN_REFERENCE_ANALYSIS` to score the six shared baselines with the
    selected parser, controls and target-group held-out IDs. Reuse the matching rows
    from the shared bases for each training group and language.
 4. Enable `RUN_AFTER_ANALYSIS` to apply the same scorer to each post checkpoint.

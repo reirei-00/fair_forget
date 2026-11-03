@@ -30,7 +30,7 @@ class WarBiasEvaluationTests(unittest.TestCase):
         selected = [(item["method"], item["run_id"]) for item in (full.plan[0], full.plan[-1])]
         workflow = evaluation.WarBiasEvaluation(ROOT, **arguments, selections=selected)
         self.assertEqual(workflow.plan, [full.plan[0], full.plan[-1]])
-        self.assertEqual(len(full.plan), 24)
+        self.assertEqual(len(full.plan), 48)
         for invalid in (
             [],
             selected * 2,

@@ -25,7 +25,7 @@ python scripts/setup_unlearning.py \
 ```
 
 This prepares four WarBias bundles under the data root: `idp_uk`, `idp_en`,
-`veteran_uk` and `veteran_en`. It downloads the three checkpoints selected in
+`veteran_uk` and `veteran_en`. It downloads the six checkpoints selected in
 [warbias_final.json](../configs/unlearning/warbias_final.json), at the revisions
 in [models.json](../configs/unlearning/models.json). Omit `--download-models`
 to use staged checkpoints. Their layout is
