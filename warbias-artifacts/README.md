@@ -13,7 +13,7 @@ review. Dataset text is licensed under [CC BY-SA 4.0](data/LICENSE.md).
 [The bilingual taxonomy](protocol/inputs/cohort_taxonomy.csv) lists every case,
 category, claim and source. It includes only cases with `case_scope = general`.
 [The attribute catalog](protocol/inputs/cohort_attributes.json)
-records all 21 added dimensions and their original and retained counts.
+records all 21 attribute dimensions, their values and selection counts.
 [The evidence mapping](protocol/inputs/cohort_evidence.json) records supporting
 references and pending source checks, including their case or profile scope.
 
@@ -22,7 +22,7 @@ The separate BBQ-style QA set contains **240 questions per language** from
 [Ukrainian QA](data/qa_uk.jsonl), [English QA](data/qa_en.jsonl) and their
 [protocol](protocol/qa.json) include answer keys and review status. The 480
 Ukrainian human reviews remain bound to the exact text each person saw.
-The current items include 185 with independent human acceptance and 55 with
+The Ukrainian items include 185 with independent human acceptance and 55 with
 [author approval](protocol/inputs/qa_author_reviews.jsonl): 28 revised and 27
 retained items. Author decisions are separate from independent annotation.
 GPT-6 Astra translated all English QA text; it has no human translation review.
@@ -31,32 +31,21 @@ Both languages use the same column order for each dataset type: ID and text
 first, followed by answers and metadata. The dataset manifests declare the order
 used in JSONL and Parquet.
 
-The recorded design selected 1,000 base inputs and 200 profile extensions.
-Excluding 136 occupation profiles and five older women veteran profiles left
-1,059 items for human annotation. Excluding 14 legitimacy-category items and
-39 items in six local cases leaves the selected 1,006. One author-edited feedback
-case adds one triplet, giving the current 1,007.
-The taxonomy marks original cohort membership with
-`in_original_annotation_cohort`. The [cohort protocol](protocol/cohort.json)
-defines the original selected inputs; the frozen allocation and pilot ratings
-retain their original scope.
-The [construction guide](docs/warbias-construction.md)
-explains the selector, extensions and exclusions.
+The [construction guide](docs/warbias-construction.md) defines the taxonomy
+allocation, profile extensions, exclusions and feedback case that produce the
+1,007 generation inputs. The [cohort protocol](protocol/cohort.json) lists their
+IDs. `in_original_annotation_cohort` distinguishes cohort cases from the feedback case.
 The taxonomy's `triplet_count` counts generation inputs; the dataset manifest's
 `counts.triplets_by_case` counts released items after
 [metadata corrections](protocol/dataset_metadata_corrections.json).
 
-Keep the intentional `the-project/` namespace in this artifact’s repository
-references.
-
 The package contains dataset text, construction inputs and reproducible methods.
-Per-item provenance separates original annotated text from author revisions.
+Per-item provenance identifies reviewed text and author-edited text.
 Triplet-quality ratings apply only to unchanged text. The taxonomy and triplets
 store `severity_mean_score` (0–100) and `severity_level` (1–5). Notebook 6 derives
 both from two active human ratings per case, including ratings with an unrecorded
 rubric version. All 120 cases and 1,007 triplets per language have severity values.
-A new model run reproduces the selected inputs; its sentences can differ from saved
-dataset text.
+Generation uses fixed inputs; model outputs can differ from the released text.
 
 ## Install
 
@@ -80,7 +69,7 @@ contains the local evaluation library; see the [evaluation guide](docs/evaluatio
 | --- | --- |
 | [1. Ukrainian pilot](notebooks/01_ukrainian_pilot.ipynb) | Saved Mamay/Lapa samples and two prompt methods |
 | [2. Model selection](notebooks/02_model_selection.ipynb) | Human pilot scores and the recorded Lapa/sequential choice |
-| [3. Ukrainian generation](notebooks/03_full_ukrainian_generation.ipynb) | Reproduce the original allocation and inspect the current 1,007 items |
+| [3. Ukrainian generation](notebooks/03_full_ukrainian_generation.ipynb) | Prepare 1,007 inputs and generate S, C and U sequentially |
 | [4. Sample translation and COMET](notebooks/04_sample_translation_comet.ipynb) | Recorded Ukrainian-to-English translations and quality scores |
 | [5. English translation](notebooks/05_full_english_translation.ipynb) | Verify all 1,007 Astra translations and their source hashes |
 | [6. Case severity](notebooks/06_severity.ipynb) | Calculate case means and severity levels for both languages |
