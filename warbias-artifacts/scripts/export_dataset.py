@@ -23,6 +23,7 @@ RUNTIME = {
     "dist",
     "runs",
     "outputs",
+    "local.json",
 }
 TREES = {
     "src": {".py"},
@@ -35,6 +36,7 @@ TREES = {
     "evaluation/warbias_baseline": {".json", ".jsonl", ".csv"},
     "tests/data_creation": {".py", ".json"},
     "tests/cli": {".py", ".json"},
+    "tests/unlearning": {".py", ".json"},
 }
 FILES = (
     "README.md",
@@ -43,6 +45,14 @@ FILES = (
     "pyproject.toml",
     "requirements.txt",
     "requirements-dev.txt",
+    "requirements-unlearning.txt",
+    "docs/unlearning.md",
+    "docs/unlearning-setup.md",
+    "docs/unlearning-evaluation.md",
+    "docs/native-evaluation.md",
+    "scripts/build_training_notebooks.py",
+    "scripts/prepare_warbias_unlearning.py",
+    "scripts/setup_unlearning.py",
     ".gitignore",
     "scripts/run_notebooks.py",
     "scripts/run_coverage.py",

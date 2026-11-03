@@ -9,3 +9,6 @@ __pycache__/
 .DS_Store
 
 *.egg-info/
+
+configs/unlearning/local.json
+models/

@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "protocol": "warbias_group_language_v4",
+  "model_ids": [
+    "gemma3_12b_it",
+    "lapa12b_instruct",
+    "mamay12b_v2"
+  ],
+  "methods": [
+    "biasunlearn",
+    "wga_kl"
+  ],
+  "evaluation_languages": [
+    "uk",
+    "en"
+  ],
+  "evaluation_language_policy": "training_language",
+  "evaluation_group_policy": "training_group",
+  "split": {
+    "seed": 42,
+    "development_fraction": 0.15,
+    "training_fraction": 0.65,
+    "evaluation_fraction": 0.2
+  },
+  "target_policy": "complete_sentence",
+  "preservation_scope": "in_domain_unrelated_sentences",
+  "lora": {
+    "r": 8,
+    "alpha": 16,
+    "target_modules": [
+      "q_proj",
+      "v_proj"
+    ],
+    "dropout": 0.0,
+    "bias": "none"
+  },
+  "training": {
+    "seed": 42,
+    "learning_rate": 1e-05,
+    "epochs": 2,
+    "batch_size": 1,
+    "max_length": 512,
+    "max_grad_norm": 1.0,
+    "gradient_checkpointing": true,
+    "retain_sampler": "seeded_family_round_robin_v1",
+    "retain_weight": 1.0,
+    "retain_reduction": "token_mean",
+    "add_special_tokens": true
+  },
+  "objectives": {
+    "biasunlearn": {
+      "npo_beta": 0.1,
+      "suppression_weight": 1.0,
+      "correction_weight": 1.0,
+      "correction_reduction": "token_mean",
+      "adversarial_fraction": 0.25,
+      "epochs": 1,
+      "step_budget": "first_epoch"
+    },
+    "wga_kl": {
+      "wga_alpha": 1.0,
+      "epochs": 1
+    }
+  },
+  "training_groups": [
+    "idp",
+    "veteran"
+  ],
+  "training_languages": [
+    "uk",
+    "en"
+  ],
+  "optional_methods": [],
+  "export_verification": {
+    "max_probe_families": 4,
+    "positions_per_probe": 3,
+    "effect_atol": 1e-06,
+    "tolerances": {
+      "bfloat16": {
+        "rtol": 0.016,
+        "atol": 1e-05
+      },
+      "float32": {
+        "rtol": 1.3e-06,
+        "atol": 1e-05
+      }
+    }
+  }
+}

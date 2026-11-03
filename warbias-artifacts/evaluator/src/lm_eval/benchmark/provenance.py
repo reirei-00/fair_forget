@@ -1,10 +1,46 @@
 """Run identity checks that prevent silently mixing model checkpoints."""
 
 import hashlib
+import json
 import re
 from pathlib import Path
 
 from lm_eval.utils import simple_parse_args_string
+
+
+def local_files_sha256(path):
+    """Hash all local checkpoint assets except Hub cache metadata."""
+    path = Path(path)
+    if not path.is_dir():
+        raise ValueError("Checkpoint assets require a local directory")
+    hashes = {}
+    for file in sorted(path.rglob("*")):
+        if not file.is_file() or ".cache" in file.relative_to(path).parts:
+            continue
+        digest = hashlib.sha256()
+        with file.open("rb") as stream:
+            for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+                digest.update(chunk)
+        hashes[str(file.relative_to(path))] = digest.hexdigest()
+    if not hashes:
+        raise ValueError("Local model directory is empty")
+    return hashes
+
+
+def lora_identity(path):
+    """Bind an unmerged LoRA adapter independently of its base weights."""
+    path = Path(path)
+    hashes = local_files_sha256(path)
+    if not {"adapter_config.json", "adapter_model.safetensors"} <= hashes.keys():
+        raise ValueError(
+            "LoRA requires adapter_config.json and adapter_model.safetensors"
+        )
+    if (
+        json.loads((path / "adapter_config.json").read_text()).get("peft_type")
+        != "LORA"
+    ):
+        raise ValueError("lora_local_path must contain a LoRA adapter")
+    return {"type": "lora", "local_files_sha256": hashes}
 
 
 def model_identity(model_args):
@@ -19,18 +55,7 @@ def model_identity(model_args):
         raise ValueError("Provide pretrained=... in --model-args")
     path = Path(str(pretrained))
     if path.is_dir():
-        hashes = {}
-        for file in sorted(path.rglob("*")):
-            if not file.is_file() or ".cache" in file.relative_to(path).parts:
-                continue
-            digest = hashlib.sha256()
-            with file.open("rb") as stream:
-                for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-                    digest.update(chunk)
-            hashes[str(file.relative_to(path))] = digest.hexdigest()
-        if not hashes:
-            raise ValueError("Local model directory is empty")
-        identity = {"local_files_sha256": hashes}
+        identity = {"local_files_sha256": local_files_sha256(path)}
     else:
         revision = str(arguments.get("revision", ""))
         if not re.fullmatch(r"[0-9a-fA-F]{40}", revision):
@@ -38,6 +63,8 @@ def model_identity(model_args):
                 "Pin a remote model with revision=<40-character commit SHA> in --model-args"
             )
         identity = {"repository": str(pretrained), "revision": revision}
+    if arguments.get("lora_local_path"):
+        identity["adapter"] = lora_identity(arguments["lora_local_path"])
     # Credentials must not appear in report artifacts. Hash the full invocation
     # for safe resume matching while displaying only non-secret parameters.
     safe = {
@@ -104,6 +131,7 @@ def fixed_inference_settings(run):
                 "seed",
                 "batch_size",
                 "runtime_versions",
+                "inference_environment",
                 "harness_version",
                 "version",
                 "generation_config",
@@ -143,12 +171,22 @@ def paired_inference_settings(run):
         "benchmark/evaluation_assets.py",
         "benchmark/__main__.py",
     }
+    if arguments.get("lora_local_path"):
+        adapter = (run.get("model_identity") or {}).get("adapter") or {}
+        hashes = adapter.get("local_files_sha256") or {}
+        if (
+            run.get("model_backend") != "vllm"
+            or adapter.get("type") != "lora"
+            or not {"adapter_config.json", "adapter_model.safetensors"} <= hashes.keys()
+            or any(not re.fullmatch(r"[0-9a-f]{64}", str(v)) for v in hashes.values())
+        ):
+            raise ValueError("Paired LoRA evaluation requires recorded adapter hashes")
     return {
         **fixed_inference_settings(run),
         "model_arguments_without_checkpoint": {
             key: value
             for key, value in arguments.items()
-            if key not in ("pretrained", "revision")
+            if key not in ("pretrained", "revision", "lora_local_path")
         },
         "inference_code": {
             key: value

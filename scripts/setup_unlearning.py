@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import runpy
 import sys
 from pathlib import Path
 
@@ -72,6 +73,11 @@ def data_available(protocol, directory):
 
 
 def main():
+    if "--legacy" not in sys.argv:
+        runpy.run_path(
+            str(ROOT / "warbias-artifacts/scripts/setup_unlearning.py"), run_name="__main__"
+        )
+        return
     sys.path.insert(0, str(ROOT / "src"))
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--models-root", type=Path, default=ROOT / "models")

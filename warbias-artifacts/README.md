@@ -59,7 +59,8 @@ warbias_kit doctor
 ```
 
 The package is `warbias_kit-warbias`; its Python namespace and command are
-`warbias_kit`. Add `generation` for local vLLM inference or `quality` for COMET.
+`warbias_kit`. Add `generation` for local vLLM inference, `quality` for COMET, or install
+`requirements-unlearning.txt` for adapter training.
 The package includes its data-release validator. The `evaluator/` directory
 contains the local evaluation library; see the [evaluation guide](docs/evaluation.md).
 
@@ -76,18 +77,30 @@ contains the local evaluation library; see the [evaluation guide](docs/evaluatio
 | [7. QA sampling and reproduction](notebooks/07_qa_dataset.ipynb) | Rebuild all QA items, sample complete scenarios and export aligned language files |
 | [8. Baseline evaluation](notebooks/08_warbias_baseline.ipynb) | Six-model triplet and QA results with severity slices; [run guide](docs/evaluation.md) |
 
-Run all eight notebooks with a local Python kernel:
+| [9. Unlearning setup](notebooks/09_unlearning_setup.ipynb) | Prepare model assets and component-level data splits |
+| [10. BiasUnlearn](notebooks/10_biasunlearn.ipynb) | Train separate group and language adapters for one epoch |
+| [11. WGA+KL](notebooks/11_wga_kl.ipynb) | Train stereotype-suppression adapters with a KL penalty |
+| [12. After-intervention evaluation](notebooks/12_after_intervention.ipynb) | Compare each adapter with its base on the same group and language |
+| [13. Native benchmark evaluation](notebooks/13_native_evaluation.ipynb) | Prepare optional capability and native benchmark comparisons |
+
+The [unlearning protocol](docs/unlearning.md) defines the two methods, three
+models and four group/language directions. The [setup guide](docs/unlearning-setup.md)
+describes model downloads and training. Evaluation uses the bundled library.
+
+Run all thirteen notebooks with a local Python kernel:
 
 ```sh
 python scripts/run_notebooks.py
 ```
 
 Default execution reads saved evidence and prepares model requests. Explicit
-run flags enable generation or COMET inference. Local outputs stay
+run flags enable generation, COMET inference, training or evaluation. Local outputs stay
 in ignored `notebooks/runs/`. Set model versions, providers and settings in
 `configs/` before executing a model.
 
 ## Verify and export
+
+Install `requirements-unlearning.txt` to include the training tests.
 
 ```sh
 python -m pytest tests -q
