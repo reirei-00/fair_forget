@@ -12,14 +12,14 @@ The [Ukrainian](data/uk.jsonl) and [English](data/en.jsonl) files share IDs and
 metadata. The [dataset manifest](protocol/dataset.json) binds all release files.
 English triplet translations use GPT-6 Astra; they have not undergone human translation
 review. Dataset text is licensed under [CC BY-SA 4.0](data/LICENSE.md).
-[The bilingual taxonomy with international sources](protocol/inputs/taxonomy_with_int.csv)
-lists every case, category and claim, with Ukrainian and international references.
-The [source list](protocol/inputs/sources.csv) includes 30 added international references.
-The [international source mapping](protocol/international_sources.json) preserves
-comments on indirect evidence and pending checks. These references supplement
-the [generation taxonomy](protocol/inputs/cohort_taxonomy.csv); they do not change
-its source provenance or saved measurements. Both taxonomies include only cases
-with `case_scope = general`.
+[The bilingual taxonomy](protocol/inputs/cohort_taxonomy.csv) lists every case,
+category and claim. Its `category_evidence_ids` includes international references
+alongside the existing category feedback. The [source list](protocol/inputs/sources.csv)
+contains the Ukrainian sources and 30 international references. The
+[category registry](protocol/inputs/taxonomy.csv) includes the international source
+IDs for each category. The [reference mapping](protocol/international_sources.json)
+preserves case-specific links, indirect evidence and pending checks. The taxonomy
+includes only cases with `case_scope = general`.
 [The attribute catalog](protocol/inputs/cohort_attributes.json)
 records all 21 attribute dimensions, their values and selection counts.
 [The evidence mapping](protocol/inputs/cohort_evidence.json) records supporting

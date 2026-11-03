@@ -5,10 +5,10 @@
   "files": {
     "taxonomy": {
       "path": "protocol/inputs/taxonomy.csv",
-      "sha256": "df0fcefe512544da1f3d425cf8c3189488823a06c444868722ab62c64872f1fc",
+      "sha256": "c3d6593e8b4f50a18bbf9470e64fc8fc4509bf1a1a9e9966e6fcf456df87b03d",
       "format": "csv",
-      "bytes": 23319,
-      "rows": 28,
+      "bytes": 28917,
+      "rows": 34,
       "role": "recorded_taxonomy_registry"
     },
     "targets": {
@@ -186,14 +186,6 @@
       "bytes": 74800,
       "rows": 120,
       "role": "scoped_source_taxonomy_case_inventory"
-    },
-    "taxonomy_with_int": {
-      "path": "protocol/inputs/taxonomy_with_int.csv",
-      "sha256": "6d95c79d2776c08b2c5d0aae2342e350039f3fde0f2607b1fa57c28b2f4a7c2b",
-      "format": "csv",
-      "bytes": 161490,
-      "rows": 120,
-      "role": "taxonomy_with_supplementary_international_references"
     }
   },
   "sampling": {
@@ -221,9 +213,11 @@
     {
       "artifact": "taxonomy",
       "source_sha256": "fe6dbac3f8834aa40fa09c91cfc0033d3a95b05be0bc18850652fe20f3aea7e1",
-      "portable_sha256": "df0fcefe512544da1f3d425cf8c3189488823a06c444868722ab62c64872f1fc",
+      "portable_sha256": "c3d6593e8b4f50a18bbf9470e64fc8fc4509bf1a1a9e9966e6fcf456df87b03d",
       "exact_bytes": false,
-      "scope_protocol": "protocol/coverage_extension.json#/scope"
+      "scope_protocol": "protocol/coverage_extension.json#/scope",
+      "original_portable_sha256": "df0fcefe512544da1f3d425cf8c3189488823a06c444868722ab62c64872f1fc",
+      "supplementary_references": "protocol/international_sources.json"
     },
     {
       "artifact": "targets",
@@ -406,7 +400,7 @@
   "cohort_protocol": "protocol/cohort.json",
   "international_sources": {
     "path": "protocol/international_sources.json",
-    "sha256": "51dc2a5f16d56ec5a559c445dbbe9684c2cb96dd3e0a61a4312f2f8399c8759b",
+    "sha256": "bc17a0b8e296687b03d9d7e672f161dab97556df372afde8b0d16931db6ac727",
     "role": "supplementary_international_reference_mapping"
   }
 }

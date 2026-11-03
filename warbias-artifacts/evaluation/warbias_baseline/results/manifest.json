@@ -87,9 +87,17 @@
       "evaluation/warbias_baseline/neutral_controls.jsonl": {
         "sha256": "d448327dbb3d835d2a090daefaa2bb242f5c44d6f44fe71e75e7bee1e01b8f7a",
         "bytes": 2805109
+      },
+      "protocol/inputs/cohort_taxonomy.csv": {
+        "sha256": "117b39a77c2ea333bc6625908bf47a40f43e2b88c5cc1ba3465cc75957f514b8",
+        "bytes": 107823
+      },
+      "protocol/qa.json": {
+        "sha256": "e8307a4d480603321705ec8135963b59f4df53a9e493ee5152434df9deecd218",
+        "bytes": 4767
       }
     },
-    "snapshot_sha256": "c7e8a67eeabedb32474db59b1902f537261383ce3bdc1476c6827e7030d9b3e2"
+    "snapshot_sha256": "09c55701b8eea7204727a0c6570d32664c153d0fb18c4e1289ab884aecc8f3c7"
   },
   "inputs": {
     "bundle_sha256": "09f900397ffca6372a73c1936c348c168dc1411b924a520fd0042a2b6736865c",
