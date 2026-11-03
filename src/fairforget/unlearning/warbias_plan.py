@@ -42,7 +42,8 @@ def evaluation_languages(repo, training_language):
 
 
 def _training_configuration(experiment):
-    return {key: value for key, value in experiment.items() if key != "evaluation_language_policy"}
+    evaluation_policies = {"evaluation_language_policy", "evaluation_group_policy"}
+    return {key: value for key, value in experiment.items() if key not in evaluation_policies}
 
 
 def _training_settings(experiment, method, rows):

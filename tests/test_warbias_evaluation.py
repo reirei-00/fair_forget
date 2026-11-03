@@ -108,6 +108,11 @@ class WarBiasEvaluationTests(unittest.TestCase):
         ).start()
         mock.patch.object(self.workflow, "cohort", return_value=["held"]).start()
         mock.patch.object(
+            self.workflow,
+            "selection",
+            return_value={"triplets": ["held", "train"], "qa": ["qa-target"]},
+        ).start()
+        mock.patch.object(
             evaluation,
             "verify_training_export",
             side_effect=lambda item, **kw: self.proofs[item["run_id"]],
@@ -156,6 +161,9 @@ class WarBiasEvaluationTests(unittest.TestCase):
             root = self.workflow._destination(item)
             self.assertEqual(record["held_out_triplet_ids"], ["held"])
             self.assertEqual(record["evaluation_languages"], [item["training_language"]])
+            self.assertEqual(record["evaluation_actors"], [item["target_group"]])
+            self.assertEqual(record["full_triplet_ids"], ["held", "train"])
+            self.assertEqual(record["qa_ids"], ["qa-target"])
             for kind, source in (
                 ("original", self.workflow.release),
                 ("neutral", self.workflow.neutral_release),
@@ -253,6 +261,22 @@ class WarBiasEvaluationTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Adapter bytes differ"):
                 verify_training_export(item, representation="adapter")
 
+    def test_prepared_evaluation_rejects_another_group_or_qa_panel(self):
+        self.workflow.prepare()
+        item = self.workflow.plan[0]
+        path = self.workflow._destination(item) / "evaluation.json"
+        original = json.loads(path.read_text())
+        for key, value in (
+            ("target_group", "veteran"),
+            ("evaluation_actors", ["idp", "veteran"]),
+            ("qa_ids", ["qa-target", "qa-other"]),
+            ("full_triplet_ids", ["held", "train", "other"]),
+        ):
+            with self.subTest(key=key):
+                path.write_text(json.dumps({**original, key: value}))
+                with self.assertRaisesRegex(ValueError, "baseline contract"):
+                    self.workflow.verify_prepared(item)
+
     def test_adapter_profile_preserves_base_and_binds_adapter_files(self):
         self.workflow.representation = "adapter"
         for root in (self.workflow.release, self.workflow.neutral_release):
@@ -306,8 +330,9 @@ class WarBiasEvaluationTests(unittest.TestCase):
             command = call.args[0]
             self.assertEqual(command[command.index("--stage") + 1], "all")
             self.assertEqual(command[-1], "--execute")
-            selected = command[command.index("--tasks") + 1 : -1]
+            selected = command[command.index("--tasks") + 1 : command.index("--actors")]
             self.assertEqual(selected, self.workflow.tasks(item, kind))
+            self.assertEqual(command[command.index("--actors") + 1 : -1], [item["target_group"]])
             self.assertTrue(
                 all(task.endswith("_" + item["training_language"]) for task in selected)
             )
@@ -337,6 +362,7 @@ class WarBiasEvaluationTests(unittest.TestCase):
             self.assertEqual((kwargs["bootstrap"], kwargs["seed"]), (1000, 42))
             self.assertEqual(kwargs["triplet_ids"], ["held"])
             self.assertEqual(kwargs["languages"], [item["training_language"]])
+            self.assertEqual(kwargs["actors"], [item["target_group"]])
             self.assertNotIn("qa_ids", kwargs)
             self.assertEqual(
                 kwargs["neutral_release"], self.workflow._destination(item) / "neutral"
@@ -345,7 +371,7 @@ class WarBiasEvaluationTests(unittest.TestCase):
             self.assertIsNone(analyze.call_args.kwargs["triplet_ids"])
             self.workflow.inference_release = self.root / "frozen-evaluator"
             with mock.patch.object(self.workflow, "comparison_scope", return_value={}):
-                report = self.workflow.analyze_before()
+                report = self.workflow.analyze_before(item)
             self.assertEqual(report["phase"], "before")
             self.assertNotIn("phase", analyze.call_args.kwargs)
             self.assertEqual(analyze.call_args.kwargs["triplet_ids"], ["held"])
@@ -354,11 +380,57 @@ class WarBiasEvaluationTests(unittest.TestCase):
                 analyze.call_args.kwargs["neutral_inference_release"],
                 self.workflow.inference_release,
             )
-            self.assertEqual(set(analyze.call_args.kwargs["languages"]), {"uk", "en"})
+            self.assertEqual(analyze.call_args.kwargs["languages"], [item["training_language"]])
+            self.assertEqual(analyze.call_args.kwargs["actors"], [item["target_group"]])
+            self.assertEqual(analyze.call_args.kwargs["models"], [item["model"]["id"]])
+            with self.assertRaisesRegex(ValueError, "Select one intervention"):
+                self.workflow.analyze_before()
             self.workflow.plan = [item]
             with mock.patch.object(self.workflow, "comparison_scope", return_value={}):
                 self.workflow.analyze_before()
             self.assertEqual(analyze.call_args.kwargs["languages"], [item["training_language"]])
+
+    def test_group_selection_keeps_only_bound_target_rows(self):
+        item = self.workflow.plan[0]
+        inputs = self.workflow.release / "inputs"
+        manifest = json.loads((inputs / "manifest.json").read_text())
+        manifest["source"] = {"files": {}}
+        for kind, ids in (("triplets", ["held", "train"]), ("qa", ["qa-target"])):
+            path = inputs / f"{kind}.jsonl"
+            field = "actor" if kind == "triplets" else "target_group"
+            rows = [{"id": identity, field: item["target_group"]} for identity in ids]
+            rows += [{"id": "other-" + kind, field: "veteran"}]
+            path.write_text("".join(json.dumps(row) + "\n" for row in rows))
+            manifest["source"]["files"][f"{kind}_{item['training_language']}"] = {
+                "path": path.name,
+                "sha256": file_hash(path),
+            }
+        (inputs / "manifest.json").write_text(json.dumps(manifest))
+        selected = evaluation.WarBiasEvaluation.selection(self.workflow, item)
+        self.assertEqual(selected, {"triplets": ["held", "train"], "qa": ["qa-target"]})
+        with mock.patch.object(self.workflow, "cohort", return_value=["other-triplets"]):
+            with self.assertRaisesRegex(ValueError, "another target group"):
+                evaluation.WarBiasEvaluation.selection(self.workflow, item)
+        (inputs / "qa.jsonl").write_text("changed")
+        with self.assertRaisesRegex(ValueError, "source differs"):
+            evaluation.WarBiasEvaluation.selection(self.workflow, item)
+
+    def test_cohort_uses_the_direction_split_and_rejects_gradient_overlap(self):
+        item = self.workflow.plan[0]
+        binding = {
+            "splits": {"evaluation": {"ids": ["held"]}},
+            "global_splits": {"evaluation": {"ids": ["held", "other-group"]}},
+            "permitted_gradient_ids": ["train"],
+        }
+        with mock.patch.object(evaluation, "validate_bundle", return_value=binding) as validate:
+            self.assertEqual(evaluation.WarBiasEvaluation.cohort(self.workflow, item), ["held"])
+            self.assertEqual(
+                validate.call_args.args[0],
+                self.workflow.data_root / f"{item['target_group']}_{item['training_language']}",
+            )
+            binding["permitted_gradient_ids"] = ["held"]
+            with self.assertRaisesRegex(ValueError, "overlap gradient"):
+                evaluation.WarBiasEvaluation.cohort(self.workflow, item)
 
     def test_policy_metrics_and_collection_settings_match_baseline_notebook_08(self):
         notebook = json.loads((ROOT / evaluation.BASELINE_NOTEBOOK).read_text())
@@ -399,6 +471,10 @@ class WarBiasEvaluationTests(unittest.TestCase):
         self.assertFalse(module.SERIAL["enable_chunked_prefill"])
         self.assertEqual(len(module.BASELINE_TASKS), 4)
         self.assertEqual(len(module.NEUTRAL_TASKS), 2)
+        legacy = module.command("bundle", "task", "model", "output", smoke=True)
+        selected = module.command("bundle", "task", "model", "output", smoke=True, actors=["idp"])
+        self.assertNotIn("--actors", legacy)
+        self.assertEqual(selected, legacy + ["--actors", "idp"])
 
     def test_actual_phase_metadata_rejects_runtime_and_effective_input_drift(self):
         try:

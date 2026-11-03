@@ -65,6 +65,6 @@ WarBias experiment.
 
 ## Evaluation
 
-Evaluate each adapter in its training language, with both groups included.
+Evaluate each adapter on its training group and language. Cross-group and cross-language checks are deferred.
 Use Fair-UK for every metric. The [WarBias workflow](WARBIAS_UNLEARNING.md)
 distinguishes current baseline scoring from the remaining paired-analysis work.

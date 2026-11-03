@@ -16,6 +16,7 @@
     "en"
   ],
   "evaluation_language_policy": "training_language",
+  "evaluation_group_policy": "training_group",
   "split": {
     "seed": 42,
     "development_fraction": 0.15,

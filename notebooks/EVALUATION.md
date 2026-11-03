@@ -5,21 +5,21 @@ scorer as [baseline notebook 08](../warbias-artifacts/notebooks/08_warbias_basel
 FairForget selects experiments and labels their before/after reports. Fair-UK
 evaluates the supplied WarBias benchmark inputs. This workflow covers all 20
 selected BiasUnlearn interventions and five shared base checkpoints.
-Evaluate each adapter only in its training language: Ukrainian for Ukrainian
-training, English for English training. Include both target groups.
+Evaluate each adapter only on its training group and language. Cross-group
+and cross-language evaluation are deferred.
 The [native benchmark workflow](native_before_after.ipynb) remains available
 with its [own setup](NATIVE_EVALUATION.md).
 
 | Setting | Before and after |
 | --- | --- |
-| Collection | 1,007 triplets and 240 QA questions in the training language; the same neutral controls |
+| Collection | 409 IDP or 598 veteran triplets, 120 same-group QA questions and matching neutral controls in the training language |
 | Main outcomes | Prior-normalised SS, QA accuracy and QA bias |
-| Slices | IDPs, veterans, both groups and case-level severity |
+| Slices | The training group and its case-level severity |
 | QA policies | Native `abc_option_text_v2`; analysis `abc_explicit_choice_v3` |
 | Weighting | Equal semantic components after within-component averaging |
 | Uncertainty | 1,000 component-bootstrap draws, seed 42 |
-| Analysis panels | The same 201 held-out triplet IDs in both phases; all 240 baseline QA questions |
-| Full-release scores | Separate descriptive diagnostics |
+| Analysis panels | The same 82 IDP or 119 veteran held-out triplets and 120 same-group QA questions before and after |
+| Full target-group scores | Separate descriptive diagnostics |
 
 ## Environment and paths
 
@@ -71,34 +71,35 @@ the adapter-capable evaluator; older collector identities remain separate.
 ## Workflow
 
 1. Enable `RUN_PREPARE` after training. Verify all 20 exports before creating
-   any releases. Preserve the baseline model options and copy its original and
-   control inputs unchanged. The post profile adds the verified adapter path to the same base model.
+   any releases. Preserve the baseline model options and select the training group
+   and language from its original and control inputs without changing their text. The post profile adds the verified adapter path to the same base model.
 2. Enable `RUN_AFTER_COLLECTION` on the GPU host. Reuse the baseline runner,
    serial BF16 options, model-specific attention settings and repeated smoke gates.
-   Each adapter supplies two original panels and one neutral panel in its training
-   language. Validated collections can resume; source and runtime changes fail validation.
+   Each adapter supplies two original panels and one neutral panel for its training
+   group and language. Validated collections can resume; source and runtime changes fail validation.
 3. Enable `RUN_REFERENCE_ANALYSIS` to score the five shared baselines with the
-   selected parser, controls and held-out IDs. The shared bases cover both languages.
+   selected parser, controls and target-group held-out IDs. Reuse the matching rows
+   from the shared bases for each training group and language.
 4. Enable `RUN_AFTER_ANALYSIS` to apply the same scorer to each post checkpoint.
    Check actual before/after runtime, tokenizer, effective inputs and row IDs.
-   Compare with the shared base scores in the same language. Save full and
-   held-out analyses in separate directories.
+   Compare with the shared base scores for the same group and language. Save full
+   target-group and held-out analyses in separate directories for each run.
 
 For a completed subset, pass explicit `(method, run_id)` pairs in
 `WarBiasEvaluation(..., selections=[("biasunlearn", "qwen3_8b__idp_uk")])`.
 Only those exports are required. The experiment configuration remains unchanged.
 
 All metric definitions, calculations and CSV exports come from Fair-UK.
-The report binds the selected triplet IDs. All native predictions are verified
+The report binds the selected triplet and QA IDs. All native predictions are verified
 before selection, including excluded rows. Empty or undefined outcomes remain
 explicit. Analysis outputs require new directories and do not replace native files.
 
-The notebook displays group scores, severity slices and diagnostics in the same
+The notebook displays target-group scores, severity slices and diagnostics in the same
 units as baseline notebook 08. QA bias remains signed and condition-specific;
 raw SS, LMS and format checks remain diagnostics. These are matched checkpoint
 scores. Paired intervention effects and their intervals use the separate Fair-UK
 intervention analysis.
 
 QA questions are evaluation-only. Their claim overlap with training and development
-triplets is recorded in each data binding. Full QA scores do not establish unseen-claim
+triplets is recorded in each data binding. Target-group QA scores do not establish unseen-claim
 generalization.

@@ -116,7 +116,7 @@ def parameters(profiles, model):
     return args
 
 
-def command(bundle, task, model_args, output, *, smoke):
+def command(bundle, task, model_args, output, *, smoke, actors=None):
     argv = [
         sys.executable,
         "-m",
@@ -137,6 +137,8 @@ def command(bundle, task, model_args, output, *, smoke):
         argv += ["--" + key.replace("_", "-"), str(value)]
     if smoke:
         argv += ["--limit-clusters-per-stratum", "1"]
+    if actors is not None:
+        argv += ["--actors", *actors]
     return argv
 
 
@@ -164,7 +166,7 @@ def runtime(environment):
     }
 
 
-def verify(directory, task, bundle, args, expected_identity, *, smoke):
+def verify(directory, task, bundle, args, expected_identity, *, smoke, actors=None):
     namespace = os.environ.get("WARBIAS_EVALUATOR_MODULE", "lm_eval.benchmark")
     verify_baseline_run = importlib.import_module(
         f"{namespace}.warbias.baseline"
@@ -178,6 +180,7 @@ def verify(directory, task, bundle, args, expected_identity, *, smoke):
         expected_identity,
         smoke=smoke,
         collection_settings=SETTINGS,
+        **({"actors": actors} if actors is not None else {}),
     )
 
 
@@ -192,20 +195,21 @@ def run_task(
     expected_identity,
     *,
     smoke,
+    actors=None,
 ):
     output.parent.mkdir(parents=True, exist_ok=True)
     artifacts = ("run.json", "report.json", "predictions.jsonl")
     if not all((output / name).is_file() for name in artifacts):
         with output.with_suffix(".log").open("a") as log:
             subprocess.run(
-                command(bundle, task, model_args, output, smoke=smoke),
+                command(bundle, task, model_args, output, smoke=smoke, actors=actors),
                 cwd=release,
                 env=environment,
                 stdout=log,
                 stderr=subprocess.STDOUT,
                 check=True,
             )
-    return verify(output, task, bundle, args, expected_identity, smoke=smoke)
+    return verify(output, task, bundle, args, expected_identity, smoke=smoke, actors=actors)
 
 
 def main(argv=None):
@@ -217,6 +221,7 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--stage", choices=("smoke", "collect", "all"), default="all")
     parser.add_argument("--tasks", nargs="+", choices=sorted(BASELINE_TASKS | NEUTRAL_TASKS))
+    parser.add_argument("--actors", nargs="+", choices=("idp", "veteran"))
     parser.add_argument("--execute", action="store_true")
     options = parser.parse_args(argv)
     release, bundle, profiles, output = (
@@ -231,6 +236,11 @@ def main(argv=None):
 
     spec = read(bundle)
     tasks = collection_tasks(spec, options.tasks)
+    actors = options.actors
+    if actors is not None:
+        if len(actors) != len(set(actors)):
+            raise ValueError("Select unique target groups")
+        actors = [actor for actor in ("idp", "veteran") if actor in actors]
     selected_profile = read(profiles)[options.model]
     expected_identity = selected_profile["model_identity"]
     args = parameters({options.model: selected_profile}, options.model)
@@ -259,6 +269,7 @@ def main(argv=None):
         "settings": SETTINGS,
         "model_parameters": args,
         "code_identity": code_identity(),
+        **({"actors": actors} if actors is not None else {}),
     }
     if not options.execute:
         print(json.dumps(plan, indent=2))
@@ -288,6 +299,7 @@ def main(argv=None):
                     environment,
                     expected_identity,
                     smoke=True,
+                    actors=actors,
                 )
                 for repeat in ("before", "repeat")
             ]
@@ -332,6 +344,7 @@ def main(argv=None):
                 environment,
                 expected_identity,
                 smoke=False,
+                actors=actors,
             )
             smoke_run = read(output / "smoke" / "before" / task / "run.json")
             if verified.provenance["run"]["model_identity"] != smoke_run["model_identity"]:

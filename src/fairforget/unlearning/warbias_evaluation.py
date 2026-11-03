@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import shutil
 import subprocess
@@ -112,19 +113,55 @@ class WarBiasEvaluation:
                 "Choose evaluation output separate from all source and training inputs"
             )
 
-    def cohort(self):
+    def _selected_item(self, item=None):
+        if item is None:
+            if len(self.plan) != 1:
+                raise ValueError("Select one intervention for its target-group evaluation")
+            return self.plan[0]
+        if item not in self.plan:
+            raise ValueError("The intervention is outside the selected plan")
+        return item
+
+    def actors(self, item):
         experiment = read_json(self.repo / "configs/unlearning/warbias_final.json")
-        ids = None
-        for group in experiment["training_groups"]:
-            for language in experiment["training_languages"]:
-                binding = validate_bundle(self.data_root / f"{group}_{language}", self.repo)
-                current = binding["global_splits"]["evaluation"]["ids"]
-                if ids is not None and current != ids:
-                    raise ValueError("Training directions use different held-out IDs")
-                if set(current) & set(binding["permitted_gradient_ids"]):
-                    raise ValueError("Held-out IDs overlap gradient inputs")
-                ids = current
+        if (
+            experiment.get("evaluation_group_policy") != "training_group"
+            or item["target_group"] not in experiment["training_groups"]
+        ):
+            raise ValueError("Evaluate each intervention on its training group")
+        return [item["target_group"]]
+
+    def cohort(self, item=None):
+        item = self._selected_item(item)
+        group, language = self.actors(item)[0], item["training_language"]
+        binding = validate_bundle(self.data_root / f"{group}_{language}", self.repo)
+        ids = binding["splits"]["evaluation"]["ids"]
+        if not ids or set(ids) & set(binding["permitted_gradient_ids"]):
+            raise ValueError("Held-out IDs are empty or overlap gradient inputs")
+        if not set(ids) <= set(binding["global_splits"]["evaluation"]["ids"]):
+            raise ValueError("The target-group cohort differs from the held-out split")
         return ids
+
+    def selection(self, item):
+        """Keep the target group's released triplets and all of its QA questions."""
+        group, language = self.actors(item)[0], item["training_language"]
+        inputs = self._source() / "inputs"
+        manifest = read_json(inputs / "manifest.json")
+        selected = {}
+        for kind in ("triplets", "qa"):
+            binding = manifest["source"]["files"][f"{kind}_{language}"]
+            path = (inputs / binding["path"]).resolve()
+            if not path.is_relative_to(inputs) or file_hash(path) != binding["sha256"]:
+                raise ValueError("Evaluation source differs from its binding")
+            rows = [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+            field = "actor" if kind == "triplets" else "target_group"
+            ids = [row["id"] for row in rows if row[field] == group]
+            if not ids or len(ids) != len(set(ids)):
+                raise ValueError("The evaluation group requires unique nonempty source IDs")
+            selected[kind] = ids
+        if not set(self.cohort(item)) <= set(selected["triplets"]):
+            raise ValueError("Held-out IDs include another target group")
+        return selected
 
     def _source(self):
         return self.metadata_release or self.release
@@ -195,6 +232,7 @@ class WarBiasEvaluation:
         return {
             "checkpoint_representation": self.representation,
             "evaluation_language_policy": "training_language",
+            "evaluation_group_policy": "training_group",
             "attention_backend": self.attention_backend,
             "comparison_scope": self.comparison_scope(),
             "post_inference_source": snapshot,
@@ -235,7 +273,7 @@ class WarBiasEvaluation:
         )
 
     def prepare(self):
-        settings, ids = self.reference_settings(), self.cohort()
+        settings = self.reference_settings()
         destination = self.output / "releases"
         if destination.exists():
             raise FileExistsError("Use a new WarBias evaluation release directory")
@@ -257,6 +295,7 @@ class WarBiasEvaluation:
             for kind, template in sources.items():
                 shutil.copytree(template / "inputs", prepared / "_inputs" / kind)
             for item in self.plan:
+                ids, selected = self.cohort(item), self.selection(item)
                 proof = evidence[item["method"], item["run_id"]]
                 model = item["model"]["id"]
                 base = profiles[model]
@@ -303,9 +342,12 @@ class WarBiasEvaluation:
                     "target_group": item["target_group"],
                     "training_language": item["training_language"],
                     "evaluation_languages": self.languages(item),
+                    "evaluation_actors": self.actors(item),
                     "training_export": proof,
                     "settings": settings,
                     "held_out_triplet_ids": ids,
+                    "full_triplet_ids": selected["triplets"],
+                    "qa_ids": selected["qa"],
                     "source_inputs": {
                         "original": hash_tree(self._source() / "inputs"),
                         "neutral": hash_tree(self.neutral_release / "inputs"),
@@ -318,10 +360,19 @@ class WarBiasEvaluation:
     def verify_prepared(self, item):
         root = self._destination(item)
         record = read_json(root / "evaluation.json")
+        selected = self.selection(item)
         if (
-            record["held_out_triplet_ids"] != self.cohort()
+            record["held_out_triplet_ids"] != self.cohort(item)
             or record["settings"] != self.reference_settings()
+            or any(
+                record.get(key) != item[key]
+                for key in ("method", "run_id", "target_group", "training_language")
+            )
+            or record.get("model") != item["model"]["id"]
             or record.get("evaluation_languages") != self.languages(item)
+            or record.get("evaluation_actors") != self.actors(item)
+            or record.get("full_triplet_ids") != selected["triplets"]
+            or record.get("qa_ids") != selected["qa"]
         ):
             raise ValueError(
                 "Prepared evaluation differs from the baseline contract or held-out split"
@@ -378,6 +429,8 @@ class WarBiasEvaluation:
                     "all",
                     "--tasks",
                     *self.tasks(item, kind),
+                    "--actors",
+                    *self.actors(item),
                     "--execute",
                 ]
                 # The baseline runner verifies receipts before resuming any saved panel.
@@ -386,15 +439,17 @@ class WarBiasEvaluation:
                         command, env=environment, stdout=log, stderr=subprocess.STDOUT, check=True
                     )
 
-    def analyze_before(self, *, held_out=True):
+    def analyze_before(self, item=None, *, held_out=True):
         from lm_eval.fair_uk.warbias.baseline import analyze_checkpoints
 
+        item = self._selected_item(item)
         self.reference_settings()
         report = analyze_checkpoints(
             self.release,
             self.results,
-            models=sorted({item["model"]["id"] for item in self.plan}),
-            languages=sorted({language for item in self.plan for language in self.languages(item)}),
+            models=[item["model"]["id"]],
+            languages=self.languages(item),
+            actors=self.actors(item),
             bootstrap=1000,
             seed=42,
             inference_release=self.inference_release,
@@ -403,9 +458,13 @@ class WarBiasEvaluation:
             neutral_results=self.neutral_results,
             neutral_inference_release=self.inference_release,
             qa_answer_policy=QA_POLICY,
-            triplet_ids=self.cohort() if held_out else None,
+            triplet_ids=self.cohort(item) if held_out else None,
         )
         report["phase"] = "before"
+        report["evaluation_target"] = {
+            "target_group": item["target_group"],
+            "training_language": item["training_language"],
+        }
         report["comparison_scope"] = self.comparison_scope()
         return report
 
@@ -419,6 +478,7 @@ class WarBiasEvaluation:
             self._results(item, "original"),
             models=[record["model"]],
             languages=self.languages(item),
+            actors=self.actors(item),
             bootstrap=1000,
             seed=42,
             inference_release=self.post_inference_release,
@@ -437,6 +497,7 @@ class WarBiasEvaluation:
                 "target_group",
                 "training_language",
                 "evaluation_languages",
+                "evaluation_actors",
                 "training_export",
             )
         }
@@ -454,6 +515,8 @@ class WarBiasEvaluation:
     def verify_alignment(self, item):
         """Require matching runtime, prompts and effective token inputs in both phases."""
         from lm_eval.fair_uk.provenance import paired_inference_settings
+        from lm_eval.fair_uk.runs import load_verified_run
+        from lm_eval.fair_uk.warbias.selection import verify_subset_alignment
 
         model = item["model"]["id"]
         checks = []
@@ -465,19 +528,35 @@ class WarBiasEvaluation:
                 left = before / model / "full" / task / "run.json"
                 right = self._results(item, kind) / model / "full" / task / "run.json"
                 a, b = read_json(left), read_json(right)
-                if (
-                    a.get("selected_ids_sha256") != b.get("selected_ids_sha256")
-                    or a.get("selected_rows") != b.get("selected_rows")
-                    or paired_inference_settings(a) != paired_inference_settings(b)
-                ):
-                    raise ValueError(
-                        f"{task}: post collection differs from the baseline inference protocol"
-                    )
+                same_selection = a.get("selected_ids_sha256") == b.get(
+                    "selected_ids_sha256"
+                ) and a.get("selected_rows") == b.get("selected_rows")
+                if same_selection:
+                    if paired_inference_settings(a) != paired_inference_settings(b):
+                        raise ValueError(
+                            f"{task}: post collection differs from the baseline inference protocol"
+                        )
+                    selection = {"policy": "identical_selected_inputs"}
+                else:
+                    before_release = self.release if kind == "original" else self.neutral_release
+                    runs = [
+                        load_verified_run(
+                            path.parent,
+                            answer_policy="abc_option_text_v2",
+                            dataset_bundle=bundle,
+                        )
+                        for path, bundle in (
+                            (left, before_release / "inputs/manifest.json"),
+                            (right, self._destination(item) / kind / "inputs/manifest.json"),
+                        )
+                    ]
+                    selection = verify_subset_alignment(*runs)
                 checks.append(
                     {
                         "task": task,
                         "before_run_sha256": file_hash(left),
                         "after_run_sha256": file_hash(right),
+                        "selection": selection,
                     }
                 )
         return {"status": "verified", "tasks": checks}

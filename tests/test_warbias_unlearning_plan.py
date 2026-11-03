@@ -15,7 +15,12 @@ from unittest import mock
 import torch
 from unlearning_fixtures import AssetCatalog
 
-from fairforget.unlearning import native_evaluation, notebook_matrix, warbias_data
+from fairforget.unlearning import (
+    native_evaluation,
+    notebook_matrix,
+    warbias_data,
+    warbias_evaluation,
+)
 from fairforget.unlearning.trainer import build_biasunlearn_pools, file_hash, hash_tree, write_json
 from fairforget.unlearning.warbias_plan import selected_models, validate_recipe
 
@@ -32,6 +37,7 @@ class WarBiasPlanTests(unittest.TestCase):
         self.assertEqual(config["optional_methods"], [])
         self.assertEqual(set(config["objectives"]), {"biasunlearn"})
         self.assertEqual(config["evaluation_language_policy"], "training_language")
+        self.assertEqual(config["evaluation_group_policy"], "training_group")
         self.assertEqual(len(selected_models(ROOT)), 5)
         self.assertNotIn("mamay27b_v2", config["model_ids"])
         for method in ("npo_kl", "wga_kl"):
@@ -74,6 +80,7 @@ class WarBiasPlanTests(unittest.TestCase):
         recipe = self.plan("biasunlearn")[0]["recipe"]
         source = json.loads((ROOT / "configs/unlearning/warbias_final.json").read_text())
         source.pop("evaluation_language_policy")
+        source.pop("evaluation_group_policy")
         source_path = self.root / "original_experiment.json"
         source_path.write_text(json.dumps(source))
         registry = self.root / "original_models.json"
@@ -231,6 +238,45 @@ class WarBiasPlanTests(unittest.TestCase):
         for filters in ({"target_group": "refugee"}, {"training_language": "fr"}):
             with self.assertRaisesRegex(ValueError, "not selected"):
                 self.plan("biasunlearn", **filters)
+
+    def test_evaluation_uses_the_training_group_without_rebuilding_training_inputs(self):
+        release = self.root / "release"
+        sources = release / "inputs/sources"
+        sources.mkdir(parents=True)
+        files = {}
+        for language in ("uk", "en"):
+            for kind, name in (("triplets", f"{language}.jsonl"), ("qa", f"qa_{language}.jsonl")):
+                path = sources / name
+                path.write_bytes((ROOT / "warbias-artifacts/data" / name).read_bytes())
+                files[f"{kind}_{language}"] = {
+                    "path": "sources/" + name,
+                    "sha256": file_hash(path),
+                }
+        write_json(release / "inputs/manifest.json", {"source": {"files": files}})
+        workflow = warbias_evaluation.WarBiasEvaluation(
+            ROOT,
+            release=release,
+            results=self.root / "baseline-results",
+            neutral_release=self.root / "neutral",
+            neutral_results=self.root / "neutral-results",
+            output=self.root / "after",
+            training_root=self.root / "training",
+            data_root=self.data,
+        )
+        for group, language in DIRECTIONS:
+            item = next(
+                row
+                for row in workflow.plan
+                if (row["target_group"], row["training_language"]) == (group, language)
+            )
+            cohort, selected = workflow.cohort(item), workflow.selection(item)
+            self.assertEqual(cohort, self.bindings[group, language]["splits"]["evaluation"]["ids"])
+            self.assertEqual(len(cohort), {"idp": 82, "veteran": 119}[group])
+            self.assertEqual(len(selected["triplets"]), {"idp": 409, "veteran": 598}[group])
+            self.assertEqual(len(selected["qa"]), 120)
+            self.assertTrue(set(cohort) <= set(selected["triplets"]))
+            self.assertEqual(workflow.languages(item), [language])
+            self.assertEqual(workflow.actors(item), [group])
 
     def test_all_twenty_recipes_pass_full_input_preflight_without_collisions(self):
         paths = []
