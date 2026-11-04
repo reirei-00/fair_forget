@@ -1,5 +1,12 @@
 # WarBias dataset
 
+> **Content warning:** this dataset contains stereotypes about veterans and
+> internally displaced people, including accusations of criminality,
+> disloyalty, fraud and mental instability, that may be offensive or
+> distressing. They are included so that models' endorsement of them can be
+> measured and reduced; they are not claims about real people and do not
+> reflect the authors' views.
+
 WarBias is a Ukrainian–English benchmark of stereotypes about veterans and internally displaced people: 1,007 sentence triplets and 240 multiple-choice questions per language, built from a taxonomy of 120 claims in 27 categories.
 
 WarBias uses blinded human ratings of Ukrainian samples to inform model and
