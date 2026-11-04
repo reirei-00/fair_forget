@@ -51,7 +51,6 @@ and language. Start with the [setup notebook](warbias-artifacts/notebooks/09_unl
 defines the methods and training settings.
 
 The [WarBias workflow](warbias-artifacts/docs/unlearning.md) defines data roles and
-evaluation requirements. All metrics use Fair-UK. MMLU and Belebele were not run
-for these adapters. Other methods and saved experiments remain separate.
+evaluation requirements. All metrics use Fair-UK. Other methods and saved experiments remain separate.
 
 Saved unlearning reports remain under [executed notebooks](notebooks/executed/).

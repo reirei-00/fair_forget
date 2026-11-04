@@ -155,10 +155,6 @@ preference and polarity changes visible. Compute paired component intervals
 through the evaluation library. Lower raw stereotype preference alone does not establish
 successful mitigation.
 
-MMLU and Belebele were not run for these adapters. The
-[native benchmark notebook](../notebooks/13_native_evaluation.ipynb) prepares them
-as optional before/after capability checks that use evaluation data only.
-
 Use the [before/after notebook](../notebooks/12_after_intervention.ipynb) for WarBias scores.
 It reuses baseline notebook 08's collector, explicit-choice parser, neutral
 controls, group/severity summaries and component bootstrap. Score the same
