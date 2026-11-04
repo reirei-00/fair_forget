@@ -31,5 +31,3 @@ and saved reports under
 
 Use the [native benchmark notebook](../warbias-artifacts/notebooks/13_native_evaluation.ipynb) for additional
 registered benchmark comparisons. These inputs are evaluation only.
-
-Run MMLU and Belebele last for all six models, after WarBias training and evaluation.
