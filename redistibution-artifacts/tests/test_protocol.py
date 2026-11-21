@@ -148,6 +148,26 @@ class Protocol(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Missing"):
             report_domains({"effects": []}, {"domain": "gender"}, "en")
 
+    def test_model_gate_requires_own_four_english_receipts(self):
+        from suite_train import require_english
+
+        cells = data.matrix(self.spec, 42)
+        target = next(c for c in cells if c["language"] == "uk")
+        en = [c for c in cells if c["language"] == "en" and c["model"] == target["model"]]
+        self.assertEqual(len(en), 4)
+        for c in en:
+            folder = self.root / c["run_id"]
+            folder.mkdir(parents=True)
+            (folder / "complete.json").touch()
+        with patch("suite_train.receipt_at") as check:
+            require_english(self.root, {"cells": cells}, "bound", target, "model")
+            self.assertEqual([c.args[2] for c in check.call_args_list], en)
+            with self.assertRaisesRegex(ValueError, "English phase incomplete"):
+                require_english(self.root, {"cells": cells}, "bound", target, "suite")
+            (self.root / en[0]["run_id"] / "complete.json").unlink()
+            with self.assertRaisesRegex(ValueError, "English phase incomplete"):
+                require_english(self.root, {"cells": cells}, "bound", target, "model")
+
     def test_concurrent_inference_exports_verify_the_winner(self):
         import shutil
 

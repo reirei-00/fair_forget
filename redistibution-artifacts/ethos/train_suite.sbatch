@@ -28,4 +28,4 @@ if [[ "${ETHOS_STUDY:-full}" == mamay27_bf16 ]]; then
 fi
 export OMP_NUM_THREADS="${SLURM_CPUS_PER_TASK}" PYTHONUNBUFFERED=1
 srun "$ETHOS_PYTHON" "$here/suite.py" train --suite "$suite" --runs "$runs" --source "$source_dir" \
-  --model-root "$model_root" --views "$views" --model "$model" --language "$lang" --domain "$domain"
+  --model-root "$model_root" --views "$views" --model "$model" --language "$lang" --domain "$domain" --english-gate "${8:-suite}"

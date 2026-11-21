@@ -19,6 +19,10 @@ The pilot saves its two native adapters and logs, base.json, and the verified SV
 
 The wrapper runs the original [Ethos bias trainer and SVD](https://github.com/leigao97/Ethos/tree/88a932f0ff5cd30ad75be163fad9b359e0a7c59d). Configuration follows the authors’ GPT-2 bias recipe with 20 stereotype epochs, two anti-stereotype epochs and SVD scale 2.0. The 128-token block is a study choice for short domain corpora. The upstream trainer drops incomplete blocks at each 1,000-row boundary. The run receipt records complete blocks and discarded tokens for both branches. The model registry pins Llama 3.1 8B Instruct, Gemma 3 12B IT, Qwen3-8B, Lapa 12B Instruct and Mamay 12B/27B IT v2.
 
+For a Ukrainian rerun after all four English checkpoints for that model have verified receipts, `suite.py train --english-gate model` uses the original suite and checkpoint identities. The study's full-array submission retains its whole-suite English prerequisite. On JUPITER the optional eighth positional argument of `train_suite.sbatch` selects the gate. For Llama and Qwen the Ukrainian recovery uses the original FP16 configuration.
+
+Use `suite.py export --suite "$SUITE" --runs "$RUNS" --model "$MODEL" --language "$LANGUAGE" --domain "$DOMAIN"` once per checkpoint before launching evaluation panels concurrently. The export verifies the native checkpoint and its published before/after weights. Schedule each panel after the export for its matching checkpoint. Repeated export calls reuse the verified files.
+
 ## Prepare the software
 
 Run the examples in Bash from this directory. Set `WORK` to an absolute, durable directory outside the checkout. Preparation and the design tests use Python 3.10 or newer. Training requires Linux, PyTorch 2.9.1 and the pinned training stack. The model snapshots, frozen input release and results live outside Git.

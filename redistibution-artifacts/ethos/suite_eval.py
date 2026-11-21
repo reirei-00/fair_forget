@@ -4,11 +4,10 @@ import json
 import os
 import subprocess
 
-from archive import completed
 from domain_matrix import report_domains
-from inference import materialize
+from inference import prepare_inference
 from pair_cache import run_pair
-from suite_data import HERE, SPEC, csv_rows, csv_write, digest, read
+from suite_data import HERE, SPEC, csv_write, digest, read
 from suite_train import execute
 
 
@@ -59,11 +58,7 @@ def evaluate(a, cell):
         env=env,
         text=True,
     )
-    attempt, receipt = completed(
-        a.runs.resolve() / cell["run_id"], digest(suite / "suite.json"), cell
-    )
-    probe = csv_rows(suite / cell["language"] / cell["domain"] / "dev.csv")[0]
-    models = materialize(attempt, receipt, probe["stereo"])
+    attempt, receipt, models = prepare_inference(suite, a.runs, cell)
     if "," in str(models):
         raise ValueError("Fair-UK model paths cannot contain a comma")
     request = {

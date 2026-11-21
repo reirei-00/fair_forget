@@ -93,6 +93,16 @@ def verify_reload(view, checkpoint, tokenizer, text):
     return (a - b).abs().max().item()
 
 
+def require_english(runs, manifest, suite_hash, cell, scope):
+    for en in manifest["cells"]:
+        if en["language"] != "en" or (scope == "model" and en["model"] != cell["model"]):
+            continue
+        folder = runs / en["run_id"]
+        if not (folder / "complete.json").is_file():
+            raise ValueError("English phase incomplete: " + en["run_id"])
+        receipt_at(folder, suite_hash, en)
+
+
 def train(a, manifest, cell):
     from prepare_view import prepare
     from transformers import AutoTokenizer
@@ -106,12 +116,7 @@ def train(a, manifest, cell):
     suite_hash = digest(root / "suite.json")
     directory = a.runs.resolve() / cell["run_id"]
     if cell["language"] == "uk":
-        for en in manifest["cells"]:
-            if en["language"] == "en":
-                folder = a.runs.resolve() / en["run_id"]
-                if not (folder / "complete.json").is_file():
-                    raise ValueError("English phase incomplete: " + en["run_id"])
-                receipt_at(folder, suite_hash, en)
+        require_english(a.runs.resolve(), manifest, suite_hash, cell, a.english_gate)
     with lock(directory):
         if (directory / "complete.json").exists():
             attempt, _ = completed(directory, suite_hash, cell)
@@ -203,6 +208,8 @@ def train(a, manifest, cell):
             "commands": [],
         }
 
+        if cell["language"] == "uk":
+            recipe["english_gate"] = a.english_gate
         if qualification is not None:
             recipe["qualification"] = qualification
             recipe["code"]["qualified_runtime.py"] = digest(HERE / "qualified_runtime.py")

@@ -1,4 +1,4 @@
-"""Prepare and run the bilingual Ethos suite. All commands except train/submit/evaluate are offline."""
+"""Prepare and run the bilingual Ethos suite. Prepare inputs, train and export checkpoints, or evaluate registered panels."""
 
 import argparse
 import csv
@@ -23,7 +23,7 @@ def main(argv=None):
         if action == "prepare":
             sub.add_argument("--review", type=Path, required=True)
             sub.add_argument("--seed", type=int, default=42)
-    for action in ("train", "submit", "evaluate"):
+    for action in ("train", "submit", "export", "evaluate"):
         sub = commands.add_parser(action)
         sub.add_argument("--suite", type=Path, required=True)
         sub.add_argument("--runs", type=Path, required=True)
@@ -40,6 +40,13 @@ def main(argv=None):
                 "--language", choices=("en", "uk"), required=True, help="Training language"
             )
             sub.add_argument("--domain", choices=tuple(read(SPEC)["domains"]), required=True)
+        if action == "train":
+            sub.add_argument(
+                "--english-gate",
+                choices=("suite", "model"),
+                default="suite",
+                help="English checkpoints required for Ukrainian training",
+            )
         if action in ("train", "submit"):
             for key in ("source", "model-root", "views"):
                 sub.add_argument("--" + key, type=Path, required=True)
@@ -114,6 +121,10 @@ def main(argv=None):
         from suite_train import train
 
         train(a, manifest, cells[0])
+    elif a.action == "export":
+        from inference import prepare_inference
+
+        print(prepare_inference(a.suite, a.runs, cells[0])[2])
     else:
         from suite_eval import evaluate
 

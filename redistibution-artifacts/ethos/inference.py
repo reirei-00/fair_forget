@@ -6,8 +6,8 @@ import shutil
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from archive import inventory, lock
-from suite_data import digest, read, write
+from archive import completed, inventory, lock
+from suite_data import csv_rows, digest, read, write
 from suite_train import base_assets, inspection
 
 
@@ -33,6 +33,14 @@ def publish_export(stage, output):
         existing = verify_export(output, staged["training_result_sha256"])
         if any(existing[key] != staged[key] for key in ("weights", "before")):
             raise ValueError("Concurrent inference exports differ") from error
+
+
+def prepare_inference(suite, runs, cell):
+    attempt, receipt = completed(
+        runs.resolve() / cell["run_id"], digest(suite / "suite.json"), cell
+    )
+    probe = csv_rows(suite / cell["language"] / cell["domain"] / "dev.csv")[0]
+    return attempt, receipt, materialize(attempt, receipt, probe["stereo"])
 
 
 def materialize(attempt, receipt, text):
