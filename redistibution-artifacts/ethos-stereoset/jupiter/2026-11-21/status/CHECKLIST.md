@@ -1,6 +1,18 @@
 # Ethos on JUPITER
 
-Snapshot 2026-11-21T19:16:07+00:00. A checked training or evaluation box requires a verified result receipt.
+Snapshot 2026-11-21T19:22:21+00:00. A checked training or evaluation box requires a verified result receipt.
+
+## Queue diagnosis for Lapa and Mamay 27B
+
+Checked on 21 November 2026 at 21:22:55 Kyiv time. Slurm reported all seven jobs eligible on the booster partition with normal QoS. Their pending reason was `Priority`, their dependency fields were empty, and Slurm had no start-time estimate.
+
+| Work | Slurm tasks | Eligible since (Kyiv) | Time requested per task |
+|---|---|---|---|
+| Lapa EN profession export | `3046431_1` | 20:06:47 | 30 minutes |
+| Lapa UK gender and profession exports | `3046432_0`, `3046432_1` | 20:06:49 | 30 minutes |
+| Mamay 27B UK training, four domains | `3045927_0` to `3045927_3` | 20:27:40 | 2 hours |
+
+Each task requests one node, one GH200 GPU and 48 CPUs. The Mamay pilot passed and the last English task completed successfully at 20:27:10 Kyiv time. The 24 Lapa evaluation retries are separately waiting on their assigned exports. Each export must succeed before its eight retries can start. At this check, 0 of 3 exports and 0 of 24 retries had finished.
 
 ## BF16 at a learning rate of 0.0005
 
@@ -67,11 +79,11 @@ Training array 3046051 covers four domains per model at FP16, learning rate 0.00
 | stereoset_en | 29/48 | 29 ☑ verified, 4 ☐ waiting for verified export, 4 ☐ pending, 7 ☐ queued, 4 ☐ waiting for checkpoint |
 | winobias_en_controlled | 29/48 | 29 ☑ verified, 4 ☐ waiting for verified export, 4 ☐ pending, 7 ☐ queued, 4 ☐ waiting for checkpoint |
 | winobias_en_natural | 29/48 | 29 ☑ verified, 4 ☐ waiting for verified export, 4 ☐ pending, 7 ☐ queued, 4 ☐ waiting for checkpoint |
-| bbq_en | 1/48 | 24 ☐ running, 8 ☐ pending, 1 ☑ verified, 4 ☐ waiting for verified export, 7 ☐ queued, 4 ☐ waiting for checkpoint |
+| bbq_en | 1/48 | 25 ☐ running, 7 ☐ pending, 1 ☑ verified, 4 ☐ waiting for verified export, 7 ☐ queued, 4 ☐ waiting for checkpoint |
 | stereoset_uk | 29/48 | 29 ☑ verified, 4 ☐ waiting for verified export, 4 ☐ pending, 7 ☐ queued, 4 ☐ waiting for checkpoint |
 | winobias_uk_controlled | 29/48 | 29 ☑ verified, 4 ☐ waiting for verified export, 4 ☐ pending, 7 ☐ queued, 4 ☐ waiting for checkpoint |
 | winobias_uk_natural | 29/48 | 29 ☑ verified, 4 ☐ waiting for verified export, 4 ☐ pending, 7 ☐ queued, 4 ☐ waiting for checkpoint |
-| bbq_uk | 1/48 | 24 ☐ running, 1 ☑ verified, 8 ☐ pending, 4 ☐ waiting for verified export, 7 ☐ queued, 4 ☐ waiting for checkpoint |
+| bbq_uk | 3/48 | 3 ☑ verified, 5 ☐ pending, 25 ☐ running, 4 ☐ waiting for verified export, 7 ☐ queued, 4 ☐ waiting for checkpoint |
 
 ## Mamay 27B feasibility
 
