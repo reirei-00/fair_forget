@@ -43,9 +43,9 @@ def _instructions(case, translated):
     if not isinstance(translated, dict):
         raise ValueError("Ukrainian case instructions must be a source-bound record")
     source = {field: case.get(field) for field in INSTRUCTION_FIELDS}
-    if translated.get("case_id") != case.get("case_id") or translated.get(
-        "source_sha256"
-    ) != digest(source):
+    if translated.get("case_id") != case.get(
+        "instruction_source_case_id", case.get("case_id")
+    ) or translated.get("source_sha256") != digest(source):
         raise ValueError("Ukrainian case instructions differ from their source binding")
     return (
         _text(translated.get("counter_intent_uk"), "counter intent"),
@@ -70,6 +70,17 @@ def request_state(case, stage, previous, *, response_field, task_uk, instruction
     if stage not in STAGE_NAMES or response_field != RESPONSE_FIELDS[stage]:
         raise ValueError("Declare the Ukrainian response field for the current stage")
     contrast, boundary = _instructions(case, instructions)
+    counterpart = case.get("counterpart_guidance")
+    if case.get("action") == "lapa_actor_counterpart" and counterpart is None:
+        raise ValueError("Actor counterparts require reviewed counterpart instructions")
+    if counterpart is not None:
+        if case.get("action") != "lapa_actor_counterpart" or (
+            counterpart["public_source_case"] != case["public_source_case"]
+            or counterpart["context_uk"] != case["context_uk"]
+        ):
+            raise ValueError("Counterpart instructions differ from the production case")
+        contrast = _text(counterpart["counter_intent_uk"], "counterpart contrast")
+        boundary = _text(counterpart["unrelated_boundary_uk"], "counterpart boundary")
     forbidden = case.get("forbidden_counters", [])
     if not isinstance(forbidden, list) or any(
         value not in FORBIDDEN_COUNTERS_UK for value in forbidden
@@ -94,7 +105,7 @@ def request_state(case, stage, previous, *, response_field, task_uk, instruction
             raise ValueError("The selected reporter must match an allowed Ukrainian role")
     elif selected_role is not None or selected_wording is not None:
         raise ValueError("An unattributed case cannot select a reporter")
-    return {
+    state = {
         "етап": STAGE_NAMES[stage],
         "випадок": {
             "твердження": _text(case.get("claim"), "claim").replace("[TARGET]", "[ЦІЛЬОВА_ГРУПА]"),
@@ -110,3 +121,24 @@ def request_state(case, stage, previous, *, response_field, task_uk, instruction
         "попередні_речення": deepcopy(previous),
         "завдання": _text(task_uk, "stage task"),
     }
+    if case.get("action") == "lapa_repair":
+        history = case.get("repair_sources")
+        if not history:
+            raise ValueError("A repair needs the earlier text and its recorded defects")
+        state["матеріал_для_виправлення"] = {
+            "правило": (
+                "Створи нову трійку для цієї групи: виправ зазначені недоліки. "
+                "Старі речення нижче є матеріалом для виправлення. "
+                "Для кроків C та U використовуй фактично згенеровані попередні речення цієї спроби."
+            ),
+            "попередні_версії": [
+                {
+                    "старі_речення": source["sentences"],
+                    "оцінка_речень": source.get("sentence_review", {}),
+                    "додаткові_зауваження": source.get("comparison_review", ""),
+                    "технічні_зауваження": source.get("mechanical_issues", []),
+                }
+                for source in history
+            ],
+        }
+    return state

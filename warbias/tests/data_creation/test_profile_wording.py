@@ -20,7 +20,8 @@ def test_reporter_dictionary_covers_all_recorded_case_roles():
     cases = read_rows(root / "protocol/inputs/construction_cases.jsonl")
     cases += read_rows(root / "protocol/inputs/coverage_case_additions.jsonl")
     roles = {role for case in cases for role in case["reporters"]}
-    assert len(roles) == 22 and set(REPORTERS_UK) == roles
+    assert len(roles) == 22 and set(REPORTERS_UK) == roles | {"community member"}
+    assert render_reporter("community member") == "представник громади"
     assert all(render_reporter(role) for role in roles)
     assert len({render_reporter(role) for role in roles}) == len(roles)
 

@@ -270,6 +270,14 @@ def generate_triplets(
     instructions = (
         unique_index(profile_context["instructions"], "case_id") if profile_context else {}
     )
+    if any(case.get("generation_slot_sha256") for case in cases) and (
+        not profile_context
+        or strategy_name != "sequential"
+        or any(case.get("matrix_schema") != "case_profile" for case in cases)
+    ):
+        raise ValueError(
+            "Dimension generation requires the source-bound sequential profile strategy"
+        )
     parents = {input_id(case): {} for case in cases}
     calls = {input_id(case): [] for case in cases}
     for stage in STRATEGIES[strategy_name]:
@@ -295,7 +303,9 @@ def generate_triplets(
                         state["previous"],
                         response_field=field,
                         task_uk=PROFILE_STAGE_TASKS[stage],
-                        instructions=instructions.get(case["case_id"]),
+                        instructions=instructions.get(
+                            case.get("instruction_source_case_id", case["case_id"])
+                        ),
                     )
                     task_case = {
                         **case,

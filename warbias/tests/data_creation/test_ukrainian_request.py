@@ -142,3 +142,44 @@ def test_synthetic_case_without_source_instructions_has_ukrainian_defaults(case)
     context = state(case, None)["випадок"]
     assert context["напрям_контрасту"] == "Створи змістовний контраст саме до заданої асоціації."
     assert context["неприпустимі_контрасти"] == []
+
+
+def test_repair_history_is_distinct_from_current_attempt(case, instructions):
+    previous = {"stereotype_uk": "Нове попереднє речення."}
+    case.update(
+        action="lapa_repair",
+        repair_sources=[
+            {
+                "sentences": {"S": "Попередній варіант.", "C": "Старе C.", "U": "Старе U."},
+                "sentence_review": {
+                    "C": {"action": "redo", "reason": "Немає змістового контрасту."}
+                },
+            }
+        ],
+    )
+    rendered = state(case, instructions, previous=previous)
+    assert rendered["попередні_речення"] == previous
+    history = rendered["матеріал_для_виправлення"]["попередні_версії"][0]
+    assert history["старі_речення"] == case["repair_sources"][0]["sentences"]
+    assert history["оцінка_речень"] == case["repair_sources"][0]["sentence_review"]
+
+
+def test_counterpart_requires_reviewed_context(case, instructions):
+    case.update(
+        action="lapa_actor_counterpart",
+        case_id="counterpart",
+        public_source_case="C-1",
+        instruction_source_case_id=instructions["case_id"],
+    )
+    with pytest.raises(ValueError, match="require reviewed"):
+        state(case, instructions)
+    case["counterpart_guidance"] = {
+        "public_source_case": "C-1",
+        "context_uk": case["context_uk"],
+        "counter_intent_uk": "Перевір обставини конкретної людини.",
+        "unrelated_boundary_uk": "Опиши незалежну буденну дію.",
+    }
+    assert (
+        state(case, instructions)["випадок"]["напрям_контрасту"]
+        == case["counterpart_guidance"]["counter_intent_uk"]
+    )

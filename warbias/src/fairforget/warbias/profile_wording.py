@@ -31,6 +31,7 @@ REPORTERS_UK = {
     "caseworker": "фахівець із супроводу",
     "caseworker in the host community": "фахівець із супроводу в громаді країни перебування",
     "colleague": "колега",
+    "community member": "представник громади",
     "community member in Ukraine": "член громади в Україні",
     "community organiser": "організатор громадської діяльності",
     "community organiser in the host community": (
