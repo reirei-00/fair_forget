@@ -27,6 +27,13 @@ def main(argv=None):
         sub = commands.add_parser(action)
         sub.add_argument("--suite", type=Path, required=True)
         sub.add_argument("--runs", type=Path, required=True)
+        if action == "submit":
+            sub.add_argument(
+                "--after-ok",
+                type=int,
+                metavar="JOB_ID",
+                help="Require a successful pilot before English training",
+            )
         if action != "submit":
             sub.add_argument("--model", required=True)
             sub.add_argument(
@@ -70,7 +77,9 @@ def main(argv=None):
     manifest = load_suite(a.suite)
     if a.action == "submit":
         n = sum(c["language"] == "en" for c in manifest["cells"])
-        dependency = []
+        if a.after_ok is not None and a.after_ok <= 0:
+            parser.error("--after-ok requires a positive Slurm job ID")
+        dependency = [f"--dependency=afterok:{a.after_ok}"] if a.after_ok else []
         for lang in spec["ethos"]["training_language_order"]:
             cmd = [
                 "sbatch",

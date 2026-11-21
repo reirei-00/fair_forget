@@ -7,6 +7,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ethos"))
+import suite
 import suite_data as data
 from archive import receipt_at
 from check_panel import check_rows
@@ -59,6 +60,36 @@ class Protocol(unittest.TestCase):
         cells = data.matrix(self.spec, 42)
         self.assertEqual(len({c["run_id"] for c in cells}), 48)
         self.assertEqual([c["language"] for c in cells], ["en"] * 24 + ["uk"] * 24)
+
+    def test_pilot_gates_english_and_english_gates_ukrainian(self):
+        cells = [{"language": lang} for lang in ["en"] * 4 + ["uk"] * 4]
+        with (
+            patch.object(suite, "load_suite", return_value={"cells": cells}),
+            patch.object(suite, "digest", return_value="suite-hash"),
+            patch.object(suite.subprocess, "check_output", side_effect=["111", "112"]) as dispatch,
+        ):
+            suite.main(
+                [
+                    "submit",
+                    "--suite",
+                    ".",
+                    "--runs",
+                    ".",
+                    "--source",
+                    ".",
+                    "--views",
+                    ".",
+                    "--model-root",
+                    ".",
+                    "--after-ok",
+                    "110",
+                ]
+            )
+        en, uk = [c.args[0] for c in dispatch.call_args_list]
+        self.assertIn("--dependency=afterok:110", en)
+        self.assertIn("--dependency=afterok:111", uk)
+        self.assertIn("--array=0-3", en)
+        self.assertIn("--array=0-3", uk)
 
     def test_incomplete_review_and_overlap(self):
         with self.assertRaisesRegex(ValueError, "split|family"):

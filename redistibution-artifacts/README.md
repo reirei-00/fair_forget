@@ -2,7 +2,7 @@
 
 Each seed covers 48 independent checkpoints across six base model revisions, four StereoSet domains (gender, profession, race/ethnicity and religion) and two training languages. Both evaluation languages apply to every checkpoint.
 
-The original full matrix runs 24 English jobs before its Ukrainian phase. The following model-specific BF16 configurations each run four English jobs before four Ukrainian jobs. Export the selector before preparing inputs, submitting training or evaluating. Give each configuration its own suite directory. All use the same seed-42 split, a learning rate of 0.0005 on both branches and separate checkpoint paths. For Lapa and Mamay 12B, first qualify the model with an English gender pilot. Check all 20 stereotype and two anti-stereotype epoch losses for finiteness and both adapters for finite values and a nonzero LoRA update.
+The original full matrix runs 24 English jobs before its Ukrainian phase. The following model-specific BF16 configurations each run four English jobs before four Ukrainian jobs. Export the selector before preparing inputs, submitting training or evaluating. Give each configuration its own suite directory. Pass `--after-ok PILOT_JOB_ID` to `suite.py submit` to have Slurm enforce the pilot condition while the pilot is queued or running. All use the same seed-42 split, a learning rate of 0.0005 on both branches and separate checkpoint paths. For Lapa and Mamay 12B, first qualify the model with an English gender pilot. Check all 20 stereotype and two anti-stereotype epoch losses for finiteness and both adapters for finite values and a nonzero LoRA update.
 
 | Model | Selector | Configuration |
 |---|---|---|
