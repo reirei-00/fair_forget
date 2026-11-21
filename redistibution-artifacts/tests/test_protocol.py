@@ -117,6 +117,35 @@ class Protocol(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Missing"):
             report_domains({"effects": []}, {"domain": "gender"}, "en")
 
+    def test_concurrent_inference_exports_verify_the_winner(self):
+        import shutil
+
+        from archive import inventory
+        from inference import publish_export
+
+        first = self.root / "first"
+        after = first / "after"
+        after.mkdir(parents=True)
+        (first / "before").mkdir()
+        (after / "config.json").write_text("{}")
+        (after / "model.safetensors").write_bytes(b"fixture")
+        data.write(
+            first / "export.json",
+            {
+                "weights": inventory(after),
+                "before": {},
+                "training_result_sha256": "same",
+            },
+        )
+        other = self.root / "other"
+        shutil.copytree(first, other)
+        output = self.root / "inference"
+        publish_export(first, output)
+        publish_export(other, output)
+        (output / "after/model.safetensors").write_bytes(b"changed")
+        with self.assertRaisesRegex(ValueError, "checkpoint changed"):
+            publish_export(other, output)
+
     def test_copied_cell_receipt_is_rejected(self):
         cell = data.matrix(self.spec, 42)[0]
         attempt = self.root / "attempt-first"
