@@ -85,6 +85,7 @@ def materialize(attempt, receipt, text):
             adapted = PeftModel.from_pretrained(model, attempt / "checkpoint").eval()
             expected = inspection(adapted, tok, text)
             merged = adapted.merge_and_unload(safe_merge=True).eval()
+            before_save = inspection(merged, tok, text)
             merged.save_pretrained(after, safe_serialization=True)
             for p in before.iterdir():
                 if (
@@ -110,7 +111,33 @@ def materialize(attempt, receipt, text):
             ).eval()
             after_tok = AutoTokenizer.from_pretrained(after, local_files_only=True)
             actual = inspection(restored, after_tok, text)
-            torch.testing.assert_close(expected, actual, rtol=1e-4, atol=1e-4)
+            checks = {}
+            if not torch.allclose(expected, actual, rtol=1e-4, atol=1e-4):
+                from dense_svd import verify_dense_svd
+
+                if not torch.equal(
+                    tok(text, return_tensors="pt").input_ids,
+                    after_tok(text, return_tensors="pt").input_ids,
+                ):
+                    raise ValueError("Export changed development token IDs")
+                torch.testing.assert_close(before_save, actual, rtol=0, atol=0)
+                original = AutoModelForCausalLM.from_pretrained(
+                    before, torch_dtype=torch.float32, local_files_only=True
+                )
+                native = attempt / "checkpoint"
+                adapter = torch.load(
+                    native / "adapter_model.bin", weights_only=True, mmap=True, map_location="cpu"
+                )
+                checks["dense_svd_exact"] = verify_dense_svd(
+                    original.state_dict(),
+                    adapter,
+                    restored.state_dict(),
+                    read(native / "adapter_config.json"),
+                )
+                checks["verifier_sha256"] = digest(Path(__file__).with_name("dense_svd.py"))
+                del original, adapter
+            checks["merged_reload_max_logit_error"] = (before_save - actual).abs().max().item()
+            checks["adapter_merge_max_logit_error"] = (expected - before_save).abs().max().item()
             write(
                 stage / "export.json",
                 {
@@ -118,6 +145,7 @@ def materialize(attempt, receipt, text):
                     "before": base_assets(before),
                     "training_result_sha256": digest(attempt / "result.json"),
                     "max_logit_error": (actual - expected).abs().max().item(),
+                    **checks,
                 },
             )
             publish_export(stage, output)
