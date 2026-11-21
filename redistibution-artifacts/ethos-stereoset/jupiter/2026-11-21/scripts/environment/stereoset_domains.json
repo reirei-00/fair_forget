@@ -1,0 +1,53 @@
+{
+  "design_id": "stereoset_domains_v1",
+  "model_registry": "models.json",
+  "models": ["llama31_8b_instruct", "gemma3_12b_it", "qwen3_8b", "lapa12b_instruct", "mamay12b_v2", "mamay27b_v2"],
+  "languages": ["uk", "en"],
+  "domains": {"gender": "гендер", "profession": "професія", "race": "раса та етнічність", "religion": "релігія"},
+  "stereoset_sources": {
+    "uk_pool": "36f96e4e63e181d4796f0747719a2415dabb92bc53eab1d4afd8f3071f2ecd10",
+    "uk_eval": "0fd16c79b88dd4d1384466b27b46e0b305aadf1a6086798da22c0e7c2f17d202",
+    "en_pool": "9e34da0362d870fe6f42a3e6e800988d1324fd040c9c630deb50d81a6f2ebd17",
+    "en_eval": "113904e37965b136f99498d3d8d176f025097a59e90adeb775175f7279081b99"
+  },
+  "methods": {
+    "wga": {
+      "name": "Weighted Gradient Ascent (WGA)",
+      "publication": "https://proceedings.iclr.cc/paper_files/paper/2025/file/9ad307ab459fb93163248a0a56959307-Paper-Conference.pdf",
+      "source_status": "blocked_at_pinned_entry",
+      "repository": "tmlr-group/G-effect", "commit": "ef368eea3b2c6dba1e090b9ebb021ac9f047e0ae",
+      "native_entry": "forget2.py", "variant": "wga_kl",
+      "qualification": "The pinned forget2.py omits the trainer's required strategy argument. For the selected wga_kl loss, it also only enables the reference on uppercase KL or lowercase npo matches."
+    },
+    "npo": {
+      "source_status": "qualification_pending",
+      "repository": "licong-lin/negative-preference-optimization", "commit": "1207bbe9a1abf502bc2d7b43a0a467d9524b4036",
+      "native_entry": "TOFU/forget.py", "variant": "npo_KL (proposed)",
+      "qualification": "Freeze the native variant, reference and question/answer export. Verify the local TOFU-format split, model configuration and nonzero optimizer steps."
+    },
+    "rmu": {
+      "source_status": "blocked_at_pinned_entry",
+      "repository": "centerforaisafety/wmdp", "commit": "c0b6c12bb0de3decf9c13bb13f9f1aa15754a132",
+      "native_entry": "rmu/unlearn.py", "variant": "original RMU",
+      "qualification": "Blocked at the pinned command. The loader selects fixed dataset sources and cannot read the local StereoSet corpus."
+    },
+    "biasunlearn": {
+      "source_status": "excluded_from_single_domain_design",
+      "repository": "a101269/BiasUnlearn", "commit": "c984eda06dbac154d73ba289592a63ef96ad1b60",
+      "native_entry": "train_7B.py", "variant": "authors' large-model trainer",
+      "qualification": "Excluded by study decision. Joint training and adaptive domain selection define this method. Preserve the original source for reference and omit this arm from single-domain execution."
+    },
+    "ethos": {
+      "source_status": "selected_model_environment_qualification",
+      "repository": "leigao97/Ethos", "commit": "88a932f0ff5cd30ad75be163fad9b359e0a7c59d",
+      "native_entry": "bias/gpt_train.py + unlearn.py --method svd", "variant": "Ethos SVD",
+      "training_language_order": ["en", "uk"], "training_block_tokens": 128,
+      "environment_setup": "deploy/ethos/setup.sh",
+      "qualification": "Qualify the registered base, training view, original two-branch trainer and SVD checkpoint in the model-specific environment. Original Transformers 4.30.0 was incompatible with the modern architectures."
+    }
+  },
+  "panels": {
+    "uk": {"stereoset_uk": "registered", "winobias_uk_controlled": "registered", "winobias_uk_natural": "registered", "bbq_uk": "registered"},
+    "en": {"stereoset_en": "staged; approved release and scorer binding pending", "winobias_en": "English release, scorer and correspondence pending", "bbq_en": "English release and scorer binding pending"}
+  }
+}

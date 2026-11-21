@@ -1,0 +1,104 @@
+[
+  {
+    "language": "en",
+    "domain": "profession",
+    "task": "stereoset_uk",
+    "old_job": "3045571_1"
+  },
+  {
+    "language": "en",
+    "domain": "profession",
+    "task": "winobias_uk_natural",
+    "old_job": "3045576_1"
+  },
+  {
+    "language": "en",
+    "domain": "profession",
+    "task": "bbq_uk",
+    "old_job": "3045583_1"
+  },
+  {
+    "language": "en",
+    "domain": "profession",
+    "task": "stereoset_en",
+    "old_job": "3045554_1"
+  },
+  {
+    "language": "en",
+    "domain": "profession",
+    "task": "winobias_en_controlled",
+    "old_job": "3045555_1"
+  },
+  {
+    "language": "en",
+    "domain": "profession",
+    "task": "winobias_en_natural",
+    "old_job": "3045557_1"
+  },
+  {
+    "language": "en",
+    "domain": "profession",
+    "task": "bbq_en",
+    "old_job": "3045558_1"
+  },
+  {
+    "language": "uk",
+    "domain": "gender",
+    "task": "stereoset_uk",
+    "old_job": "3045600_0"
+  },
+  {
+    "language": "uk",
+    "domain": "gender",
+    "task": "winobias_uk_controlled",
+    "old_job": "3045607_0"
+  },
+  {
+    "language": "uk",
+    "domain": "gender",
+    "task": "winobias_uk_natural",
+    "old_job": "3045608_0"
+  },
+  {
+    "language": "uk",
+    "domain": "gender",
+    "task": "bbq_uk",
+    "old_job": "3045609_0"
+  },
+  {
+    "language": "uk",
+    "domain": "gender",
+    "task": "stereoset_en",
+    "old_job": "3045587_0"
+  },
+  {
+    "language": "uk",
+    "domain": "gender",
+    "task": "winobias_en_controlled",
+    "old_job": "3045591_0"
+  },
+  {
+    "language": "uk",
+    "domain": "gender",
+    "task": "winobias_en_natural",
+    "old_job": "3045592_0"
+  },
+  {
+    "language": "uk",
+    "domain": "gender",
+    "task": "bbq_en",
+    "old_job": "3045599_0"
+  },
+  {
+    "language": "uk",
+    "domain": "profession",
+    "task": "stereoset_en",
+    "old_job": "3045587_1"
+  },
+  {
+    "language": "uk",
+    "domain": "profession",
+    "task": "winobias_en_controlled",
+    "old_job": "3045591_1"
+  }
+]

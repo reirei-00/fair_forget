@@ -1,0 +1,39 @@
+{
+  "en": {
+    "1": {
+      "cell": {
+        "model": "lapa12b_instruct",
+        "language": "en",
+        "domain": "profession",
+        "seed": 42,
+        "run_id": "stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/en/profession/seed-42"
+      },
+      "attempt": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/en/profession/seed-42/attempt-t0tu6l4e",
+      "training_sha256": "635ca33d54eb934470a71bde77d08cc0f505ccc56d5b233513b271feac794839"
+    }
+  },
+  "uk": {
+    "0": {
+      "cell": {
+        "model": "lapa12b_instruct",
+        "language": "uk",
+        "domain": "gender",
+        "seed": 42,
+        "run_id": "stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/uk/gender/seed-42"
+      },
+      "attempt": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/uk/gender/seed-42/attempt-jbapjc2l",
+      "training_sha256": "d385c10b6a35d6307dc256216b7231b673402d8891234c5786f56797a677518b"
+    },
+    "1": {
+      "cell": {
+        "model": "lapa12b_instruct",
+        "language": "uk",
+        "domain": "profession",
+        "seed": 42,
+        "run_id": "stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/uk/profession/seed-42"
+      },
+      "attempt": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/uk/profession/seed-42/attempt-a1junl6z",
+      "training_sha256": "de282bca255fa234ca6afac47e5f52a290016b69ad6b34dc979973a1eff81f7b"
+    }
+  }
+}

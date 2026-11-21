@@ -2,7 +2,7 @@
 required-version = "==0.16.2"
 target-version = "py310"
 line-length = 100
-extend-exclude = ["outputs", ".venv"]
+extend-exclude = ["outputs", ".venv", "redistibution-artifacts/ethos-stereoset/jupiter/2026-11-21/scripts"]
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I"]
