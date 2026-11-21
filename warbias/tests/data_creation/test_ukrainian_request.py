@@ -183,3 +183,35 @@ def test_counterpart_requires_reviewed_context(case, instructions):
         state(case, instructions)["випадок"]["напрям_контрасту"]
         == case["counterpart_guidance"]["counter_intent_uk"]
     )
+
+
+def test_structural_followup_keeps_actor_instructions_and_current_parents(case, instructions):
+    from fairforget.warbias.output_defects import repair_context
+
+    case.update(
+        action="lapa_actor_counterpart",
+        matrix_item_id="TC-1",
+        public_source_case="test",
+        counterpart_guidance={
+            "public_source_case": "test",
+            "context_uk": case["context_uk"],
+            "counter_intent_uk": "Настанова для нової групи.",
+            "unrelated_boundary_uk": "Незалежна подія.",
+        },
+    )
+    observed = {
+        "id": "TC-1",
+        "case": deepcopy(case),
+        "stereotype": "Стара версія S.",
+        "counter_stereotype": "Стара версія S. Старе продовження.",
+        "unrelated": "Стара версія U.",
+    }
+    case["output_defect_repair"] = repair_context(case, observed)
+    parents = {"stereotype_uk": "Нове S.", "counter_stereotype_uk": "Нове C."}
+    result = state(case, instructions, stage="U", previous=parents)
+    assert result["попередні_речення"] == parents
+    assert result["випадок"]["напрям_контрасту"] == "Настанова для нової групи."
+    assert (
+        result["виправлення_згенерованої_трійки"]["попередня_згенерована_трійка"]["S"]
+        == "Стара версія S."
+    )

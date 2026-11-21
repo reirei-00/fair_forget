@@ -141,4 +141,8 @@ def request_state(case, stage, previous, *, response_field, task_uk, instruction
                 for source in history
             ],
         }
+    if case.get("output_defect_repair") is not None:
+        from fairforget.warbias.output_defects import repair_instructions
+
+        state["виправлення_згенерованої_трійки"] = repair_instructions(case["output_defect_repair"])
     return state
