@@ -57,11 +57,27 @@ if __name__ == "__main__":
             r["item_id"]: adapt(a.task, r, language=lang)
             for r in csv_rows(a.review.parent / lang / "heldout.csv")
         }
+        spec = dataset_spec(a.task, a.dataset_bundle)
+        # Source-matched English rows use the registered Ukrainian target vocabulary
+        # for macro averaging. Validate those labels and the English sentences by ID.
+        matched = (
+            lang == "en"
+            and spec.get("pairing", {}).get("uk_task") == "stereoset_uk"
+            and spec.get("original_registry", {}).get("sha256")
+            == read(SPEC)["stereoset_sources"]["uk_eval"]
+        )
+        grouping = (
+            {
+                r["item_id"]: adapt("stereoset_uk", r, language="uk")
+                for r in csv_rows(a.review.parent / "uk" / "heldout.csv")
+            }
+            if matched
+            else expected
+        )
         for row in rows:
             reference = expected[row["id"]]
-            if any(
-                row[k] != reference[k]
-                for k in ("sentences", "group", "category", "condition", "eligible")
+            if any(row[k] != reference[k] for k in ("sentences", "condition", "eligible")) or any(
+                row[k] != grouping[row["id"]][k] for k in ("group", "stratum", "category")
             ):
                 raise ValueError(f"Changed held-out StereoSet item {row['id']}")
     packages = (
