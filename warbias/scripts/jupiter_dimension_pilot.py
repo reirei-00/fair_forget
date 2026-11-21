@@ -9,6 +9,7 @@ import fcntl
 import importlib.util
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -28,9 +29,14 @@ def load_operator(root):
 def run_pilot(root, operator):
     if not os.environ.get("SLURM_JOB_ID"):
         raise ValueError("Pilot execution requires a Slurm allocation")
-    device = os.environ.get("CUDA_VISIBLE_DEVICES", "")
-    if not device or "," in device:
-        raise ValueError("Pilot execution requires exactly one Slurm-assigned GPU")
+    assigned = [item.strip() for item in os.environ.get("CUDA_VISIBLE_DEVICES", "").split(",")]
+    gpu_id = r"(?:[0-9]+|GPU-[0-9A-Fa-f-]+|MIG-(?:GPU-)?[0-9A-Fa-f-]+(?:/[0-9]+/[0-9]+)?)"
+    if not all(re.fullmatch(gpu_id, device) for device in assigned) or len(set(assigned)) != len(
+        assigned
+    ):
+        raise ValueError("No valid Slurm CUDA device list for this step")
+    # Booster can grant an entire node. Keep inference on its first visible device.
+    device = assigned[0]
 
     results = root / "results"
     results.mkdir(exist_ok=True)
@@ -53,6 +59,7 @@ def run_pilot(root, operator):
         if not completed:
             env = {
                 **os.environ,
+                "CUDA_VISIBLE_DEVICES": device,
                 "PYTHONDONTWRITEBYTECODE": "1",
                 "PYTHONPATH": str(source / "src"),
                 "HF_HUB_OFFLINE": "1",

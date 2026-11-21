@@ -11,4 +11,4 @@ export LMOD_PAGER=cat PAGER=cat
 module load Stages/2026 CUDA/13
 export PYTHONDONTWRITEBYTECODE=1 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 HF_HUB_DISABLE_IMPLICIT_TOKEN=1
 export XDG_CACHE_HOME="$PWD/runtime-cache" VLLM_CACHE_ROOT="$PWD/runtime-cache/vllm" HF_HOME="$PWD/runtime-cache/huggingface"
-exec /e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python -u pilot-ops/jupiter_dimension_pilot.py .
+exec srun --exact --nodes=1 --ntasks=1 --cpus-per-task=8 --gpus-per-task=1 /e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python -u pilot-ops/jupiter_dimension_pilot.py .
