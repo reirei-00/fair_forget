@@ -1,9 +1,46 @@
 {
-  "snapshot_utc": "2026-11-21T19:22:55+00:00",
+  "snapshot_utc": "2026-11-21T19:57:16+00:00",
   "requested": 17,
   "total_same_failure": 24,
-  "verified_exports": {},
+  "verified_exports": {
+    "en/profession": {
+      "training_result_sha256": "635ca33d54eb934470a71bde77d08cc0f505ccc56d5b233513b271feac794839",
+      "dense_svd_exact": {
+        "updated_weights": 96,
+        "other_tensors": 531
+      },
+      "merged_reload_max_logit_error": 0.0,
+      "adapter_merge_max_logit_error": 0.00028705596923828125,
+      "max_logit_error": 0.00028705596923828125,
+      "verifier_sha256": "4f8cf3c45798049d596be5210374b8144e1c86770b6835a40102320552214037",
+      "export_sha256": "f57ee38bb84a308626bc9dbaa9dcc0b87678be06fa4594ec8225e5e72b3d7e73"
+    },
+    "uk/gender": {
+      "training_result_sha256": "d385c10b6a35d6307dc256216b7231b673402d8891234c5786f56797a677518b",
+      "dense_svd_exact": {
+        "updated_weights": 96,
+        "other_tensors": 531
+      },
+      "merged_reload_max_logit_error": 0.0,
+      "adapter_merge_max_logit_error": 0.0002288818359375,
+      "max_logit_error": 0.0002288818359375,
+      "verifier_sha256": "4f8cf3c45798049d596be5210374b8144e1c86770b6835a40102320552214037",
+      "export_sha256": "cadfc5ffdbc8edf1b7d9aab5bf860110b89eac17dcc89093ed2f503cbdf78cc4"
+    },
+    "uk/profession": {
+      "training_result_sha256": "de282bca255fa234ca6afac47e5f52a290016b69ad6b34dc979973a1eff81f7b",
+      "dense_svd_exact": {
+        "updated_weights": 96,
+        "other_tensors": 531
+      },
+      "merged_reload_max_logit_error": 0.0,
+      "adapter_merge_max_logit_error": 0.0001678466796875,
+      "max_logit_error": 0.0001678466796875,
+      "verifier_sha256": "4f8cf3c45798049d596be5210374b8144e1c86770b6835a40102320552214037",
+      "export_sha256": "674425ea4297460e0b898c27b5865c9dc4d8611f4541488fc2c4d668ac9f0258"
+    }
+  },
   "evaluations": {
-    "\u2610 waiting for verified export": 24
+    "\u2610 queued": 24
   }
 }
