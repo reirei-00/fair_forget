@@ -44,7 +44,7 @@ def reasons(row):
     return result
 
 
-def build(items, scores):
+def build(items, scores, spans, frontier):
     items = sorted(items, key=lambda r: r["item_id"])
     ids = [r["item_id"] for r in items]
     parent = {i: i for i in ids}
@@ -57,20 +57,29 @@ def build(items, scores):
             i = parent[i]
         return i
 
-    edges = []
+    edges = set()
     counts = Counter()
-    screened = 0
-    for row in pair_rows(scores):
-        screened += 1
+
+    def connect(row, signals):
         left, right = row["left"], row["right"]
         if left >= right or left not in parent or right not in parent:
             raise ValueError("Invalid evidence pair")
-        signals = reasons(row)
         if signals:
             a, b = root(left), root(right)
             parent[max(a, b)] = min(a, b)
-            edges.append((left, right))
+            edges.add((left, right))
             counts.update(signals)
+
+    screened = 0
+    for row in pair_rows(scores):
+        screened += 1
+        connect(row, reasons(row))
+    for row in pair_rows(spans):
+        connect(row, row["signal"].split("+"))
+    for row in csv_rows(frontier):
+        if row["decision"] not in ("link", "distinct"):
+            raise ValueError("Unknown audit decision")
+        connect(row, ["boundary_audit"] if row["decision"] == "link" else [])
     groups = defaultdict(list)
     for row in items:
         groups[root(row["item_id"])].append(row)
@@ -110,7 +119,7 @@ def build(items, scores):
     leaks = [
         (i, j)
         for i, j in edges
-        if {split_by_id[i], split_by_id[j]} not in ({"exclude", "eval"},)
+        if {split_by_id[i], split_by_id[j]} != {"exclude", "eval"}
         and split_by_id[i] != split_by_id[j]
     ]
     if leaks:
@@ -182,15 +191,19 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--template", required=True, type=Path)
     p.add_argument("--scores", required=True, type=Path)
+    p.add_argument("--spans", required=True, type=Path)
+    p.add_argument("--frontier", type=Path, default=Path(__file__).with_name("frontier_review.csv"))
     p.add_argument("--output", required=True, type=Path)
     a = p.parse_args()
     items = input_items(a.template)
-    rows, audit = build(items, a.scores)
+    rows, audit = build(items, a.scores, a.spans, a.frontier)
     a.output.mkdir(exist_ok=False, parents=True)
     write_rows(a.output / "items.csv", items)
     write_rows(a.output / "assignments.csv", rows)
     expand(a.template, rows, a.output / "review.csv")
     audit["template_sha256"] = source_digest(a.template)
+    audit["spans_sha256"] = source_digest(a.spans)
+    audit["frontier_sha256"] = source_digest(a.frontier)
     audit["scores_sha256"] = source_digest(a.scores)
     audit["items_sha256"] = source_digest(a.output / "items.csv")
     audit["assignments_sha256"] = source_digest(a.output / "assignments.csv")
