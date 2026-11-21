@@ -56,10 +56,15 @@ def qualify(args):
         or digest(cp / "adapter_model.bin") != fit["checkpoint_sha256"]
     ):
         raise ValueError("Missing or changed native SVD checkpoint")
+    if "gpus" in fit and (
+        fit["gpus"] != 1 or (fit["cell"]["language"], fit["cell"]["domain"]) != ("en", "gender")
+    ):
+        raise ValueError("The production profile requires a passing one-GPU English gender pilot")
+    branches = args.pilot / "native" if (args.pilot / "native").is_dir() else args.pilot
     views = set()
     proofs = {}
     for role, epochs in controls["runner_defaults"]["epochs"].items():
-        config = read(args.pilot / role / "adapter_config.json")
+        config = read(branches / role / "adapter_config.json")
         views.add(Path(config["base_model_name_or_path"]).resolve(strict=True))
         if config["r"] != 16:
             raise ValueError("Pilot adapter rank differs")
@@ -67,7 +72,7 @@ def qualify(args):
         losses = [float(v) for v in re.findall(r"Epoch \d+ finished, total loss: (\S+)", log)]
         if len(losses) != epochs or not all(map(math.isfinite, losses)):
             raise ValueError(f"Invalid {role} epochs")
-        path = args.pilot / role / "adapter_model.safetensors"
+        path = branches / role / "adapter_model.safetensors"
         weights = load_file(path)
         if not all(w.isfinite().all() for w in weights.values()) or not any(
             w.count_nonzero() for k, w in weights.items() if "lora_B" in k
