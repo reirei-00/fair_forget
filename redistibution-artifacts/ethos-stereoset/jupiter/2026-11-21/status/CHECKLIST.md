@@ -1,6 +1,6 @@
 # Ethos on JUPITER
 
-Snapshot 2026-11-21T18:28:57+00:00. A checked training or evaluation box requires a verified result receipt.
+Snapshot 2026-11-21T19:16:07+00:00. A checked training or evaluation box requires a verified result receipt.
 
 ## BF16 at a learning rate of 0.0005
 
@@ -67,11 +67,11 @@ Training array 3046051 covers four domains per model at FP16, learning rate 0.00
 | stereoset_en | 29/48 | 29 ☑ verified, 4 ☐ waiting for verified export, 4 ☐ pending, 7 ☐ queued, 4 ☐ waiting for checkpoint |
 | winobias_en_controlled | 29/48 | 29 ☑ verified, 4 ☐ waiting for verified export, 4 ☐ pending, 7 ☐ queued, 4 ☐ waiting for checkpoint |
 | winobias_en_natural | 29/48 | 29 ☑ verified, 4 ☐ waiting for verified export, 4 ☐ pending, 7 ☐ queued, 4 ☐ waiting for checkpoint |
-| bbq_en | 0/48 | 25 ☐ running, 8 ☐ pending, 4 ☐ waiting for verified export, 7 ☐ queued, 4 ☐ waiting for checkpoint |
+| bbq_en | 1/48 | 24 ☐ running, 8 ☐ pending, 1 ☑ verified, 4 ☐ waiting for verified export, 7 ☐ queued, 4 ☐ waiting for checkpoint |
 | stereoset_uk | 29/48 | 29 ☑ verified, 4 ☐ waiting for verified export, 4 ☐ pending, 7 ☐ queued, 4 ☐ waiting for checkpoint |
 | winobias_uk_controlled | 29/48 | 29 ☑ verified, 4 ☐ waiting for verified export, 4 ☐ pending, 7 ☐ queued, 4 ☐ waiting for checkpoint |
 | winobias_uk_natural | 29/48 | 29 ☑ verified, 4 ☐ waiting for verified export, 4 ☐ pending, 7 ☐ queued, 4 ☐ waiting for checkpoint |
-| bbq_uk | 0/48 | 25 ☐ running, 8 ☐ pending, 4 ☐ waiting for verified export, 7 ☐ queued, 4 ☐ waiting for checkpoint |
+| bbq_uk | 1/48 | 24 ☐ running, 1 ☑ verified, 8 ☐ pending, 4 ☐ waiting for verified export, 7 ☐ queued, 4 ☐ waiting for checkpoint |
 
 ## Mamay 27B feasibility
 
