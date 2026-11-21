@@ -19,7 +19,7 @@ python3 ethos/suite.py plan --seed 42
 python3 -m unittest discover -s tests
 ```
 
-On JUPITER, `bash ethos/setup.sh` provisions one environment per model with the Stages/2026 PyTorch module and [package pins](ethos/requirements-jupiter.txt). Set `ETHOS_PROJECT_ROOT` to override the project storage root and `ETHOS_UV` to override the uv executable. Source `ethos/use.sh MODEL_ID` to select the matching interpreter. On another Linux host use a separate virtual environment with a compatible PyTorch 2.9.1 build and install the pinned packages with normal dependency resolution. Install Fair-UK in a separate virtual environment using its `.[fair-uk]` extra, with a compatible Transformers version for all selected models (4.57.6 in the training environments). Set `EVAL_PYTHON` to its absolute interpreter path. The evaluator records its effective dependency versions.
+On JUPITER, `bash ethos/setup.sh` provisions one environment per model with the Stages/2026 PyTorch module and [package pins](ethos/requirements-jupiter.txt). Set `ETHOS_PROJECT_ROOT` to override the project storage root and `ETHOS_UV` to override the uv executable. Source `ethos/use.sh MODEL_ID` to select the matching interpreter. On another Linux host use a separate virtual environment with a compatible PyTorch 2.9.1 build and install the pinned packages with normal dependency resolution. Install Fair-UK in a separate virtual environment using its `.[fair-uk]` extra, with a compatible Transformers version for all selected models (4.57.6 in the training environments). Set `EVAL_PYTHON` to its absolute interpreter path. The evaluator records its effective dependency versions and ignores the training interpreter’s Python import path. Set `FAIR_UK_PYTHONPATH` only if the evaluation environment needs extra module directories.
 
 Acquire the exact [model revisions](config/models.json) on a download host with access to the model repositories. From an environment with huggingface-hub installed:
 
@@ -77,7 +77,7 @@ cell=(--model llama31_8b_instruct --language en --domain gender)
 "$ETHOS_PYTHON" ethos/suite.py train "${common[@]}" "${training[@]}" "${cell[@]}"
 ```
 
-The trainer reads the stereotype and anti-stereotype columns from the training-only file named `test.csv`, the split name expected by Ethos. For Gemma-based models the training view selects the original text backbone. Each attempt keeps both native adapters, their tensor-equivalent binary exports, the SVD checkpoint, commands, dependency versions, frozen-input identity, base-file hashes and logs. The runner reloads the final adapter twice on the same development prompt before publishing the completion receipt. Repeating a completed cell verifies its archive. Failed attempts stay available for diagnosis. Keep the model snapshots and views at their recorded absolute paths. The original SVD runs on CPU, produces dense adapter matrices and needs substantial RAM, disk and time, particularly for Mamay 27B.
+The trainer reads the stereotype and anti-stereotype columns from the training-only file named `test.csv`, the split name expected by Ethos. For Gemma-based models the training view selects the original text backbone. Each attempt keeps both native adapters, their tensor-equivalent binary exports, the SVD checkpoint, commands, dependency versions, frozen-input identity, base-file hashes and logs. The runner verifies the base weight shards against the Hub revision, matches the reloaded adapter tensors to the SVD output, and reloads the final adapter twice on the same development prompt before publishing the completion receipt. Repeating a completed cell verifies its archive. Failed attempts stay available for diagnosis. Keep the model snapshots and views at their recorded absolute paths. The original SVD runs on CPU, produces dense adapter matrices and needs substantial RAM, disk and time, particularly for Mamay 27B.
 
 ## Evaluate and read redistribution
 
@@ -98,15 +98,22 @@ To evaluate all eight interventions for one model, list the available panels in 
   --fair-uk "$WORK/fair-uk" --eval-python "$EVAL_PYTHON" --panels "$WORK/panels.json"
 ```
 
-Add `--execute` to run the printed commands. Select each of the six model environments in turn.
+Add `--execute` to run the printed commands. Select each of the six model environments in turn. Restarting the sweep verifies and reuses completed pairs with the same checkpoint, release, evaluator, runtime and inference settings. Interrupted attempts retain their logs.
 
 Each pair preserves the per-item predictions, Fair-UK reports, paired changes, intervals and coverage. Each StereoSet pair writes `domains.csv` with four rows of target-macro SS, LMS and ICAT. The trained domain identifies a row of the 4 × 4 redistribution matrix and the evaluated domain identifies a column. Read SS against 50, inspect direction changes, and use LMS and ICAT to check whether language-modeling quality also changed. Assess WinoBias and BBQ using their native category and condition breakdowns. A calibrated redistribution index and the other study metrics requiring extra panels or judgments remain separate analyses.
 
+To export one complete matrix, pass the four paired output directories printed by the runner for the same model, training language, evaluation language and seed. The exporter verifies their receipts, base scores, source rows and inference settings. The long-format CSV contains sixteen targeted and off-target comparisons with their native scores, signed changes, direction relative to 50 and parity crossings.
+
+```bash
+python3 ethos/domain_matrix.py --pairs "$GENDER_PAIR" "$PROFESSION_PAIR" "$RACE_PAIR" "$RELIGION_PAIR" \
+  --output "$WORK/matrix.csv"
+```
+
 ## Reproduce the software check
 
-With the training stack installed, run the following on CPU. The test creates a disposable model and dataset, runs both upstream training branches and SVD, repeats the training command, exports the checkpoint, runs Fair-UK inference on both sides, and verifies all four domain rows. Use a new output directory for each invocation.
+With the training stack installed, run the following on CPU. The test creates a disposable model and dataset, runs both upstream training branches and SVD, repeats the training command, exports the checkpoint, runs Fair-UK inference on both sides, and verifies all four domain rows. The optional `--matrix` flag trains all four tiny English interventions and verifies the combined sixteen-row matrix. Use a new output directory for each invocation.
 
 ```bash
 "$ETHOS_PYTHON" tests/smoke.py --source "$WORK/Ethos" --fair-uk "$WORK/fair-uk" \
-  --eval-python "$EVAL_PYTHON" --output "$WORK/smoke-1"
+  --eval-python "$EVAL_PYTHON" --output "$WORK/smoke-1" --matrix
 ```

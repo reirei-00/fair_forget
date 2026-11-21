@@ -44,6 +44,8 @@ def csv_write(path, rows):
 
 
 def matrix(spec, seed):
+    if type(seed) is not int or not 0 <= seed < 2**32:
+        raise ValueError("Seed must be an unsigned 32-bit integer for the native trainer")
     return [
         {
             "model": model,

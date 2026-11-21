@@ -1,32 +1,16 @@
 """Train and archive one Ethos intervention using the authors' programs."""
 
-import contextlib
-import fcntl
 import importlib.metadata
-import math
 import os
 import platform
-import re
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
-from archive import inventory
+from archive import completed, inventory, lock, receipt_at
 from suite_data import HERE, REGISTRY, SPEC, csv_rows, digest, read, write
-
-UPSTREAM = {
-    "bias/gpt_train.py": "7b9a622f07a8039d7da079308ff4b4ac75dffa328d8740c411a556b44c70736b",
-    "unlearn.py": "91bbaba200bc9145baf5ca626e7cf8b64ab6eec23c3c9a7cceb7badeae4e3102",
-}
-
-
-@contextlib.contextmanager
-def lock(directory):
-    directory.mkdir(parents=True, exist_ok=True)
-    with (directory / ".lock").open("a") as f:
-        fcntl.flock(f, fcntl.LOCK_EX)
-        yield
+from upstream import UPSTREAM, fit, verify_source
 
 
 def base_assets(base):
@@ -36,25 +20,6 @@ def base_assets(base):
         if p.is_file()
         and p.suffix in (".safetensors", ".bin", ".json", ".model", ".txt", ".tiktoken", ".jinja")
     }
-
-
-def completed(directory, suite_hash):
-    pointer = read(directory / "complete.json")
-    name = pointer["attempt"]
-    if not re.fullmatch(r"attempt-[a-zA-Z0-9_-]+", name):
-        raise ValueError("Invalid attempt name")
-    attempt = directory / name
-    if digest(attempt / "result.json") != pointer["result_sha256"]:
-        raise ValueError("Completion receipt changed")
-    receipt = read(attempt / "result.json")
-    if receipt["suite_sha256"] != suite_hash:
-        raise ValueError(
-            "Different prepared suite at this run path; choose a separate runs directory"
-        )
-    for label, expected in receipt["artifacts"].items():
-        if inventory(attempt / label) != expected:
-            raise ValueError(f"Archived weights changed: {attempt / label}")
-    return attempt, receipt
 
 
 def packed(rows, column, tokenizer, block):
@@ -104,34 +69,37 @@ def inspection(model, tok, text):
 
 def verify_reload(view, checkpoint, tokenizer, text):
     import torch
-    from peft import PeftModel
+    from peft import PeftModel, get_peft_model_state_dict
     from transformers import AutoModelForCausalLM
 
-    def reload_once():
+    def reload_once(check_weights):
         base = AutoModelForCausalLM.from_pretrained(
             view, torch_dtype=torch.float32, local_files_only=True
         )
         model = PeftModel.from_pretrained(base, checkpoint).eval()
+        if check_weights:
+            saved = torch.load(
+                checkpoint / "adapter_model.bin", map_location="cpu", weights_only=True, mmap=True
+            )
+            recovered = get_peft_model_state_dict(model)
+            if saved.keys() != recovered.keys() or any(
+                not torch.equal(saved[k], recovered[k]) for k in saved
+            ):
+                raise ValueError("Reloaded PEFT adapter differs from the native SVD tensors")
         return inspection(model, tokenizer, text)
 
-    a, b = reload_once(), reload_once()
+    a, b = reload_once(True), reload_once(False)
     torch.testing.assert_close(a, b, rtol=1e-5, atol=1e-6)
     return (a - b).abs().max().item()
 
 
 def train(a, manifest, cell):
-    import torch
-    from adapter_for_svd import export
     from prepare_view import prepare
     from transformers import AutoTokenizer
 
     controls = read(SPEC)["ethos"]
     source = a.source.resolve()
-    head = subprocess.check_output(["git", "-C", source, "rev-parse", "HEAD"], text=True).strip()
-    if head != controls["commit"]:
-        raise ValueError("Different upstream Ethos revision")
-    if {k: digest(source / k) for k in UPSTREAM} != UPSTREAM:
-        raise ValueError("Expected published Ethos trainer and SVD at " + controls["commit"])
+    verify_source(source, controls["commit"])
     if os.environ.get("ETHOS_MODEL", cell["model"]) != cell["model"]:
         raise ValueError("Active model environment differs from the requested cell")
     root = a.suite.resolve()
@@ -143,16 +111,10 @@ def train(a, manifest, cell):
                 folder = a.runs.resolve() / en["run_id"]
                 if not (folder / "complete.json").is_file():
                     raise ValueError("English phase incomplete: " + en["run_id"])
-                pointer = read(folder / "complete.json")
-                result = folder / pointer["attempt"] / "result.json"
-                if (
-                    digest(result) != pointer["result_sha256"]
-                    or read(result)["suite_sha256"] != suite_hash
-                ):
-                    raise ValueError("English receipt does not match this suite")
+                receipt_at(folder, suite_hash, en)
     with lock(directory):
         if (directory / "complete.json").exists():
-            attempt, _ = completed(directory, suite_hash)
+            attempt, _ = completed(directory, suite_hash, cell)
             print("Verified", attempt)
             return
         view_root = a.views.resolve()
@@ -181,8 +143,13 @@ def train(a, manifest, cell):
             "PYTHONDONTWRITEBYTECODE": "1",
         }
         args = controls["runner_defaults"]
+        assets = base_assets(base)
+        if {k: v for k, v in assets.items() if k.endswith(".safetensors")} != model[
+            "weights_sha256"
+        ]:
+            raise ValueError("Model weights differ from the pinned Hub shard checksums")
         recipe = {
-            "base_assets": base_assets(base),
+            "base_assets": assets,
             "cell": cell,
             "suite_sha256": suite_hash,
             "base": str(base),
@@ -205,6 +172,8 @@ def train(a, manifest, cell):
                 for n in (
                     "suite.py",
                     "suite_train.py",
+                    "upstream.py",
+                    "archive.py",
                     "suite_data.py",
                     "prepare_view.py",
                     "adapter_for_svd.py",
@@ -232,69 +201,7 @@ def train(a, manifest, cell):
 
         write(attempt / "recipe.json", recipe)
         try:
-            epochs = args["epochs"]
-            for role in ("stereo", "antistereo"):
-                path = attempt / "native" / role
-                launch(
-                    [
-                        sys.executable,
-                        source / "bias/gpt_train.py",
-                        "--model_name_or_path",
-                        view,
-                        "--dataset_name",
-                        train_dir,
-                        "--output_dir",
-                        path,
-                        "--num_train_epochs",
-                        epochs[role],
-                        "--seed",
-                        cell["seed"],
-                        "--per_device_train_batch_size",
-                        args["batch_size"],
-                        "--learning_rate",
-                        args["learning_rate"],
-                        "--gradient_accumulation_steps",
-                        1,
-                        "--lora_rank",
-                        args["lora_rank"],
-                        "--mixed_precision",
-                        args["mixed_precision"],
-                    ],
-                    role,
-                )
-                log = (attempt / (role + ".log")).read_text()
-                losses = re.findall(r"Epoch \d+ finished, total loss: ([^\s]+)", log)
-                if len(losses) != epochs[role] or not all(math.isfinite(float(v)) for v in losses):
-                    raise ValueError(f"Incomplete or nonfinite {role} training")
-                export(path, attempt / "svd-input" / role)
-                weights = torch.load(
-                    attempt / "svd-input" / role / "adapter_model.bin",
-                    map_location="cpu",
-                    weights_only=True,
-                )
-                if not all(torch.isfinite(v).all() for v in weights.values()) or not any(
-                    v.count_nonzero() for k, v in weights.items() if "lora_B" in k
-                ):
-                    raise ValueError(f"Invalid {role} adapter update")
-                del weights
-            alpha = args["alpha"]
-            launch(
-                [
-                    sys.executable,
-                    source / "unlearn.py",
-                    "--input_path_1",
-                    attempt / "svd-input/antistereo",
-                    "--input_path_2",
-                    attempt / "svd-input/stereo",
-                    "--alpha",
-                    alpha,
-                    "--method",
-                    "svd",
-                ],
-                "svd",
-            )
-            checkpoint = attempt / "checkpoint"
-            (attempt / "svd-input" / f"svd_{float(alpha)}").rename(checkpoint)
+            checkpoint = fit(source, view, train_dir, attempt, cell, args, launch)
             error = verify_reload(view, checkpoint, tok, probe["stereo"])
             artifacts = {
                 n: inventory(attempt / n)

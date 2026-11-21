@@ -145,6 +145,11 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     for key in ("source", "fair-uk", "eval-python", "output"):
         p.add_argument("--" + key, required=True, type=Path)
+    p.add_argument(
+        "--matrix",
+        action="store_true",
+        help="Train all four tiny English checkpoints and assemble the 4 × 4 result",
+    )
     a = p.parse_args()
     root = a.output.resolve()
     root.mkdir(parents=True, exist_ok=False)
@@ -165,6 +170,7 @@ def main():
                 "directory": "tiny",
                 "tokenizer_revision": "fixture",
                 "config_sha256": sha(model / "config.json"),
+                "weights_sha256": {"model.safetensors": sha(model / "model.safetensors")},
             }
         ]
     }
@@ -202,54 +208,77 @@ def main():
     write_csv(review, records)
     suite = root / "suite"
     run("prepare", *files, "--review", review, "--output", suite)
-    common = [
-        "--model",
-        "tiny",
-        "--domain",
-        "gender",
-        "--language",
-        "en",
-        "--suite",
-        suite,
-        "--runs",
-        root / "runs",
-    ]
-    train = [
-        "train",
-        *common,
-        "--source",
-        a.source.resolve(),
-        "--views",
-        root / "views",
-        "--model-root",
-        model_root,
-    ]
-    run(*train)
-    run(*train)
-    assert len(list((root / "runs").rglob("attempt-*"))) == 1
-    run(
-        "evaluate",
-        *common,
-        "--fair-uk",
-        a.fair_uk.resolve(),
-        "--eval-python",
-        a.eval_python.absolute(),
-        "--device",
-        "cpu",
-        "--dtype",
-        "float32",
-        "--bootstrap",
-        "0",
-        "--dataset-bundle",
-        bundle,
-        "--task",
-        "stereoset_en",
-    )
-    (csv_path,) = (root / "runs").rglob("domains.csv")
-    with csv_path.open() as f:
-        contrasts = list(csv.DictReader(f))
-    assert {r["evaluated_domain"] for r in contrasts} == set(DOMAINS)
-    assert sum(r["targeted"] == "True" for r in contrasts) == 1
+    pairs = []
+    for domain in DOMAINS if a.matrix else ("gender",):
+        common = [
+            "--model",
+            "tiny",
+            "--domain",
+            domain,
+            "--language",
+            "en",
+            "--suite",
+            suite,
+            "--runs",
+            root / "runs",
+        ]
+        train = [
+            "train",
+            *common,
+            "--source",
+            a.source.resolve(),
+            "--views",
+            root / "views",
+            "--model-root",
+            model_root,
+        ]
+        evaluation = [
+            "evaluate",
+            *common,
+            "--fair-uk",
+            a.fair_uk.resolve(),
+            "--eval-python",
+            a.eval_python.absolute(),
+            "--device",
+            "cpu",
+            "--dtype",
+            "float32",
+            "--bootstrap",
+            "0",
+            "--dataset-bundle",
+            bundle,
+            "--task",
+            "stereoset_en",
+        ]
+        run(*train)
+        run(*evaluation)
+        if domain == "gender":
+            run(*train)
+            run(*evaluation)
+        folder = root / "runs" / spec["design_id"] / "tiny/ethos/en" / domain / "seed-42"
+        (attempt,) = folder.glob("attempt-*")
+        (csv_path,) = attempt.rglob("domains.csv")
+        with csv_path.open() as f:
+            contrasts = list(csv.DictReader(f))
+        assert {r["evaluated_domain"] for r in contrasts} == set(DOMAINS)
+        assert sum(r["targeted"] == "True" for r in contrasts) == 1
+        pairs.append(csv_path.parent)
+    if a.matrix:
+        output = root / "matrix.csv"
+        subprocess.run(
+            [
+                sys.executable,
+                fixture / "ethos/domain_matrix.py",
+                "--pairs",
+                *pairs,
+                "--output",
+                output,
+            ],
+            check=True,
+            env=env,
+        )
+        with output.open() as f:
+            assert len(list(csv.DictReader(f))) == 16
     print("Verified both native updates, SVD reload, retry and four paired Fair-UK domain scores.")
 
 

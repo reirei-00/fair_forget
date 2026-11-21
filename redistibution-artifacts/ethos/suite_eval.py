@@ -1,41 +1,27 @@
 """Collect and pair one registered panel through the pinned Fair-UK CLI."""
 
+import json
 import os
 import subprocess
-import tempfile
-from pathlib import Path
 
+from archive import completed
+from domain_matrix import report_domains
 from inference import materialize
-from suite_data import HERE, SPEC, csv_rows, csv_write, digest, read, write
-from suite_train import completed, execute
+from pair_cache import run_pair
+from suite_data import HERE, SPEC, csv_rows, csv_write, digest, read
+from suite_train import execute
 
 
-def report_domains(report, cell, lang):
-    labels = read(SPEC)["domains"]
-    effects = {(e["scope"], e["metric"]): e for e in report["effects"]}
-    result = []
-    for category in labels:
-        prefix = "category_target_macro / "
-        scope = next(
-            (prefix + c for c in (category, labels[category]) if (prefix + c, "ss") in effects),
-            None,
-        )
-        if scope is None:
-            raise ValueError(f"Missing Fair-UK StereoSet domain {category}")
-        row = {
-            **cell,
-            "evaluation_language": lang,
-            "evaluated_domain": category,
-            "targeted": category == cell["domain"],
-        }
-        for metric in ("ss", "lms", "icat"):
-            entry = effects[scope, metric]
-            for key in ("before", "after", "after_minus_before", "uncertainty_status"):
-                row[f"{metric}_{key}"] = entry[key]
-            ci = entry["ci95"]
-            row[f"{metric}_ci95_low"], row[f"{metric}_ci95_high"] = ci or (None, None)
-        result.append(row)
-    return result
+def evaluator_env(root):
+    # JUPITER's training launcher prepends its own site-packages to PYTHONPATH.
+    extra = os.environ.get("FAIR_UK_PYTHONPATH")
+    return {
+        **os.environ,
+        "PYTHONPATH": os.pathsep.join([str(root), extra]) if extra else str(root),
+        "HF_HUB_OFFLINE": "1",
+        "HF_DATASETS_OFFLINE": "1",
+        "PYTHONDONTWRITEBYTECODE": "1",
+    }
 
 
 def evaluate(a, cell):
@@ -49,13 +35,7 @@ def evaluate(a, cell):
 
     if git("rev-parse", "HEAD") != pin or git("status", "--porcelain", "--", "lm_eval"):
         raise ValueError(f"Expected clean Fair-UK evaluator at {pin}")
-    env = {
-        **os.environ,
-        "PYTHONPATH": str(root) + os.pathsep + os.environ.get("PYTHONPATH", ""),
-        "HF_HUB_OFFLINE": "1",
-        "HF_DATASETS_OFFLINE": "1",
-        "PYTHONDONTWRITEBYTECODE": "1",
-    }
+    env = evaluator_env(root)
     interpreter = a.eval_python.absolute()
     cli = [interpreter, "-m", "lm_eval.fair_uk"]
     suite = a.suite.resolve()
@@ -63,7 +43,7 @@ def evaluate(a, cell):
     bundle = ["--dataset-bundle", a.dataset_bundle.resolve(strict=True)] if a.dataset_bundle else []
     local = ["--input", a.input.resolve(strict=True)] if a.input else []
     sampling = ["--bootstrap", str(a.bootstrap), "--seed", str(cell["seed"])]
-    subprocess.run(
+    probe_output = subprocess.check_output(
         [
             interpreter,
             HERE / "check_panel.py",
@@ -77,19 +57,48 @@ def evaluate(a, cell):
         ],
         cwd=root,
         env=env,
-        check=True,
+        text=True,
     )
-    attempt, receipt = completed(a.runs.resolve() / cell["run_id"], digest(suite / "suite.json"))
-    if receipt["cell"] != cell:
-        raise ValueError("Checkpoint belongs to a different intervention")
+    attempt, receipt = completed(
+        a.runs.resolve() / cell["run_id"], digest(suite / "suite.json"), cell
+    )
     probe = csv_rows(suite / cell["language"] / cell["domain"] / "dev.csv")[0]
     models = materialize(attempt, receipt, probe["stereo"])
     if "," in str(models):
         raise ValueError("Fair-UK model paths cannot contain a comma")
-    folder = attempt / "evaluation" / a.task
-    folder.mkdir(parents=True, exist_ok=True)
-    out = Path(tempfile.mkdtemp(prefix="pair-", dir=folder))
+    request = {
+        "cell": cell,
+        "task": a.task,
+        "suite_sha256": receipt["suite_sha256"],
+        "training_result_sha256": digest(attempt / "result.json"),
+        "export_sha256": digest(models / "export.json"),
+        "base_assets": receipt["base_assets"],
+        "evaluator_revision": pin,
+        "panel_runtime": json.loads(probe_output),
+        "bootstrap": a.bootstrap,
+        "device": a.device,
+        "dtype": a.dtype,
+        "batch_size": 1,
+        "runner": {
+            p: digest(HERE / p)
+            for p in (
+                "suite_eval.py",
+                "check_panel.py",
+                "pair_cache.py",
+                "inference.py",
+                "domain_matrix.py",
+            )
+        },
+    }
 
+    def collect(out):
+        collect_native(out, a, cell, models, cli, panel, bundle, local, sampling, env, root)
+
+    out = run_pair(attempt / "evaluation" / a.task, request, collect)
+    print(out)
+
+
+def collect_native(out, a, cell, models, cli, panel, bundle, local, sampling, env, root):
     def run(command, label):
         execute(command, out / (label + ".log"), env, root)
 
@@ -135,15 +144,3 @@ def evaluate(a, cell):
     result = out / "paired/paired.json"
     if a.task.startswith("stereoset_"):
         csv_write(out / "domains.csv", report_domains(read(result), cell, a.task.rsplit("_", 1)[1]))
-    write(
-        out / "complete.json",
-        {
-            "cell": cell,
-            "task": a.task,
-            "evaluator_revision": pin,
-            "suite_sha256": receipt["suite_sha256"],
-            "training_result_sha256": digest(attempt / "result.json"),
-            "paired_sha256": digest(result),
-        },
-    )
-    print(out)

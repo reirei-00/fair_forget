@@ -1,6 +1,9 @@
 """Validate a local Fair-UK release and its cohort before loading a checkpoint."""
 
 import argparse
+import importlib.metadata
+import json
+import sys
 from pathlib import Path
 
 from suite_data import SPEC, csv_rows, read
@@ -61,3 +64,24 @@ if __name__ == "__main__":
                 for k in ("sentences", "group", "category", "condition", "eligible")
             ):
                 raise ValueError(f"Changed held-out StereoSet item {row['id']}")
+    packages = (
+        "torch",
+        "transformers",
+        "datasets",
+        "tokenizers",
+        "safetensors",
+        "peft",
+        "accelerate",
+        "numpy",
+        "lm_eval",
+    )
+    print(
+        json.dumps(
+            {
+                "dataset": dataset_spec(a.task, a.dataset_bundle),
+                "python": sys.version,
+                "interpreter": sys.executable,
+                "packages": {name: importlib.metadata.version(name) for name in packages},
+            }
+        )
+    )

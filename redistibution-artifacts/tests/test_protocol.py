@@ -8,8 +8,11 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ethos"))
 import suite_data as data
+from archive import receipt_at
 from check_panel import check_rows
-from suite_eval import report_domains
+from domain_matrix import assemble, report_domains
+from pair_cache import run_pair
+from suite_eval import evaluator_env
 from suite_train import packed
 
 
@@ -51,6 +54,8 @@ class Protocol(unittest.TestCase):
         data.csv_write(self.review, rows)
 
     def test_order_and_independence(self):
+        with self.assertRaisesRegex(ValueError, "Seed"):
+            data.matrix(self.spec, -1)
         cells = data.matrix(self.spec, 42)
         self.assertEqual(len({c["run_id"] for c in cells}), 48)
         self.assertEqual([c["language"] for c in cells], ["en"] * 24 + ["uk"] * 24)
@@ -111,6 +116,104 @@ class Protocol(unittest.TestCase):
     def test_no_missing_domain_in_report(self):
         with self.assertRaisesRegex(ValueError, "Missing"):
             report_domains({"effects": []}, {"domain": "gender"}, "en")
+
+    def test_copied_cell_receipt_is_rejected(self):
+        cell = data.matrix(self.spec, 42)[0]
+        attempt = self.root / "attempt-first"
+        attempt.mkdir()
+        data.write(
+            attempt / "result.json",
+            {
+                "suite_sha256": "split",
+                "cell": cell,
+                "artifacts": {
+                    name: {} for name in ("checkpoint", "native/stereo", "native/antistereo")
+                },
+            },
+        )
+        data.write(
+            self.root / "complete.json",
+            {"attempt": attempt.name, "result_sha256": data.digest(attempt / "result.json")},
+        )
+        self.assertEqual(receipt_at(self.root, "split", cell)[0], attempt)
+        with self.assertRaisesRegex(ValueError, "different study cell"):
+            receipt_at(self.root, "split", {**cell, "domain": "religion"})
+
+    def test_evaluator_import_isolation(self):
+        with patch.dict(
+            "os.environ",
+            {"PYTHONPATH": "/some/training/wheels", "FAIR_UK_PYTHONPATH": "/evaluator/wheels"},
+        ):
+            self.assertEqual(
+                evaluator_env(self.root)["PYTHONPATH"], str(self.root) + ":/evaluator/wheels"
+            )
+
+    def test_resume_pair_and_detect_corrupted_predictions(self):
+        calls = []
+
+        def collect(out):
+            calls.append(out)
+            (out / "predictions.jsonl").write_text("original")
+
+        request = {"task": "stereoset_uk", "seed": 42}
+        first = run_pair(self.root, request, collect)
+        self.assertEqual(first, run_pair(self.root, request, collect))
+        other = run_pair(self.root, {**request, "seed": 43}, collect)
+        self.assertNotEqual(first, other)
+        self.assertEqual(len(calls), 2)
+        (first / "predictions.jsonl").write_text("changed")
+        with self.assertRaisesRegex(ValueError, "outputs changed"):
+            run_pair(self.root, request, collect)
+
+    def test_matrix_requires_four_matched_checkpoints(self):
+        paths = []
+        for cell in data.matrix(self.spec, 42)[:4]:
+            effects = []
+            for d in self.spec["domains"]:
+                for metric in ("ss", "lms", "icat"):
+                    effects.append(
+                        {
+                            "scope": "category_target_macro / " + d,
+                            "metric": metric,
+                            "before": 55,
+                            "after": 49,
+                            "after_minus_before": -6,
+                            "uncertainty_status": "not_requested",
+                            "ci95": None,
+                        }
+                    )
+
+            def collect(out):
+                (out / "paired").mkdir()
+                data.write(
+                    out / "paired/paired.json",
+                    {
+                        "effects": effects,
+                        "source_rows_sha256": "cohort",
+                        "native_checkpoint_scores": {"before": []},
+                    },
+                )
+
+            paths.append(run_pair(self.root, {"cell": cell, "task": "stereoset_en"}, collect))
+        rows = assemble(paths)
+        self.assertEqual(len(rows), 16)
+        self.assertEqual(sum(r["targeted"] for r in rows), 4)
+        self.assertTrue(all(r["crossed_50"] and r["movement_vs_50"] == "toward" for r in rows))
+        with self.assertRaisesRegex(ValueError, "all four"):
+            assemble(paths[:3])
+        with self.assertRaisesRegex(ValueError, "per training domain"):
+            assemble(paths[:2] * 2)
+
+    def test_interrupted_pair_is_preserved_and_retried(self):
+        def fail(out):
+            (out / "partial.log").write_text("failed")
+            raise RuntimeError("interrupted")
+
+        with self.assertRaisesRegex(RuntimeError, "interrupted"):
+            run_pair(self.root, {}, fail)
+        success = run_pair(self.root, {}, lambda out: (out / "done").write_text("ok"))
+        self.assertEqual(len(list(success.parent.glob("pair-*"))), 2)
+        self.assertTrue((success / "done").is_file())
 
 
 if __name__ == "__main__":

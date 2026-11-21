@@ -13,7 +13,7 @@ from transformers import AutoConfig, AutoTokenizer
 def prepare(registry, model_id, model_root, view_root):
     rows = json.loads(registry.read_text())["models"]
     row = next(r for r in rows if r["id"] == model_id)
-    source = model_root / row["directory"] / row["revision"]
+    source = (model_root / row["directory"] / row["revision"]).resolve(strict=True)
     if hashlib.sha256((source / "config.json").read_bytes()).hexdigest() != row["config_sha256"]:
         raise ValueError("Pinned model configuration differs")
     cfg = AutoConfig.from_pretrained(source, local_files_only=True)

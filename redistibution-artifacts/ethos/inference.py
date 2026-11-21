@@ -5,9 +5,9 @@ import shutil
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from archive import inventory
+from archive import inventory, lock
 from suite_data import digest, read, write
-from suite_train import base_assets, inspection, lock
+from suite_train import base_assets, inspection
 
 
 def materialize(attempt, receipt, text):
