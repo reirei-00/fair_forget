@@ -60,6 +60,16 @@ def materialize(attempt, receipt, text):
                 if p.is_file() and p.name in receipt["base_assets"]:
                     src = (view / "config.json") if p.name == "config.json" else p
                     (before / p.name).symlink_to(src.resolve(strict=True))
+            if qualification := receipt.get("qualification"):
+                for p in list(before.glob("*.safetensors")) + list(
+                    before.glob("*.safetensors.index.json")
+                ):
+                    p.unlink()
+                for name, expected in qualification["view_files"].items():
+                    if name.endswith((".safetensors", ".safetensors.index.json")):
+                        if digest(view / name) != expected:
+                            raise ValueError(f"Qualified text weight changed: {name}")
+                        (before / name).symlink_to((view / name).resolve(strict=True))
             tok = AutoTokenizer.from_pretrained(before, local_files_only=True)
             model = AutoModelForCausalLM.from_pretrained(
                 before, torch_dtype=torch.float32, local_files_only=True

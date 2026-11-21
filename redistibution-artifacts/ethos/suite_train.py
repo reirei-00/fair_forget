@@ -117,11 +117,20 @@ def train(a, manifest, cell):
             attempt, _ = completed(directory, suite_hash, cell)
             print("Verified", attempt)
             return
-        view_root = a.views.resolve()
-        with lock(view_root / cell["model"]):
-            view = prepare(REGISTRY, cell["model"], a.model_root.resolve(), view_root)
         model = next(m for m in read(REGISTRY)["models"] if m["id"] == cell["model"])
         base = a.model_root.resolve() / model["directory"] / model["revision"]
+        qualification = None
+        if "qualified_runtime" in controls:
+            from qualified_runtime import check_qualification
+
+            qualification = check_qualification(
+                Path(os.environ["ETHOS_QUALIFICATION"]), model, controls, suite_hash
+            )
+            view = Path(qualification["view"])
+        else:
+            view_root = a.views.resolve()
+            with lock(view_root / cell["model"]):
+                view = prepare(REGISTRY, cell["model"], a.model_root.resolve(), view_root)
         data = root / cell["language"] / cell["domain"]
         train_dir = data / "train"
         if {p.name for p in train_dir.iterdir()} != {"test.csv"}:
@@ -193,6 +202,10 @@ def train(a, manifest, cell):
             },
             "commands": [],
         }
+
+        if qualification is not None:
+            recipe["qualification"] = qualification
+            recipe["code"]["qualified_runtime.py"] = digest(HERE / "qualified_runtime.py")
 
         def launch(command, name):
             recipe["commands"].append([str(x) for x in command])

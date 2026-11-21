@@ -15,6 +15,7 @@ SPEC = (
         "full": "stereoset_domains.json",
         "gemma_bf16": "stereoset_gemma_bf16.json",
         "lapa_bf16": "stereoset_lapa_bf16.json",
+        "mamay27_bf16": "stereoset_mamay27_bf16.json",
         "mamay12_bf16": "stereoset_mamay12_bf16.json",
     }[os.environ.get("ETHOS_STUDY", "full")]
 )
