@@ -1,8 +1,14 @@
 # Single-domain Ethos experiments
 
-For Gemma 3 12B, select the registered BF16 study with `export ETHOS_STUDY=gemma_bf16` before preparing inputs, submitting training or evaluating checkpoints. Use the seed-42 split and a separate suite directory. The original trainer uses BF16 and a learning rate of 0.0005 for both branches. The four Ukrainian runs depend on verified checkpoints for all four English domains in this Gemma study. [Gemma configuration](config/stereoset_gemma_bf16.json)
+Each seed covers 48 independent checkpoints across six base model revisions, four StereoSet domains (gender, profession, race/ethnicity and religion) and two training languages. Both evaluation languages apply to every checkpoint.
 
-The suite trains 48 independent interventions per seed. Each of the six model revisions starts from its original weights for each StereoSet domain (gender, profession, race/ethnicity or religion). The English phase has 24 checkpoints. The Ukrainian phase starts when all 24 English runs have succeeded. Both evaluation languages apply to every checkpoint.
+The original full matrix runs 24 English jobs before its Ukrainian phase. The following model-specific BF16 configurations each run four English jobs before four Ukrainian jobs. Export the selector before preparing inputs, submitting training or evaluating. Give each configuration its own suite directory. All use the same seed-42 split, a learning rate of 0.0005 on both branches and separate checkpoint paths. For Lapa and Mamay 12B, first qualify the model with an English gender pilot. Check all 20 stereotype and two anti-stereotype epoch losses for finiteness and both adapters for finite values and a nonzero LoRA update.
+
+| Model | Selector | Configuration |
+|---|---|---|
+| Gemma 3 12B IT | `export ETHOS_STUDY=gemma_bf16` | [Gemma](config/stereoset_gemma_bf16.json) |
+| Lapa 12B Instruct | `export ETHOS_STUDY=lapa_bf16` | [Lapa](config/stereoset_lapa_bf16.json) |
+| Mamay 12B IT v2 | `export ETHOS_STUDY=mamay12_bf16` | [Mamay 12B](config/stereoset_mamay12_bf16.json) |
 
 The wrapper runs the original [Ethos bias trainer and SVD](https://github.com/leigao97/Ethos/tree/88a932f0ff5cd30ad75be163fad9b359e0a7c59d). Configuration follows the authors’ GPT-2 bias recipe with 20 stereotype epochs, two anti-stereotype epochs and SVD scale 2.0. The 128-token block is a study choice for short domain corpora. The upstream trainer drops incomplete blocks at each 1,000-row boundary. The run receipt records complete blocks and discarded tokens for both branches. The model registry pins Llama 3.1 8B Instruct, Gemma 3 12B IT, Qwen3-8B, Lapa 12B Instruct and Mamay 12B/27B IT v2.
 

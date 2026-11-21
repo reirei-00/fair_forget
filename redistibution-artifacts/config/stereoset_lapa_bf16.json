@@ -1,0 +1,61 @@
+{
+  "design_id": "stereoset_lapa_bf16_v1",
+  "model_registry": "models.json",
+  "models": [
+    "lapa12b_instruct"
+  ],
+  "languages": [
+    "uk",
+    "en"
+  ],
+  "domains": {
+    "gender": "гендер",
+    "profession": "професія",
+    "race": "раса та етнічність",
+    "religion": "релігія"
+  },
+  "stereoset_sources": {
+    "uk_pool": "36f96e4e63e181d4796f0747719a2415dabb92bc53eab1d4afd8f3071f2ecd10",
+    "uk_eval": "0fd16c79b88dd4d1384466b27b46e0b305aadf1a6086798da22c0e7c2f17d202",
+    "en_pool": "9e34da0362d870fe6f42a3e6e800988d1324fd040c9c630deb50d81a6f2ebd17",
+    "en_eval": "113904e37965b136f99498d3d8d176f025097a59e90adeb775175f7279081b99"
+  },
+  "panels": {
+    "en": [
+      "stereoset_en",
+      "winobias_en_controlled",
+      "winobias_en_natural",
+      "bbq_en"
+    ],
+    "uk": [
+      "stereoset_uk",
+      "winobias_uk_controlled",
+      "winobias_uk_natural",
+      "bbq_uk"
+    ]
+  },
+  "ethos": {
+    "repository": "leigao97/Ethos",
+    "commit": "88a932f0ff5cd30ad75be163fad9b359e0a7c59d",
+    "training_language_order": [
+      "en",
+      "uk"
+    ],
+    "training_block_tokens": 128,
+    "runner_defaults": {
+      "epochs": {
+        "stereo": 20,
+        "antistereo": 2
+      },
+      "alpha": 2.0,
+      "learning_rate": 0.0005,
+      "lora_rank": 16,
+      "batch_size": 6,
+      "mixed_precision": "bf16"
+    }
+  },
+  "evaluator": {
+    "repository": "reirei-00/fair-uk",
+    "commit": "db435f59ec65890969358af15084737e2e64bf77"
+  }
+}
