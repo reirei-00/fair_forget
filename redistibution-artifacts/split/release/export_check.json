@@ -1,0 +1,28 @@
+{
+  "registered_sources": {
+    "uk_pool": "36f96e4e63e181d4796f0747719a2415dabb92bc53eab1d4afd8f3071f2ecd10",
+    "uk_eval": "0fd16c79b88dd4d1384466b27b46e0b305aadf1a6086798da22c0e7c2f17d202",
+    "en_pool": "9e34da0362d870fe6f42a3e6e800988d1324fd040c9c630deb50d81a6f2ebd17",
+    "en_eval": "113904e37965b136f99498d3d8d176f025097a59e90adeb775175f7279081b99"
+  },
+  "stream_rows": {
+    "en/gender/train/test.csv": 34,
+    "en/gender/dev.csv": 4,
+    "en/profession/train/test.csv": 139,
+    "en/profession/dev.csv": 15,
+    "en/race/train/test.csv": 177,
+    "en/race/dev.csv": 20,
+    "en/religion/train/test.csv": 17,
+    "en/religion/dev.csv": 2,
+    "uk/gender/train/test.csv": 34,
+    "uk/gender/dev.csv": 4,
+    "uk/profession/train/test.csv": 139,
+    "uk/profession/dev.csv": 15,
+    "uk/race/train/test.csv": 177,
+    "uk/race/dev.csv": 20,
+    "uk/religion/train/test.csv": 17,
+    "uk/religion/dev.csv": 2
+  },
+  "protected_rows_per_language": 949,
+  "suite_sha256": "1771e0cfa56dd7dcbca547c765f9d5622a7bab2eb02db4041a262dc543be9026"
+}
