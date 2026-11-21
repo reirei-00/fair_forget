@@ -52,7 +52,25 @@ sources=(--uk-pool "$WORK/uk_pool.csv" --uk-eval "$WORK/uk_eval.csv"
 python3 ethos/suite.py review-template "${sources[@]}" --output "$WORK/review-template.csv"
 ```
 
-The template contains 2,101 aligned IDs. Its 949 protected evaluation IDs leave 1,152 candidates for training, development or exclusion. Copy the template to `review.csv` and complete the semantic-family and split decisions. Use the same family for related examples across languages and domains. Each retained family belongs to one split. Preserve all protected IDs, and allocate training and development families to all four domains. The suite requires the reviewed split as an input.
+The [executed split notebook](split/stereoset_split.ipynb) documents the full-pool release at seed 42. Open it to inspect the 2,101 source IDs, held-out families, exclusions, counts and leakage checks. Its default path replays the committed evidence with the Python standard library and Jupyter. An automated screen can miss semantic overlap.
+
+To materialize this exact release after creating the bilingual template:
+
+```bash
+python3 split/partition.py --template "$WORK/review-template.csv" --scores split/release/scores.csv.gz \
+  --spans split/release/claim_links.csv.gz --output "$WORK/allocation"
+cmp "$WORK/allocation/assignments.csv" split/release/assignments.csv
+python3 ethos/suite.py prepare "${sources[@]}" --review "$WORK/allocation/review.csv" --seed 42 --output "$WORK/suite"
+```
+
+To regenerate the similarity evidence from the source template, install [the split dependencies](split/requirements.txt) in a separate environment and use new output paths. Both encoders load exact Hub revisions. The reference score release was generated on Apple MPS. Cross-device floating-point differences can affect a rounded threshold decision. The distributed pair evidence fixes the study run.
+
+```bash
+python split/screen.py --template "$WORK/review-template.csv" --output "$WORK/scores.csv.gz" --device cpu
+python split/claim_spans.py --template "$WORK/review-template.csv" --output "$WORK/claim_links.csv.gz" --device cpu
+```
+
+For a separately reviewed future release, the template contains 2,101 aligned IDs. Its 949 protected evaluation IDs leave 1,152 candidates for training, development or exclusion. Copy the template to `review.csv` and complete the semantic-family and split decisions. Use the same family for related examples across languages and domains. Each retained family belongs to one split. Preserve all protected IDs, and allocate training and development families to all four domains. The suite requires the reviewed split as an input.
 
 ```bash
 python3 ethos/suite.py prepare "${sources[@]}" --review "$WORK/review.csv" \
