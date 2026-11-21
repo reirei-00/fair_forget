@@ -445,8 +445,8 @@
       "snapshot_file": "scripts/lapa-bf16-c17deb1/check_inputs.py"
     },
     "02fef57d372c385c96f4bc6ae7548e37adbb3301f3c0a16d7d0a697d6380c875": {
-      "prior_git_blob": "648457f81c0dd589022f30bfee0759fb40fd967a",
-      "snapshot_file": "scripts/initial/redistibution-artifacts/ethos/train_suite.sbatch"
+      "git_commit": "c17deb1248e25d1f0ea4f46706b748be6f0cbdc0",
+      "git_path": "redistibution-artifacts/ethos/train_suite.sbatch"
     },
     "030e5610625a2a7842fafa1efb10a408d46f08b3520da1b775cf4185e7b4adab": {
       "snapshot_file": "scripts/lapa-mamay-preflight/fit-27b.sbatch"
@@ -461,8 +461,8 @@
       "snapshot_file": "scripts/mamay27-bf16-v1/capacity_decision.py"
     },
     "0bba8fa1f23acf1577ed07ff27371a7e4f522ee1198348a577f5726b5e2fa041": {
-      "prior_git_blob": "cf458d8eac5896ca9df460da88376ed62db102f4",
-      "snapshot_file": "scripts/initial/redistibution-artifacts/ethos/suite_eval.py"
+      "git_commit": "39eec5435f231de337de9c8382bd5cebbac558ac",
+      "git_path": "redistibution-artifacts/ethos/suite_eval.py"
     },
     "10991af85b82c6033ade77afbb9436d70e4c42dc836fbb35253fc9df004a31e3": {
       "snapshot_file": "scripts/initial/evaluate.sbatch"
@@ -474,15 +474,15 @@
       "snapshot_file": "scripts/lapa-mamay-preflight/refresh.sbatch"
     },
     "153fd42c599176e31a5715a7f6e4fd63ee6be3e9d663338b16cecfccd8019021": {
-      "prior_git_blob": "d28fc351334f463a72368e5f8b1224b1bbd24064",
-      "snapshot_file": "scripts/lapa-bf16-c17deb1/code/redistibution-artifacts/tests/test_protocol.py"
+      "git_commit": "39eec5435f231de337de9c8382bd5cebbac558ac",
+      "git_path": "redistibution-artifacts/tests/test_protocol.py"
     },
     "1643cf3a508a436ced557c87e901182563b80fcaad58d048f867cee9deb3cf26": {
       "snapshot_file": "scripts/lapa-mamay-preflight/check_27b_base.py"
     },
     "18106a11e3bf8ca0388f2f2a151b27964c4c85bbea152d166ac9bc44d527ea51": {
-      "prior_git_blob": "2117d113def668cea936ea1acb66863cfd8919df",
-      "snapshot_file": "scripts/fairforget/ethos/suite_train.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/suite_train.py"
     },
     "185e03a6bd95003a3725cef36730692f650da83dd4e981a12ac37e4fe17ffa9e": {
       "snapshot_file": "scripts/lapa-mamay-preflight/register_phase_jobs.py"
@@ -515,16 +515,16 @@
       "snapshot_file": "scripts/mamay27-bf16-v1/two_gpu.sbatch"
     },
     "2c00eaad254dc38c9812b8dbe0254a64ce76170d1a257cc2b7b75f66ca267cff": {
-      "prior_git_blob": "4615e9d014b491cbcbd881035783663aed2dd1d6",
-      "snapshot_file": "scripts/fairforget/config/stereoset_domains.json"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/config/stereoset_domains.json"
     },
     "2e0476637365e8529173b77d1c93e9afbde343df1b316e82dd61e6e42cfa0bd2": {
-      "prior_git_blob": "b2398fda7f84a76527d37192271442d151a4c138",
-      "snapshot_file": "scripts/initial/redistibution-artifacts/ethos/suite_data.py"
+      "git_commit": "349ebc4a58e55f802f3f7d5d9216a3adca3e11ec",
+      "git_path": "redistibution-artifacts/ethos/suite_data.py"
     },
     "2e3e773f3610e790c72295e047b47108f2801369c3db11a552df2049deaf1f33": {
-      "prior_git_blob": "a4cbc2f7357fa57c8c68ad0f1e960683debbcce0",
-      "snapshot_file": "scripts/fairforget/split/partition.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/split/partition.py"
     },
     "2f1574cd480a98a8970737bfde49560bc2a26ed8b633a32f44893ac3b00901d7": {
       "snapshot_file": "scripts/gemma-bf16-c22989b/retire_fp16.py"
@@ -542,8 +542,8 @@
       "snapshot_file": "scripts/mamay27-bf16-v1/phase_memory.py"
     },
     "345114f5392a03b63dd1825764decbb411de3f0af829d70227872165a8fca124": {
-      "prior_git_blob": "7c123f3209f3f9b8076ca07538a320bf4e1a0453",
-      "snapshot_file": "scripts/fairforget/split/check_export.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/split/check_export.py"
     },
     "35e802bcca1a0a5aa72898bc5dca3aed632efe40dce9bafd4d1e4db7e0bc5e61": {
       "snapshot_file": "scripts/environment/check_ethos_token_budget.py"
@@ -552,8 +552,8 @@
       "snapshot_file": "scripts/environment/software.sbatch"
     },
     "3905ebcc4efccc10147db8fdba804995d4f94e9a53b6a3184371e1d5e87b00e4": {
-      "prior_git_blob": "2bc2329da6fb9fd1fd0644b159b22eea539ed764",
-      "snapshot_file": "scripts/fairforget/ethos/requirements-jupiter.txt"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/requirements-jupiter.txt"
     },
     "3973b7252bdf25af0ab6a16d7b6169d42b27ca059d2a7d8cb9708b61c9ae7ff3": {
       "snapshot_file": "scripts/initial/validate_panels.sh"
@@ -562,49 +562,49 @@
       "snapshot_file": "scripts/llama-qwen-uk-recovery/audit.py"
     },
     "421bff95147f78074bbfcb4b9084444c9c5d21f4619d438ad7381dec4c969e6d": {
-      "prior_git_blob": "7d7971248c4e23e9adc6302f0980c8fa4ffcdc12",
-      "snapshot_file": "scripts/fairforget/ethos/mamay_pilot.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/mamay_pilot.py"
     },
     "442786de91b5c5d2c5141abdb7a43ddf66ccdf3eadf8e900036b21f90c6121ef": {
       "snapshot_file": "scripts/dispatch-349ebc4/checklist.py"
     },
     "45ba3aaea678bd0d9fe9ea67cea8511efabe5f872e8348c2cd1b63a5c19931e7": {
-      "prior_git_blob": "7616d3e9cf135cd58500932cd19018722f17f8ba",
-      "snapshot_file": "scripts/fairforget/ethos/adapter_for_svd.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/adapter_for_svd.py"
     },
     "464e0d2d490408cbf7b27d844f74be5e9f0f2f95050ec0c418443c6f2e681b61": {
       "snapshot_file": "scripts/mamay27-bf16-v1/prepare.sh"
     },
     "46e828492d82987d848b4b841c565293ed403600d220d9ff50dff338b3587faf": {
-      "prior_git_blob": "8817040ea20e0370038c4718a135ed3597715cfe",
-      "snapshot_file": "scripts/initial/redistibution-artifacts/ethos/inference.py"
+      "git_commit": "349ebc4a58e55f802f3f7d5d9216a3adca3e11ec",
+      "git_path": "redistibution-artifacts/ethos/inference.py"
     },
     "4853eeaca3e34d0a57408f44164f2c635d5467c064175cd3390aa194323f32bf": {
-      "prior_git_blob": "022b3079358620bd5dcff04f087c3c1c255187d8",
-      "snapshot_file": "scripts/fairforget/tests/test_protocol.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/tests/test_protocol.py"
     },
     "486a2ed1f52df539eebfd9b62a3d61b6e5c81b3879132db4fc930edb40297f44": {
       "snapshot_file": "scripts/lapa-mamay-preflight/pilot_summary.py"
     },
     "4b0d76e584c7b03e3ae77d2fa9c295fce550d48e69162688183ad19f06df1ae0": {
-      "prior_git_blob": "46a544b49d242c9c7f693515d7fe4055584e7564",
-      "snapshot_file": "scripts/initial/redistibution-artifacts/ethos/check_panel.py"
+      "git_commit": "cac7e26629f788f1252a93a93e480749fae638d9",
+      "git_path": "redistibution-artifacts/ethos/check_panel.py"
     },
     "4f8cf3c45798049d596be5210374b8144e1c86770b6835a40102320552214037": {
-      "prior_git_blob": "aa551a6981013631a6c67de88e30e4169ea79f26",
-      "snapshot_file": "scripts/lapa-export-recovery/code/redistibution-artifacts/ethos/dense_svd.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/dense_svd.py"
     },
     "4f95e3f37f613e6d47f3a07fcf1f25501d7688b30ba6d8554cd638ba3c7e0f1c": {
-      "prior_git_blob": "1c0121c95c07f4973da052c72c7b2adbe134b0ae",
-      "snapshot_file": "scripts/fairforget/ethos/check_27b_base.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/check_27b_base.py"
     },
     "5200ae76512d5c10e2d2cdf994a380d1fd4c9540c77b8fb0199cdafa29ae3415": {
-      "prior_git_blob": "bbff253d339d548c072ab617b89bfa8fcc88f5b0",
-      "snapshot_file": "scripts/fairforget/ethos/pair_cache.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/pair_cache.py"
     },
     "52308fa2111fbdc5d3bd02915ce9af369762b34ab8a7659197e44081169325ea": {
-      "prior_git_blob": "fe0282acb9e67ff33b7fc4560d3fc736ad909681",
-      "snapshot_file": "scripts/fairforget/ethos/qualified_runtime.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/qualified_runtime.py"
     },
     "530597c61266887a7ddb0269ad944f31fa7f68c0a13a31a1f8d739659c5941a9": {
       "snapshot_file": "scripts/gemma-bf16-c22989b/check_inputs.py"
@@ -613,8 +613,8 @@
       "snapshot_file": "scripts/dispatch-349ebc4/submit_evaluations.py"
     },
     "5778afd784388748ba0e460dc358f06623401bf73d272458fc40b6cc1967aa75": {
-      "prior_git_blob": "b811ffa50c84c7e4e78184816e11d50385fea9bf",
-      "snapshot_file": "scripts/fairforget/split/pilot_links.json"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/split/pilot_links.json"
     },
     "57a937a81115a1e0e5c6220901df7ca0362ed735ccae2f62c0d79b985487a8b7": {
       "snapshot_file": "scripts/gemma-bf16-c22989b/evaluate.sbatch"
@@ -626,15 +626,15 @@
       "snapshot_file": "scripts/lapa-mamay-preflight/prepare_dispatch.sh"
     },
     "5fdd00fb371a06f6eb841848f60cc0b054eec9462bba18cdfdae609802966410": {
-      "prior_git_blob": "5aff22f46b2a3d082af8f2aab04366ef4aae43f7",
-      "snapshot_file": "scripts/gemma-bf16-c22989b/code/redistibution-artifacts/ethos/suite_data.py"
+      "git_commit": "c22989b88be93e5bda0db60267c8e7f2f498d394",
+      "git_path": "redistibution-artifacts/ethos/suite_data.py"
     },
     "60ab1f115df1ba99cc687b089219790733fcf15af032a57faebf244e8ab6a854": {
       "snapshot_file": "scripts/environment/setup.sh"
     },
     "60d582f8104a87a358b2d07a1f1a7b3f696a87e7ff674975c0d4609742d5b6fe": {
-      "prior_git_blob": "6fd6f11777a6e5cfe8aed1e1b64b4fee121b4209",
-      "snapshot_file": "scripts/mamay27-bf16-v1/code/redistibution-artifacts/ethos/train_suite.sbatch"
+      "git_commit": "39eec5435f231de337de9c8382bd5cebbac558ac",
+      "git_path": "redistibution-artifacts/ethos/train_suite.sbatch"
     },
     "6252f67e9d0d39e13b34533307eb87c494687b006846c1648051d456b05a07fe": {
       "snapshot_file": "scripts/dispatch-349ebc4/audit_queue.py"
@@ -646,8 +646,8 @@
       "snapshot_file": "scripts/llama-qwen-uk-recovery/refresh.sbatch"
     },
     "645ace56d3f0517c194faee64c7a7dce790577225ecdf51ab1e36c2dab3bab65": {
-      "prior_git_blob": "776655dcf2294eb3b9fe1e9bd60397f943f08548",
-      "snapshot_file": "scripts/fairforget/split/requirements.txt"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/split/requirements.txt"
     },
     "676992674e1e2fde152ac93cfcaa0bbe777516db5f5dc0c817c355633f7d40c9": {
       "snapshot_file": "scripts/initial/preflight.py"
@@ -656,15 +656,15 @@
       "snapshot_file": "scripts/gemma-bf16-c22989b/previous_checklist.py"
     },
     "6882bd72ff83044cab400d53bf65dbf0aceff40f30e038cceb478098ca11cc40": {
-      "prior_git_blob": "7a847eb88902103333e9e1a3c99a38d0b4e10402",
-      "snapshot_file": "scripts/fairforget/config/stereoset_mamay12_bf16.json"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/config/stereoset_mamay12_bf16.json"
     },
     "6b33b4e3c2ea4c3d2a9bc10046860cc6877dbcb114aa6b78b1ba427633345894": {
       "snapshot_file": "scripts/llama-qwen-uk-recovery/verify.sbatch"
     },
     "6f9d8bf1f60552212c42c20da1875c9d7c1b1880a004523ec793a940b04c0a8d": {
-      "prior_git_blob": "77ef94a1857d71a7f5d99a981b0d706bc3c655bb",
-      "snapshot_file": "scripts/fairforget/ethos/suite_eval.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/suite_eval.py"
     },
     "7685ea643348d28d0fc9be95ecf4c03ff4e3be03ca436a24890ac253c3d77b01": {
       "snapshot_file": "scripts/lapa-export-recovery/audit.py"
@@ -685,73 +685,73 @@
       "snapshot_file": "scripts/dispatch-349ebc4/reconcile.sbatch"
     },
     "7aaa48229ae9ff2f987eb856a8c03f090fb6ec9337c7be62128f0617fea623c7": {
-      "prior_git_blob": "d0e22a856f78c58e0b4155e0c91dc06d893744db",
-      "snapshot_file": "scripts/fairforget/config/stereoset_lapa_bf16.json"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/config/stereoset_lapa_bf16.json"
     },
     "7ac49145ee02b21c289fecc38627761a792176ee0c83a3550add681f9151d0a4": {
-      "prior_git_blob": "2249ca4ddbd169df4649155d816aef8f1923bbab",
-      "snapshot_file": "scripts/lapa-bf16-c17deb1/code/redistibution-artifacts/ethos/suite_data.py"
+      "git_commit": "c17deb1248e25d1f0ea4f46706b748be6f0cbdc0",
+      "git_path": "redistibution-artifacts/ethos/suite_data.py"
     },
     "7c03ae5b2f843f81641462fc2a13d103d8565dac1f240766f02162dddb3a008b": {
-      "prior_git_blob": "3d512d07e191050b0d4403b6f01eacb9c7923d2d",
-      "snapshot_file": "scripts/fairforget/ethos/check_panel.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/check_panel.py"
     },
     "7d24a0725194823ed2581745e42a6681ae01151d52bd6ec8458d556a70a979cd": {
       "snapshot_file": "scripts/gemma-bf16-c22989b/watch.py"
     },
     "7d740fc5c10a517d70638b6caba838590aebeb723c0569283f3b9413193a30d9": {
-      "prior_git_blob": "6346e4a2d16bdbea215f010dd45aabb27e0b3903",
-      "snapshot_file": "scripts/fairforget/ethos/suite_data.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/suite_data.py"
     },
     "7e72c714f955f3c0dd5ccd090480323156b4be30a962547df6fa10658cd88a40": {
       "snapshot_file": "scripts/lapa-mamay-preflight/retire.sbatch"
     },
     "7ea76f1bba392d83c882253e8032f8f3f7f6541ae282310b642b392da6b79434": {
-      "prior_git_blob": "71bd90bebe85a6c9b71dbcc72be17cc1e87dba2c",
-      "snapshot_file": "scripts/fairforget/ethos/train_suite.sbatch"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/train_suite.sbatch"
     },
     "7ec425bbad46618e3635d2f5bc47d21bbb2cdc06dab31bf3b4518430af1b79dc": {
       "snapshot_file": "scripts/lapa-bf16-c17deb1/verify_checkpoints.py"
     },
     "80130d52350b158f047196b15b5ddf4fd5bcb8a0e49a3fb18d8e5b149fef3081": {
-      "prior_git_blob": "9082db5ba8fc3da0316dde234090cf137d7ab36b",
-      "snapshot_file": "scripts/fairforget/split/claim_spans.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/split/claim_spans.py"
     },
     "8140a9be0bbd4c34c8d5aabe028ec3fcbfba52185c29421078b5e56b354ac8b8": {
       "snapshot_file": "scripts/scheduler/3045543/fit-27b.sbatch"
     },
     "842ee25aaf3bc4c6e24090c5a3abfac3b243c0d6bdab8862d6d9ae312cdd76ae": {
-      "prior_git_blob": "3a3d5c174a8817c650d4b2a74353a5c214de729f",
-      "snapshot_file": "scripts/fairforget/ethos/panel_sweep.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/panel_sweep.py"
     },
     "8609ba89705d21ad3d477ca208b18188c4a1129267388ebe905af2a592bf442b": {
       "snapshot_file": "scripts/dispatch-349ebc4/validate.sh"
     },
     "8a06f83c161e7b9dc0130ed719d1092f3a357ed16a441db2d8834d4bf4091af9": {
-      "prior_git_blob": "97b5a46ac972e8a340f3677364750027179e43a1",
-      "snapshot_file": "scripts/fairforget/config/stereoset_mamay27_bf16.json"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/config/stereoset_mamay27_bf16.json"
     },
     "8aca0acb1237393bf962ef291e28fbc45dda09ae1d06a2aca8e313b163a14734": {
-      "prior_git_blob": "ddfa15b90550cfd6a54fb9c36fe6cf89fbb2d704",
-      "snapshot_file": "scripts/fairforget/ethos/domain_matrix.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/domain_matrix.py"
     },
     "8b6963af8ff49111ba3499214b368b94f5350b06f69b83c73f8612407d262da6": {
       "snapshot_file": "scripts/lapa-mamay-preflight/finish_phase.py"
     },
     "8c90993fd7a2a8d60e4eb200e3e0d10658bbd0424d55377365c5a56b2406e5c5": {
-      "prior_git_blob": "467f4be44325967e858fbc96e8cd7a8eec7bb2e5",
-      "snapshot_file": "scripts/fairforget/ethos/prepare_view.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/prepare_view.py"
     },
     "8d0ac8337cb6224f3d3df7e4f08b8ca03b3b6ba48e137d3f8970d8caf9d89864": {
       "snapshot_file": "scripts/dispatch-349ebc4/precision-check.sbatch"
     },
     "8d7c49af6f536144a954f135a3ae16af29e057d9d773e45c921c5c612154dbbc": {
-      "prior_git_blob": "e39020147abb2c99da52995a2a7569cc02c67a58",
-      "snapshot_file": "scripts/fairforget/ethos/requirements-mamay27-overlay.txt"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/requirements-mamay27-overlay.txt"
     },
     "8df34ff43e48e9aca3eba57319eb32e3a0017ca6cac2a374fceb9f76f0b72274": {
-      "prior_git_blob": "23c8380a351977ffa9cf9008cf892a93f0435447",
-      "snapshot_file": "scripts/initial/redistibution-artifacts/ethos/suite.py"
+      "git_commit": "c22989b88be93e5bda0db60267c8e7f2f498d394",
+      "git_path": "redistibution-artifacts/ethos/suite.py"
     },
     "8e51d51566e4010f08964d4fd09fd65d0f1c198bf3da83c87c162e4aa052aa89": {
       "snapshot_file": "scripts/initial/queue_evaluation.py"
@@ -760,12 +760,12 @@
       "snapshot_file": "scripts/lapa-export-recovery/retry.py"
     },
     "9211219c9426ba30af47c33fe9284777bb30a01e970ad08dc5a7a0834050fb46": {
-      "prior_git_blob": "c0d40f38a29c2b9f251ee40eb47427deedd8e1f4",
-      "snapshot_file": "scripts/llama-qwen-uk-recovery/code/redistibution-artifacts/ethos/inference.py"
+      "git_commit": "af3269fc09d7105d850ba591f7838e53ddd8e9b9",
+      "git_path": "redistibution-artifacts/ethos/inference.py"
     },
     "93277748dd06e83f5625416235ae2a2d0324c935d9531734c664edd04326326b": {
-      "prior_git_blob": "1a4f6afc758a0996353819b07fb8cae406a427fd",
-      "snapshot_file": "scripts/fairforget/ethos/suite.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/suite.py"
     },
     "9709452fe95866494d85cef949c059908d834e8fe62e4fc8350923bad41f166a": {
       "snapshot_file": "scripts/mamay27-bf16-v1/original-reconcile.py"
@@ -774,12 +774,12 @@
       "snapshot_file": "scripts/dispatch-349ebc4/evaluate.sbatch"
     },
     "983a3dfb60e6c6bb659e65c009d862de9b273274552087eebdde8e6c2296a102": {
-      "prior_git_blob": "342579677f87b408700ca34f925f413940ebff93",
-      "snapshot_file": "scripts/fairforget/ethos/source_data.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/source_data.py"
     },
     "99b90b7c157eb5b940b67c33722070e876fe7a06301b0b4f7b23e8f427339139": {
-      "prior_git_blob": "927642117cec987261239481b785ff45a20239be",
-      "snapshot_file": "scripts/mamay27-bf16-v1/code/redistibution-artifacts/ethos/suite_train.py"
+      "git_commit": "39eec5435f231de337de9c8382bd5cebbac558ac",
+      "git_path": "redistibution-artifacts/ethos/suite_train.py"
     },
     "9aa3c10276e728329439864912257cec4960e50c4b0d15d158393e34e33cd4e8": {
       "snapshot_file": "scripts/mamay27-bf16-v1/model-id"
@@ -794,16 +794,16 @@
       "snapshot_file": "scripts/mamay27-bf16-v1/qualify.sbatch"
     },
     "a132d7da5953183490f3e71b239cc3a99508b0fb02c849b9cb7a69e56deab059": {
-      "prior_git_blob": "0147212d418f6382732d6b5857480a20184e9cf0",
-      "snapshot_file": "scripts/initial/redistibution-artifacts/ethos/use.sh"
+      "git_commit": "cac7e26629f788f1252a93a93e480749fae638d9",
+      "git_path": "redistibution-artifacts/ethos/use.sh"
     },
     "a3745bcdc7fd61d9ce78f9f00d2739e0cdc24bb3d391daf48159b3616394085b": {
-      "prior_git_blob": "811af51d4dfe3c40dc70c4b5ff8378d47ee70253",
-      "snapshot_file": "scripts/fairforget/config/models.json"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/config/models.json"
     },
     "a427e520c0d86336395ea9aa2753f2546280c1c4c9951e5fdd4392b951bd6d73": {
-      "prior_git_blob": "925baeea75ae3fdc720c984ab248672fed1dcbe3",
-      "snapshot_file": "scripts/fairforget/config/stereoset_gemma_bf16.json"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/config/stereoset_gemma_bf16.json"
     },
     "a53f549e53901aad27d53b7458ed3c9c4aec11d81ee9e956f9527b6de79e094a": {
       "snapshot_file": "scripts/lapa-mamay-preflight/text_view_27b.py"
@@ -827,19 +827,19 @@
       "snapshot_file": "scripts/lapa-export-recovery/refresh.sbatch"
     },
     "abaf9e00922fa2f7ccbcac9c0dbcb91b741e5922f8889434fc7bd5432e576237": {
-      "prior_git_blob": "850d8c6b5abfc994c5ad5bcb2fdd730b810b7d58",
-      "snapshot_file": "scripts/gemma-bf16-c22989b/code/redistibution-artifacts/ethos/inference.py"
+      "git_commit": "c17deb1248e25d1f0ea4f46706b748be6f0cbdc0",
+      "git_path": "redistibution-artifacts/ethos/inference.py"
     },
     "ad06e1ebf666c22397abc690f3fe595311119ba5224ba049d93db487d207ef7d": {
       "snapshot_file": "scripts/scheduler/3044782/precision-check.sbatch"
     },
     "b0c6108e57b8afbd41390426fc934bbef790ece9ed8f0a1359c27d9046bd343c": {
-      "prior_git_blob": "d1147e7de2972fac4e061bf94310afe3bef00adf",
-      "snapshot_file": "scripts/fairforget/ethos/setup.sh"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/setup.sh"
     },
     "b0d82a9ffdbac3be92f944b4caad8e277e4f77888a2f55d45234cb577f8d1067": {
-      "prior_git_blob": "45bf8909a64c5e1af80de18dddaa603e8fe9bea8",
-      "snapshot_file": "scripts/fairforget/tests/smoke.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/tests/smoke.py"
     },
     "b3b0d253386c2e04acc2c9c7bac4941d0a3a73c4e68b0cc5249659ee90c51324": {
       "snapshot_file": "scripts/lapa-mamay-preflight/schedule_refresh.py"
@@ -848,8 +848,8 @@
       "snapshot_file": "scripts/lapa-mamay-preflight/retire_fp16.py"
     },
     "b8a9ecd2cd3ce767dfe8bb9792deb244287ecd2d72fbd181db0ecb703dba7889": {
-      "prior_git_blob": "188a39bcb63c6e6e79f05acece0077283bfbe93d",
-      "snapshot_file": "scripts/initial/redistibution-artifacts/ethos/suite_train.py"
+      "git_commit": "c17deb1248e25d1f0ea4f46706b748be6f0cbdc0",
+      "git_path": "redistibution-artifacts/ethos/suite_train.py"
     },
     "b9016e9fc1884bf8fbba934dfea5d6ffb7694fbcc9227587f80adf3568a6c419": {
       "snapshot_file": "scripts/mamay27-bf16-v1/verify.sbatch"
@@ -864,8 +864,8 @@
       "snapshot_file": "scripts/lapa-bf16-c17deb1/evaluate.sbatch"
     },
     "bbb36f64ae4e17bf15bb99259639f9b07815fd2eb859c303cd46d8489dcd66e2": {
-      "prior_git_blob": "605b978ff7107e9598de857f985a4a954eb682c6",
-      "snapshot_file": "scripts/environment/models.json"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "configs/unlearning/models.json"
     },
     "bf6384665213e6a715967987c3a08c3fc0285a2df2e4453fff158cc6f6fb9d79": {
       "snapshot_file": "scripts/mamay12-bf16-c17deb1/study-name"
@@ -877,24 +877,24 @@
       "snapshot_file": "scripts/mamay27-bf16-v1/study-name"
     },
     "c4cb0e31705cb21d2f68723f2ab6ad54aa41c19782f309e9327b70bf6d5c0ca9": {
-      "prior_git_blob": "16b9313ae5eb855a7aacb37e3308991c7c8a3417",
-      "snapshot_file": "scripts/fairforget/split/screen.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/split/screen.py"
     },
     "c6b367b21d8c50b5172448b3020af8562e38a79008e97647c79acd06068aa652": {
-      "prior_git_blob": "3a8ce8ca70f60e2a80b91b4f419f1d4b30bd329e",
-      "snapshot_file": "scripts/mamay27-bf16-v1/code/redistibution-artifacts/ethos/qualify_mamay.py"
+      "git_commit": "b78b25746b17b37f3b9a72ab0024b9cc4dfee78e",
+      "git_path": "redistibution-artifacts/ethos/qualify_mamay.py"
     },
     "ca3483df10e2a449c057d84bb76b8345f72744627674d72a01f20299510c5afa": {
-      "prior_git_blob": "478da59e02ee2790f268bdedc087976a413dfccc",
-      "snapshot_file": "scripts/mamay27-bf16-v1/code/redistibution-artifacts/ethos/inference.py"
+      "git_commit": "39eec5435f231de337de9c8382bd5cebbac558ac",
+      "git_path": "redistibution-artifacts/ethos/inference.py"
     },
     "cbc34bc97f7251952da03db7967cafbf5bbdcd9cf892c137fba4db35a2f0c8b8": {
-      "prior_git_blob": "2f22a6d8a703647726aed46c690c0f49d6cfb1d6",
-      "snapshot_file": "scripts/fairforget/ethos/upstream.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/upstream.py"
     },
     "d2aa15aef825a1941bb52bedb0d5d9da4ed975fd28dbf34ef02618692b2936bd": {
-      "prior_git_blob": "e3e8e6a848c3f37cd7c43b10954368dba4e66c59",
-      "snapshot_file": "scripts/lapa-bf16-c17deb1/code/redistibution-artifacts/ethos/suite.py"
+      "git_commit": "39eec5435f231de337de9c8382bd5cebbac558ac",
+      "git_path": "redistibution-artifacts/ethos/suite.py"
     },
     "d56fec1bda76e20756fbf0127d31b36293738e40ea1c821054d461b689e4bc69": {
       "snapshot_file": "scripts/lapa-mamay-preflight/checklist.py"
@@ -918,16 +918,16 @@
       "snapshot_file": "scripts/environment/check_pipeline.py"
     },
     "e11a3199212a2629a3e9d9c0c4e608abe58202c4dcf5ac0e03334a79f6a8ce10": {
-      "prior_git_blob": "bf3232391761ebc6d355a3dce71acbe1d620d156",
-      "snapshot_file": "scripts/fairforget/ethos/inference.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/inference.py"
     },
     "e2ab54006edb0ff9d95cd599dd03a7049631e08c537c6052bb2cb1134b6a5c1e": {
-      "prior_git_blob": "ec8e9095caf5e384e15540ae1c50aa5ac74a7d49",
-      "snapshot_file": "scripts/fairforget/ethos/qualify_mamay.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/qualify_mamay.py"
     },
     "e2c23d48897178cad09147837f520d3d3516d1c72082cba782d9201889a4bc6f": {
-      "prior_git_blob": "9a6db7597ac0a2cd84bc11eed9557a8228369116",
-      "snapshot_file": "scripts/environment/prepare_view.py"
+      "git_commit": "5a76a07b711d974270199f8cfb7d1ba5c7cdbc69",
+      "git_path": "redistibution-artifacts/ethos/prepare_view.py"
     },
     "e3bc575a63ceb5ec969079728b6a4e8708010bbefe664667576238e720e25612": {
       "snapshot_file": "scripts/environment/use.sh"
@@ -936,27 +936,27 @@
       "snapshot_file": "scripts/lapa-export-recovery/checkpoints.json"
     },
     "ebcbea1389021130422a1eeec33c39253af4da9ad63eea2c6a6a292c201e61c4": {
-      "prior_git_blob": "40cb938701691063676ede582038471f943411f9",
-      "snapshot_file": "scripts/initial/redistibution-artifacts/tests/test_protocol.py"
+      "git_commit": "349ebc4a58e55f802f3f7d5d9216a3adca3e11ec",
+      "git_path": "redistibution-artifacts/tests/test_protocol.py"
     },
     "ed16d5b80e1f0a760b11d3cb69930ff89fa15d9e503144bc7e1af90ae7b80d8f": {
-      "prior_git_blob": "bf66e4898ce742a57b9a4efcb9aec52d2e76c644",
-      "snapshot_file": "scripts/fairforget/ethos/use.sh"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/use.sh"
     },
     "face646871d8a2bf05c0b65210bc8844151926e2659baa567536fb6486dc0ab0": {
-      "prior_git_blob": "dd7e1a48cbce882e6f8885e078348d50748712c4",
-      "snapshot_file": "scripts/fairforget/tests/test_dense_svd.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/tests/test_dense_svd.py"
     },
     "fb29d7132949369bcc8af187e852ae33d14c7a9521226dee2854bed9d345dd80": {
       "snapshot_file": "scripts/initial/checklist.py"
     },
     "fb7440b970f2077b947c9d051ec87ab4ba99e6a71f2da161fd5d2dd9fb8a8c9d": {
-      "prior_git_blob": "6418c58e93aae92ef341f82747eebb4b5c67ed92",
-      "snapshot_file": "scripts/fairforget/ethos/text_view_27b.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/text_view_27b.py"
     },
     "fe2a6b3e710360e4fcbf3b4794650765f2940ae8c35606ca7e1e7ce12431ae93": {
-      "prior_git_blob": "98eca18ab5af9a0bbbea6176599385b10b33ce8b",
-      "snapshot_file": "scripts/fairforget/ethos/archive.py"
+      "git_commit": "e0957c58e609a1adaf275bd5463e11be0618cfe8",
+      "git_path": "redistibution-artifacts/ethos/archive.py"
     }
   }
 }
