@@ -104,10 +104,10 @@ Use the maintained [Fair-UK evaluator](https://github.com/reirei-00/fair-uk/tree
 ```bash
 "$ETHOS_PYTHON" ethos/suite.py evaluate "${common[@]}" "${cell[@]}" \
   --fair-uk "$WORK/fair-uk" --eval-python "$EVAL_PYTHON" \
-  --task stereoset_uk --input "$WORK/uk_eval.csv" --bootstrap 1000
+  --task stereoset_uk --input "$WORK/uk_eval.csv" --bootstrap 0
 ```
 
-Repeat for both evaluation languages and each registered panel in [the study configuration](config/stereoset_domains.json). For a task registered through an explicit release, pass `--dataset-bundle /absolute/path/to/manifest.json`. Use the reviewed WinoBias controlled/natural correspondence and BBQ scenario mapping for cross-language analysis. English StereoSet, WinoBias and BBQ require a released bundle at the pinned evaluator revision. Ukrainian built-in tasks accept the local files named by Fair-UK's registry. For StereoSet, bootstrap components must match the reviewed families within strata. Point estimates are available with `--bootstrap 0` when family-respecting intervals cannot be computed.
+For English, install Fair-UK's `matched-en-v1` release and pass the installed `manifest.json` to the pinned evaluator with `--dataset-bundle`. It contains 949 held-out StereoSet rows, 1,580 WinoBias Controlled rows, 558 source-matched WinoBias Natural rows and 58,492 BBQ rows. The English StereoSet panel uses the original English sentences and shared Ukrainian target labels for target-macro scoring. Ukrainian panels use the files pinned in Fair-UK's native registry. Use `--bootstrap 0` for both StereoSet panels on the seed-42 split because some protected families span Fair-UK strata. WinoBias and BBQ use 1,000 paired bootstrap draws. [Fair-UK release and installation](https://github.com/reirei-00/fair-uk/blob/d888b451b954c7329b6c869bdfe1112268766e64/docs/fair-uk.md#bilingual-data)
 
 To evaluate all eight interventions for one model, list the available panels in a JSON file. Each key is a task ID. Each value supplies `input` and/or `dataset-bundle` paths relative to that file. For example, `{"stereoset_uk":{"input":"uk_eval.csv"}}` evaluates this registered release across four domains and both training languages. Include all eight configured panels to collect 64 pairs per model.
 
