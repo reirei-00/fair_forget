@@ -4,7 +4,7 @@ The [experiment checklist](2026-11-21/status/CHECKLIST.md) tracks the six models
 
 ## What ran
 
-[JUPITER’s submission records](2026-11-21/jobs.json) identify 116 Slurm submissions for this suite and its environment setup through 18:26 UTC. Each entry records the original command, working directory and SHA-256 of the batch script retained by Slurm. An array counts as one submission. The 116 submissions used 25 distinct batch scripts. Three of those scripts already existed byte for byte in the FairForget PR history at commit `39876c0`.
+[JUPITER’s submission records](2026-11-21/jobs.json) identify 202 Slurm submissions for this suite and its environment setup through job `3046464`. Each entry records the original command, working directory and SHA-256 of the batch script retained by Slurm. An array counts as one submission. The 202 submissions used 29 distinct batch scripts. Of those, 3 already existed byte for byte in the FairForget PR history at commit `39876c0`.
 
 The [source inventory](2026-11-21/sources.json) maps 437 paths in the deployment to their captured contents. It covers runner and environment code, training and evaluation launchers, diagnostic scripts, checklist and retry helpers, and their selected configuration files. Its 152 distinct files include 61 that already existed in FairForget history. A `prior_git_blob` identifies the original Git content. SHA-256 identifies the captured bytes independently of Git. Repeated files share one snapshot copy. All archived contents live under the dated directory and can be verified independently of future edits to the study runner.
 

@@ -1,4 +1,5 @@
 import argparse
+import csv
 import hashlib
 import json
 from pathlib import Path
@@ -14,9 +15,26 @@ def relative_path(name):
     return path
 
 
+def check_recorded_jobs(jobs):
+    with (SNAPSHOT / "status/experiments.csv").open(newline="", encoding="utf-8") as stream:
+        references = {
+            value
+            for row in csv.DictReader(stream)
+            for key, value in row.items()
+            if key.endswith("_job") and value
+        }
+    failures = json.loads((SNAPSHOT / "status/lapa-failures.json").read_text())
+    references.update(failures)
+    references.update(row["retry"] for row in failures.values())
+    missing = {job.partition("_")[0] for job in references} - jobs.keys()
+    if missing:
+        raise ValueError(f"Missing submitted scripts for recorded jobs: {sorted(missing)}")
+
+
 def load_sources():
     manifest = json.loads((SNAPSHOT / "sources.json").read_text())
     jobs = json.loads((SNAPSHOT / "jobs.json").read_text())
+    check_recorded_jobs(jobs)
     data = {}
     for expected, record in manifest["sources"].items():
         path = SNAPSHOT / relative_path(record["snapshot_file"])

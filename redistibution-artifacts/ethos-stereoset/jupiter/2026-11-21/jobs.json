@@ -17,10 +17,64 @@
     "submission": "sbatch --parsable --array=0-23 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/release-cac7e26/redistibution-artifacts/ethos/train_suite.sbatch en 1771e0cfa56dd7dcbca547c765f9d5622a7bab2eb02db4041a262dc543be9026 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/suite /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/results /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/Ethos /e/project1/e-dev-2026d09-075/fairforget/models /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/views",
     "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/release-cac7e26/logs"
   },
+  "3043888": {
+    "batch_sha256": "02fef57d372c385c96f4bc6ae7548e37adbb3301f3c0a16d7d0a697d6380c875",
+    "name": "ethos-domain",
+    "submission": "sbatch --parsable --array=0-23 --dependency=afterok:3043887 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/release-cac7e26/redistibution-artifacts/ethos/train_suite.sbatch uk 1771e0cfa56dd7dcbca547c765f9d5622a7bab2eb02db4041a262dc543be9026 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/suite /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/results /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/Ethos /e/project1/e-dev-2026d09-075/fairforget/models /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/views",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/release-cac7e26/logs"
+  },
   "3043899": {
     "batch_sha256": "d5e4cc218aac3a00dd9c3b57129f6b0853d443ade6d5e3a30b41cb61520d0e5b",
     "name": "ethos-pair-check",
     "submission": "sbatch --parsable /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/eval_smoke.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/release-cac7e26/logs"
+  },
+  "3043900": {
+    "batch_sha256": "10991af85b82c6033ade77afbb9436d70e4c42dc836fbb35253fc9df004a31e3",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=08:00:00 --dependency=aftercorr:3043887,afterok:3043899 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42 en stereoset_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/release-cac7e26/logs"
+  },
+  "3043901": {
+    "batch_sha256": "10991af85b82c6033ade77afbb9436d70e4c42dc836fbb35253fc9df004a31e3",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=08:00:00 --dependency=aftercorr:3043887,afterok:3043899 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42 en winobias_uk_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/release-cac7e26/logs"
+  },
+  "3043922": {
+    "batch_sha256": "10991af85b82c6033ade77afbb9436d70e4c42dc836fbb35253fc9df004a31e3",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=08:00:00 --dependency=aftercorr:3043887,afterok:3043899 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42 en winobias_uk_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/release-cac7e26/logs"
+  },
+  "3043967": {
+    "batch_sha256": "10991af85b82c6033ade77afbb9436d70e4c42dc836fbb35253fc9df004a31e3",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=12:00:00 --dependency=aftercorr:3043887,afterok:3043899 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42 en bbq_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/release-cac7e26/logs"
+  },
+  "3043978": {
+    "batch_sha256": "10991af85b82c6033ade77afbb9436d70e4c42dc836fbb35253fc9df004a31e3",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=08:00:00 --dependency=aftercorr:3043888,afterok:3043899 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42 uk stereoset_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/release-cac7e26/logs"
+  },
+  "3043979": {
+    "batch_sha256": "10991af85b82c6033ade77afbb9436d70e4c42dc836fbb35253fc9df004a31e3",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=08:00:00 --dependency=aftercorr:3043888,afterok:3043899 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42 uk winobias_uk_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/release-cac7e26/logs"
+  },
+  "3044000": {
+    "batch_sha256": "10991af85b82c6033ade77afbb9436d70e4c42dc836fbb35253fc9df004a31e3",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=08:00:00 --dependency=aftercorr:3043888,afterok:3043899 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42 uk winobias_uk_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/release-cac7e26/logs"
+  },
+  "3044001": {
+    "batch_sha256": "10991af85b82c6033ade77afbb9436d70e4c42dc836fbb35253fc9df004a31e3",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=12:00:00 --dependency=aftercorr:3043888,afterok:3043899 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42 uk bbq_uk",
     "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/release-cac7e26/logs"
   },
   "3044542": {
@@ -33,6 +87,12 @@
     "batch_sha256": "02fef57d372c385c96f4bc6ae7548e37adbb3301f3c0a16d7d0a697d6380c875",
     "name": "ethos-domain",
     "submission": "sbatch --parsable --array=0-23 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/code/redistibution-artifacts/ethos/train_suite.sbatch en 1771e0cfa56dd7dcbca547c765f9d5622a7bab2eb02db4041a262dc543be9026 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/suite /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/results /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/Ethos /e/project1/e-dev-2026d09-075/fairforget/models /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-domain-env-20261121/views",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044548": {
+    "batch_sha256": "02fef57d372c385c96f4bc6ae7548e37adbb3301f3c0a16d7d0a697d6380c875",
+    "name": "ethos-domain",
+    "submission": "sbatch --parsable --array=0-23 --dependency=afterok:3044547 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/code/redistibution-artifacts/ethos/train_suite.sbatch uk 1771e0cfa56dd7dcbca547c765f9d5622a7bab2eb02db4041a262dc543be9026 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/suite /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/results /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/Ethos /e/project1/e-dev-2026d09-075/fairforget/models /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-domain-env-20261121/views",
     "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
   },
   "3044564": {
@@ -83,16 +143,160 @@
     "submission": "sbatch --parsable --array=0-23%4 --time=12:00:00 --dependency=aftercorr:3044547,afterok:3044542 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en bbq_uk",
     "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
   },
+  "3044593": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=8:00:00 --dependency=aftercorr:3044548,afterok:3044542 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 uk stereoset_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044594": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=8:00:00 --dependency=aftercorr:3044548,afterok:3044542 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 uk winobias_en_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044595": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=8:00:00 --dependency=aftercorr:3044548,afterok:3044542 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 uk winobias_en_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044596": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=12:00:00 --dependency=aftercorr:3044548,afterok:3044542 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 uk bbq_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044597": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=8:00:00 --dependency=aftercorr:3044548,afterok:3044542 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 uk stereoset_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044598": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=8:00:00 --dependency=aftercorr:3044548,afterok:3044542 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 uk winobias_uk_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044599": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=8:00:00 --dependency=aftercorr:3044548,afterok:3044542 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 uk winobias_uk_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044601": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --array=0-23%4 --time=12:00:00 --dependency=aftercorr:3044548,afterok:3044542 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 uk bbq_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
   "3044782": {
     "batch_sha256": "ad06e1ebf666c22397abc690f3fe595311119ba5224ba049d93db487d207ef7d",
     "name": "ethos-precision",
     "submission": "sbatch --parsable ../precision-check.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4",
     "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
   },
+  "3044841": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=8:00:00 --array=4,5,6,7,12,13,14%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en stereoset_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044842": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=8:00:00 --array=4,5,6,7,12,13,14%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en winobias_en_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044843": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=8:00:00 --array=4,5,6,7,12,13,14%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en winobias_en_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044844": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=12:00:00 --array=4,5,6,7,12,13,14%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en bbq_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044845": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=8:00:00 --array=4,5,6,7,12,13,14%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en stereoset_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044846": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=8:00:00 --array=4,5,6,7,12,13,14%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en winobias_uk_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044847": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=8:00:00 --array=4,5,6,7,12,13,14%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en winobias_uk_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044848": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=12:00:00 --array=4,5,6,7,12,13,14%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en bbq_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
   "3044849": {
     "batch_sha256": "79908867a3c337ed2cbe6d58e336c6e575fca197442189ebf75242eec5d7e82e",
     "name": "ethos-checkpoints",
     "submission": "sbatch --parsable --dependency=afterany:3044547:3044548 ../reconcile.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044917": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=8:00:00 --array=15,16,17,18,19,20,21,22%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en stereoset_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044918": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=8:00:00 --array=15,16,17,18,19,20,21,22%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en winobias_en_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044919": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=8:00:00 --array=15,16,17,18,19,20,21,22%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en winobias_en_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044920": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=12:00:00 --array=15,16,17,18,19,20,21,22%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en bbq_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044921": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=8:00:00 --array=15,16,17,18,19,20,21,22%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en stereoset_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044922": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=8:00:00 --array=15,16,17,18,19,20,21,22%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en winobias_uk_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044923": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=8:00:00 --array=15,16,17,18,19,20,21,22%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en winobias_uk_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3044924": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=12:00:00 --array=15,16,17,18,19,20,21,22%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en bbq_uk",
     "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
   },
   "3044931": {
@@ -219,6 +423,18 @@
     "batch_sha256": "57a937a81115a1e0e5c6220901df7ca0362ed735ccae2f62c0d79b985487a8b7",
     "name": "ethos-eval",
     "submission": "sbatch --parsable --array=0-3%4 --time=12:00:00 --dependency=aftercorr:3045174 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/gemma-bf16-c22989b/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/gemma-bf16-c22989b uk bbq_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/gemma-bf16-c22989b/logs"
+  },
+  "3045383": {
+    "batch_sha256": "9783e6d1464e9a5c6cfd483822cd3f5eb6c3cda7d55a3e38deedf8a72418c5c8",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --time=8:00:00 --array=23%4 --hold /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4 en stereoset_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/dispatch-349ebc4/logs"
+  },
+  "3045479": {
+    "batch_sha256": "a9cbd0650117cae8c293147bbcf3b98be6bb0c74d898c815108ceac8e69dbdf7",
+    "name": "gemma-checklist",
+    "submission": "sbatch --parsable --dependency=afterany:3045176:3045177:3045184:3045185:3045186:3045187:3045200:3045205:3045209:3045210:3045211:3045212:3045213:3045229:3045230:3045231 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/gemma-bf16-c22989b/final-checklist.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/gemma-bf16-c22989b",
     "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/gemma-bf16-c22989b/logs"
   },
   "3045510": {
@@ -467,6 +683,12 @@
     "submission": "sbatch --parsable --dependency=afterok:3045620 --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-mamay-preflight/logs/%j.out /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-mamay-preflight/refresh.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-mamay-preflight /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay12-bf16-c17deb1",
     "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-mamay-preflight"
   },
+  "3045693": {
+    "batch_sha256": "111c2ea734496363d10596a124c9ad0d624d061131cf0aaeeea64102c9c00dd1",
+    "name": "ethos-checklist",
+    "submission": "sbatch --parsable --dependency=afterany:3045543:3045554:3045555:3045557:3045558:3045571:3045575:3045576:3045583:3045587:3045591:3045592:3045599:3045600:3045607:3045608:3045609:3045621:3045622:3045623:3045624:3045625:3045626:3045627:3045628:3045629:3045657:3045658:3045659:3045660:3045673:3045674:3045676:3045691:3045692 --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-mamay-preflight/logs/%j.out /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-mamay-preflight/refresh.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-mamay-preflight",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-mamay-preflight"
+  },
   "3045700": {
     "batch_sha256": "030e5610625a2a7842fafa1efb10a408d46f08b3520da1b775cf4185e7b4adab",
     "name": "fit-mamay27-text",
@@ -489,6 +711,12 @@
     "batch_sha256": "111c2ea734496363d10596a124c9ad0d624d061131cf0aaeeea64102c9c00dd1",
     "name": "ethos-checklist",
     "submission": "sbatch --parsable --dependency=afterany:3045700 --output=/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-mamay-preflight/logs/%j.out refresh.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-mamay-preflight",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-mamay-preflight"
+  },
+  "3045711": {
+    "batch_sha256": "c3c933795554c4108cdd5b2c0405c0c4b4fc1fa3b8b69b8137ae0187b2d0bd89",
+    "name": "ethos-27b-svd",
+    "submission": "sbatch --parsable --dependency=afterok:3045543 --kill-on-invalid-dep=yes --output=/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-mamay-preflight/logs/%j.out finish_27b.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-mamay-preflight 3045543",
     "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-mamay-preflight"
   },
   "3045712": {
@@ -551,16 +779,142 @@
     "submission": "sbatch --parsable --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs/%A_%a.out --dependency=afterok:3045925 --kill-on-invalid-dep=yes --time=02:00:00 --array=0-3 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/code/redistibution-artifacts/ethos/train_suite.sbatch en 1da758e64a982e352b4097cf00c0b8b92ac64bc3aa34583036e259c8321d578a /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/suite /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/results /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/Ethos /e/project1/e-dev-2026d09-075/fairforget/models /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-domain-env-20261121/views",
     "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
   },
+  "3045927": {
+    "batch_sha256": "60d582f8104a87a358b2d07a1f1a7b3f696a87e7ff674975c0d4609742d5b6fe",
+    "name": "ethos-domain",
+    "submission": "sbatch --parsable --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs/%A_%a.out --dependency=afterok:3045926 --kill-on-invalid-dep=yes --time=02:00:00 --array=0-3 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/code/redistibution-artifacts/ethos/train_suite.sbatch uk 1da758e64a982e352b4097cf00c0b8b92ac64bc3aa34583036e259c8321d578a /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/suite /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/results /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/Ethos /e/project1/e-dev-2026d09-075/fairforget/models /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-domain-env-20261121/views",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045928": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=8:00:00 --dependency=aftercorr:3045926 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 en stereoset_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045929": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=8:00:00 --dependency=aftercorr:3045926 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 en winobias_en_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045930": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=8:00:00 --dependency=aftercorr:3045926 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 en winobias_en_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045931": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=12:00:00 --dependency=aftercorr:3045926 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 en bbq_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045932": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=8:00:00 --dependency=aftercorr:3045926 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 en stereoset_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045933": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=8:00:00 --dependency=aftercorr:3045926 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 en winobias_uk_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045934": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=8:00:00 --dependency=aftercorr:3045926 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 en winobias_uk_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045935": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=12:00:00 --dependency=aftercorr:3045926 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 en bbq_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045936": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=8:00:00 --dependency=aftercorr:3045927 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 uk stereoset_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045937": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=8:00:00 --dependency=aftercorr:3045927 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 uk winobias_en_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045938": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=8:00:00 --dependency=aftercorr:3045927 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 uk winobias_en_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045939": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=12:00:00 --dependency=aftercorr:3045927 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 uk bbq_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045940": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=8:00:00 --dependency=aftercorr:3045927 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 uk stereoset_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045941": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=8:00:00 --dependency=aftercorr:3045927 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 uk winobias_uk_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045984": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=8:00:00 --dependency=aftercorr:3045927 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 uk winobias_uk_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045988": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --array=0-3%4 --time=12:00:00 --dependency=aftercorr:3045927 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 uk bbq_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
   "3045989": {
     "batch_sha256": "1e2460bc045bdcc23a13c8409109c09553fad47411de7561670954dda75b0a9e",
     "name": "ethos-27b-status",
     "submission": "sbatch --parsable --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs/%A_%a.out --dependency=afterany:3045925 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/refresh.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 qualification",
     "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
   },
+  "3045990": {
+    "batch_sha256": "1e2460bc045bdcc23a13c8409109c09553fad47411de7561670954dda75b0a9e",
+    "name": "ethos-27b-status",
+    "submission": "sbatch --parsable --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs/%A_%a.out --dependency=afterany:3045926 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/refresh.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045991": {
+    "batch_sha256": "1e2460bc045bdcc23a13c8409109c09553fad47411de7561670954dda75b0a9e",
+    "name": "ethos-27b-status",
+    "submission": "sbatch --parsable --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs/%A_%a.out --dependency=afterany:3045927 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/refresh.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
   "3045992": {
     "batch_sha256": "7e72c714f955f3c0dd5ccd090480323156b4be30a962547df6fa10658cd88a40",
     "name": "ethos-retire-fp16",
     "submission": "sbatch --parsable --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs/%A_%a.out --kill-on-invalid-dep=yes --dependency=afterok:3045925 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/retire.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045993": {
+    "batch_sha256": "b9016e9fc1884bf8fbba934dfea5d6ffb7694fbcc9227587f80adf3568a6c419",
+    "name": "ethos-27b-proof",
+    "submission": "sbatch --parsable --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs/%A_%a.out --kill-on-invalid-dep=yes --dependency=afterok:3045927 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/verify.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
+  },
+  "3045994": {
+    "batch_sha256": "1e2460bc045bdcc23a13c8409109c09553fad47411de7561670954dda75b0a9e",
+    "name": "ethos-27b-status",
+    "submission": "sbatch --parsable --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs/%A_%a.out --dependency=afterany:3045928:3045929:3045930:3045931:3045932:3045933:3045934:3045935:3045936:3045937:3045938:3045939:3045940:3045941:3045984:3045988 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/refresh.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1 evaluation",
     "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/mamay27-bf16-v1/logs"
   },
   "3046051": {
@@ -671,6 +1025,12 @@
     "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/llama-qwen-uk-recovery/logs/%A_%a.out --dependency=afterany:3046054:3046063:3046064:3046065:3046066 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/llama-qwen-uk-recovery/refresh.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/llama-qwen-uk-recovery retries",
     "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/llama-qwen-uk-recovery/logs"
   },
+  "3046133": {
+    "batch_sha256": "63b789a35f96a72d8ddb16dec2ae378bca89a360d93181623cbed154b8db2f84",
+    "name": "ethos-recovery-status",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/llama-qwen-uk-recovery/logs/%A_%a.out --dependency=afterany:3046067:3046068:3046069:3046070:3046071:3046072:3046073:3046074 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/llama-qwen-uk-recovery/refresh.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/llama-qwen-uk-recovery panels",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/llama-qwen-uk-recovery/logs"
+  },
   "3046156": {
     "batch_sha256": "6b33b4e3c2ea4c3d2a9bc10046860cc6877dbcb114aa6b78b1ba427633345894",
     "name": "ethos-recovery-proof",
@@ -694,5 +1054,161 @@
     "name": "ethos-export",
     "submission": "sbatch --parsable --array=0,1 --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/export-%A_%a.out /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/export.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk",
     "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery"
+  },
+  "3046439": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=08:00:00 --dependency=afterok:3046431_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery en stereoset_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046440": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=08:00:00 --dependency=afterok:3046431_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery en winobias_en_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046441": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=08:00:00 --dependency=afterok:3046431_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery en winobias_en_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046442": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=12:00:00 --dependency=afterok:3046431_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery en bbq_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046443": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=08:00:00 --dependency=afterok:3046431_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery en stereoset_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046444": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=08:00:00 --dependency=afterok:3046431_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery en winobias_uk_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046445": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=08:00:00 --dependency=afterok:3046431_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery en winobias_uk_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046446": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=12:00:00 --dependency=afterok:3046431_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery en bbq_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046447": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=0 --time=08:00:00 --dependency=afterok:3046432_0 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk stereoset_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046448": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=08:00:00 --dependency=afterok:3046432_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk stereoset_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046449": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=0 --time=08:00:00 --dependency=afterok:3046432_0 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk winobias_en_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046450": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=08:00:00 --dependency=afterok:3046432_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk winobias_en_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046451": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=0 --time=08:00:00 --dependency=afterok:3046432_0 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk winobias_en_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046452": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=08:00:00 --dependency=afterok:3046432_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk winobias_en_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046453": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=0 --time=12:00:00 --dependency=afterok:3046432_0 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk bbq_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046454": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=12:00:00 --dependency=afterok:3046432_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk bbq_en",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046455": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=0 --time=08:00:00 --dependency=afterok:3046432_0 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk stereoset_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046456": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=08:00:00 --dependency=afterok:3046432_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk stereoset_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046457": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=0 --time=08:00:00 --dependency=afterok:3046432_0 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk winobias_uk_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046458": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=08:00:00 --dependency=afterok:3046432_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk winobias_uk_controlled",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046459": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=0 --time=08:00:00 --dependency=afterok:3046432_0 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk winobias_uk_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046460": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=08:00:00 --dependency=afterok:3046432_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk winobias_uk_natural",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046461": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=0 --time=12:00:00 --dependency=afterok:3046432_0 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk bbq_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046462": {
+    "batch_sha256": "bafd17d88e705514f50aefcf84e522733c23f7ffaf616df1be2dcd32fd6c3b9f",
+    "name": "ethos-eval",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --array=1 --time=12:00:00 --dependency=afterok:3046432_1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/evaluate.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery uk bbq_uk",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046463": {
+    "batch_sha256": "aa6ae810fb12e91c2bc865c1940142eb33b7f7ce853b386eee35ad977dabd7a2",
+    "name": "lapa-export-status",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --dependency=afterany:3046431:3046432 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/refresh.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
+  },
+  "3046464": {
+    "batch_sha256": "aa6ae810fb12e91c2bc865c1940142eb33b7f7ce853b386eee35ad977dabd7a2",
+    "name": "lapa-export-status",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs/%A_%a.out --dependency=afterany:3046439:3046440:3046441:3046442:3046443:3046444:3046445:3046446:3046447:3046448:3046449:3046450:3046451:3046452:3046453:3046454:3046455:3046456:3046457:3046458:3046459:3046460:3046461:3046462 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/refresh.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/logs"
   }
 }
