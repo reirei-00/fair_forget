@@ -9,7 +9,13 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 CONFIG = HERE.parent / "config"
-SPEC = CONFIG / "stereoset_domains.json"
+SPEC = (
+    CONFIG
+    / {
+        "full": "stereoset_domains.json",
+        "gemma_bf16": "stereoset_gemma_bf16.json",
+    }[os.environ.get("ETHOS_STUDY", "full")]
+)
 REGISTRY = CONFIG / "models.json"
 
 

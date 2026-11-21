@@ -1,5 +1,7 @@
 # Single-domain Ethos experiments
 
+For Gemma 3 12B, select the registered BF16 study with `export ETHOS_STUDY=gemma_bf16` before preparing inputs, submitting training or evaluating checkpoints. Use the seed-42 split and a separate suite directory. The original trainer uses BF16 and a learning rate of 0.0005 for both branches. The four Ukrainian runs depend on verified checkpoints for all four English domains in this Gemma study. [Gemma configuration](config/stereoset_gemma_bf16.json)
+
 The suite trains 48 independent interventions per seed. Each of the six model revisions starts from its original weights for each StereoSet domain (gender, profession, race/ethnicity or religion). The English phase has 24 checkpoints. The Ukrainian phase starts when all 24 English runs have succeeded. Both evaluation languages apply to every checkpoint.
 
 The wrapper runs the original [Ethos bias trainer and SVD](https://github.com/leigao97/Ethos/tree/88a932f0ff5cd30ad75be163fad9b359e0a7c59d). Configuration follows the authors’ GPT-2 bias recipe with 20 stereotype epochs, two anti-stereotype epochs and SVD scale 2.0. The 128-token block is a study choice for short domain corpora. The upstream trainer drops incomplete blocks at each 1,000-row boundary. The run receipt records complete blocks and discarded tokens for both branches. The model registry pins Llama 3.1 8B Instruct, Gemma 3 12B IT, Qwen3-8B, Lapa 12B Instruct and Mamay 12B/27B IT v2.
