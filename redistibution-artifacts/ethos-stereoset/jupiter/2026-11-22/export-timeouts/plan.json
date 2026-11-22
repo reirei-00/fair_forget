@@ -1,0 +1,93 @@
+{
+  "en_profession": {
+    "original_job": "3046446_1",
+    "dispatch": "lapa-export-recovery",
+    "language": "en",
+    "domain": "profession",
+    "source_pair": "results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/en/profession/seed-42/attempt-t0tu6l4e/evaluation/bbq_uk/69410d040a66b04379730c0584f33e1230999b34049b2a021eaf6f7bc6ffea1a/pair-nz1ikz1s",
+    "reference_pair": "results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/en/religion/seed-42/attempt-4ixc6d93/evaluation/bbq_uk/5280e4b4963a2b12f8f29557c8b620d47351b0cb8ac649a8238caebb042b70fc/pair-r06gwd3y",
+    "checkpoint_reference_pair": "results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/en/profession/seed-42/attempt-t0tu6l4e/evaluation/bbq_en/5ca8aefccd6d44bc8a467a9c5ed552af548dd4c3a9b46b6f2c95c6cdf4c64bde/pair-qg452ehv",
+    "phases": {
+      "before": {
+        "rows": 58492,
+        "files": {
+          "groups.csv": "29cde754711deb3666aa03c9ac24823efc912d12042003d172caa8c889dbf306",
+          "predictions.jsonl": "af3fcba3eb420a203d01211789d29e9f20063d77272c8e454f1d8dafd1908e6f",
+          "records.jsonl": "588d2959dd2d576f368b81f6c0579011fed6942c08a1dd0645fc67ee17449bd9",
+          "report.json": "3c80718ef8ad12f6bf38f73c99100988428da8a2938083df573b59dd4523127f",
+          "report.md": "020f81d666bbd9f1cc74c7feeb86e2c4e0eef7aca2ba72695dfab8a8d3670785",
+          "run.json": "eabfa8cf300be89331deb3d55637fcc0cc8a4a4b5723f6be329fa39d32759e36"
+        }
+      },
+      "after": {
+        "rows": 58492,
+        "files": {
+          "groups.csv": "59dbb49ec958e2fda7ff94116c99330d4143c0c3b65ce687ba3385c979e48ca5",
+          "predictions.jsonl": "919a6ad3ebf017aa2a98793402570ef1ba43d4d91cac66b4ebc5f9c3f674a922",
+          "records.jsonl": "105aea6f5718ea2b3e5269e14be9a873446b1de5ba4a16d8292d6ef1d0c4ccb7",
+          "report.json": "c86cf14bf41552e1757d4f651d71eba5a8917615cf47dc8ac66a31c95dc1f954",
+          "report.md": "df9e2cbd75942404e8e1741ce485331117746464f22a37d918524b4e9346d26a",
+          "run.json": "09ce1a8a2a9a3b2e9c7f985a0a52c1a3b4b203b1b58f9380326dd41db2b90ad4"
+        }
+      }
+    }
+  },
+  "uk_gender": {
+    "original_job": "3046461_0",
+    "dispatch": "lapa-export-recovery",
+    "language": "uk",
+    "domain": "gender",
+    "source_pair": "results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/uk/gender/seed-42/attempt-jbapjc2l/evaluation/bbq_uk/614af98d07b0b77cdd39a676164f2011b70dd67a0c4d345c82d0087b2f9e5570/pair-wkbrvf37",
+    "reference_pair": "results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/en/religion/seed-42/attempt-4ixc6d93/evaluation/bbq_uk/5280e4b4963a2b12f8f29557c8b620d47351b0cb8ac649a8238caebb042b70fc/pair-r06gwd3y",
+    "checkpoint_reference_pair": "results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/uk/gender/seed-42/attempt-jbapjc2l/evaluation/bbq_en/371cc24b0f83b8e8cf25c257a797175c489e84fe134a94a924785b9f9a8a1448/pair-esz4r6w9",
+    "phases": {
+      "before": {
+        "rows": 58492,
+        "files": {
+          "groups.csv": "d89fa29aa2a69b6fb12527885a3ea48889a25191e53fa54294507637077121ee",
+          "predictions.jsonl": "af3fcba3eb420a203d01211789d29e9f20063d77272c8e454f1d8dafd1908e6f",
+          "records.jsonl": "588d2959dd2d576f368b81f6c0579011fed6942c08a1dd0645fc67ee17449bd9",
+          "report.json": "c3fb379233e820061073e523c5dab906c62542b8348a3e5986fc0c6784f11854",
+          "report.md": "85a779e426ddc7e7b24b36d932f9f926a65b18604580f350fa2573e2591e5080",
+          "run.json": "5dc18dc95975aa6ef0eefe20c4d3b0f97aae46650dac40a5e0273c8d59b7cb01"
+        }
+      },
+      "after": {
+        "rows": 52864,
+        "files": {
+          "predictions.jsonl": "eb3904a2234229f735cdd0eea4a1d08c641dcec92afbd9e8acd33760452f9b7c",
+          "run.json": "014115c641c30028f4d265893b285acf8a8653888208aae1e0f7e260389c4335"
+        }
+      }
+    }
+  },
+  "uk_profession": {
+    "original_job": "3046462_1",
+    "dispatch": "lapa-export-recovery",
+    "language": "uk",
+    "domain": "profession",
+    "source_pair": "results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/uk/profession/seed-42/attempt-a1junl6z/evaluation/bbq_uk/4105a1d83c09d810c2590e1c3e98ac0d942da05cb6b9394cce5eb17ecdec61d4/pair-3jrkbv79",
+    "reference_pair": "results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/en/religion/seed-42/attempt-4ixc6d93/evaluation/bbq_uk/5280e4b4963a2b12f8f29557c8b620d47351b0cb8ac649a8238caebb042b70fc/pair-r06gwd3y",
+    "checkpoint_reference_pair": "results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/uk/profession/seed-42/attempt-a1junl6z/evaluation/bbq_en/e19449e18cbbf304420bcbb6c36b6c8d557eb828ad90bdcf0005290c530b5b33/pair-4ymr9eec",
+    "phases": {
+      "before": {
+        "rows": 58492,
+        "files": {
+          "groups.csv": "261f90698185c832271d51170f61dca8f5994cfd72f09f4d861fa323589e5931",
+          "predictions.jsonl": "af3fcba3eb420a203d01211789d29e9f20063d77272c8e454f1d8dafd1908e6f",
+          "records.jsonl": "588d2959dd2d576f368b81f6c0579011fed6942c08a1dd0645fc67ee17449bd9",
+          "report.json": "6e06800c5523f813096892981a2773ef961e15a2b72c8993a0f2ec736a582743",
+          "report.md": "88fdfb3b04292ba5380b060fdcfc3589213e543cd4a452f616e0592a909adc02",
+          "run.json": "6f11efbc83340cbb2195463ebbfbf98b42cea3b43b628992f4c6954129c8113e"
+        }
+      },
+      "after": {
+        "rows": 56800,
+        "files": {
+          "predictions.jsonl": "223fd65a23aa7e6df3910127622f924a494d1a7007ca5147ed04b603cd9f0896",
+          "run.json": "995db6f0e2ed9467558fba1a5079264e0613edc1e64188aaba5e11ca6f1f35cf"
+        }
+      }
+    }
+  }
+}

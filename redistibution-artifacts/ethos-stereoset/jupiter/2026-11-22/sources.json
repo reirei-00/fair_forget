@@ -13,16 +13,19 @@
       "snapshot_file": "plan.json"
     },
     "0b0973c1311c75aac25f3c8285740982dcfcecef8b89dd26c48296a1fcce9fe9": {
-      "snapshot_file": "bbq_timeout_status.py"
+      "git_commit": "d5e25cc661169143269ce70783659e491edb52f0",
+      "git_path": "redistibution-artifacts/ethos-stereoset/jupiter/2026-11-22/bbq_timeout_status.py"
     },
     "60f2b0bffd5821077ff118ae51ab066636ae0dcb218d0150ec29d20da8126be9": {
-      "snapshot_file": "submit.py"
+      "git_commit": "d5e25cc661169143269ce70783659e491edb52f0",
+      "git_path": "redistibution-artifacts/ethos-stereoset/jupiter/2026-11-22/submit.py"
     },
     "ba96cfd97e978df08c11438a92a6d202b7ae9b6ed9f2b7365f1223578f4716b9": {
       "snapshot_file": "retry.sbatch"
     },
     "dbd139bf33e548f19557212436b5fd0ddeffa93a63a4454bb389288aa0f6ab6b": {
-      "snapshot_file": "continue_bbq.py"
+      "git_commit": "d5e25cc661169143269ce70783659e491edb52f0",
+      "git_path": "redistibution-artifacts/ethos-stereoset/jupiter/2026-11-22/continue_bbq.py"
     },
     "e170f2489f700f88706b0c2fd4634052e1c36040b69f2e2e5c11a3f0b0918508": {
       "snapshot_file": "checklist.patch"

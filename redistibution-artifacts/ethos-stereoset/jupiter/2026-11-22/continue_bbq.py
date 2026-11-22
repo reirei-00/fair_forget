@@ -18,10 +18,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("action", choices=["after", "compare", "check"])
     parser.add_argument("recovery", type=Path)
-    parser.add_argument("domain", choices=["gender", "race"])
+    parser.add_argument("panel", help="Panel key in the continuation plan")
     args = parser.parse_args()
     recovery = args.recovery.resolve()
-    dispatch = recovery.parent / "lapa-bf16-c17deb1"
+    record = json.loads((recovery / "plan.json").read_text())[args.panel]
+    language = record.get("language", "en")
+    domain = record.get("domain", args.panel)
+    dispatch = recovery.parent / record.get("dispatch", "lapa-bf16-c17deb1")
     code = dispatch / "code/redistibution-artifacts/ethos"
     sys.path.insert(0, str(code))
     from archive import lock, receipt_at
@@ -29,13 +32,17 @@ def main():
     from suite_data import digest, read
     from suite_eval import evaluator_env
 
-    record = read(recovery / "plan.json")[args.domain]
     source = recovery.parent / record["source_pair"]
     peer = recovery.parent / record["reference_pair"]
     request = verified_pair(peer)
+    if "checkpoint_reference_pair" in record:
+        checkpoint = verified_pair(recovery.parent / record["checkpoint_reference_pair"])
+        if checkpoint["task"] != "bbq_en" or request["task"] != "bbq_uk":
+            raise ValueError("Expected matched English and Ukrainian BBQ references")
+        request = dict(checkpoint, task=request["task"], panel_runtime=request["panel_runtime"])
     suite = dispatch / "suite/suite.json"
     (cell,) = (
-        c for c in read(suite)["cells"] if c["language"] == "en" and c["domain"] == args.domain
+        c for c in read(suite)["cells"] if c["language"] == language and c["domain"] == domain
     )
     attempt, _ = receipt_at(dispatch / "results" / cell["run_id"], digest(suite), cell)
     models = attempt.resolve() / "inference"
@@ -67,7 +74,7 @@ def main():
     if args.action == "check":
         return
 
-    resumed = recovery / "work" / args.domain / "after"
+    resumed = recovery / "work" / args.panel / "after"
     if args.action == "after":
         resumed.parent.mkdir(parents=True, exist_ok=True)
         with lock(resumed.parent / "lock"):

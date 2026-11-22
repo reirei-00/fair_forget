@@ -36,35 +36,43 @@ def submit(label, *arguments):
 with (root / ".submit.lock").open("a") as lock:
     fcntl.flock(lock, fcntl.LOCK_EX)
     jobs = json.loads(records.read_text()) if records.exists() else {}
+    plan = json.loads((root / "plan.json").read_text())
+    batch = root / "retry.sbatch"
     if not jobs:
+        masters = sorted({record["original_job"].split("_")[0] for record in plan.values()})
         output = subprocess.check_output(
-            ["sacct", "-XnP", "--array", "-j", "3045583", "-o", "JobID,State"], text=True
+            ["sacct", "-XnP", "--array", "-j", ",".join(masters), "-o", "JobID,State"], text=True
         )
         states = dict(line.split("|")[:2] for line in output.splitlines())
-        for entry in json.loads((root / "plan.json").read_text()).values():
-            pair = root.parent / entry["source_pair"]
+        for record in plan.values():
+            source = root.parent / record["source_pair"]
             if (
-                states[entry["original_job"]] != "TIMEOUT"
-                or (pair.parent / "complete.json").exists()
+                states.get(record["original_job"]) != "TIMEOUT"
+                or (source.parent / "complete.json").exists()
             ):
-                raise ValueError("Expected an unfinished timed-out panel")
-    batch = root / "retry.sbatch"
-    after = submit(
-        "gender_after", "--cpus-per-task=48", "--gres=gpu:gh200:1", batch, root, "after", "gender"
-    )
-    gender = submit(
-        "gender_compare",
-        "--cpus-per-task=8",
-        "--dependency=afterok:" + after,
-        batch,
-        root,
-        "compare",
-        "gender",
-    )
-    race = submit("race_compare", "--cpus-per-task=8", batch, root, "compare", "race")
+                raise ValueError(f"Panel {record['original_job']} is not an unfinished timeout")
+    comparisons = []
+    for panel, record in plan.items():
+        dependency = []
+        if "report.json" not in record["phases"]["after"]["files"]:
+            after = submit(
+                panel + "_after",
+                "--cpus-per-task=48",
+                "--gres=gpu:gh200:1",
+                batch,
+                root,
+                "after",
+                panel,
+            )
+            dependency = ["--dependency=afterok:" + after]
+        comparisons.append(
+            submit(
+                panel + "_compare", "--cpus-per-task=8", *dependency, batch, root, "compare", panel
+            )
+        )
     submit(
         "refresh",
-        f"--dependency=afterany:{gender}:{race}",
+        "--dependency=afterany:" + ":".join(comparisons),
         root.parent / "lapa-export-recovery/refresh.sbatch",
         root,
     )
