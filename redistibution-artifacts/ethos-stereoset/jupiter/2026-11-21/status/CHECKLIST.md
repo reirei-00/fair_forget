@@ -1,6 +1,6 @@
 # Ethos on JUPITER
 
-Snapshot 2026-11-22T09:04:04+00:00. A checked training or evaluation box requires a verified result receipt.
+Snapshot 2026-11-22T09:15:27+00:00. A checked training or evaluation box requires a verified result receipt.
 
 ## BF16 at a learning rate of 0.0005
 
@@ -56,26 +56,21 @@ Training array 3046051 covers four domains per model at FP16, learning rate 0.00
 
 | Training language | Domain | Export job | Export status | Evaluation retries |
 |---|---|---|---|---|
-| EN | profession | 3046431_1 | ☑ verified | 7 ☑ verified, 1 ☐ timeout |
-| UK | gender | 3046432_0 | ☑ verified | 7 ☑ verified, 1 ☐ timeout |
-| UK | profession | 3046432_1 | ☑ verified | 7 ☑ verified, 1 ☐ timeout |
+| EN | profession | 3046431_1 | ☑ verified | 7 ☑ verified, 1 ☐ queued (priority) |
+| UK | gender | 3046432_0 | ☑ verified | 7 ☑ verified, 1 ☐ predictions queued (priority) |
+| UK | profession | 3046432_1 | ☑ verified | 7 ☑ verified, 1 ☐ predictions queued (priority) |
 
 ## Lapa Ukrainian BBQ timeout retries
 
-The original English gender and race/ethnicity evaluations reached the 12-hour limit. Each continuation stage has its own 12-hour allocation. Gender resumes 55,936 of 58,492 post-training predictions. Race/ethnicity already has both complete prediction sets.
+Each stage has a 12-hour limit. Saved counts are from the timed-out jobs. A checked panel has a verified paired comparison.
 
-| English training domain | Original job | Post-training predictions | Paired comparison | Panel status |
-|---|---|---|---|---|
-| gender | 3045583_0 | 3053906 pending | 3053907 pending | ☐ waiting for post-training predictions |
-| race | 3045583_2 | ☑ already complete | 3053908 pending | ☐ pending |
-
-The three Ukrainian BBQ jobs from the earlier export recovery are recorded separately.
-
-| Training checkpoint | Job | Status |
-|---|---|---|
-| EN profession | 3046446_1 | ☐ timeout |
-| UK gender | 3046461_0 | ☐ timeout |
-| UK profession | 3046462_1 | ☐ timeout |
+| Training checkpoint | Timed-out job | Saved post-training predictions | Prediction continuation | Paired comparison | Panel status |
+|---|---|---:|---|---|---|
+| EN gender | 3045583_0 | 55,936 / 58,492 | 3053906 queued (priority) | 3053907 queued (dependency) | ☐ predictions queued (priority) |
+| EN race/ethnicity | 3045583_2 | 58,492 / 58,492 | Complete in original job | 3053908 queued (priority) | ☐ queued (priority) |
+| EN profession | 3046446_1 | 58,492 / 58,492 | Complete in original job | 3054085 queued (priority) | ☐ queued (priority) |
+| UK gender | 3046461_0 | 52,864 / 58,492 | 3054086 queued (priority) | 3054087 queued (dependency) | ☐ predictions queued (priority) |
+| UK profession | 3046462_1 | 56,800 / 58,492 | 3054088 queued (priority) | 3054089 queued (dependency) | ☐ predictions queued (priority) |
 
 ## Held-out evaluations
 
@@ -88,7 +83,7 @@ The three Ukrainian BBQ jobs from the earlier export recovery are recorded separ
 | stereoset_uk | 48/48 | 48 ☑ verified |
 | winobias_uk_controlled | 48/48 | 48 ☑ verified |
 | winobias_uk_natural | 48/48 | 48 ☑ verified |
-| bbq_uk | 43/48 | 43 ☑ verified, 1 ☐ waiting for post-training predictions, 3 ☐ timeout, 1 ☐ pending |
+| bbq_uk | 43/48 | 43 ☑ verified, 3 ☐ predictions queued (priority), 2 ☐ queued (priority) |
 
 ## Mamay 27B feasibility
 

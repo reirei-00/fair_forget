@@ -1,0 +1,24 @@
+--- a/audit.py
++++ b/audit.py
+@@ -21,2 +21,12 @@
+ records={}
++continuations = {}
++recovery = root.parent / "lapa-bbq-export-timeouts"
++if (recovery / "submitted.json").is_file():
++    jobs = read(recovery / "submitted.json")
++    if "refresh" in jobs:
++        for key, panel in read(recovery / "plan.json").items():
++            stages = {"continuation_job": jobs[key + "_compare"]}
++            if key + "_after" in jobs:
++                stages["continuation_after_job"] = jobs[key + "_after"]
++            continuations[panel["original_job"]] = stages
+ with (root.parent/"lapa-mamay-preflight/tracker/experiments.csv").open() as f:
+@@ -32,5 +42,6 @@
+     row=rows[lang,domain]
+-    assert row[task+"_job"]==rec["retry"]
++    stages = continuations.get(rec["retry"], {})
++    assert row[task+"_job"] == stages.get("continuation_job", rec["retry"])
+     idx=old.split("_")[1]; c=checkpoints[lang][idx];a=Path(c["attempt"])
+-    records[old]={**rec,"mismatched_logits":int(mismatch[1]),"total_logits":int(mismatch[2]),"greatest_reported_absolute_difference":float(error[1])}
++    records[old]={**rec,**stages,"mismatched_logits":int(mismatch[1]),"total_logits":int(mismatch[2]),"greatest_reported_absolute_difference":float(error[1])}
+     export=a/"inference/export.json"

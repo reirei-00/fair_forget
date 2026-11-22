@@ -1,0 +1,8 @@
+--- a/lapa_status.py
++++ b/lapa_status.py
+@@ -7 +7 @@
+-def overlay(root,rows,query):
++def overlay(root,rows,query,replacements=None):
+@@ -41,0 +42,2 @@
++                if replacements and assigned in replacements:
++                    assigned,label=replacements[assigned]

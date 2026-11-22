@@ -1,5 +1,14 @@
 {
   "deployed_paths": {
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-export-timeouts/audit.patch": "2aa07f14dac0ee5d13302d2a9653e9702a6566114ec6ab034fbe75476f92cf50",
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-export-timeouts/bbq_timeout_status.py": "4d3d7da780d69502d3792a344deb4360d1e852fb293e68ccc922aa12b097e6cf",
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-export-timeouts/checklist.patch": "4a533cb9506943ccb03e601a2639522caded75c6be5b53bdf7a0254c7cded3f4",
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-export-timeouts/continue_bbq.py": "856e7748648ccf00167a25a6bf00902531955807819a4bc42a0a3b8ea6927b2e",
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-export-timeouts/lapa_status.patch": "0ccabe928fca8d8e51de99acc1c1463b1cbc10df06425147508c8c246fb8af4f",
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-export-timeouts/plan.json": "ac4b0ba3c5ce59e3e5fbc9a0c896aeae10bf5614873d86104cea183d9ee0052d",
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-export-timeouts/retry.sbatch": "ba96cfd97e978df08c11438a92a6d202b7ae9b6ed9f2b7365f1223578f4716b9",
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-export-timeouts/submit.py": "4e9e27e692eac3b86bcb076643e60c8f1912d74ee461b4cff5f5a591a55dec2c",
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-export-timeouts/submitted.json": "c46e8e65482a9bb925a2043799c5286fe8a133044a5967736f298f4258050c70",
     "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/bbq_timeout_status.py": "0b0973c1311c75aac25f3c8285740982dcfcecef8b89dd26c48296a1fcce9fe9",
     "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/checklist.patch": "e170f2489f700f88706b0c2fd4634052e1c36040b69f2e2e5c11a3f0b0918508",
     "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/continue_bbq.py": "dbd139bf33e548f19557212436b5fd0ddeffa93a63a4454bb389288aa0f6ab6b",
@@ -16,12 +25,36 @@
       "git_commit": "d5e25cc661169143269ce70783659e491edb52f0",
       "git_path": "redistibution-artifacts/ethos-stereoset/jupiter/2026-11-22/bbq_timeout_status.py"
     },
+    "0ccabe928fca8d8e51de99acc1c1463b1cbc10df06425147508c8c246fb8af4f": {
+      "snapshot_file": "export-timeouts/lapa_status.patch"
+    },
+    "2aa07f14dac0ee5d13302d2a9653e9702a6566114ec6ab034fbe75476f92cf50": {
+      "snapshot_file": "export-timeouts/audit.patch"
+    },
+    "4a533cb9506943ccb03e601a2639522caded75c6be5b53bdf7a0254c7cded3f4": {
+      "snapshot_file": "export-timeouts/checklist.patch"
+    },
+    "4d3d7da780d69502d3792a344deb4360d1e852fb293e68ccc922aa12b097e6cf": {
+      "snapshot_file": "bbq_timeout_status.py"
+    },
+    "4e9e27e692eac3b86bcb076643e60c8f1912d74ee461b4cff5f5a591a55dec2c": {
+      "snapshot_file": "submit.py"
+    },
     "60f2b0bffd5821077ff118ae51ab066636ae0dcb218d0150ec29d20da8126be9": {
       "git_commit": "d5e25cc661169143269ce70783659e491edb52f0",
       "git_path": "redistibution-artifacts/ethos-stereoset/jupiter/2026-11-22/submit.py"
     },
+    "856e7748648ccf00167a25a6bf00902531955807819a4bc42a0a3b8ea6927b2e": {
+      "snapshot_file": "continue_bbq.py"
+    },
+    "ac4b0ba3c5ce59e3e5fbc9a0c896aeae10bf5614873d86104cea183d9ee0052d": {
+      "snapshot_file": "export-timeouts/plan.json"
+    },
     "ba96cfd97e978df08c11438a92a6d202b7ae9b6ed9f2b7365f1223578f4716b9": {
       "snapshot_file": "retry.sbatch"
+    },
+    "c46e8e65482a9bb925a2043799c5286fe8a133044a5967736f298f4258050c70": {
+      "snapshot_file": "export-timeouts/submitted.json"
     },
     "dbd139bf33e548f19557212436b5fd0ddeffa93a63a4454bb389288aa0f6ab6b": {
       "git_commit": "d5e25cc661169143269ce70783659e491edb52f0",

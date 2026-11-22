@@ -27,7 +27,11 @@ def check_recorded_jobs(jobs):
         }
     failures = json.loads((SNAPSHOT / "status/lapa-failures.json").read_text())
     references.update(failures)
-    references.update(row["retry"] for row in failures.values())
+    for row in failures.values():
+        references.add(row["retry"])
+        references.update(
+            row[key] for key in ("continuation_after_job", "continuation_job") if key in row
+        )
     missing = {job.partition("_")[0] for job in references} - jobs.keys()
     if missing:
         raise ValueError(f"Missing submitted scripts for recorded jobs: {sorted(missing)}")

@@ -91,6 +91,7 @@
     "domain": "profession",
     "task": "bbq_uk",
     "original_request": true,
+    "continuation_job": "3054085",
     "mismatched_logits": 318,
     "total_logits": 262208,
     "greatest_reported_absolute_difference": 0.00028574466705322266
@@ -271,6 +272,8 @@
     "domain": "gender",
     "task": "bbq_uk",
     "original_request": true,
+    "continuation_job": "3054087",
+    "continuation_after_job": "3054086",
     "mismatched_logits": 1,
     "total_logits": 262208,
     "greatest_reported_absolute_difference": 0.00011703185737133026
@@ -283,6 +286,8 @@
     "domain": "profession",
     "task": "bbq_uk",
     "original_request": false,
+    "continuation_job": "3054089",
+    "continuation_after_job": "3054088",
     "mismatched_logits": 10,
     "total_logits": 262208,
     "greatest_reported_absolute_difference": 0.00015348196029663086
