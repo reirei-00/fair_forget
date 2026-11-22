@@ -21,4 +21,5 @@ if [[ "$track" == "utility-large" || "$track" == "pilot-large" ]]; then
     options=(--large-utility)
     export VLLM_ENABLE_V1_MULTIPROCESSING=1
 fi
-srun --exact --ntasks=1 --gres=gpu:"$gpus" /e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python "$worker_dir/evaluate.py" "$root" "$work" "$SLURM_ARRAY_TASK_ID" "$track" "${options[@]}"
+ulimit -c 0
+srun --exact --ntasks=1 --gres=gpu:"$gpus" /e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python "$work/worker_entry.py" "$worker_dir/evaluate.py" "$root" "$work" "$SLURM_ARRAY_TASK_ID" "$track" "${options[@]}"
