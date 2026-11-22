@@ -1,0 +1,19 @@
+sheet_row,metric_id,metric,status,result_file,evidence_or_gap
+2,forget_efficacy,Forget efficacy,Reportable,target_and_off_target.csv,"Target StereoSet distance from 50 before and after. Efficacy is before minus after, so positive values mean improvement."
+3,nnr,Net neutralization rate (NNR),Missing evidence,,Retrieve matched item-level stereotype/anti-stereotype margins. Freeze the eligible baseline cohort and calibrate a neutrality band on separate reviewed neutral pairs.
+4,retain_utility,Retain utility,Missing evidence,,"Collect group-specific and general out-of-topic quality controls with reviewed answers, a defined quality outcome and matched before/after predictions."
+5,lms,Language-modeling score (LMS),Reportable,stereoset_domains.csv,Native target-macro LMS on the same held-out triplets measures preference for meaningful text over the unrelated control.
+6,icat,ICAT,Reportable,stereoset_domains.csv,Native before/after ICAT uses SS and LMS from the same held-out domain with the same target weighting.
+7,m1,M1 · Worst-group quality,Missing evidence,,"Evaluate common content across eligible groups with a defined quality outcome, group weights and sufficient independent components."
+8,m1b,M1b · Minimum-to-maximum quality ratio,Missing evidence,,"Requires the M1 panel, both absolute quality extrema and uncertainty. Define handling of a zero maximum."
+9,m2,M2 · Disparity in quality loss,Missing evidence,,Measure paired quality losses for each fixed M1 group on matched content and estimate the dispersion of those losses.
+10,m3a_actor,M3a · Actor-to-actor redistribution,Missing evidence,,"Needs targeted IDP and veteran interventions in both directions, shared applicable claim families and matched profiles."
+11,m3b_topic,M3b · Within-actor topic redistribution,Missing evidence,,Needs topic-targeted interventions and a reviewed within-actor map of matched claim families and near/far topics.
+12,m3c_demographic,M3c · Within-claim demographic redistribution,Missing evidence,,"Needs parent-targeted interventions and matched parent, gender, age and eligible intersectional variants, with intrinsic attributes preserved."
+13,m3d_language,M3d · Cross-language redistribution,Reportable,cross_language.csv,"Compare the same checkpoint and held-out StereoSet domain in both languages. Keep language-specific base scores, signed SS changes and distance-from-parity changes."
+14,ri,Redistribution Index (RI),Partial inputs,stereoset_domains.csv,"Raw target and off-target changes exist. Freeze axis membership, weights, common harm scale, practical minimum and uncertainty rule for stable positive target improvement before reporting a ratio."
+15,m4a_refusal,M4a · Over-refusal on benign requests,Missing evidence,,"Collect balanced benign prompts, general controls, task references and model responses. Calibrate response-level refusal and helpfulness judgments."
+16,m4b_abstention,M4b · Over-abstention with sufficient evidence,Missing evidence,,"Collect sufficient-evidence QA with reviewed favorable/adverse labels, answer keys and ambiguous controls. Separate abstention from error and refusal."
+17,bbq_bias,BBQ bias by group,Reportable,bbq_categories.csv,"Use the signed native bias score in each BBQ category, with eligible counts and availability. Ambiguous items are the sheet endpoint. Disambiguated items are a separate diagnostic."
+18,training_imbalance,Training imbalance as a covariate,Missing evidence,,"Bind actual stream, item, valid-token and step exposure from the original trainer to source groups and paired outcomes. Planned corpus sizes alone do not establish exposure."
+19,severity,Severity slice,Missing evidence,,Link versioned source severity ratings to eligible cases and matched outcomes. Check independent support at each severity level.
