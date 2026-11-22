@@ -1,0 +1,70 @@
+{
+  "seed": 42,
+  "source_ids": 2101,
+  "all_unordered_pairs": 2206050,
+  "reranked_pairs": 37341,
+  "linked_pairs": 5167,
+  "link_signals": {
+    "bilingual_pair": 574,
+    "bilingual_stereo": 748,
+    "target_swap": 34,
+    "english_sts": 291,
+    "prior_locked_link": 259,
+    "sentence": 24,
+    "en_same_target_claim": 1622,
+    "uk_same_target_claim": 1453,
+    "uk_shared_contrast": 1141,
+    "en_shared_contrast": 2344,
+    "uk_role_swap": 11,
+    "en_role_swap": 5,
+    "boundary_audit": 71
+  },
+  "total_components": 734,
+  "protected_components": 361,
+  "cross_partition_links": 0,
+  "largest_retained_cross_split_scores": {
+    "bilingual_stereo": 829,
+    "bilingual_pair": 794,
+    "english_sts": 761
+  },
+  "domain_counts": {
+    "gender": {
+      "train": 34,
+      "dev": 4,
+      "eval": 110,
+      "exclude": 105
+    },
+    "profession": {
+      "train": 139,
+      "dev": 15,
+      "eval": 354,
+      "exclude": 300
+    },
+    "race": {
+      "train": 177,
+      "dev": 20,
+      "eval": 453,
+      "exclude": 312
+    },
+    "religion": {
+      "train": 17,
+      "dev": 2,
+      "eval": 32,
+      "exclude": 27
+    }
+  },
+  "component_counts": {
+    "train": 333,
+    "dev": 40,
+    "eval": 361,
+    "exclude": 80
+  },
+  "semantic_review": "automated_screen",
+  "human_review": false,
+  "template_sha256": "4f9be3c00065103e6f135be72ef854ff806226c1ae6834bf72e71c74bccb9fd9",
+  "spans_sha256": "397043b6c3bde06eb314ce8dff4baacbb3960fb892e34105ad778a2f094d82ce",
+  "frontier_sha256": "4b792327a19d72c20c91468b9b64a6d8ca5b40f2c94d55a5121cdbeaf4fb64e4",
+  "scores_sha256": "b7c8d449d5468df343f0da610f7eb2e9a15454daf933e7396c9bb2c4d0b6643f",
+  "items_sha256": "3184fda7cb98679234ae699f65c9b2e0710fd664271c23eb63bc062ee1b44726",
+  "assignments_sha256": "b0d4a556c99d206333f04834476ee034b9ed5454249c40a36dbac7f8f3643072"
+}

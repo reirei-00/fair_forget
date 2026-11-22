@@ -1,3 +1,5 @@
+exclude: ^redistibution-artifacts/ethos-stereoset/jupiter/2026-11-21/scripts/
+
 default_language_version:
   python: python3.10
 

@@ -1,0 +1,56 @@
+{
+  "gender": {
+    "original_job": "3045583_0",
+    "source_pair": "results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/en/gender/seed-42/attempt-ykqx06s5/evaluation/bbq_uk/9b8da519d4bf5b750ac18c4ef3e16c9008fea995445b53249bdedd7b6fc4e62e/pair-maxes_ra",
+    "reference_pair": "results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/en/religion/seed-42/attempt-4ixc6d93/evaluation/bbq_uk/5280e4b4963a2b12f8f29557c8b620d47351b0cb8ac649a8238caebb042b70fc/pair-r06gwd3y",
+    "phases": {
+      "before": {
+        "rows": 58492,
+        "files": {
+          "report.json": "e0ba5516886268296f8d730c5e11f6c5537724a647be825e6db96beab2a6493c",
+          "run.json": "24f558de27a0ce5e5e290ffb3da2f01e571c1fe54b078f8ace3825d18a53df12",
+          "groups.csv": "37bd3000d3b295e38117819ef1f9195784ce61853263bc786d40e266242c7919",
+          "report.md": "98c80588be9f38b8a10a4071348dd0a81cabafd29572d8b075a983330d5079f5",
+          "predictions.jsonl": "af3fcba3eb420a203d01211789d29e9f20063d77272c8e454f1d8dafd1908e6f",
+          "records.jsonl": "588d2959dd2d576f368b81f6c0579011fed6942c08a1dd0645fc67ee17449bd9"
+        }
+      },
+      "after": {
+        "rows": 55936,
+        "files": {
+          "run.json": "2cd06cb74769fc6ed703eac4b83e7b5fa03374c944481a8bcab7ec4d124c9354",
+          "predictions.jsonl": "746c8414b6ca02e6c75fbd70e255dfb5ecfb09010035653e7685932348d03adb"
+        }
+      }
+    }
+  },
+  "race": {
+    "original_job": "3045583_2",
+    "source_pair": "results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/en/race/seed-42/attempt-_kngbdzw/evaluation/bbq_uk/00b8a282fcae61bba6182cf636f62f2f935c549ece9ee77e367fd7418d156fa8/pair-mpe_mtlo",
+    "reference_pair": "results/stereoset_lapa_bf16_v1/lapa12b_instruct/ethos/en/religion/seed-42/attempt-4ixc6d93/evaluation/bbq_uk/5280e4b4963a2b12f8f29557c8b620d47351b0cb8ac649a8238caebb042b70fc/pair-r06gwd3y",
+    "phases": {
+      "before": {
+        "rows": 58492,
+        "files": {
+          "report.json": "378c779d35bdc9acef37d892ce5f0ee7dea82bd998e89d00ad100a29bbeccdc8",
+          "run.json": "414bda28e2d79f4944edb16c40730f2019d02421390e07d6a6ebfe2c0ba86793",
+          "groups.csv": "68ef2f268f13744724025a716a2ac8a01ebdfbe7e3d27d256e1368dcad2d407e",
+          "report.md": "fb30ca251ac6dcc37246b8e0e24e33d8333a58d4d5fdde1b4846fe90966d0e72",
+          "predictions.jsonl": "af3fcba3eb420a203d01211789d29e9f20063d77272c8e454f1d8dafd1908e6f",
+          "records.jsonl": "588d2959dd2d576f368b81f6c0579011fed6942c08a1dd0645fc67ee17449bd9"
+        }
+      },
+      "after": {
+        "rows": 58492,
+        "files": {
+          "report.json": "3c69720674d05b526a69104a783f589435577e7f606d41bad496a5d480d3674c",
+          "run.json": "718aa7c28e28e79bed86c353beec2b77ee61ec1a52892e6e3b1ded21942f3d45",
+          "groups.csv": "efc4327f6067e2ac0fa8dfa1505de52c368ae83c304b59c9e0e344b7284292a3",
+          "report.md": "20a236a7f5ffc192537aa6ace37528d488ccf56f10052ea0c6b5f6136b7e984e",
+          "predictions.jsonl": "5819278a052243e051d8853228eba02d9c38dc991235b61812cfeac5529faa59",
+          "records.jsonl": "52340e3775d7375259e383b11f17165e57777166686625ba0064361ac20129f7"
+        }
+      }
+    }
+  }
+}

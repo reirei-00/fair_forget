@@ -1,0 +1,26 @@
+--- a/checklist.py
++++ b/checklist.py
+@@ -110,2 +110,10 @@
+ lapa_recovery=base/"lapa-export-recovery"
++timeouts = base / "lapa-bbq-timeout-recovery"
++export_timeouts = base / "lapa-bbq-export-timeouts"
++timeout_lines = []
++replacements = {}
++if (export_timeouts / "submitted.json").is_file() and "refresh" in read(export_timeouts / "submitted.json"):
++    sys.path.insert(0, str(export_timeouts))
++    from bbq_timeout_status import overlay as timeout_overlay
++    timeout_lines, replacements = timeout_overlay([timeouts, export_timeouts], rows, states)
+ if (lapa_recovery/"retries.json").is_file():
+@@ -113,8 +121,8 @@
+     from lapa_status import overlay as lapa_overlay
+-    recovery_lines.extend(lapa_overlay(lapa_recovery,rows,states))
+-timeouts = base / "lapa-bbq-timeout-recovery"
+-if (timeouts / "submitted.json").is_file():
++    recovery_lines.extend(lapa_overlay(lapa_recovery, rows, states, replacements))
++if not timeout_lines and (timeouts / "submitted.json").is_file():
+     sys.path.insert(0, str(timeouts))
+     from bbq_timeout_status import overlay as timeout_overlay
+-    recovery_lines.extend(timeout_overlay(timeouts, rows, states))
++    timeout_lines = timeout_overlay(timeouts, rows, states)
++recovery_lines.extend(timeout_lines)
+ with tempfile.NamedTemporaryFile("w",newline="",dir=out,delete=False) as f:
