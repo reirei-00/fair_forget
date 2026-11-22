@@ -1,14 +1,12 @@
 # Ethos on JUPITER
 
-> **Live refresh unavailable on 22 November at 10:49 Kyiv time.** The JUPITER access certificate expired. The tables below show the last verified Slurm and result records, from 21 November at 22:05 Kyiv time. At that check, 0 of 24 Lapa retries had started or finished and all four Ukrainian Mamay 27B runs were queued. Their current states are unverified.
+Snapshot 2026-11-22T08:51:49+00:00. A checked training or evaluation box requires a verified result receipt.
 
-Snapshot 2026-11-21T20:05:53+00:00. A checked training or evaluation box requires a verified result receipt.
+## Lapa retries and Ukrainian Mamay 27B training
 
-## Queue diagnosis for Lapa and Mamay 27B
+At 10:52 Kyiv time on 22 November, all 24 Lapa evaluation retries had started. Of these, 21 had finished with verified results and three Ukrainian BBQ panels were running. The three active panels evaluate the English profession, Ukrainian gender and Ukrainian profession checkpoints. All four Ukrainian Mamay 27B training jobs completed successfully, and all four checkpoints were verified.
 
-At 22:05 Kyiv time on 21 November, all three Lapa checkpoint exports were verified. Of their 24 evaluation retries, 0 had started and 0 had finished. Of the four Ukrainian Mamay 27B training jobs, 0 had started. Slurm listed all 28 as eligible, pending for priority, with no outstanding dependency or estimated start time.
-
-Across the study, 44/48 training checkpoints and 205/384 evaluation panels were verified. Another 66 panels were running.
+Across the study, 48/48 training checkpoints and 379/384 evaluation panels were verified. The remaining five are all Lapa Ukrainian BBQ panels. In addition to the three active retries, two original evaluations reached their 12-hour time limit on the English gender and English race/ethnicity checkpoints.
 
 ## BF16 at a learning rate of 0.0005
 
@@ -40,7 +38,7 @@ For Mamay 27B the pilot job column gives the qualification job, which checks the
 | Qwen3 8B | ☑ verified | ☑ verified | ☑ verified | ☑ verified |
 | Lapa 12B | ☑ verified | ☑ verified | ☑ verified | ☑ verified |
 | Mamay 12B | ☑ verified | ☑ verified | ☑ verified | ☑ verified |
-| Mamay 27B | ☐ pending | ☐ pending | ☐ pending | ☐ pending |
+| Mamay 27B | ☑ verified | ☑ verified | ☑ verified | ☑ verified |
 
 
 ## Llama and Qwen Ukrainian reruns
@@ -64,22 +62,22 @@ Training array 3046051 covers four domains per model at FP16, learning rate 0.00
 
 | Training language | Domain | Export job | Export status | Evaluation retries |
 |---|---|---|---|---|
-| EN | profession | 3046431_1 | ☑ verified | 8 ☐ queued |
-| UK | gender | 3046432_0 | ☑ verified | 8 ☐ queued |
-| UK | profession | 3046432_1 | ☑ verified | 8 ☐ queued |
+| EN | profession | 3046431_1 | ☑ verified | 7 ☑ verified, 1 ☐ running |
+| UK | gender | 3046432_0 | ☑ verified | 7 ☑ verified, 1 ☐ running |
+| UK | profession | 3046432_1 | ☑ verified | 7 ☑ verified, 1 ☐ running |
 
 ## Held-out evaluations
 
 | Panel | Verified / 48 | Status |
 |---|---:|---|
-| stereoset_en | 33/48 | 33 ☑ verified, 5 ☐ queued, 4 ☐ pending, 2 ☐ running, 4 ☐ waiting for checkpoint |
-| winobias_en_controlled | 34/48 | 34 ☑ verified, 5 ☐ queued, 4 ☐ pending, 1 ☐ running, 4 ☐ waiting for checkpoint |
-| winobias_en_natural | 34/48 | 34 ☑ verified, 5 ☐ queued, 4 ☐ pending, 1 ☐ running, 4 ☐ waiting for checkpoint |
-| bbq_en | 3/48 | 3 ☑ verified, 28 ☐ running, 6 ☐ pending, 7 ☐ queued, 4 ☐ waiting for checkpoint |
-| stereoset_uk | 34/48 | 34 ☑ verified, 4 ☐ queued, 4 ☐ pending, 2 ☐ running, 4 ☐ waiting for checkpoint |
-| winobias_uk_controlled | 33/48 | 33 ☑ verified, 6 ☐ queued, 4 ☐ pending, 1 ☐ running, 4 ☐ waiting for checkpoint |
-| winobias_uk_natural | 31/48 | 31 ☑ verified, 7 ☐ queued, 4 ☐ pending, 2 ☐ running, 4 ☐ waiting for checkpoint |
-| bbq_uk | 3/48 | 3 ☑ verified, 5 ☐ pending, 29 ☐ running, 7 ☐ queued, 4 ☐ waiting for checkpoint |
+| stereoset_en | 48/48 | 48 ☑ verified |
+| winobias_en_controlled | 48/48 | 48 ☑ verified |
+| winobias_en_natural | 48/48 | 48 ☑ verified |
+| bbq_en | 48/48 | 48 ☑ verified |
+| stereoset_uk | 48/48 | 48 ☑ verified |
+| winobias_uk_controlled | 48/48 | 48 ☑ verified |
+| winobias_uk_natural | 48/48 | 48 ☑ verified |
+| bbq_uk | 43/48 | 43 ☑ verified, 2 ☐ timeout, 3 ☐ running |
 
 ## Mamay 27B feasibility
 
