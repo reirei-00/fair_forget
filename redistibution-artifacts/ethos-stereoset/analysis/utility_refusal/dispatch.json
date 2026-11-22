@@ -22,26 +22,28 @@
       "bbq": {
         "job": "3061430",
         "planned": 18,
-        "requests_written": 4,
-        "responses_written": 129280,
+        "requests_written": 11,
+        "responses_written": 229492,
         "scheduler": {
-          "PENDING": 14,
-          "RUNNING": 4
+          "COMPLETED": 3,
+          "PENDING": 7,
+          "RUNNING": 8
         },
-        "verified_receipts": 0
+        "verified_receipts": 3
       },
       "pilot_passed": true,
       "utility": {
-        "belebele_files": 4,
+        "belebele_files": 8,
         "job": "3061429",
-        "mmlu_files": 0,
+        "mmlu_files": 2,
         "planned": 18,
-        "requests_written": 4,
+        "requests_written": 10,
         "scheduler": {
-          "PENDING": 14,
-          "RUNNING": 4
+          "FAILED": 2,
+          "PENDING": 8,
+          "RUNNING": 8
         },
-        "verified_receipts": 0
+        "verified_receipts": 2
       }
     },
     "lapa12b_instruct": {
@@ -49,54 +51,54 @@
         "job": "3061432",
         "planned": 18,
         "requests_written": 4,
-        "responses_written": 164220,
-        "scheduler": {
-          "COMPLETED": 1,
-          "PENDING": 14,
-          "RUNNING": 3
-        },
-        "verified_receipts": 1
-      },
-      "pilot_passed": true,
-      "utility": {
-        "belebele_files": 4,
-        "job": "3061431",
-        "mmlu_files": 0,
-        "planned": 18,
-        "requests_written": 4,
-        "scheduler": {
-          "PENDING": 14,
-          "RUNNING": 4
-        },
-        "verified_receipts": 0
-      }
-    },
-    "llama31_8b_instruct": {
-      "bbq": {
-        "job": "3061368",
-        "planned": 18,
-        "requests_written": 5,
-        "responses_written": 260980,
+        "responses_written": 202356,
         "scheduler": {
           "COMPLETED": 3,
-          "PENDING": 13,
-          "RUNNING": 2
+          "PENDING": 14,
+          "RUNNING": 1
         },
         "verified_receipts": 3
       },
       "pilot_passed": true,
       "utility": {
         "belebele_files": 4,
-        "job": "3061367",
-        "mmlu_files": 2,
+        "job": "3061431",
+        "mmlu_files": 4,
         "planned": 18,
         "requests_written": 4,
         "scheduler": {
-          "FAILED": 2,
-          "PENDING": 13,
-          "RUNNING": 3
+          "FAILED": 4,
+          "PENDING": 14
         },
-        "verified_receipts": 2
+        "verified_receipts": 4
+      }
+    },
+    "llama31_8b_instruct": {
+      "bbq": {
+        "job": "3061368",
+        "planned": 18,
+        "requests_written": 13,
+        "responses_written": 454252,
+        "scheduler": {
+          "COMPLETED": 5,
+          "PENDING": 5,
+          "RUNNING": 8
+        },
+        "verified_receipts": 5
+      },
+      "pilot_passed": true,
+      "utility": {
+        "belebele_files": 12,
+        "job": "3061367",
+        "mmlu_files": 4,
+        "planned": 18,
+        "requests_written": 12,
+        "scheduler": {
+          "FAILED": 4,
+          "PENDING": 6,
+          "RUNNING": 8
+        },
+        "verified_receipts": 4
       }
     },
     "mamay12b_v2": {
@@ -104,7 +106,7 @@
         "job": "3061434",
         "planned": 18,
         "requests_written": 4,
-        "responses_written": 40704,
+        "responses_written": 118272,
         "scheduler": {
           "PENDING": 14,
           "RUNNING": 4
@@ -115,25 +117,26 @@
       "utility": {
         "belebele_files": 4,
         "job": "3061433",
-        "mmlu_files": 0,
+        "mmlu_files": 1,
         "planned": 18,
         "requests_written": 4,
         "scheduler": {
+          "FAILED": 1,
           "PENDING": 14,
-          "RUNNING": 4
+          "RUNNING": 3
         },
-        "verified_receipts": 0
+        "verified_receipts": 1
       }
     },
     "mamay27b_v2": {
       "bbq": {
         "job": "3061372",
         "planned": 18,
-        "requests_written": 4,
-        "responses_written": 45568,
+        "requests_written": 8,
+        "responses_written": 103936,
         "scheduler": {
-          "PENDING": 14,
-          "RUNNING": 4
+          "PENDING": 10,
+          "RUNNING": 8
         },
         "verified_receipts": 0
       },
@@ -154,28 +157,28 @@
       "bbq": {
         "job": "3061374",
         "planned": 18,
-        "requests_written": 8,
-        "responses_written": 383216,
+        "requests_written": 15,
+        "responses_written": 701276,
         "scheduler": {
-          "COMPLETED": 4,
-          "PENDING": 10,
-          "RUNNING": 4
+          "COMPLETED": 9,
+          "PENDING": 3,
+          "RUNNING": 6
         },
-        "verified_receipts": 4
+        "verified_receipts": 9
       },
       "pilot_passed": true,
       "utility": {
-        "belebele_files": 4,
+        "belebele_files": 10,
         "job": "3061373",
-        "mmlu_files": 2,
+        "mmlu_files": 3,
         "planned": 18,
-        "requests_written": 4,
+        "requests_written": 10,
         "scheduler": {
-          "FAILED": 2,
-          "PENDING": 12,
-          "RUNNING": 4
+          "FAILED": 3,
+          "PENDING": 8,
+          "RUNNING": 7
         },
-        "verified_receipts": 2
+        "verified_receipts": 3
       }
     }
   },
@@ -202,6 +205,6 @@
     "3061428"
   ],
   "plan_sha256": "972d43a403d2a5996eece4d9d29f92700a8915136e5cf6a64a0cc7733ba98e0d",
-  "recorded_at_utc": "2026-11-22T18:37:31.229718+00:00",
+  "recorded_at_utc": "2026-11-22T19:02:10.758945+00:00",
   "workdir": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-utility-bbq-generation-v1"
 }
