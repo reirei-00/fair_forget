@@ -12,4 +12,13 @@ if [[ "$track" == "pilot-text" ]]; then
     python3 "$work/text_baseline.py" "$work" "$SLURM_ARRAY_TASK_ID"
     track=pilot
 fi
-srun --exact --ntasks=1 --gres=gpu:1 /e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python "$work/evaluate.py" "$root" "$work" "$SLURM_ARRAY_TASK_ID" "$track"
+gpus=1
+worker_dir=${ETHOS_FOLLOWUP_WORKER_DIR:-$work}
+options=()
+if [[ "$track" == "utility-large" || "$track" == "pilot-large" ]]; then
+    gpus=2
+    track=${track%-large}
+    options=(--large-utility)
+    export VLLM_ENABLE_V1_MULTIPROCESSING=1
+fi
+srun --exact --ntasks=1 --gres=gpu:"$gpus" /e/project1/e-dev-2026d09-075/fairforget/envs/baseline-vllm018-py312/bin/python "$worker_dir/evaluate.py" "$root" "$work" "$SLURM_ARRAY_TASK_ID" "$track" "${options[@]}"

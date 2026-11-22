@@ -70,16 +70,16 @@ class FollowupTests(unittest.TestCase):
                     target=1,
                     correct=correct,
                 )
-                file.write_text(json.dumps(row) + "\n")
+                file.write_text("".join(json.dumps({**row, "id": i}) + "\n" for i in range(900)))
                 receipt = {
-                    "results": {"belebele": {"rows": 1, "sha256": sha(file)}},
+                    "results": {"belebele": {"rows": 900, "sha256": sha(file)}},
                     "request_sha256": sha(out / "request.json"),
                 }
                 write(out / "complete.json", receipt)
                 items.append(item)
             self.assertEqual(paired(root, *items, "belebele")["change_pp"], 100)
             row["prompt_hash"] = "different"
-            file.write_text(json.dumps(row) + "\n")
+            file.write_text("".join(json.dumps({**row, "id": i}) + "\n" for i in range(900)))
             receipt["results"]["belebele"]["sha256"] = sha(file)
             write(out / "complete.json", receipt)
             with self.assertRaisesRegex(ValueError, "different utility"):

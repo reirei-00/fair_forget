@@ -30,7 +30,7 @@ def save_rows(path, rows):
     temporary.replace(path)
 
 
-def utility(engine, work, out, lang, benchmark, pilot):
+def utility(engine, work, out, lang, benchmark, pilot, large=False):
     from lm_eval import simple_evaluate
     from lm_eval.tasks import TaskManager
 
@@ -38,14 +38,16 @@ def utility(engine, work, out, lang, benchmark, pilot):
         task = "belebele_" + {"en": "eng_Latn", "uk": "ukr_Cyrl"}[lang]
         expected = 900
     else:
-        task = f"global_mmlu_full_{lang}" + ("_anatomy" if pilot else "")
+        subject = "_professional_law" if large else "_anatomy"
+        task = f"global_mmlu_full_{lang}" + (subject if pilot else "")
         expected = 14042
+    pilot_size = 64 if large and benchmark == "mmlu" else 2
     manager = TaskManager(include_path=str(work / "tasks"), include_defaults=False)
     result = simple_evaluate(
         model=engine,
         tasks=[task],
         task_manager=manager,
-        limit=2 if pilot else None,
+        limit=pilot_size if pilot else None,
         bootstrap_iters=0,
         log_samples=True,
         random_seed=42,
@@ -68,9 +70,9 @@ def utility(engine, work, out, lang, benchmark, pilot):
                     correct=int(sample["acc"]),
                 )
             )
-    if len(rows) != (2 if pilot else expected) or len({(x["task"], x["id"]) for x in rows}) != len(
-        rows
-    ):
+    if len(rows) != (pilot_size if pilot else expected) or len(
+        {(x["task"], x["id"]) for x in rows}
+    ) != len(rows):
         raise ValueError(f"Incomplete {task} samples")
     accuracy = sum(r["correct"] for r in rows) / len(rows)
     native = result.get("groups", {}).get(task, result["results"].get(task, {})).get("acc,none")
@@ -127,7 +129,7 @@ def bbq(engine, work, out, lang, pilot):
     return dict(rows=len(rows), chunks=receipts, input_sha256=sha(source))
 
 
-def evaluate(root, work, index, track, pilot):
+def evaluate(root, work, index, track, pilot, large=False):
     from lm_eval.models.vllm_causallms import VLLM
 
     item = read(work / "plan.json")[index]
@@ -149,6 +151,8 @@ def evaluate(root, work, index, track, pilot):
         if pilot
         else "full"
     )
+    if large and pilot:
+        condition = "pilot-large"
     out = work / condition / item["id"] / item["language"] / track
     out.mkdir(parents=True, exist_ok=True)
     with (out / ".lock").open("a") as lock:
@@ -186,6 +190,13 @@ def evaluate(root, work, index, track, pilot):
             seed=42,
             batch_size="auto",
         )
+        if large:
+            params.update(
+                tensor_parallel_size=2,
+                max_num_seqs=16,
+                max_num_batched_tokens=2048,
+                gpu_memory_utilization=0.75,
+            )
         request = dict(
             reference=reference["sha256"],
             plan_sha256=sha(work / "plan.json"),
@@ -218,7 +229,9 @@ def evaluate(root, work, index, track, pilot):
         results = {}
         if track in ("utility", "pilot"):
             for benchmark in ("belebele", "mmlu"):
-                results[benchmark] = utility(engine, work, out, item["language"], benchmark, pilot)
+                results[benchmark] = utility(
+                    engine, work, out, item["language"], benchmark, pilot, large
+                )
         if track in ("bbq", "pilot"):
             results["bbq"] = bbq(engine, work, out, item["language"], pilot)
         atomic_json(
@@ -233,5 +246,8 @@ if __name__ == "__main__":
     parser.add_argument("work", type=Path)
     parser.add_argument("index", type=int)
     parser.add_argument("track", choices=["pilot", "utility", "bbq"])
+    parser.add_argument("--large-utility", action="store_true")
     args = parser.parse_args()
-    evaluate(args.root, args.work, args.index, args.track, args.track == "pilot")
+    evaluate(
+        args.root, args.work, args.index, args.track, args.track == "pilot", args.large_utility
+    )

@@ -6,7 +6,7 @@ from pathlib import Path
 from plan import read, write
 
 
-def queue(work, root, pilot, selected=None):
+def queue(work, root, pilot, selected=None, large_utility_pilot=None):
     items = read(work / "plan.json")
     models = sorted({row["model"] for row in items})
     with (work / ".submit-lock").open("a") as lock:
@@ -29,6 +29,11 @@ def queue(work, root, pilot, selected=None):
                 if key in receipts:
                     continue
                 dependency = f"afterok:{pilot}_{pilot_index}"
+                large = model == "mamay27b_v2" and track == "utility"
+                if large:
+                    if not large_utility_pilot:
+                        raise ValueError("Supply the Mamay 27B two-GPU utility pilot job ID")
+                    dependency = f"afterok:{large_utility_pilot}"
                 command = [
                     "sbatch",
                     "--parsable",
@@ -36,9 +41,9 @@ def queue(work, root, pilot, selected=None):
                     "--partition=booster",
                     "--nodes=1",
                     "--ntasks=1",
-                    "--cpus-per-task=12",
-                    "--gres=gpu:gh200:1",
-                    "--time=08:00:00",
+                    f"--cpus-per-task={24 if large else 12}",
+                    f"--gres=gpu:gh200:{2 if large else 1}",
+                    "--time=12:00:00" if large else "--time=08:00:00",
                     "--array=" + ",".join(map(str, selection)) + "%4",
                     "--dependency=" + dependency,
                     "--job-name=ethos-" + track,
@@ -46,7 +51,7 @@ def queue(work, root, pilot, selected=None):
                     str(work / "run.sh"),
                     str(root),
                     str(work),
-                    track,
+                    "utility-large" if large else track,
                 ]
                 job = subprocess.check_output(command, text=True).strip().split(";")[0]
                 if not job.isdigit():
@@ -64,5 +69,6 @@ if __name__ == "__main__":
     parser.add_argument("work", type=Path)
     parser.add_argument("pilot")
     parser.add_argument("--models", nargs="+")
+    parser.add_argument("--large-utility-pilot")
     args = parser.parse_args()
-    queue(args.work, args.root, args.pilot, args.models)
+    queue(args.work, args.root, args.pilot, args.models, args.large_utility_pilot)

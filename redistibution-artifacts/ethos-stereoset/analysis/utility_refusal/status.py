@@ -57,10 +57,23 @@ def snapshot(work):
                 verified_receipts=sum((p / "complete.json").is_file() for p in outputs),
                 requests_written=sum((p / "request.json").is_file() for p in outputs),
             )
+        utility_dirs = [work / "full" / i["id"] / i["language"] / "utility" for i in group]
+        for benchmark in ("belebele", "mmlu"):
+            state["utility"][f"{benchmark}_files"] = sum(
+                (p / f"{benchmark}.jsonl").is_file() for p in utility_dirs
+            )
+        state["bbq"]["responses_written"] = sum(
+            min(256, 58492 - int(path.stem))
+            for i in group
+            for path in (work / "full" / i["id"] / i["language"] / "bbq/responses").glob("*.jsonl")
+        )
         passes = list(work.glob(f"pilot*/{model}__base/*/pilot/complete.json"))
         state["pilot_passed"] = bool(passes)
         models[model] = state
+    large_pilot = (work / "tp2-pilot.id").read_text().strip()
+    large_passed = (work / "pilot-large/mamay27b_v2__base/uk/pilot/complete.json").is_file()
     return dict(
+        large_utility_pilot=dict(job=large_pilot, passed=large_passed),
         recorded_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
         workdir=str(work),
         inputs_sha256=sha(work / "inputs.json"),
