@@ -158,3 +158,24 @@ With the training stack installed, run the following on CPU. The test creates a 
 "$ETHOS_PYTHON" tests/smoke.py --source "$WORK/Ethos" --fair-uk "$WORK/fair-uk" \
   --eval-python "$EVAL_PYTHON" --output "$WORK/smoke-1" --matrix
 ```
+
+## Reproduce the seed-42 analysis
+
+The [executed notebook](analysis/ethos_redistribution.ipynb) reads the saved Fair-UK scores for all 384 paired evaluations. It shows before/after values for each of the six models in all four combinations of training and evaluation language. Two heatmaps show domain-specific changes in stereotype-score distance from parity and language-modeling score. Separate tables cover WinoBias and BBQ.
+
+From this study directory on Linux or macOS, run the following with Python 3.13. After installing the listed packages, replay works offline on CPU. The notebook writes full-precision CSV tables and PNG figures to `analysis/outputs/`. Open the notebook directly to read its saved outputs.
+
+```sh
+python3.13 -m venv .venv
+.venv/bin/python -m pip install -r analysis/requirements.txt
+.venv/bin/python -m nbconvert --to notebook --execute --inplace analysis/ethos_redistribution.ipynb
+```
+
+The [score extract](analysis/seed-42/fair-uk-reports.jsonl.gz) contains one record per paired report, with native scores, uncertainty, sample sizes, the evaluator revision and receipt hashes. The notebook checks the uncompressed SHA-256 and reconciles each record with the [verified experiment ledger](jupiter/2026-11-21/status/experiments.csv). An available score may lack a bootstrap interval. Unavailable BBQ changes retain their native status and are excluded from direction counts.
+
+To verify the extract against the original JUPITER files, run the commands below from a checkout of this study with access to the run directory. The collector verifies each paired receipt and its files, the training and export identities, complete predictions and panel coverage. Compare the uncompressed JSON Lines digest with the [published checksum](analysis/seed-42/reports.sha256).
+
+```sh
+python3 ethos/collect_paired_reports.py /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42 /tmp/ethos-fair-uk-reports.jsonl.gz
+gzip -dc /tmp/ethos-fair-uk-reports.jsonl.gz | sha256sum
+```
