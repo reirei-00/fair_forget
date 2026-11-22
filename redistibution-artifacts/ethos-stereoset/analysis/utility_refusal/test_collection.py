@@ -7,6 +7,7 @@ from pathlib import Path
 from collect import paired
 from plan import sha, write
 from text_baseline import convert_shard, header
+from worker_entry import verify_completed
 
 
 class FollowupTests(unittest.TestCase):
@@ -35,6 +36,28 @@ class FollowupTests(unittest.TestCase):
                     fields["model.layer"], {"dtype": "BF16", "shape": [2], "data_offsets": [0, 4]}
                 )
                 self.assertEqual(file.read(), b"\x00\x00\x01\xff")
+
+    def test_shutdown_recovery_rejects_changed_output(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            item = {"id": "model", "language": "uk", "reference": {"sha256": "original"}}
+            write(root / "plan.json", [item])
+            out = root / "full/model/uk/utility"
+            out.mkdir(parents=True)
+            write(out / "request.json", {"reference": "original"})
+            results = {}
+            for name, n in (("belebele", 900), ("mmlu", 14042)):
+                path = out / f"{name}.jsonl"
+                path.write_text("{}\n" * n)
+                results[name] = {"rows": n, "sha256": sha(path)}
+            write(
+                out / "complete.json",
+                {"request_sha256": sha(out / "request.json"), "results": results},
+            )
+            self.assertEqual(verify_completed(root, 0, "utility"), out)
+            (out / "mmlu.jsonl").write_text("")
+            with self.assertRaisesRegex(ValueError, "Incomplete mmlu outputs"):
+                verify_completed(root, 0, "utility")
 
     def test_utility_requires_identical_questions_and_prompts(self):
         with tempfile.TemporaryDirectory() as directory:
