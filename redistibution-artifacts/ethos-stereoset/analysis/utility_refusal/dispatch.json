@@ -1,0 +1,169 @@
+{
+  "collection": {
+    "bbq": {
+      "dependency": "afterok:3061430:3061432:3061368:3061434:3061372:3061374",
+      "job": "3061436"
+    },
+    "utility": {
+      "dependency": "afterok:3061429:3061431:3061367:3061433:3061371:3061373",
+      "job": "3061435"
+    }
+  },
+  "inputs_sha256": "b202740b0884c5a5eb436482fdfb615a5d2d8755c6ac57898a4312dd3cf906da",
+  "m4a_scoring": "requires response-bound review and calibration",
+  "models": {
+    "gemma3_12b_it": {
+      "bbq": {
+        "job": "3061430",
+        "planned": 18,
+        "requests_written": 0,
+        "scheduler": {
+          "PENDING": 18
+        },
+        "verified_receipts": 0
+      },
+      "pilot_passed": false,
+      "utility": {
+        "job": "3061429",
+        "planned": 18,
+        "requests_written": 0,
+        "scheduler": {
+          "PENDING": 18
+        },
+        "verified_receipts": 0
+      }
+    },
+    "lapa12b_instruct": {
+      "bbq": {
+        "job": "3061432",
+        "planned": 18,
+        "requests_written": 0,
+        "scheduler": {
+          "PENDING": 18
+        },
+        "verified_receipts": 0
+      },
+      "pilot_passed": false,
+      "utility": {
+        "job": "3061431",
+        "planned": 18,
+        "requests_written": 0,
+        "scheduler": {
+          "PENDING": 18
+        },
+        "verified_receipts": 0
+      }
+    },
+    "llama31_8b_instruct": {
+      "bbq": {
+        "job": "3061368",
+        "planned": 18,
+        "requests_written": 1,
+        "scheduler": {
+          "PENDING": 17,
+          "RUNNING": 1
+        },
+        "verified_receipts": 0
+      },
+      "pilot_passed": true,
+      "utility": {
+        "job": "3061367",
+        "planned": 18,
+        "requests_written": 3,
+        "scheduler": {
+          "PENDING": 15,
+          "RUNNING": 3
+        },
+        "verified_receipts": 0
+      }
+    },
+    "mamay12b_v2": {
+      "bbq": {
+        "job": "3061434",
+        "planned": 18,
+        "requests_written": 0,
+        "scheduler": {
+          "PENDING": 18
+        },
+        "verified_receipts": 0
+      },
+      "pilot_passed": false,
+      "utility": {
+        "job": "3061433",
+        "planned": 18,
+        "requests_written": 0,
+        "scheduler": {
+          "PENDING": 18
+        },
+        "verified_receipts": 0
+      }
+    },
+    "mamay27b_v2": {
+      "bbq": {
+        "job": "3061372",
+        "planned": 18,
+        "requests_written": 0,
+        "scheduler": {
+          "PENDING": 18
+        },
+        "verified_receipts": 0
+      },
+      "pilot_passed": true,
+      "utility": {
+        "job": "3061371",
+        "planned": 18,
+        "requests_written": 0,
+        "scheduler": {
+          "PENDING": 18
+        },
+        "verified_receipts": 0
+      }
+    },
+    "qwen3_8b": {
+      "bbq": {
+        "job": "3061374",
+        "planned": 18,
+        "requests_written": 0,
+        "scheduler": {
+          "PENDING": 18
+        },
+        "verified_receipts": 0
+      },
+      "pilot_passed": true,
+      "utility": {
+        "job": "3061373",
+        "planned": 18,
+        "requests_written": 0,
+        "scheduler": {
+          "PENDING": 18
+        },
+        "verified_receipts": 0
+      }
+    }
+  },
+  "original_submission": {
+    "gemma3_12b_it/bbq": "3061363",
+    "gemma3_12b_it/utility": "3061362",
+    "lapa12b_instruct/bbq": "3061366",
+    "lapa12b_instruct/utility": "3061364",
+    "llama31_8b_instruct/bbq": "3061368",
+    "llama31_8b_instruct/utility": "3061367",
+    "mamay12b_v2/bbq": "3061370",
+    "mamay12b_v2/utility": "3061369",
+    "mamay27b_v2/bbq": "3061372",
+    "mamay27b_v2/utility": "3061371",
+    "qwen3_8b/bbq": "3061374",
+    "qwen3_8b/utility": "3061373"
+  },
+  "phase_counts": {
+    "after": 96,
+    "before": 12
+  },
+  "pilot_jobs": [
+    "3061352",
+    "3061428"
+  ],
+  "plan_sha256": "972d43a403d2a5996eece4d9d29f92700a8915136e5cf6a64a0cc7733ba98e0d",
+  "recorded_at_utc": "2026-11-22T18:06:03.348108+00:00",
+  "workdir": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-utility-bbq-generation-v1"
+}
