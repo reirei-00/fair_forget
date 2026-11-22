@@ -158,7 +158,8 @@ def bbq_categories(records, effects):
                         }
                     )
     groups = pd.DataFrame(rows).pivot(index=[*KEY, "category", "condition"], columns="phase")
-    if groups.isna().any().any():
+    phases = set(groups.columns.get_level_values("phase"))
+    if phases != {"before", "after"} or groups.isna().any().any():
         raise ValueError("Missing a before or after BBQ category denominator")
     groups.columns = ["_".join(parts) for parts in groups.columns]
     groups = groups.reset_index()

@@ -51,3 +51,9 @@ class BBQComparisons(unittest.TestCase):
         effects = external_rows([self.record]).iloc[:0]
         with self.assertRaisesRegex(ValueError, "cover different groups"):
             bbq_categories([self.record], effects)
+
+    def test_missing_after_denominators_are_detected(self):
+        self.record["native"]["after"] = []
+        effects = external_rows([self.record])
+        with self.assertRaisesRegex(ValueError, "Missing a before or after"):
+            bbq_categories([self.record], effects)
