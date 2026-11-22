@@ -1,6 +1,6 @@
 # Ethos on JUPITER
 
-Snapshot 2026-11-22T13:59:35+00:00. A checked training or evaluation box requires a verified result receipt.
+Snapshot 2026-11-22T15:03:35+00:00. A checked training or evaluation box requires a verified result receipt.
 
 ## BF16 at a learning rate of 0.0005
 
@@ -57,8 +57,8 @@ Training array 3046051 covers four domains per model at FP16, learning rate 0.00
 | Training language | Domain | Export job | Export status | Evaluation retries |
 |---|---|---|---|---|
 | EN | profession | 3046431_1 | ☑ verified | 8 ☑ verified |
-| UK | gender | 3046432_0 | ☑ verified | 7 ☑ verified, 1 ☐ queued (priority) |
-| UK | profession | 3046432_1 | ☑ verified | 7 ☑ verified, 1 ☐ queued (priority) |
+| UK | gender | 3046432_0 | ☑ verified | 8 ☑ verified |
+| UK | profession | 3046432_1 | ☑ verified | 8 ☑ verified |
 
 ## Lapa Ukrainian BBQ timeout retries
 
@@ -66,11 +66,11 @@ Each stage has a 12-hour limit. Saved counts are from the timed-out jobs. A chec
 
 | Training checkpoint | Timed-out job | Saved post-training predictions | Prediction continuation | Paired comparison | Panel status |
 |---|---|---:|---|---|---|
-| EN gender | 3045583_0 | 55,936 / 58,492 | 3053906 completed | 3053907 queued (priority) | ☐ queued (priority) |
+| EN gender | 3045583_0 | 55,936 / 58,492 | 3053906 completed | 3053907 completed | ☑ verified |
 | EN race/ethnicity | 3045583_2 | 58,492 / 58,492 | Complete in original job | 3053908 completed | ☑ verified |
 | EN profession | 3046446_1 | 58,492 / 58,492 | Complete in original job | 3054085 completed | ☑ verified |
-| UK gender | 3046461_0 | 52,864 / 58,492 | 3054086 completed | 3054087 queued (priority) | ☐ queued (priority) |
-| UK profession | 3046462_1 | 56,800 / 58,492 | 3054088 completed | 3054089 queued (priority) | ☐ queued (priority) |
+| UK gender | 3046461_0 | 52,864 / 58,492 | 3054086 completed | 3054087 completed | ☑ verified |
+| UK profession | 3046462_1 | 56,800 / 58,492 | 3054088 completed | 3054089 completed | ☑ verified |
 
 ## Held-out evaluations
 
@@ -83,7 +83,7 @@ Each stage has a 12-hour limit. Saved counts are from the timed-out jobs. A chec
 | stereoset_uk | 48/48 | 48 ☑ verified |
 | winobias_uk_controlled | 48/48 | 48 ☑ verified |
 | winobias_uk_natural | 48/48 | 48 ☑ verified |
-| bbq_uk | 45/48 | 45 ☑ verified, 3 ☐ queued (priority) |
+| bbq_uk | 48/48 | 48 ☑ verified |
 
 ## Mamay 27B feasibility
 
