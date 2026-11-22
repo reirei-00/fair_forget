@@ -1,12 +1,6 @@
 # Ethos on JUPITER
 
-Snapshot 2026-11-22T08:51:49+00:00. A checked training or evaluation box requires a verified result receipt.
-
-## Lapa retries and Ukrainian Mamay 27B training
-
-At 10:52 Kyiv time on 22 November, all 24 Lapa evaluation retries had started. Of these, 21 had finished with verified results and three Ukrainian BBQ panels were running. The three active panels evaluate the English profession, Ukrainian gender and Ukrainian profession checkpoints. All four Ukrainian Mamay 27B training jobs completed successfully, and all four checkpoints were verified.
-
-Across the study, 48/48 training checkpoints and 379/384 evaluation panels were verified. The remaining five are all Lapa Ukrainian BBQ panels. In addition to the three active retries, two original evaluations reached their 12-hour time limit on the English gender and English race/ethnicity checkpoints.
+Snapshot 2026-11-22T09:04:04+00:00. A checked training or evaluation box requires a verified result receipt.
 
 ## BF16 at a learning rate of 0.0005
 
@@ -62,9 +56,26 @@ Training array 3046051 covers four domains per model at FP16, learning rate 0.00
 
 | Training language | Domain | Export job | Export status | Evaluation retries |
 |---|---|---|---|---|
-| EN | profession | 3046431_1 | ☑ verified | 7 ☑ verified, 1 ☐ running |
-| UK | gender | 3046432_0 | ☑ verified | 7 ☑ verified, 1 ☐ running |
-| UK | profession | 3046432_1 | ☑ verified | 7 ☑ verified, 1 ☐ running |
+| EN | profession | 3046431_1 | ☑ verified | 7 ☑ verified, 1 ☐ timeout |
+| UK | gender | 3046432_0 | ☑ verified | 7 ☑ verified, 1 ☐ timeout |
+| UK | profession | 3046432_1 | ☑ verified | 7 ☑ verified, 1 ☐ timeout |
+
+## Lapa Ukrainian BBQ timeout retries
+
+The original English gender and race/ethnicity evaluations reached the 12-hour limit. Each continuation stage has its own 12-hour allocation. Gender resumes 55,936 of 58,492 post-training predictions. Race/ethnicity already has both complete prediction sets.
+
+| English training domain | Original job | Post-training predictions | Paired comparison | Panel status |
+|---|---|---|---|---|
+| gender | 3045583_0 | 3053906 pending | 3053907 pending | ☐ waiting for post-training predictions |
+| race | 3045583_2 | ☑ already complete | 3053908 pending | ☐ pending |
+
+The three Ukrainian BBQ jobs from the earlier export recovery are recorded separately.
+
+| Training checkpoint | Job | Status |
+|---|---|---|
+| EN profession | 3046446_1 | ☐ timeout |
+| UK gender | 3046461_0 | ☐ timeout |
+| UK profession | 3046462_1 | ☐ timeout |
 
 ## Held-out evaluations
 
@@ -77,7 +88,7 @@ Training array 3046051 covers four domains per model at FP16, learning rate 0.00
 | stereoset_uk | 48/48 | 48 ☑ verified |
 | winobias_uk_controlled | 48/48 | 48 ☑ verified |
 | winobias_uk_natural | 48/48 | 48 ☑ verified |
-| bbq_uk | 43/48 | 43 ☑ verified, 2 ☐ timeout, 3 ☐ running |
+| bbq_uk | 43/48 | 43 ☑ verified, 1 ☐ waiting for post-training predictions, 3 ☐ timeout, 1 ☐ pending |
 
 ## Mamay 27B feasibility
 

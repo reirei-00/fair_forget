@@ -49,4 +49,24 @@ def overlay(root, rows, states):
         lines.append(
             f"| {domain} | {record['original_job']} | {inference} | {compare} {state.lower()} | {label} |"
         )
+    previous = [
+        row
+        for row in rows
+        if row["model"] == "lapa12b_instruct"
+        and (row["language"], row["domain"])
+        in {("en", "profession"), ("uk", "gender"), ("uk", "profession")}
+    ]
+    lines.extend(
+        [
+            "",
+            "The three Ukrainian BBQ jobs from the earlier export recovery are recorded separately.",
+            "",
+            "| Training checkpoint | Job | Status |",
+            "|---|---|---|",
+        ]
+    )
+    for row in previous:
+        lines.append(
+            f"| {row['language'].upper()} {row['domain']} | {row['bbq_uk_job']} | {row['bbq_uk']} |"
+        )
     return lines
