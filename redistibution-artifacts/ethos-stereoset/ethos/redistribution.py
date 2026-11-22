@@ -158,6 +158,8 @@ def bbq_categories(records, effects):
                         }
                     )
     groups = pd.DataFrame(rows).pivot(index=[*KEY, "category", "condition"], columns="phase")
+    if groups.isna().any().any():
+        raise ValueError("Missing a before or after BBQ category denominator")
     groups.columns = ["_".join(parts) for parts in groups.columns]
     groups = groups.reset_index()
     groups["scope"] = groups["category"] + " / " + groups["condition"]
@@ -165,7 +167,13 @@ def bbq_categories(records, effects):
         effects["metric"].eq("bias_score"),
         KEY + ["scope", "before", "after", "change", "ci_low", "ci_high", "status", "uncertainty"],
     ]
-    groups = groups.merge(bias, on=KEY + ["scope"], validate="one_to_one")
+    bias = bias.loc[~bias.scope.str.startswith("pooled_eligible / ")]
+    groups = groups.merge(
+        bias, on=KEY + ["scope"], how="outer", validate="one_to_one", indicator=True
+    )
+    if not groups["_merge"].eq("both").all():
+        raise ValueError("BBQ category scores and denominators cover different groups")
+    groups = groups.drop(columns="_merge")
     groups["magnitude_change"] = (groups["after"].abs() - groups["before"].abs()).where(
         groups["status"].eq("available")
     )

@@ -163,7 +163,7 @@ With the training stack installed, run the following on CPU. The test creates a 
 
 The [executed notebook](analysis/ethos_redistribution.ipynb) reads the saved Fair-UK scores for all 384 paired evaluations. It shows before/after values for each of the six models in all four combinations of training and evaluation language. Two heatmaps show domain-specific changes in stereotype-score distance from parity and language-modeling score. Separate tables cover WinoBias and BBQ.
 
-From this study directory on Linux or macOS, run the following with Python 3.13. After installing the listed packages, replay works offline on CPU. The notebook writes full-precision CSV tables and PNG figures to `analysis/outputs/`. Open the notebook directly to read its saved outputs.
+From this study directory on Linux or macOS, run the following with Python 3.13. After installing the listed packages, replay works offline on CPU. The notebook writes full-precision CSV tables and PNG figures to `analysis/outputs/`. Open the notebook directly to read its saved outputs. Set `ETHOS_ARTIFACT_ROOT` to the study directory if starting the kernel outside the checkout.
 
 ```sh
 python3.13 -m venv .venv
