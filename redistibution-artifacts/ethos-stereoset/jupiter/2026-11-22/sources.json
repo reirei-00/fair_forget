@@ -1,0 +1,34 @@
+{
+  "deployed_paths": {
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/bbq_timeout_status.py": "bbc640853841843f04097309e043193dd9874654e8c26b8c88e6579695352e65",
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/checklist.patch": "e170f2489f700f88706b0c2fd4634052e1c36040b69f2e2e5c11a3f0b0918508",
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/continue_bbq.py": "dbd139bf33e548f19557212436b5fd0ddeffa93a63a4454bb389288aa0f6ab6b",
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/plan.json": "02bb2087d8932f96cc3fb286880cd165b8e1a0359555af048fcf48d4ba1d437e",
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/retry.sbatch": "ba96cfd97e978df08c11438a92a6d202b7ae9b6ed9f2b7365f1223578f4716b9",
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/submit.py": "60f2b0bffd5821077ff118ae51ab066636ae0dcb218d0150ec29d20da8126be9",
+    "ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/submitted.json": "efff3e55820ed0916b1c9cb01fb478129f9bf7cc9a15dd5bfb54b98f0304de07"
+  },
+  "sources": {
+    "02bb2087d8932f96cc3fb286880cd165b8e1a0359555af048fcf48d4ba1d437e": {
+      "snapshot_file": "plan.json"
+    },
+    "60f2b0bffd5821077ff118ae51ab066636ae0dcb218d0150ec29d20da8126be9": {
+      "snapshot_file": "submit.py"
+    },
+    "ba96cfd97e978df08c11438a92a6d202b7ae9b6ed9f2b7365f1223578f4716b9": {
+      "snapshot_file": "retry.sbatch"
+    },
+    "bbc640853841843f04097309e043193dd9874654e8c26b8c88e6579695352e65": {
+      "snapshot_file": "bbq_timeout_status.py"
+    },
+    "dbd139bf33e548f19557212436b5fd0ddeffa93a63a4454bb389288aa0f6ab6b": {
+      "snapshot_file": "continue_bbq.py"
+    },
+    "e170f2489f700f88706b0c2fd4634052e1c36040b69f2e2e5c11a3f0b0918508": {
+      "snapshot_file": "checklist.patch"
+    },
+    "efff3e55820ed0916b1c9cb01fb478129f9bf7cc9a15dd5bfb54b98f0304de07": {
+      "snapshot_file": "submitted.json"
+    }
+  }
+}

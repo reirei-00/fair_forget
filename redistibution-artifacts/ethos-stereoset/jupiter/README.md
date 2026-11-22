@@ -12,6 +12,12 @@ Slurm retained two pilot scripts that differ from their last working-directory c
 
 The latest Lapa recovery uses the [export verifier deployed for the retries](https://github.com/reirei-00/fair_forget/commit/e0957c58e609a1adaf275bd5463e11be0618cfe8). The 17 initial failures grew to 24 across the same three checkpoints. They occurred during export, before Fair-UK scoring. Each checkpoint has one export followed by eight evaluation retries. The submitted export script requested one hour. The pending jobs were shortened to 30 minutes after submission. [Job mapping and original failure evidence](2026-11-21/status/lapa-failures.json) · [Export and evaluation status](2026-11-21/status/lapa-audit.json)
 
+## Lapa Ukrainian BBQ continuations on 22 November
+
+The normal service class on this project allows 12 hours per job. The two timed-out English-trained checkpoints retain their original prediction files. The [continuation plan](2026-11-22/plan.json) binds the exact files and counts to the interrupted attempts. The gender checkpoint saved 55,936 of 58,492 post-training predictions. A new 12-hour inference job resumes a copy with the original Fair-UK CLI and compares its runtime manifest to the saved one. A separate 12-hour job performs the paired comparison after successful inference. Both race/ethnicity prediction sets were complete, so its continuation runs only the paired comparison with a fresh 12-hour budget. Each comparison uses the registered 1,000 bootstrap draws and seed 42. It publishes through the original receipt writer under the exact original evaluation request hash.
+
+The [submission records](2026-11-22/jobs.json) cover the three continuation stages and the dependent checklist refresh. The script verifier restores the additional files under `lapa-bbq-timeout-recovery` in the original run directory. To reproduce the 22 November tracker, apply its [checklist patch](2026-11-22/checklist.patch) to the restored 21 November script in `lapa-mamay-preflight`. The patched script has SHA-256 `f0ec5bac1ab70fab1d49715cf7b7acdc5fd386a2519ade7ca4a02ddb872a298a`. Use `submitted.json` as historical job evidence. Fresh submissions use a separate recovery directory.
+
 ## Verify or restore the scripts
 
 Run the verifier from `redistibution-artifacts/ethos-stereoset/` in a FairForget Git checkout with Python 3.10 or later.

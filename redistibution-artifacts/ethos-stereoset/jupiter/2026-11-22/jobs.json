@@ -1,0 +1,26 @@
+{
+  "3053906": {
+    "batch_sha256": "ba96cfd97e978df08c11438a92a6d202b7ae9b6ed9f2b7365f1223578f4716b9",
+    "name": "lapa-bbq-retry",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/logs/%j.out --cpus-per-task=48 --gres=gpu:gh200:1 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/retry.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery after gender",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery"
+  },
+  "3053907": {
+    "batch_sha256": "ba96cfd97e978df08c11438a92a6d202b7ae9b6ed9f2b7365f1223578f4716b9",
+    "name": "lapa-bbq-retry",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/logs/%j.out --cpus-per-task=8 --dependency=afterok:3053906 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/retry.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery compare gender",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery"
+  },
+  "3053908": {
+    "batch_sha256": "ba96cfd97e978df08c11438a92a6d202b7ae9b6ed9f2b7365f1223578f4716b9",
+    "name": "lapa-bbq-retry",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/logs/%j.out --cpus-per-task=8 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/retry.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery compare race",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery"
+  },
+  "3053909": {
+    "batch_sha256": "aa6ae810fb12e91c2bc865c1940142eb33b7f7ce853b386eee35ad977dabd7a2",
+    "name": "lapa-export-status",
+    "submission": "sbatch --parsable --kill-on-invalid-dep=yes --output /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery/logs/%j.out --dependency=afterany:3053907:3053908 /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-export-recovery/refresh.sbatch /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery",
+    "working_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42/lapa-bbq-timeout-recovery"
+  }
+}

@@ -33,9 +33,9 @@ def check_recorded_jobs(jobs):
         raise ValueError(f"Missing submitted scripts for recorded jobs: {sorted(missing)}")
 
 
-def source_bytes(record, repository):
+def source_bytes(record, repository, snapshot=SNAPSHOT):
     if record.keys() == {"snapshot_file"}:
-        return (SNAPSHOT / relative_path(record["snapshot_file"])).read_bytes()
+        return (snapshot / relative_path(record["snapshot_file"])).read_bytes()
     if record.keys() != {"git_commit", "git_path"}:
         raise ValueError(f"Invalid source record: {record}")
     commit = record["git_commit"]
@@ -61,17 +61,27 @@ def source_bytes(record, repository):
 
 
 def load_sources(repository=JUPITER):
-    manifest = json.loads((SNAPSHOT / "sources.json").read_text())
-    jobs = json.loads((SNAPSHOT / "jobs.json").read_text())
-    check_recorded_jobs(jobs)
+    jobs = {}
     data = {}
-    for expected, record in manifest["sources"].items():
-        content = source_bytes(record, repository)
-        if hashlib.sha256(content).hexdigest() != expected:
-            raise ValueError(f"SHA-256 mismatch for {record}, expected {expected}")
-        data[expected] = content
-
-    files = {relative_path(name): digest for name, digest in manifest["deployed_paths"].items()}
+    files = {}
+    for manifest_path in sorted(JUPITER.glob("*/sources.json")):
+        snapshot = manifest_path.parent
+        manifest = json.loads(manifest_path.read_text())
+        submissions = json.loads((snapshot / "jobs.json").read_text())
+        if jobs.keys() & submissions.keys():
+            raise ValueError(f"Duplicate Slurm job in {snapshot}")
+        jobs.update(submissions)
+        for expected, record in manifest["sources"].items():
+            content = source_bytes(record, repository, snapshot)
+            if hashlib.sha256(content).hexdigest() != expected:
+                raise ValueError(f"SHA-256 mismatch for {record}, expected {expected}")
+            data[expected] = content
+        for name, digest in manifest["deployed_paths"].items():
+            path = relative_path(name)
+            if path in files and files[path] != digest:
+                raise ValueError(f"Conflicting versions of deployed path {path}")
+            files[path] = digest
+    check_recorded_jobs(jobs)
     for job_id, job in jobs.items():
         if not job_id.isdecimal():
             raise ValueError(f"Invalid Slurm job ID: {job_id}")
