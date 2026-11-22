@@ -168,7 +168,7 @@ From this study directory on Linux or macOS, run the following with Python 3.13.
 ```sh
 python3.13 -m venv .venv
 .venv/bin/python -m pip install -r analysis/requirements.txt
-.venv/bin/python -m nbconvert --to notebook --execute --inplace analysis/ethos_redistribution.ipynb
+.venv/bin/python -m nbconvert --to notebook --execute --inplace --ExecutePreprocessor.record_timing=False analysis/ethos_redistribution.ipynb
 ```
 
 The [score extract](analysis/seed-42/fair-uk-reports.jsonl.gz) contains one record per paired report, with native scores, uncertainty, sample sizes, the evaluator revision and receipt hashes. The notebook checks the uncompressed SHA-256 and reconciles each record with the [verified experiment ledger](jupiter/2026-11-21/status/experiments.csv). An available score may lack a bootstrap interval. Unavailable BBQ changes retain their native status and are excluded from direction counts.
