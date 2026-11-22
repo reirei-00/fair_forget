@@ -1,5 +1,5 @@
 {
-  "snapshot_utc": "2026-11-22T11:22:09+00:00",
+  "snapshot_utc": "2026-11-22T13:59:44+00:00",
   "requested": 17,
   "total_same_failure": 24,
   "verified_exports": {
@@ -41,8 +41,7 @@
     }
   },
   "evaluations": {
-    "\u2611 verified": 21,
-    "\u2610 queued (priority)": 1,
-    "\u2610 predictions queued (priority)": 2
+    "\u2611 verified": 22,
+    "\u2610 queued (priority)": 2
   }
 }
