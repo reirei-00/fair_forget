@@ -1,5 +1,7 @@
 # Ethos on JUPITER
 
+> **Live refresh unavailable on 22 November at 10:49 Kyiv time.** The JUPITER access certificate expired. The tables below show the last verified Slurm and result records, from 21 November at 22:05 Kyiv time. At that check, 0 of 24 Lapa retries had started or finished and all four Ukrainian Mamay 27B runs were queued. Their current states are unverified.
+
 Snapshot 2026-11-21T20:05:53+00:00. A checked training or evaluation box requires a verified result receipt.
 
 ## Queue diagnosis for Lapa and Mamay 27B
