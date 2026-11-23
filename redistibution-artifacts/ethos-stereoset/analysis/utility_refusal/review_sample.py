@@ -5,7 +5,7 @@ import tempfile
 from collections import defaultdict
 from pathlib import Path
 
-from plan import read, sha
+from plan import load_plan, read, read_request, sha
 
 
 def digest(text):
@@ -13,7 +13,15 @@ def digest(text):
 
 
 def sample(work, destination):
-    plan = read(work / "plan.json")
+    plan, plan_digest = load_plan(work)
+    panels = []
+    for item in plan:
+        out = work / "full" / item["id"] / item["language"] / "bbq"
+        read_request(out, item, "bbq", plan_digest)
+        receipt = read(out / "complete.json")
+        if sha(out / "request.json") != receipt["request_sha256"]:
+            raise ValueError(f"Different generation request in {out}")
+        panels.append((item, out, receipt))
     metadata = {
         lang: {
             row["id"]: row
@@ -28,16 +36,8 @@ def sample(work, destination):
     if any(len(values) != 58492 for values in ids.values()):
         raise ValueError("Incomplete or duplicate BBQ source IDs")
     strata = defaultdict(list)
-    for item in plan:
+    for item, out, receipt in panels:
         lang = item["language"]
-        out = work / "full" / item["id"] / lang / "bbq"
-        receipt = read(out / "complete.json")
-        request = out / "request.json"
-        if (
-            sha(request) != receipt["request_sha256"]
-            or read(request)["reference"] != item["reference"]["sha256"]
-        ):
-            raise ValueError(f"Different generation request in {out}")
         result = receipt["results"]["bbq"]
         starts = range(0, len(ids[lang]), 256)
         if (
@@ -90,7 +90,12 @@ def sample(work, destination):
             (staged / name).write_text(
                 "".join(json.dumps(r[index], ensure_ascii=False) + "\n" for r in records)
             )
-        staged.rename(destination)
+        if destination.exists():
+            for path in staged.iterdir():
+                if sha(path) != sha(destination / path.name):
+                    raise ValueError(f"Existing BBQ review file differs: {path.name}")
+        else:
+            staged.rename(destination)
 
 
 if __name__ == "__main__":

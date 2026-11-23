@@ -3,18 +3,36 @@ import csv
 import json
 from pathlib import Path
 
-from plan import read, sha
+from plan import load_plan, read, read_request, sha
 
 
-def predictions(work, item, benchmark, available_only):
+def benchmark_tasks(work, language, benchmark):
+    if benchmark == "belebele":
+        task = {"en": "belebele_eng_Latn", "uk": "belebele_ukr_Cyrl"}[language]
+        return task, {task}
+    if benchmark != "mmlu":
+        raise ValueError(f"Unknown utility benchmark {benchmark}")
+    task = f"global_mmlu_full_{language}"
+    subjects = {
+        Path(name).stem
+        for name in read(work / "inputs.json")
+        if name.startswith(f"tasks/mmlu_{language}/{task}_") and name.endswith(".yaml")
+    }
+    if len(subjects) != 57:
+        raise ValueError(f"Incomplete subject registration for {task}")
+    return task, subjects
+
+
+def predictions(work, item, benchmark, available_only, plan_digest):
     out = work / "full" / item["id"] / item["language"] / "utility"
     file = out / f"{benchmark}.jsonl"
     request = out / "request.json"
     if available_only and not file.is_file():
         return None
-    binding = read(request)
-    if binding["reference"] != item["reference"]["sha256"]:
-        raise ValueError(f"Checkpoint request mismatch in {out}")
+    binding = read_request(out, item, "utility", plan_digest)
+    if binding["inputs_sha256"] != sha(work / "inputs.json"):
+        raise ValueError(f"Utility input registration differs from the saved request in {out}")
+    task, expected_tasks = benchmark_tasks(work, item["language"], benchmark)
     digest = sha(file)
     receipt = out / "complete.json"
     expected = {"belebele": 900, "mmlu": 14042}[benchmark]
@@ -23,9 +41,11 @@ def predictions(work, item, benchmark, available_only):
         if sha(request) != complete["request_sha256"]:
             raise ValueError(f"Changed request in {out}")
         result = complete["results"][benchmark]
-        if digest != result["sha256"] or result["rows"] != expected:
+        if digest != result["sha256"] or result["rows"] != expected or result["task"] != task:
             raise ValueError(f"Invalid utility predictions in {file}")
     rows = [json.loads(line) for line in file.read_text().splitlines()]
+    if {row["task"] for row in rows} != expected_tasks:
+        raise ValueError(f"Prediction tasks differ from the registered {task} panel in {file}")
     records = {
         (r["task"], r["id"]): (r["doc_hash"], r["prompt_hash"], r["target"], r["correct"])
         for r in rows
@@ -39,9 +59,11 @@ def predictions(work, item, benchmark, available_only):
     return records, binding, digest
 
 
-def paired(work, original, model, benchmark, available_only=False):
-    first = predictions(work, original, benchmark, available_only)
-    last = predictions(work, model, benchmark, available_only)
+def paired(work, original, model, benchmark, available_only=False, *, plan_digest=None):
+    if plan_digest is None:
+        plan_digest = sha(work / "plan.json")
+    first = predictions(work, original, benchmark, available_only, plan_digest)
+    last = predictions(work, model, benchmark, available_only, plan_digest)
     if first is None or last is None:
         return None
     before, base, before_sha = first
@@ -80,14 +102,19 @@ def paired(work, original, model, benchmark, available_only=False):
 
 
 def collect(work, destination, available_only=False):
-    plan = read(work / "plan.json")
+    plan, plan_digest = load_plan(work)
     bases = {(i["model"], i["language"]): i for i in plan if i["phase"] == "before"}
     rows = []
     for item in plan:
         if item["phase"] == "after":
             for task in ("belebele", "mmlu"):
                 result = paired(
-                    work, bases[item["model"], item["language"]], item, task, available_only
+                    work,
+                    bases[item["model"], item["language"]],
+                    item,
+                    task,
+                    available_only,
+                    plan_digest=plan_digest,
                 )
                 if result is not None:
                     rows.append(result)

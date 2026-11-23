@@ -33,14 +33,19 @@ def scheduler(jobs):
 
 
 def snapshot(work):
-    original = read(work / "submission.json")
     active = read(work / "production-jobs.json")
-    finish = read(work / "collection-jobs.json")
-    pilot = (work / "pilot.id").read_text().strip()
-    text_pilot = (work / "text-pilot.id").read_text().strip()
+    original = read(work / "submission.json") if (work / "submission.json").exists() else active
+    finish = read(work / "collection-jobs.json") if (work / "collection-jobs.json").exists() else {}
+    pilots = {entry["pilot"] for entry in active.values() if "pilot" in entry}
+    for filename in ("pilot.id", "text-pilot.id"):
+        if (work / filename).exists():
+            pilots.add((work / filename).read_text().strip())
+    large_pilot = active.get("mamay27b_v2/utility", {}).get("large_utility_pilot")
+    if large_pilot is None and (work / "tp2-pilot.id").exists():
+        large_pilot = (work / "tp2-pilot.id").read_text().strip()
     all_jobs = {
         job["job"] for mapping in (original, active, finish) for job in mapping.values()
-    } | {pilot, text_pilot}
+    } | pilots
     states = scheduler(sorted(all_jobs))
     plan = read(work / "plan.json")
     models = {}
@@ -48,7 +53,7 @@ def snapshot(work):
         group = [r for r in plan if r["model"] == model]
         state = {}
         for track in ("utility", "bbq"):
-            job = active[f"{model}/{track}"]["job"]
+            job = active.get(f"{model}/{track}", {}).get("job")
             outputs = [work / "full" / i["id"] / i["language"] / track for i in group]
             state[track] = dict(
                 job=job,
@@ -70,7 +75,6 @@ def snapshot(work):
         passes = list(work.glob(f"pilot*/{model}__base/*/pilot/complete.json"))
         state["pilot_passed"] = bool(passes)
         models[model] = state
-    large_pilot = (work / "tp2-pilot.id").read_text().strip()
     large_passed = (work / "pilot-large/mamay27b_v2__base/uk/pilot/complete.json").is_file()
     return dict(
         large_utility_pilot=dict(job=large_pilot, passed=large_passed),
@@ -79,11 +83,11 @@ def snapshot(work):
         inputs_sha256=sha(work / "inputs.json"),
         plan_sha256=sha(work / "plan.json"),
         phase_counts=dict(collections.Counter(i["phase"] for i in plan)),
-        pilot_jobs=[pilot, text_pilot],
+        pilot_jobs=sorted(pilots),
         original_submission={k: v["job"] for k, v in original.items()},
         models=models,
         collection=finish,
-        m4a_scoring="requires response-bound review and calibration",
+        m4a_scoring="skipped this iteration",
     )
 
 
