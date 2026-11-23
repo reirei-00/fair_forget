@@ -141,7 +141,7 @@ To evaluate all eight interventions for one model, list the available panels in 
 
 Add `--execute` to run the printed commands. Select each of the six model environments in turn. Restarting the sweep verifies and reuses completed pairs with the same checkpoint, release, evaluator, runtime and inference settings. Interrupted attempts retain their logs.
 
-Each pair preserves the per-item predictions, Fair-UK reports, paired changes, intervals and coverage. Each StereoSet pair writes `domains.csv` with four rows of target-macro SS, LMS and ICAT. The trained domain identifies a row of the 4 × 4 redistribution matrix and the evaluated domain identifies a column. Read SS against 50, inspect direction changes, and use LMS and ICAT to check whether language-modeling quality also changed. Assess WinoBias and BBQ using their native category and condition breakdowns. A calibrated redistribution index and the other study metrics requiring extra panels or judgments remain separate analyses.
+Each pair preserves the per-item predictions, Fair-UK reports, paired changes, intervals and coverage. Each StereoSet pair writes `domains.csv` with four rows of target-macro SS, LMS and ICAT. The trained domain identifies a row of the 4 × 4 redistribution matrix and the evaluated domain identifies a column. Read SS against 50, inspect direction changes, and use LMS and ICAT to check whether language-modeling quality also changed. Assess WinoBias and BBQ using their native category and condition breakdowns. The [calibrated analysis](analysis/calibration/README.md) adds NNR and separate domain and language redistribution indices.
 
 To export one complete matrix, pass the four paired output directories printed by the runner for the same model, training language, evaluation language and seed. The exporter verifies their receipts, base scores, source rows and inference settings. The long-format CSV contains sixteen targeted and off-target comparisons with their native scores, signed changes, direction relative to 50 and parity crossings.
 
@@ -163,13 +163,20 @@ With the training stack installed, run the following on CPU. The test creates a 
 
 The [executed notebook](analysis/ethos_redistribution.ipynb) reads the saved Fair-UK scores for all 384 paired evaluations. It shows before/after values for each of the six models in all four combinations of training and evaluation language. Two heatmaps show domain-specific changes in stereotype-score distance from parity and language-modeling score. Separate tables cover WinoBias and BBQ.
 
+The notebook opens with an [18-metric analyst checklist](analysis/metric_checklist.csv) keyed to the rows of the FairForget metric sheet. It reports descriptive before/after results for forget efficacy, LMS, ICAT, M3d language transfer and native BBQ bias by category. The notebook also calculates training imbalance by named StereoSet target from verified single-process training logs, exact packed exposure and held-out Fair-UK scores. The [calibrated checkpoint table](analysis/seed-42/checkpoint_nnr_ri.csv) adds NNR and domain RI for all 48 checkpoints in both evaluation languages. In the target CSV, positive `forget_efficacy` is improvement. In the domain CSV, positive `bias_change` is an increase in distance from parity.
+
+The [paired utility table](analysis/utility_refusal/retain_utility.csv) adds 96 before/after comparisons on Belebele and 96 on Global-MMLU. Each covers all 48 checkpoints and their six shared baselines in both evaluation languages. The free-text BBQ follow-up collected 6,317,136 responses to the original questions. The [collection protocol](analysis/utility_refusal/README.md) documents the archived blinded sample. This iteration skips response labeling and M4a over-refusal scoring. The original `bbq_unknown_rates.csv` measures forced-choice abstention.
+
 From this study directory on Linux or macOS, run the following with Python 3.13. After installing the listed packages, replay works offline on CPU. The notebook writes full-precision CSV tables and PNG figures to `analysis/outputs/`. Open the notebook directly to read its saved outputs. Set `ETHOS_ARTIFACT_ROOT` to the study directory if starting the kernel outside the checkout.
 
 ```sh
 python3.13 -m venv .venv
 .venv/bin/python -m pip install -r analysis/requirements.txt
+.venv/bin/python -m pip install --no-deps "git+https://github.com/reirei-00/fair-uk.git@aa91dba8f950d0353836f4e3b93663e2b56a6cc8"
 .venv/bin/python -m nbconvert --to notebook --execute --inplace --ExecutePreprocessor.record_timing=False analysis/ethos_redistribution.ipynb
 ```
+
+Download the [calculated values (compressed CSV)](analysis/seed-42/metric-values.csv.gz) or open `analysis/outputs/metric_values.csv` after replay. The notebook checks the exported values against the published CSV. It includes full-precision endpoints and changes where defined, all four language routes, and one row per correlation, held-out domain or BBQ category as applicable. `training_imbalance.csv` contains a separate Spearman correlation for each checkpoint, evaluation language, Ethos stream and exposure covariate. The correlation uses all evaluated named targets within the trained domain. Groups with zero exposure count. The outcome is change in absolute distance from SS = 50 in percentage points. Constant ranks give an empty value. The [calibration protocol and reproduction commands](analysis/calibration/README.md) describe the additional inference, paired uncertainty and denominator gates.
 
 The [score extract](analysis/seed-42/fair-uk-reports.jsonl.gz) contains one record per paired report, with native scores, uncertainty, sample sizes, the evaluator revision and receipt hashes. The notebook checks the uncompressed SHA-256 and reconciles each record with the [verified experiment ledger](jupiter/2026-11-21/status/experiments.csv). An available score may lack a bootstrap interval. Unavailable BBQ changes retain their native status and are excluded from direction counts.
 
@@ -179,3 +186,22 @@ To verify the extract against the original JUPITER files, run the commands below
 python3 ethos/collect_paired_reports.py /e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42 /tmp/ethos-fair-uk-reports.jsonl.gz
 gzip -dc /tmp/ethos-fair-uk-reports.jsonl.gz | sha256sum
 ```
+
+The [additional inputs](analysis/seed-42/metric-inputs.sha256) contain per-item retained input and causal-label counts per epoch, completed epochs and steps, native named-target scores, and matched target-domain item margins. The notebook joins them to the original receipts and uses the pinned Fair-UK Spearman implementation. To regenerate the inputs on JUPITER, run the following from this study directory for each model ID in the configuration. Use a fresh output directory. The recorded single-process data loader visits every complete 128-token block once per completed epoch. The collector verifies the source IDs, tokenizer, block budget, original training program, logs and paired reports.
+
+```sh
+root=/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-bilingual-5e4a6bf-seed42
+mkdir -p reproduced-inputs
+for model in llama31_8b_instruct gemma3_12b_it qwen3_8b lapa12b_instruct mamay12b_v2 mamay27b_v2; do
+  (
+    set -e
+    source ethos/use.sh "$model"
+    if [[ "$model" == mamay27b_v2 ]]; then
+      export PYTHONPATH="$root/lapa-mamay-preflight/mamay27-packages:$PYTHONPATH"
+    fi
+    "$ETHOS_PYTHON" ethos/collect_metric_inputs.py "$root" "$model" "reproduced-inputs/$model.jsonl.gz"
+  ) || exit 1
+done
+```
+
+Compare the SHA-256 of each decompressed file with the published manifest.

@@ -1,0 +1,64 @@
+{
+  "cluster": "JUPITER",
+  "slurm_array_job": 3060806,
+  "run_directory": "/e/project1/e-dev-2026d09-075/fairforget/runs/ethos-dev-calibration.R7CuOS0X",
+  "rules_commit": "ca793508f50b2c0315f96847784ec68e029b4222",
+  "inference_commit": "db435f59ec65890969358af15084737e2e64bf77",
+  "analysis_commit": "aa91dba8f950d0353836f4e3b93663e2b56a6cc8",
+  "base_model_language_pairs": 12,
+  "baseline_predictions": 984,
+  "uncompressed_sha256": {
+    "development.json.gz": "b6a4cd5e0b116b3df1583ff7371867ae43d6ea7db2e470f1c34d1af37db1ef17",
+    "preferences.json.gz": "04d7cc10d75ae6b7d9240cc81e89d05761c3141a34707119e05bb604e0d2695b"
+  },
+  "job_map": {
+    "0": {
+      "model": "llama31_8b_instruct",
+      "language": "en"
+    },
+    "1": {
+      "model": "llama31_8b_instruct",
+      "language": "uk"
+    },
+    "2": {
+      "model": "gemma3_12b_it",
+      "language": "en"
+    },
+    "3": {
+      "model": "gemma3_12b_it",
+      "language": "uk"
+    },
+    "4": {
+      "model": "qwen3_8b",
+      "language": "en"
+    },
+    "5": {
+      "model": "qwen3_8b",
+      "language": "uk"
+    },
+    "6": {
+      "model": "lapa12b_instruct",
+      "language": "en"
+    },
+    "7": {
+      "model": "lapa12b_instruct",
+      "language": "uk"
+    },
+    "8": {
+      "model": "mamay12b_v2",
+      "language": "en"
+    },
+    "9": {
+      "model": "mamay12b_v2",
+      "language": "uk"
+    },
+    "10": {
+      "model": "mamay27b_v2",
+      "language": "en"
+    },
+    "11": {
+      "model": "mamay27b_v2",
+      "language": "uk"
+    }
+  }
+}

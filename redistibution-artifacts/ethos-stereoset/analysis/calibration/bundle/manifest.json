@@ -1,0 +1,43 @@
+{
+  "datasets": {
+    "stereoset_en": {
+      "filename": "stereoset_en.jsonl",
+      "format": "adapted_jsonl_v1",
+      "human_validated": false,
+      "language": "en",
+      "pairing": {
+        "en_task": "stereoset_en",
+        "excluded_uk_rows": 0,
+        "filename": "pairs.jsonl",
+        "matched_rows": 41,
+        "sha256": "a0f0c70826f9b2e2507b8c2011d5baad47801e09541c8a2f36d5bbae7c6b6fd4",
+        "uk_task": "stereoset_uk"
+      },
+      "protocol": "causal_full_sentence_mean_token_logprob_v1",
+      "repo": "local-bundle",
+      "revision": "local-sha256:2a25386b89eb74edf490de395c01f666c40c330a7f61f2d88573587d3b883779",
+      "rows": 41,
+      "sha256": "2a25386b89eb74edf490de395c01f666c40c330a7f61f2d88573587d3b883779"
+    },
+    "stereoset_uk": {
+      "filename": "stereoset_uk.jsonl",
+      "format": "adapted_jsonl_v1",
+      "human_validated": false,
+      "language": "uk",
+      "pairing": {
+        "en_task": "stereoset_en",
+        "excluded_uk_rows": 0,
+        "filename": "pairs.jsonl",
+        "matched_rows": 41,
+        "sha256": "a0f0c70826f9b2e2507b8c2011d5baad47801e09541c8a2f36d5bbae7c6b6fd4",
+        "uk_task": "stereoset_uk"
+      },
+      "protocol": "causal_full_sentence_mean_token_logprob_v1",
+      "repo": "local-bundle",
+      "revision": "local-sha256:46e12763da03ee0e066c324d780388034f3623b9772eccd3a3d984b8e86a544a",
+      "rows": 41,
+      "sha256": "46e12763da03ee0e066c324d780388034f3623b9772eccd3a3d984b8e86a544a"
+    }
+  },
+  "schema_version": 1
+}

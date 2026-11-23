@@ -144,11 +144,24 @@ def bbq_categories(records, effects):
             continue
         native = r["native"]
         for phase in ("before", "after"):
+            all_rows = {
+                (row["condition"], row["group"]): row
+                for row in native[phase]
+                if row["scope"] == "group_all"
+            }
             for entry in native[phase]:
                 if "zero_denominator_convention" in entry and entry["scope"] != "pooled_eligible":
+                    group = all_rows[entry["condition"], entry["scope"]]
+                    if group["bias_eligible_rows"] != entry["n"]:
+                        raise ValueError(
+                            "BBQ eligible counts differ between native category reports"
+                        )
                     rows.append(
                         {
                             **identifiers(r),
+                            "all_rows": group["n"],
+                            "accuracy": group["accuracy_all_rows"],
+                            "unknown_rate": group["unknown_rate"],
                             "category": entry["scope"],
                             "condition": entry["condition"],
                             "phase": phase,
@@ -179,3 +192,24 @@ def bbq_categories(records, effects):
         groups["status"].eq("available")
     )
     return groups.drop(columns="scope")
+
+
+def summarize_bbq_categories(categories):
+    keys = ["model", "train", "eval", "condition", "category"]
+    if categories.duplicated(keys + ["target"]).any():
+        raise ValueError("A BBQ category has duplicate training targets")
+    available = categories["status"].eq("available")
+    endpoints = categories[["before", "after", "change"]].notna().all(axis=1)
+    if (available & ~endpoints).any():
+        raise ValueError("Available BBQ comparisons require both endpoints and a paired change")
+    paired = categories.assign(
+        before=categories["before"].where(available),
+        after=categories["after"].where(available),
+        available=available,
+    )
+    return paired.groupby(keys).agg(
+        before=("before", "mean"),
+        after=("after", "mean"),
+        available_targets=("available", "sum"),
+        total_targets=("target", "size"),
+    )

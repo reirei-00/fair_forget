@@ -1,0 +1,18 @@
+{
+  "evaluator": "db435f59ec65890969358af15084737e2e64bf77",
+  "sources": {
+    "CohereForAI/Global-MMLU": "0e619dbeb34206cd48705a1a0ea7fb21cae09993",
+    "facebook/belebele": "7899cdfa4e1e0d733fd77c848e2c273cb1d32be2"
+  },
+  "data_sha256": {
+    "data/belebele_en.jsonl": "15af884c2b5994fdc71199e79d553a1864b08ce1b31894aa87f6be925a064a31",
+    "data/belebele_uk.jsonl": "a064f157a9322a8bf76f3027da353fe85dbe79e5e5b86aa39b131246d9add932",
+    "data/mmlu_en_dev.parquet": "86e985fb70b49130d751c7c5b255767348a8590793dc794ff0f34f1b8bd2d16f",
+    "data/mmlu_en_test.parquet": "5baec81ba97243728cc9557b2cba2f03aaeedf8232473db9f20cf995c6b0a1a9",
+    "data/mmlu_uk_dev.parquet": "1ae9db2e9949c3aef36a344ce3455f18400982ad7827192afd5cc71592e4ce05",
+    "data/mmlu_uk_test.parquet": "fc6ebf99e1a6486619af54276b2e2d4dba3fef446b5391bf38e6263369543653"
+  },
+  "bbq_uk_sha256": "de97272d7b1368d8fc9d347d71a004a0781d9336d8670ede5c6ed0d80e819c0f",
+  "bbq_en_sha256": "cb3fa063dbad6833937b005899e894580969a3654573d7fe4d4ed265ca889fe6",
+  "bbq_bundle_sha256": "8928e6d537ff48f4cc0b7ae5f41c7300b6ecc4bd06bf22c79e0003d5d7b5b12d"
+}
